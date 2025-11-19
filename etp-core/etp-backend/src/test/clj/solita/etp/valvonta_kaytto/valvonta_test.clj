@@ -4,7 +4,7 @@
     [jsonista.core :as j]
     [ring.mock.request :as mock]
     [solita.etp.schema.valvonta-kaytto :as valvonta-schema]
-    [solita.etp.service.suomifi-viestit :as suomifi-viestit]
+    [solita.etp.service.suomifi-viestit-rest :as suomifi-viestit-rest]
     [solita.etp.service.valvonta-kaytto :as valvonta-service]
     [solita.etp.test-data.generators :as generators]
     [solita.etp.test-data.kayttaja :as test-kayttajat]
@@ -26,22 +26,19 @@
 (t/deftest adding-toimenpide
   (t/testing "Kun uusi toimenpide lisätään, omistajille joilla on Suomi.fi-viestit käytössä lähtee viesti oikealla kuvauksella"
     (let [suomifi-message-sent (promise)
-          assert-suomifi-message-sent (fn [sanoma kohde & _]
-                                        (t/is (= {:tunniste "ARA-ETP-KV-1-1-PERSON-1"
-                                                  :versio   "1.0"
-                                                  }
-                                                 sanoma
-                                                 ))
+          assert-suomifi-message-sent (fn [message config]
+                                        (t/is (= "ARA-ETP-KV-1-1-PERSON-1"
+                                                 (:external-id message)))
                                         (t/is (= (str "Tämän viestin liitteenä on tietopyyntö koskien rakennustasi: 1035150826\n"
                                                       "katu, 65100 VAASA\n"
                                                       "Kehotamme vastaamaan tietopyyntöön 10.11.2024 mennessä.\n\n"
                                                       "Som bilaga till detta meddelande finns en begäran om information som gäller din byggnad: 1035150826\n"
                                                       "katu, 65100 VASA\n"
                                                       "Vi uppmanar dig att besvara begäran om information senast den 10.11.2024.")
-                                                 (:kuvaus-teksti kohde))
-                                              )
+                                                 (:body message)))
                                         (deliver suomifi-message-sent true))]
-      (with-redefs [suomifi-viestit/send-message! assert-suomifi-message-sent]
+      (with-redefs [suomifi-viestit-rest/validate-config (fn [_] nil)
+                    suomifi-viestit-rest/send-suomifi-viesti-with-pdf-attachment! assert-suomifi-message-sent]
         (let [kayttaja-id (test-kayttajat/insert-virtu-paakayttaja!)
               valvonta-id (valvonta-service/add-valvonta! ts/*db*
                                                           (-> {} (generators/complete valvonta-schema/ValvontaSave)
