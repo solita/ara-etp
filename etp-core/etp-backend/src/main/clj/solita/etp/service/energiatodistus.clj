@@ -28,7 +28,7 @@
             [solita.etp.service.rooli :as rooli-service]
             [solita.postgresql.composite :as pg-composite]
             [solita.etp.service.perusparannuspassi :as perusparannuspassi-service])
-  (:import (org.apache.pdfbox.pdmodel PDDocument)))
+  (:import (org.apache.pdfbox Loader)))
 
 ; *** Require sql functions ***
 (db/require-queries 'energiatodistus)
@@ -557,7 +557,7 @@
 
 (defn- pdf-signed? [content]
   (with-open
-    [doc (PDDocument/load content)]
+    [doc (Loader/loadPDF content)]
     (-> (.getLastSignatureDictionary doc) nil? not)))
 
 (defn energiatodistus-pdf-signed? [aws-s3-client id language]

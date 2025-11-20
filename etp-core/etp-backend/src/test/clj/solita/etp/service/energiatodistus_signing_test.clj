@@ -13,7 +13,7 @@
     [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
     [solita.etp.test-system :as ts])
   (:import (java.io InputStream)
-           (org.apache.pdfbox.pdmodel PDDocument)))
+           (org.apache.pdfbox Loader)))
 
 (t/use-fixtures :each ts/fixture)
 
@@ -240,6 +240,6 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
                                        :now            (time/now)
                                        :id             id})
             (with-open [^InputStream pdf-is (pdf-service/find-energiatodistus-pdf db ts/*aws-s3-client* whoami id language-code)
-                        pdf (PDDocument/load pdf-is)]
+                        pdf (Loader/loadPDF pdf-is)]
               (let [signatures (.getSignatureDictionaries pdf)]
                 (t/is (not (nil? signatures)))))))))))

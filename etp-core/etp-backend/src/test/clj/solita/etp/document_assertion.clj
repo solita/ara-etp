@@ -5,6 +5,7 @@
             [solita.etp.service.pdf :as pdf])
   (:import (java.io ByteArrayOutputStream FileOutputStream InputStream)
            (java.util Arrays)
+           (org.apache.pdfbox Loader)
            (org.apache.pdfbox.pdmodel PDDocument)
            (org.apache.pdfbox.rendering ImageType PDFRenderer)
            (org.apache.pdfbox.tools.imageio ImageIOUtil)))
@@ -41,7 +42,7 @@
   "Reads a pdf into PDFBox Document class from an input stream. This object can then be used for assertions."
   ^PDDocument
   [^InputStream input]
-  (PDDocument/load input))
+  (Loader/loadPDF input))
 
 (defn- pdf-page->image-byte-array
   "Renders the page of given pdf to a png image and converts that to a byte array"

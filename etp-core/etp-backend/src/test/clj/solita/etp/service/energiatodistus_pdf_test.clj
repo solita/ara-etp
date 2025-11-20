@@ -11,6 +11,7 @@
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-system :as ts])
   (:import (org.apache.pdfbox.pdmodel PDDocument)
+           (org.apache.pdfbox Loader)
            (org.apache.xmpbox.xml DomXmpParser)))
 
 (t/use-fixtures :each ts/fixture)
@@ -90,7 +91,7 @@
         (let [{:keys [etunimi sukunimi]} (kayttaja-service/find-kayttaja ts/*db* (:laatija-id energiatodistus))
               expected-author (str sukunimi ", " etunimi)
               expected-title (-> energiatodistus :perustiedot :nimi-sv)
-              document (-> file-path io/as-file PDDocument/load)
+              document (-> file-path io/as-file Loader/loadPDF)
               document-info (.getDocumentInformation document)
               xmp-metadata (->> document .getDocumentCatalog .getMetadata .exportXMPMetadata (.parse xmp-parser))]
           (t/testing "Test for author and title in the older-style metadata"
@@ -122,7 +123,7 @@
                                                           "allekirjoitus-id")]]
       (t/testing "Test that the generation works even when building name is not set"
         (let [expected-title "Energiatodistus"
-              document (-> file-path io/as-file PDDocument/load)
+              document (-> file-path io/as-file Loader/loadPDF)
               document-info (.getDocumentInformation document)
               xmp-metadata (->> document .getDocumentCatalog .getMetadata .exportXMPMetadata (.parse xmp-parser))]
           (t/testing "Test for title in the older-style metadata"
