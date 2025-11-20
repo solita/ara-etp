@@ -12,6 +12,22 @@
 
 (def object-mapper (j/object-mapper {:decode-key-fn true}))
 
+(defn assert-status
+  "Assert that response has expected status. Print response body if status doesn't match."
+  ([response expected-status]
+   (assert-status response expected-status nil))
+  ([response expected-status message]
+   (when-not (= expected-status (:status response))
+     (println "Expected status:" expected-status)
+     (println "Actual status:" (:status response))
+     (println "Response body:" (try
+                                  (-> response :body (j/read-value object-mapper))
+                                  (catch Exception _
+                                    (str (:body response))))))
+   (if message
+     (t/is (= expected-status (:status response)) message)
+     (t/is (= expected-status (:status response))))))
+
 (t/deftest ppp-post-test
   (laatija-test-data/insert-suomifi-laatija!
     (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))
@@ -136,16 +152,14 @@
                                          (mock/body ppp-body)
                                          (laatija-test-data/with-suomifi-laatija)))
                 response-body (-> post-res :body (j/read-value object-mapper))]
-            (when-not (= 201 (:status post-res))
-              (println "Response body:" response-body))
-            (t/is (= 201 (:status post-res)) "Expected status 201 - value is outside warning range but inside error range")
+            (assert-status post-res 201 "Expected status 201 - value is outside warning range but inside error range")
             (t/is (some? (:warnings response-body)) "Expected warnings to be present")
             (t/is (seq (:warnings response-body)) "Expected warnings list to be non-empty")
             (let [warnings (:warnings response-body)]
               (t/is (some #(= "tulokset.kaukolampo-hinta" (:property %)) warnings)
                     "Expected warning for tulokset.kaukolampo-hinta"))))
 
-        (t/testing "PPP with kaukolampo-hinta at 1 cent should fail with 400 (outside error range 1-100)"
+        (t/testing "PPP with kaukolampo-hinta at 1 cent should fail with 400 (outside error range 2-100)"
           (let [ppp (-> (ppp-test-data/generate-add et-id)
                         (assoc-in [:tulokset :kaukolampo-hinta] 1))
                 ppp-body (-> ppp j/write-value-as-string)
@@ -154,4 +168,42 @@
                                          (mock/header "Content-Type" "application/json")
                                          (mock/body ppp-body)
                                          (laatija-test-data/with-suomifi-laatija)))]
-            (t/is (= 400 (:status post-res)) "Expected status 400 - value is outside error range")))))))
+            (assert-status post-res 400 "Expected status 400 - value is outside error range")))))))
+
+(t/deftest ppp-vaihe-numeric-validation-test
+  (t/testing "PPP vaihe numeric validation for uusiutuvan-energian-hyodynnetty-osuus"
+    (laatija-test-data/insert-suomifi-laatija!
+      (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))
+
+    ;; Create energiatodistus first
+    (let [et (-> (et-test-data/generate-add 2026 true))
+          et-body (-> et j/write-value-as-string)
+          post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2026")
+                                   (mock/header "Accept" "application/json")
+                                   (mock/header "Content-Type" "application/json")
+                                   (mock/body et-body)
+                                   (laatija-test-data/with-suomifi-laatija)))]
+      (t/is (= 201 (:status post-res)) "Expected status 201 from ET creation")
+      (let [et-id (-> post-res :body (j/read-value object-mapper) :id)]
+
+        (t/testing "PPP with vaihe uusiutuvan-energian-hyodynnetty-osuus above 100 should fail with 400"
+          (let [ppp (-> (ppp-test-data/generate-add et-id)
+                        (assoc-in [:vaiheet 0 :tulokset :uusiutuvan-energian-hyodynnetty-osuus] 101))
+                ppp-body (-> ppp j/write-value-as-string)
+                post-res (ts/handler (-> (mock/request :post "/api/private/perusparannuspassit/2026")
+                                         (mock/header "Accept" "application/json")
+                                         (mock/header "Content-Type" "application/json")
+                                         (mock/body ppp-body)
+                                         (laatija-test-data/with-suomifi-laatija)))]
+            (assert-status post-res 400 "Expected status 400 - value is outside error range 0-100")))
+
+        (t/testing "PPP with vaihe uusiutuvan-energian-hyodynnetty-osuus at 50 should succeed"
+          (let [ppp (-> (ppp-test-data/generate-add et-id)
+                        (assoc-in [:vaiheet 0 :tulokset :uusiutuvan-energian-hyodynnetty-osuus] 50))
+                ppp-body (-> ppp j/write-value-as-string)
+                post-res (ts/handler (-> (mock/request :post "/api/private/perusparannuspassit/2026")
+                                         (mock/header "Accept" "application/json")
+                                         (mock/header "Content-Type" "application/json")
+                                         (mock/body ppp-body)
+                                         (laatija-test-data/with-suomifi-laatija)))]
+            (assert-status post-res 201 "Expected status 201 - value is within valid range 0-100")))))))
