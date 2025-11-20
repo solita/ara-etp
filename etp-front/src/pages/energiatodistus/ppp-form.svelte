@@ -1,6 +1,7 @@
 <script>
   import H3 from '@Component/H/H3';
   import { _ } from '@Language/i18n';
+  import * as R from 'ramda';
 
   import Perustiedot from './form-parts-ppp/ppp-perustiedot';
   import RakenteidenUArvot from './form-parts-ppp/rakenteiden-u-arvot';
@@ -12,6 +13,7 @@
   import EnergianHinta from './form-parts-ppp/laskennan-tulokset-energian-hinta';
   import LaskennallinenEnergiaKustannukset from './form-parts-ppp/laskennan-tulokset-kustannukset-laskennallinen-ostoenergia';
   import ToteutunutOstoenergiaKustannukset from './form-parts-ppp/laskennan-tulokset-kustannukset-toteutunut-ostoenergia';
+  import Toimenpiteet from './form-parts-ppp/toimenpiteet';
 
   export let energiatodistus;
   export let inputLanguage;
@@ -56,4 +58,11 @@
     bind:perusparannuspassi
     {energiatodistus}
     {schema} />
+
+  <Toimenpiteet
+    {energiatodistus}
+    bind:perusparannuspassi
+    pppSchema={schema}
+    toimenpideEhdotuksetLuokittelu={R.prop('toimenpide-ehdotus', luokittelut)}
+    {inputLanguage} />
 </div>
