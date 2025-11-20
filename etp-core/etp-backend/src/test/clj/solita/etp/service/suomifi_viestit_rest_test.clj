@@ -22,8 +22,8 @@
                                             :rest-password "password"
                                             :viranomaistunnus "testuser"})))
   (t/is (not (seq (rest-service/validate-config full-config))))
-  (t/testing "When laskutus-tunniste or laskutus-salasana are missing, validation fails"
-    (t/is (seq (rest-service/validate-config electronic-config)))))
+  (t/testing "laskutus-tunniste and laskutus-salasana can be left out."
+    (t/is (not (seq (rest-service/validate-config electronic-config))))))
 
 (t/deftest get-access-token-test
   (let [url (atom nil)

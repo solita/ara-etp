@@ -174,8 +174,6 @@
      (if (str/blank? palvelutunnus) ["palvelutunnus is missing"] [])
      (if (str/blank? rest-password) ["rest-password is missing"] [])
      (if (str/blank? viranomaistunnus) ["viranomaistunnus is missing"] [])
-     (if (str/blank? laskutus-tunniste) ["laskutus-tunniste is missing"] [])
-     (if (str/blank? laskutus-salasana) ["laskutus-salasana is missing"] [])
      (if (str/blank? yhteyshenkilo-email) ["yhteyshenkilo-email is missing"] [])]))
 
 (defn merge-default-config [config]
