@@ -1,7 +1,8 @@
 (ns solita.etp.service.suomifi-viestit-rest
   (:require [clj-http.client :as http]
             [clojure.string :as str]
-            [clojure.tools.logging :as log])
+            [clojure.tools.logging :as log]
+            [solita.etp.config :as config])
   (:import (java.net URI)))
 
 (def ^{:private true
@@ -160,7 +161,9 @@
                                palvelutunnus
                                rest-password
                                viranomaistunnus
-                               yhteyshenkilo-email]}]
+                               yhteyshenkilo-email
+                               laskutus-tunniste
+                               laskutus-salasana]}]
   (flatten
     [(if (str/blank? rest-base-url)
        ["rest-base-url is missing"]
@@ -172,3 +175,13 @@
      (if (str/blank? rest-password) ["rest-password is missing"] [])
      (if (str/blank? viranomaistunnus) ["viranomaistunnus is missing"] [])
      (if (str/blank? yhteyshenkilo-email) ["yhteyshenkilo-email is missing"] [])]))
+
+(defn merge-default-config [config]
+  (merge {:rest-base-url        config/suomifi-viestit-rest-base-url
+          :rest-password        config/suomifi-viestit-rest-password
+          :viranomaistunnus     config/suomifi-viestit-viranomaistunnus
+          :palvelutunnus        config/suomifi-viestit-palvelutunnus
+          :yhteyshenkilo-email  config/suomifi-viestit-yhteyshenkilo-email
+          :laskutus-tunniste    config/suomifi-viestit-laskutus-tunniste
+          :laskutus-salasana    config/suomifi-viestit-laskutus-salasana}
+         config))
