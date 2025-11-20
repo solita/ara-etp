@@ -11,7 +11,6 @@
   const i18n = $_;
 
   export let energiatodistus;
-  export let etSchema;
   export let perusparannuspassi;
   export let pppSchema;
   export let toimenpideEhdotuksetLuokittelu;
@@ -25,7 +24,6 @@
     {#if R.compose(Maybe.isSome, EM.toMaybe, R.view(R.lensPath( ['tulokset', 'vaiheen-alku-pvm'] )))(vaihe)}
       <Osio
         {energiatodistus}
-        {etSchema}
         bind:perusparannuspassi
         {pppSchema}
         {toimenpideEhdotuksetLuokittelu}
