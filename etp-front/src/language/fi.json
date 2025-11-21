@@ -1278,7 +1278,8 @@
       "tyojono-remove-success": "Energiatodistus poistettiin työjonosta onnistuneesti",
       "tyojono-remove-error": "Energiatodistuksen poistaminen työjonosta epäonnistui",
       "add-ppp-success": "Perusparannuspassi lisättiin onnistuneesti",
-      "add-ppp-error": "Perusparannuspassin lisääminen epäonnistui"
+      "add-ppp-error": "Perusparannuspassin lisääminen epäonnistui",
+      "mark-ppp-for-deletion": "Perusparannuspassi merkitty poistettavaksi. Tallenna muutokset poistaaksesi sen lopullisesti."
     },
     "muutoshistoria": {
       "not-found": "Energiatodistusta ei ole olemassa.",

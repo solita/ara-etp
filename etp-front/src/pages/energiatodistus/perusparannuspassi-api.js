@@ -72,6 +72,33 @@ export const putPerusparannuspassi = R.curry(
     )(perusparannuspassi)
 );
 
+export const deletePerusparannuspassi = R.curry((fetch, pppId) => {
+  console.log('[PPP Delete API] Calling DELETE endpoint', { pppId });
+  return R.compose(
+    R.map(result => {
+      console.log('[PPP Delete API] DELETE successful', { pppId, result });
+      return result;
+    }),
+    R.chain(response => {
+      if (!response.ok) {
+        console.error('[PPP Delete API] DELETE failed', {
+          pppId,
+          status: response.status,
+          statusText: response.statusText
+        });
+      }
+      return Fetch.rejectWithInvalidResponse(response);
+    }),
+    Future.encaseP(
+      Fetch.fetchWithMethod(
+        fetch,
+        'delete',
+        `/api/private/perusparannuspassit/2026/${pppId}`
+      )
+    )
+  )();
+});
+
 const deserializer = {
   id: Maybe.get,
   valid: Maybe.get,

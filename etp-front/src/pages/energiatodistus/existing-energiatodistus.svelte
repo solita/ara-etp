@@ -58,10 +58,27 @@
   // PPP state
   let perusparannuspassi = Maybe.None();
   let showPPP = false;
+  let markedForDeletion = false;
 
   // Add PPP - creates a new perusparannuspassi via API
   const addPerusparannuspassi = energiatodistusId => () => {
-    if (!showPPP && Maybe.isNone(perusparannuspassi)) {
+    // If we have a PPP that was marked for deletion, just unmark it and show it
+    if (markedForDeletion && perusparannuspassi) {
+      markedForDeletion = false;
+      showPPP = true;
+      setFormDirty();
+      announceSuccess(i18n('energiatodistus.messages.add-ppp-success'));
+      return;
+    }
+
+    // If PPP already exists but is hidden, just show it
+    if (perusparannuspassi && !Maybe.isNone(perusparannuspassi)) {
+      showPPP = !showPPP;
+      return;
+    }
+
+    // Create a new PPP via API (backend will resurrect soft-deleted PPP if exists)
+    if (!showPPP && (!perusparannuspassi || Maybe.isNone(perusparannuspassi))) {
       toggleOverlay(true);
       Future.fork(
         _response => {
@@ -71,23 +88,54 @@
         result => {
           perusparannuspassi = result;
           showPPP = true;
+          markedForDeletion = false;
           toggleOverlay(false);
           announceSuccess(i18n('energiatodistus.messages.add-ppp-success'));
         },
         pppApi.addPerusparannuspassi(fetch, energiatodistusId)
       );
-    } else {
-      // Just toggle visibility if PPP already exists
-      showPPP = !showPPP;
     }
   };
 
+  // Delete PPP - marks for deletion, actual deletion happens on save
+  const deletePerusparannuspassi = () => {
+    console.log('[PPP Delete] Marking PPP for deletion', {
+      pppId: perusparannuspassi?.id,
+      hasPPP: !!perusparannuspassi
+    });
+    markedForDeletion = true;
+    showPPP = false;
+    setFormDirty();
+    announceSuccess(i18n('energiatodistus.messages.mark-ppp-for-deletion'));
+  };
+
   const submit = (energiatodistus, onSuccessfulSave) => {
+    console.log('[PPP Delete] Submit called', {
+      markedForDeletion,
+      hasPPP: !!perusparannuspassi,
+      pppId: perusparannuspassi?.id,
+      energiatodistusId: params.id,
+      energiatodistusPppId: energiatodistus['perusparannuspassi-id']
+    });
     toggleOverlay(true);
 
     const saveFuture =
-      perusparannuspassi && perusparannuspassi.id
-        ? Future.parallelObject(2, {
+      markedForDeletion && perusparannuspassi && perusparannuspassi.id
+        ? (console.log('[PPP Delete] Executing DELETE API call', { pppId: perusparannuspassi.id }),
+          Future.parallelObject(2, {
+            energiatodistus: api.putEnergiatodistusById(
+              fetch,
+              params.version,
+              params.id
+            )(energiatodistus),
+            perusparannuspassi: pppApi.deletePerusparannuspassi(
+              fetch,
+              perusparannuspassi.id
+            )
+          }))
+        : perusparannuspassi && perusparannuspassi.id && !markedForDeletion
+        ? (console.log('[PPP Delete] Executing UPDATE API call', { pppId: perusparannuspassi.id }),
+          Future.parallelObject(2, {
             energiatodistus: api.putEnergiatodistusById(
               fetch,
               params.version,
@@ -98,18 +146,20 @@
               perusparannuspassi.id,
               perusparannuspassi
             )
-          })
-        : R.map(
+          }))
+        : (console.log('[PPP Delete] No PPP operation, saving only energiatodistus'),
+          R.map(
             energiatodistus => ({ energiatodistus }),
             api.putEnergiatodistusById(
               fetch,
               params.version,
               params.id
             )(energiatodistus)
-          );
+          ));
 
     Future.fork(
       response => {
+        console.error('[PPP Delete] Save failed', response);
         toggleOverlay(false);
         if (R.pathEq('missing-value', ['body', 'type'], response)) {
           showMissingProperties(response.body.missing);
@@ -117,8 +167,16 @@
           announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
         }
       },
-      () => {
+      (result) => {
+        console.log('[PPP Delete] Save successful', { result, markedForDeletion });
         toggleOverlay(false);
+        // Reset PPP state after successful deletion
+        if (markedForDeletion) {
+          console.log('[PPP Delete] Resetting PPP state after deletion');
+          perusparannuspassi = Maybe.None();
+          markedForDeletion = false;
+          showPPP = false;
+        }
         announceSuccess($_('energiatodistus.messages.save-success'));
         onSuccessfulSave();
       },
@@ -131,8 +189,9 @@
     toggleOverlay(true);
     // form is recreated in reload - side effect is scroll to up
     resources = Maybe.None();
-    perusparannuspassi = null;
+    perusparannuspassi = Maybe.None();
     showPPP = false;
+    markedForDeletion = false;
 
     Future.fork(
       response => {
@@ -140,12 +199,20 @@
         announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
       },
       response => {
+        console.log('[PPP Delete] Loaded energiatodistus', {
+          hasPPP: !!response.perusparannuspassi,
+          pppId: response.perusparannuspassi?.id,
+          energiatodistusPppId: response.energiatodistus['perusparannuspassi-id']
+        });
         resources = Maybe.Some(response);
 
         // Set PPP if it exists
         if (response.perusparannuspassi) {
           perusparannuspassi = response.perusparannuspassi;
           showPPP = true;
+        } else {
+          perusparannuspassi = Maybe.None();
+          showPPP = false;
         }
 
         toggleOverlay(false);
@@ -222,8 +289,9 @@
         {#if isEtp2026Enabled(config) && params.version == 2026}
           <PPPSection
             {showPPP}
-            onAddPPP={addPerusparannuspassi(energiatodistus.id)}>
-            {#if perusparannuspassi}
+            onAddPPP={addPerusparannuspassi(energiatodistus.id)}
+            onDeletePPP={deletePerusparannuspassi}>
+            {#if perusparannuspassi && !markedForDeletion}
               <div on:input={setFormDirty} on:change={setFormDirty}>
                 <PPPForm
                   {energiatodistus}
