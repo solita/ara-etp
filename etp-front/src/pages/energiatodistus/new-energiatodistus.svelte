@@ -114,18 +114,11 @@
         () => Maybe.isSome(perusparannuspassi),
         R.chain(etResult =>
           R.map(
-            pppResult => ({
+            pppId => ({
               energiatodistus: etResult,
-              perusparannuspassi: pppResult
+              perusparannuspassi: { id: pppId }
             }),
-            pppApi.postPerusparannuspassi(
-              fetch,
-              R.assoc(
-                'energiatodistus-id',
-                etResult.id,
-                perusparannuspassi.some()
-              )
-            )
+            pppApi.addPerusparannuspassi(fetch, etResult.id)
           )
         )
       ),

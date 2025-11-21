@@ -85,12 +85,22 @@
           toggleOverlay(false);
           announceError(i18n('energiatodistus.messages.add-ppp-error'));
         },
-        result => {
-          perusparannuspassi = result;
-          showPPP = true;
-          markedForDeletion = false;
-          toggleOverlay(false);
-          announceSuccess(i18n('energiatodistus.messages.add-ppp-success'));
+        id => {
+          // After creation, fetch the full PPP object
+          Future.fork(
+            _response => {
+              toggleOverlay(false);
+              announceError(i18n('energiatodistus.messages.add-ppp-error'));
+            },
+            result => {
+              perusparannuspassi = result;
+              showPPP = true;
+              markedForDeletion = false;
+              toggleOverlay(false);
+              announceSuccess(i18n('energiatodistus.messages.add-ppp-success'));
+            },
+            pppApi.getPerusparannuspassi(fetch, id)
+          );
         },
         pppApi.addPerusparannuspassi(fetch, energiatodistusId)
       );
@@ -99,10 +109,6 @@
 
   // Delete PPP - marks for deletion, actual deletion happens on save
   const deletePerusparannuspassi = () => {
-    console.log('[PPP Delete] Marking PPP for deletion', {
-      pppId: perusparannuspassi?.id,
-      hasPPP: !!perusparannuspassi
-    });
     markedForDeletion = true;
     showPPP = false;
     setFormDirty();
@@ -110,19 +116,11 @@
   };
 
   const submit = (energiatodistus, onSuccessfulSave) => {
-    console.log('[PPP Delete] Submit called', {
-      markedForDeletion,
-      hasPPP: !!perusparannuspassi,
-      pppId: perusparannuspassi?.id,
-      energiatodistusId: params.id,
-      energiatodistusPppId: energiatodistus['perusparannuspassi-id']
-    });
     toggleOverlay(true);
 
     const saveFuture =
       markedForDeletion && perusparannuspassi && perusparannuspassi.id
-        ? (console.log('[PPP Delete] Executing DELETE API call', { pppId: perusparannuspassi.id }),
-          Future.parallelObject(2, {
+        ? Future.parallelObject(2, {
             energiatodistus: api.putEnergiatodistusById(
               fetch,
               params.version,
@@ -132,34 +130,31 @@
               fetch,
               perusparannuspassi.id
             )
-          }))
+          })
         : perusparannuspassi && perusparannuspassi.id && !markedForDeletion
-        ? (console.log('[PPP Delete] Executing UPDATE API call', { pppId: perusparannuspassi.id }),
-          Future.parallelObject(2, {
-            energiatodistus: api.putEnergiatodistusById(
-              fetch,
-              params.version,
-              params.id
-            )(energiatodistus),
-            perusparannuspassi: pppApi.putPerusparannuspassi(
-              fetch,
-              perusparannuspassi.id,
-              perusparannuspassi
-            )
-          }))
-        : (console.log('[PPP Delete] No PPP operation, saving only energiatodistus'),
-          R.map(
-            energiatodistus => ({ energiatodistus }),
-            api.putEnergiatodistusById(
-              fetch,
-              params.version,
-              params.id
-            )(energiatodistus)
-          ));
+          ? Future.parallelObject(2, {
+              energiatodistus: api.putEnergiatodistusById(
+                fetch,
+                params.version,
+                params.id
+              )(energiatodistus),
+              perusparannuspassi: pppApi.putPerusparannuspassi(
+                fetch,
+                perusparannuspassi.id,
+                perusparannuspassi
+              )
+            })
+          : R.map(
+              energiatodistus => ({ energiatodistus }),
+              api.putEnergiatodistusById(
+                fetch,
+                params.version,
+                params.id
+              )(energiatodistus)
+            );
 
     Future.fork(
       response => {
-        console.error('[PPP Delete] Save failed', response);
         toggleOverlay(false);
         if (R.pathEq('missing-value', ['body', 'type'], response)) {
           showMissingProperties(response.body.missing);
@@ -167,12 +162,10 @@
           announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
         }
       },
-      (result) => {
-        console.log('[PPP Delete] Save successful', { result, markedForDeletion });
+      result => {
         toggleOverlay(false);
         // Reset PPP state after successful deletion
         if (markedForDeletion) {
-          console.log('[PPP Delete] Resetting PPP state after deletion');
           perusparannuspassi = Maybe.None();
           markedForDeletion = false;
           showPPP = false;
@@ -180,7 +173,7 @@
         announceSuccess($_('energiatodistus.messages.save-success'));
 
         // If PPP was deleted, reload the page to reset state
-        if (pppMarkedForDeletion) {
+        if (markedForDeletion) {
           load(params);
         } else {
           onSuccessfulSave();
@@ -192,7 +185,6 @@
 
   // load energiatodistus and classifications in parallel
   const load = params => {
-    console.log('load() called with params:', params);
     toggleOverlay(true);
     // form is recreated in reload - side effect is scroll to up
     resources = Maybe.None();
@@ -207,11 +199,6 @@
         announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
       },
       response => {
-        console.log('[PPP Delete] Loaded energiatodistus', {
-          hasPPP: !!response.perusparannuspassi,
-          pppId: response.perusparannuspassi?.id,
-          energiatodistusPppId: response.energiatodistus['perusparannuspassi-id']
-        });
         resources = Maybe.Some(response);
 
         // Set PPP if it exists and is valid
@@ -219,7 +206,6 @@
           response.perusparannuspassi &&
           response.perusparannuspassi.valid !== false
         ) {
-          console.log('Setting PPP from response');
           perusparannuspassi = response.perusparannuspassi;
           showPPP = true;
         } else {
@@ -230,25 +216,22 @@
         toggleOverlay(false);
       },
       R.chain(
-        response =>
-          R.map(
+        response => {
+          const pppId = response.energiatodistus['perusparannuspassi-id'];
+
+          return R.map(
             R.mergeLeft(response),
             Future.parallelObject(2, {
               laskutusosoitteet: laatijaApi.laskutusosoitteet(
                 Maybe.get(response.energiatodistus['laatija-id'])
               ),
               perusparannuspassi:
-                response.energiatodistus['perusparannuspassi-id'] &&
-                Maybe.isSome(response.energiatodistus['perusparannuspassi-id'])
-                  ? pppApi.getPerusparannuspassi(
-                      fetch,
-                      Maybe.get(
-                        response.energiatodistus['perusparannuspassi-id']
-                      )
-                    )
+                pppId && Maybe.isSome(pppId)
+                  ? pppApi.getPerusparannuspassi(fetch, Maybe.get(pppId))
                   : Future.resolve(null)
             })
-          ),
+          );
+        },
         Future.parallelObject(6, {
           energiatodistus: api.getEnergiatodistusById(
             params.version,

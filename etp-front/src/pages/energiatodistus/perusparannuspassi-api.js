@@ -11,7 +11,7 @@ import * as schema from './schema.js';
 
 export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
   R.compose(
-    R.map(deserialize),
+    R.map(R.prop('id')),
     Fetch.responseAsJson,
     Future.encaseP(
       Fetch.fetchWithMethod(
@@ -24,21 +24,6 @@ export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
     R.assoc('valid', true),
     empty.perusparannuspassi
   )(energiatodistusId)
-);
-
-export const postPerusparannuspassi = R.curry((fetch, perusparannuspassi) =>
-  R.compose(
-    R.map(deserialize),
-    Fetch.responseAsJson,
-    Future.encaseP(
-      Fetch.fetchWithMethod(
-        fetch,
-        'post',
-        '/api/private/perusparannuspassit/2026'
-      )
-    ),
-    serialize
-  )(perusparannuspassi)
 );
 
 // This is somewhat different route than with energiatodistus. With energiatodistus inputtable values out of schema
@@ -73,10 +58,8 @@ export const putPerusparannuspassi = R.curry(
 );
 
 export const deletePerusparannuspassi = R.curry((fetch, pppId) => {
-  console.log('[PPP Delete API] Calling DELETE endpoint', { pppId });
   return R.compose(
     R.map(result => {
-      console.log('[PPP Delete API] DELETE successful', { pppId, result });
       return result;
     }),
     R.chain(response => {
