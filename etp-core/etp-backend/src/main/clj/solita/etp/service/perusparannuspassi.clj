@@ -119,7 +119,7 @@
 
 (defn replace-abbreviation->fullname [path]
   (reduce (fn [result [fullname abbreviation]]
-            (if (str/starts-with? result (name abbreviation))
+            (if (str/starts-with? result (str (name abbreviation) "$"))
               (reduced (str/replace-first
                          result (name abbreviation) (name fullname)))
               result))
@@ -310,10 +310,10 @@
                               perusparannuspassi-id)))
 
 (defn find-ppp-numeric-validations [db versio]
-  (map (comp
-         #(set/rename-keys % {:column-name :property})
-         #(update % :column-name to-property-name))
-       (perusparannuspassi-db/select-ppp-numeric-validations db {:versio versio})))
+  (->> (perusparannuspassi-db/select-ppp-numeric-validations db {:versio versio})
+       (map #(update % :column-name to-property-name))
+       (map #(set/rename-keys % {:column-name :property}))
+       (map #(flat/flat->tree #"\$" %))))
 
 (defn find-ppp-required-properties [db versio bypass-validation]
   (map (comp to-property-name :column-name)
@@ -321,10 +321,10 @@
          db {:versio versio :bypass-validation bypass-validation})))
 
 (defn find-ppp-vaihe-numeric-validations [db versio]
-  (map (comp
-         #(set/rename-keys % {:column-name :property})
-         #(update % :column-name to-property-name))
-       (perusparannuspassi-db/select-ppp-vaihe-numeric-validations db {:versio versio})))
+  (->> (perusparannuspassi-db/select-ppp-vaihe-numeric-validations db {:versio versio})
+       (map #(update % :column-name to-property-name))
+       (map #(set/rename-keys % {:column-name :property}))
+       (map #(flat/flat->tree #"\$" %))))
 
 (defn find-ppp-vaihe-required-properties [db versio bypass-validation]
   (map (comp to-property-name :column-name)
