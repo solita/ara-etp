@@ -163,17 +163,14 @@
         }
       },
       result => {
+        const wasDeleted = markedForDeletion;
         toggleOverlay(false);
-        // Reset PPP state after successful deletion
-        if (markedForDeletion) {
+        announceSuccess($_('energiatodistus.messages.save-success'));
+
+        if (wasDeleted) {
           perusparannuspassi = Maybe.None();
           markedForDeletion = false;
           showPPP = false;
-        }
-        announceSuccess($_('energiatodistus.messages.save-success'));
-
-        // If PPP was deleted, reload the page to reset state
-        if (markedForDeletion) {
           load(params);
         } else {
           onSuccessfulSave();
