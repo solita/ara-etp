@@ -178,7 +178,13 @@
           showPPP = false;
         }
         announceSuccess($_('energiatodistus.messages.save-success'));
-        onSuccessfulSave();
+
+        // If PPP was deleted, reload the page to reset state
+        if (pppMarkedForDeletion) {
+          load(params);
+        } else {
+          onSuccessfulSave();
+        }
       },
       R.chain(Future.after(400), saveFuture)
     );
@@ -186,6 +192,7 @@
 
   // load energiatodistus and classifications in parallel
   const load = params => {
+    console.log('load() called with params:', params);
     toggleOverlay(true);
     // form is recreated in reload - side effect is scroll to up
     resources = Maybe.None();
@@ -195,6 +202,7 @@
 
     Future.fork(
       response => {
+        console.log('Load failed:', response);
         toggleOverlay(false);
         announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
       },
@@ -206,8 +214,12 @@
         });
         resources = Maybe.Some(response);
 
-        // Set PPP if it exists
-        if (response.perusparannuspassi) {
+        // Set PPP if it exists and is valid
+        if (
+          response.perusparannuspassi &&
+          response.perusparannuspassi.valid !== false
+        ) {
+          console.log('Setting PPP from response');
           perusparannuspassi = response.perusparannuspassi;
           showPPP = true;
         } else {
