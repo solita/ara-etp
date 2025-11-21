@@ -2,7 +2,7 @@
   (:import (java.util HashMap)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            [org.apache.pdfbox.pdmodel PDDocument PDPage PDPageContentStream]
-           [org.apache.pdfbox.pdmodel.font PDType1Font]
+           [org.apache.pdfbox.pdmodel.font PDType1Font Standard14Fonts$FontName]
            [org.apache.pdfbox.pdmodel.common PDRectangle]
            [org.apache.pdfbox.pdmodel.graphics.state PDExtendedGraphicsState]
            [org.apache.pdfbox.util Matrix]
@@ -20,7 +20,7 @@
         media-box (.getMediaBox page)
         width (.getWidth media-box)
         height (.getHeight media-box)
-        font PDType1Font/HELVETICA_BOLD
+        font (PDType1Font. Standard14Fonts$FontName/HELVETICA_BOLD)
         opacity 0.23
         font-size 120]
 

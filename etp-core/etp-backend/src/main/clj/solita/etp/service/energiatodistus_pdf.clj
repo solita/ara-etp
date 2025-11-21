@@ -21,6 +21,7 @@
            (org.apache.pdfbox.pdmodel PDDocument
                                       PDPageContentStream
                                       PDPageContentStream$AppendMode)
+           (org.apache.pdfbox Loader)
            (org.apache.pdfbox.pdmodel.common PDMetadata)
            (org.apache.pdfbox.pdmodel.graphics.image PDImageXObject)
            (org.apache.xmpbox XMPMetadata)
@@ -638,7 +639,7 @@
                  ^Float x ^Float y
                  ^Float width ^Float height]
   (with-open
-    [doc (PDDocument/load (io/file pdf-path))
+    [doc (Loader/loadPDF (io/file pdf-path))
      contents (PDPageContentStream. doc
                                     (.getPage doc page)
                                     PDPageContentStream$AppendMode/APPEND
@@ -703,7 +704,7 @@
   (-> clock ZonedDateTime/now GregorianCalendar/from))
 
 (defn- set-metadata [^String pdf-path ^String author laatija-allekirjoitus-id ^String title]
-  (with-open [document (PDDocument/load (File. pdf-path))]
+  (with-open [document (Loader/loadPDF (File. pdf-path))]
     (let [creation-date (clock->calendar common-time/clock)
           metadata (PDMetadata. document)
           catalog (.getDocumentCatalog document)
