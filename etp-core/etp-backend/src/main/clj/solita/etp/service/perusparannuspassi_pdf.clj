@@ -1,8 +1,9 @@
 (ns solita.etp.service.perusparannuspassi-pdf
   (:require
     [hiccup.core :as hiccup]
+    [solita.etp.service.pdf :as pdf-service]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot ]
-    [solita.etp.service.pdf :as pdf-service]))
+    [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]]))
 
 ;; CSS styles for the document
 (defn- styles []
@@ -70,6 +71,19 @@
       font-family: roboto, sans-serif;
     }
 
+    h1 {
+      font-size: 30pt;
+    }
+
+    h2 {
+      font-size: 13pt;
+      color: #2c5234;
+    }
+
+    h3 {
+      font-size: 11pt;
+    }
+
     p, div, span, li, ul, ol {
       font-family: roboto, sans-serif;
     }
@@ -103,6 +117,20 @@
       border-right: 1px solid #2c5234;
     }
 
+    .vaikutukset-box {
+      background-color: #eaeeeb;
+      border-radius: 3mm;
+      padding: 3mm 6mm 6mm 6mm;
+      width: 100%;
+      min-height: 80mm;
+    }
+
+    .kohdistuminen-box {
+      background-color: #d5dcd6;
+      border-radius: 3mm;
+      width: 100%;
+      padding-left: 5mm;
+    }
   </style>"))
 
 
@@ -147,12 +175,13 @@
        [:body
         pages-html]])))
 
-(defn generate-perusparannuspassi-pdf [{:keys [perusparannuspassi output-stream] :as params}]
+(defn generate-perusparannuspassi-pdf [{:keys [energiatodistus perusparannuspassi output-stream] :as params}]
   (let [pages [{:title "Perusparannuspassi"
                 :content
                 [:div
                  (etusivu-yleistiedot/etusivu-yleistiedot params)
-                 [:p "Etusivun sisältö tähän"]]}
+                 [:h2 "Perusparannuspassissa ehdotettujen toimenpiteiden vaikutukset"]
+                 (toimenpiteiden-vaikutukset energiatodistus perusparannuspassi)]}
                {:title "Vaiheessa 1 toteutettavat toimenpiteet"
                 :content
                 [:div
