@@ -47,6 +47,7 @@
              com.cognitect.aws/kms                               {:mvn/version "869.2.1687.0"}
              de.ubercode.clostache/clostache                     {:mvn/version "1.4.0"}
              commonmark-hiccup/commonmark-hiccup                 {:mvn/version "0.3.0"}
+             hiccup/hiccup                                       {:mvn/version "1.0.5"}
 
              com.openhtmltopdf/openhtmltopdf-pdfbox              {:mvn/version "1.0.10"}
              com.openhtmltopdf/openhtmltopdf-slf4j               {:mvn/version "1.0.10"}
