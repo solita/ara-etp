@@ -1,5 +1,7 @@
 (ns solita.etp.service.perusparannuspassi-pdf
-  (:require [hiccup.core :as hiccup]))
+  (:require
+    [hiccup.core :as hiccup]
+    [solita.etp.service.pdf :as pdf-service]))
 
 ;; CSS styles for the document
 (defn- styles []
@@ -35,9 +37,9 @@
 
     .page-header {
       background-color: #2c5234;
-      height: 5cm;
+      height: 35mm;
       width: 100%;
-      padding: 16mm 2cm 0 16mm;
+      padding: 10mm 16mm 0 16mm;
     }
 
     .page-title {
@@ -112,3 +114,39 @@
         (styles)]
        [:body
         pages-html]])))
+
+(defn generate-perusparannuspassi-pdf [_energiatodistus perusparannuspassi output-stream]
+  (let [pages [{:title "Perusparannuspassi"
+                :content
+                [:div
+                 [:p "Etusivun sisältö tähän"]]}
+               {:title "Vaiheessa 1 toteutettavat toimenpiteet"
+                :content
+                [:div
+                 [:p "Sisältö vaiheesta 1 tähän"]]}
+               {:title "Vaiheessa 2 toteutettavat toimenpiteet"
+                :content
+                [:div
+                 [:p "Sisältö vaiheesta 2 tähän"]]}
+               {:title "Vaiheessa 3 toteutettavat toimenpiteet"
+                :content
+                [:div
+                 [:p "Sisältö vaiheesta 3 tähän"]]}
+               {:title "Vaiheessa 4 toteutettavat toimenpiteet"
+                :content
+                [:div
+                 [:p "Sisältö vaiheesta 4 tähän"]]}
+               {:title "Vaiheistuksen yhteenveto"
+                :content
+                [:div
+                 [:p "Tähän se suuri taulukko"]]}
+               {:title "Laskennan taustatiedot"
+                :content
+                [:div
+                 [:p "Laskennan taustatiedot tähän"]]}
+               {:title "Lisätietoja"
+                :content
+                [:div
+                 [:p "Viimeinen sivu tähän"]]}]]
+    (-> (generate-document-html pages (:id perusparannuspassi))
+        (pdf-service/html->pdf output-stream))))
