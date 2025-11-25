@@ -30,6 +30,7 @@
 </style>
 
 <button {type} {title} {disabled} on:click>
-  <span class="mr-1 font-icon icon-outlined {largeIcon ? 'text-3xl' : ''}">{icon}</span>
+  <span class="icon-outlined mr-1 font-icon {largeIcon ? 'text-3xl' : ''}"
+    >{icon}</span>
   {text}
 </button>
