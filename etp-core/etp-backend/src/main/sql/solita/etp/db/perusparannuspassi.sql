@@ -66,28 +66,6 @@ set
 where
     perusparannuspassi_id = :perusparannuspassi-id;
 
--- name: find-deleted-by-energiatodistus-id
-select
-    ppp.id,
-    ppp.energiatodistus_id
-from perusparannuspassi ppp
-         join energiatodistus et on ppp.energiatodistus_id = et.id
-where ppp.energiatodistus_id = :energiatodistus-id
-  and et.laatija_id = :laatija-id
-  and ppp.valid = false;
-
--- name: resurrect-perusparannuspassi!
-update perusparannuspassi
-set
-    valid = true
-where id = :id;
-
--- name: resurrect-perusparannuspassi-vaiheet!
-update perusparannuspassi_vaihe
-set
-    valid = true
-where
-    perusparannuspassi_id = :perusparannuspassi-id;
 -- name: select-ppp-numeric-validations
 select column_name, warning$min, warning$max, error$min, error$max
 from ppp_validation_numeric_column where versio = :versio;
