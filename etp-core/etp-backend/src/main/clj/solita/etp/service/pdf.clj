@@ -29,6 +29,7 @@
     (.withHtmlContent builder html-doc nil)
 
     (.usePdfAConformance builder PdfRendererBuilder$PdfAConformance/PDFA_1_A)
+    (.usePdfUaAccessbility builder true)
 
     (add-font builder "fonts/Roboto-Bold.ttf" 700 BaseRendererBuilder$FontStyle/NORMAL)
     (add-font builder "fonts/Roboto-BoldItalic.ttf" 700 BaseRendererBuilder$FontStyle/ITALIC)
