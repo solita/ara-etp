@@ -15,6 +15,7 @@
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.schema.geo :as geo-schema]
             [solita.etp.schema.public-energiatodistus :as public-energiatodistus-schema]
+            [solita.etp.schema.validation :as validation-schema]
             [solita.etp.schema.valvonta-oikeellisuus :as valvonta-schema]
             [solita.etp.schema.viesti :as viesti-schema]
             [solita.etp.security :as security]
@@ -225,7 +226,7 @@
      ["/validation/numeric/:versio"
       {:get {:summary    "Hae energiatodistuksen numeroarvojen validointisäännöt"
              :parameters {:path {:versio common-schema/Key}}
-             :responses  {200 {:body [energiatodistus-schema/NumericValidation]}}
+             :responses  {200 {:body [validation-schema/NumericValidation]}}
              :handler    (fn [{{{:keys [versio]} :path} :parameters :keys [db]}]
                            (r/response (energiatodistus-service/find-numeric-validations
                                          db versio)))}}]

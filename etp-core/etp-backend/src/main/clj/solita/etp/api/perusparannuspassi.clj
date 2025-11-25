@@ -1,10 +1,12 @@
 (ns solita.etp.api.perusparannuspassi
   (:require
+    [ring.util.response :as r]
     [schema.core :as schema]
     [solita.etp.api.response :as api-response]
     [solita.etp.service.rooli :as rooli-service]
     [solita.etp.schema.common :as common-schema]
     [solita.etp.schema.perusparannuspassi :as ppp-schema]
+    [solita.etp.schema.validation :as validation-schema]
     [solita.etp.service.perusparannuspassi :as ppp-service]))
 
 (defn not-implemented! [& _]
@@ -26,7 +28,8 @@
                              [{:type :energiatodistus-not-found :response 404}
                               {:type :foreign-key-violation :response 400}
                               {:type :invalid-energiatodistus-versio :response 400}
-                              {:type :invalid-energiatodistus-id :response 400}]))}}]
+                              {:type :invalid-energiatodistus-id :response 400}
+                              {:type :invalid-value :response 400}]))}}]
     ["/:id"
      {:get    {:summary    "Hae perusparannuspassi tunnisteella (id)"
                :parameters {:path {:id common-schema/Key}}
@@ -49,7 +52,8 @@
                                [{:type :energiatodistus-not-found :response 404}
                                 {:type :foreign-key-violation :response 400}
                                 {:type :invalid-energiatodistus-versio :response 400}
-                                {:type :invalid-energiatodistus-id :response 400}]))}
+                                {:type :invalid-energiatodistus-id :response 400}
+                                {:type :invalid-value :response 400}]))}
       :delete {:summary    "Poista energiatodistukselta perusparannuspassi"
                :parameters {:path {:id common-schema/Key}}
                :responses  {200 {:body nil}
@@ -59,4 +63,56 @@
                             (api-response/ok|not-found
                               (ppp-service/delete-perusparannuspassi!
                                 db whoami id)
-                              (str "perusparannuspassi " id " does not exists.")))}}]]]])
+                              (str "perusparannuspassi " id " does not exists.")))}}]
+
+    ["/validation/numeric/:versio"
+     {:get {:summary    "Hae perusparannuspassin numeroarvojen validointisäännöt"
+            :parameters {:path {:versio common-schema/Key}}
+            :responses  {200 {:body [validation-schema/NumericValidation]}}
+            :handler    (fn [{{{:keys [versio]} :path} :parameters :keys [db]}]
+                          (r/response (ppp-service/find-ppp-numeric-validations
+                                        db versio)))}}]
+
+    ["/validation/required/:versio/bypass"
+     {:get {:summary    "Hae voimassaolevan perusparannuspassin pakolliset kentät,
+                         joita ei voi ohittaa allekirjoituksessa"
+            :parameters {:path {:versio common-schema/Key}}
+            :responses  {200 {:body [schema/Str]}}
+            :handler    (fn [{{{:keys [versio]} :path} :parameters :keys [db]}]
+                          (r/response (ppp-service/find-ppp-required-properties
+                                        db versio true)))}}]
+
+    ["/validation/required/:versio/all"
+     {:get {:summary    "Hae voimassaolevan perusparannuspassin kaikki pakolliset kentät.
+                         Osa näistä on mahdollista ohittaa allekirjoituksessa."
+            :parameters {:path {:versio common-schema/Key}}
+            :responses  {200 {:body [schema/Str]}}
+            :handler    (fn [{{{:keys [versio]} :path} :parameters :keys [db]}]
+                          (r/response (ppp-service/find-ppp-required-properties
+                                        db versio false)))}}]
+
+    ["/vaihe/validation/numeric/:versio"
+     {:get {:summary    "Hae perusparannuspassin vaiheen numeroarvojen validointisäännöt"
+            :parameters {:path {:versio common-schema/Key}}
+            :responses  {200 {:body [validation-schema/NumericValidation]}}
+            :handler    (fn [{{{:keys [versio]} :path} :parameters :keys [db]}]
+                          (r/response (ppp-service/find-ppp-vaihe-numeric-validations
+                                        db versio)))}}]
+
+    ["/vaihe/validation/required/:versio/bypass"
+     {:get {:summary    "Hae voimassaolevan perusparannuspassin vaiheen pakolliset kentät,
+                         joita ei voi ohittaa allekirjoituksessa"
+            :parameters {:path {:versio common-schema/Key}}
+            :responses  {200 {:body [schema/Str]}}
+            :handler    (fn [{{{:keys [versio]} :path} :parameters :keys [db]}]
+                          (r/response (ppp-service/find-ppp-vaihe-required-properties
+                                        db versio true)))}}]
+
+    ["/vaihe/validation/required/:versio/all"
+     {:get {:summary    "Hae voimassaolevan perusparannuspassin vaiheen kaikki pakolliset kentät.
+                         Osa näistä on mahdollista ohittaa allekirjoituksessa."
+            :parameters {:path {:versio common-schema/Key}}
+            :responses  {200 {:body [schema/Str]}}
+            :handler    (fn [{{{:keys [versio]} :path} :parameters :keys [db]}]
+                          (r/response (ppp-service/find-ppp-vaihe-required-properties
+                                        db versio false)))}}]]]])

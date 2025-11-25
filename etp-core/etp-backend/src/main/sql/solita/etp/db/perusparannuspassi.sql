@@ -88,3 +88,22 @@ set
     valid = true
 where
     perusparannuspassi_id = :perusparannuspassi-id;
+-- name: select-ppp-numeric-validations
+select column_name, warning$min, warning$max, error$min, error$max
+from ppp_validation_numeric_column where versio = :versio;
+
+-- name: select-ppp-required-columns
+select column_name
+from ppp_validation_required_column
+where versio = :versio and valid and not (bypass_allowed and :bypass-validation)
+order by ordinal asc;
+
+-- name: select-ppp-vaihe-numeric-validations
+select column_name, warning$min, warning$max, error$min, error$max
+from ppp_vaihe_validation_numeric_column where versio = :versio;
+
+-- name: select-ppp-vaihe-required-columns
+select column_name
+from ppp_vaihe_validation_required_column
+where versio = :versio and valid and not (bypass_allowed and :bypass-validation)
+order by ordinal asc;
