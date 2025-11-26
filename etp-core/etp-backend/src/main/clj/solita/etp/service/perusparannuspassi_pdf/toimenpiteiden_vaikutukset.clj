@@ -1,4 +1,5 @@
-(ns solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset)
+(ns solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset
+  (:require [clojure.string :as str]))
 
 (defn dark? [color]
   "Determines if a color is dark based on relative luminance.
@@ -45,15 +46,17 @@
    "E" "#e8b63e"})
 
 (defn arrow-alt [vaiheet]
-  (str "Energiatehokkuuden kehitys: "
-       (clojure.string/join ", "
-                            (map-indexed
-                              (fn [idx {:keys [e-luku e-luokka]}]
-                                (let [vaihe-name (if (zero? idx)
-                                                   "Lähtötilanne"
-                                                   (str "Vaihe " idx))]
-                                  (str vaihe-name " energialuokka " e-luokka " E-luku " e-luku)))
-                              vaiheet))))
+  (clojure.string/join
+    ""
+    ["Energiatehokkuuden kehitys: "
+     (str/join ", "
+               (map-indexed
+                 (fn [idx {:keys [e-luku e-luokka]}]
+                   (let [vaihe-name (if (zero? idx)
+                                      "Lähtötilanne"
+                                      (clojure.string/join "" ["Vaihe " idx]))]
+                     (clojure.string/join "" [vaihe-name " energialuokka " e-luokka " E-luku " e-luku])))
+                 vaiheet))]))
 
 (defn arrow-svg [vaiheet]
   (let [;; Fixed positions for up to 5 arrows (right to left: 400, 300, 200, 100, 0)
@@ -128,17 +131,54 @@
            :text-anchor "start"}
     text]])
 
-(defn kohdistuminen-svg [toimenpide-ehdotukset]
+(defn kohdistuminen-alt [{:keys [ylapohja
+                                 julkisivu
+                                 ikkunat
+                                 ulkoovet
+                                 alapohja
+                                 lammitys
+                               lammin-kayttovesi
+                                 ilmanvaihto
+                                 jaahdytys
+                                 valaistus
+                                 uusiutuva-energia]}]
+  (let [kaikki-kohteet [["yläpohja" ylapohja]
+                        ["julkisivu" julkisivu]
+                        ["ikkunat" ikkunat]
+                        ["ulko-ovet" ulkoovet]
+                        ["alapohja" alapohja]
+                        ["lämmitys" lammitys]
+                        ["lämmin käyttövesi" lammin-kayttovesi]
+                        ["ilmanvaihto" ilmanvaihto]
+                        ["jäähdytys" jaahdytys]
+                        ["valaistus" valaistus]
+                        ["uusiutuva energia" uusiutuva-energia]]
+        kuvaukset (map (fn [[nimi kohdistuu?]]
+                        (str nimi (if kohdistuu? " kohdistuu" " ei kohdistu")))
+                      kaikki-kohteet)]
+    (str "Toimenpiteiden kohdistuminen rakennuksen osa-alueisiin: "
+         (str/join ", " kuvaukset))))
+
+(defn kohdistuminen-svg [{:keys [lammitys
+                                 lammin-kayttovesi
+                                 ilmanvaihto
+                                 jaahdytys
+                                 valaistus
+                                 uusiutuva-energia] :as toimenpide-ehdotukset}]
   [:svg {:xmlns   "http://www.w3.org/2000/svg"
          :viewBox "0 2 160 45"
-         :width   "160mm"}
+         :width   "160mm"
+         :role    "img"
+         :aria-label (kohdistuminen-alt toimenpide-ehdotukset)
+         :alt (kohdistuminen-alt toimenpide-ehdotukset)}
    (house toimenpide-ehdotukset)
-   (circle-with-text 60 10 "Lämmitys" (:lammitys toimenpide-ehdotukset))
-   (circle-with-text 60 18 "Lämmin käyttövesi" (:lammin-kayttovesi toimenpide-ehdotukset))
-   (circle-with-text 60 26 "Ilmanvaihto" (:ilmanvaihto toimenpide-ehdotukset))
-   (circle-with-text 110 10 "Jäähdytys" (:jaahdytys toimenpide-ehdotukset))
-   (circle-with-text 110 18 "Valaistus" (:valaistus toimenpide-ehdotukset))
-   (circle-with-text 110 26 "Uusiutuva energia" (:uusiutuva-energia toimenpide-ehdotukset))
+
+   (circle-with-text 60 10 "Lämmitys" lammitys)
+   (circle-with-text 60 18 "Lämmin käyttövesi" lammin-kayttovesi)
+   (circle-with-text 60 26 "Ilmanvaihto" ilmanvaihto)
+   (circle-with-text 110 10 "Jäähdytys" jaahdytys)
+   (circle-with-text 110 18 "Valaistus" valaistus)
+   (circle-with-text 110 26 "Uusiutuva energia" uusiutuva-energia)
    [:rect {:x 55 :y 35.5 :width 103.8 :height 9 :ry 2 :fill "#c0cbc2"}]
    (circle-with-text 60 38 "Kohdistuu muutoksia" true)
    (circle-with-text 110 38 "Ei kohdistu muutoksia" false)])
