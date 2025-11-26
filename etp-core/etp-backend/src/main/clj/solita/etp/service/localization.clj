@@ -1,4 +1,6 @@
-(ns solita.etp.service.localization)
+(ns solita.etp.service.localization
+  (:require
+    [solita.etp.service.luokittelu :as luokittelu-service]))
 
 (def ppp-pdf-localization
   {:fi {:rakennuksen-nimi                  "Rakennuksen nimi"
@@ -23,7 +25,7 @@
   "To use this you must provide the list of alakayttotarkoitukset as fetched from the DB for the correct version. At the
   time of writing the alakayttotarkoitukset can be fetched with `solita.etp.service.kayttotarkoitus/find-alakayttotarkoitukset`"
   [luokka alakayttotarkoitukset kieli]
-  (let [kayttotarkoitus (some #(when (= (:id %) luokka) %) alakayttotarkoitukset)]
+  (let [kayttotarkoitus (luokittelu-service/find-luokka luokka alakayttotarkoitukset)]
     (case kieli
       :fi (:label-fi kayttotarkoitus)
       :sv (:label-sv kayttotarkoitus))))
