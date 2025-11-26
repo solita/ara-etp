@@ -78,7 +78,16 @@
         :kohdistuu                         "riktas"
         :ei-kohdistu                       "riktas inte"
         :kohdistuu-muutoksia               "Förändringar riktas"
-        :ei-kohdistu-muutoksia             "Inga förändringar riktas"}})
+        :ei-kohdistu-muutoksia             "Inga förändringar riktas"
+
+        ;; Page titles and headings
+        :perusparannuspassi                "Grundrenoveringspass"
+        :perusparannuspassissa-ehdotettujen-toimenpiteiden-vaikutukset "Effekterna av de åtgärder som föreslås i grundrenoveringspasset"
+        :vaiheessa-n-toteutettavat-toimenpiteet "Åtgärder som ska genomföras i fas %s"
+        :vaiheistuksen-yhteenveto          "Sammanfattning av fasindelningen"
+        :laskennan-taustatiedot            "Bakgrundsinformation om beräkningen"
+        :lisatietoja                       "Ytterligare information"
+        :perusparannuspassin-tunnus-footer "Grundrenoveringspassets beteckning"}})
 
 
 (defn et-perustiedot-kayttotarkoitus->description
