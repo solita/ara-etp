@@ -9,12 +9,6 @@
                      [:dt (str (:dt %) ":")]
                      [:dd (:dd %)]]) key-vals)))
 
-(defn- perustiedot-kayttotarkoitus->description [luokka alakayttotarkoitukset kieli]
-  (let [kayttotarkoitus (some #(when (= (:id %) luokka) %) alakayttotarkoitukset)]
-    (case kieli
-      :fi (:label-fi kayttotarkoitus)
-      :sv (:label-sv kayttotarkoitus))))
-
 (defn etusivu-yleistiedot [energiatodistus perusparannuspassi kieli alakayttotarkoitukset]
   (let [l (kieli loc/ppp-pdf-localization)]
     (description-list
@@ -37,4 +31,4 @@
        {:dt (l :passin-esittelyn-paivamaara)
         :dd (-> perusparannuspassi (get-in [:passin-perustiedot :havainnointikaynti]) time/format-date)}
        {:dt (l :rakennuksen-kayttotarkoitusluokka)
-        :dd (-> energiatodistus (get-in [:perustiedot :kayttotarkoitus]) (perustiedot-kayttotarkoitus->description alakayttotarkoitukset kieli))}])))
+        :dd (-> energiatodistus (get-in [:perustiedot :kayttotarkoitus]) (loc/et-perustiedot-kayttotarkoitus->description alakayttotarkoitukset kieli))}])))

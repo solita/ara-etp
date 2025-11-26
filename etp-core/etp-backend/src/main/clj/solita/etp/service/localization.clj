@@ -18,3 +18,14 @@
         :havainnointikaynnin-paivamaara    "Havainnointikäynnin päivämäärä (sv)"
         :passin-esittelyn-paivamaara       "Passin esittelyn päivämäärä (sv)"
         :rakennuksen-kayttotarkoitusluokka "Rakennuksen käyttötarkoitusluokka (sv)"}})
+
+
+(defn et-perustiedot-kayttotarkoitus->description
+  "To use this you must provide the list of alakayttotarkoitukset as fetched from the DB for the correct version. At the
+  time of writing the alakayttotarkoitukset can be fetched with `solita.etp.service.kayttotarkoitus/find-alakayttotarkoitukset`"
+  [luokka alakayttotarkoitukset kieli]
+  (let [kayttotarkoitus (some #(when (= (:id %) luokka) %) alakayttotarkoitukset)]
+    (case kieli
+      :fi (:label-fi kayttotarkoitus)
+      :sv (:label-sv kayttotarkoitus))))
+
