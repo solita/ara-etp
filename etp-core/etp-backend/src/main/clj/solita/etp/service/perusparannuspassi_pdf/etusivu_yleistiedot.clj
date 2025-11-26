@@ -9,7 +9,7 @@
                      [:dt (str (:dt %) ":")]
                      [:dd (:dd %)]]) key-vals)))
 
-(defn etusivu-yleistiedot [energiatodistus perusparannuspassi kieli alakayttotarkoitukset]
+(defn etusivu-yleistiedot [{:keys [energiatodistus perusparannuspassi kieli alakayttotarkoitukset]}]
   (let [l (kieli loc/ppp-pdf-localization)]
     (description-list
       [{:dt (l :rakennuksen-nimi)

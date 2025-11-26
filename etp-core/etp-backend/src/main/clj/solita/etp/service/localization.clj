@@ -1,8 +1,7 @@
 (ns solita.etp.service.localization)
 
 (def ppp-pdf-localization
-  {
-   :fi {:rakennuksen-nimi                  "Rakennuksen nimi"
+  {:fi {:rakennuksen-nimi                  "Rakennuksen nimi"
         :rakennuksen-osoite                "Rakennuksen osoite"
         :pysyva-rakennustunnus             "Pysyvä rakennustunnus"
         :energiatodistuksen-todistustunnus "Energiatodistuksen todistustunnus"

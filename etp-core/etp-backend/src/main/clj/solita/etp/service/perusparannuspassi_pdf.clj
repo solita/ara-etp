@@ -147,11 +147,11 @@
        [:body
         pages-html]])))
 
-(defn generate-perusparannuspassi-pdf [energiatodistus perusparannuspassi kieli alakayttotarkoitukset output-stream]
+(defn generate-perusparannuspassi-pdf [{:keys [perusparannuspassi output-stream] :as params}]
   (let [pages [{:title "Perusparannuspassi"
                 :content
                 [:div
-                 (etusivu-yleistiedot/etusivu-yleistiedot energiatodistus perusparannuspassi kieli alakayttotarkoitukset)
+                 (etusivu-yleistiedot/etusivu-yleistiedot params)
                  [:p "Etusivun sisältö tähän"]]}
                {:title "Vaiheessa 1 toteutettavat toimenpiteet"
                 :content
