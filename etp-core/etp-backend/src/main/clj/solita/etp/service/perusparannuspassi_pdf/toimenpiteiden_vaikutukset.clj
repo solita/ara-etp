@@ -87,27 +87,27 @@
            :d "M 2.8793241,22.92212 24.988592,5.0422558 47.114073,22.936696 45.809767,24.559126 25.002882,7.738184 4.1952653,24.564235 Z"
            :stroke "#2c5234"
            :stroke-width "0.5"
-           :fill (if (contains? toimenpide-ehdotukset :ylapohja) "#2c5234" "white")}]
+           :fill (if (:ylapohja toimenpide-ehdotukset) "#2c5234" "white")}]
    [:path {:id           "outer-shell"
            :d            "M 24.991756,9.0428589 8.3209391,22.487516 v 17.311088 h 4.7221949 l -0.0083,-12.137778 h 8.979297 l -0.03204,12.137778 H 41.673912 V 22.507153 Z m 1.953369,18.6179671 h 11.802381 v 7.078139 l -11.8184,-0.03152 z"
            :stroke "#2c5234"
            :stroke-width "0.5"
-           :fill (if (contains? toimenpide-ehdotukset :julkisivu) "#2c5234" "white")}]
+           :fill (if (:julkisivu toimenpide-ehdotukset) "#2c5234" "white")}]
    [:path {:id "windows"
            :d "m 27.978952,28.726542 v 4.915006 h 9.718663 v -4.915006 z"
            :stroke "#2c5234"
            :stroke-width "0.5"
-           :fill (if (contains? toimenpide-ehdotukset :ikkunat) "#2c5234" "white")}]
+           :fill (if (:ikkunat toimenpide-ehdotukset) "#2c5234" "white")}]
    [:path {:id "doors"
            :d "m 14.092866,28.726542 h 6.839653 V 39.7018 h -6.839653 z"
            :stroke "#2c5234"
            :stroke-width "0.5"
-           :fill (if (contains? toimenpide-ehdotukset :ulkoovet) "#2c5234" "white")}]
+           :fill (if (:ulkoovet toimenpide-ehdotukset) "#2c5234" "white")}]
    [:path {:id "undershell"
            :d "m 8.3209391,41.006106 33.3530029,0.03181 v 3.944731 l -33.3530029,0.0159 z"
            :stroke "#2c5234"
            :stroke-width "0.5"
-           :fill (if (contains? toimenpide-ehdotukset :alapohja) "#2c5234" "white")}]])
+           :fill (if (:alapohja toimenpide-ehdotukset) "#2c5234" "white")}]])
 
 
 
@@ -133,12 +133,12 @@
          :viewBox "0 2 160 45"
          :width   "160mm"}
    (house toimenpide-ehdotukset)
-   (circle-with-text 60 10 "Lämmitys" (contains? toimenpide-ehdotukset :lammitys))
-   (circle-with-text 60 18 "Lämmin käyttövesi" (contains? toimenpide-ehdotukset :lammin-kayttovesi))
-   (circle-with-text 60 26 "Ilmanvaihto" (contains? toimenpide-ehdotukset :ilmanvaihto))
-   (circle-with-text 110 10 "Jäähdytys" (contains? toimenpide-ehdotukset :jaahdytys))
-   (circle-with-text 110 18 "Valaistus" (contains? toimenpide-ehdotukset :valaistus))
-   (circle-with-text 110 26 "Uusiutuva energia" (contains? toimenpide-ehdotukset :uusiutuva-energia))
+   (circle-with-text 60 10 "Lämmitys" (:lammitys toimenpide-ehdotukset))
+   (circle-with-text 60 18 "Lämmin käyttövesi" (:lammin-kayttovesi toimenpide-ehdotukset))
+   (circle-with-text 60 26 "Ilmanvaihto" (:ilmanvaihto toimenpide-ehdotukset))
+   (circle-with-text 110 10 "Jäähdytys" (:jaahdytys toimenpide-ehdotukset))
+   (circle-with-text 110 18 "Valaistus" (:valaistus toimenpide-ehdotukset))
+   (circle-with-text 110 26 "Uusiutuva energia" (:uusiutuva-energia toimenpide-ehdotukset))
    [:rect {:x 55 :y 35.5 :width 103.8 :height 9 :ry 2 :fill "#c0cbc2"}]
    (circle-with-text 60 38 "Kohdistuu muutoksia" true)
    (circle-with-text 110 38 "Ei kohdistu muutoksia" false)])
@@ -158,6 +158,16 @@
                 :e-luokka "A"}])
    [:h3 "Toimenpiteiden kohdistuminen rakennuksen osa-alueisiin"]
    [:div {:class "kohdistuminen-box"}
-    (kohdistuminen-svg #{:ylapohja :ulkoovet})]
+    (kohdistuminen-svg {:ylapohja true
+                        :julkisivu false
+                        :ikkunat false
+                        :ulkoovet true
+                        :alapohja false
+                        :lammitys false
+                        :lammin-kayttovesi false
+                        :ilmanvaihto false
+                        :jaahdytys false
+                        :valaistus false
+                        :uusiutuva-energia false})]
    [:h3 "Rakennus ehdotettujen toimenpiteiden jälkeen"]
    [:p "Lopputaulukot tähän"]])
