@@ -1,10 +1,12 @@
 (ns solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [solita.etp.service.localization :as loc]))
 
-(defn dark? [color]
+(defn dark?
   "Determines if a color is dark based on relative luminance.
    Uses the standard luminance formula: 0.299*R + 0.587*G + 0.114*B
    Returns true if the color's luminance is below the threshold."
+  [color]
   (let [;; Remove # prefix if present
         hex (if (.startsWith color "#") (subs color 1) color)
         ;; Parse RGB components (0-255)
@@ -45,21 +47,21 @@
    "D" "#fced4f"
    "E" "#e8b63e"})
 
-(defn arrow-alt [vaiheet]
-  (clojure.string/join
-    ""
-    ["Energiatehokkuuden kehitys: "
-     (str/join ", "
-               (map-indexed
-                 (fn [idx {:keys [e-luku e-luokka]}]
-                   (let [vaihe-name (if (zero? idx)
-                                      "Lähtötilanne"
-                                      (clojure.string/join "" ["Vaihe " idx]))]
-                     (clojure.string/join "" [vaihe-name " energialuokka " e-luokka " E-luku " e-luku])))
-                 vaiheet))]))
+(defn arrow-alt [vaiheet kieli]
+  (let [l (kieli loc/ppp-pdf-localization)]
+    (str (l :energiatehokkuuden-kehitys) ": "
+         (str/join ", "
+                   (map-indexed
+                     (fn [idx {:keys [e-luku e-luokka]}]
+                       (let [vaihe-name (if (zero? idx)
+                                          (l :lahtotilanne)
+                                          (str (l :vaihe) " " idx))]
+                         (str vaihe-name " " (l :energialuokka) " " e-luokka " " (l :e-luku) " " e-luku)))
+                     vaiheet)))))
 
-(defn arrow-svg [vaiheet]
-  (let [;; Fixed positions for up to 5 arrows (right to left: 400, 300, 200, 100, 0)
+(defn arrow-svg [vaiheet kieli]
+  (let [l (kieli loc/ppp-pdf-localization)
+        ;; Fixed positions for up to 5 arrows (right to left: 400, 300, 200, 100, 0)
         arrow-positions [0 100 200 300 400]
         ;; Generate arrows only for vaiheet that exist
         arrows (map-indexed
@@ -68,13 +70,13 @@
                          color (get colors-by-e-luokka e-luokka "#e8b63e")
                          x-position (get arrow-positions idx 0)
                          vaihe-title (if (zero? idx)
-                                       "Lähtötilanne"
-                                       (str "Vaihe " idx))
+                                       (l :lahtotilanne)
+                                       (str (l :vaihe) " " idx))
                          perf-label (str e-luokka " - " e-luku)]
                      (arrow color x-position vaihe-title perf-label)))
                  vaiheet)
         ;; Generate accessibility description from vaiheet data
-        alt-text (arrow-alt vaiheet)]
+        alt-text (arrow-alt vaiheet kieli)]
     [:svg {:xmlns      "http://www.w3.org/2000/svg"
            :viewBox    "-6 -60 520 65"
            :width      "100%"
@@ -120,6 +122,9 @@
           :stroke (if filled? "none" "#2c5234")
           :stroke-width "0.4"}])
 
+(defn capitalize [s]
+  (str (str/upper-case (subs s 0 1)) (subs s 1)))
+
 (defn circle-with-text [x y text filled?]
   [:g {:transform (format "translate(%d,%d)" x y)}
    (circle filled?)
@@ -129,85 +134,77 @@
            :font-size   "4"
            :fill        "black"
            :text-anchor "start"}
-    text]])
+    (capitalize text)]])
 
-(defn kohdistuminen-alt [{:keys [ylapohja
-                                 julkisivu
-                                 ikkunat
-                                 ulkoovet
-                                 alapohja
-                                 lammitys
-                               lammin-kayttovesi
-                                 ilmanvaihto
-                                 jaahdytys
-                                 valaistus
-                                 uusiutuva-energia]}]
-  (let [kaikki-kohteet [["yläpohja" ylapohja]
-                        ["julkisivu" julkisivu]
-                        ["ikkunat" ikkunat]
-                        ["ulko-ovet" ulkoovet]
-                        ["alapohja" alapohja]
-                        ["lämmitys" lammitys]
-                        ["lämmin käyttövesi" lammin-kayttovesi]
-                        ["ilmanvaihto" ilmanvaihto]
-                        ["jäähdytys" jaahdytys]
-                        ["valaistus" valaistus]
-                        ["uusiutuva energia" uusiutuva-energia]]
+(defn kohdistuminen-alt [toimenpide-ehdotukset kieli]
+  (let [l (kieli loc/ppp-pdf-localization)
+        {:keys [ylapohja julkisivu ikkunat ulkoovet alapohja
+                lammitys lammin-kayttovesi ilmanvaihto jaahdytys
+                valaistus uusiutuva-energia]} toimenpide-ehdotukset
+        kaikki-kohteet [[(l :ylapohja) ylapohja]
+                        [(l :julkisivu) julkisivu]
+                        [(l :ikkunat) ikkunat]
+                        [(l :ulko-ovet) ulkoovet]
+                        [(l :alapohja) alapohja]
+                        [(l :lammitys) lammitys]
+                        [(l :lammin-kayttovesi) lammin-kayttovesi]
+                        [(l :ilmanvaihto) ilmanvaihto]
+                        [(l :jaahdytys) jaahdytys]
+                        [(l :valaistus) valaistus]
+                        [(l :uusiutuva-energia) uusiutuva-energia]]
         kuvaukset (map (fn [[nimi kohdistuu?]]
-                        (str nimi (if kohdistuu? " kohdistuu" " ei kohdistu")))
+                        (str nimi " " (if kohdistuu? (l :kohdistuu) (l :ei-kohdistu))))
                       kaikki-kohteet)]
-    (str "Toimenpiteiden kohdistuminen rakennuksen osa-alueisiin: "
+    (str (l :toimenpiteiden-kohdistuminen) ": "
          (str/join ", " kuvaukset))))
+(defn kohdistuminen-svg [toimenpide-ehdotukset kieli]
+  (let [l (kieli loc/ppp-pdf-localization)
+        {:keys [lammitys lammin-kayttovesi ilmanvaihto
+                jaahdytys valaistus uusiutuva-energia]} toimenpide-ehdotukset
+        alt-text (kohdistuminen-alt toimenpide-ehdotukset kieli)]
+    [:svg {:xmlns      "http://www.w3.org/2000/svg"
+           :viewBox    "0 2 160 45"
+           :width      "160mm"
+           :role       "img"
+           :aria-label alt-text
+           :alt        alt-text}
+     (house toimenpide-ehdotukset)
+     (circle-with-text 60 10 (l :lammitys) lammitys)
+     (circle-with-text 60 18 (l :lammin-kayttovesi) lammin-kayttovesi)
+     (circle-with-text 60 26 (l :ilmanvaihto) ilmanvaihto)
+     (circle-with-text 110 10 (l :jaahdytys) jaahdytys)
+     (circle-with-text 110 18 (l :valaistus) valaistus)
+     (circle-with-text 110 26 (l :uusiutuva-energia) uusiutuva-energia)
+     [:rect {:x 55 :y 35.5 :width 103.8 :height 9 :ry 2 :fill "#c0cbc2"}]
+     (circle-with-text 60 38 (l :kohdistuu-muutoksia) true)
+     (circle-with-text 110 38 (l :ei-kohdistu-muutoksia) false)]))
 
-(defn kohdistuminen-svg [{:keys [lammitys
-                                 lammin-kayttovesi
-                                 ilmanvaihto
-                                 jaahdytys
-                                 valaistus
-                                 uusiutuva-energia] :as toimenpide-ehdotukset}]
-  [:svg {:xmlns   "http://www.w3.org/2000/svg"
-         :viewBox "0 2 160 45"
-         :width   "160mm"
-         :role    "img"
-         :aria-label (kohdistuminen-alt toimenpide-ehdotukset)
-         :alt (kohdistuminen-alt toimenpide-ehdotukset)}
-   (house toimenpide-ehdotukset)
-
-   (circle-with-text 60 10 "Lämmitys" lammitys)
-   (circle-with-text 60 18 "Lämmin käyttövesi" lammin-kayttovesi)
-   (circle-with-text 60 26 "Ilmanvaihto" ilmanvaihto)
-   (circle-with-text 110 10 "Jäähdytys" jaahdytys)
-   (circle-with-text 110 18 "Valaistus" valaistus)
-   (circle-with-text 110 26 "Uusiutuva energia" uusiutuva-energia)
-   [:rect {:x 55 :y 35.5 :width 103.8 :height 9 :ry 2 :fill "#c0cbc2"}]
-   (circle-with-text 60 38 "Kohdistuu muutoksia" true)
-   (circle-with-text 110 38 "Ei kohdistu muutoksia" false)])
-
-(defn toimenpiteiden-vaikutukset [_energiatodistus _perusparannuspassi]
-  [:div {:class "vaikutukset-box"}
-   [:h3 "Energiatehokkuusluokan ja E-luvun muutos"]
-   (arrow-svg [{:e-luku 181
-                :e-luokka "E"}
-               {:e-luku 145
-                :e-luokka "D"}
-               {:e-luku 123
-                :e-luokka "C"}
-               {:e-luku 98
-                :e-luokka "B"}
-               {:e-luku 76
-                :e-luokka "A"}])
-   [:h3 "Toimenpiteiden kohdistuminen rakennuksen osa-alueisiin"]
-   [:div {:class "kohdistuminen-box"}
-    (kohdistuminen-svg {:ylapohja true
-                        :julkisivu false
-                        :ikkunat false
-                        :ulkoovet true
-                        :alapohja false
-                        :lammitys false
-                        :lammin-kayttovesi false
-                        :ilmanvaihto false
-                        :jaahdytys false
-                        :valaistus false
-                        :uusiutuva-energia false})]
-   [:h3 "Rakennus ehdotettujen toimenpiteiden jälkeen"]
-   [:p "Lopputaulukot tähän"]])
+(defn toimenpiteiden-vaikutukset [{:keys [kieli]}]
+  (let [l (kieli loc/ppp-pdf-localization)]
+    [:div {:class "vaikutukset-box"}
+     [:h3 (l :energiatehokkuusluokan-muutos)]
+     (arrow-svg [{:e-luku 181
+                  :e-luokka "E"}
+                 {:e-luku 145
+                  :e-luokka "D"}
+                 {:e-luku 123
+                  :e-luokka "C"}
+                 {:e-luku 98
+                  :e-luokka "B"}
+                 {:e-luku 76
+                  :e-luokka "A"}] kieli)
+     [:h3 (l :toimenpiteiden-kohdistuminen)]
+     [:div {:class "kohdistuminen-box"}
+      (kohdistuminen-svg {:ylapohja true
+                          :julkisivu false
+                          :ikkunat false
+                          :ulkoovet true
+                          :alapohja false
+                          :lammitys false
+                          :lammin-kayttovesi false
+                          :ilmanvaihto false
+                          :jaahdytys false
+                          :valaistus false
+                          :uusiutuva-energia false} kieli)]
+     [:h3 (l :rakennus-toimenpiteiden-jalkeen)]
+     [:p "Lopputaulukot tähän"]]))

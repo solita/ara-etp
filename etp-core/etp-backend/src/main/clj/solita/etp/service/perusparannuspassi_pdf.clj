@@ -181,7 +181,7 @@
                 [:div
                  (etusivu-yleistiedot/etusivu-yleistiedot params)
                  [:h2 "Perusparannuspassissa ehdotettujen toimenpiteiden vaikutukset"]
-                 (toimenpiteiden-vaikutukset energiatodistus perusparannuspassi)]}
+                 (toimenpiteiden-vaikutukset params)]}
                {:title "Vaiheessa 1 toteutettavat toimenpiteet"
                 :content
                 [:div
