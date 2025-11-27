@@ -10,7 +10,9 @@
         :perusparannuspassin-tunnus        "Perusparannuspassin tunnus"
         :havainnointikaynnin-paivamaara    "Havainnointikäynnin päivämäärä"
         :passin-esittelyn-paivamaara       "Passin esittelyn päivämäärä"
-        :rakennuksen-kayttotarkoitusluokka "Rakennuksen käyttötarkoitusluokka"}
+        :rakennuksen-kayttotarkoitusluokka "Rakennuksen käyttötarkoitusluokka"
+        :perusparannuspassin-laatija       "Perusparannuspassin laatija"
+        :allekirjoituspaiva                 "Allekirjoituspäivä"}
    :sv {:rakennuksen-nimi                  "Rakennuksen nimi (sv)"
         :rakennuksen-osoite                "Rakennuksen osoite (sv)"
         :pysyva-rakennustunnus             "Pysyvä rakennustunnus (sv)"
@@ -18,7 +20,9 @@
         :perusparannuspassin-tunnus        "Perusparannuspassin tunnus (sv)"
         :havainnointikaynnin-paivamaara    "Havainnointikäynnin päivämäärä (sv)"
         :passin-esittelyn-paivamaara       "Passin esittelyn päivämäärä (sv)"
-        :rakennuksen-kayttotarkoitusluokka "Rakennuksen käyttötarkoitusluokka (sv)"}})
+        :rakennuksen-kayttotarkoitusluokka "Rakennuksen käyttötarkoitusluokka (sv)"
+        :perusparannuspassin-laatija       "Perusparannuspassin laatija (sv)"
+        :allekirjoituspaiva                 "Allekirjoituspäivä (sv)"}})
 
 
 (defn et-perustiedot-kayttotarkoitus->description
