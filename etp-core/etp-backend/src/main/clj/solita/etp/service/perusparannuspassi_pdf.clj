@@ -78,7 +78,8 @@
       display: table;
       width: 100%;
       background-color: #2c5234;
-      border-bottom: 1px solid #2c5234;
+      border-collapse: collapse;
+      -fs-border-rendering: no-bevel;
     }
 
     dl.etusivu-yleistiedot div {
@@ -88,6 +89,8 @@
     dl.etusivu-yleistiedot dt,
     dl.etusivu-yleistiedot dd {
       display: table-cell;
+      -fs-border-rendering: no-bevel;
+      border: 1px solid #2c5234;
       padding: 6.5px 8px;
     }
 
@@ -99,8 +102,6 @@
 
     dl.etusivu-yleistiedot dd {
       background-color: white;
-      border-top: 1px solid #2c5234;
-      border-right: 1px solid #2c5234;
     }
 
   </style>"))
