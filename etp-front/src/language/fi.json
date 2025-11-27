@@ -1615,29 +1615,14 @@
         },
         "tulokset": {
           "label-context": "$unused",
-          "vaiheen-alku-pvm": " 1. Vaiheen aloituspäivämäärä",
-          "ostoenergian-tarve-kaukolampo": "1. Vaiheen kaukolämpö",
-          "ostoenergian-tarve-uusiutuvat-pat": "1. vaiheen uusiutuvat polttoaineet",
-          "ostoenergian-tarve-fossiiliset-pat": "1. Vaiheen fossiiliset polttoaineet",
-          "ostoenergian-tarve-kaukojaahdytys": "1. Vaiheen kaukojäähdytys",
-          "ostoenergian-tarve-sahko": "1. Vaiheeen sähkö",
-          "uusiutuvan-energian-kokonaistuotto": "1. Vaiheen uusiutuvan energian kokonaistuotto",
-          "uusiutuvan-energian-hyodynnetty-osuus": "1. Vaiheen uusiutuvan energian hyödynnetty osuus"
-        }
-      },
-      "1": {
-        "toimenpiteet": {
-          "toimenpideseloste": "Toimenpideseloste"
-        },
-        "tulokset": {
-          "label-context": "$unused",
-          "ostoenergian-tarve-kaukolampo": "2. Vaiheen kaukolämpö",
-          "ostoenergian-tarve-uusiutuvat-pat": "2. vaiheen uusiutuvat polttoaineet",
-          "ostoenergian-tarve-fossiiliset-pat": "2. Vaiheen fossiiliset polttoaineet",
-          "ostoenergian-tarve-kaukojaahdytys": "2. Vaiheen kaukojäähdytys",
-          "ostoenergian-tarve-sahko": "2. Vaiheeen sähkö",
-          "uusiutuvan-energian-kokonaistuotto": "2. Vaiheen uusiutuvan energian kokonaistuotto",
-          "uusiutuvan-energian-hyodynnetty-osuus": "2. Vaiheen uusiutuvan energian hyödynnetty osuus"
+          "vaiheen-alku-pvm": "vaiheen aloituspäivämäärä",
+          "ostoenergian-tarve-kaukolampo": "Vaiheen kaukolämpö",
+          "ostoenergian-tarve-uusiutuvat-pat": "vaiheen uusiutuvat polttoaineet",
+          "ostoenergian-tarve-fossiiliset-pat": "Vaiheen fossiiliset polttoaineet",
+          "ostoenergian-tarve-kaukojaahdytys": "Vaiheen kaukojäähdytys",
+          "ostoenergian-tarve-sahko": "Vaiheeen sähkö",
+          "uusiutuvan-energian-kokonaistuotto": "Vaiheen uusiutuvan energian kokonaistuotto",
+          "uusiutuvan-energian-hyodynnetty-osuus": "Vaiheen uusiutuvan energian hyödynnetty osuus"
         }
       }
     }
