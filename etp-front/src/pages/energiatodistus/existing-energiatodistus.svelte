@@ -55,7 +55,7 @@
     versionApi.getConfig
   );
 
-    // PPP state
+  // PPP state
   let perusparannuspassi = Maybe.None();
   let showPPP = false;
 
@@ -109,7 +109,9 @@
           perusparannuspassi = Maybe.None();
           showPPP = false;
           toggleOverlay(false);
-          announceSuccess(i18n('energiatodistus.messages.mark-ppp-for-deletion'));
+          announceSuccess(
+            i18n('energiatodistus.messages.mark-ppp-for-deletion')
+          );
         },
         pppApi.deletePerusparannuspassi(fetch, perusparannuspassi.id)
       );
