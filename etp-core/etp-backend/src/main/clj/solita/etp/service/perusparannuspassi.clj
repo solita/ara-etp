@@ -206,39 +206,49 @@
       (assert-2026! versio)
       (assert-draft! tila-id)
 
-      (let [ppp-db-row (-> ppp (dissoc :vaiheet) ppp->db-row)
-            warnings (validate-ppp-db-row! tx ppp-db-row versio)
-            vaihe-warnings (reduce concat
-                                   (for [vaihe-db-row (->> ppp :vaiheet (map ->vaihe-update-db-row))]
-                                     (validate-ppp-vaihe-db-row! tx vaihe-db-row versio)))
-            {:keys [id]} (db/with-db-exception-translation
-                           jdbc/insert! tx :perusparannuspassi (dissoc ppp-db-row :vaiheet)
-                           db/default-opts)]
+      ;; Check if there's a soft-deleted PPP for this energiatodistus
+      (if-let [deleted-ppp (first (perusparannuspassi-db/find-deleted-by-energiatodistus-id
+                                   tx
+                                   {:energiatodistus-id (:energiatodistus-id ppp)}))]
+        ;; Resurrect the soft-deleted PPP
+        (let [ppp-id (:id deleted-ppp)]
+          (perusparannuspassi-db/resurrect-perusparannuspassi! tx {:id ppp-id})
+          {:id ppp-id :warnings []})
 
-        ;; Insert vaiheet
-        (doseq [vaihe (:vaiheet ppp)]
-          (db/with-db-exception-translation
-            jdbc/insert! tx :perusparannuspassi-vaihe (->vaihe-insert-db-row vaihe id)
-            db/default-opts)
+        ;; No soft-deleted PPP exists, insert a new one
+        (let [ppp-db-row (-> ppp (dissoc :vaiheet) ppp->db-row)
+              warnings (validate-ppp-db-row! tx ppp-db-row versio)
+              vaihe-warnings (reduce concat
+                                     (for [vaihe-db-row (->> ppp :vaiheet (map ->vaihe-update-db-row))]
+                                       (validate-ppp-vaihe-db-row! tx vaihe-db-row versio)))
+              {:keys [id]} (db/with-db-exception-translation
+                             jdbc/insert! tx :perusparannuspassi (dissoc ppp-db-row :vaiheet)
+                             db/default-opts)]
 
-          (doseq [[ordinal toimenpide-ehdotus-id]
-                  (map vector (range) (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id)))]
+          ;; Insert vaiheet
+          (doseq [vaihe (:vaiheet ppp)]
             (db/with-db-exception-translation
-              jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
-              {:perusparannuspassi_id id
-               :vaihe_nro             (:vaihe-nro vaihe)
-               :toimenpide_ehdotus_id toimenpide-ehdotus-id
-               :ordinal               ordinal}
-              db/default-opts)))
+              jdbc/insert! tx :perusparannuspassi-vaihe (->vaihe-insert-db-row vaihe id)
+              db/default-opts)
 
-        (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
-          (jdbc/insert! tx :perusparannuspassi-vaihe
-                        {:perusparannuspassi-id id
-                         :vaihe-nro             vaihe-nro
-                         :valid                 false}
-                        db/default-opts))
-        {:id       id
-         :warnings (concat warnings vaihe-warnings)}))))
+            (doseq [[ordinal toimenpide-ehdotus-id]
+                    (map vector (range) (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id)))]
+              (db/with-db-exception-translation
+                jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
+                {:perusparannuspassi_id id
+                 :vaihe_nro             (:vaihe-nro vaihe)
+                 :toimenpide_ehdotus_id toimenpide-ehdotus-id
+                 :ordinal               ordinal}
+                db/default-opts)))
+
+          (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
+            (jdbc/insert! tx :perusparannuspassi-vaihe
+                          {:perusparannuspassi-id id
+                           :vaihe-nro             vaihe-nro
+                           :valid                 false}
+                          db/default-opts))
+          {:id       id
+           :warnings (concat warnings vaihe-warnings)})))))
 
 (defn assert-update-requirements! [db whoami current-ppp new-ppp]
   (let [{:keys [tila-id laatija-id]}
@@ -314,7 +324,6 @@
          (str "perusparannuspassi " perusparannuspassi-id " does not exist.")))
       ;; Soft delete PPP and its vaiheet (set valid = false)
       ;; This removes the PPP from queries that filter by valid = true
-      (perusparannuspassi-db/delete-perusparannuspassi-vaiheet! db {:perusparannuspassi-id perusparannuspassi-id})
       (perusparannuspassi-db/delete-perusparannuspassi! db {:id perusparannuspassi-id})
       perusparannuspassi-id)))
 

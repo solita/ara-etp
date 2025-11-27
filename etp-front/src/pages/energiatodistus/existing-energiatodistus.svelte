@@ -55,22 +55,12 @@
     versionApi.getConfig
   );
 
-  // PPP state
+    // PPP state
   let perusparannuspassi = Maybe.None();
   let showPPP = false;
-  let markedForDeletion = false;
 
   // Add PPP - creates a new perusparannuspassi via API
   const addPerusparannuspassi = energiatodistusId => () => {
-    // If we have a PPP that was marked for deletion, just unmark it and show it
-    if (markedForDeletion && perusparannuspassi) {
-      markedForDeletion = false;
-      showPPP = true;
-      setFormDirty();
-      announceSuccess(i18n('energiatodistus.messages.add-ppp-success'));
-      return;
-    }
-
     // If PPP already exists but is hidden, just show it
     if (perusparannuspassi && !Maybe.isNone(perusparannuspassi)) {
       showPPP = !showPPP;
@@ -95,7 +85,6 @@
             result => {
               perusparannuspassi = result;
               showPPP = true;
-              markedForDeletion = false;
               toggleOverlay(false);
               announceSuccess(i18n('energiatodistus.messages.add-ppp-success'));
             },
@@ -107,51 +96,51 @@
     }
   };
 
-  // Delete PPP - marks for deletion, actual deletion happens on save
+  // Delete PPP - deletes immediately via API
   const deletePerusparannuspassi = () => {
-    markedForDeletion = true;
-    showPPP = false;
-    setFormDirty();
-    announceSuccess(i18n('energiatodistus.messages.mark-ppp-for-deletion'));
+    if (perusparannuspassi && perusparannuspassi.id) {
+      toggleOverlay(true);
+      Future.fork(
+        _response => {
+          toggleOverlay(false);
+          announceError(i18n('energiatodistus.messages.delete-ppp-error'));
+        },
+        _success => {
+          perusparannuspassi = Maybe.None();
+          showPPP = false;
+          toggleOverlay(false);
+          announceSuccess(i18n('energiatodistus.messages.mark-ppp-for-deletion'));
+        },
+        pppApi.deletePerusparannuspassi(fetch, perusparannuspassi.id)
+      );
+    }
   };
 
   const submit = (energiatodistus, onSuccessfulSave) => {
     toggleOverlay(true);
 
     const saveFuture =
-      markedForDeletion && perusparannuspassi && perusparannuspassi.id
+      perusparannuspassi && perusparannuspassi.id
         ? Future.parallelObject(2, {
             energiatodistus: api.putEnergiatodistusById(
               fetch,
               params.version,
               params.id
             )(energiatodistus),
-            perusparannuspassi: pppApi.deletePerusparannuspassi(
+            perusparannuspassi: pppApi.putPerusparannuspassi(
               fetch,
-              perusparannuspassi.id
+              perusparannuspassi.id,
+              perusparannuspassi
             )
           })
-        : perusparannuspassi && perusparannuspassi.id && !markedForDeletion
-          ? Future.parallelObject(2, {
-              energiatodistus: api.putEnergiatodistusById(
-                fetch,
-                params.version,
-                params.id
-              )(energiatodistus),
-              perusparannuspassi: pppApi.putPerusparannuspassi(
-                fetch,
-                perusparannuspassi.id,
-                perusparannuspassi
-              )
-            })
-          : R.map(
-              energiatodistus => ({ energiatodistus }),
-              api.putEnergiatodistusById(
-                fetch,
-                params.version,
-                params.id
-              )(energiatodistus)
-            );
+        : R.map(
+            energiatodistus => ({ energiatodistus }),
+            api.putEnergiatodistusById(
+              fetch,
+              params.version,
+              params.id
+            )(energiatodistus)
+          );
 
     Future.fork(
       response => {
@@ -163,18 +152,9 @@
         }
       },
       result => {
-        const wasDeleted = markedForDeletion;
         toggleOverlay(false);
         announceSuccess($_('energiatodistus.messages.save-success'));
-
-        if (wasDeleted) {
-          perusparannuspassi = Maybe.None();
-          markedForDeletion = false;
-          showPPP = false;
-          load(params);
-        } else {
-          onSuccessfulSave();
-        }
+        onSuccessfulSave();
       },
       R.chain(Future.after(400), saveFuture)
     );
@@ -187,7 +167,6 @@
     resources = Maybe.None();
     perusparannuspassi = Maybe.None();
     showPPP = false;
-    markedForDeletion = false;
 
     Future.fork(
       response => {
@@ -283,7 +262,7 @@
             {showPPP}
             onAddPPP={addPerusparannuspassi(energiatodistus.id)}
             onDeletePPP={deletePerusparannuspassi}>
-            {#if perusparannuspassi && !markedForDeletion}
+            {#if perusparannuspassi}
               <div on:input={setFormDirty} on:change={setFormDirty}>
                 <PPPForm
                   {energiatodistus}
