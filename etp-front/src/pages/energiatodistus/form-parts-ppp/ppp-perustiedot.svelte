@@ -27,6 +27,7 @@
       <Input
         bind:model={perusparannuspassi}
         i18nRoot="perusparannuspassi"
+        required={true}
         path={['passin-perustiedot', 'havainnointikaynti']}
         {schema} />
     </div>

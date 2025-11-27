@@ -142,3 +142,31 @@ export const serialize = R.compose(
   R.evolve(transformationFromSchema('serialize')),
   R.evolve(serializer)
 );
+
+let pppUrl = '/perusparannuspassit/2026';
+
+export const pppValidation = R.memoizeWith(R.identity, version =>
+  Future.parallelObject(6, {
+    numeric: Fetch.cached(fetch, pppUrl + '/validation/numeric/' + version),
+    requiredAll: Fetch.cached(
+      fetch,
+      pppUrl + '/validation/required/' + version + '/all'
+    ),
+    requiredBypass: Fetch.cached(
+      fetch,
+      pppUrl + '/validation/required/' + version + '/bypass'
+    ),
+    vaiheNumeric: Fetch.cached(
+      fetch,
+      pppUrl + '/vaihe/validation/numeric/' + version
+    ),
+    vaiheBypass: Fetch.cached(
+      fetch,
+      pppUrl + '/vaihe/validation/required/' + version + '/bypass'
+    ),
+    vaiheAll: Fetch.cached(
+      fetch,
+      pppUrl + '/vaihe/validation/required/' + version + '/all'
+    )
+  })
+);

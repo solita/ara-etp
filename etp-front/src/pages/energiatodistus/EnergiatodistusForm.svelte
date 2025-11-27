@@ -1,18 +1,19 @@
 <script>
   import * as R from 'ramda';
-  import { replace, loc } from 'svelte-spa-router';
-  import { tick } from 'svelte';
+  import {loc, replace} from 'svelte-spa-router';
+  import {tick} from 'svelte';
 
   import * as et from './energiatodistus-utils';
+  import * as EtUtils from './energiatodistus-utils';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as EM from '@Utility/either-maybe.js';
   import * as Formats from '@Utility/formats';
   import * as Validations from '@Utility/validation';
   import * as schemas from './schema';
-  import { _ } from '@Language/i18n';
+  import {_} from '@Language/i18n';
 
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
-  import HR from '@Component/HR/HR';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import PaakayttajanKommentti from './paakayttajan-kommentti';
   import EnergiatodistusKorvattu from './korvaavuus/korvattu';
@@ -23,8 +24,6 @@
   import ET2013Form from './ET2013Form';
   import Signing from './signing/SigningDialog.svelte';
   import Input from './Input';
-
-  import * as EtUtils from './energiatodistus-utils';
   import * as EtValidations from './validation';
   import * as Inputs from './inputs';
   import * as Postinumero from '@Component/address/postinumero-fi';
@@ -33,7 +32,7 @@
   import ToolBar from './ToolBar/toolbar';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
-  import { announcementsForModule } from '@Utility/announce';
+  import {announcementsForModule} from '@Utility/announce';
 
   export let version;
   export let energiatodistus;
@@ -43,6 +42,8 @@
   export let valvonta;
   export let laskutusosoitteet;
   export let verkkolaskuoperaattorit;
+  export let perusparannuspassi;
+  export let pppvalidation;
 
   export let submit;
   export let title = '';
@@ -54,6 +55,47 @@
     energiatodistus['bypass-validation-limits']
       ? validation.requiredBypass
       : validation.requiredAll;
+  /*
+  const pppRequired = perusparannuspassi =>
+    perusparannuspassi['bypass-validation-limits']
+      ? pppvalidation.requiredBypass
+      : pppvalidation.requiredAll;*/
+
+  const pppRequired = perusparannuspassi => {
+    const validVaiheet = R.compose(
+      R.map(R.prop('vaihe-nro')),
+      R.filter(vaihe =>
+        R.compose(
+          R.isNotEmpty,
+          EM.toArray,
+        )(vaihe.tulokset['vaiheen-alku-pvm'])
+      ),
+    )(perusparannuspassi.vaiheet);
+
+    if (R.isEmpty(validVaiheet)) {
+      return R.concat(pppvalidation.requiredAll, ['vaiheet.0.tulokset.vaiheen-alku-pvm'] );
+    } else {
+      const vaiheRequireds = R.compose(
+        R.flatten,
+        R.map(vaiheNro =>
+          R.map(requiredField =>
+            R.concat('vaiheet.' + (vaiheNro - 1) + '.', requiredField)
+          )(pppvalidation.vaiheAll)
+        ),
+      )(validVaiheet);
+
+      return R.pipe(
+        R.filter(field => !field.includes("toimenpideseloste")))(
+        R.concat(pppvalidation.requiredAll, vaiheRequireds)
+      );
+    }
+
+  };
+  /*
+  const pppVaiheRequired = perusparannuspassi =>
+    perusparannuspassi['bypass-validation-limits']
+      ? pppvalidation.vaiheBypass
+      : pppvalidation.vaiheAll;*/
 
   const saveSchema = R.compose(
     R.reduce(schemas.assocRequired, R.__, required(energiatodistus)),
@@ -82,6 +124,12 @@
     R.assoc('$signature', true, saveSchema),
     isRequiredPredicate => isRequiredPredicate(inputLanguage)(energiatodistus)
   );
+
+  /*
+  const signatureSchemaPpp = schemas.appendRequiredValidators(
+    R.assoc('$signature', true, saveSchemaPpp),
+    isRequiredPredicate => isRequiredPredicate(inputLanguage)(perusparannuspassi)
+  );*/
 
   let schema = saveSchema;
 
@@ -153,35 +201,66 @@
     }
   };
 
-  const language = R.compose(
-    R.map(R.slice(-2, Infinity)),
-    R.filter(R.either(R.endsWith('-fi'), R.endsWith('-sv'))),
-    Maybe.Some
-  );
-
-  export const showMissingProperties = missing => {
-    const missingTxt = R.compose(
+  export const showMissingProperties = (missing, i18nRoot) => {
+    console.log('missing ', missing);
+    return R.compose(
       R.join(', '),
-      R.map(Inputs.propertyLabel($_))
+     // R.tap(x => console.log('missing labels ', x)),
+      R.map(Inputs.propertyLabel($_, i18nRoot))
     )(missing);
+  };
 
+  export const showError = (allMissingFields, allMissing) => {
     announceError(
-      $_('energiatodistus.messages.validation-required-error') + missingTxt
+      $_('energiatodistus.messages.validation-required-error') +
+        allMissingFields
     );
-
-    Inputs.scrollIntoView(document, missing[0]);
+    Inputs.scrollIntoView(document, allMissing[0]);
   };
 
   let etFormElement;
   const validateCompleteAndSubmit = onSuccessfulSave => () => {
+
     const missing = EtValidations.missingProperties(
       required(energiatodistus),
       energiatodistus
     );
-    if (R.isEmpty(missing)) {
+
+   console.log(pppRequired(perusparannuspassi))
+
+    const missingPPP = EtValidations.missingProperties(
+      pppRequired(perusparannuspassi),
+      perusparannuspassi
+    );
+
+    /*
+    perusparannuspassi.vaiheet.forEach(vaihe => {
+      console.log(vaihe)
+      console.log(pppVaiheRequired(vaihe))
+      const missingPPPVaihe = EtValidations.missingProperties(
+        pppVaiheRequired(vaihe),
+        vaihe
+      );
+    });*/
+
+    console.log(missing)
+    const allMissing = [...missing, ...missingPPP];
+
+    //...missingPPPVaihe
+
+    if (R.isEmpty(allMissing)) {
       validateAndSubmit(onSuccessfulSave)();
     } else {
-      showMissingProperties(missing);
+      const missingETFields = showMissingProperties(missing, 'energiatodistus');
+      const missingPPPFields = showMissingProperties(
+        missingPPP,
+        'perusparannuspassi'
+      );
+      //const missingPPPvaiheFields = showMissingProperties(missingPPPVaihe, 'perusparannuspassi');
+
+      const allMissingFields = missingETFields + ', ' + missingPPPFields;
+      //+ ", " + missingPPPvaiheFields;
+      showError(allMissingFields, allMissing);
       schema = signatureSchema;
       tick().then(_ => Validations.blurForm(etFormElement));
     }

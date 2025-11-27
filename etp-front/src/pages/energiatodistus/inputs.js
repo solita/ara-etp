@@ -1,6 +1,5 @@
 import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
-import * as Either from '@Utility/either-utils';
 import * as objects from '@Utility/objects';
 import * as locales from '@Language/locale-utils';
 
@@ -61,22 +60,20 @@ export const label = (i18n, i18nRoot, inputLanguage, path) =>
   findOrdinalInArray(path) +
   labelWithoutOrdinal(i18n, i18nRoot, inputLanguage, path);
 
-const labelContext = (i18n, path) =>
+const labelContext = (i18n, i18nRoot, path) =>
   R.length(path) > 1
     ? R.compose(
         R.filter(R.complement(R.equals('$unused'))),
         Maybe.fromEmpty
       )(
         i18n(
-          'energiatodistus.' +
-            localeKey(R.slice(0, -1, path)) +
-            '.label-context'
+          i18nRoot + '.' + localeKey(R.slice(0, -1, path)) + '.label-context'
         )
       )
     : Maybe.None();
 
 export const fullLabel = (i18n, i18nRoot, inputLanguage, path) =>
-  labelContext(i18n, path)
+  labelContext(i18n, i18nRoot, path)
     .map(t => t + ' / ')
     .orSome('') + label(i18n, i18nRoot, inputLanguage, path);
 
@@ -92,11 +89,8 @@ const language = R.compose(
   Maybe.Some
 );
 
-export const propertyLabel = R.curry((i18n, propertyName) =>
-  fullLabel(
-    i18n,
-    'energiatodistus',
-    language(propertyName),
-    R.split('.', propertyName)
+export const propertyLabel = R.curry((i18n, i18nRoot, propertyName) =>
+  fullLabel(i18n, i18nRoot, language(propertyName),
+      R.split('.', propertyName)
   )
 );

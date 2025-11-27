@@ -5,6 +5,7 @@
   import H4 from '@Component/H/H4.svelte';
   import Input from '@Pages/energiatodistus/Input.svelte';
   import * as EitherMaybe from '@/utils/either-maybe.js';
+  import Select from '@Component/Select/Select.svelte';
 
   export let schema;
   export let perusparannuspassi;
@@ -74,6 +75,7 @@
               {schema}
               bind:model={perusparannuspassi}
               compact={true}
+              required={true}
               i18nRoot="perusparannuspassi"
               path={['rakennuksen-perustiedot', `${rakenteet}-ehdotettu-taso`]}
             ></Input>

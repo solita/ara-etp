@@ -91,6 +91,7 @@ export const predicate = R.compose(
 const requiredConstraints = R.map(R.juxt([predicate, R.identity]));
 
 const assertValue = R.curry((property, value) => {
+   // console.log("property:", property, "value:", value);
   if (R.isNil(value) || !Maybe.isMaybe(value)) {
     throw (
       'Required property: ' +
@@ -102,21 +103,21 @@ const assertValue = R.curry((property, value) => {
   }
 });
 
-const isValueMissing = (property, energiatodistus) =>
+const isValueMissing = (property, object) =>
   R.compose(
     Maybe.isNone,
     R.tap(assertValue(property)),
     R.when(Either.isEither, Either.orSome(Maybe.None())),
-    R.path(R.__, energiatodistus),
+    R.path(R.__, object),
     R.split('.')
   )(property);
 
-export const missingProperties = (requiredProperties, energiatodistus) =>
+export const missingProperties = (requiredProperties, object) =>
   R.compose(
     R.map(R.nth(1)),
     R.filter(
       ([predicate, property]) =>
-        isValueMissing(property, energiatodistus) && predicate(energiatodistus)
+        isValueMissing(property, object) && predicate(object)
     )
   )(requiredConstraints(requiredProperties));
 
