@@ -15,7 +15,6 @@
   import LaskennallinenEnergiaKustannukset from './form-parts-ppp/laskennan-tulokset-kustannukset-laskennallinen-ostoenergia';
   import ToteutunutOstoenergiaKustannukset from './form-parts-ppp/laskennan-tulokset-kustannukset-toteutunut-ostoenergia';
   import Toimenpiteet from './form-parts-ppp/toimenpiteet';
-  import * as Postinumero from '@Component/address/postinumero-fi.js';
 
   export let energiatodistus;
   export let inputLanguage;
@@ -46,7 +45,6 @@
     schemas.perusparannuspassi,
     pppvalidation.vaiheNumeric
   );
-
 </script>
 
 <div class="flex flex-col gap-6">
