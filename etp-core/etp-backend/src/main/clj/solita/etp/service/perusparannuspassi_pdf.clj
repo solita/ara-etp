@@ -2,6 +2,7 @@
   (:require
     [hiccup.core :as hiccup]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot ]
+    [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija ]
     [solita.etp.service.pdf :as pdf-service]))
 
 ;; CSS styles for the document
@@ -78,7 +79,8 @@
       display: table;
       width: 100%;
       background-color: #2c5234;
-      border-bottom: 1px solid #2c5234;
+      border-collapse: collapse;
+      -fs-border-rendering: no-bevel;
     }
 
     dl.etusivu-yleistiedot div {
@@ -88,6 +90,8 @@
     dl.etusivu-yleistiedot dt,
     dl.etusivu-yleistiedot dd {
       display: table-cell;
+      -fs-border-rendering: no-bevel;
+      border: 1px solid #2c5234;
       padding: 6.5px 8px;
     }
 
@@ -99,8 +103,40 @@
 
     dl.etusivu-yleistiedot dd {
       background-color: white;
-      border-top: 1px solid #2c5234;
-      border-right: 1px solid #2c5234;
+    }
+
+    dl.etusivu-laatija-allekirjoitus {
+      display: table;
+      width: 80%;
+      margin: auto;
+      border-collapse: collapse;
+      -fs-border-rendering: no-bevel;
+    }
+
+    dl.etusivu-laatija-allekirjoitus div{
+      display: table-row;
+    }
+
+    dl.etusivu-laatija-allekirjoitus dt,
+    dl.etusivu-laatija-allekirjoitus dd {
+      display: table-cell;
+      padding: 6.5px 8px;
+      white-space: nowrap;
+    }
+
+    dl.etusivu-laatija-allekirjoitus dd {
+      border: 1px solid #2c5234;
+    }
+
+    dl.etusivu-laatija-allekirjoitus dd.laatija-nimi {
+      border-right: none;
+      width: 100%
+    }
+
+    dt.hidden-dt {
+      font-size: 0;
+      border: 1px solid #2c5234;
+      border-left: none;
     }
 
   </style>"))
@@ -152,7 +188,7 @@
                 :content
                 [:div
                  (etusivu-yleistiedot/etusivu-yleistiedot params)
-                 [:p "Etusivun sisältö tähän"]]}
+                 (etusivu-laatija/etusivu-laatija params)]}
                {:title "Vaiheessa 1 toteutettavat toimenpiteet"
                 :content
                 [:div
