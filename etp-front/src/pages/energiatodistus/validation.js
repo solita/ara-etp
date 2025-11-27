@@ -91,7 +91,6 @@ export const predicate = R.compose(
 const requiredConstraints = R.map(R.juxt([predicate, R.identity]));
 
 const assertValue = R.curry((property, value) => {
-   // console.log("property:", property, "value:", value);
   if (R.isNil(value) || !Maybe.isMaybe(value)) {
     throw (
       'Required property: ' +
