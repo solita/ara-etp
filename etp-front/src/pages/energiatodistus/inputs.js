@@ -11,7 +11,12 @@ const zeroPath = R.map(
   )
 );
 
-const index = R.compose(Maybe.fromNull, R.head, R.filter(R.is(Number)));
+const index = R.compose(
+  Maybe.fromNull,
+  R.head,
+  R.filter(R.allPass([R.is(Number), R.complement(isNaN)])),
+  R.map(R.when(R.complement(R.is(Number)), s => parseInt(s, 10)))
+);
 
 export const dataLens = (inputLanguage, path) =>
   R.compose(
@@ -90,7 +95,5 @@ const language = R.compose(
 );
 
 export const propertyLabel = R.curry((i18n, i18nRoot, propertyName) =>
-  fullLabel(i18n, i18nRoot, language(propertyName),
-      R.split('.', propertyName)
-  )
+  fullLabel(i18n, i18nRoot, language(propertyName), R.split('.', propertyName))
 );

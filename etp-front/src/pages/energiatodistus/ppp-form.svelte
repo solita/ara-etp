@@ -40,12 +40,6 @@
             pppvalidation.numeric
           )
   )(schemas.perusparannuspassi);
-  /*
-  const saveSchema = R.reduce(
-    schemas.redefineNumericValidation,
-    schemas.perusparannuspassi,
-    pppvalidation.numeric
-  );*/
 
   const vaiheSchema = R.reduce(
     schemas.redefineNumericValidation,
@@ -53,12 +47,6 @@
     pppvalidation.vaiheNumeric
   );
 
-  /*
-  const signatureSchema = schemas.appendRequiredValidators(
-    R.assoc('$signature', true, saveSchema),
-    isRequiredPredicate => isRequiredPredicate(inputLanguage)(perusparannuspassi)
-  );
-*/
 </script>
 
 <div class="flex flex-col gap-6">

@@ -1,7 +1,7 @@
 <script>
   import * as R from 'ramda';
-  import {loc, replace} from 'svelte-spa-router';
-  import {tick} from 'svelte';
+  import { loc, replace } from 'svelte-spa-router';
+  import { tick } from 'svelte';
 
   import * as et from './energiatodistus-utils';
   import * as EtUtils from './energiatodistus-utils';
@@ -10,7 +10,7 @@
   import * as Formats from '@Utility/formats';
   import * as Validations from '@Utility/validation';
   import * as schemas from './schema';
-  import {_} from '@Language/i18n';
+  import { _ } from '@Language/i18n';
 
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
@@ -32,7 +32,7 @@
   import ToolBar from './ToolBar/toolbar';
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
-  import {announcementsForModule} from '@Utility/announce';
+  import { announcementsForModule } from '@Utility/announce';
 
   export let version;
   export let energiatodistus;
@@ -65,15 +65,14 @@
     const validVaiheet = R.compose(
       R.map(R.prop('vaihe-nro')),
       R.filter(vaihe =>
-        R.compose(
-          R.isNotEmpty,
-          EM.toArray,
-        )(vaihe.tulokset['vaiheen-alku-pvm'])
-      ),
+        R.compose(R.isNotEmpty, EM.toArray)(vaihe.tulokset['vaiheen-alku-pvm'])
+      )
     )(perusparannuspassi.vaiheet);
 
     if (R.isEmpty(validVaiheet)) {
-      return R.concat(pppvalidation.requiredAll, ['vaiheet.0.tulokset.vaiheen-alku-pvm'] );
+      return R.concat(pppvalidation.requiredAll, [
+        'vaiheet.0.tulokset.vaiheen-alku-pvm'
+      ]);
     } else {
       const vaiheRequireds = R.compose(
         R.flatten,
@@ -81,21 +80,12 @@
           R.map(requiredField =>
             R.concat('vaiheet.' + (vaiheNro - 1) + '.', requiredField)
           )(pppvalidation.vaiheAll)
-        ),
+        )
       )(validVaiheet);
 
-      return R.pipe(
-        R.filter(field => !field.includes("toimenpideseloste")))(
-        R.concat(pppvalidation.requiredAll, vaiheRequireds)
-      );
+      return R.concat(pppvalidation.requiredAll, vaiheRequireds);
     }
-
   };
-  /*
-  const pppVaiheRequired = perusparannuspassi =>
-    perusparannuspassi['bypass-validation-limits']
-      ? pppvalidation.vaiheBypass
-      : pppvalidation.vaiheAll;*/
 
   const saveSchema = R.compose(
     R.reduce(schemas.assocRequired, R.__, required(energiatodistus)),
@@ -124,12 +114,6 @@
     R.assoc('$signature', true, saveSchema),
     isRequiredPredicate => isRequiredPredicate(inputLanguage)(energiatodistus)
   );
-
-  /*
-  const signatureSchemaPpp = schemas.appendRequiredValidators(
-    R.assoc('$signature', true, saveSchemaPpp),
-    isRequiredPredicate => isRequiredPredicate(inputLanguage)(perusparannuspassi)
-  );*/
 
   let schema = saveSchema;
 
@@ -202,10 +186,8 @@
   };
 
   export const showMissingProperties = (missing, i18nRoot) => {
-    console.log('missing ', missing);
     return R.compose(
       R.join(', '),
-     // R.tap(x => console.log('missing labels ', x)),
       R.map(Inputs.propertyLabel($_, i18nRoot))
     )(missing);
   };
@@ -220,33 +202,21 @@
 
   let etFormElement;
   const validateCompleteAndSubmit = onSuccessfulSave => () => {
-
     const missing = EtValidations.missingProperties(
       required(energiatodistus),
       energiatodistus
     );
 
-   console.log(pppRequired(perusparannuspassi))
-
     const missingPPP = EtValidations.missingProperties(
       pppRequired(perusparannuspassi),
-      perusparannuspassi
+      R.assocPath(
+        ['perustiedot', 'kieli'],
+        energiatodistus.perustiedot.kieli,
+        perusparannuspassi
+      )
     );
 
-    /*
-    perusparannuspassi.vaiheet.forEach(vaihe => {
-      console.log(vaihe)
-      console.log(pppVaiheRequired(vaihe))
-      const missingPPPVaihe = EtValidations.missingProperties(
-        pppVaiheRequired(vaihe),
-        vaihe
-      );
-    });*/
-
-    console.log(missing)
     const allMissing = [...missing, ...missingPPP];
-
-    //...missingPPPVaihe
 
     if (R.isEmpty(allMissing)) {
       validateAndSubmit(onSuccessfulSave)();
@@ -256,10 +226,8 @@
         missingPPP,
         'perusparannuspassi'
       );
-      //const missingPPPvaiheFields = showMissingProperties(missingPPPVaihe, 'perusparannuspassi');
 
       const allMissingFields = missingETFields + ', ' + missingPPPFields;
-      //+ ", " + missingPPPvaiheFields;
       showError(allMissingFields, allMissing);
       schema = signatureSchema;
       tick().then(_ => Validations.blurForm(etFormElement));
