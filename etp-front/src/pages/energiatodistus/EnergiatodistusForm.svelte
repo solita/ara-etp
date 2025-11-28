@@ -55,13 +55,21 @@
     energiatodistus['bypass-validation-limits']
       ? validation.requiredBypass
       : validation.requiredAll;
-  /*
-  const pppRequired = perusparannuspassi =>
+
+  const pppRequiredValidation = perusparannuspassi =>
     perusparannuspassi['bypass-validation-limits']
       ? pppvalidation.requiredBypass
-      : pppvalidation.requiredAll;*/
+      : pppvalidation.requiredAll;
+
+  const pppRequiredVaihe = perusparannuspassi =>
+    perusparannuspassi['bypass-validation-limits']
+      ? pppvalidation.vaiheBypass
+      : pppvalidation.vaiheAll;
 
   const pppRequired = perusparannuspassi => {
+    const validationFields = pppRequiredValidation(perusparannuspassi);
+    const vaiheFields = pppRequiredVaihe(perusparannuspassi);
+
     const validVaiheet = R.compose(
       R.map(R.prop('vaihe-nro')),
       R.filter(vaihe =>
@@ -70,7 +78,7 @@
     )(perusparannuspassi.vaiheet);
 
     if (R.isEmpty(validVaiheet)) {
-      return R.concat(pppvalidation.requiredAll, [
+      return R.concat(validationFields, [
         'vaiheet.0.tulokset.vaiheen-alku-pvm'
       ]);
     } else {
@@ -79,11 +87,11 @@
         R.map(vaiheNro =>
           R.map(requiredField =>
             R.concat('vaiheet.' + (vaiheNro - 1) + '.', requiredField)
-          )(pppvalidation.vaiheAll)
+          )(vaiheFields)
         )
       )(validVaiheet);
 
-      return R.concat(pppvalidation.requiredAll, vaiheRequireds);
+      return R.concat(validationFields, vaiheRequireds);
     }
   };
 
@@ -206,6 +214,8 @@
       required(energiatodistus),
       energiatodistus
     );
+
+    console.log(pppRequired(perusparannuspassi));
 
     const missingPPP = EtValidations.missingProperties(
       pppRequired(perusparannuspassi),
