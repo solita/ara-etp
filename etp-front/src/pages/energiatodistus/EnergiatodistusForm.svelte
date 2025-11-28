@@ -1,10 +1,12 @@
 <script>
   import * as R from 'ramda';
-  import { replace, loc } from 'svelte-spa-router';
+  import { loc, replace } from 'svelte-spa-router';
   import { tick } from 'svelte';
 
   import * as et from './energiatodistus-utils';
+  import * as EtUtils from './energiatodistus-utils';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as EM from '@Utility/either-maybe.js';
   import * as Formats from '@Utility/formats';
   import * as Validations from '@Utility/validation';
   import * as schemas from './schema';
@@ -12,7 +14,6 @@
 
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
-  import HR from '@Component/HR/HR';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import PaakayttajanKommentti from './paakayttajan-kommentti';
   import EnergiatodistusKorvattu from './korvaavuus/korvattu';
@@ -23,8 +24,6 @@
   import ET2013Form from './ET2013Form';
   import Signing from './signing/SigningDialog.svelte';
   import Input from './Input';
-
-  import * as EtUtils from './energiatodistus-utils';
   import * as EtValidations from './validation';
   import * as Inputs from './inputs';
   import * as Postinumero from '@Component/address/postinumero-fi';
@@ -43,6 +42,8 @@
   export let valvonta;
   export let laskutusosoitteet;
   export let verkkolaskuoperaattorit;
+  export let perusparannuspassi;
+  export let pppvalidation;
 
   export let submit;
   export let title = '';
@@ -54,6 +55,45 @@
     energiatodistus['bypass-validation-limits']
       ? validation.requiredBypass
       : validation.requiredAll;
+
+  const pppRequiredValidation = perusparannuspassi =>
+    perusparannuspassi['bypass-validation-limits']
+      ? pppvalidation.requiredBypass
+      : pppvalidation.requiredAll;
+
+  const pppRequiredVaihe = perusparannuspassi =>
+    perusparannuspassi['bypass-validation-limits']
+      ? pppvalidation.vaiheBypass
+      : pppvalidation.vaiheAll;
+
+  const pppRequired = perusparannuspassi => {
+    const pppRequiredFields = pppRequiredValidation(perusparannuspassi);
+    const vaiheRequiredFields = pppRequiredVaihe(perusparannuspassi);
+
+    const validVaiheet = R.compose(
+      R.map(R.prop('vaihe-nro')),
+      R.filter(vaihe =>
+        R.compose(R.isNotEmpty, EM.toArray)(vaihe.tulokset['vaiheen-alku-pvm'])
+      )
+    )(perusparannuspassi.vaiheet);
+
+    if (R.isEmpty(validVaiheet)) {
+      return R.concat(pppRequiredFields, [
+        'vaiheet.0.tulokset.vaiheen-alku-pvm'
+      ]);
+    } else {
+      const vaiheRequireds = R.compose(
+        R.flatten,
+        R.map(vaiheNro =>
+          R.map(requiredField =>
+            R.concat('vaiheet.' + (vaiheNro - 1) + '.', requiredField)
+          )(vaiheRequiredFields)
+        )
+      )(validVaiheet);
+
+      return R.concat(pppRequiredFields, vaiheRequireds);
+    }
+  };
 
   const saveSchema = R.compose(
     R.reduce(schemas.assocRequired, R.__, required(energiatodistus)),
@@ -153,23 +193,19 @@
     }
   };
 
-  const language = R.compose(
-    R.map(R.slice(-2, Infinity)),
-    R.filter(R.either(R.endsWith('-fi'), R.endsWith('-sv'))),
-    Maybe.Some
-  );
-
-  export const showMissingProperties = missing => {
-    const missingTxt = R.compose(
+  export const showMissingProperties = (missing, i18nRoot) => {
+    return R.compose(
       R.join(', '),
-      R.map(Inputs.propertyLabel($_))
+      R.map(Inputs.propertyLabel($_, i18nRoot))
     )(missing);
+  };
 
+  export const showError = (allMissingFields, allMissing) => {
     announceError(
-      $_('energiatodistus.messages.validation-required-error') + missingTxt
+      $_('energiatodistus.messages.validation-required-error') +
+        allMissingFields
     );
-
-    Inputs.scrollIntoView(document, missing[0]);
+    Inputs.scrollIntoView(document, allMissing[0]);
   };
 
   let etFormElement;
@@ -178,10 +214,29 @@
       required(energiatodistus),
       energiatodistus
     );
-    if (R.isEmpty(missing)) {
+
+    const missingPPP = EtValidations.missingProperties(
+      pppRequired(perusparannuspassi),
+      R.assocPath(
+        ['perustiedot', 'kieli'],
+        energiatodistus.perustiedot.kieli,
+        perusparannuspassi
+      )
+    );
+
+    const allMissing = [...missing, ...missingPPP];
+
+    if (R.isEmpty(allMissing)) {
       validateAndSubmit(onSuccessfulSave)();
     } else {
-      showMissingProperties(missing);
+      const missingETFields = showMissingProperties(missing, 'energiatodistus');
+      const missingPPPFields = showMissingProperties(
+        missingPPP,
+        'perusparannuspassi'
+      );
+
+      const allMissingFields = missingETFields + ', ' + missingPPPFields;
+      showError(allMissingFields, allMissing);
       schema = signatureSchema;
       tick().then(_ => Validations.blurForm(etFormElement));
     }
