@@ -6,6 +6,10 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as R from 'ramda';
 
+const pppvalidation = {
+  requiredAll: []
+};
+
 /* For ET this comes from the /validation/required API endpoint */
 const requiredFields = [
   'passin-perustiedot.havainnointikaynti',
@@ -319,5 +323,6 @@ Default.args = {
   schema: saveSchema,
   inputLanguage: 'fi',
   luokittelut,
+  pppvalidation,
   ...testData()
 };
