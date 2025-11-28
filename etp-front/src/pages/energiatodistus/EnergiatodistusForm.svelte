@@ -67,7 +67,6 @@
       : pppvalidation.vaiheAll;
 
   const pppRequired = perusparannuspassi => {
-
     const pppRequiredFields = pppRequiredValidation(perusparannuspassi);
     const vaiheRequiredFields = pppRequiredVaihe(perusparannuspassi);
 
@@ -79,7 +78,7 @@
     )(perusparannuspassi.vaiheet);
 
     if (R.isEmpty(validVaiheet)) {
-      return R.concat(pppRequiredFields , [
+      return R.concat(pppRequiredFields, [
         'vaiheet.0.tulokset.vaiheen-alku-pvm'
       ]);
     } else {
@@ -92,7 +91,7 @@
         )
       )(validVaiheet);
 
-      return R.concat(pppRequiredFields , vaiheRequireds);
+      return R.concat(pppRequiredFields, vaiheRequireds);
     }
   };
 
