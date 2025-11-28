@@ -67,8 +67,9 @@
       : pppvalidation.vaiheAll;
 
   const pppRequired = perusparannuspassi => {
-    const validationFields = pppRequiredValidation(perusparannuspassi);
-    const vaiheFields = pppRequiredVaihe(perusparannuspassi);
+
+    const pppRequiredFields = pppRequiredValidation(perusparannuspassi);
+    const vaiheRequiredFields = pppRequiredVaihe(perusparannuspassi);
 
     const validVaiheet = R.compose(
       R.map(R.prop('vaihe-nro')),
@@ -78,7 +79,7 @@
     )(perusparannuspassi.vaiheet);
 
     if (R.isEmpty(validVaiheet)) {
-      return R.concat(validationFields, [
+      return R.concat(pppRequiredFields , [
         'vaiheet.0.tulokset.vaiheen-alku-pvm'
       ]);
     } else {
@@ -87,11 +88,11 @@
         R.map(vaiheNro =>
           R.map(requiredField =>
             R.concat('vaiheet.' + (vaiheNro - 1) + '.', requiredField)
-          )(vaiheFields)
+          )(vaiheRequiredFields)
         )
       )(validVaiheet);
 
-      return R.concat(validationFields, vaiheRequireds);
+      return R.concat(pppRequiredFields , vaiheRequireds);
     }
   };
 
@@ -214,8 +215,6 @@
       required(energiatodistus),
       energiatodistus
     );
-
-    console.log(pppRequired(perusparannuspassi));
 
     const missingPPP = EtValidations.missingProperties(
       pppRequired(perusparannuspassi),
