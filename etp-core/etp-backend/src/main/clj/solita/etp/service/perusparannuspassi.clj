@@ -110,7 +110,7 @@
     (when-not versio
       (exception/throw-ex-info!
        {:type    :energiatodistus-not-found
-        :message (str "Energiaselvitys with id " (:energiatodistus-id ppp) " not found.")}))
+        :message (str "Energiatodistus with id " (:energiatodistus-id ppp) " not found.")}))
     (assert-2026! versio)
     (assert-draft! tila-id)))
 
@@ -202,7 +202,7 @@
       (when-not versio
         (exception/throw-ex-info!
          {:type    :energiatodistus-not-found
-          :message (str "Energiaselvitys with id " (:energiatodistus-id ppp) " not found.")}))
+          :message (str "Energiatodistus with id " (:energiatodistus-id ppp) " not found.")}))
       (assert-2026! versio)
       (assert-draft! tila-id)
 

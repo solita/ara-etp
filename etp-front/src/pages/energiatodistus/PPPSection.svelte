@@ -6,7 +6,7 @@
 
   export let showPPP;
   export let onAddPPP;
-  export let onDeletePPP = () => console.log('Perusparannuspassi poistettu');
+  export let onDeletePPP;
 </script>
 
 <style>
