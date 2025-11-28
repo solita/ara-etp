@@ -1224,7 +1224,9 @@
     "perusparannuspassi": {
       "header": "Perusparannuspassi (sv)",
       "add-button": "Lisää perusparannuspassi (sv)",
+      "delete-button": "Poista perusparannuspassi (sv)",
       "info-text": "Perusparannuspassin käyttö korvaa energiatodistuksen toimenpide-ehdotukset. (sv)",
+      "info-text-when-PPP": "Perusparannuspassi on otettu käyttöön. Passin käyttö korvaa energiatodistuksen toimenpide-ehdotukset. (sv)",
       "not-added": "Perusparannuspassia ei ole vielä lisätty. Aloita lisäämällä perusparannuspassi. (sv)",
       "disclaimer": "Perusparannuspassi on tilaajalle vapaaehtoinen. Energiatodistus voidaan laatia ilman perusparannuspassia. Perusparannuspassissa esitetyt eri vaiheiden toteutuneet kulutukset ja kustannukset ovat arvioita. Laskelmissa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen verrattuna. (sv)"
     },
@@ -1247,7 +1249,8 @@
       "tyojono-remove-error": "Det gick inte att ta bort energicertifikatet från arbetskön",
       "invalid-laskutusosoite-id": "Används inte längre. Välj en faktureringsuppgift som är i kraft.",
       "add-ppp-success": "Grundförbättringspass lades till",
-      "add-ppp-error": "Det gick inte att lägga till grundförbättringspass"
+      "add-ppp-error": "Det gick inte att lägga till grundförbättringspass",
+      "mark-ppp-for-deletion": "Grundförbättringspass markerat för radering. Spara ändringarna för att ta bort det permanent."
     },
     "signing": {
       "header": "Undertecknande",
