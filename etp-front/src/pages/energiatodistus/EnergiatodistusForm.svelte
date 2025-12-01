@@ -178,15 +178,17 @@
 
     const missingPPP = [];
 
-    if(perusparannuspassi && perusparannuspassi.id) {
-      missingPPP.push(...EtValidations.missingProperties(
-        pppRequired(perusparannuspassi, pppvalidation),
-        R.assocPath(
-          ['perustiedot', 'kieli'],
-          energiatodistus.perustiedot.kieli,
-          perusparannuspassi
+    if (perusparannuspassi && perusparannuspassi.id) {
+      missingPPP.push(
+        ...EtValidations.missingProperties(
+          pppRequired(perusparannuspassi, pppvalidation),
+          R.assocPath(
+            ['perustiedot', 'kieli'],
+            energiatodistus.perustiedot.kieli,
+            perusparannuspassi
+          )
         )
-      ));
+      );
     }
 
     const allMissing = [...missing, ...missingPPP];

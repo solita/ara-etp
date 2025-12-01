@@ -12,9 +12,14 @@ const pppRequiredVaihe = (perusparannuspassi, pppvalidation) =>
     : pppvalidation.vaiheAll;
 
 export const pppRequired = (perusparannuspassi, pppvalidation) => {
-
-  const pppRequiredFields = pppRequiredValidation(perusparannuspassi, pppvalidation);
-  const vaiheRequiredFields = pppRequiredVaihe(perusparannuspassi, pppvalidation);
+  const pppRequiredFields = pppRequiredValidation(
+    perusparannuspassi,
+    pppvalidation
+  );
+  const vaiheRequiredFields = pppRequiredVaihe(
+    perusparannuspassi,
+    pppvalidation
+  );
   const validVaiheet = R.compose(
     R.map(R.prop('vaihe-nro')),
     R.filter(vaihe =>
