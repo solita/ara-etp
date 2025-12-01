@@ -3,6 +3,7 @@
    [clojure.java.jdbc :as jdbc]
    [clojure.set :as set]
    [clojure.string :as str]
+   [clojure.tools.logging :as log]
    [flathead.flatten :as flat]
    [solita.etp.db :as db]
    [solita.etp.exception :as exception]
@@ -207,17 +208,19 @@
       (assert-draft! tila-id)
 
       ;; Check if there's a soft-deleted PPP for this energiatodistus
-      (if-let [deleted-ppp (first (perusparannuspassi-db/find-deleted-by-energiatodistus-id
-                                   tx
-                                   {:energiatodistus-id (:energiatodistus-id ppp)}))]
-        ;; Resurrect the soft-deleted PPP
-        (let [ppp-id (:id deleted-ppp)]
-          (perusparannuspassi-db/resurrect-perusparannuspassi! tx {:id ppp-id})
-          {:id ppp-id :warnings []})
+      (let [deleted-ppp (first (perusparannuspassi-db/find-deleted-by-energiatodistus-id
+                                tx
+                                {:energiatodistus-id (:energiatodistus-id ppp)}))]
+        (if deleted-ppp
+          ;; Resurrect the soft-deleted PPP
+          (let [ppp-id (:id deleted-ppp)]
+            (log/info "Resurrecting PPP ID:" ppp-id)
+            (perusparannuspassi-db/resurrect-perusparannuspassi! tx {:id ppp-id})
+            {:id ppp-id :warnings []})
 
-        ;; No soft-deleted PPP exists, insert a new one
-        (let [ppp-db-row (-> ppp (dissoc :vaiheet) ppp->db-row)
-              warnings (validate-ppp-db-row! tx ppp-db-row versio)
+          ;; No soft-deleted PPP exists, insert a new one
+          (let [ppp-db-row (-> ppp (dissoc :vaiheet) ppp->db-row)
+                warnings (validate-ppp-db-row! tx ppp-db-row versio)
               vaihe-warnings (reduce concat
                                      (for [vaihe-db-row (->> ppp :vaiheet (map ->vaihe-update-db-row))]
                                        (validate-ppp-vaihe-db-row! tx vaihe-db-row versio)))
@@ -248,7 +251,7 @@
                            :valid                 false}
                           db/default-opts))
           {:id       id
-           :warnings (concat warnings vaihe-warnings)})))))
+           :warnings (concat warnings vaihe-warnings)}))))))
 
 (defn assert-update-requirements! [db whoami current-ppp new-ppp]
   (let [{:keys [tila-id laatija-id]}
