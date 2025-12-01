@@ -26,6 +26,14 @@ on conflict (column_name, versio) do update set
   ordinal = excluded.ordinal,
   bypass_allowed = excluded.bypass_allowed;
 
+insert into ppp_vaihe_validation_required_column (versio, column_name, ordinal, bypass_allowed, valid)
+values
+(2026, 'tp$toimenpideseloste', 0, false, false)
+
+on conflict (column_name, versio) do update set
+    ordinal = excluded.ordinal,
+    bypass_allowed = excluded.bypass_allowed;
+
 insert into ppp_vaihe_validation_required_column (versio, column_name, ordinal, bypass_allowed)
 values
 -- Vaihe / Toimenpideseloste
