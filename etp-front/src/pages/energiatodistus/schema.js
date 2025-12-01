@@ -403,7 +403,6 @@ export const EnumerationIdType = (values, i18nKey) => ({
 });
 
 export const perusparannuspassi = {
-  $signature: false,
   'passin-perustiedot': {
     havainnointikaynti: DateValue(),
     'passin-esittely': DateValue(),
