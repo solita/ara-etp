@@ -6,7 +6,6 @@
   import * as et from './energiatodistus-utils';
   import * as EtUtils from './energiatodistus-utils';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as EM from '@Utility/either-maybe.js';
   import * as Formats from '@Utility/formats';
   import * as Validations from '@Utility/validation';
   import * as schemas from './schema';
@@ -19,6 +18,7 @@
   import EnergiatodistusKorvattu from './korvaavuus/korvattu';
   import EnergiatodistusKorvaava from './korvaavuus/korvaava';
   import Laskutus from './laskutus';
+  import { pppRequired } from './perusparannuspassi-utils.js';
 
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
@@ -55,45 +55,6 @@
     energiatodistus['bypass-validation-limits']
       ? validation.requiredBypass
       : validation.requiredAll;
-
-  const pppRequiredValidation = perusparannuspassi =>
-    perusparannuspassi['bypass-validation-limits']
-      ? pppvalidation.requiredBypass
-      : pppvalidation.requiredAll;
-
-  const pppRequiredVaihe = perusparannuspassi =>
-    perusparannuspassi['bypass-validation-limits']
-      ? pppvalidation.vaiheBypass
-      : pppvalidation.vaiheAll;
-
-  const pppRequired = perusparannuspassi => {
-    const pppRequiredFields = pppRequiredValidation(perusparannuspassi);
-    const vaiheRequiredFields = pppRequiredVaihe(perusparannuspassi);
-
-    const validVaiheet = R.compose(
-      R.map(R.prop('vaihe-nro')),
-      R.filter(vaihe =>
-        R.compose(R.isNotEmpty, EM.toArray)(vaihe.tulokset['vaiheen-alku-pvm'])
-      )
-    )(perusparannuspassi.vaiheet);
-
-    if (R.isEmpty(validVaiheet)) {
-      return R.concat(pppRequiredFields, [
-        'vaiheet.0.tulokset.vaiheen-alku-pvm'
-      ]);
-    } else {
-      const vaiheRequireds = R.compose(
-        R.flatten,
-        R.map(vaiheNro =>
-          R.map(requiredField =>
-            R.concat('vaiheet.' + (vaiheNro - 1) + '.', requiredField)
-          )(vaiheRequiredFields)
-        )
-      )(validVaiheet);
-
-      return R.concat(pppRequiredFields, vaiheRequireds);
-    }
-  };
 
   const saveSchema = R.compose(
     R.reduce(schemas.assocRequired, R.__, required(energiatodistus)),
@@ -215,14 +176,18 @@
       energiatodistus
     );
 
-    const missingPPP = EtValidations.missingProperties(
-      pppRequired(perusparannuspassi),
-      R.assocPath(
-        ['perustiedot', 'kieli'],
-        energiatodistus.perustiedot.kieli,
-        perusparannuspassi
-      )
-    );
+    const missingPPP = [];
+
+    if(perusparannuspassi && perusparannuspassi.id) {
+      missingPPP.push(...EtValidations.missingProperties(
+        pppRequired(perusparannuspassi, pppvalidation),
+        R.assocPath(
+          ['perustiedot', 'kieli'],
+          energiatodistus.perustiedot.kieli,
+          perusparannuspassi
+        )
+      ));
+    }
 
     const allMissing = [...missing, ...missingPPP];
 
