@@ -104,7 +104,7 @@
         }
       ),
       R.chain(Future.after(400)),
-      R.when(
+      R.ifElse(
         () => Maybe.isSome(perusparannuspassi),
         R.chain(etResult =>
           R.map(
@@ -121,7 +121,8 @@
               )
             )
           )
-        )
+        ),
+        R.map(etResult => ({ energiatodistus: etResult }))
       ),
       api.postEnergiatodistus(fetch, params.version),
       R.tap(() => toggleOverlay(true))
