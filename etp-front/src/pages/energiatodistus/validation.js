@@ -111,12 +111,12 @@ const isValueMissing = (property, object) =>
     R.split('.')
   )(property);
 
-export const missingProperties = (requiredProperties, object) =>
+export const missingProperties = (requiredProperties, etOrPpp) =>
   R.compose(
     R.map(R.nth(1)),
     R.filter(
       ([predicate, property]) =>
-        isValueMissing(property, object) && predicate(object)
+        isValueMissing(property, etOrPpp) && predicate(etOrPpp)
     )
   )(requiredConstraints(requiredProperties));
 
