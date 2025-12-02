@@ -207,7 +207,8 @@
                   ? pppApi.getPerusparannuspassi(fetch, Maybe.get(pppId))
                   : Future.resolve(null)
             })
-          ),
+          );
+        },
         Future.parallelObject(7, {
           energiatodistus: api.getEnergiatodistusById(
             params.version,
