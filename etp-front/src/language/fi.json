@@ -1434,6 +1434,7 @@
   "perusparannuspassi": {
     "id": "Perusparannuspassin tunnus",
     "passin-perustiedot": {
+      "label-context": "$unused",
       "header": "Passin perustiedot",
       "havainnointikaynti": "Havainnointikäynnin päivämäärä",
       "passin-esittely": "Passin esittelyn päivämäärä",
@@ -1441,8 +1442,14 @@
       "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa"
     },
     "rakennuksen-perustiedot": {
+      "label-context": "$unused",
       "header": "Rakennuksen perustiedot",
       "lisatietoja": "Lisätiedot",
+      "ulkoseinat-ehdotettu-taso": "Ulkoseinät viimeisen vaiheen jälkeen",
+      "ylapohja-ehdotettu-taso": "Yläpohjat viimeisen vaiheen jälkeen",
+      "alapohja-ehdotettu-taso": "Alapohjat viimeisen vaiheen jälkeen",
+      "ikkunat-ehdotettu-taso": "Ikkunat viimeisen vaiheen jälkeen",
+      "ulkoovet-ehdotettu-taso": "Ulko-ovet viimeisen jälkeen vaiheen jälkeen",
       "rakenteiden-u-arvot": {
         "header": "Rakenteiden U-arvot",
         "rakenne": "Rakenne",
@@ -1454,6 +1461,11 @@
         "ikkunat": "Ikkunat",
         "ulkoovet": "Ulko-ovet"
       },
+      "paalammitysjarjestelma-ehdotettu-taso": "Päälämmitysjärjestelmä ehdotettu taso",
+      "ilmanvaihto-ehdotettu-taso": "Ilmanvaihto ehdotettu taso",
+      "uusiutuva-energia-ehdotettu-taso": "Uusiutuva energia ehdotettu taso",
+      "jaahdytys-ehdotettu-taso": "Jäähdytys (optio) ehdotettu taso",
+      "mahdollisuus-liittya-energiatehokkaaseen": "Kohteen liitettävyys",
       "energiajarjestelmat": {
         "header": "Energiajärjestelmät",
         "title": "Energiajärjestelmä",
@@ -1474,6 +1486,14 @@
           "kuvaus": "YM:n asetusten 4/13 mukainen korjausrakentamisen vähimmäisvaatimustaso"
         }
       }
+    },
+    "tulokset": {
+      "label-context": "$unused",
+      "kaukolampo-hinta": "Kaukolämpö hinta",
+      "sahko-hinta": "Sähkö hinta",
+      "uusiutuvat-pat-hinta": "Uusiutuva polttoaine hinta",
+      "fossiiliset-pat-hinta": "Fossiilinen polttoaine hinta",
+      "kaukojaahdytys-hinta": "Kaukojäähdytys hinta"
     },
     "laskennan-tulokset": {
       "header": "Laskennan tulokset",
@@ -1594,6 +1614,17 @@
       "0": {
         "toimenpiteet": {
           "toimenpideseloste": "Toimenpideseloste"
+        },
+        "tulokset": {
+          "label-context": "$unused",
+          "vaiheen-alku-pvm": "vaiheen aloituspäivämäärä",
+          "ostoenergian-tarve-kaukolampo": "Vaiheen kaukolämpö",
+          "ostoenergian-tarve-uusiutuvat-pat": "vaiheen uusiutuvat polttoaineet",
+          "ostoenergian-tarve-fossiiliset-pat": "Vaiheen fossiiliset polttoaineet",
+          "ostoenergian-tarve-kaukojaahdytys": "Vaiheen kaukojäähdytys",
+          "ostoenergian-tarve-sahko": "Vaiheeen sähkö",
+          "uusiutuvan-energian-kokonaistuotto": "Vaiheen uusiutuvan energian kokonaistuotto",
+          "uusiutuvan-energian-hyodynnetty-osuus": "Vaiheen uusiutuvan energian hyödynnetty osuus"
         }
       }
     }

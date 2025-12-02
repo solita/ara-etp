@@ -1,9 +1,10 @@
 <script>
   import * as R from 'ramda';
-  import { replace, loc } from 'svelte-spa-router';
+  import { loc, replace } from 'svelte-spa-router';
   import { tick } from 'svelte';
 
   import * as et from './energiatodistus-utils';
+  import * as EtUtils from './energiatodistus-utils';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Formats from '@Utility/formats';
   import * as Validations from '@Utility/validation';
@@ -12,19 +13,17 @@
 
   import H1 from '@Component/H/H1';
   import H2 from '@Component/H/H2';
-  import HR from '@Component/HR/HR';
   import Checkbox from '@Component/Checkbox/Checkbox';
   import PaakayttajanKommentti from './paakayttajan-kommentti';
   import EnergiatodistusKorvattu from './korvaavuus/korvattu';
   import EnergiatodistusKorvaava from './korvaavuus/korvaava';
   import Laskutus from './laskutus';
+  import { pppRequired } from './perusparannuspassi-utils.js';
 
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
   import Signing from './signing/SigningDialog.svelte';
   import Input from './Input';
-
-  import * as EtUtils from './energiatodistus-utils';
   import * as EtValidations from './validation';
   import * as Inputs from './inputs';
   import * as Postinumero from '@Component/address/postinumero-fi';
@@ -43,6 +42,8 @@
   export let valvonta;
   export let laskutusosoitteet;
   export let verkkolaskuoperaattorit;
+  export let perusparannuspassi;
+  export let pppvalidation;
 
   export let submit;
   export let title = '';
@@ -153,23 +154,19 @@
     }
   };
 
-  const language = R.compose(
-    R.map(R.slice(-2, Infinity)),
-    R.filter(R.either(R.endsWith('-fi'), R.endsWith('-sv'))),
-    Maybe.Some
-  );
-
-  export const showMissingProperties = missing => {
-    const missingTxt = R.compose(
+  export const showMissingProperties = (missing, i18nRoot) => {
+    return R.compose(
       R.join(', '),
-      R.map(Inputs.propertyLabel($_))
+      R.map(Inputs.propertyLabel($_, i18nRoot))
     )(missing);
+  };
 
+  export const showError = (allMissingFields, allMissing) => {
     announceError(
-      $_('energiatodistus.messages.validation-required-error') + missingTxt
+      $_('energiatodistus.messages.validation-required-error') +
+        allMissingFields
     );
-
-    Inputs.scrollIntoView(document, missing[0]);
+    Inputs.scrollIntoView(document, allMissing[0]);
   };
 
   let etFormElement;
@@ -178,10 +175,39 @@
       required(energiatodistus),
       energiatodistus
     );
-    if (R.isEmpty(missing)) {
+
+    const missingPPP = [];
+
+    if (perusparannuspassi && perusparannuspassi.id) {
+      missingPPP.push(
+        ...EtValidations.missingProperties(
+          pppRequired(
+            perusparannuspassi,
+            pppvalidation,
+            energiatodistus['bypass-validation-limits']
+          ),
+          R.assocPath(
+            ['perustiedot', 'kieli'],
+            energiatodistus.perustiedot.kieli,
+            perusparannuspassi
+          )
+        )
+      );
+    }
+
+    const allMissing = [...missing, ...missingPPP];
+
+    if (R.isEmpty(allMissing)) {
       validateAndSubmit(onSuccessfulSave)();
     } else {
-      showMissingProperties(missing);
+      const missingETFields = showMissingProperties(missing, 'energiatodistus');
+      const missingPPPFields = showMissingProperties(
+        missingPPP,
+        'perusparannuspassi'
+      );
+
+      const allMissingFields = missingETFields + ', ' + missingPPPFields;
+      showError(allMissingFields, allMissing);
       schema = signatureSchema;
       tick().then(_ => Validations.blurForm(etFormElement));
     }

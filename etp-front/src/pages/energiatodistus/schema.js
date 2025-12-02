@@ -30,7 +30,7 @@ const Year = () => ({
   parse: parsers.optionalParser(parsers.parseInteger),
   format: formats.optionalYear,
   deserialize: Either.Right,
-  validators: validations.MaybeInterval(2025, 2200)
+  validators: validations.MaybeInterval(2026, 2200)
 });
 
 const Currency = {

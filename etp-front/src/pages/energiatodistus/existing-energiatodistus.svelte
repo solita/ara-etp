@@ -9,7 +9,6 @@
   import * as versionApi from '@Component/Version/version-api';
   import { isEtp2026Enabled } from '@Utility/config_utils.js';
   import * as Schema from '@Pages/energiatodistus/schema';
-  import * as Empty from '@Pages/energiatodistus/empty';
 
   import EnergiatodistusForm from '@Pages/energiatodistus/EnergiatodistusForm';
   import PPPForm from '@Pages/energiatodistus/ppp-form.svelte';
@@ -210,7 +209,7 @@
             })
           );
         },
-        Future.parallelObject(6, {
+        Future.parallelObject(7, {
           energiatodistus: api.getEnergiatodistusById(
             params.version,
             params.id
@@ -218,6 +217,7 @@
           luokittelut: api.luokittelutForVersion(params.version),
           whoami: kayttajaApi.whoami,
           validation: api.validation(params.version),
+          pppvalidation: pppApi.pppValidation(params.version),
           valvonta: ValvontaApi.getValvonta(params.id),
           verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit
         })
@@ -244,17 +244,19 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, whoami, validation, valvonta, verkkolaskuoperaattorit, laskutusosoitteet }}
+    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, whoami, validation, valvonta, verkkolaskuoperaattorit, laskutusosoitteet, pppvalidation }}
       <EnergiatodistusForm
         bind:this={energiatodistusFormComponent}
         version={params.version}
         {energiatodistus}
+        {perusparannuspassi}
         {luokittelut}
         {whoami}
         {validation}
         {valvonta}
         {verkkolaskuoperaattorit}
         {laskutusosoitteet}
+        {pppvalidation}
         bind:showMissingProperties
         {submit}
         title={title(energiatodistus)}>
@@ -270,6 +272,7 @@
                   {energiatodistus}
                   inputLanguage={'fi'}
                   {luokittelut}
+                  {pppvalidation}
                   bind:perusparannuspassi
                   schema={Schema.perusparannuspassi} />
               </div>

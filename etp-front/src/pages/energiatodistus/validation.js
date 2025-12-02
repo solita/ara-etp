@@ -102,21 +102,21 @@ const assertValue = R.curry((property, value) => {
   }
 });
 
-const isValueMissing = (property, energiatodistus) =>
+const isValueMissing = (property, object) =>
   R.compose(
     Maybe.isNone,
     R.tap(assertValue(property)),
     R.when(Either.isEither, Either.orSome(Maybe.None())),
-    R.path(R.__, energiatodistus),
+    R.path(R.__, object),
     R.split('.')
   )(property);
 
-export const missingProperties = (requiredProperties, energiatodistus) =>
+export const missingProperties = (requiredProperties, etOrPpp) =>
   R.compose(
     R.map(R.nth(1)),
     R.filter(
       ([predicate, property]) =>
-        isValueMissing(property, energiatodistus) && predicate(energiatodistus)
+        isValueMissing(property, etOrPpp) && predicate(etOrPpp)
     )
   )(requiredConstraints(requiredProperties));
 
