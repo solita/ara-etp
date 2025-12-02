@@ -1,24 +1,26 @@
 import * as EM from '@/utils/either-maybe.js';
 import * as R from 'ramda';
 
-const pppRequiredValidation = (perusparannuspassi, pppvalidation) =>
-  perusparannuspassi['bypass-validation-limits']
+const pppRequiredValidation = (perusparannuspassi, pppvalidation, bypassValidationLimits) =>
+    bypassValidationLimits
     ? pppvalidation.requiredBypass
     : pppvalidation.requiredAll;
 
-const pppRequiredVaihe = (perusparannuspassi, pppvalidation) =>
-  perusparannuspassi['bypass-validation-limits']
+const pppRequiredVaihe = (perusparannuspassi, pppvalidation, bypassValidationLimits) =>
+    bypassValidationLimits
     ? pppvalidation.vaiheBypass
     : pppvalidation.vaiheAll;
 
-export const pppRequired = (perusparannuspassi, pppvalidation) => {
+export const pppRequired = (perusparannuspassi, pppvalidation, bypassValidationLimits) => {
   const pppRequiredFields = pppRequiredValidation(
     perusparannuspassi,
-    pppvalidation
+    pppvalidation,
+    bypassValidationLimits
   );
   const vaiheRequiredFields = pppRequiredVaihe(
     perusparannuspassi,
-    pppvalidation
+    pppvalidation,
+    bypassValidationLimits
   );
   const validVaiheet = R.compose(
     R.map(R.prop('vaihe-nro')),
