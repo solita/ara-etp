@@ -181,7 +181,7 @@
     if (perusparannuspassi && perusparannuspassi.id) {
       missingPPP.push(
         ...EtValidations.missingProperties(
-          pppRequired(perusparannuspassi, pppvalidation),
+          pppRequired(perusparannuspassi, pppvalidation, energiatodistus['bypass-validation-limits']),
           R.assocPath(
             ['perustiedot', 'kieli'],
             energiatodistus.perustiedot.kieli,
