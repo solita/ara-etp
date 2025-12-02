@@ -430,8 +430,8 @@ export const perusparannuspassi = {
         toimenpideseloste: String(2, 1500)
       },
       tulokset: {
-        'vaiheen-alku-pvm': Year(),
-        'vaiheen-loppu-pvm': Year(),
+        'vaiheen-alku-pvm': YearOnlyDate(),
+        'vaiheen-loppu-pvm': YearOnlyDate(),
         'ostoenergian-tarve-kaukolampo': FloatNonNegative,
         'ostoenergian-tarve-sahko': FloatNonNegative,
         'ostoenergian-tarve-uusiutuvat-pat': FloatNonNegative,
