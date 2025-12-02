@@ -178,16 +178,16 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each resources.toArray() as { energiatodistus, luokittelut, validation, whoami, verkkolaskuoperaattorit, laskutusosoitteet }}
+    {#each resources.toArray() as resource}
       <EnergiatodistusForm
         version={params.version}
         {title}
-        {energiatodistus}
-        {whoami}
-        {luokittelut}
-        {validation}
-        {verkkolaskuoperaattorit}
-        {laskutusosoitteet}
+        bind:energiatodistus={resource.energiatodistus}
+        whoami={resource.whoami}
+        luokittelut={resource.luokittelut}
+        validation={resource.validation}
+        verkkolaskuoperaattorit={resource.verkkolaskuoperaattorit}
+        laskutusosoitteet={resource.laskutusosoitteet}
         {submit}>
         <!-- PPP section as slot content -->
         {#if isEtp2026Enabled(config) && params.version == 2026}
@@ -196,9 +196,9 @@
             onAddPPP={addPerusparannuspassi}>
             {#each Maybe.toArray(perusparannuspassi) as ppp}
               <PPPForm
-                {energiatodistus}
+                energiatodistus={resource.energiatodistus}
                 inputLanguage={'fi'}
-                {luokittelut}
+                luokittelut={resource.luokittelut}
                 bind:perusparannuspassi={ppp}
                 schema={Schema.perusparannuspassi} />
             {/each}

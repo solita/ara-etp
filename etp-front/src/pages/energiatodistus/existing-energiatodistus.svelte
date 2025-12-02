@@ -244,32 +244,32 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, whoami, validation, valvonta, verkkolaskuoperaattorit, laskutusosoitteet }}
+    {#each Maybe.toArray(resources) as resource}
       <EnergiatodistusForm
         bind:this={energiatodistusFormComponent}
         version={params.version}
-        {energiatodistus}
-        {luokittelut}
-        {whoami}
-        {validation}
-        {valvonta}
-        {verkkolaskuoperaattorit}
-        {laskutusosoitteet}
+        bind:energiatodistus={resource.energiatodistus}
+        luokittelut={resource.luokittelut}
+        whoami={resource.whoami}
+        validation={resource.validation}
+        valvonta={resource.valvonta}
+        verkkolaskuoperaattorit={resource.verkkolaskuoperaattorit}
+        laskutusosoitteet={resource.laskutusosoitteet}
         bind:showMissingProperties
         {submit}
-        title={title(energiatodistus)}>
+        title={title(resource.energiatodistus)}>
         <!-- PPP section as slot content -->
         {#if isEtp2026Enabled(config) && params.version == 2026}
           <PPPSection
             {showPPP}
-            onAddPPP={addPerusparannuspassi(energiatodistus.id)}
+            onAddPPP={addPerusparannuspassi(resource.energiatodistus.id)}
             onDeletePPP={deletePerusparannuspassi}>
             {#if perusparannuspassi}
               <div on:input={setFormDirty} on:change={setFormDirty}>
                 <PPPForm
-                  {energiatodistus}
+                  energiatodistus={resource.energiatodistus}
                   inputLanguage={'fi'}
-                  {luokittelut}
+                  luokittelut={resource.luokittelut}
                   bind:perusparannuspassi
                   schema={Schema.perusparannuspassi} />
               </div>
