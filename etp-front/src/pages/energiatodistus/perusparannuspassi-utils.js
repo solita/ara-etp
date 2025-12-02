@@ -1,17 +1,27 @@
 import * as EM from '@/utils/either-maybe.js';
 import * as R from 'ramda';
 
-const pppRequiredValidation = (perusparannuspassi, pppvalidation, bypassValidationLimits) =>
-    bypassValidationLimits
+const pppRequiredValidation = (
+  perusparannuspassi,
+  pppvalidation,
+  bypassValidationLimits
+) =>
+  bypassValidationLimits
     ? pppvalidation.requiredBypass
     : pppvalidation.requiredAll;
 
-const pppRequiredVaihe = (perusparannuspassi, pppvalidation, bypassValidationLimits) =>
-    bypassValidationLimits
-    ? pppvalidation.vaiheBypass
-    : pppvalidation.vaiheAll;
+const pppRequiredVaihe = (
+  perusparannuspassi,
+  pppvalidation,
+  bypassValidationLimits
+) =>
+  bypassValidationLimits ? pppvalidation.vaiheBypass : pppvalidation.vaiheAll;
 
-export const pppRequired = (perusparannuspassi, pppvalidation, bypassValidationLimits) => {
+export const pppRequired = (
+  perusparannuspassi,
+  pppvalidation,
+  bypassValidationLimits
+) => {
   const pppRequiredFields = pppRequiredValidation(
     perusparannuspassi,
     pppvalidation,
