@@ -60,24 +60,60 @@
 
   // Add PPP - creates a new perusparannuspassi via API
   const addPerusparannuspassi = energiatodistusId => () => {
-    if (!showPPP && Maybe.isNone(perusparannuspassi)) {
+    // If PPP already exists but is hidden, just show it
+    if (perusparannuspassi && !Maybe.isNone(perusparannuspassi)) {
+      showPPP = !showPPP;
+      return;
+    }
+
+    // Create a new PPP via API (backend will resurrect soft-deleted PPP if exists)
+    if (!showPPP && (!perusparannuspassi || Maybe.isNone(perusparannuspassi))) {
       toggleOverlay(true);
       Future.fork(
         _response => {
           toggleOverlay(false);
           announceError(i18n('energiatodistus.messages.add-ppp-error'));
         },
-        result => {
-          perusparannuspassi = result;
-          showPPP = true;
-          toggleOverlay(false);
-          announceSuccess(i18n('energiatodistus.messages.add-ppp-success'));
+        id => {
+          // After creation, fetch the full PPP object
+          Future.fork(
+            _response => {
+              toggleOverlay(false);
+              announceError(i18n('energiatodistus.messages.add-ppp-error'));
+            },
+            result => {
+              perusparannuspassi = result;
+              showPPP = true;
+              toggleOverlay(false);
+              announceSuccess(i18n('energiatodistus.messages.add-ppp-success'));
+            },
+            pppApi.getPerusparannuspassi(fetch, id)
+          );
         },
         pppApi.addPerusparannuspassi(fetch, energiatodistusId)
       );
-    } else {
-      // Just toggle visibility if PPP already exists
-      showPPP = !showPPP;
+    }
+  };
+
+  // Delete PPP - deletes immediately via API
+  const deletePerusparannuspassi = () => {
+    if (perusparannuspassi && perusparannuspassi.id) {
+      toggleOverlay(true);
+      Future.fork(
+        _response => {
+          toggleOverlay(false);
+          announceError(i18n('energiatodistus.messages.delete-ppp-error'));
+        },
+        _success => {
+          perusparannuspassi = Maybe.None();
+          showPPP = false;
+          toggleOverlay(false);
+          announceSuccess(
+            i18n('energiatodistus.messages.mark-ppp-for-deletion')
+          );
+        },
+        pppApi.deletePerusparannuspassi(fetch, perusparannuspassi.id)
+      );
     }
   };
 
@@ -116,7 +152,7 @@
           announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
         }
       },
-      () => {
+      result => {
         toggleOverlay(false);
         announceSuccess($_('energiatodistus.messages.save-success'));
         onSuccessfulSave();
@@ -130,42 +166,45 @@
     toggleOverlay(true);
     // form is recreated in reload - side effect is scroll to up
     resources = Maybe.None();
-    perusparannuspassi = null;
+    perusparannuspassi = Maybe.None();
     showPPP = false;
 
     Future.fork(
       response => {
+        console.log('Load failed:', response);
         toggleOverlay(false);
         announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
       },
       response => {
         resources = Maybe.Some(response);
 
-        // Set PPP if it exists
-        if (response.perusparannuspassi) {
+        // Set PPP if it exists and is valid
+        if (
+          response.perusparannuspassi &&
+          response.perusparannuspassi.valid !== false
+        ) {
           perusparannuspassi = response.perusparannuspassi;
           showPPP = true;
+        } else {
+          perusparannuspassi = Maybe.None();
+          showPPP = false;
         }
 
         toggleOverlay(false);
       },
       R.chain(
-        response =>
-          R.map(
+        response => {
+          const pppId = response.energiatodistus['perusparannuspassi-id'];
+
+          return R.map(
             R.mergeLeft(response),
             Future.parallelObject(2, {
               laskutusosoitteet: laatijaApi.laskutusosoitteet(
                 Maybe.get(response.energiatodistus['laatija-id'])
               ),
               perusparannuspassi:
-                response.energiatodistus['perusparannuspassi-id'] &&
-                Maybe.isSome(response.energiatodistus['perusparannuspassi-id'])
-                  ? pppApi.getPerusparannuspassi(
-                      fetch,
-                      Maybe.get(
-                        response.energiatodistus['perusparannuspassi-id']
-                      )
-                    )
+                pppId && Maybe.isSome(pppId)
+                  ? pppApi.getPerusparannuspassi(fetch, Maybe.get(pppId))
                   : Future.resolve(null)
             })
           ),
@@ -224,7 +263,8 @@
         {#if isEtp2026Enabled(config) && params.version == 2026}
           <PPPSection
             {showPPP}
-            onAddPPP={addPerusparannuspassi(energiatodistus.id)}>
+            onAddPPP={addPerusparannuspassi(energiatodistus.id)}
+            onDeletePPP={deletePerusparannuspassi}>
             {#if perusparannuspassi}
               <div on:input={setFormDirty} on:change={setFormDirty}>
                 <PPPForm

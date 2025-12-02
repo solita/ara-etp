@@ -249,13 +249,6 @@
         <div class="mt-3 w-full">
           <H1 text={title} />
 
-          {#if version == 2026 && energiatodistus['perusparannuspassi-id'] && Maybe.isSome(energiatodistus['perusparannuspassi-id'])}
-            <!-- Just for local development, wip indicator -->
-            <div class="mb-3">
-              <H1 text="PPP - Lisätty" />
-            </div>
-          {/if}
-
           {#if EtUtils.isSigned(energiatodistus)}
             <div class="mb-5">
               Voimassa:
