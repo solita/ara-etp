@@ -30,7 +30,7 @@ export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
 // are put into empty energiatodistus and then the empty is merged when deserializing.
 const deserializeToimenpideEhdotukset = toimenpiteet =>
   R.concat(
-    toimenpiteet,
+    R.map(({ id }) => id, toimenpiteet),
     R.repeat(Maybe.None(), R.max(6 - R.length(toimenpiteet), 0))
   );
 
@@ -104,6 +104,7 @@ const deserializer = {
 };
 
 const serializeToimenpideEhdotukset = R.compose(
+  R.map(id => ({ id })),
   R.filter(R.isNotNil),
   R.map(Maybe.orSome(null))
 );
