@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 
 import * as Either from '@Utility/either-utils';
+import * as EitherMaybe from '@Utility/either-maybe';
 import * as Future from '@Utility/future-utils';
 import * as Fetch from '@/utils/fetch-utils.js';
 import * as Maybe from '@Utility/maybe-utils.js';
@@ -120,6 +121,27 @@ const serializer = {
   )
 };
 
+/*
+ @sig Vaihe -> Vaihe
+ */
+const makeVaiheValidIfAloitusPvmPresent = R.ifElse(
+  R.compose(
+    Maybe.isSome,
+    EitherMaybe.toMaybe,
+    R.prop('vaiheen-alku-pvm'),
+    R.prop('tulokset')
+  ),
+  R.assoc('valid', true),
+  R.assoc('valid', false)
+);
+
+/*
+  @sig Perusparannuspassi -> Perusparannuspassi
+ */
+const withValidVaiheetAccordingToAloitusPvm = R.evolve({
+  vaiheet: R.map(makeVaiheValidIfAloitusPvmPresent)
+});
+
 const transformationFromSchema = name =>
   R.compose(
     deep.filter(R.is(Function), R.complement(R.isNil)),
@@ -151,7 +173,8 @@ export const serialize = R.compose(
   ),
   R.omit(['id', 'tila-id', 'laatija-id']),
   R.evolve(transformationFromSchema('serialize')),
-  R.evolve(serializer)
+  R.evolve(serializer),
+  withValidVaiheetAccordingToAloitusPvm
 );
 
 let pppUrl = '/perusparannuspassit/2026';
