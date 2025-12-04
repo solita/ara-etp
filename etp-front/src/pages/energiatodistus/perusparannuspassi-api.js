@@ -123,14 +123,15 @@ const serializer = {
 /*
  @sig Vaihe -> Vaihe
  */
-const makeVaiheValidIfAloitusPvmPresent = R.when(
+const makeVaiheValidIfAloitusPvmPresent = R.ifElse(
   R.compose(
     Maybe.isSome,
     EitherMaybe.toMaybe,
     R.prop('vaiheen-alku-pvm'),
     R.prop('tulokset')
   ),
-  R.assoc('valid', true)
+  R.assoc('valid', true),
+  R.assoc('valid', false)
 );
 
 /*
