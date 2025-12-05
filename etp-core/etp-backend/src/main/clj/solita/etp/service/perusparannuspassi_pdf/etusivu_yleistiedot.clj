@@ -29,6 +29,6 @@
        {:dt (l :havainnointikaynnin-paivamaara)
         :dd (-> energiatodistus (get-in [:perustiedot :havainnointikaynti]) time/format-date)}
        {:dt (l :passin-esittelyn-paivamaara)
-        :dd (-> perusparannuspassi (get-in [:passin-perustiedot :havainnointikaynti]) time/format-date)}
+        :dd (-> perusparannuspassi (get-in [:passin-perustiedot :passin-esittely]) time/format-date)}
        {:dt (l :rakennuksen-kayttotarkoitusluokka)
         :dd (-> energiatodistus (get-in [:perustiedot :kayttotarkoitus]) (loc/et-perustiedot-kayttotarkoitus->description alakayttotarkoitukset kieli))}])))
