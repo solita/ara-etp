@@ -1,15 +1,16 @@
 (ns solita.etp.service.perusparannuspassi-pdf
   (:require
     [hiccup.core :as hiccup]
+    [solita.etp.service.localization :as loc]
+    [solita.etp.service.pdf :as pdf-service]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot ]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija ]
-    [solita.etp.service.pdf :as pdf-service]))
+    [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]]))
 
 ;; CSS styles for the document
 (defn- styles []
   (str
-  "<style>
-    @page {
+  "@page {
       size: A4;
       margin: 0;
     }
@@ -22,7 +23,7 @@
       margin: 0;
       padding: 0;
       font-family: roboto, sans-serif;
-      font-size: 12pt;
+      font-size: 11pt;
     }
 
     .page {
@@ -54,7 +55,7 @@
 
     .page-content {
       padding: 16mm;
-      min-height: calc(297mm - 5cm - 2cm);
+      min-height: 227mm;
     }
 
     .page-footer {
@@ -69,6 +70,19 @@
 
     h1, h2, h3, h4, h5, h6 {
       font-family: roboto, sans-serif;
+    }
+
+    h1 {
+      font-size: 30pt;
+    }
+
+    h2 {
+      font-size: 13pt;
+      color: #2c5234;
+    }
+
+    h3 {
+      font-size: 11pt;
     }
 
     p, div, span, li, ul, ol {
@@ -139,7 +153,77 @@
       border-left: none;
     }
 
-  </style>"))
+    .vaikutukset-box {
+      background-color: #eaeeeb;
+      border-radius: 3mm;
+      padding: 3mm 6mm 6mm 6mm;
+      width: 100%;
+      min-height: 80mm;
+    }
+
+    .kohdistuminen-box {
+      background-color: #d5dcd6;
+      border-radius: 3mm;
+      width: 100%;
+      padding-left: 5mm;
+    }
+
+    dl.tayttaa-vaatimukset-list {
+      display: table;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
+    dl.tayttaa-vaatimukset-list > div {
+      display: table-cell;
+      padding-right: 10mm;
+      vertical-align: top;
+    }
+
+    dl.tayttaa-vaatimukset-list > div:last-child {
+      padding-right: 0;
+    }
+
+    dl.tayttaa-vaatimukset-list > div > dt,
+    dl.tayttaa-vaatimukset-list > div > dd {
+      display: inline-block;
+      border: 1px solid #2c5234;
+      padding: 6px 8px;
+      margin: 0;
+      vertical-align: top;
+    }
+
+    dl.tayttaa-vaatimukset-list > div > dt {
+      width: 60mm;
+      border-right: none;
+      font-weight: normal;
+      white-space: nowrap;
+    }
+
+    dl.tayttaa-vaatimukset-list > div > dd {
+      width: 14mm;
+    }
+
+    .vaatimukset-selitteet-box {
+      margin-top: 3mm;
+    }
+
+    .vaatimukset-selitteet {
+      display: table-row;
+      width: 100%;
+    }
+
+    .vaatimukset-selitteet > div {
+      display: table-cell;
+      width: 50%;
+      margin-right: 10mm;
+    }
+
+    .vaatimukset-selitteet > div:last-child {
+      margin-right: 0;
+      padding-left: 5mm;
+    }"))
 
 
 (defn- page-header [title]
@@ -178,42 +262,46 @@
       [:html
        [:head
         [:meta {:charset "UTF-8"}]
+        [:meta {:name "subject" :content "Perusparannuspassi"}]
         [:title "Perusparannuspassi"]
-        (styles)]
+        [:style (styles)]]
        [:body
         pages-html]])))
 
-(defn generate-perusparannuspassi-pdf [{:keys [perusparannuspassi output-stream] :as params}]
-  (let [pages [{:title "Perusparannuspassi"
+(defn generate-perusparannuspassi-pdf [{:keys [energiatodistus perusparannuspassi output-stream kieli] :as params}]
+  (let [l (kieli loc/ppp-pdf-localization)
+        pages [{:title (l :perusparannuspassi)
                 :content
                 [:div
                  (etusivu-yleistiedot/etusivu-yleistiedot params)
+                 [:h2 (l :perusparannuspassissa-ehdotettujen-toimenpiteiden-vaikutukset)]
+                 (toimenpiteiden-vaikutukset params)
                  (etusivu-laatija/etusivu-laatija params)]}
-               {:title "Vaiheessa 1 toteutettavat toimenpiteet"
+               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "1")
                 :content
                 [:div
                  [:p "Sisältö vaiheesta 1 tähän"]]}
-               {:title "Vaiheessa 2 toteutettavat toimenpiteet"
+               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "2")
                 :content
                 [:div
                  [:p "Sisältö vaiheesta 2 tähän"]]}
-               {:title "Vaiheessa 3 toteutettavat toimenpiteet"
+               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "3")
                 :content
                 [:div
                  [:p "Sisältö vaiheesta 3 tähän"]]}
-               {:title "Vaiheessa 4 toteutettavat toimenpiteet"
+               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "4")
                 :content
                 [:div
                  [:p "Sisältö vaiheesta 4 tähän"]]}
-               {:title "Vaiheistuksen yhteenveto"
+               {:title (l :vaiheistuksen-yhteenveto)
                 :content
                 [:div
                  [:p "Tähän se suuri taulukko"]]}
-               {:title "Laskennan taustatiedot"
+               {:title (l :laskennan-taustatiedot)
                 :content
                 [:div
                  [:p "Laskennan taustatiedot tähän"]]}
-               {:title "Lisätietoja"
+               {:title (l :lisatietoja)
                 :content
                 [:div
                  [:p "Viimeinen sivu tähän"]]}]]
