@@ -113,7 +113,7 @@
     if (!R.isEmpty(invalidProperties)) {
       const invalidTxt = R.compose(
         R.join(', '),
-        R.map(Inputs.propertyLabel($_)),
+        R.map(Inputs.propertyLabel($_, 'energiatodistus')),
         R.map(R.nth(0))
       )(invalidProperties);
 

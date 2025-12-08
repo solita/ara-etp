@@ -196,7 +196,7 @@
                   {event['modifiedby-fullname']}
                 </td>
                 <td class="etp-table--td">
-                  {Inputs.propertyLabel($_, event.k)}
+                  {Inputs.propertyLabel($_, 'energiatodistus', event.k)}
                 </td>
                 <td class="etp-table--td">
                   {event['init-v'].map(formattedValue(event.type)).orSome('-')}
