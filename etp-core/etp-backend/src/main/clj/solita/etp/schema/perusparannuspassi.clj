@@ -57,9 +57,9 @@
    :toimenpide-ehdotukset [common-schema/Id]})
 
 (def PerusparannuspassiVaihe
-  {:vaihe-nro         (common-schema/LimitedInt 1 4)
-   :valid             schema/Bool
-   :toimenpiteet      Toimenpiteet
+  {:vaihe-nro    (common-schema/LimitedInt 1 4)
+   :valid        schema/Bool
+   :toimenpiteet Toimenpiteet
    :tulokset (xschema/optional-properties VaiheLaskennanTulokset)})
 
 (def PerusparannuspassiSave

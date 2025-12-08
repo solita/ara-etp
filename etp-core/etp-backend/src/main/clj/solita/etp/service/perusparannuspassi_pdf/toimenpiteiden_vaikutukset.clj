@@ -193,53 +193,20 @@
      (circle-with-text 60 38 (l :kohdistuu-muutoksia) true)
      (circle-with-text 110 38 (l :ei-kohdistu-muutoksia) false)]))
 
-(def ^:private vaikutus-luokat
+(def ^:private group-id->keyword
+  "Maps toimenpide_ehdotus group_id to the corresponding keyword for the house diagram"
   {0  :lammitys
-   1  :lammitys
-   2  :lammitys
-   3  :lammitys
-   4  :lammitys
-   5  :lammitys
-   6  :uusiutuva-energia
-   7  :lammitys
-   8  :lammin-kayttovesi
-   9  :lammitys
-   10 :lammin-kayttovesi
-   11 :ilmanvaihto
-   12 :ilmanvaihto
-   13 :ilmanvaihto
-   14 :ilmanvaihto
-   15 :ilmanvaihto
-   16 :valaistus
-   17 :valaistus
-   18 :valaistus
-   19 :jaahdytys
-   20 :jaahdytys
-   21 :jaahdytys
-   22 :jaahdytys
-   23 :uusiutuva-energia
-   24 :uusiutuva-energia
-   25 :uusiutuva-energia
-   26 :uusiutuva-energia
-   27 :ikkunat
-   28 :ulkoovet
-   29 :ylapohja
-   30 :alapohja
-   31 :julkisivu
-   32 :julkisivu
-   33 :uusiutuva-energia
-   34 :uusiutuva-energia
-   35 :lammitys
-   36 :lammitys
-   37 :lammitys
-   38 :uusiutuva-energia
-   39 :lammitys
-   40 :lammitys
-   41 :lammin-kayttovesi
-   42 :lammin-kayttovesi
-   43 :lammin-kayttovesi
-   44 :ilmanvaihto
-   45 :uusiutuva-energia})
+   1  :lammin-kayttovesi
+   2  :ilmanvaihto
+   3  :valaistus
+   4  :jaahdytys
+   5  :uusiutuva-energia
+   6  :ikkunat
+   7  :ulkoovet
+   8  :ylapohja
+   9  :alapohja
+   10 :julkisivu
+   11 nil}) ; Muut toimenpiteet - not shown in house diagram
 
 (defn- ppp-vaihe->et-ish-for-e-luku
   [et vaihe]
@@ -284,9 +251,11 @@
                                   (:vaiheet perusparannuspassi))
            ;; Create a map showing if any vaihe targets each element
            kohdistuminen (reduce (fn [acc ehdotus]
-                                   (merge-with #(or %1 %2)
-                                               acc
-                                               {(-> ehdotus :id vaikutus-luokat) true}))
+                                   (if-let [group-keyword (group-id->keyword (:group-id ehdotus))]
+                                     (merge-with #(or %1 %2)
+                                                 acc
+                                                 {group-keyword true})
+                                     acc))
                                  {:ylapohja          false
                                   :julkisivu         false
                                   :ikkunat           false

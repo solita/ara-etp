@@ -4,6 +4,7 @@
             [solita.etp.service.laatimisvaihe :as laatimisvaihe]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
             [solita.etp.service.luokittelu :as luokittelu-service]
+            [solita.etp.service.toimenpide-ehdotus :as toimenpide-ehdotus-service]
             [solita.etp.schema.common :as common-schema]
             [solita.etp.api.response :as api-response]
             [solita.etp.service.e-luokka :as e-luokka-service]
@@ -26,7 +27,7 @@
    (classification-route "/mahdollisuus-liittya-energiatehokkaaseen" "mahdollisuus-liittya-energiatehokkaaseen" luokittelu-service/find-mahdollisuus-liittya)
    (classification-route "/uusiutuva-energia" "uusiutuva-energia" luokittelu-service/find-uusiutuva-energia)
    (classification-route "/jaahdytys" "jaahdytys" luokittelu-service/find-jaahdytys)
-   (classification-route "/toimenpide-ehdotus" "toimenpide-ehdotus" luokittelu-service/find-toimenpide-ehdotus)
+   (classification-route "/toimenpide-ehdotus" "toimenpide-ehdotus" toimenpide-ehdotus-service/find-all)
 
    ["/kayttotarkoitusluokat/:versio"
     {:get {:summary    "Hae energiatodistuksen käyttötarkoitusluokat"
