@@ -58,10 +58,10 @@
       setPPP(perusparannuspassiCache.orElse(Maybe.Some(empty.perusparannuspassi(null)))));
 
   const deleteAndCachePerusparannuspassi =
-    setPPP => maybePerusparannuspassi => {
-      perusparannuspassiCache = maybePerusparannuspassi;
+    R.curry(((setPPP, currentMaybePerusparannuspassi) => () => {
       setPPP(Maybe.None());
-    };
+      perusparannuspassiCache = currentMaybePerusparannuspassi;
+    }));
 
   const emptyEnergiatodistus = versio =>
     R.cond([
@@ -149,7 +149,7 @@
             laatijaApi.laskutusosoitteet(response.whoami.id)
           ),
         Future.parallelObject(7, {
-          maybePerusparannuspassi: Future.resolve(Maybe.Some(empty.perusparannuspassi(null))),
+          maybePerusparannuspassi: Future.resolve(Maybe.None()),
           energiatodistus: Maybe.fold(
             Future.resolve(emptyEnergiatodistus(version)),
             R.compose(
@@ -161,7 +161,7 @@
           luokittelut: api.luokittelutForVersion(version),
           whoami: kayttajaApi.whoami,
           validation: api.validation(version),
-          pppvalidation: pppApi.pppValidation(params.version),
+          pppValidation: pppApi.pppValidation(version),
           verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit
         })
       )
@@ -181,11 +181,14 @@
       verkkolaskuoperaattorit,
       laskutusosoitteet,
       maybePerusparannuspassi,
-      ppppValidation
+      pppValidation
     }}
       <EtPppForm
         version={params.version}
         {title}
+
+        {addPerusparannuspassi}
+        deletePerusparannuspassi = {deleteAndCachePerusparannuspassi}
 
         {energiatodistus}
         {luokittelut}
@@ -194,7 +197,7 @@
         {verkkolaskuoperaattorit}
         {laskutusosoitteet}
         {maybePerusparannuspassi}
-        {ppppValidation}
+        {pppValidation}
 
         {submit}
 

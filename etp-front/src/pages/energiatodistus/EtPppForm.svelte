@@ -13,6 +13,7 @@
 
   import Signing from './signing/SigningDialog.svelte';
   import EnergiatodistusForm from './EnergiatodistusFormRef.svelte';
+  import PerusparannuspassiForm from './PPPFormRef.svelte';
   import * as EtValidations from './validation';
   import * as Inputs from './inputs';
   import * as Postinumero from '@Component/address/postinumero-fi';
@@ -27,7 +28,7 @@
 
   export let version;
   export let valvonta;
-  export let pppvalidation;
+  export let pppValidation;
 
   export let energiatodistus;
   export let luokittelut;
@@ -35,6 +36,9 @@
   export let whoami;
   export let verkkolaskuoperaattorit;
   export let laskutusosoitteet;
+
+  export let addPerusparannuspassi;
+  export let deletePerusparannuspassi;
 
   // TODO: AE-2690: Can we unify this and use the same one everywhere?
   export let maybePerusparannuspassi;
@@ -178,7 +182,7 @@
         ...EtValidations.missingProperties(
           pppRequired(
             perusparannuspassi,
-            pppvalidation,
+            pppValidation,
             energiatodistus['bypass-validation-limits']
           ),
           R.assocPath(
@@ -246,7 +250,7 @@
         }}
         on:reset={reset}>
         <EnergiatodistusForm
-                {ETForm}
+          {ETForm}
           {version}
           {luokittelut}
           {whoami}
@@ -254,14 +258,22 @@
           {laskutusosoitteet}
           {verkkolaskuoperaattorit}
           {title}
-                {disabled}
-                {disabledForPaakayttaja}
-                {inputLanguage}
-
+          {disabled}
+          {disabledForPaakayttaja}
+          {inputLanguage}
           bind:energiatodistus
           bind:eTehokkuus
           bind:dirty
-          bind:korvausError/>
+          bind:korvausError />
+        <PerusparannuspassiForm
+          {energiatodistus}
+          {inputLanguage}
+          {luokittelut}
+          schema={schemas.perusparannuspassi}
+          {pppValidation}
+          {addPerusparannuspassi}
+          {deletePerusparannuspassi}
+          bind:maybePerusparannuspassi />
       </form>
     </div>
   </div>
