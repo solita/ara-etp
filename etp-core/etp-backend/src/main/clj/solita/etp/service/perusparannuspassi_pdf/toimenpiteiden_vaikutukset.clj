@@ -208,16 +208,6 @@
    10 :julkisivu
    11 nil}) ; Muut toimenpiteet - not shown in house diagram
 
-(defn- ppp-vaihe->et-ish-for-e-luku
-  [et vaihe]
-  {:lahtotiedot {:lammitetty-nettoala (get-in et [:lahtotiedot :lammitetty-nettoala])}
-   :tulokset
-   {:kaytettavat-energiamuodot {:fossiilinen-polttoaine (-> vaihe :tulokset :ostoenergian-tarve-fossiiliset-pat)
-                                :sahko                  (-> vaihe :tulokset :ostoenergian-tarve-sahko)
-                                :kaukojaahdytys         (-> vaihe :tulokset :ostoenergian-tarve-kaukojaahdytys)
-                                :kaukolampo             (-> vaihe :tulokset :ostoenergian-tarve-kaukolampo)
-                                :uusiutuva-polttoaine   (-> vaihe :tulokset :ostoenergian-tarve-uusiutuvat-pat)}}})
-
 (defn toimenpiteiden-vaikutukset [{:keys [kieli
                                           energiatodistus
                                           perusparannuspassi
@@ -233,7 +223,7 @@
                                                   #_(not (nil? (get-in vaihe [:tulokset :vaiheen-alku-pvm]))))))
                          (map (fn [vaihe]
                                 (let [versio 2018
-                                      e-luku (e-luokka-service/e-luku versio (ppp-vaihe->et-ish-for-e-luku energiatodistus vaihe))
+                                      e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus vaihe)
                                       e-luokka (-> (e-luokka-service/e-luokka kayttotarkoitukset alakayttotarkoitukset versio
                                                                               (get-in energiatodistus [:perustiedot :kayttotarkoitus])
                                                                               (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
