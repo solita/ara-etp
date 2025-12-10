@@ -184,6 +184,9 @@
       ppppValidation
     }}
       <EtPppForm
+        version={params.version}
+        {title}
+
         {energiatodistus}
         {luokittelut}
         {validation}
