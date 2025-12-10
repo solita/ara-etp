@@ -3,7 +3,7 @@
 
   import EnergiatodistusResolver from './energiatodistus-resolver';
   import ExistingEnergiatodistus from './existing-energiatodistus';
-  import NewEnergiatodistus from './new-energiatodistus';
+  import NewEnergiatodistus from './new-energiatodistus-ref';
   import Energiatodistukset from './energiatodistukset';
   import Liitteet from './liitteet';
   import Viestit from './viestit';
