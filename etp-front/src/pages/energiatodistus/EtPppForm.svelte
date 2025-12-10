@@ -143,7 +143,7 @@
 
     if (R.isEmpty(invalid) && korvausError.isNone()) {
       clearAnnouncements();
-      submit(energiatodistus, (...args) => {
+      submit(energiatodistus, maybePerusparannuspassi, (...args) => {
         dirty = false;
         onSuccessfulSave(...args);
       });
@@ -231,6 +231,7 @@
         saveComplete={validateCompleteAndSubmit}
         cancel={reset}
         {energiatodistus}
+        {maybePerusparannuspassi}
         {eTehokkuus}
         dirty={dirty || R.isNil(energiatodistus.id)}
         {whoami}

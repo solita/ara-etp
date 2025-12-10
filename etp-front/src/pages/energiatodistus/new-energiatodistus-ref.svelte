@@ -1,9 +1,9 @@
 <script>
-  import {replace} from '@Component/Router/router';
-  import {querystring} from 'svelte-spa-router';
+  import { replace } from '@Component/Router/router';
+  import { querystring } from 'svelte-spa-router';
   import * as R from 'ramda';
 
-  import {_} from '@Language/i18n';
+  import { _ } from '@Language/i18n';
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
@@ -21,13 +21,13 @@
   import * as versionApi from '@Component/Version/version-api';
 
   import * as Response from '@Utility/response';
-  import {announcementsForModule} from '@Utility/announce';
-  import EtPppForm from "@Pages/energiatodistus/EtPppForm.svelte";
+  import { announcementsForModule } from '@Utility/announce';
+  import EtPppForm from '@Pages/energiatodistus/EtPppForm.svelte';
 
   export let params;
   const i18n = $_;
   const i18nRoot = 'energiatodistus';
-  const {announceError, announceSuccess} =
+  const { announceError, announceSuccess } =
     announcementsForModule('Energiatodistus');
 
   let overlay = false;
@@ -54,14 +54,22 @@
   let perusparannuspassiCache = Maybe.None();
 
   // We return the cached PPP or create a new empty one with null ET id. When saving the ET needs to be saved first in order to obtain the id.
-  const addPerusparannuspassi = R.curry(setPPP => () =>
-      setPPP(perusparannuspassiCache.orElse(Maybe.Some(empty.perusparannuspassi(null)))));
+  // TODO: AE-2690: Do we need to set unvalid values to empty valid values here?
+  const addPerusparannuspassi = R.curry(
+    setPPP => () =>
+      setPPP(
+        perusparannuspassiCache.orElse(
+          Maybe.Some(empty.perusparannuspassi(null))
+        )
+      )
+  );
 
-  const deleteAndCachePerusparannuspassi =
-    R.curry(((setPPP, currentMaybePerusparannuspassi) => () => {
+  const deleteAndCachePerusparannuspassi = R.curry(
+    (setPPP, currentMaybePerusparannuspassi) => () => {
       setPPP(Maybe.None());
       perusparannuspassiCache = currentMaybePerusparannuspassi;
-    }));
+    }
+  );
 
   const emptyEnergiatodistus = versio =>
     R.cond([
@@ -105,16 +113,37 @@
         }
       ),
       R.chain(Future.after(400)),
-      R.tap(etResult =>
-        maybePerusparannuspassi.map(ppp =>
-          R.compose(
-            R.chain(pppId =>
-              pppApi.putPerusparannuspassi(fetch, pppId, R.assoc('energiatodistus-id', etResult.id, ppp))
-            ),
-            pppApi.addPerusparannuspassi(fetch, etResult.id)
-          )
-        )
-      ),
+      etFuture =>
+        Maybe.cata(
+          () => etFuture,
+          ppp =>
+            R.compose(
+              R.map(({ etResult }) => etResult),
+              R.chain(({ etResult, pppId }) =>
+                R.map(
+                  pppResult => ({
+                    etResult: etResult,
+                    pppId: pppId,
+                    pppResult: pppResult
+                  }),
+                  pppApi.putPerusparannuspassi(
+                    fetch,
+                    pppId,
+                    R.assoc('energiatodistus-id', etResult.id, ppp)
+                  )
+                )
+              ),
+              R.chain(etResult =>
+                R.map(
+                  pppId => ({
+                    etResult: etResult,
+                    pppId: pppId
+                  }),
+                  pppApi.addPerusparannuspassi(fetch, etResult.id)
+                )
+              )
+            )(etFuture)
+        )(maybePerusparannuspassi),
       api.postEnergiatodistus(fetch, params.version),
       R.tap(() => toggleOverlay(true))
     )(energiatodistus);
@@ -173,23 +202,12 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each resources.toArray() as {
-      energiatodistus,
-      luokittelut,
-      validation,
-      whoami,
-      verkkolaskuoperaattorit,
-      laskutusosoitteet,
-      maybePerusparannuspassi,
-      pppValidation
-    }}
+    {#each resources.toArray() as { energiatodistus, luokittelut, validation, whoami, verkkolaskuoperaattorit, laskutusosoitteet, maybePerusparannuspassi, pppValidation }}
       <EtPppForm
         version={params.version}
         {title}
-
         {addPerusparannuspassi}
-        deletePerusparannuspassi = {deleteAndCachePerusparannuspassi}
-
+        deletePerusparannuspassi={deleteAndCachePerusparannuspassi}
         {energiatodistus}
         {luokittelut}
         {validation}
@@ -198,14 +216,11 @@
         {laskutusosoitteet}
         {maybePerusparannuspassi}
         {pppValidation}
-
         {submit}
-
-        bind:showMissingProperties
-      />
+        bind:showMissingProperties />
     {/each}
   </div>
   <div slot="overlay-content">
-    <Spinner/>
+    <Spinner />
   </div>
 </Overlay>

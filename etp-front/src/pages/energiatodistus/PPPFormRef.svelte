@@ -7,7 +7,7 @@
   import H3 from '@Component/H/H3';
   import HR from '@Component/HR/HR';
   import TextButton from '@Component/Button/TextButton';
-  import Maybe from '@Utility/maybe-utils';
+  import * as Maybe from '@Utility/maybe-utils';
   import * as empty from './empty.js';
 
   import Perustiedot from './form-parts-ppp/ppp-perustiedot';
@@ -38,6 +38,8 @@
   let perusparannuspassi = maybePerusparannuspassi.getOrElse(
     empty.perusparannuspassi(energiatodistus.id)
   );
+
+  $: maybePerusparannuspassi = Maybe.fromNull(perusparannuspassi);
 
   const setMaybePerusparannuspassi = newMaybePerusparannuspassi =>
     (maybePerusparannuspassi = newMaybePerusparannuspassi);
