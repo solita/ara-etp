@@ -12,8 +12,8 @@
   import { pppRequired } from './perusparannuspassi-utils.js';
 
   import Signing from './signing/SigningDialog.svelte';
-  import EnergiatodistusForm from './EnergiatodistusFormRef.svelte';
-  import PerusparannuspassiForm from './PPPFormRef.svelte';
+  import EnergiatodistusForm from './EnergiatodistusForm.svelte';
+  import PppForm from './PPPForm.svelte';
   import * as EtValidations from './validation';
   import * as Inputs from './inputs';
   import * as Postinumero from '@Component/address/postinumero-fi';
@@ -266,7 +266,7 @@
           bind:eTehokkuus
           bind:dirty
           bind:korvausError />
-        <PerusparannuspassiForm
+        <PppForm
           {energiatodistus}
           {inputLanguage}
           {luokittelut}
