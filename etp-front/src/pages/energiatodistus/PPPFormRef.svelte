@@ -39,7 +39,18 @@
     empty.perusparannuspassi(energiatodistus.id)
   );
 
-  $: maybePerusparannuspassi = Maybe.fromNull(perusparannuspassi);
+  // TODO: AE-2690: Change this?
+  // We want to avoid setting the maybePerusparannuspassi to the initial value
+  // of perusparannuspassi. Currently perusparannuspassi needs to respect the schema
+  // for everything to work.
+  let initialLoad = true;
+  $: {
+    if (initialLoad) {
+      initialLoad = false;
+    } else {
+      maybePerusparannuspassi = Maybe.fromNull(perusparannuspassi);
+    }
+  }
 
   const setMaybePerusparannuspassi = newMaybePerusparannuspassi =>
     (maybePerusparannuspassi = newMaybePerusparannuspassi);
