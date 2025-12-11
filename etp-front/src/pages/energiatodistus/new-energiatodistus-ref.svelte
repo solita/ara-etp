@@ -59,7 +59,7 @@
     setPPP => () =>
       setPPP(
         perusparannuspassiCache.orElse(
-          Maybe.Some(empty.perusparannuspassi(null))
+          Maybe.Some(empty.validPerusparannuspassi(null))
         )
       )
   );

@@ -2,7 +2,7 @@
   import Router from 'svelte-spa-router';
 
   import EnergiatodistusResolver from './energiatodistus-resolver';
-  import ExistingEnergiatodistus from './existing-energiatodistus';
+  import ExistingEnergiatodistus from './existing-energiatodistus-ref';
   import NewEnergiatodistus from './new-energiatodistus-ref';
   import Energiatodistukset from './energiatodistukset';
   import Liitteet from './liitteet';
