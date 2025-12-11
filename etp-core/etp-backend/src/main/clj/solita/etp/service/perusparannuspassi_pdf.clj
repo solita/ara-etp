@@ -1,11 +1,49 @@
 (ns solita.etp.service.perusparannuspassi-pdf
   (:require
+    [clojure.java.io :as io]
     [hiccup.core :as hiccup]
+    [solita.etp.config :as config]
     [solita.etp.service.localization :as loc]
     [solita.etp.service.pdf :as pdf-service]
+    [solita.etp.service.watermark-pdf :as watermark-pdf]
+    [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]
+    [solita.etp.service.energiatodistus :as energiatodistus-service]
+    [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot ]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija ]
     [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]]))
+
+(def draft-watermark-texts {"fi" "LUONNOS"
+                            "sv" "UTKAST"})
+
+(def test-watermark-texts {"fi" "TESTI"
+                           "sv" "TEST"})
+
+(defn- apply-watermark-to-bytes
+  "Apply watermark to PDF bytes and return new byte array with watermark.
+   If watermark-text is nil, returns original bytes unchanged."
+  [pdf-bytes watermark-text]
+  (if watermark-text
+    (let [temp-input (java.io.File/createTempFile "ppp-input-" ".pdf")
+          temp-output (java.io.File/createTempFile "ppp-output-" ".pdf")]
+      (try
+        ;; Write bytes to temp input file
+        (with-open [out (io/output-stream temp-input)]
+          (.write out ^bytes pdf-bytes))
+
+        ;; Apply watermark (modifies file in place or creates output)
+        (watermark-pdf/add-watermark (.getPath temp-input) watermark-text)
+
+        ;; Read watermarked bytes back
+        (let [result (with-open [in (io/input-stream temp-input)]
+                       (let [baos (java.io.ByteArrayOutputStream.)]
+                         (io/copy in baos)
+                         (.toByteArray baos)))]
+          result)
+        (finally
+          (.delete temp-input)
+          (.delete temp-output))))
+    pdf-bytes))
 
 ;; CSS styles for the document
 (defn- styles []
@@ -307,3 +345,54 @@
                  [:p "Viimeinen sivu tähän"]]}]]
     (-> (generate-document-html pages (:id perusparannuspassi))
         (pdf-service/html->pdf output-stream))))
+
+(defn ^:dynamic generate-pdf-as-bytes
+  "Generate a perusparannuspassi PDF and return it as a byte array.
+   Marked as dynamic so it can be mocked in tests."
+  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
+  (let [kieli-keyword (keyword kieli)
+        output-stream (java.io.ByteArrayOutputStream.)]
+
+    ;; Generate the PDF to byte array
+    (generate-perusparannuspassi-pdf
+      {:energiatodistus energiatodistus
+       :perusparannuspassi perusparannuspassi
+       :kayttotarkoitukset kayttotarkoitukset
+       :alakayttotarkoitukset alakayttotarkoitukset
+       :output-stream output-stream
+       :kieli kieli-keyword})
+
+    (let [pdf-bytes (.toByteArray output-stream)
+          watermark-text (cond
+                           draft? (draft-watermark-texts kieli)
+                           (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
+                           :else nil)]
+      (apply-watermark-to-bytes pdf-bytes watermark-text))))
+
+(defn generate-pdf-as-input-stream
+  "Generate a perusparannuspassi PDF and return it as an InputStream.
+   Applies watermarks via post-processing with PDFBox."
+  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
+  (let [pdf-bytes (generate-pdf-as-bytes perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?)]
+    (java.io.ByteArrayInputStream. pdf-bytes)))
+
+(defn find-perusparannuspassi-pdf
+  "Find or generate a perusparannuspassi PDF.
+   For now, always generates a new PDF (S3 caching not implemented yet).
+
+   Parameters:
+   - db: Database connection
+   - whoami: Current user
+   - ppp-id: Perusparannuspassi ID
+   - kieli: Language code ('fi' or 'sv')
+
+   Returns: InputStream of the PDF, or nil if not found"
+  [db whoami ppp-id kieli]
+  (when-let [perusparannuspassi (perusparannuspassi-service/find-perusparannuspassi db whoami ppp-id)]
+    (let [energiatodistus-id (:energiatodistus-id perusparannuspassi)
+          energiatodistus (energiatodistus-service/find-energiatodistus db whoami energiatodistus-id)
+          versio (:versio energiatodistus)
+          kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
+          alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)]
+      ;; Always show draft watermark for now (no signing yet)
+      (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli true))))
