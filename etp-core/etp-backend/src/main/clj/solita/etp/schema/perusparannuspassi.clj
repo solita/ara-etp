@@ -71,7 +71,12 @@
    :tulokset   (xschema/optional-properties LaskennanTulokset)})
 
 (def Perusparannuspassi
-  (merge common-schema/Id
-         {:laatija-id common-schema/Key
-          :tila-id    common-schema/Key}
-         PerusparannuspassiSave))
+  (-> PerusparannuspassiSave
+      (merge common-schema/Id
+             {:laatija-id common-schema/Key
+              :tila-id    common-schema/Key})
+
+      (update-in [:vaiheet 0 :toimenpiteet :toimenpide-ehdotukset 0]
+                 (fn [toimenpide-ehdotus-save-schema]
+                   (merge toimenpide-ehdotus-save-schema
+                          {:group-id common-schema/Key})))))

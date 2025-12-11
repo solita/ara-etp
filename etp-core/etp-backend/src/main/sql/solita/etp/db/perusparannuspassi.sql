@@ -31,8 +31,10 @@ where
 
 -- name: select-perusparannuspassi-vaihe-toimenpide-ehdotukset
 select
-    pvte.toimenpide_ehdotus_id as id
+    pvte.toimenpide_ehdotus_id as id,
+    te.group_id
 from perusparannuspassi_vaihe_toimenpide_ehdotus pvte
+    join toimenpide_ehdotus te on pvte.toimenpide_ehdotus_id = te.id
 where perusparannuspassi_id = :perusparannuspassi-id
   and vaihe_nro = :vaihe-nro
 order by pvte.ordinal asc, pvte.toimenpide_ehdotus_id asc;
