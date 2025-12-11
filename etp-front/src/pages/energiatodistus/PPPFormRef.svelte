@@ -35,8 +35,8 @@
   $: showPPP = maybePerusparannuspassi.isSome();
 
   // TODO: AE-2690: Can we unify this and use the same one everywhere?
-  let perusparannuspassi = maybePerusparannuspassi.getOrElse(
-    empty.perusparannuspassi(energiatodistus.id)
+  let perusparannuspassi = maybePerusparannuspassi.orSome(
+    empty.validPerusparannuspassi(energiatodistus.id)
   );
 
   // TODO: AE-2690: Change this?
@@ -55,7 +55,19 @@
   const setMaybePerusparannuspassi = newMaybePerusparannuspassi =>
     (maybePerusparannuspassi = newMaybePerusparannuspassi);
 
-  const onAddPPP = addPerusparannuspassi(setMaybePerusparannuspassi);
+  const setUnwrappedPerusparannuspassi = Maybe.cata(
+    () => {},
+    newPpp => {
+      perusparannuspassi = newPpp;
+    }
+  );
+
+  const setPerusparannuspassit = R.compose(
+    R.map(R.__, [setMaybePerusparannuspassi, setUnwrappedPerusparannuspassi]),
+    R.applyTo
+  );
+
+  const onAddPPP = addPerusparannuspassi(setPerusparannuspassit);
 
   const onDeletePPP = deletePerusparannuspassi(
     setMaybePerusparannuspassi,
