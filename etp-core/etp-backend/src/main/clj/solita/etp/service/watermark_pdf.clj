@@ -1,4 +1,5 @@
 (ns solita.etp.service.watermark-pdf
+  (:require [clojure.java.io :as io])
   (:import (java.util HashMap)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            [org.apache.pdfbox.pdmodel PDDocument PDPage PDPageContentStream]
@@ -91,3 +92,29 @@
               result (.overlay overlay (HashMap.))]
     (.save result ^String pdf-path)
     pdf-path))
+
+(defn apply-watermark-to-bytes
+  "Apply watermark to PDF bytes and return new byte array with watermark.
+   If watermark-text is nil, returns original bytes unchanged."
+  [pdf-bytes watermark-text]
+  (if watermark-text
+    (let [temp-input (java.io.File/createTempFile "pdf-watermark-input-" ".pdf")
+          temp-output (java.io.File/createTempFile "pdf-watermark-output-" ".pdf")]
+      (try
+        ;; Write bytes to temp input file
+        (with-open [out (io/output-stream temp-input)]
+          (.write out ^bytes pdf-bytes))
+
+        ;; Apply watermark (modifies file in place)
+        (add-watermark (.getPath temp-input) watermark-text)
+
+        ;; Read watermarked bytes back
+        (let [result (with-open [in (io/input-stream temp-input)]
+                       (let [baos (java.io.ByteArrayOutputStream.)]
+                         (io/copy in baos)
+                         (.toByteArray baos)))]
+          result)
+        (finally
+          (.delete temp-input)
+          (.delete temp-output))))
+    pdf-bytes))

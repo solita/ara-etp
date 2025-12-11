@@ -19,31 +19,6 @@
 (def test-watermark-texts {"fi" "TESTI"
                            "sv" "TEST"})
 
-(defn- apply-watermark-to-bytes
-  "Apply watermark to PDF bytes and return new byte array with watermark.
-   If watermark-text is nil, returns original bytes unchanged."
-  [pdf-bytes watermark-text]
-  (if watermark-text
-    (let [temp-input (java.io.File/createTempFile "ppp-input-" ".pdf")
-          temp-output (java.io.File/createTempFile "ppp-output-" ".pdf")]
-      (try
-        ;; Write bytes to temp input file
-        (with-open [out (io/output-stream temp-input)]
-          (.write out ^bytes pdf-bytes))
-
-        ;; Apply watermark (modifies file in place or creates output)
-        (watermark-pdf/add-watermark (.getPath temp-input) watermark-text)
-
-        ;; Read watermarked bytes back
-        (let [result (with-open [in (io/input-stream temp-input)]
-                       (let [baos (java.io.ByteArrayOutputStream.)]
-                         (io/copy in baos)
-                         (.toByteArray baos)))]
-          result)
-        (finally
-          (.delete temp-input)
-          (.delete temp-output))))
-    pdf-bytes))
 
 ;; CSS styles for the document
 (defn- styles []
@@ -367,7 +342,7 @@
                            draft? (draft-watermark-texts kieli)
                            (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
                            :else nil)]
-      (apply-watermark-to-bytes pdf-bytes watermark-text))))
+      (watermark-pdf/apply-watermark-to-bytes pdf-bytes watermark-text))))
 
 (defn generate-pdf-as-input-stream
   "Generate a perusparannuspassi PDF and return it as an InputStream.
