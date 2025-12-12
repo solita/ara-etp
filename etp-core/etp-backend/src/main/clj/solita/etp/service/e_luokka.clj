@@ -206,3 +206,21 @@
     [^BigDecimal kulutus (painotettu-ostoenergiankulutus versio energiatodistus)
      ^BigDecimal nettoala (some-> energiatodistus :lahtotiedot :lammitetty-nettoala bigdec)]
     (when-not (zero? nettoala) (.divide kulutus nettoala 0 RoundingMode/CEILING))))
+
+(defn e-luku-from-ppp-vaihe
+  "Calculate e-luku from PPP vaihe data.
+   Takes the base energiatodistus (for nettoala) and a PPP vaihe with ostoenergian-tarve values.
+   Returns the calculated e-luku for this vaihe."
+  [versio energiatodistus ppp-vaihe]
+  (logic/if-let*
+    [^BigDecimal nettoala (some-> energiatodistus :lahtotiedot :lammitetty-nettoala bigdec)
+     ;; Build energiamuodot map from vaihe's ostoenergian-tarve values
+     energiamuodot {:fossiilinen-polttoaine (-> ppp-vaihe :tulokset :ostoenergian-tarve-fossiiliset-pat)
+                    :sahko                  (-> ppp-vaihe :tulokset :ostoenergian-tarve-sahko)
+                    :kaukojaahdytys         (-> ppp-vaihe :tulokset :ostoenergian-tarve-kaukojaahdytys)
+                    :kaukolampo             (-> ppp-vaihe :tulokset :ostoenergian-tarve-kaukolampo)
+                    :uusiutuva-polttoaine   (-> ppp-vaihe :tulokset :ostoenergian-tarve-uusiutuvat-pat)}
+     ;; Create a temporary ET-like structure for calculation
+     temp-et {:tulokset {:kaytettavat-energiamuodot energiamuodot}
+              :lahtotiedot {:lammitetty-nettoala nettoala}}]
+    (e-luku versio temp-et)))
