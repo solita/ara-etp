@@ -3,6 +3,7 @@
     [hiccup.core :as hiccup]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot ]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija ]
+    [solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot :as laskennan-taustatiedot]
     [solita.etp.service.pdf :as pdf-service]))
 
 ;; CSS styles for the document
@@ -139,6 +140,138 @@
       border-left: none;
     }
 
+    table.laskennan-taustatiedot {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+      -fs-border-rendering: no-bevel;
+    }
+
+   table.laskennan-taustatiedot th,
+   table.laskennan-taustatiedot td {
+     display: table-cell;
+     -fs-border-rendering: no-bevel;
+     border: 1px solid #2c5234;
+     padding: 5px 8px;
+     font-size: 14px;
+   }
+
+   th.otsikko {
+     background-color: #2c5234;
+     color: white;
+     font-weight:bold;
+     padding: 5px 8px;
+     font-size: 14px;
+   }
+
+   table.laskennan-taustatiedot .sarakkeet th {
+     font-weight: normal;
+     font-size: 14px;
+   }
+
+   table.lammitys th,
+   table.lammitys td {
+     display: table-cell;
+     -fs-border-rendering: no-bevel;
+     border: 1px solid #2c5234;
+     padding: 5px 8px;
+     font-size: 14px;
+   }
+
+   tr.sarakkeet.lammitys-ilmanvaihto {
+     background-color: #2c5234;
+     color: white;
+     text-align:center;
+     font-weight:bold;
+     padding: 5px 8px;
+     font-size: 14px;
+   }
+
+   table.lammitys th.empty {
+    border: none;
+    background: none;
+   }
+
+    table.lammitys th {
+     font-weight: normal;
+     text-align: center;
+     font-size: 14px;
+    }
+
+   table.lammitys {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+   }
+
+   dl.vahimmaisvaatimustaso {
+    display: table;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+    font-size: 14px;
+    width: 100%;
+    }
+
+  dl.vahimmaisvaatimustaso dt,
+  dl.vahimmaisvaatimustaso dd {
+    display: table-cell;
+    padding: 5px 8px;
+    white-space: nowrap
+   }
+
+   dl.vahimmaisvaatimustaso dd {
+    border: 1px solid #2c5234;
+   }
+
+   dl.vahimmaisvaartimustaso dt {
+    font-weight: bold;
+    align-items: left;
+   }
+
+   dl.korjausrakentamisen-saadokset {
+    font-size: 14px;
+    align-items: left;
+   }
+
+   table.mahdollisuus-liittya {
+     display: table;
+     width: 100%;
+     border-collapse: collapse;
+     -fs-border-rendering: no-bevel;
+   }
+
+   table.mahdollisuus-liittya th,
+   table.mahdollisuus-liittya td {
+     display: table-cell;
+     fs-border-rendering: no-bevel;
+     border: 1px solid #2c5234;
+     padding: 5px 8px
+     font-size: 14px;
+   }
+
+   table.lisatietoja {
+     display: table;
+     width: 100%;
+     border-collapse: collapse;
+     -fs-border-rendering: no-bevel;
+     align-items: left;
+   }
+
+   table.lisatietoja th,
+   table.lisatietoja td {
+     align-items: left;
+     display: table-cell;
+     -fs-border-rendering: no-bevel;
+     border: 1px solid #2c5234;
+     padding: 5px 8px;
+     font-size: 14px;
+   }
+
+   dl.voimassaolo {
+     font-size: 14px;
+   }
+
   </style>"))
 
 
@@ -212,7 +345,21 @@
                {:title "Laskennan taustatiedot"
                 :content
                 [:div
-                 [:p "Laskennan taustatiedot tähän"]]}
+                 [:div
+                  (laskennan-taustatiedot/laskennan-taustatiedot-u-arvot params)]
+                 [:div
+                  (laskennan-taustatiedot/lammitys-ilmanvaihto params)]
+                [:div
+                 (laskennan-taustatiedot/vahimmaisvaatimustaso params)]
+                [:div
+                 (laskennan-taustatiedot/korjausrakentamisen-saadokset params)]
+                 [:div
+                  (laskennan-taustatiedot/mahdollisuus-liittya params)]
+                 [:div
+                  (laskennan-taustatiedot/lisatiedot params)]
+                 [:div
+                  (laskennan-taustatiedot/voimassa-olo params)]
+                 ]}
                {:title "Lisätietoja"
                 :content
                 [:div
