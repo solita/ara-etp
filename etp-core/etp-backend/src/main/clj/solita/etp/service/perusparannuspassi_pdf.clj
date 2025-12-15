@@ -9,9 +9,10 @@
     [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]
     [solita.etp.service.energiatodistus :as energiatodistus-service]
     [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
-    [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot ]
-    [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija ]
-    [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]]))
+    [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot]
+    [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija]
+    [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]])
+  (:import (org.apache.axis.utils ByteArrayOutputStream)))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
                             "sv" "UTKAST"})
@@ -281,8 +282,9 @@
        [:body
         pages-html]])))
 
-(defn generate-perusparannuspassi-pdf [{:keys [energiatodistus perusparannuspassi output-stream kieli] :as params}]
-  (let [l (kieli loc/ppp-pdf-localization)
+(defn generate-perusparannuspassi-base-pdf [{:keys [energiatodistus perusparannuspassi kieli] :as params}]
+  (let [output-stream (ByteArrayOutputStream.)
+        l (kieli loc/ppp-pdf-localization)
         pages [{:title (l :perusparannuspassi)
                 :content
                 [:div
@@ -319,36 +321,36 @@
                 [:div
                  [:p "Viimeinen sivu tähän"]]}]]
     (-> (generate-document-html pages (:id perusparannuspassi))
-        (pdf-service/html->pdf output-stream))))
+        (pdf-service/html->pdf output-stream))
+    (-> output-stream .toByteArray)))
 
-(defn ^:dynamic generate-pdf-as-bytes
-  "Generate a perusparannuspassi PDF and return it as a byte array.
-   Marked as dynamic so it can be mocked in tests."
+(defn generate-perusparannuspassi-pdf
+  "Generate a perusparannuspassi PDF and return it as a byte array."
   [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
   (let [kieli-keyword (keyword kieli)
-        output-stream (java.io.ByteArrayOutputStream.)]
+        pdf-bytes
 
-    ;; Generate the PDF to byte array
-    (generate-perusparannuspassi-pdf
-      {:energiatodistus energiatodistus
-       :perusparannuspassi perusparannuspassi
-       :kayttotarkoitukset kayttotarkoitukset
-       :alakayttotarkoitukset alakayttotarkoitukset
-       :output-stream output-stream
-       :kieli kieli-keyword})
+        ;; Generate the PDF to byte array
+        (generate-perusparannuspassi-base-pdf
+          {:energiatodistus       energiatodistus
+           :perusparannuspassi    perusparannuspassi
+           :kayttotarkoitukset    kayttotarkoitukset
+           :alakayttotarkoitukset alakayttotarkoitukset
+           :kieli                 kieli-keyword})]
 
-    (let [pdf-bytes (.toByteArray output-stream)
-          watermark-text (cond
+    (let [watermark-text (cond
                            draft? (draft-watermark-texts kieli)
                            (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
                            :else nil)]
-      (watermark-pdf/apply-watermark-to-bytes pdf-bytes watermark-text))))
+      (if (some? watermark-text)
+        (watermark-pdf/apply-watermark-to-bytes pdf-bytes watermark-text)
+        pdf-bytes))))
 
 (defn generate-pdf-as-input-stream
   "Generate a perusparannuspassi PDF and return it as an InputStream.
    Applies watermarks via post-processing with PDFBox."
   [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
-  (let [pdf-bytes (generate-pdf-as-bytes perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?)]
+  (let [pdf-bytes (generate-perusparannuspassi-pdf perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?)]
     (java.io.ByteArrayInputStream. pdf-bytes)))
 
 (defn find-perusparannuspassi-pdf
