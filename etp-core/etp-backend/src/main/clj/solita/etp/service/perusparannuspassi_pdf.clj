@@ -282,7 +282,9 @@
        [:body
         pages-html]])))
 
-(defn generate-perusparannuspassi-base-pdf [{:keys [energiatodistus perusparannuspassi kieli] :as params}]
+(defn- generate-perusparannuspassi-ohtp-pdf
+  "Use OpenHTMLToPDF to generate a PPP PDF, return as a byte array"
+  [{:keys [energiatodistus perusparannuspassi kieli] :as params}]
   (let [output-stream (ByteArrayOutputStream.)
         l (kieli loc/ppp-pdf-localization)
         pages [{:title (l :perusparannuspassi)
@@ -324,14 +326,14 @@
         (pdf-service/html->pdf output-stream))
     (-> output-stream .toByteArray)))
 
-(defn generate-perusparannuspassi-pdf
+(defn- generate-perusparannuspassi-pdf
   "Generate a perusparannuspassi PDF and return it as a byte array."
   [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
   (let [kieli-keyword (keyword kieli)
         pdf-bytes
 
         ;; Generate the PDF to byte array
-        (generate-perusparannuspassi-base-pdf
+        (generate-perusparannuspassi-ohtp-pdf
           {:energiatodistus       energiatodistus
            :perusparannuspassi    perusparannuspassi
            :kayttotarkoitukset    kayttotarkoitukset
@@ -346,7 +348,7 @@
         (watermark-pdf/apply-watermark-to-bytes pdf-bytes watermark-text)
         pdf-bytes))))
 
-(defn generate-pdf-as-input-stream
+(defn- generate-pdf-as-input-stream
   "Generate a perusparannuspassi PDF and return it as an InputStream.
    Applies watermarks via post-processing with PDFBox."
   [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
@@ -370,6 +372,7 @@
           energiatodistus (energiatodistus-service/find-energiatodistus db whoami energiatodistus-id)
           versio (:versio energiatodistus)
           kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
-          alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)]
+          alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
+          draft? true]
       ;; Always show draft watermark for now (no signing yet)
-      (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli true))))
+      (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?))))
