@@ -13,7 +13,8 @@
     [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]]
     [solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot :as laskennan-taustatiedot]
     [solita.etp.service.luokittelu :as luokittelu-service]
-    [solita.etp.service.perusparannuspassi-pdf.lisatietoja :as lisatietoja])
+    [solita.etp.service.perusparannuspassi-pdf.lisatietoja :as lisatietoja]
+    [solita.etp.service.perusparannuspassi-pdf.vaiheissa-toteutettavat-toimenpiteet :as vaiheissa-toteutettavat-toimenpiteet])
   (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
@@ -21,7 +22,6 @@
 
 (def test-watermark-texts {"fi" "TESTI"
                            "sv" "TEST"})
-
 
 ;; CSS styles for the document
 (defn- styles []
@@ -396,9 +396,9 @@
    (str "Perusparannuspassin tunnus: " ppp-tunnus " | " page-num "/" total-pages)])
 
 (defn- render-page [page-data page-num total-pages ppp-tunnus]
-  (let [{:keys [title content]} page-data]
+  (let [{:keys [title content header]} page-data]
     [:div {:class "page"}
-     (page-header title)
+     (or header (page-header title))
      [:div {:class "page-content"}
       content]
      (page-footer ppp-tunnus page-num total-pages)]))
@@ -441,22 +441,10 @@
                  [:h2 (l :perusparannuspassissa-ehdotettujen-toimenpiteiden-vaikutukset)]
                  (toimenpiteiden-vaikutukset params)
                  (etusivu-laatija/etusivu-laatija params)]}
-               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "1")
-                :content
-                [:div
-                 [:p "Sisältö vaiheesta 1 tähän"]]}
-               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "2")
-                :content
-                [:div
-                 [:p "Sisältö vaiheesta 2 tähän"]]}
-               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "3")
-                :content
-                [:div
-                 [:p "Sisältö vaiheesta 3 tähän"]]}
-               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "4")
-                :content
-                [:div
-                 [:p "Sisältö vaiheesta 4 tähän"]]}
+               (vaiheissa-toteutettavat-toimenpiteet/render-page params 1)
+               (vaiheissa-toteutettavat-toimenpiteet/render-page params 2)
+               (vaiheissa-toteutettavat-toimenpiteet/render-page params 3)
+               (vaiheissa-toteutettavat-toimenpiteet/render-page params 4)
                {:title (l :vaiheistuksen-yhteenveto)
                 :content
                 [:div

@@ -61,6 +61,7 @@
         :ei                                "Ei"
         :a0-selite                         "A0 on päästötön rakennus"
         :a-plus-selite                     "A+ rakennus on erittäin energiatehokas, päästötön ja energiapositiivinen"
+        :toimenpide-ehdotukset             "Toimenpide-ehdotukset"
 
         :laskennan-taustatiedot-otsikko    "Laskennan taustatiedot"
         :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti:"
@@ -160,6 +161,7 @@
         :ei                                "Nej"
         :a0-selite                         "A0 är en utsläppsfri byggnad"
         :a-plus-selite                     "A+ byggnad är mycket energieffektiv, utsläppsfri och energipositiv"
+        :toimenpide-ehdotukset             "Åtgärdsförslag"
 
         :laskennan-taustatiedot-otsikko    "Laskennan taustatiedot (sv)"
         :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti: (sv)"
