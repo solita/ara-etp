@@ -3,7 +3,7 @@
             [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.localization :as loc]))
 
-(defn- dark?
+(defn dark?
   "Determines if a color is dark based on relative luminance.
    Uses the standard luminance formula: 0.299*R + 0.587*G + 0.114*B
    Returns true if the color's luminance is below the threshold."
@@ -20,7 +20,7 @@
     ;; but #cad344 (luminance ~200) is not
     (< luminance 180)))
 
-(defn- arrow [color x text1 text2]
+(defn arrow [color x text1 text2]
   (let [text-fill (if (dark? color) "white" "#2c5234")
         path-d (str/join " "
                          ["M -5.6958636,-5.9998443"
@@ -54,7 +54,7 @@
              :text-anchor "middle"}
       text2]]))
 
-(def ^:private colors-by-e-luokka
+(def colors-by-e-luokka
   {"A" "#449841"
    "B" "#7dae35"
    "C" "#cad344"
