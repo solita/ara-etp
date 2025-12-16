@@ -1,16 +1,34 @@
 (ns solita.etp.service.perusparannuspassi-pdf
   (:require
+    [clojure.java.io :as io]
     [hiccup.core :as hiccup]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot ]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija ]
     [solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot :as laskennan-taustatiedot]
     [solita.etp.service.pdf :as pdf-service]))
+    [solita.etp.config :as config]
+    [solita.etp.service.localization :as loc]
+    [solita.etp.service.pdf :as pdf-service]
+    [solita.etp.service.watermark-pdf :as watermark-pdf]
+    [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]
+    [solita.etp.service.energiatodistus :as energiatodistus-service]
+    [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
+    [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot]
+    [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija]
+    [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]])
+  (:import (org.apache.axis.utils ByteArrayOutputStream)))
+
+(def draft-watermark-texts {"fi" "LUONNOS"
+                            "sv" "UTKAST"})
+
+(def test-watermark-texts {"fi" "TESTI"
+                           "sv" "TEST"})
+
 
 ;; CSS styles for the document
 (defn- styles []
   (str
-  "<style>
-    @page {
+  "@page {
       size: A4;
       margin: 0;
     }
@@ -23,7 +41,7 @@
       margin: 0;
       padding: 0;
       font-family: roboto, sans-serif;
-      font-size: 12pt;
+      font-size: 11pt;
     }
 
     .page {
@@ -55,7 +73,7 @@
 
     .page-content {
       padding: 16mm;
-      min-height: calc(297mm - 5cm - 2cm);
+      min-height: 227mm;
     }
 
     .page-footer {
@@ -70,6 +88,19 @@
 
     h1, h2, h3, h4, h5, h6 {
       font-family: roboto, sans-serif;
+    }
+
+    h1 {
+      font-size: 30pt;
+    }
+
+    h2 {
+      font-size: 13pt;
+      color: #2c5234;
+    }
+
+    h3 {
+      font-size: 11pt;
     }
 
     p, div, span, li, ul, ol {
@@ -140,6 +171,77 @@
       border-left: none;
     }
 
+    .vaikutukset-box {
+      background-color: #eaeeeb;
+      border-radius: 3mm;
+      padding: 3mm 6mm 6mm 6mm;
+      width: 100%;
+      min-height: 80mm;
+    }
+
+    .kohdistuminen-box {
+      background-color: #d5dcd6;
+      border-radius: 3mm;
+      width: 100%;
+      padding-left: 5mm;
+    }
+
+    dl.tayttaa-vaatimukset-list {
+      display: table;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
+    dl.tayttaa-vaatimukset-list > div {
+      display: table-cell;
+      padding-right: 10mm;
+      vertical-align: top;
+    }
+
+    dl.tayttaa-vaatimukset-list > div:last-child {
+      padding-right: 0;
+    }
+
+    dl.tayttaa-vaatimukset-list > div > dt,
+    dl.tayttaa-vaatimukset-list > div > dd {
+      display: inline-block;
+      border: 1px solid #2c5234;
+      padding: 6px 8px;
+      margin: 0;
+      vertical-align: top;
+    }
+
+    dl.tayttaa-vaatimukset-list > div > dt {
+      width: 60mm;
+      border-right: none;
+      font-weight: normal;
+      white-space: nowrap;
+    }
+
+    dl.tayttaa-vaatimukset-list > div > dd {
+      width: 14mm;
+    }
+
+    .vaatimukset-selitteet-box {
+      margin-top: 3mm;
+    }
+
+    .vaatimukset-selitteet {
+      display: table-row;
+      width: 100%;
+    }
+
+    .vaatimukset-selitteet > div {
+      display: table-cell;
+      width: 50%;
+      margin-right: 10mm;
+    }
+
+    .vaatimukset-selitteet > div:last-child {
+      margin-right: 0;
+      padding-left: 5mm;
+    }"))
     table.laskennan-taustatiedot {
       display: table;
       width: 100%;
@@ -311,40 +413,49 @@
       [:html
        [:head
         [:meta {:charset "UTF-8"}]
+        [:meta {:name "subject" :content "Perusparannuspassi"}]
         [:title "Perusparannuspassi"]
-        (styles)]
+        [:style (styles)]]
        [:body
         pages-html]])))
 
-(defn generate-perusparannuspassi-pdf [{:keys [perusparannuspassi output-stream] :as params}]
-  (let [pages [{:title "Perusparannuspassi"
+(defn- generate-perusparannuspassi-ohtp-pdf
+  "Use OpenHTMLToPDF to generate a PPP PDF, return as a byte array"
+  [{:keys [energiatodistus perusparannuspassi kieli] :as params}]
+  (let [output-stream (ByteArrayOutputStream.)
+        l (kieli loc/ppp-pdf-localization)
+        pages [{:title (l :perusparannuspassi)
                 :content
                 [:div
                  (etusivu-yleistiedot/etusivu-yleistiedot params)
+                 [:h2 (l :perusparannuspassissa-ehdotettujen-toimenpiteiden-vaikutukset)]
+                 (toimenpiteiden-vaikutukset params)
                  (etusivu-laatija/etusivu-laatija params)]}
-               {:title "Vaiheessa 1 toteutettavat toimenpiteet"
+               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "1")
                 :content
                 [:div
                  [:p "Sisältö vaiheesta 1 tähän"]]}
-               {:title "Vaiheessa 2 toteutettavat toimenpiteet"
+               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "2")
                 :content
                 [:div
                  [:p "Sisältö vaiheesta 2 tähän"]]}
-               {:title "Vaiheessa 3 toteutettavat toimenpiteet"
+               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "3")
                 :content
                 [:div
                  [:p "Sisältö vaiheesta 3 tähän"]]}
-               {:title "Vaiheessa 4 toteutettavat toimenpiteet"
+               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "4")
                 :content
                 [:div
                  [:p "Sisältö vaiheesta 4 tähän"]]}
-               {:title "Vaiheistuksen yhteenveto"
+               {:title (l :vaiheistuksen-yhteenveto)
                 :content
                 [:div
                  [:p "Tähän se suuri taulukko"]]}
-               {:title "Laskennan taustatiedot"
+               {:title (l :laskennan-taustatiedot)
                 :content
                 [:div
+                 [:p "Laskennan taustatiedot tähän"]]}
+               {:title (l :lisatietoja)
                  [:div
                   (laskennan-taustatiedot/laskennan-taustatiedot-u-arvot params)]
                  [:div
@@ -365,4 +476,56 @@
                 [:div
                  [:p "Viimeinen sivu tähän"]]}]]
     (-> (generate-document-html pages (:id perusparannuspassi))
-        (pdf-service/html->pdf output-stream))))
+        (pdf-service/html->pdf output-stream))
+    (-> output-stream .toByteArray)))
+
+(defn- generate-perusparannuspassi-pdf
+  "Generate a perusparannuspassi PDF and return it as a byte array."
+  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
+  (let [kieli-keyword (keyword kieli)
+        pdf-bytes
+
+        ;; Generate the PDF to byte array
+        (generate-perusparannuspassi-ohtp-pdf
+          {:energiatodistus       energiatodistus
+           :perusparannuspassi    perusparannuspassi
+           :kayttotarkoitukset    kayttotarkoitukset
+           :alakayttotarkoitukset alakayttotarkoitukset
+           :kieli                 kieli-keyword})]
+
+    (let [watermark-text (cond
+                           draft? (draft-watermark-texts kieli)
+                           (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
+                           :else nil)]
+      (if (some? watermark-text)
+        (watermark-pdf/apply-watermark-to-bytes pdf-bytes watermark-text)
+        pdf-bytes))))
+
+(defn- generate-pdf-as-input-stream
+  "Generate a perusparannuspassi PDF and return it as an InputStream.
+   Applies watermarks via post-processing with PDFBox."
+  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
+  (let [pdf-bytes (generate-perusparannuspassi-pdf perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?)]
+    (java.io.ByteArrayInputStream. pdf-bytes)))
+
+(defn find-perusparannuspassi-pdf
+  "Find or generate a perusparannuspassi PDF.
+   For now, always generates a new PDF (S3 caching not implemented yet).
+
+   Parameters:
+   - db: Database connection
+   - whoami: Current user
+   - ppp-id: Perusparannuspassi ID
+   - kieli: Language code ('fi' or 'sv')
+
+   Returns: InputStream of the PDF, or nil if not found"
+  [db whoami ppp-id kieli]
+  (when-let [perusparannuspassi (perusparannuspassi-service/find-perusparannuspassi db whoami ppp-id)]
+    (let [energiatodistus-id (:energiatodistus-id perusparannuspassi)
+          energiatodistus (energiatodistus-service/find-energiatodistus db whoami energiatodistus-id)
+          versio (:versio energiatodistus)
+          kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
+          alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
+          draft? true]
+      ;; Always show draft watermark for now (no signing yet)
+      (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?))))

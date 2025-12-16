@@ -1,6 +1,7 @@
 import * as R from 'ramda';
 
 import * as Either from '@Utility/either-utils';
+import * as EitherMaybe from '@Utility/either-maybe';
 import * as Future from '@Utility/future-utils';
 import * as Fetch from '@/utils/fetch-utils.js';
 import * as Maybe from '@Utility/maybe-utils.js';
@@ -30,7 +31,7 @@ export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
 // are put into empty energiatodistus and then the empty is merged when deserializing.
 const deserializeToimenpideEhdotukset = toimenpiteet =>
   R.concat(
-    toimenpiteet,
+    R.map(({ id }) => id, toimenpiteet),
     R.repeat(Maybe.None(), R.max(6 - R.length(toimenpiteet), 0))
   );
 
@@ -104,6 +105,7 @@ const deserializer = {
 };
 
 const serializeToimenpideEhdotukset = R.compose(
+  R.map(id => ({ id })),
   R.filter(R.isNotNil),
   R.map(Maybe.orSome(null))
 );
@@ -118,6 +120,27 @@ const serializer = {
     4
   )
 };
+
+/*
+ @sig Vaihe -> Vaihe
+ */
+const makeVaiheValidIfAloitusPvmPresent = R.ifElse(
+  R.compose(
+    Maybe.isSome,
+    EitherMaybe.toMaybe,
+    R.prop('vaiheen-alku-pvm'),
+    R.prop('tulokset')
+  ),
+  R.assoc('valid', true),
+  R.assoc('valid', false)
+);
+
+/*
+  @sig Perusparannuspassi -> Perusparannuspassi
+ */
+const withValidVaiheetAccordingToAloitusPvm = R.evolve({
+  vaiheet: R.map(makeVaiheValidIfAloitusPvmPresent)
+});
 
 const transformationFromSchema = name =>
   R.compose(
@@ -150,7 +173,8 @@ export const serialize = R.compose(
   ),
   R.omit(['id', 'tila-id', 'laatija-id']),
   R.evolve(transformationFromSchema('serialize')),
-  R.evolve(serializer)
+  R.evolve(serializer),
+  withValidVaiheetAccordingToAloitusPvm
 );
 
 let pppUrl = '/perusparannuspassit/2026';

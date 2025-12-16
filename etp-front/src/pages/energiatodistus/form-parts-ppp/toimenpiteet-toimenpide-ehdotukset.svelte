@@ -32,6 +32,7 @@
         <Select
           variant={SelectVariants.LIGHT}
           items={R.pluck('id', toimenpideEhdotuksetLuokittelu)}
+          parse={Maybe.Some}
           format={ETUtils.selectFormat(
             LocaleUtils.label($locale),
             toimenpideEhdotuksetLuokittelu

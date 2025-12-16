@@ -27,7 +27,12 @@
   const keyLabel = R.cond([
     [
       R.compose(R.equals('energiatodistus'), R.head, R.split('.')),
-      R.compose(Inputs.propertyLabel($_), R.join('.'), R.tail, R.split('.'))
+      R.compose(
+        Inputs.propertyLabel($_, 'energiatodistus'),
+        R.join('.'),
+        R.tail,
+        R.split('.')
+      )
     ],
     [R.T, R.compose($_, R.concat('energiatodistus.haku.'))]
   ]);
