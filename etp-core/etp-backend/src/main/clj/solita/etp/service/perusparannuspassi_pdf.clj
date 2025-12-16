@@ -2,10 +2,6 @@
   (:require
     [clojure.java.io :as io]
     [hiccup.core :as hiccup]
-    [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot ]
-    [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija ]
-    [solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot :as laskennan-taustatiedot]
-    [solita.etp.service.pdf :as pdf-service]))
     [solita.etp.config :as config]
     [solita.etp.service.localization :as loc]
     [solita.etp.service.pdf :as pdf-service]
@@ -15,7 +11,9 @@
     [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija]
-    [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]])
+    [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]]
+    [solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot :as laskennan-taustatiedot]
+    [solita.etp.service.luokittelu :as luokittelu-service])
   (:import (org.apache.axis.utils ByteArrayOutputStream)))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
@@ -243,11 +241,6 @@
       padding-left: 5mm;
     }
 
-    table.laskennan-taustatiedot {
-    table.lt-u-arvot {
-    table.lt-u-arvot {
-    table.lt-u-arvot {
-    table.lt-u-arvot {
     table.lt-u-arvot {
       display: table;
       width: 100%;
@@ -256,13 +249,13 @@
       margin-bottom: 30px;
     }
 
-   table.lt-u-arvot th,
-   table.lt-u-arvot td {
-     display: table-cell;
-     -fs-border-rendering: no-bevel;
-     border: 1px solid #2c5234;
-     padding: 5px 8px;
-     font-size: 14px;
+    table.lt-u-arvot th,
+    table.lt-u-arvot td {
+      display: table-cell;
+      -fs-border-rendering: no-bevel;
+      border: 1px solid #2c5234;
+      padding: 5px 8px;
+      font-size: 14px;
    }
 
    th.lt-otsikko {
@@ -374,9 +367,7 @@
 
    dl.lt-voimassaolo {
      font-size: 14px;
-   }
-
-  </style>"))
+   }"))
 
 
 (defn- page-header [title]
@@ -453,7 +444,7 @@
                 :content
                 [:div
                  [:p "Tähän se suuri taulukko"]]}
-               {:title (l :laskennan-taustatiedot)
+               {:title (l :laskennan-taustatiedot-otsikko)
                 :content
                 [:div
                  (laskennan-taustatiedot/lt-u-arvot params)
@@ -473,7 +464,8 @@
 
 (defn- generate-perusparannuspassi-pdf
   "Generate a perusparannuspassi PDF and return it as a byte array."
-  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
+  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
+   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?]
   (let [kieli-keyword (keyword kieli)
         pdf-bytes
 
@@ -483,7 +475,11 @@
            :perusparannuspassi    perusparannuspassi
            :kayttotarkoitukset    kayttotarkoitukset
            :alakayttotarkoitukset alakayttotarkoitukset
-           :kieli                 kieli-keyword})]
+           :kieli                 kieli-keyword
+           :mahdollisuus-liittya  mahdollisuus-liittya
+           :uusiutuva-energia     uusiutuva-energia
+           :lammitysmuodot        lammitysmuodot
+           :ilmanvaihtotyypit     ilmanvaihtotyypit})]
 
     (let [watermark-text (cond
                            draft? (draft-watermark-texts kieli)
@@ -496,8 +492,10 @@
 (defn- generate-pdf-as-input-stream
   "Generate a perusparannuspassi PDF and return it as an InputStream.
    Applies watermarks via post-processing with PDFBox."
-  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
-  (let [pdf-bytes (generate-perusparannuspassi-pdf perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?)]
+  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
+   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?]
+  (let [pdf-bytes (generate-perusparannuspassi-pdf perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
+                                                   mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?)]
     (java.io.ByteArrayInputStream. pdf-bytes)))
 
 (defn find-perusparannuspassi-pdf
@@ -518,6 +516,11 @@
           versio (:versio energiatodistus)
           kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
           alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
+          mahdollisuus-liittya (luokittelu-service/find-mahdollisuus-liittya db)
+          uusiutuva-energia (luokittelu-service/find-uusiutuva-energia db)
+          lammitysmuodot (luokittelu-service/find-lammitysmuodot db)
+          ilmanvaihtotyypit (luokittelu-service/find-ilmanvaihtotyypit db)
           draft? true]
       ;; Always show draft watermark for now (no signing yet)
-      (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?))))
+      (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
+                                    mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?))))
