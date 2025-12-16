@@ -62,6 +62,7 @@
         :a0-selite                         "A0 on päästötön rakennus"
         :a-plus-selite                     "A+ rakennus on erittäin energiatehokas, päästötön ja energiapositiivinen"
 
+        :laskennan-taustatiedot-otsikko    "Laskennan taustatiedot"
         :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti:"
         :U-arvot                           "U-arvot [W/m2K]"
         :ulkoseinat-lt                     "Ulkoseinät"
@@ -69,15 +70,15 @@
         :alapohja-lt                       "Alapohja"
         :ikkunat-lt                        "Ikkunat"
         :ulko-ovet-lt                      "Ulko-ovet"
-        :lahtotilanne-lt                     "Lähtötilanne"
+        :lahtotilanne-lt                   "Lähtötilanne"
         :vahimmaisvaatimus                 "Vähimmäisvaatimus***"
         :ehdotettu-taso                    "Ehdotettu taso"
         :mahdollisuus-liittya-otsikko      "Kohteen on mahdollista liittyä energiatehokkaaseen kaukolämpöön tai kaukojäähdytykseen:"
         :mahdollisuus-liittya              "Mahdollisuus liittyä energiatehokkaaseen kaukolämpöön tai kaukojaahdytykseen"
-        :lisatietoja-lt                       "Lisätietoja"
+        :lisatietoja-lt                    "Lisätietoja"
         :paalammitysjarjestelma            "Päälämmitysjärjestelmä"
-        :ilmanvaihto-lt                      "Ilmanvaihto"
-        :uusiutuva-energia-lt                 "Uusiutuva energia"
+        :ilmanvaihto-lt                    "Ilmanvaihto"
+        :uusiutuva-energia-lt              "Uusiutuva energia"
         :vahimmaisvaatimustaso             "Korjausrakentamisen säädösten mukainen E-luvun vähimmäistavoitetaso***"
         :korjausrakentamisen-saadokset     "***Korjausrakentamisen energiatehokkuudesta määrätään ympäristöministeriön asetuksessa
                                             4/13, jota noudatetaan perusparannuspassin toteutuksessa sekä vähimmäisvaatimuksissa.
@@ -156,22 +157,23 @@
         :a0-selite                         "A0 är en utsläppsfri byggnad"
         :a-plus-selite                     "A+ byggnad är mycket energieffektiv, utsläppsfri och energipositiv"
 
-        :laskennan-tautatiedot-otsikko     "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti: (sv)"
+        :laskennan-taustatiedot-otsikko    "Laskennan taustatiedot (sv)"
+        :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti: (sv)"
         :U-arvot                           "U-arvot [W/m2K] (sv)"
         :ulkoseinat-lt                     "Ulkoseinät (sv)"
         :ylapohja-lt                       "Yläpohja (sv)"
         :alapohja-lt                       "Alapohja (sv)"
         :ikkunat-lt                        "Ikkunat (sv)"
         :ulko-ovet-lt                      "Ulko-ovet (sv)"
-        :lahtotilanne-lt                    "Lähtötilanne (sv)"
+        :lahtotilanne-lt                   "Lähtötilanne (sv)"
         :vahimmaisvaatimus                 "Vähimmäisvaatimus*** (sv)"
         :ehdotettu-taso                    "Ehdotettu taso (sv)"
         :mahdollisuus-liittya-otsikko      "Kohteen on mahdollista liittyä energiatehokkaaseen kaukolämpöön tai kaukojäähdytykseen: (sv)"
         :mahdollisuus-liittya              "Mahdollisuus liitty' energiatehokkaaseen kaukolämpöön tai kaukojaahdytyksee (sv)"
-        :lisatietoja-lt                      "Lisätietoja (SV)"
+        :lisatietoja-lt                    "Lisätietoja (SV)"
         :paalammitysjarjestelma            "Päälämmitysjärjestelmä (sv)"
         :ilmanvaihto-lt                    "Ilmanvaihto (sv)"
-        :uusiutuva-energia-lt                 "Uusiutuva energia (sv)"
+        :uusiutuva-energia-lt              "Uusiutuva energia (sv)"
         :korjausrakentamisen-saadokset     "***Korjausrakentamisen energiatehokkuudesta määrätään ympäristöministeriön asetuksessa
                                             4/13, jota noudatetaan perusparannuspassin toteutuksessa sekä vähimmäisvaatimuksissa.
                                             Suunnitelmallinen kiinteistönpito\nedistää rakennuksen turvallisuutta, terveellisyyttä
@@ -198,13 +200,4 @@
     (case kieli
       :fi (:label-fi kayttotarkoitus)
       :sv (:label-sv kayttotarkoitus))))
-
-(defn et-laskennan-taustatiedot-mahdollisuus-liittya-energiatehokkaaseen->description
-  "To use this you must provide the list of mahdollisuus-liittya as fetched from the DB for the correct version. At the
-  time of writing the mahdollisuus-liittya can be fetched with `solita.etp.service.luokittelu/find-mahdollisuus-liittya`"
-  [luokka mahdollisuus-liittya kieli]
-  (let [kuvaus (luokittelu-service/find-mahdollisuus-liittya luokka mahdollisuus-liittya)]
-    (case kieli
-      :fi (:label-fi kuvaus)
-      :sv (:label-sv kuvaus))))
 
