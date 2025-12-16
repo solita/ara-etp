@@ -1,4 +1,6 @@
+
 <script>
+  // TODO: AE-2690: RENAME FILES TO kebab-case!
   import * as R from 'ramda';
   import { loc, replace } from 'svelte-spa-router';
   import { tick } from 'svelte';
@@ -25,6 +27,8 @@
   import { announcementsForModule } from '@Utility/announce';
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
+
+  export let config;
 
   export let version;
   export let valvonta;

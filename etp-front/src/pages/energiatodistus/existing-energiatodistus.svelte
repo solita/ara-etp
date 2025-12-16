@@ -37,6 +37,7 @@
   };
 
   let showMissingProperties;
+  $: (console.log("HERE: ", showMissingProperties));
 
   let config = {};
   Future.fork(
@@ -101,6 +102,7 @@
         // TODO: AE-2690: Should showing missing properties work for new-energiatodistus as well?
         response => {
           if (R.pathEq('missing-value', ['body', 'type'], response)) {
+            // TODO: Does this work?
             showMissingProperties(response.body.missing);
           } else {
             announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));

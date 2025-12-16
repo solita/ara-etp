@@ -41,7 +41,8 @@
 
   // TODO: AE-2690: Change this?
   // We want to avoid setting the maybePerusparannuspassi to the initial value
-  // of perusparannuspassi. Currently perusparannuspassi needs to respect the schema
+  // of perusparannuspassi. This would set it to validPerusparannuspassi if maybePerusparannuspassi
+  // is initially None. Currently perusparannuspassi needs to respect the schema
   // for everything to work.
   let initialLoad = true;
   $: {
@@ -62,10 +63,10 @@
     }
   );
 
-  const setPerusparannuspassit = R.compose(
-    R.map(R.__, [setMaybePerusparannuspassi, setUnwrappedPerusparannuspassi]),
-    R.applyTo
-  );
+  const setPerusparannuspassit = newMaybePerusparannuspassi => {
+    setMaybePerusparannuspassi(newMaybePerusparannuspassi);
+    setUnwrappedPerusparannuspassi(newMaybePerusparannuspassi);
+  };
 
   const onAddPPP = addPerusparannuspassi(setPerusparannuspassit);
 
