@@ -50,27 +50,6 @@
     versionApi.getConfig
   );
 
-  // We store the PPP state locally as the energiatodistus doesn't have an ID yet so we can not add it before saving the ET.
-  let perusparannuspassiCache = Maybe.None();
-
-  // We return the cached PPP or create a new empty one with null ET id. When saving the ET needs to be saved first in order to obtain the id.
-  // TODO: AE-2690: Do we need to set unvalid values to empty valid values here?
-  const addPerusparannuspassi = R.curry(
-    setPPP => () =>
-      setPPP(
-        perusparannuspassiCache.orElse(
-          Maybe.Some(empty.validPerusparannuspassi(null))
-        )
-      )
-  );
-
-  const deleteAndCachePerusparannuspassi = R.curry(
-    (setPPP, currentMaybePerusparannuspassi) => () => {
-      setPPP(Maybe.None());
-      perusparannuspassiCache = currentMaybePerusparannuspassi;
-    }
-  );
-
   const emptyEnergiatodistus = versio =>
     R.cond([
       [R.equals('2018'), () => empty.energiatodistus2018()],
@@ -178,7 +157,7 @@
             laatijaApi.laskutusosoitteet(response.whoami.id)
           ),
         Future.parallelObject(7, {
-          maybePerusparannuspassi: Future.resolve(Maybe.None()),
+          perusparannuspassi: Future.resolve(empty.perusparannuspassi(null)),
           energiatodistus: Maybe.fold(
             Future.resolve(emptyEnergiatodistus(version)),
             R.compose(
@@ -202,19 +181,17 @@
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each resources.toArray() as { energiatodistus, luokittelut, validation, whoami, verkkolaskuoperaattorit, laskutusosoitteet, maybePerusparannuspassi, pppValidation }}
+    {#each resources.toArray() as { energiatodistus, luokittelut, validation, whoami, verkkolaskuoperaattorit, laskutusosoitteet, perusparannuspassi, pppValidation }}
       <EtPppForm
         version={params.version}
         {title}
-        {addPerusparannuspassi}
-        deletePerusparannuspassi={deleteAndCachePerusparannuspassi}
         {energiatodistus}
         {luokittelut}
         {validation}
         {whoami}
         {verkkolaskuoperaattorit}
         {laskutusosoitteet}
-        {maybePerusparannuspassi}
+        {perusparannuspassi}
         {pppValidation}
         {submit}
         bind:showMissingProperties />

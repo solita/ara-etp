@@ -364,8 +364,3 @@ export const perusparannuspassi = energiatodistusId => ({
   'rakennuksen-perustiedot': emptyPerusparannusRakennuksenPerustiedot(),
   tulokset: emptyPerusparannusLaskennanTulokset()
 });
-
-export const validPerusparannuspassi = R.compose(
-  R.assoc('valid', true),
-  perusparannuspassi
-);

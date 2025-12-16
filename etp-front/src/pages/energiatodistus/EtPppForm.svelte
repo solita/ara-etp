@@ -1,4 +1,3 @@
-
 <script>
   // TODO: AE-2690: RENAME FILES TO kebab-case!
   import * as R from 'ramda';
@@ -45,8 +44,7 @@
   export let deletePerusparannuspassi;
 
   // TODO: AE-2690: Can we unify this and use the same one everywhere?
-  export let maybePerusparannuspassi;
-  $: perusparannuspassi = maybePerusparannuspassi.orNull();
+  export let perusparannuspassi;
 
   export let submit;
   export let title = '';
@@ -147,10 +145,16 @@
 
     if (R.isEmpty(invalid) && korvausError.isNone()) {
       clearAnnouncements();
-      submit(energiatodistus, maybePerusparannuspassi, (...args) => {
-        dirty = false;
-        onSuccessfulSave(...args);
-      });
+      submit(
+        energiatodistus,
+        perusparannuspassi.valid
+          ? Maybe.Some(perusparannuspassi)
+          : Maybe.None(),
+        (...args) => {
+          dirty = false;
+          onSuccessfulSave(...args);
+        }
+      );
     } else {
       showKorvausErrorMessage(korvausError);
       showInvalidPropertiesMessage(invalid);
@@ -277,7 +281,7 @@
           {pppValidation}
           {addPerusparannuspassi}
           {deletePerusparannuspassi}
-          bind:maybePerusparannuspassi />
+          bind:perusparannuspassi />
       </form>
     </div>
   </div>

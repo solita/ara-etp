@@ -28,52 +28,15 @@
   export let schema;
   export let pppValidation;
 
-  export let addPerusparannuspassi;
-  export let deletePerusparannuspassi;
+  export let perusparannuspassi;
 
-  export let maybePerusparannuspassi;
-  $: showPPP = maybePerusparannuspassi.isSome();
-
-  // TODO: AE-2690: Can we unify this and use the same one everywhere?
-  let perusparannuspassi = maybePerusparannuspassi.orSome(
-    empty.validPerusparannuspassi(energiatodistus.id)
-  );
-
-  // TODO: AE-2690: Change this?
-  // We want to avoid setting the maybePerusparannuspassi to the initial value
-  // of perusparannuspassi. This would set it to validPerusparannuspassi if maybePerusparannuspassi
-  // is initially None. Currently perusparannuspassi needs to respect the schema
-  // for everything to work.
-  let initialLoad = true;
-  $: {
-    if (initialLoad) {
-      initialLoad = false;
-    } else {
-      maybePerusparannuspassi = Maybe.fromNull(perusparannuspassi);
-    }
-  }
-
-  const setMaybePerusparannuspassi = newMaybePerusparannuspassi =>
-    (maybePerusparannuspassi = newMaybePerusparannuspassi);
-
-  const setUnwrappedPerusparannuspassi = Maybe.cata(
-    () => {},
-    newPpp => {
-      perusparannuspassi = newPpp;
-    }
-  );
-
-  const setPerusparannuspassit = newMaybePerusparannuspassi => {
-    setMaybePerusparannuspassi(newMaybePerusparannuspassi);
-    setUnwrappedPerusparannuspassi(newMaybePerusparannuspassi);
+  const onAddPPP = () => {
+    perusparannuspassi = R.assoc('valid', true, perusparannuspassi);
   };
 
-  const onAddPPP = addPerusparannuspassi(setPerusparannuspassit);
-
-  const onDeletePPP = deletePerusparannuspassi(
-    setMaybePerusparannuspassi,
-    maybePerusparannuspassi
-  );
+  const onDeletePPP = () => {
+    perusparannuspassi = R.assoc('valid', false, perusparannuspassi);
+  };
 
   const required = perusparannuspassi =>
     perusparannuspassi['bypass-validation-limits']
@@ -111,7 +74,7 @@
     <H2
       id="perusparannuspassi"
       text={$_('energiatodistus.perusparannuspassi.header')} />
-    {#if !showPPP}
+    {#if !perusparannuspassi.valid}
       <TextButton
         icon="add_circle_outline"
         text={$_('energiatodistus.perusparannuspassi.add-button')}
@@ -131,14 +94,14 @@
     <span class="mr-2 font-icon text-2xl">info_outline</span>
     <span>
       {$_(
-        showPPP
+        perusparannuspassi.valid
           ? 'energiatodistus.perusparannuspassi.info-text-when-PPP'
           : 'energiatodistus.perusparannuspassi.info-text'
       )}
     </span>
   </div>
 
-  {#if !showPPP}
+  {#if !perusparannuspassi.valid}
     <p>
       {$_('energiatodistus.perusparannuspassi.not-added')}
     </p>
