@@ -248,6 +248,7 @@
     table.lt-u-arvot {
     table.lt-u-arvot {
     table.lt-u-arvot {
+    table.lt-u-arvot {
       display: table;
       width: 100%;
       border-collapse: collapse;

@@ -62,8 +62,6 @@
         :a0-selite                         "A0 on päästötön rakennus"
         :a-plus-selite                     "A+ rakennus on erittäin energiatehokas, päästötön ja energiapositiivinen"
 
-        :laskennan-taustatiedot-otsikko    "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti:"
-        :allekirjoituspaiva                "Allekirjoituspäivä"
         :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti:"
         :U-arvot                           "U-arvot [W/m2K]"
         :ulkoseinat-lt                     "Ulkoseinät"
