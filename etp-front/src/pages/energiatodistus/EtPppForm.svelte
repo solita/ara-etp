@@ -235,7 +235,6 @@
         saveComplete={validateCompleteAndSubmit}
         cancel={reset}
         {energiatodistus}
-        {maybePerusparannuspassi}
         {eTehokkuus}
         dirty={dirty || R.isNil(energiatodistus.id)}
         {whoami}
