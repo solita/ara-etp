@@ -245,6 +245,7 @@
 
     table.laskennan-taustatiedot {
     table.lt-u-arvot {
+    table.lt-u-arvot {
       display: table;
       width: 100%;
       border-collapse: collapse;
@@ -452,23 +453,6 @@
                {:title (l :laskennan-taustatiedot)
                 :content
                 [:div
-                 [:p "Laskennan taustatiedot tähän"]]}
-               {:title (l :lisatietoja)
-                 [:div
-                  (laskennan-taustatiedot/laskennan-taustatiedot-u-arvot params)]
-                 [:div
-                  (laskennan-taustatiedot/lammitys-ilmanvaihto params)]
-                [:div
-                 (laskennan-taustatiedot/vahimmaisvaatimustaso params)]
-                [:div
-                 (laskennan-taustatiedot/korjausrakentamisen-saadokset params)]
-                 [:div
-                  (laskennan-taustatiedot/mahdollisuus-liittya params)]
-                 [:div
-                  (laskennan-taustatiedot/lisatiedot params)]
-                 [:div
-                  (laskennan-taustatiedot/voimassa-olo params)]
-                 ]}
                  (laskennan-taustatiedot/lt-u-arvot params)
                  (laskennan-taustatiedot/lt-lammitys-ilmanvaihto params)
                  (laskennan-taustatiedot/lt-vahimmaisvaatimustaso params)

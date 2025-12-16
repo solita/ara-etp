@@ -85,7 +85,7 @@
                                             sekä asukkaiden viihtyvyyttä. Oikea-aikaisesti toteutetut ja\nhyvin suunnitellut korjaukset
                                             ja remontit auttavat rakennusta mukautumaa ilmastonmuutokseen sekä pien\nentävät energiankulutusta.
                                             Parantunut energiatehokkuus ja uusiutuvan energian hyödyntäminen vähentävät\n rakennuksen käytöstä
-                                            aiheutuvia kasvihuonekaasupäästöjä. Rakennusmateriaalien uudelleenkäyttö ja kierrä\ntys
+                                            aiheutuvia kasvihuonekaasupäästöjä. Rakennusmateriaalien uudelleenkäyttö ja kierrätys
                                             säästävät luonnonvaroja ja vähentävät uusien tuotteiden valmistuksessa syntyviä päästöjä."
         :yksikko                           "kWhE/m2vuosi"
         :lisatietoja-saatavilla            "Lisätietoja saatavilla"
@@ -189,6 +189,7 @@
         :lisatietoja5                      "Laskentatyökalun nimi ja versionumero: www.laskentapalvelut.fi, versio 1.5 (sv)"
         :voimassa-olo                      "Perusparannuspassi on voimassa 1.1.2050 asti tai voimassa olevan lainsäädännön mukaisesti (sv)"}})
 
+
 (defn et-perustiedot-kayttotarkoitus->description
   "To use this you must provide the list of alakayttotarkoitukset as fetched from the DB for the correct version. At the
   time of writing the alakayttotarkoitukset can be fetched with `solita.etp.service.kayttotarkoitus/find-alakayttotarkoitukset`"
@@ -197,4 +198,13 @@
     (case kieli
       :fi (:label-fi kayttotarkoitus)
       :sv (:label-sv kayttotarkoitus))))
+
+(defn et-laskennan-taustatiedot-mahdollisuus-liittya-energiatehokkaaseen->description
+  "To use this you must provide the list of mahdollisuus-liittya as fetched from the DB for the correct version. At the
+  time of writing the mahdollisuus-liittya can be fetched with `solita.etp.service.luokittelu/find-mahdollisuus-liittya`"
+  [luokka mahdollisuus-liittya kieli]
+  (let [kuvaus (luokittelu-service/find-mahdollisuus-liittya luokka mahdollisuus-liittya)]
+    (case kieli
+      :fi (:label-fi kuvaus)
+      :sv (:label-sv kuvaus))))
 
