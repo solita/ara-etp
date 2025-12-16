@@ -4,12 +4,12 @@
 
 (defn taulukko1 [kieli items]
   (let [l (kieli loc/ppp-pdf-localization)]
-    [:table.laskennan-taustatiedot
+    [:table.lt-u-arvot
      [:thead
       [:tr
-       [:th.otsikko {:colspan 6}
-        (l :laskennan-taustatiedot-otsikko)]]
-      [:tr.sarakkeet
+       [:th.lt-otsikko {:colspan 6}
+        (l :lt-otsikko)]]
+      [:tr.lt-sarakkeet
        [:th (l :U-arvot)]
        [:th (l :ulkoseinat)]
        [:th (l :ylapohja)]
@@ -27,13 +27,13 @@
 (defn taulukko2 [kieli items]
   (let [l (kieli loc/ppp-pdf-localization)
         last-index (dec (count items))]
-    [:table.lammitys
+    [:table.lt-lammitys
      [:thead
       [:tr
-       [:th.otsikko.lammitys.empty]
-       [:th.otsikko.lammitys (l :paalammitysjarjestelma)]
-       [:th.otsikko.lammitys (l :ilmanvaihto)]
-       [:th.otsikko.lammitys (l :uusiutuva-energia)]]]
+       [:th.lt-otsikko.lammitys.empty]
+       [:th.lt-otsikko.lammitys (l :paalammitysjarjestelma)]
+       [:th.lt-otsikko.lammitys (l :ilmanvaihto)]
+       [:th.lt-otsikko.lammitys (l :uusiutuva-energia)]]]
 
      [:tbody
       (map-indexed
@@ -52,10 +52,10 @@
 (defn taulukko3 [kieli items]
   (let [l (kieli loc/ppp-pdf-localization)]
     (let [{:keys [dd]} (first items)]
-      [:table.mahdollisuus-liittya
+      [:table.lt-mahdollisuus-liittya
        [:thead
         [:tr
-         [:th.otsikko (l :mahdollisuus-liittya-otsikko)]]]
+         [:th.lt-otsikko (l :mahdollisuus-liittya-otsikko)]]]
        [:tbody
         (for [row dd]
           [:tr
@@ -64,43 +64,43 @@
 (defn taulukko4 [kieli items]
   (let [l (kieli loc/ppp-pdf-localization)]
     (let [{:keys [dd]} (first items)]
-      [:table.lisatietoja
+      [:table.lt-lisatietoja
        [:thead
         [:tr
-         [:th.otsikko (l :lisatietoja-saatavilla)]]]
+         [:th.lt-otsikko (l :lisatietoja-saatavilla)]]]
        [:tbody
         (for [row dd]
           [:tr
            [:td (or row "")]])]])))
 
-(defn laskennan-taustatiedot-u-arvot
+(defn lt-u-arvot
   [{:keys [perusparannuspassi energiatodistus kieli]}]
   (let [l (kieli loc/ppp-pdf-localization)]
     (taulukko1 kieli
       [{:dt (l :lahtotilanne)
-        :dd [(get-in energiatodistus [:lahtotiedot :rakennusvaippa :ulkoseinat :u])
-             (get-in energiatodistus [:lahtotiedot :rakennusvaippa :ylapohja :u])
-             (get-in energiatodistus [:lahtotiedot :rakennusvaippa :alapohja :u])
-             (get-in energiatodistus [:lahtotiedot :rakennusvaippa :ikkunat :u])
-             (get-in energiatodistus [:lahtotiedot :rakennusvaippa :ulko-ovet :u])]}
+        :dd [(get-in energiatodistus [:lahtotiedot :rakennusvaippa :ulkoseinat :U])
+             (get-in energiatodistus [:lahtotiedot :rakennusvaippa :ylapohja :U])
+             (get-in energiatodistus [:lahtotiedot :rakennusvaippa :alapohja :U])
+             (get-in energiatodistus [:lahtotiedot :rakennusvaippa :ikkunat :U])
+             (get-in energiatodistus [:lahtotiedot :rakennusvaippa :ulkoovet :U])]}
 
        {:dt (l :vahimmaisvaatimus)
-        :dd ["0,17" "0,09" "0,17" "0,70" "0,70"]}
+        :dd ["0.17" "0.09" "0.17" "0.70" "0.70"]}
 
        {:dt (l :ehdotettu-taso)
-        :dd [(get-in perusparannuspassi [:rakennuksen-perustiedot :ulkoseinat-ehdotettu])
-             (get-in perusparannuspassi [:rakennuksen-perustiedot :ylapohja-ehdotettu])
-             (get-in perusparannuspassi [:rakennuksen-perustiedot :alapohja-ehdotettu])
+        :dd [(get-in perusparannuspassi [:rakennuksen-perustiedot :ulkoseinat-ehdotettu-taso])
+             (get-in perusparannuspassi [:rakennuksen-perustiedot :ylapohja-ehdotettu-taso])
+             (get-in perusparannuspassi [:rakennuksen-perustiedot :alapohja-ehdotettu-taso])
              (get-in perusparannuspassi [:rakennuksen-perustiedot :ikkunat-ehdotettu-taso])
              (get-in perusparannuspassi [:rakennuksen-perustiedot :ulkoovet-ehdotettu-taso])]}])))
 
-(defn lammitys-ilmanvaihto
+(defn lt-lammitys-ilmanvaihto
   [{:keys [perusparannuspassi energiatodistus kieli]}]
   (let [l (kieli loc/ppp-pdf-localization)]
     (taulukko2 kieli
       [{:dt (l :lahtotilanne)
-        :dd [(get-in energiatodistus [:lahtotiedot :lammmitys :lammitysmuoto-1])
-             (get-in energiatodistus [:lahtotiedot :ilmanvaihto :kuvaus])
+        :dd [(get-in energiatodistus [:lahtotiedot :lammitys :lammitysmuoto-1 :id])
+             (get-in energiatodistus [:lahtotiedot :ilmanvaihto :tyyppi-id])
              (get-in energiatodistus [""])]}
 
        {:dt (l :ehdotettu-taso)
@@ -109,25 +109,27 @@
              (get-in perusparannuspassi [:rakennuksen-perustiedot :uusiutuva-energia-ehdotettu-taso])]}
 
        {:dt (l :lisatietoja)
-        :dd [(get-in perusparannuspassi [:rakennuksen-perustiedot :lisatietoja])]}])))
+        :dd [(get-in perusparannuspassi [:rakennuksen-perustiedot (case kieli
+                                                                    :fi :lisatietoja-fi
+                                                                    :sv :lisatietoja-sv)])]}])))
 
-(defn vahimmaisvaatimustaso [{:keys [kieli]}]
+(defn lt-vahimmaisvaatimustaso [{:keys [kieli]}]
   (let [l (kieli loc/ppp-pdf-localization)]
-    [:dl.vahimmaisvaatimustaso
+    [:dl.lt-vahimmaisvaatimustaso
       [:dt (l :vahimmaisvaatimustaso)]
       [:dd.e-luku (str "154")]
       [:dd.yksikko (str (l :yksikko))]]))
 
-(defn korjausrakentamisen-saadokset [{:keys [kieli]}]
+(defn lt-korjausrakentamisen-saadokset [{:keys [kieli]}]
   (let [l (kieli loc/ppp-pdf-localization)]
-    [:dl.korjausrakentamisen-saadokset
+    [:dl.lt-korjausrakentamisen-saadokset
     [:p.note (l :korjausrakentamisen-saadokset)]]))
 
-(defn mahdollisuus-liittya [{:keys [perusparannuspassi kieli]}]
+(defn lt-mahdollisuus-liittya [{:keys [perusparannuspassi kieli mahdollisuus-liittya]}]
     (taulukko3 kieli
-      [{:dd [(get-in perusparannuspassi [:rakennuksen-perustiedot :mahdollisuus-liittya])]}]))
+      [{:dd (-> perusparannuspassi (get-in [:rakennuksen-perustiedot :mahdollisuus-liittya-energiatehokkaaseen]) (loc/et-laskennan-taustatiedot-mahdollisuus-liittya-energiatehokkaaseen->description mahdollisuus-liittya kieli))}]))
 
-(defn lisatiedot [{:keys [kieli]}]
+(defn lt-lisatiedot [{:keys [kieli]}]
   (let [l (kieli loc/ppp-pdf-localization)]
     (taulukko4 kieli
       [{:dd [(str (l :lisatietoja1))
@@ -136,8 +138,8 @@
              (str (l :lisatietoja4))
              (str (l :lisatietoja5))]}])))
 
-(defn voimassa-olo [{:keys [kieli]}]
+(defn lt-voimassa-olo [{:keys [kieli]}]
   (let [l (kieli loc/ppp-pdf-localization)]
-    [:dl.voimassaolo
+    [:dl.lt-voimassaolo
      [:p.note (l :voimassa-olo)]]))
 

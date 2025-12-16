@@ -241,16 +241,19 @@
     .vaatimukset-selitteet > div:last-child {
       margin-right: 0;
       padding-left: 5mm;
-    }"))
+    }
+
     table.laskennan-taustatiedot {
+    table.lt-u-arvot {
       display: table;
       width: 100%;
       border-collapse: collapse;
       -fs-border-rendering: no-bevel;
+      margin-bottom: 30px;
     }
 
-   table.laskennan-taustatiedot th,
-   table.laskennan-taustatiedot td {
+   table.lt-u-arvot th,
+   table.lt-u-arvot td {
      display: table-cell;
      -fs-border-rendering: no-bevel;
      border: 1px solid #2c5234;
@@ -258,7 +261,7 @@
      font-size: 14px;
    }
 
-   th.otsikko {
+   th.lt-otsikko {
      background-color: #2c5234;
      color: white;
      font-weight:bold;
@@ -266,13 +269,13 @@
      font-size: 14px;
    }
 
-   table.laskennan-taustatiedot .sarakkeet th {
+   table.lt-u-arvot .lt-sarakkeet th {
      font-weight: normal;
      font-size: 14px;
    }
 
-   table.lammitys th,
-   table.lammitys td {
+   table.lt-lammitys th,
+   table.lt-lammitys td {
      display: table-cell;
      -fs-border-rendering: no-bevel;
      border: 1px solid #2c5234;
@@ -289,25 +292,25 @@
      font-size: 14px;
    }
 
-   table.lammitys th.empty {
+   table.lt-lammitys th.empty {
     border: none;
     background: none;
    }
 
-    table.lammitys th {
+    table.lt-lammitys th {
      font-weight: normal;
      text-align: center;
      font-size: 14px;
     }
 
-   table.lammitys {
+   table.lt-lammitys {
     display: table;
     width: 100%;
     border-collapse: collapse;
     -fs-border-rendering: no-bevel;
    }
 
-   dl.vahimmaisvaatimustaso {
+   dl.lt-vahimmaisvaatimustaso {
     display: table;
     border-collapse: collapse;
     -fs-border-rendering: no-bevel;
@@ -315,36 +318,31 @@
     width: 100%;
     }
 
-  dl.vahimmaisvaatimustaso dt,
-  dl.vahimmaisvaatimustaso dd {
+  dl.lt-vahimmaisvaatimustaso dd {
     display: table-cell;
     padding: 5px 8px;
     white-space: nowrap
    }
 
-   dl.vahimmaisvaatimustaso dd {
+   dl.lt-vahimmaisvaatimustaso dd {
     border: 1px solid #2c5234;
    }
 
-   dl.vahimmaisvaartimustaso dt {
-    font-weight: bold;
-    align-items: left;
-   }
-
-   dl.korjausrakentamisen-saadokset {
+   dl.lt-korjausrakentamisen-saadokset {
     font-size: 14px;
     align-items: left;
    }
 
-   table.mahdollisuus-liittya {
+   table.lt-mahdollisuus-liittya {
      display: table;
      width: 100%;
      border-collapse: collapse;
      -fs-border-rendering: no-bevel;
+     margin-bottom: 30px;
    }
 
-   table.mahdollisuus-liittya th,
-   table.mahdollisuus-liittya td {
+   table.lt-mahdollisuus-liittya th,
+   table.lt-mahdollisuus-liittya td {
      display: table-cell;
      fs-border-rendering: no-bevel;
      border: 1px solid #2c5234;
@@ -352,7 +350,7 @@
      font-size: 14px;
    }
 
-   table.lisatietoja {
+   table.lt-lisatietoja {
      display: table;
      width: 100%;
      border-collapse: collapse;
@@ -360,8 +358,8 @@
      align-items: left;
    }
 
-   table.lisatietoja th,
-   table.lisatietoja td {
+   table.lt-lisatietoja th,
+   table.lt-lisatietoja td {
      align-items: left;
      display: table-cell;
      -fs-border-rendering: no-bevel;
@@ -370,7 +368,7 @@
      font-size: 14px;
    }
 
-   dl.voimassaolo {
+   dl.lt-voimassaolo {
      font-size: 14px;
    }
 
@@ -471,6 +469,13 @@
                  [:div
                   (laskennan-taustatiedot/voimassa-olo params)]
                  ]}
+                 (laskennan-taustatiedot/lt-u-arvot params)
+                 (laskennan-taustatiedot/lt-lammitys-ilmanvaihto params)
+                 (laskennan-taustatiedot/lt-vahimmaisvaatimustaso params)
+                 (laskennan-taustatiedot/lt-korjausrakentamisen-saadokset params)
+                 (laskennan-taustatiedot/lt-mahdollisuus-liittya params)
+                 (laskennan-taustatiedot/lt-lisatiedot params)
+                 (laskennan-taustatiedot/lt-voimassa-olo params)]}
                {:title "Lisätietoja"
                 :content
                 [:div
