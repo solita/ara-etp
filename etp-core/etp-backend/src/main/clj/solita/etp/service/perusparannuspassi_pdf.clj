@@ -446,14 +446,8 @@
                  [:p "Tähän se suuri taulukko"]]}
                {:title (l :laskennan-taustatiedot-otsikko)
                 :content
-                [:div
-                 (laskennan-taustatiedot/lt-u-arvot params)
-                 (laskennan-taustatiedot/lt-lammitys-ilmanvaihto params)
-                 (laskennan-taustatiedot/lt-vahimmaisvaatimustaso params)
-                 (laskennan-taustatiedot/lt-korjausrakentamisen-saadokset params)
-                 (laskennan-taustatiedot/lt-mahdollisuus-liittya params)
-                 (laskennan-taustatiedot/lt-lisatiedot params)
-                 (laskennan-taustatiedot/lt-voimassa-olo params)]}
+                (into [:div]
+                      (vals (laskennan-taustatiedot/generate-all-laskennan-taustatiedot params)))}
                {:title "Lisätietoja"
                 :content
                 [:div
