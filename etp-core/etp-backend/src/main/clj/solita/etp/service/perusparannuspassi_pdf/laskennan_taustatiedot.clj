@@ -73,9 +73,29 @@
           [:tr
            [:td (or row "")]])]])))
 
+(def kerroin 0.45)
+
+(defn laske-u-arvot
+  [u-arvo raja-arvo]
+  (when u-arvo
+    (let [value (max (* u-arvo kerroin) raja-arvo)]
+      (/ (^[double] Math/round (* value 100.0)) 100.0)))
+  )
+
 (defn lt-u-arvot
   [{:keys [perusparannuspassi energiatodistus kieli]}]
-  (let [l (kieli loc/ppp-pdf-localization)]
+  (let [l (kieli loc/ppp-pdf-localization)
+        ulkoseinat (get-in energiatodistus [:lahtotiedot :rakennusvaippa :ulkoseinat :U])
+        ylapohja (get-in energiatodistus [:lahtotiedot :rakennusvaippa :ylapohja :U])
+        alapohja (get-in energiatodistus [:lahtotiedot :rakennusvaippa :alapohja :U])
+        ;ikkunat (get-in energiatodistus [:lahtotiedot :rakennusvaippa :ikkunat :U])
+        ;ulkoovet (get-in energiatodistus [:lahtotiedot :rakennusvaippa :ulkoovet :U])
+
+        ulkoseinat-vaatimus (laske-u-arvot ulkoseinat 0.17)
+        ylapohja-vaatimus (laske-u-arvot ylapohja 0.09)
+        alapohja-vaatimus (laske-u-arvot alapohja 0.17)]
+
+
     (taulukko1 kieli
       [{:dt (l :lahtotilanne-lt)
         :dd [(get-in energiatodistus [:lahtotiedot :rakennusvaippa :ulkoseinat :U])
@@ -85,7 +105,7 @@
              (get-in energiatodistus [:lahtotiedot :rakennusvaippa :ulkoovet :U])]}
 
        {:dt (l :vahimmaisvaatimus)
-        :dd ["0.17" "0.09" "0.17" "0.70" "0.70"]}
+        :dd [ulkoseinat-vaatimus ylapohja-vaatimus alapohja-vaatimus "0.70" "0.70"]}
 
        {:dt (l :ehdotettu-taso)
         :dd [(get-in perusparannuspassi [:rakennuksen-perustiedot :ulkoseinat-ehdotettu-taso])
