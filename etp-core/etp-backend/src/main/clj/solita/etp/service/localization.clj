@@ -60,7 +60,43 @@
         :kylla                             "Kyllä"
         :ei                                "Ei"
         :a0-selite                         "A0 on päästötön rakennus"
-        :a-plus-selite                     "A+ rakennus on erittäin energiatehokas, päästötön ja energiapositiivinen"}
+        :a-plus-selite                     "A+ rakennus on erittäin energiatehokas, päästötön ja energiapositiivinen"
+
+        :laskennan-taustatiedot-otsikko    "Laskennan taustatiedot"
+        :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti:"
+        :U-arvot-lt                         "U-arvot [W/m2K]"
+        :ulkoseinat-lt                     "Ulkoseinät"
+        :ylapohja-lt                       "Yläpohja"
+        :alapohja-lt                       "Alapohja"
+        :ikkunat-lt                        "Ikkunat"
+        :ulko-ovet-lt                      "Ulko-ovet"
+        :lahtotilanne-lt                   "Lähtötilanne"
+        :vahimmaisvaatimus                 "Vähimmäisvaatimus***"
+        :ehdotettu-taso                    "Ehdotettu taso"
+        :mahdollisuus-liittya-otsikko      "Kohteen on mahdollista liittyä energiatehokkaaseen kaukolämpöön tai kaukojäähdytykseen:"
+        :mahdollisuus-liittya              "Mahdollisuus liittyä energiatehokkaaseen kaukolämpöön tai kaukojaahdytykseen"
+        :lisatietoja-lt                    "Lisätietoja"
+        :paalammitysjarjestelma            "Päälämmitysjärjestelmä"
+        :ilmanvaihto-lt                    "Ilmanvaihto"
+        :uusiutuva-energia-lt              "Uusiutuva energia"
+        :vahimmaisvaatimustaso             "Korjausrakentamisen säädösten mukainen E-luvun vähimmäistavoitetaso***"
+        :korjausrakentamisen-saadokset     "***Korjausrakentamisen energiatehokkuudesta määrätään ympäristöministeriön asetuksessa
+                                            4/13, jota noudatetaan perusparannuspassin toteutuksessa sekä vähimmäisvaatimuksissa.
+                                            Suunnitelmallinen kiinteistönpito\nedistää rakennuksen turvallisuutta, terveellisyyttä
+                                            sekä asukkaiden viihtyvyyttä. Oikea-aikaisesti toteutetut ja\nhyvin suunnitellut korjaukset
+                                            ja remontit auttavat rakennusta mukautumaa ilmastonmuutokseen sekä pien\nentävät energiankulutusta.
+                                            Parantunut energiatehokkuus ja uusiutuvan energian hyödyntäminen vähentävät\n rakennuksen käytöstä
+                                            aiheutuvia kasvihuonekaasupäästöjä. Rakennusmateriaalien uudelleenkäyttö ja kierrätys
+                                            säästävät luonnonvaroja ja vähentävät uusien tuotteiden valmistuksessa syntyviä päästöjä."
+        :yksikko                           "kWhE/m2vuosi"
+        :lisatietoja-saatavilla            "Lisätietoja saatavilla"
+        :lisatietoja1                      "Korjausrakentamisen lainsäädäntö: www.ym.fi/rakentamismaaraykset"
+        :lisatietoja2                      "Lisätietoa rahoituksesta: www.motiva.fi/ratkaisut/energiatehokkuuden_rahoitus/rahoituksen_tietopalvelu"
+        :lisatietoja3                      "Lisätietoa rakennusten energiatehokkuudesta: www.motiva.fi"
+        :lisatietoja4                      "Perusparannuspassin digiversio saatavilla osoitteesta www.energiatodistusrekisteri.fi"
+        :lisatietoja5                      "Laskentatyökalun nimi ja versionumero: www.laskentapalvelut.fi, versio 1.5"
+        :voimassa-olo                      "Perusparannuspassi on voimassa 1.1.2050 asti tai voimassa olevan lainsäädännön mukaisesti"}
+
    :sv {:rakennuksen-nimi                  "Byggnadens namn"
         :rakennuksen-osoite                "Byggnadens adress"
         :pysyva-rakennustunnus             "Permanent byggnadsbeteckning"
@@ -69,9 +105,8 @@
         :havainnointikaynnin-paivamaara    "Datum för observationsbesök"
         :passin-esittelyn-paivamaara       "Datum för passens presentation"
         :rakennuksen-kayttotarkoitusluokka "Byggnadens användningsändamålsklass"
-
         :perusparannuspassin-laatija       "Perusparannuspassin laatija (sv)"
-        :allekirjoituspaiva                 "Allekirjoituspäivä (sv)"
+
 
         ;; Toimenpiteiden vaikutukset
         :energiatehokkuusluokan-muutos     "Förändring av energieffektivitetsklass och E-tal"
@@ -82,6 +117,7 @@
         :energiatehokkuuden-kehitys        "Utveckling av energieffektivitet"
         :energialuokka                     "energiklass"
         :e-luku                            "E-tal"
+        :allekirjoituspaiva                "Allekirjoituspäivä (sv)"
 
         ;; Building parts
         :ylapohja                          "överbjälklag"
@@ -119,7 +155,42 @@
         :kylla                             "Ja"
         :ei                                "Nej"
         :a0-selite                         "A0 är en utsläppsfri byggnad"
-        :a-plus-selite                     "A+ byggnad är mycket energieffektiv, utsläppsfri och energipositiv"}})
+        :a-plus-selite                     "A+ byggnad är mycket energieffektiv, utsläppsfri och energipositiv"
+
+        :laskennan-taustatiedot-otsikko    "Laskennan taustatiedot (sv)"
+        :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti: (sv)"
+        :U-arvot-lt                        "U-arvot [W/m2K] (sv)"
+        :ulkoseinat-lt                     "Ulkoseinät (sv)"
+        :ylapohja-lt                       "Yläpohja (sv)"
+        :alapohja-lt                       "Alapohja (sv)"
+        :ikkunat-lt                        "Ikkunat (sv)"
+        :ulko-ovet-lt                      "Ulko-ovet (sv)"
+        :lahtotilanne-lt                   "Lähtötilanne (sv)"
+        :vahimmaisvaatimus                 "Vähimmäisvaatimus*** (sv)"
+        :ehdotettu-taso                    "Ehdotettu taso (sv)"
+        :mahdollisuus-liittya-otsikko      "Kohteen on mahdollista liittyä energiatehokkaaseen kaukolämpöön tai kaukojäähdytykseen: (sv)"
+        :mahdollisuus-liittya              "Mahdollisuus liitty' energiatehokkaaseen kaukolämpöön tai kaukojaahdytyksee (sv)"
+        :lisatietoja-lt                    "Lisätietoja (SV)"
+        :paalammitysjarjestelma            "Päälämmitysjärjestelmä (sv)"
+        :ilmanvaihto-lt                    "Ilmanvaihto (sv)"
+        :uusiutuva-energia-lt              "Uusiutuva energia (sv)"
+        :korjausrakentamisen-saadokset     "***Korjausrakentamisen energiatehokkuudesta määrätään ympäristöministeriön asetuksessa
+                                            4/13, jota noudatetaan perusparannuspassin toteutuksessa sekä vähimmäisvaatimuksissa.
+                                            Suunnitelmallinen kiinteistönpito\nedistää rakennuksen turvallisuutta, terveellisyyttä
+                                            sekä asukkaiden viihtyvyyttä. Oikea-aikaisesti toteutetut ja\nhyvin suunnitellut korjaukset
+                                            ja remontit auttavat rakennusta mukautumaa ilmastonmuutokseen sekä pien\nentävät energiankulutusta.
+                                            Parantunut energiatehokkuus ja uusiutuvan energian hyödyntäminen vähentävät\n rakennuksen käytöstä
+                                            aiheutuvia kasvihuonekaasupäästöjä. Rakennusmateriaalien uudelleenkäyttö ja kierrä\ntys
+                                            säästävät luonnonvaroja ja vähentävät uusien tuotteiden valmistuksessa syntyviä päästöjä. (sv)"
+        :yksikko                           "kWhE/m2vuosi (sv)"
+        :lisatietoja-saatavilla            "Lisätietoja saatavilla (sv)"
+        :lisatietoja1                      "Korjausrakentamisen lainsäädäntö: www.ym.fi/rakentamismaaraykset (sv)"
+        :lisatietoja2                      "Lisätietoa rahoituksesta: www.motiva.fi/ratkaisut/energiatehokkuuden_rahoitus/rahoituksen_tietopalvelu (sv)"
+        :lisatietoja3                      "Lisätietoa rakennusten energiatehokkuudesta: www.motiva.fi (sv)"
+        :lisatietoja4                      "Perusparannuspassin digiversio saatavilla osoitteesta www.energiatodistusrekisteri.fi (sv)"
+        :lisatietoja5                      "Laskentatyökalun nimi ja versionumero: www.laskentapalvelut.fi, versio 1.5 (sv)"
+        :voimassa-olo                      "Perusparannuspassi on voimassa 1.1.2050 asti tai voimassa olevan lainsäädännön mukaisesti (sv)"}})
+
 
 (defn et-perustiedot-kayttotarkoitus->description
   "To use this you must provide the list of alakayttotarkoitukset as fetched from the DB for the correct version. At the
@@ -129,3 +200,4 @@
     (case kieli
       :fi (:label-fi kayttotarkoitus)
       :sv (:label-sv kayttotarkoitus))))
+

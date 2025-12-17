@@ -11,7 +11,9 @@
     [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija]
-    [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]])
+    [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]]
+    [solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot :as laskennan-taustatiedot]
+    [solita.etp.service.luokittelu :as luokittelu-service])
   (:import (org.apache.axis.utils ByteArrayOutputStream)))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
@@ -237,7 +239,135 @@
     .vaatimukset-selitteet > div:last-child {
       margin-right: 0;
       padding-left: 5mm;
-    }"))
+    }
+
+    table.lt-u-arvot {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+      -fs-border-rendering: no-bevel;
+      margin-bottom: 30px;
+    }
+
+    table.lt-u-arvot th,
+    table.lt-u-arvot td {
+      display: table-cell;
+      -fs-border-rendering: no-bevel;
+      border: 1px solid #2c5234;
+      padding: 5px 8px;
+      font-size: 14px;
+   }
+
+   th.lt-otsikko {
+     background-color: #2c5234;
+     color: white;
+     font-weight:bold;
+     padding: 5px 8px;
+     font-size: 14px;
+   }
+
+   table.lt-u-arvot .lt-sarakkeet th {
+     font-weight: normal;
+     font-size: 14px;
+   }
+
+   table.lt-lammitys th,
+   table.lt-lammitys td {
+     display: table-cell;
+     -fs-border-rendering: no-bevel;
+     border: 1px solid #2c5234;
+     padding: 5px 8px;
+     font-size: 14px;
+   }
+
+   tr.sarakkeet.lammitys-ilmanvaihto {
+     background-color: #2c5234;
+     color: white;
+     text-align:center;
+     font-weight:bold;
+     padding: 5px 8px;
+     font-size: 14px;
+   }
+
+   table.lt-lammitys th.empty {
+    border: none;
+    background: none;
+   }
+
+    table.lt-lammitys th {
+     font-weight: normal;
+     text-align: center;
+     font-size: 14px;
+    }
+
+   table.lt-lammitys {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+   }
+
+   dl.lt-vahimmaisvaatimustaso {
+    display: table;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+    font-size: 14px;
+    width: 100%;
+    }
+
+  dl.lt-vahimmaisvaatimustaso dd {
+    display: table-cell;
+    padding: 5px 8px;
+    white-space: nowrap
+   }
+
+   dl.lt-vahimmaisvaatimustaso dd {
+    border: 1px solid #2c5234;
+   }
+
+   dl.lt-korjausrakentamisen-saadokset {
+    font-size: 14px;
+    align-items: left;
+   }
+
+   table.lt-mahdollisuus-liittya {
+     display: table;
+     width: 100%;
+     border-collapse: collapse;
+     -fs-border-rendering: no-bevel;
+     margin-bottom: 30px;
+   }
+
+   table.lt-mahdollisuus-liittya th,
+   table.lt-mahdollisuus-liittya td {
+     display: table-cell;
+     fs-border-rendering: no-bevel;
+     border: 1px solid #2c5234;
+     padding: 5px 8px
+     font-size: 14px;
+   }
+
+   table.lt-lisatietoja {
+     display: table;
+     width: 100%;
+     border-collapse: collapse;
+     -fs-border-rendering: no-bevel;
+     align-items: left;
+   }
+
+   table.lt-lisatietoja th,
+   table.lt-lisatietoja td {
+     align-items: left;
+     display: table-cell;
+     -fs-border-rendering: no-bevel;
+     border: 1px solid #2c5234;
+     padding: 5px 8px;
+     font-size: 14px;
+   }
+
+   dl.lt-voimassaolo {
+     font-size: 14px;
+   }"))
 
 
 (defn- page-header [title]
@@ -314,11 +444,11 @@
                 :content
                 [:div
                  [:p "Tähän se suuri taulukko"]]}
-               {:title (l :laskennan-taustatiedot)
+               {:title (l :laskennan-taustatiedot-otsikko)
                 :content
-                [:div
-                 [:p "Laskennan taustatiedot tähän"]]}
-               {:title (l :lisatietoja)
+                (into [:div]
+                      (vals (laskennan-taustatiedot/generate-all-laskennan-taustatiedot params)))}
+               {:title "Lisätietoja"
                 :content
                 [:div
                  [:p "Viimeinen sivu tähän"]]}]]
@@ -328,7 +458,8 @@
 
 (defn- generate-perusparannuspassi-pdf
   "Generate a perusparannuspassi PDF and return it as a byte array."
-  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
+  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
+   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?]
   (let [kieli-keyword (keyword kieli)
         pdf-bytes
 
@@ -338,7 +469,11 @@
            :perusparannuspassi    perusparannuspassi
            :kayttotarkoitukset    kayttotarkoitukset
            :alakayttotarkoitukset alakayttotarkoitukset
-           :kieli                 kieli-keyword})]
+           :kieli                 kieli-keyword
+           :mahdollisuus-liittya  mahdollisuus-liittya
+           :uusiutuva-energia     uusiutuva-energia
+           :lammitysmuodot        lammitysmuodot
+           :ilmanvaihtotyypit     ilmanvaihtotyypit})]
 
     (let [watermark-text (cond
                            draft? (draft-watermark-texts kieli)
@@ -351,8 +486,10 @@
 (defn- generate-pdf-as-input-stream
   "Generate a perusparannuspassi PDF and return it as an InputStream.
    Applies watermarks via post-processing with PDFBox."
-  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?]
-  (let [pdf-bytes (generate-perusparannuspassi-pdf perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?)]
+  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
+   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?]
+  (let [pdf-bytes (generate-perusparannuspassi-pdf perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
+                                                   mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?)]
     (java.io.ByteArrayInputStream. pdf-bytes)))
 
 (defn find-perusparannuspassi-pdf
@@ -373,6 +510,11 @@
           versio (:versio energiatodistus)
           kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
           alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
+          mahdollisuus-liittya (luokittelu-service/find-mahdollisuus-liittya db)
+          uusiutuva-energia (luokittelu-service/find-uusiutuva-energia db)
+          lammitysmuodot (luokittelu-service/find-lammitysmuodot db)
+          ilmanvaihtotyypit (luokittelu-service/find-ilmanvaihtotyypit db)
           draft? true]
       ;; Always show draft watermark for now (no signing yet)
-      (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset kieli draft?))))
+      (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
+                                    mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?))))
