@@ -101,6 +101,10 @@
       font-size: 11pt;
     }
 
+    p {
+      font-size: 11pt;
+    }
+
     p, div, span, li, ul, ol {
       font-family: roboto, sans-serif;
     }
