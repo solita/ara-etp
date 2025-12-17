@@ -123,37 +123,37 @@
 
       let future;
       // When perusparannuspassi is not valid we only submit energiatodistus.
-        if (perusparannuspassi.id) {
-          future = Future.parallelObject(2, {
-            perusparannuspassi: pppApi.putPerusparannuspassi(
-              fetch,
-              perusparannuspassi.id,
-              perusparannuspassi
-            ),
-            energiatodistus: api.putEnergiatodistusById(
-              fetch,
-              params.version,
-              energiatodistus.id,
-              energiatodistus
-            )
-            // Pass the same success value to fork.
-          });
-        } else {
-          future = Future.parallelObject(2, {
-            perusparannuspassi: pppApi.postPerusparannuspassi(
-              fetch,
-              perusparannuspassi
-            ),
-            energiatodistus: api.putEnergiatodistusById(
-              fetch,
-              params.version,
-              energiatodistus.id,
-              energiatodistus
-            )
-            // Pass the same success value to fork.
-          });
+      if (perusparannuspassi.id) {
+        future = Future.parallelObject(2, {
+          perusparannuspassi: pppApi.putPerusparannuspassi(
+            fetch,
+            perusparannuspassi.id,
+            perusparannuspassi
+          ),
+          energiatodistus: api.putEnergiatodistusById(
+            fetch,
+            params.version,
+            energiatodistus.id,
+            energiatodistus
+          )
+          // Pass the same success value to fork.
+        });
+      } else {
+        future = Future.parallelObject(2, {
+          perusparannuspassi: pppApi.postPerusparannuspassi(
+            fetch,
+            perusparannuspassi
+          ),
+          energiatodistus: api.putEnergiatodistusById(
+            fetch,
+            params.version,
+            energiatodistus.id,
+            energiatodistus
+          )
+          // Pass the same success value to fork.
+        });
       }
-      (console.log("B: ", future));
+      console.log('B: ', future);
 
       toggleOverlay(true);
       return Future.fork(onUnsuccessfulResponse, onSuccesfulResponse, future);
@@ -187,11 +187,10 @@
                 Maybe.get(response.energiatodistus['laatija-id'])
               ),
               perusparannuspassi: Maybe.fold(
-                  Future.resolve(
-                    empty.perusparannuspassi(response.energiatodistus.id)
-                  ),
-                pppId =>
-                  pppApi.getPerusparannuspassi(fetch, pppId)
+                Future.resolve(
+                  empty.perusparannuspassi(response.energiatodistus.id)
+                ),
+                pppId => pppApi.getPerusparannuspassi(fetch, pppId)
               )(pppId)
             })
           );

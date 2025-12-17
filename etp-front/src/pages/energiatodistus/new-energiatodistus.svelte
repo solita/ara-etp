@@ -79,12 +79,12 @@
 
   const submit = (energiatodistus, perusparannuspassi, onSuccessfulSave) => {
     const onUnsuccessfulResponse = response => {
-      toggleOverlay(false)
+      toggleOverlay(false);
       announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
     };
 
     const onSuccesfulResponse = etResult => {
-      toggleOverlay(false)
+      toggleOverlay(false);
       announceSuccess($_('energiatodistus.messages.save-success'));
       onSuccessfulSave();
       replace(`/energiatodistus/${params.version}/${etResult.id}`);
