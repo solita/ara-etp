@@ -265,14 +265,16 @@
           bind:eTehokkuus
           bind:dirty
           bind:korvausError />
-        <PppForm
-          {energiatodistus}
-          {inputLanguage}
-          {luokittelut}
-          bind:dirty
-          schema={schemas.perusparannuspassi}
-          {pppValidation}
-          bind:perusparannuspassi />
+        {#if version === '2026'}
+          <PppForm
+            {energiatodistus}
+            {inputLanguage}
+            {luokittelut}
+            bind:dirty
+            schema={schemas.perusparannuspassi}
+            {pppValidation}
+            bind:perusparannuspassi />
+        {/if}
       </form>
     </div>
   </div>
