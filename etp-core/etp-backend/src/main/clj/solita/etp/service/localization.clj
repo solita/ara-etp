@@ -98,6 +98,23 @@
         :lisatietoja5                      "Laskentatyökalun nimi ja versionumero: www.laskentapalvelut.fi, versio 1.5"
         :voimassa-olo                      "Perusparannuspassi on voimassa 1.1.2050 asti tai voimassa olevan lainsäädännön mukaisesti"}
 
+        :toimenpideseloste                 "Toimenpideseloste"
+        :energiankulutuksen-muutos-lahtotilanteesta "Energiankulutuksen muutos lähtötilanteesta, laskennallinen [kWh/vuosi]"
+        :kaukolampo                        "Kaukolämpö"
+        :sahko                             "Sähkö"
+        :uusiutuvat-pat                    "Uusiutuvat PA:t"
+        :fossiiliset-pat                   "Fossiiliset PA:t"
+        :kaukojaahdytys                    "Kaukojäähdytys"
+        :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen "Energiankulutus, kustannukset ja CO₂-päästöt vaiheen jälkeen"
+        :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen "Ostoenergian kokonaistarve vaiheen jälkeen, laskennallinen"
+        :uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta "Uusiutuvan energian osuus ostoenergian kokonaistarpeesta"
+        :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus "Ostoenergian kokonaistarve vaiheen jälkeen, toteutunut kulutus"
+        :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio "Toteutuneen ostoenergian vuotuinen energiakustannus, arvio*"
+        :energiankaytosta-aiheutuvat-hiilidioksidipaastot-laskennallinen "Energiankäytöstä aiheutuvat hiilidioksidipäästöt, laskennallinen"
+        :kwh-vuosi                         "kWh/vuosi"
+        :prosenttia                        "%"
+        :euroa-vuosi                       "€/vuosi"
+        :tco2ekv-vuosi                     "tCO2ekv/vuosi"}
    :sv {:rakennuksen-nimi                  "Byggnadens namn"
         :rakennuksen-osoite                "Byggnadens adress"
         :pysyva-rakennustunnus             "Permanent byggnadsbeteckning"
@@ -158,41 +175,23 @@
         :a0-selite                         "A0 är en utsläppsfri byggnad"
         :a-plus-selite                     "A+ byggnad är mycket energieffektiv, utsläppsfri och energipositiv"
         :toimenpide-ehdotukset             "Åtgärdsförslag"
-
-        :laskennan-taustatiedot-otsikko    "Laskennan taustatiedot (sv)"
-        :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti: (sv)"
-        :U-arvot-lt                        "U-arvot [W/m2K] (sv)"
-        :ulkoseinat-lt                     "Ulkoseinät (sv)"
-        :ylapohja-lt                       "Yläpohja (sv)"
-        :alapohja-lt                       "Alapohja (sv)"
-        :ikkunat-lt                        "Ikkunat (sv)"
-        :ulko-ovet-lt                      "Ulko-ovet (sv)"
-        :lahtotilanne-lt                   "Lähtötilanne (sv)"
-        :vahimmaisvaatimus                 "Vähimmäisvaatimus*** (sv)"
-        :ehdotettu-taso                    "Ehdotettu taso (sv)"
-        :mahdollisuus-liittya-otsikko      "Kohteen on mahdollista liittyä energiatehokkaaseen kaukolämpöön tai kaukojäähdytykseen: (sv)"
-        :mahdollisuus-liittya              "Mahdollisuus liitty' energiatehokkaaseen kaukolämpöön tai kaukojaahdytyksee (sv)"
-        :lisatietoja-lt                    "Lisätietoja (SV)"
-        :paalammitysjarjestelma            "Päälämmitysjärjestelmä (sv)"
-        :ilmanvaihto-lt                    "Ilmanvaihto (sv)"
-        :uusiutuva-energia-lt              "Uusiutuva energia (sv)"
-        :korjausrakentamisen-saadokset     "***Korjausrakentamisen energiatehokkuudesta määrätään ympäristöministeriön asetuksessa
-                                            4/13, jota noudatetaan perusparannuspassin toteutuksessa sekä vähimmäisvaatimuksissa.
-                                            Suunnitelmallinen kiinteistönpito\nedistää rakennuksen turvallisuutta, terveellisyyttä
-                                            sekä asukkaiden viihtyvyyttä. Oikea-aikaisesti toteutetut ja\nhyvin suunnitellut korjaukset
-                                            ja remontit auttavat rakennusta mukautumaa ilmastonmuutokseen sekä pien\nentävät energiankulutusta.
-                                            Parantunut energiatehokkuus ja uusiutuvan energian hyödyntäminen vähentävät\n rakennuksen käytöstä
-                                            aiheutuvia kasvihuonekaasupäästöjä. Rakennusmateriaalien uudelleenkäyttö ja kierrä\ntys
-                                            säästävät luonnonvaroja ja vähentävät uusien tuotteiden valmistuksessa syntyviä päästöjä. (sv)"
-        :yksikko                           "kWhE/m2vuosi (sv)"
-        :lisatietoja-saatavilla            "Lisätietoja saatavilla (sv)"
-        :lisatietoja1                      "Korjausrakentamisen lainsäädäntö: www.ym.fi/rakentamismaaraykset (sv)"
-        :lisatietoja2                      "Lisätietoa rahoituksesta: www.motiva.fi/ratkaisut/energiatehokkuuden_rahoitus/rahoituksen_tietopalvelu (sv)"
-        :lisatietoja3                      "Lisätietoa rakennusten energiatehokkuudesta: www.motiva.fi (sv)"
-        :lisatietoja4                      "Perusparannuspassin digiversio saatavilla osoitteesta www.energiatodistusrekisteri.fi (sv)"
-        :lisatietoja5                      "Laskentatyökalun nimi ja versionumero: www.laskentapalvelut.fi, versio 1.5 (sv)"
-        :voimassa-olo                      "Perusparannuspassi on voimassa 1.1.2050 asti tai voimassa olevan lainsäädännön mukaisesti (sv)"}})
-
+        :toimenpideseloste                 "Åtgärdsbeskrivning"
+        :energiankulutuksen-muutos-lahtotilanteesta "Förändring av energiförbrukning från utgångsläget, beräknad [kWh/år]"
+        :kaukolampo                        "Fjärrvärme"
+        :sahko                             "El"
+        :uusiutuvat-pat                    "Förnybara bränslen"
+        :fossiiliset-pat                   "Fossila bränslen"
+        :kaukojaahdytys                    "Fjärrkyla"
+        :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen "Energiförbrukning, kostnader och CO₂-utsläpp efter fasen"
+        :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen "Total energiförbrukning efter fasen, beräknad"
+        :uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta "Andel förnybar energi av total energiförbrukning"
+        :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus "Total energiförbrukning efter fasen, faktisk förbrukning"
+        :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio "Årlig energikostnad för faktisk energiförbrukning, uppskattning*"
+        :energiankaytosta-aiheutuvat-hiilidioksidipaastot-laskennallinen "Koldioxidutsläpp från energianvändning, beräknad"
+        :kwh-vuosi                         "kWh/år"
+        :prosenttia                        "%"
+        :euroa-vuosi                       "€/år"
+        :tco2ekv-vuosi                     "tCO2ekv/år"})
 
 (defn et-perustiedot-kayttotarkoitus->description
   "To use this you must provide the list of alakayttotarkoitukset as fetched from the DB for the correct version. At the
