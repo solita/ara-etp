@@ -269,6 +269,7 @@
           {energiatodistus}
           {inputLanguage}
           {luokittelut}
+          bind:dirty
           schema={schemas.perusparannuspassi}
           {pppValidation}
           bind:perusparannuspassi />

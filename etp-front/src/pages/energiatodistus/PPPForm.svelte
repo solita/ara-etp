@@ -27,15 +27,18 @@
   export let luokittelut;
   export let schema;
   export let pppValidation;
+  export let dirty;
 
   export let perusparannuspassi;
 
   const onAddPPP = () => {
     perusparannuspassi = R.assoc('valid', true, perusparannuspassi);
+    dirty = true;
   };
 
   const onDeletePPP = () => {
     perusparannuspassi = R.assoc('valid', false, perusparannuspassi);
+    dirty = true;
   };
 
   const required = perusparannuspassi =>
