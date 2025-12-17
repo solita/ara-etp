@@ -64,7 +64,7 @@
 
         :laskennan-taustatiedot-otsikko    "Laskennan taustatiedot"
         :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti:"
-        :U-arvot                           "U-arvot [W/m2K]"
+        :U-arvot-lt                         "U-arvot [W/m2K]"
         :ulkoseinat-lt                     "Ulkoseinät"
         :ylapohja-lt                       "Yläpohja"
         :alapohja-lt                       "Alapohja"
@@ -159,7 +159,7 @@
 
         :laskennan-taustatiedot-otsikko    "Laskennan taustatiedot (sv)"
         :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti: (sv)"
-        :U-arvot                           "U-arvot [W/m2K] (sv)"
+        :U-arvot-lt                        "U-arvot [W/m2K] (sv)"
         :ulkoseinat-lt                     "Ulkoseinät (sv)"
         :ylapohja-lt                       "Yläpohja (sv)"
         :alapohja-lt                       "Alapohja (sv)"
