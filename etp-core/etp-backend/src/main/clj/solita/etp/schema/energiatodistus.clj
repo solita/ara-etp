@@ -330,6 +330,7 @@
 (defn energiatodistus-versio [versio save-schema]
   "Energiatodistus schema contains basic information about persistent energiatodistus"
   (-> save-schema
+      (assoc :perusparannuspassi-id (schema/maybe common-schema/Key))
       (merge common-schema/Id
              {:versio (schema/eq versio)}
              Status
@@ -346,8 +347,7 @@
 
 (def Energiatodistus2026
   "Energiatodistus 2026"
-  (assoc (energiatodistus-versio 2026 EnergiatodistusSave2026)
-    :perusparannuspassi-id (schema/maybe common-schema/Key)))
+  (energiatodistus-versio 2026 EnergiatodistusSave2026))
 
 (defn versio? [versio et] (-> et :versio (= versio)))
 
