@@ -10,6 +10,20 @@ import * as empty from '@Pages/energiatodistus/empty.js';
 import * as deep from '@/utils/deep-objects.js';
 import * as schema from './schema.js';
 
+export const postPerusparannuspassi = R.curry((fetch, perusparannuspassi) =>
+  R.compose(
+    R.chain(Fetch.rejectWithInvalidResponse),
+    Future.encaseP(
+      Fetch.fetchWithMethod(
+        fetch,
+        'post',
+        '/api/private/perusparannuspassit/2026'
+      )
+    ),
+    serialize
+  )(perusparannuspassi)
+);
+
 export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
   R.compose(
     R.map(R.prop('id')),
