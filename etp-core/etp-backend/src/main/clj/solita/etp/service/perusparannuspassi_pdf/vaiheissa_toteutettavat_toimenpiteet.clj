@@ -37,7 +37,7 @@
             ;; Left Item
             [:td {:style "border: 1px solid #2c5234; background-color: #2c5234; color: #ffffff; font-weight: bold; text-align: center; width: 40px; padding: 10px 0;"}
              (inc idx)]
-            [:td {:style "border: 1px solid #2c5234; padding: 6px 8px; width: 40%; vertical-align: top;"}
+            [:td {:style "border: 1px solid #2c5234; padding: 6px 8px; width: 40%; vertical-align: middle;"}
              (or (get item1 label-key) "\u00A0")]
 
             ;; Spacer
@@ -46,7 +46,7 @@
             ;; Right Item
             [:td {:style "border: 1px solid #2c5234; background-color: #2c5234; color: #ffffff; font-weight: bold; text-align: center; width: 40px; padding: 10px 0;"}
              (+ 4 idx)]
-            [:td {:style "border: 1px solid #2c5234; padding: 6px 8px; width: 40%; vertical-align: top;"}
+            [:td {:style "border: 1px solid #2c5234; padding: 6px 8px; width: 40%; vertical-align: middle;"}
              (or (get item2 label-key) "\u00A0")]]))
        col1)]]))
 
@@ -85,25 +85,30 @@
   (let [l (kieli loc/ppp-pdf-localization)
         {:keys [vaihe e-luku e-luokka]} (get-vaihe-data params vaihe-nro)]
     (if vaihe
-      {:header [:div {:class "page-header" :style "height: auto; padding: 0;"}
-                [:table {:style "width: 100%; border-collapse: collapse;"}
+      {:title [:table {:style "width: 100%; border-collapse: collapse; margin-top: -10px;"}
+               [:tr
+                [:td {:style "vertical-align: top;"}
+                 (format (l :vaiheessa-n-toteutettavat-toimenpiteet) vaihe-nro)]
+                [:td {:style "text-align: right; vertical-align: top;"}
+                 (let [color (get tv/colors-by-e-luokka e-luokka "#e8b63e")
+                       vaihe-title (str (l :vaihe) " " vaihe-nro)
+                       perf-label (str e-luokka " - " e-luku)]
+                   [:svg {:xmlns "http://www.w3.org/2000/svg"
+                          :viewBox "-6 -60 120 65"
+                          :width "120px"
+                          :height "65px"}
+                    (tv/arrow color 0 vaihe-title perf-label)])]]]
+       :content [:table {:style "width: 100%; height: 100%; border-collapse: collapse;"}
                  [:tr
-                  [:td {:style "padding: 78px 0 78px 16mm; vertical-align: middle; width: 70%;"}
-                   [:h1 {:class "page-title" :style "margin: 0;"} (format (l :vaiheessa-n-toteutettavat-toimenpiteet) vaihe-nro)]]
-                  [:td {:style "padding: 78px 16mm 78px 0; vertical-align: middle; width: 30%; text-align: right;"}
-                   (let [color (get tv/colors-by-e-luokka e-luokka "#e8b63e")
-                         vaihe-title (str (l :vaihe) " " vaihe-nro)
-                         perf-label (str e-luokka " - " e-luku)]
-                     [:svg {:xmlns "http://www.w3.org/2000/svg"
-                            :viewBox "-6 -60 120 65"
-                            :width "120px"
-                            :height "65px"}
-                      (tv/arrow color 0 vaihe-title perf-label)])]]]]
-       :content [:div
-                 (render-toimenpide-ehdotukset vaihe kieli l)
-                 (render-toimenpideseloste l)
-                 (render-energiankulutuksen-muutos l)
-                 (render-energiankulutus-kustannukset-ja-co2-paastot l)]}
+                  [:td {:style "vertical-align: top;"}
+                   (render-toimenpide-ehdotukset vaihe kieli l)
+                   (render-toimenpideseloste l)]]
+                 [:tr {:style "height: 100%;"}
+                  [:td]]
+                 [:tr
+                  [:td {:style "vertical-align: bottom;"}
+                   (render-energiankulutuksen-muutos l)
+                   (render-energiankulutus-kustannukset-ja-co2-paastot l)]]]}
       {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) vaihe-nro)
        :content [:div
                  [:p (str "Vaihetta " vaihe-nro " ei määritelty.")]]})))
