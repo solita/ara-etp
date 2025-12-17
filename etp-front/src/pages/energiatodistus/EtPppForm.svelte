@@ -40,9 +40,6 @@
   export let verkkolaskuoperaattorit;
   export let laskutusosoitteet;
 
-  export let addPerusparannuspassi;
-  export let deletePerusparannuspassi;
-
   // TODO: AE-2690: Can we unify this and use the same one everywhere?
   export let perusparannuspassi;
 
@@ -145,16 +142,10 @@
 
     if (R.isEmpty(invalid) && korvausError.isNone()) {
       clearAnnouncements();
-      submit(
-        energiatodistus,
-        perusparannuspassi.valid
-          ? Maybe.Some(perusparannuspassi)
-          : Maybe.None(),
-        (...args) => {
-          dirty = false;
-          onSuccessfulSave(...args);
-        }
-      );
+      submit(energiatodistus, perusparannuspassi, (...args) => {
+        dirty = false;
+        onSuccessfulSave(...args);
+      });
     } else {
       showKorvausErrorMessage(korvausError);
       showInvalidPropertiesMessage(invalid);
@@ -185,6 +176,7 @@
 
     const missingPPP = [];
 
+    // TODO: AE-2690: Should this depend on perusparannuspassi.valid instead?
     if (perusparannuspassi && perusparannuspassi.id) {
       missingPPP.push(
         ...EtValidations.missingProperties(
@@ -279,8 +271,6 @@
           {luokittelut}
           schema={schemas.perusparannuspassi}
           {pppValidation}
-          {addPerusparannuspassi}
-          {deletePerusparannuspassi}
           bind:perusparannuspassi />
       </form>
     </div>

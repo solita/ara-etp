@@ -77,55 +77,39 @@
 
   let resources = Maybe.None();
 
-  const submit = (energiatodistus, maybePerusparannuspassi, onSuccessfulSave) =>
-    R.compose(
-      Future.fork(
-        response => {
-          toggleOverlay(false);
-          announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
-        },
-        etResult => {
-          toggleOverlay(false);
-          announceSuccess($_('energiatodistus.messages.save-success'));
-          onSuccessfulSave();
-          replace(`/energiatodistus/${params.version}/${etResult.id}`);
-        }
-      ),
-      R.chain(Future.after(400)),
-      etFuture =>
-        Maybe.cata(
-          () => etFuture,
-          ppp =>
-            R.compose(
-              R.map(({ etResult }) => etResult),
-              R.chain(({ etResult, pppId }) =>
-                R.map(
-                  pppResult => ({
-                    etResult: etResult,
-                    pppId: pppId,
-                    pppResult: pppResult
-                  }),
-                  pppApi.putPerusparannuspassi(
-                    fetch,
-                    pppId,
-                    R.assoc('energiatodistus-id', etResult.id, ppp)
-                  )
-                )
-              ),
-              R.chain(etResult =>
-                R.map(
-                  pppId => ({
-                    etResult: etResult,
-                    pppId: pppId
-                  }),
-                  pppApi.addPerusparannuspassi(fetch, etResult.id)
-                )
-              )
-            )(etFuture)
-        )(maybePerusparannuspassi),
-      api.postEnergiatodistus(fetch, params.version),
-      R.tap(() => toggleOverlay(true))
-    )(energiatodistus);
+  const submit = (energiatodistus, perusparannuspassi, onSuccessfulSave) => {
+    const onUnsuccessfulResponse = response => {
+      toggleOverlay(false)
+      announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
+    };
+
+    const onSuccesfulResponse = etResult => {
+      toggleOverlay(false)
+      announceSuccess($_('energiatodistus.messages.save-success'));
+      onSuccessfulSave();
+      replace(`/energiatodistus/${params.version}/${etResult.id}`);
+    };
+
+    let future;
+    if (R.equals(true, perusparannuspassi.valid)) {
+      future = R.chain(
+        et =>
+          R.map(
+            R.always(et),
+            pppApi.postPerusparannuspassi(
+              fetch,
+              R.assoc('energiatodistus-id', et.id, perusparannuspassi)
+            )
+          ),
+        api.postEnergiatodistus(fetch, params.version, energiatodistus)
+      );
+    } else {
+      future = api.postEnergiatodistus(fetch, params.version, energiatodistus);
+    }
+
+    toggleOverlay(true);
+    return Future.fork(onUnsuccessfulResponse, onSuccesfulResponse, future);
+  };
 
   $: title =
     $_('energiatodistus.title') +

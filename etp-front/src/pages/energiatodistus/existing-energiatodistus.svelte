@@ -1,13 +1,14 @@
 <script>
   import * as R from 'ramda';
 
-  import {_} from '@Language/i18n';
+  import { _ } from '@Language/i18n';
 
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
   import * as versionApi from '@Component/Version/version-api';
 
+  import * as empty from '@Pages/energiatodistus/empty';
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as pppApi from '@Pages/energiatodistus/perusparannuspassi-api';
@@ -19,14 +20,14 @@
   import Overlay from '@Component/Overlay/Overlay';
   import Spinner from '@Component/Spinner/Spinner';
 
-  import {announcementsForModule} from '@Utility/announce';
+  import { announcementsForModule } from '@Utility/announce';
   import EtPppForm from '@Pages/energiatodistus/EtPppForm.svelte';
 
   export let params;
 
   const i18n = $_;
   const i18nRoot = 'energiatodistus';
-  const {announceError, announceSuccess} =
+  const { announceError, announceSuccess } =
     announcementsForModule('Energiatodistus');
   let resources = Maybe.None();
 
@@ -37,7 +38,6 @@
   };
 
   let showMissingProperties;
-  $: (console.log("HERE: ", showMissingProperties));
 
   let config = {};
   Future.fork(
@@ -50,78 +50,115 @@
     versionApi.getConfig
   );
 
-  // PPP state is stored on the server side for an existing energiatodistus.
-  const addPerusparannuspassiForEnergiatodistus =
-    R.curry(energiatodistusId => setPPP => () =>
-      R.compose(
-        Future.fork(
-          () => R.compose(
-            R.always(
-              announceError(i18n('energiatodistus.messages.add-ppp-error'))
-            ),
-            setPPP
-          )(Maybe.None()),
-          R.compose(
-            R.always(
-              announceSuccess(i18n('energiatodistus.messages.add-ppp-success'))
-            ),
-            setPPP,
-            Maybe.fromNull
-          )
-        ),
-        Future.lastly(Future.attempt(() => toggleOverlay(false))),
-        R.chain(pppApi.getPerusparannuspassi(fetch)),
-        pppApi.addPerusparannuspassi(fetch),
-        R.tap(() => toggleOverlay(true))
-      )(energiatodistusId));
+  const submit = (energiatodistus, perusparannuspassi, onSuccessfulSave) => {
+    toggleOverlay(true);
 
-  // Delete PPP - deletes immediately via API
-  const deletePerusparannuspassi = R.curry((setPPP, currentMaybePerusparannuspassi) => () =>
-    Maybe.cata(
-      // We should never be deleting a non-existing perusparannuspassi but we'll just set it to None then.
-      () => setPPP(Maybe.None()),
-      R.compose(
-        Future.fork(
-          _response => announceError(i18n('energiatodistus.messages.delete-ppp-error')),
-          _success => {
-            setPPP(Maybe.None());
-            announceSuccess(i18n('energiatodistus.messages.mark-ppp-for-deletion'));
-          }
-        ),
-        Future.lastly(Future.attempt(() => toggleOverlay(false))),
-        R.chain(pppId => pppApi.deletePerusparannuspassi(fetch, pppId)),
-        // Save the current state before deleting and take the pppId forward.
-        ppp => R.map(_ => ppp.id, pppApi.putPerusparannuspassi(fetch, ppp.id, ppp)),
-        R.tap(() => toggleOverlay(true))
-      )
-    )(currentMaybePerusparannuspassi));
-
-  const submit = R.curry((energiatodistus, maybePerusparannuspassi, onSuccessfulSave) =>
-    R.compose(
-      Future.fork(
-        // TODO: AE-2690: Should showing missing properties work for new-energiatodistus as well?
-        response => {
-          if (R.pathEq('missing-value', ['body', 'type'], response)) {
-            // TODO: Does this work?
-            showMissingProperties(response.body.missing);
-          } else {
-            announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
-          }
-        },
-        _result => {
-          announceSuccess($_('energiatodistus.messages.save-success'));
-          onSuccessfulSave();
+    Future.fork(
+      response => {
+        toggleOverlay(false);
+        if (R.pathEq('missing-value', ['body', 'type'], response)) {
+          showMissingProperties(response.body.missing);
+        } else {
+          announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
         }
-      ),
-      Future.lastly(Future.attempt(() => toggleOverlay(false))),
-      R.chain(Future.after(400)),
-      futures => Future.parallel(R.length(futures), futures),
-      R.concat([api.putEnergiatodistusById(fetch, params.version, params.id, energiatodistus)]),
-      R.map(ppp => pppApi.putPerusparannuspassi(fetch, ppp.id, ppp)),
-      R.tap(x => console.log(x)),
-      Maybe.toArray,
-      R.tap(() => toggleOverlay(true))
-    )(maybePerusparannuspassi));
+      },
+      result => {
+        toggleOverlay(false);
+        announceSuccess($_('energiatodistus.messages.save-success'));
+        onSuccessfulSave();
+      },
+      R.chain(
+        Future.after(400),
+        Future.parallelObject(2, {
+          energiatodistus: api.putEnergiatodistusById(
+            fetch,
+            params.version,
+            params.id
+          )(energiatodistus),
+          perusparannuspassi: R.cond([
+            [
+              /* PPP has an ID so it has been submitted at least once */
+              R.always(perusparannuspassi?.id),
+
+              /* Always keep PPP state in sync with the local
+               * (could well have no effect for a PPP that has valid: false) */
+              () =>
+                pppApi.putPerusparannuspassi(
+                  fetch,
+                  perusparannuspassi.id,
+                  perusparannuspassi
+                )
+            ],
+            [
+              /* PPP has no ID but is marked as valid, so we are likely making a first save
+               * for a newly added PPP */
+              R.always(perusparannuspassi?.valid),
+              () => pppApi.postPerusparannuspassi(fetch, perusparannuspassi)
+            ],
+            [R.T, () => Future.resolve({})]
+          ])()
+        })
+      )
+    );
+  };
+
+  const submitV1 = R.curry(
+    (energiatodistus, perusparannuspassi, onSuccessfulSave) => {
+      const onSuccesfulResponse = _ => {
+        toggleOverlay(false);
+        announceSuccess(i18n('energiatodistus.messages.save-success'));
+        onSuccessfulSave();
+      };
+
+      const onUnsuccessfulResponse = response => {
+        toggleOverlay(false);
+        if (R.pathEq('missing-value', ['body', 'type'], response)) {
+          // TODO: Does this work?
+          // TODO: AE-2690: Should showing missing properties work for new-energiatodistus as well?
+          showMissingProperties(response.body.missing);
+        } else {
+          announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
+        }
+      };
+
+      let future;
+      // When perusparannuspassi is not valid we only submit energiatodistus.
+        if (perusparannuspassi.id) {
+          future = Future.parallelObject(2, {
+            perusparannuspassi: pppApi.putPerusparannuspassi(
+              fetch,
+              perusparannuspassi.id,
+              perusparannuspassi
+            ),
+            energiatodistus: api.putEnergiatodistusById(
+              fetch,
+              params.version,
+              energiatodistus.id,
+              energiatodistus
+            )
+            // Pass the same success value to fork.
+          });
+        } else {
+          future = Future.parallelObject(2, {
+            perusparannuspassi: pppApi.postPerusparannuspassi(
+              fetch,
+              perusparannuspassi
+            ),
+            energiatodistus: api.putEnergiatodistusById(
+              fetch,
+              params.version,
+              energiatodistus.id,
+              energiatodistus
+            )
+            // Pass the same success value to fork.
+          });
+      }
+      (console.log("B: ", future));
+
+      toggleOverlay(true);
+      return Future.fork(onUnsuccessfulResponse, onSuccesfulResponse, future);
+    }
+  );
 
   // load energiatodistus and classifications in parallel
   const load = params => {
@@ -149,11 +186,13 @@
               laskutusosoitteet: laatijaApi.laskutusosoitteet(
                 Maybe.get(response.energiatodistus['laatija-id'])
               ),
-              maybePerusparannuspassi:
-                Maybe.cata(
-                  () => Future.resolve(Maybe.None()),
-                  pppId => R.map(Maybe.of, pppApi.getPerusparannuspassi(fetch, pppId))
-                )(pppId)
+              perusparannuspassi: Maybe.fold(
+                  Future.resolve(
+                    empty.perusparannuspassi(response.energiatodistus.id)
+                  ),
+                pppId =>
+                  pppApi.getPerusparannuspassi(fetch, pppId)
+              )(pppId)
             })
           );
         },
@@ -181,26 +220,15 @@
     `${$_('energiatodistus.title')} ${params.version}/${
       params.id
     } - ${tilaLabel(energiatodistus)}`;
-
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each Maybe.toArray(resources) as {
-      energiatodistus,
-      luokittelut,
-      validation,
-      whoami,
-      verkkolaskuoperaattorit,
-      laskutusosoitteet,
-      maybePerusparannuspassi,
-      pppValidation,
-      valvonta
-    }}
+    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, validation, whoami, verkkolaskuoperaattorit, laskutusosoitteet, perusparannuspassi, pppValidation, valvonta }}
       <EtPppForm
         version={params.version}
         {energiatodistus}
-        {maybePerusparannuspassi}
+        {perusparannuspassi}
         {luokittelut}
         {whoami}
         {validation}
@@ -210,15 +238,10 @@
         {pppValidation}
         bind:showMissingProperties
         {submit}
-        title={title(energiatodistus)}
-
-        addPerusparannuspassi={addPerusparannuspassiForEnergiatodistus(energiatodistus.id)}
-        {deletePerusparannuspassi}
-
-      />
+        title={title(energiatodistus)} />
     {/each}
   </div>
   <div slot="overlay-content">
-    <Spinner/>
+    <Spinner />
   </div>
 </Overlay>
