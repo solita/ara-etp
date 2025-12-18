@@ -45,8 +45,6 @@
       response => {
         toggleOverlay(false);
         if (R.pathEq('missing-value', ['body', 'type'], response)) {
-          // TODO: Does this work?
-          // TODO: AE-2690: Should showing missing properties work for new-energiatodistus as well?
           showMissingProperties(response.body.missing);
         } else {
           announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));

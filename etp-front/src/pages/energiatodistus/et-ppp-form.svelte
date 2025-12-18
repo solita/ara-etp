@@ -37,7 +37,6 @@
   export let verkkolaskuoperaattorit;
   export let laskutusosoitteet;
 
-  // TODO: AE-2690: Can we unify this and use the same one everywhere?
   export let perusparannuspassi;
 
   export let submit;
@@ -183,7 +182,6 @@
 
     const missingPPP = [];
 
-    // TODO: AE-2690: Should this depend on perusparannuspassi.valid instead?
     if (perusparannuspassi && perusparannuspassi.id) {
       missingPPP.push(
         ...EtValidations.missingProperties(

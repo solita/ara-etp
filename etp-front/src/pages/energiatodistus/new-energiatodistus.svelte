@@ -35,7 +35,6 @@
     overlay = value;
   };
 
-  // TODO: AE-2690: Do we want this for new?
   let showMissingProperties;
 
   const emptyEnergiatodistus = versio =>
