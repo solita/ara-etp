@@ -13,7 +13,8 @@
     [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija]
     [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]]
     [solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot :as laskennan-taustatiedot]
-    [solita.etp.service.luokittelu :as luokittelu-service])
+    [solita.etp.service.luokittelu :as luokittelu-service]
+    [solita.etp.service.perusparannuspassi-pdf.lisatietoja :as lisatietoja])
   (:import (org.apache.axis.utils ByteArrayOutputStream)))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
@@ -367,6 +368,29 @@
 
    dl.lt-voimassaolo {
      font-size: 14px;
+   }
+
+  .lisatietoja-box {
+    display: block;
+    border: 1px solid #2c5234;
+    padding: 3px;
+    border-top: none;
+    font-size: 13.8px;
+    }
+
+   .lisatietoja-field {
+     min-height: 180mm;
+   }
+
+   .lisatietoja-sivu-otsikko {
+     background-color: #2c5234;
+     color: white;
+     font-weight: bold;
+     padding: 5px 8px;
+     font-size: 14px;
+     margin: 0;
+    }
+
    }"))
 
 
@@ -451,7 +475,7 @@
                {:title "Lisätietoja"
                 :content
                 [:div
-                 [:p "Viimeinen sivu tähän"]]}]]
+                 (lisatietoja/lisatietoja params)]}]]
     (-> (generate-document-html pages (:id perusparannuspassi))
         (pdf-service/html->pdf output-stream))
     (-> output-stream .toByteArray)))
