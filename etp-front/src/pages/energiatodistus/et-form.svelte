@@ -75,8 +75,7 @@
 
   {#if EtUtils.isSigned(energiatodistus)}
     <div class="mb-5">
-      <!-- TODO: AE-2690: Should this be localized? -->
-      Voimassa:
+      {$_('energiatodistus.tila.signed')}:
       {Maybe.fold(
         '',
         Formats.inclusiveStartDate,
