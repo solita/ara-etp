@@ -114,7 +114,7 @@
       },
       R.chain(
         response => {
-          const pppId = Maybe.fromNull(response.energiatodistus['perusparannuspassi-id']).join();
+          const pppId = response.energiatodistus['perusparannuspassi-id'];
 
           return R.map(
             R.mergeLeft(response),

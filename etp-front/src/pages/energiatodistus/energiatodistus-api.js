@@ -74,7 +74,8 @@ export const deserialize = R.compose(
   evolveForVersion('deserializer'),
   R.tap(assertVersion),
   R.evolve(deserializer),
-  deep.map(R.F, Maybe.fromNull)
+  deep.map(R.F, Maybe.fromNull),
+  R.when(R.complement(R.has('perusparannuspassi-id')), R.assoc('perusparannuspassi-id', null)),
 );
 
 export const serialize = R.compose(
