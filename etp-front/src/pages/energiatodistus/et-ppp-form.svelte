@@ -131,10 +131,10 @@
     if (Maybe.isSome(newPerusparannuspassiId)) {
       const newId = Maybe.get(newPerusparannuspassiId);
       if (newId !== perusparannuspassi.id) {
-          perusparannuspassi = R.assoc('id', newId, perusparannuspassi);
+        perusparannuspassi = R.assoc('id', newId, perusparannuspassi);
       }
     }
-  }
+  };
 
   const validateAndSubmit = onSuccessfulSave => () => {
     const invalid = R.filter(
@@ -147,11 +147,15 @@
 
     if (R.isEmpty(invalid) && korvausError.isNone()) {
       clearAnnouncements();
-      submit(energiatodistus, perusparannuspassi, (newPerusparannuspassiId, ...args) => {
-        setPppIdIfItChanged(newPerusparannuspassiId)
-        dirty = false;
-        onSuccessfulSave(...args);
-      });
+      submit(
+        energiatodistus,
+        perusparannuspassi,
+        (newPerusparannuspassiId, ...args) => {
+          setPppIdIfItChanged(newPerusparannuspassiId);
+          dirty = false;
+          onSuccessfulSave(...args);
+        }
+      );
     } else {
       showKorvausErrorMessage(korvausError);
       showInvalidPropertiesMessage(invalid);
