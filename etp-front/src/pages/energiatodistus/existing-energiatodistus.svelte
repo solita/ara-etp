@@ -45,6 +45,8 @@
       response => {
         toggleOverlay(false);
         if (R.pathEq('missing-value', ['body', 'type'], response)) {
+          // TODO: Does this work?
+          // TODO: AE-2690: Should showing missing properties work for new-energiatodistus as well?
           showMissingProperties(response.body.missing);
         } else {
           announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
@@ -93,64 +95,6 @@
       )
     );
   };
-
-  const submitV1 = R.curry(
-    (energiatodistus, perusparannuspassi, onSuccessfulSave) => {
-      const onSuccesfulResponse = _ => {
-        toggleOverlay(false);
-        announceSuccess(i18n('energiatodistus.messages.save-success'));
-        onSuccessfulSave();
-      };
-
-      const onUnsuccessfulResponse = response => {
-        toggleOverlay(false);
-        if (R.pathEq('missing-value', ['body', 'type'], response)) {
-          // TODO: Does this work?
-          // TODO: AE-2690: Should showing missing properties work for new-energiatodistus as well?
-          showMissingProperties(response.body.missing);
-        } else {
-          announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
-        }
-      };
-
-      let future;
-      // When perusparannuspassi is not valid we only submit energiatodistus.
-      if (perusparannuspassi.id) {
-        future = Future.parallelObject(2, {
-          perusparannuspassi: pppApi.putPerusparannuspassi(
-            fetch,
-            perusparannuspassi.id,
-            perusparannuspassi
-          ),
-          energiatodistus: api.putEnergiatodistusById(
-            fetch,
-            params.version,
-            energiatodistus.id,
-            energiatodistus
-          )
-          // Pass the same success value to fork.
-        });
-      } else {
-        future = Future.parallelObject(2, {
-          perusparannuspassi: pppApi.postPerusparannuspassi(
-            fetch,
-            perusparannuspassi
-          ),
-          energiatodistus: api.putEnergiatodistusById(
-            fetch,
-            params.version,
-            energiatodistus.id,
-            energiatodistus
-          )
-          // Pass the same success value to fork.
-        });
-      }
-      console.log('B: ', future);
-
-      toggleOverlay(true);
-      return Future.fork(onUnsuccessfulResponse, onSuccesfulResponse, future);
-    }
-  );
 
   // load energiatodistus and classifications in parallel
   const load = params => {
