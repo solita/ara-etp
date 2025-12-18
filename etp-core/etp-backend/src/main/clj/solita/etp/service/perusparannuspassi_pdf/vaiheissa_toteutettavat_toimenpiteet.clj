@@ -28,6 +28,52 @@
       (unwrap-monet val))
     v))
 
+(def ^:private table-style "width: 100%; border-collapse: collapse; table-layout: fixed;")
+(def ^:private cell-style "border: 1px solid #2c5234; padding: 6px 8px;")
+(def ^:private header-cell-style "width: 20%; border: 1px solid #2c5234; background-color: #2c5234; color: #ffffff; font-weight: bold; text-align: left; padding: 10px 5px; font-size: 14px;")
+(def ^:private number-cell-style "border: 1px solid #2c5234; background-color: #2c5234; color: #ffffff; font-weight: bold; text-align: center; width: 40px; padding: 10px 0;")
+(def ^:private row-header-style "border: 1px solid #2c5234; padding: 6px 8px; text-align: left; font-weight: normal; width: 70%;")
+
+(defn- format-year-range [vaihe seuraava-vaihe]
+  (let [alku-pvm (unwrap-monet (get-in vaihe [:tulokset :vaiheen-alku-pvm]))
+        seuraava-alku-pvm (when seuraava-vaihe
+                            (unwrap-monet (get-in seuraava-vaihe [:tulokset :vaiheen-alku-pvm])))
+        start-year (cond
+                     (number? alku-pvm) (int alku-pvm)
+                     alku-pvm (.getYear alku-pvm)
+                     :else nil)
+        next-start-year (cond
+                          (number? seuraava-alku-pvm) (int seuraava-alku-pvm)
+                          seuraava-alku-pvm (.getYear seuraava-alku-pvm)
+                          :else nil)
+        end-year (if next-start-year
+                   (dec next-start-year)
+                   (when start-year (+ start-year 4)))]
+    (if (and start-year end-year)
+      (str " " start-year "–" end-year)
+      (if start-year (str " " start-year) ""))))
+
+(defn- calculate-totals [tulokset]
+  (let [get-val (fn [k] (or (unwrap-monet (get tulokset k)) 0))
+        ostoenergian-kokonaistarve (reduce + (map get-val (vals perusparannuspassi-service/energy-keys-laskennallinen)))
+        toteutunut-ostoenergian-kulutus (reduce + (map get-val perusparannuspassi-service/energy-keys-toteutunut))
+        toteutunut-energiakustannus (or (unwrap-monet (get tulokset :toteutunut-energiakustannus))
+                                        (reduce + (for [[short-key _] perusparannuspassi-service/energy-keys-laskennallinen]
+                                                    (let [toteutunut-key (keyword (str "toteutunut-ostoenergia-" (name short-key)))
+                                                          energy (get-val toteutunut-key)
+                                                          price-key (get perusparannuspassi-service/price-keys short-key)
+                                                          price (get-val price-key)]
+                                                      (* energy price 0.01)))))
+        hiilidioksidipaastot (or (unwrap-monet (get tulokset :hiilidioksidipaastot))
+                                 (reduce + (for [[short-key laskennallinen-key] perusparannuspassi-service/energy-keys-laskennallinen]
+                                             (let [energy (get-val laskennallinen-key)
+                                                   factor (get perusparannuspassi-service/paastokertoimet short-key 0)]
+                                               (* energy factor)))))]
+    {:ostoenergian-kokonaistarve ostoenergian-kokonaistarve
+     :toteutunut-ostoenergian-kulutus toteutunut-ostoenergian-kulutus
+     :toteutunut-energiakustannus toteutunut-energiakustannus
+     :hiilidioksidipaastot hiilidioksidipaastot}))
+
 (defn- render-toimenpide-ehdotukset [vaihe seuraava-vaihe kieli l toimenpide-ehdotukset-defs]
   (let [toimenpide-ehdotukset-items (->> (get-in vaihe [:toimenpiteet :toimenpide-ehdotukset])
                                          (map unwrap-monet))
@@ -43,45 +89,28 @@
                                    toimenpide-ehdotukset-items)
         slots (take 6 (concat toimenpide-ehdotukset (repeat nil)))
         [col1 col2] (split-at 3 slots)
-        alku-pvm (unwrap-monet (get-in vaihe [:tulokset :vaiheen-alku-pvm]))
-        seuraava-alku-pvm (if seuraava-vaihe
-                            (unwrap-monet (get-in seuraava-vaihe [:tulokset :vaiheen-alku-pvm]))
-                            nil)
-        vuosi (cond
-                (number? alku-pvm) (int alku-pvm)
-                alku-pvm (.getYear alku-pvm)
-                :else nil)
-        seuraava-vuosi (cond
-                         (number? seuraava-alku-pvm) (int seuraava-alku-pvm)
-                         seuraava-alku-pvm (.getYear seuraava-alku-pvm)
-                         :else nil)
-        end-year (if seuraava-vuosi
-                   (dec seuraava-vuosi)
-                   (if vuosi (+ vuosi 4) nil))
-        title-suffix (if (and vuosi end-year)
-                       (str " " vuosi "–" end-year)
-                       (if vuosi (str " " vuosi) ""))
+        title-suffix (format-year-range vaihe seuraava-vaihe)
         title-text (str (l :toimenpide-ehdotukset) title-suffix)]
     [:div
      [:h2 {:style "margin-top: 0;"} title-text]
-     [:table {:role "presentation" :style "width: 100%; border-collapse: collapse; table-layout: fixed;"}
+     [:table {:role "presentation" :style table-style}
       (map-indexed
        (fn [idx item1]
          (let [item2 (nth col2 idx)]
            [:tr
             ;; Left Item
-            [:td {:style "border: 1px solid #2c5234; background-color: #2c5234; color: #ffffff; font-weight: bold; text-align: center; width: 40px; padding: 10px 0;"}
+            [:td {:style number-cell-style}
              (inc idx)]
-            [:td {:style "border: 1px solid #2c5234; padding: 6px 8px; width: 40%; vertical-align: middle;"}
+            [:td {:style (str cell-style " width: 40%; vertical-align: middle;")}
              (or item1 "\u00A0")]
 
             ;; Spacer
             [:td {:style "width: 42px; border: none;"}]
 
             ;; Right Item
-            [:td {:style "border: 1px solid #2c5234; background-color: #2c5234; color: #ffffff; font-weight: bold; text-align: center; width: 40px; padding: 10px 0;"}
+            [:td {:style number-cell-style}
              (+ 4 idx)]
-            [:td {:style "border: 1px solid #2c5234; padding: 6px 8px; width: 40%; vertical-align: middle;"}
+            [:td {:style (str cell-style " width: 40%; vertical-align: middle;")}
              (or item2 "\u00A0")]]))
        col1)]]))
 
@@ -97,33 +126,22 @@
   (let [tulokset (:tulokset vaihe)]
     [:div {:style "margin-top: 24px;"}
      [:h2 (l :energiankulutuksen-muutos-lahtotilanteesta)]
-     [:table {:role "presentation" :style "width: 100%; border-collapse: collapse; table-layout: fixed;"}
+     [:table {:role "presentation" :style table-style}
       [:tr
        (for [header [:kaukolampo :sahko :uusiutuvat-pat :fossiiliset-pat :kaukojaahdytys]]
-         [:th {:style "width: 20%; border: 1px solid #2c5234; background-color: #2c5234; color: #ffffff; font-weight: bold; text-align: left; padding: 10px 5px; font-size: 14px;"}
+         [:th {:style header-cell-style}
           (l header)])]
       [:tr
        (for [key [:kaukolampo :sahko :uusiutuvat-pat :fossiiliset-pat :kaukojaahdytys]]
-         [:td {:style "border: 1px solid #2c5234; padding: 6px 8px;"}
+         [:td {:style cell-style}
           (or (unwrap-monet (get tulokset (get perusparannuspassi-service/energy-keys-laskennallinen key))) "-")])]]]))
 
 (defn- render-energiankulutus-kustannukset-ja-co2-paastot [vaihe l]
   (let [tulokset (:tulokset vaihe)
-        get-val (fn [k] (or (unwrap-monet (get tulokset k)) 0))
-        ostoenergian-kokonaistarve (reduce + (map get-val (vals perusparannuspassi-service/energy-keys-laskennallinen)))
-        toteutunut-ostoenergian-kulutus (reduce + (map get-val perusparannuspassi-service/energy-keys-toteutunut))
-        toteutunut-energiakustannus (or (unwrap-monet (get tulokset :toteutunut-energiakustannus))
-                                        (reduce + (for [[short-key _] perusparannuspassi-service/energy-keys-laskennallinen]
-                                                    (let [toteutunut-key (keyword (str "toteutunut-ostoenergia-" (name short-key)))
-                                                          energy (get-val toteutunut-key)
-                                                          price-key (get perusparannuspassi-service/price-keys short-key)
-                                                          price (get-val price-key)]
-                                                      (* energy price 0.01)))))
-        hiilidioksidipaastot (or (unwrap-monet (get tulokset :hiilidioksidipaastot))
-                                 (reduce + (for [[short-key laskennallinen-key] perusparannuspassi-service/energy-keys-laskennallinen]
-                                             (let [energy (get-val laskennallinen-key)
-                                                   factor (get perusparannuspassi-service/paastokertoimet short-key 0)]
-                                               (* energy factor)))))]
+        {:keys [ostoenergian-kokonaistarve
+                toteutunut-ostoenergian-kulutus
+                toteutunut-energiakustannus
+                hiilidioksidipaastot]} (calculate-totals tulokset)]
     [:div {:style "margin-top: 24px;"}
      [:h2 (l :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen)]
      [:table {:role "presentation" :style "width: 100%; border-collapse: collapse;"}
@@ -133,9 +151,9 @@
                                 [(l :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio) (format "%.2f" (double toteutunut-energiakustannus)) (l :euroa-vuosi)]
                                 [(l :energiankaytosta-aiheutuvat-hiilidioksidipaastot-laskennallinen) (format "%.2f" (double hiilidioksidipaastot)) (l :tco2ekv-vuosi)]]]
         [:tr
-         [:th {:scope "row" :style "border: 1px solid #2c5234; padding: 6px 8px; text-align: left; font-weight: normal; width: 70%;"} label]
-         [:td {:style "border: 1px solid #2c5234; padding: 6px 8px; width: 12%;"} (or value "-")]
-         [:td {:style "border: 1px solid #2c5234; padding: 6px 8px; width: 18%;"} unit]])]]))
+         [:th {:scope "row" :style row-header-style} label]
+         [:td {:style (str cell-style " width: 12%;")} (or value "-")]
+         [:td {:style (str cell-style " width: 18%;")} unit]])]]))
 
 (defn render-page [params vaihe-nro]
   (let [{:keys [kieli toimenpide-ehdotukset]} params
