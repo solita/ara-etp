@@ -62,10 +62,10 @@
           announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
         }
       },
-      result => {
+      ({newPerusparannuspassiId}) => {
         toggleOverlay(false);
         announceSuccess($_('energiatodistus.messages.save-success'));
-        onSuccessfulSave();
+        onSuccessfulSave(newPerusparannuspassiId);
       },
       R.chain(
         Future.after(400),
@@ -75,7 +75,7 @@
             params.version,
             params.id
           )(energiatodistus),
-          perusparannuspassi: R.cond([
+          newPerusparannuspassiId: R.cond([
             [
               /* PPP has an ID so it has been submitted at least once */
               R.always(perusparannuspassi?.id),
@@ -83,19 +83,23 @@
               /* Always keep PPP state in sync with the local
                * (could well have no effect for a PPP that has valid: false) */
               () =>
-                pppApi.putPerusparannuspassi(
+                R.map(
+                  R.always(Maybe.None()),
+                  pppApi.putPerusparannuspassi(
                   fetch,
                   perusparannuspassi.id,
                   perusparannuspassi
-                )
+                ))
             ],
             [
               /* PPP has no ID but is marked as valid, so we are likely making a first save
                * for a newly added PPP */
               R.always(perusparannuspassi?.valid),
-              () => pppApi.postPerusparannuspassi(fetch, perusparannuspassi)
+              () => {
+                return R.map(ppp => Maybe.Some(ppp.id), pppApi.postPerusparannuspassi(fetch, perusparannuspassi))
+              }
             ],
-            [R.T, () => Future.resolve({})]
+            [R.T, () => Future.resolve(Maybe.None())]
           ])()
         })
       )

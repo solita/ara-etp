@@ -86,7 +86,7 @@
     const onSuccesfulResponse = etResult => {
       toggleOverlay(false);
       announceSuccess($_('energiatodistus.messages.save-success'));
-      onSuccessfulSave();
+      onSuccessfulSave(Maybe.None());
       replace(`/energiatodistus/${params.version}/${etResult.id}`);
     };
 

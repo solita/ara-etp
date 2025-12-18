@@ -12,7 +12,7 @@ import * as schema from './schema.js';
 
 export const postPerusparannuspassi = R.curry((fetch, perusparannuspassi) =>
   R.compose(
-    R.chain(Fetch.rejectWithInvalidResponse),
+    Fetch.responseAsJson,
     Future.encaseP(
       Fetch.fetchWithMethod(
         fetch,
