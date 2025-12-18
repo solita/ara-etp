@@ -1,5 +1,4 @@
 <script>
-  // TODO: AE-2690: RENAME FILES TO kebab-case!
   import * as R from 'ramda';
   import { loc, replace } from 'svelte-spa-router';
   import { tick } from 'svelte';
@@ -13,8 +12,8 @@
   import { pppRequired } from './perusparannuspassi-utils.js';
 
   import Signing from './signing/SigningDialog.svelte';
-  import EnergiatodistusForm from './EnergiatodistusForm.svelte';
-  import PppForm from './PPPForm.svelte';
+  import EtForm from './et-form.svelte';
+  import PppForm from './ppp-form.svelte';
   import * as EtValidations from './validation';
   import * as Inputs from './inputs';
   import * as Postinumero from '@Component/address/postinumero-fi';
@@ -257,7 +256,7 @@
           dirty = true;
         }}
         on:reset={reset}>
-        <EnergiatodistusForm
+        <EtForm
           {ETForm}
           {version}
           {luokittelut}

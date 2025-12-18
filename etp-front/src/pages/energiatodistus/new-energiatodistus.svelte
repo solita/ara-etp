@@ -21,7 +21,7 @@
 
   import * as Response from '@Utility/response';
   import { announcementsForModule } from '@Utility/announce';
-  import EtPppForm from '@Pages/energiatodistus/EtPppForm.svelte';
+  import EtPppForm from '@Pages/energiatodistus/et-ppp-form.svelte';
 
   export let params;
   const i18n = $_;

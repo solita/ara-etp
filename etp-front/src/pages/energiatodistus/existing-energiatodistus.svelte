@@ -20,7 +20,7 @@
   import Spinner from '@Component/Spinner/Spinner';
 
   import { announcementsForModule } from '@Utility/announce';
-  import EtPppForm from '@Pages/energiatodistus/EtPppForm.svelte';
+  import EtPppForm from '@Pages/energiatodistus/et-ppp-form.svelte';
 
   export let params;
 
