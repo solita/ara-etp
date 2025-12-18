@@ -370,25 +370,26 @@
      font-size: 14px;
    }
 
-   table.lisatietoja-sivu {
-     display: table;
-     border-collapse: collapse;
-     -fs-border-rendering: no-bevel;
-     margin-top: 0;
+  .lisatietoja-box {
+    display: block;
+    border: 1px solid #2c5234;
+    padding: 3px;
+    border-top: none;
+    font-size: 13.8px;
+    }
+
+   .lisatietoja-field {
+     min-height: 180mm;
    }
 
-    table.lisatietoja-sivu th,
-    table.lisatietoja-sivu td {
-      display: table-cell;
-      border: 1px solid #2c5234;
-      font-size: 13.8px;
-      padding: 3px;
-   }
-
-   td.lisatietoja-field {
-     min-height: 185mm;
-     vertical-align: top;
-   }
+   .lisatietoja-sivu-otsikko {
+     background-color: #2c5234;
+     color: white;
+     font-weight: bold;
+     padding: 5px 8px;
+     font-size: 14px;
+     margin: 0;
+    }
 
    }"))
 
