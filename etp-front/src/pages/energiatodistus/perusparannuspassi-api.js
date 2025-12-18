@@ -6,7 +6,6 @@ import * as Future from '@Utility/future-utils';
 import * as Fetch from '@/utils/fetch-utils.js';
 import * as Maybe from '@Utility/maybe-utils.js';
 
-import * as empty from '@Pages/energiatodistus/empty.js';
 import * as deep from '@/utils/deep-objects.js';
 import * as schema from './schema.js';
 
@@ -22,23 +21,6 @@ export const postPerusparannuspassi = R.curry((fetch, perusparannuspassi) =>
     ),
     serialize
   )(perusparannuspassi)
-);
-
-export const addPerusparannuspassi = R.curry((fetch, energiatodistusId) =>
-  R.compose(
-    R.map(R.prop('id')),
-    Fetch.responseAsJson,
-    Future.encaseP(
-      Fetch.fetchWithMethod(
-        fetch,
-        'post',
-        '/api/private/perusparannuspassit/2026'
-      )
-    ),
-    serialize,
-    R.assoc('valid', true),
-    empty.perusparannuspassi
-  )(energiatodistusId)
 );
 
 // This is somewhat different route than with energiatodistus. With energiatodistus inputtable values out of schema
