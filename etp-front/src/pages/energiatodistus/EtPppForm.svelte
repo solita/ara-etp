@@ -27,8 +27,6 @@
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
 
-  export let config;
-
   export let version;
   export let valvonta;
   export let pppValidation;

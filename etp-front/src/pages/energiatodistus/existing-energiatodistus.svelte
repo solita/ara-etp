@@ -6,7 +6,6 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as versionApi from '@Component/Version/version-api';
 
   import * as empty from '@Pages/energiatodistus/empty';
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
@@ -38,17 +37,6 @@
   };
 
   let showMissingProperties;
-
-  let config = {};
-  Future.fork(
-    _ => {
-      config = {};
-    },
-    loadedConfig => {
-      config = loadedConfig;
-    },
-    versionApi.getConfig
-  );
 
   const submit = (energiatodistus, perusparannuspassi, onSuccessfulSave) => {
     toggleOverlay(true);

@@ -18,7 +18,6 @@
   import * as kayttajaApi from '@Pages/kayttaja/kayttaja-api';
   import * as laatijaApi from '@Pages/laatija/laatija-api';
   import * as laskutusApi from '@Utility/api/laskutus-api';
-  import * as versionApi from '@Component/Version/version-api';
 
   import * as Response from '@Utility/response';
   import { announcementsForModule } from '@Utility/announce';
@@ -38,17 +37,6 @@
 
   // TODO: AE-2690: Do we want this for new?
   let showMissingProperties;
-
-  let config = {};
-  Future.fork(
-    _ => {
-      config = {};
-    },
-    loadedConfig => {
-      config = loadedConfig;
-    },
-    versionApi.getConfig
-  );
 
   const emptyEnergiatodistus = versio =>
     R.cond([

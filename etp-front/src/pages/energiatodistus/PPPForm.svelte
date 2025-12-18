@@ -7,8 +7,6 @@
   import H3 from '@Component/H/H3';
   import HR from '@Component/HR/HR';
   import TextButton from '@Component/Button/TextButton';
-  import * as Maybe from '@Utility/maybe-utils';
-  import * as empty from './empty.js';
 
   import Perustiedot from './form-parts-ppp/ppp-perustiedot';
   import RakenteidenUArvot from './form-parts-ppp/rakenteiden-u-arvot';
