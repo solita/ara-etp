@@ -95,7 +95,11 @@
         :lisatietoja3                      "Lisätietoa rakennusten energiatehokkuudesta: www.motiva.fi"
         :lisatietoja4                      "Perusparannuspassin digiversio saatavilla osoitteesta www.energiatodistusrekisteri.fi"
         :lisatietoja5                      "Laskentatyökalun nimi ja versionumero: www.laskentapalvelut.fi, versio 1.5"
-        :voimassa-olo                      "Perusparannuspassi on voimassa 1.1.2050 asti tai voimassa olevan lainsäädännön mukaisesti"}
+        :voimassa-olo                      "Perusparannuspassi on voimassa 1.1.2050 asti tai voimassa olevan lainsäädännön mukaisesti"
+        :lisatietoja-otsikko               "Lisätietoja"
+        :perusparannuspassi-info           "Perusparannuspassi on tilaajalle vapaaehtoinen. Energiatodistus voidaan laatia ilman perusparannuspassia.\n
+                                            Perusparannuspassissa esitetyt eri vaiheiden toteutuneet kulutukset ja kustannukset ovat arvioita. Laskel-\n
+                                            missa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen\nverrattuna."}
 
    :sv {:rakennuksen-nimi                  "Byggnadens namn"
         :rakennuksen-osoite                "Byggnadens adress"
@@ -189,7 +193,11 @@
         :lisatietoja3                      "Lisätietoa rakennusten energiatehokkuudesta: www.motiva.fi (sv)"
         :lisatietoja4                      "Perusparannuspassin digiversio saatavilla osoitteesta www.energiatodistusrekisteri.fi (sv)"
         :lisatietoja5                      "Laskentatyökalun nimi ja versionumero: www.laskentapalvelut.fi, versio 1.5 (sv)"
-        :voimassa-olo                      "Perusparannuspassi on voimassa 1.1.2050 asti tai voimassa olevan lainsäädännön mukaisesti (sv)"}})
+        :voimassa-olo                      "Perusparannuspassi on voimassa 1.1.2050 asti tai voimassa olevan lainsäädännön mukaisesti (sv)"
+        :lisatietoja-otsikko               "Lisätietoja (sv)"
+        :perusparannuspassi-info           "Perusparannuspassi on tilaajalle vapaaehtoinen. Energiatodistus voidaan laatia ilman perusparannuspassia.\n
+                                            Perusparannuspassissa esitetyt eri vaiheiden toteutuneet kulutukset ja kustannukset ovat arvioita. Laskel-\n
+                                            missa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen\nverrattuna.(sv)"}})
 
 
 (defn et-perustiedot-kayttotarkoitus->description
