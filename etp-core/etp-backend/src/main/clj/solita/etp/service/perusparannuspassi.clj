@@ -17,6 +17,34 @@
    :tulokset                :t
    :toimenpiteet            :tp})
 
+(def energy-keys-laskennallinen
+  {:kaukolampo      :ostoenergian-tarve-kaukolampo
+   :sahko           :ostoenergian-tarve-sahko
+   :uusiutuvat-pat  :ostoenergian-tarve-uusiutuvat-pat
+   :fossiiliset-pat :ostoenergian-tarve-fossiiliset-pat
+   :kaukojaahdytys  :ostoenergian-tarve-kaukojaahdytys})
+
+(def energy-keys-toteutunut
+  [:toteutunut-ostoenergia-kaukolampo
+   :toteutunut-ostoenergia-sahko
+   :toteutunut-ostoenergia-uusiutuvat-pat
+   :toteutunut-ostoenergia-fossiiliset-pat
+   :toteutunut-ostoenergia-kaukojaahdytys])
+
+(def paastokertoimet
+  {:kaukolampo      0.059
+   :sahko           0.05
+   :uusiutuvat-pat  0.027
+   :fossiiliset-pat 0.306
+   :kaukojaahdytys  0.014})
+
+(def price-keys
+  {:kaukolampo      :kaukolampo-hinta
+   :sahko           :sahko-hinta
+   :uusiutuvat-pat  :uusiutuvat-pat-hinta
+   :fossiiliset-pat :fossiiliset-pat-hinta
+   :kaukojaahdytys  :kaukojaahdytys-hinta})
+
 (defn tree->flat [ppp]
   (->> ppp
        (flat/tree->flat "$")))

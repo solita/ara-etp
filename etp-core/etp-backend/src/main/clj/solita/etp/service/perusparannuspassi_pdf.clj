@@ -14,7 +14,8 @@
     [solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot :as laskennan-taustatiedot]
     [solita.etp.service.luokittelu :as luokittelu-service]
     [solita.etp.service.perusparannuspassi-pdf.lisatietoja :as lisatietoja]
-    [solita.etp.service.perusparannuspassi-pdf.vaiheissa-toteutettavat-toimenpiteet :as vaiheissa-toteutettavat-toimenpiteet])
+    [solita.etp.service.perusparannuspassi-pdf.vaiheissa-toteutettavat-toimenpiteet :as vaiheissa-toteutettavat-toimenpiteet]
+    [solita.etp.service.toimenpide-ehdotus :as toimenpide-ehdotus-service])
   (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
@@ -465,10 +466,10 @@
         (pdf-service/html->pdf output-stream))
     (-> output-stream .toByteArray)))
 
-(defn- generate-perusparannuspassi-pdf
+(defn generate-perusparannuspassi-pdf
   "Generate a perusparannuspassi PDF and return it as a byte array."
   [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
-   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?]
+   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?]
   (let [kieli-keyword (keyword kieli)
         pdf-bytes
 
@@ -482,7 +483,8 @@
            :mahdollisuus-liittya  mahdollisuus-liittya
            :uusiutuva-energia     uusiutuva-energia
            :lammitysmuodot        lammitysmuodot
-           :ilmanvaihtotyypit     ilmanvaihtotyypit})
+           :ilmanvaihtotyypit     ilmanvaihtotyypit
+           :toimenpide-ehdotukset toimenpide-ehdotukset})
         watermark-text (cond
                          draft? (draft-watermark-texts kieli)
                          (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
@@ -496,9 +498,9 @@
   "Generate a perusparannuspassi PDF and return it as an InputStream.
    Applies watermarks via post-processing with PDFBox."
   [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
-   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?]
+   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?]
   (let [pdf-bytes (generate-perusparannuspassi-pdf perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
-                                                   mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?)]
+                                                   mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?)]
     (ByteArrayInputStream. pdf-bytes)))
 
 (defn find-perusparannuspassi-pdf
@@ -523,7 +525,8 @@
           uusiutuva-energia (luokittelu-service/find-uusiutuva-energia db)
           lammitysmuodot (luokittelu-service/find-lammitysmuodot db)
           ilmanvaihtotyypit (luokittelu-service/find-ilmanvaihtotyypit db)
+          toimenpide-ehdotukset (toimenpide-ehdotus-service/find-all db)
           draft? true]
       ;; Always show draft watermark for now (no signing yet)
       (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
-                                    mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?))))
+                                    mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?))))

@@ -100,7 +100,7 @@
         :lisatietoja-otsikko               "Lisätietoja"
         :perusparannuspassi-info           "Perusparannuspassi on tilaajalle vapaaehtoinen. Energiatodistus voidaan laatia ilman perusparannuspassia.\n
                                             Perusparannuspassissa esitetyt eri vaiheiden toteutuneet kulutukset ja kustannukset ovat arvioita. Laskel-\n
-                                            missa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen\nverrattuna."}
+                                            missa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen\nverrattuna."
 
         :toimenpideseloste                 "Toimenpideseloste"
         :energiankulutuksen-muutos-lahtotilanteesta "Energiankulutuksen muutos lähtötilanteesta, laskennallinen [kWh/vuosi]"
@@ -234,7 +234,7 @@
         :kwh-vuosi                         "kWh/år"
         :prosenttia                        "%"
         :euroa-vuosi                       "€/år"
-        :tco2ekv-vuosi                     "tCO2ekv/år"})
+        :tco2ekv-vuosi                     "tCO2ekv/år"}})
 
 (defn et-perustiedot-kayttotarkoitus->description
   "To use this you must provide the list of alakayttotarkoitukset as fetched from the DB for the correct version. At the
