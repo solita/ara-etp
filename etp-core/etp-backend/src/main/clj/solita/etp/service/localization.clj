@@ -96,7 +96,7 @@
         :lisatietoja3                      "Lisätietoa rakennusten energiatehokkuudesta: www.motiva.fi"
         :lisatietoja4                      "Perusparannuspassin digiversio saatavilla osoitteesta www.energiatodistusrekisteri.fi"
         :lisatietoja5                      "Laskentatyökalun nimi ja versionumero: www.laskentapalvelut.fi, versio 1.5"
-        :voimassa-olo                      "Perusparannuspassi on voimassa 1.1.2050 asti tai voimassa olevan lainsäädännön mukaisesti"}
+        :voimassa-olo                      "Perusparannuspassi on voimassa 1.1.2050 asti tai voimassa olevan lainsäädännön mukaisesti"
 
         :toimenpideseloste                 "Toimenpideseloste"
         :energiankulutuksen-muutos-lahtotilanteesta "Energiankulutuksen muutos lähtötilanteesta, laskennallinen [kWh/vuosi]"
@@ -191,7 +191,7 @@
         :kwh-vuosi                         "kWh/år"
         :prosenttia                        "%"
         :euroa-vuosi                       "€/år"
-        :tco2ekv-vuosi                     "tCO2ekv/år"})
+        :tco2ekv-vuosi                     "tCO2ekv/år"}})
 
 (defn et-perustiedot-kayttotarkoitus->description
   "To use this you must provide the list of alakayttotarkoitukset as fetched from the DB for the correct version. At the
