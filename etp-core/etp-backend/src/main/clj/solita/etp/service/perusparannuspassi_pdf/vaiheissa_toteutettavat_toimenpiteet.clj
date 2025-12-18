@@ -6,7 +6,9 @@
 
 (defn- get-vaihe-data [params vaihe-nro]
   (let [{:keys [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset]} params
-        vaihe (first (filter #(= (:vaihe-nro %) vaihe-nro) (:vaiheet perusparannuspassi)))]
+        vaiheet (:vaiheet perusparannuspassi)
+        vaihe (first (filter #(= (:vaihe-nro %) vaihe-nro) vaiheet))
+        seuraava-vaihe (first (filter #(= (:vaihe-nro %) (inc vaihe-nro)) vaiheet))]
     (when vaihe
       (let [versio 2018
             e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus vaihe)
@@ -16,6 +18,7 @@
                                                     e-luku)
                          :e-luokka)]
         {:vaihe vaihe
+         :seuraava-vaihe seuraava-vaihe
          :e-luku e-luku
          :e-luokka e-luokka}))))
 
@@ -25,7 +28,7 @@
       (unwrap-monet val))
     v))
 
-(defn- render-toimenpide-ehdotukset [vaihe kieli l toimenpide-ehdotukset-defs]
+(defn- render-toimenpide-ehdotukset [vaihe seuraava-vaihe kieli l toimenpide-ehdotukset-defs]
   (let [toimenpide-ehdotukset-items (->> (get-in vaihe [:toimenpiteet :toimenpide-ehdotukset])
                                          (map unwrap-monet))
         label-key (if (= (keyword kieli) :sv) :label-sv :label-fi)
@@ -41,11 +44,26 @@
         slots (take 6 (concat toimenpide-ehdotukset (repeat nil)))
         [col1 col2] (split-at 3 slots)
         alku-pvm (unwrap-monet (get-in vaihe [:tulokset :vaiheen-alku-pvm]))
-        vuosi (if alku-pvm (.getYear alku-pvm) nil)
-        title-suffix (if vuosi (str " " vuosi "–" (+ vuosi 3)) "")
+        seuraava-alku-pvm (if seuraava-vaihe
+                            (unwrap-monet (get-in seuraava-vaihe [:tulokset :vaiheen-alku-pvm]))
+                            nil)
+        vuosi (cond
+                (number? alku-pvm) (int alku-pvm)
+                alku-pvm (.getYear alku-pvm)
+                :else nil)
+        seuraava-vuosi (cond
+                         (number? seuraava-alku-pvm) (int seuraava-alku-pvm)
+                         seuraava-alku-pvm (.getYear seuraava-alku-pvm)
+                         :else nil)
+        end-year (if seuraava-vuosi
+                   (dec seuraava-vuosi)
+                   (if vuosi (+ vuosi 4) nil))
+        title-suffix (if (and vuosi end-year)
+                       (str " " vuosi "–" end-year)
+                       (if vuosi (str " " vuosi) ""))
         title-text (str (l :toimenpide-ehdotukset) title-suffix)]
     [:div
-     [:h2 title-text]
+     [:h2 {:style "margin-top: 0;"} title-text]
      [:table {:role "presentation" :style "width: 100%; border-collapse: collapse; table-layout: fixed;"}
       (map-indexed
        (fn [idx item1]
@@ -124,11 +142,15 @@
         l (kieli loc/ppp-pdf-localization)
         vaihe-data (get-vaihe-data params vaihe-nro)]
     (if vaihe-data
-      (let [{:keys [vaihe e-luku e-luokka]} vaihe-data]
+      (let [{:keys [vaihe e-luku e-luokka]} vaihe-data
+            title-text (format (l :vaiheessa-n-toteutettavat-toimenpiteet) vaihe-nro)
+            parts (clojure.string/split title-text (re-pattern (str "(?<=" vaihe-nro ")")))]
         {:title [:table {:style "width: 100%; border-collapse: collapse; margin-top: -10px;"}
                  [:tr
                   [:td {:style "vertical-align: top;"}
-                   (format (l :vaiheessa-n-toteutettavat-toimenpiteet) vaihe-nro)]
+                   (if (> (count parts) 1)
+                     [:span (first parts) [:br] (clojure.string/join "" (rest parts))]
+                     title-text)]
                   [:td {:style "text-align: right; vertical-align: top;"}
                    (let [color (get tv/colors-by-e-luokka e-luokka "#e8b63e")
                          vaihe-title (str (l :vaihe) " " vaihe-nro)
@@ -141,7 +163,7 @@
        :content [:table {:style "width: 100%; height: 100%; border-collapse: collapse;"}
                  [:tr
                   [:td {:style "vertical-align: top;"}
-                   (render-toimenpide-ehdotukset vaihe kieli l toimenpide-ehdotukset)
+                   (render-toimenpide-ehdotukset vaihe (:seuraava-vaihe vaihe-data) kieli l toimenpide-ehdotukset)
                    (render-toimenpideseloste vaihe kieli l)]]
                  [:tr {:style "height: 100%;"}
                   [:td]]
