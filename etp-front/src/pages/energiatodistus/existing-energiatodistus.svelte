@@ -170,7 +170,7 @@
       },
       R.chain(
         response => {
-          const pppId = response.energiatodistus['perusparannuspassi-id'];
+          const pppId = Maybe.fromNull(response.energiatodistus['perusparannuspassi-id']).join();
 
           return R.map(
             R.mergeLeft(response),
@@ -186,6 +186,7 @@
               )(pppId)
             })
           );
+
         },
         Future.parallelObject(7, {
           energiatodistus: api.getEnergiatodistusById(
