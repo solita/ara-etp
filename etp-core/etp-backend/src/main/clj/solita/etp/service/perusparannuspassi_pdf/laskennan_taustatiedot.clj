@@ -187,4 +187,3 @@
    :lt-mahdollisuus-liittya (lt-mahdollisuus-liittya params)
    :lt-lisatiedot (lt-lisatiedot params)
    :lt-voimassa-olo (lt-voimassa-olo params)})
-
