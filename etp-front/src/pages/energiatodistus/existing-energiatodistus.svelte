@@ -6,14 +6,8 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
-  import * as versionApi from '@Component/Version/version-api';
-  import { isEtp2026Enabled } from '@Utility/config_utils.js';
-  import * as Schema from '@Pages/energiatodistus/schema';
 
-  import EnergiatodistusForm from '@Pages/energiatodistus/EnergiatodistusForm';
-  import PPPForm from '@Pages/energiatodistus/ppp-form.svelte';
-  import PPPSection from '@Pages/energiatodistus/PPPSection.svelte';
-
+  import * as empty from '@Pages/energiatodistus/empty';
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as pppApi from '@Pages/energiatodistus/perusparannuspassi-api';
@@ -26,6 +20,7 @@
   import Spinner from '@Component/Spinner/Spinner';
 
   import { announcementsForModule } from '@Utility/announce';
+  import EtPppForm from '@Pages/energiatodistus/et-ppp-form.svelte';
 
   export let params;
 
@@ -43,105 +38,8 @@
 
   let showMissingProperties;
 
-  let config = {};
-  Future.fork(
-    _ => {
-      config = {};
-    },
-    loadedConfig => {
-      config = loadedConfig;
-    },
-    versionApi.getConfig
-  );
-
-  // PPP state
-  let perusparannuspassi = Maybe.None();
-  let showPPP = false;
-
-  // Add PPP - creates a new perusparannuspassi via API
-  const addPerusparannuspassi = energiatodistusId => () => {
-    // If PPP already exists but is hidden, just show it
-    if (perusparannuspassi && !Maybe.isNone(perusparannuspassi)) {
-      showPPP = !showPPP;
-      return;
-    }
-
-    // Create a new PPP via API (backend will resurrect soft-deleted PPP if exists)
-    if (!showPPP && (!perusparannuspassi || Maybe.isNone(perusparannuspassi))) {
-      toggleOverlay(true);
-      Future.fork(
-        _response => {
-          toggleOverlay(false);
-          announceError(i18n('energiatodistus.messages.add-ppp-error'));
-        },
-        id => {
-          // After creation, fetch the full PPP object
-          Future.fork(
-            _response => {
-              toggleOverlay(false);
-              announceError(i18n('energiatodistus.messages.add-ppp-error'));
-            },
-            result => {
-              perusparannuspassi = result;
-              showPPP = true;
-              toggleOverlay(false);
-              announceSuccess(i18n('energiatodistus.messages.add-ppp-success'));
-            },
-            pppApi.getPerusparannuspassi(fetch, id)
-          );
-        },
-        pppApi.addPerusparannuspassi(fetch, energiatodistusId)
-      );
-    }
-  };
-
-  // Delete PPP - deletes immediately via API
-  const deletePerusparannuspassi = () => {
-    if (perusparannuspassi && perusparannuspassi.id) {
-      toggleOverlay(true);
-      Future.fork(
-        _response => {
-          toggleOverlay(false);
-          announceError(i18n('energiatodistus.messages.delete-ppp-error'));
-        },
-        _success => {
-          perusparannuspassi = Maybe.None();
-          showPPP = false;
-          toggleOverlay(false);
-          announceSuccess(
-            i18n('energiatodistus.messages.mark-ppp-for-deletion')
-          );
-        },
-        pppApi.deletePerusparannuspassi(fetch, perusparannuspassi.id)
-      );
-    }
-  };
-
-  const submit = (energiatodistus, onSuccessfulSave) => {
+  const submit = (energiatodistus, perusparannuspassi, onSuccessfulSave) => {
     toggleOverlay(true);
-
-    const saveFuture =
-      perusparannuspassi && perusparannuspassi.id
-        ? Future.parallelObject(2, {
-            energiatodistus: api.putEnergiatodistusById(
-              fetch,
-              params.version,
-              params.id
-            )(energiatodistus),
-            perusparannuspassi: pppApi.putPerusparannuspassi(
-              fetch,
-              perusparannuspassi.id,
-              perusparannuspassi
-            )
-          })
-        : R.map(
-            energiatodistus => ({ energiatodistus }),
-            api.putEnergiatodistusById(
-              fetch,
-              params.version,
-              params.id
-            )(energiatodistus)
-          );
 
     Future.fork(
       response => {
@@ -152,12 +50,51 @@
           announceError(i18n(Response.errorKey(i18nRoot, 'save', response)));
         }
       },
-      result => {
+      ({ newPerusparannuspassiId }) => {
         toggleOverlay(false);
         announceSuccess($_('energiatodistus.messages.save-success'));
-        onSuccessfulSave();
+        onSuccessfulSave(newPerusparannuspassiId);
       },
-      R.chain(Future.after(400), saveFuture)
+      R.chain(
+        Future.after(400),
+        Future.parallelObject(2, {
+          energiatodistus: api.putEnergiatodistusById(
+            fetch,
+            params.version,
+            params.id
+          )(energiatodistus),
+          newPerusparannuspassiId: R.cond([
+            [
+              /* PPP has an ID so it has been submitted at least once */
+              R.always(perusparannuspassi?.id),
+
+              /* Always keep PPP state in sync with the local
+               * (could well have no effect for a PPP that has valid: false) */
+              () =>
+                R.map(
+                  R.always(Maybe.None()),
+                  pppApi.putPerusparannuspassi(
+                    fetch,
+                    perusparannuspassi.id,
+                    perusparannuspassi
+                  )
+                )
+            ],
+            [
+              /* PPP has no ID but is marked as valid, so we are likely making a first save
+               * for a newly added PPP */
+              R.always(perusparannuspassi?.valid),
+              () => {
+                return R.map(
+                  ppp => Maybe.Some(ppp.id),
+                  pppApi.postPerusparannuspassi(fetch, perusparannuspassi)
+                );
+              }
+            ],
+            [R.T, () => Future.resolve(Maybe.None())]
+          ])()
+        })
+      )
     );
   };
 
@@ -166,8 +103,6 @@
     toggleOverlay(true);
     // form is recreated in reload - side effect is scroll to up
     resources = Maybe.None();
-    perusparannuspassi = Maybe.None();
-    showPPP = false;
 
     Future.fork(
       response => {
@@ -177,19 +112,6 @@
       },
       response => {
         resources = Maybe.Some(response);
-
-        // Set PPP if it exists and is valid
-        if (
-          response.perusparannuspassi &&
-          response.perusparannuspassi.valid !== false
-        ) {
-          perusparannuspassi = response.perusparannuspassi;
-          showPPP = true;
-        } else {
-          perusparannuspassi = Maybe.None();
-          showPPP = false;
-        }
-
         toggleOverlay(false);
       },
       R.chain(
@@ -202,10 +124,12 @@
               laskutusosoitteet: laatijaApi.laskutusosoitteet(
                 Maybe.get(response.energiatodistus['laatija-id'])
               ),
-              perusparannuspassi:
-                pppId && Maybe.isSome(pppId)
-                  ? pppApi.getPerusparannuspassi(fetch, Maybe.get(pppId))
-                  : Future.resolve(null)
+              perusparannuspassi: Maybe.fold(
+                Future.resolve(
+                  empty.perusparannuspassi(response.energiatodistus.id)
+                ),
+                pppId => pppApi.getPerusparannuspassi(fetch, pppId)
+              )(pppId)
             })
           );
         },
@@ -217,7 +141,7 @@
           luokittelut: api.luokittelutForVersion(params.version),
           whoami: kayttajaApi.whoami,
           validation: api.validation(params.version),
-          pppvalidation: pppApi.pppValidation(params.version),
+          pppValidation: pppApi.pppValidation(params.version),
           valvonta: ValvontaApi.getValvonta(params.id),
           verkkolaskuoperaattorit: laskutusApi.verkkolaskuoperaattorit
         })
@@ -233,20 +157,12 @@
     `${$_('energiatodistus.title')} ${params.version}/${
       params.id
     } - ${tilaLabel(energiatodistus)}`;
-
-  let energiatodistusFormComponent;
-  const setFormDirty = () => {
-    if (energiatodistusFormComponent) {
-      energiatodistusFormComponent.$set({ dirty: true });
-    }
-  };
 </script>
 
 <Overlay {overlay}>
   <div slot="content">
-    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, whoami, validation, valvonta, verkkolaskuoperaattorit, laskutusosoitteet, pppvalidation }}
-      <EnergiatodistusForm
-        bind:this={energiatodistusFormComponent}
+    {#each Maybe.toArray(resources) as { energiatodistus, luokittelut, validation, whoami, verkkolaskuoperaattorit, laskutusosoitteet, perusparannuspassi, pppValidation, valvonta }}
+      <EtPppForm
         version={params.version}
         {energiatodistus}
         {perusparannuspassi}
@@ -256,30 +172,10 @@
         {valvonta}
         {verkkolaskuoperaattorit}
         {laskutusosoitteet}
-        {pppvalidation}
+        {pppValidation}
         bind:showMissingProperties
         {submit}
-        title={title(energiatodistus)}>
-        <!-- PPP section as slot content -->
-        {#if isEtp2026Enabled(config) && params.version == 2026}
-          <PPPSection
-            {showPPP}
-            onAddPPP={addPerusparannuspassi(energiatodistus.id)}
-            onDeletePPP={deletePerusparannuspassi}>
-            {#if perusparannuspassi}
-              <div on:input={setFormDirty} on:change={setFormDirty}>
-                <PPPForm
-                  {energiatodistus}
-                  inputLanguage={'fi'}
-                  {luokittelut}
-                  {pppvalidation}
-                  bind:perusparannuspassi
-                  schema={Schema.perusparannuspassi} />
-              </div>
-            {/if}
-          </PPPSection>
-        {/if}
-      </EnergiatodistusForm>
+        title={title(energiatodistus)} />
     {/each}
   </div>
   <div slot="overlay-content">

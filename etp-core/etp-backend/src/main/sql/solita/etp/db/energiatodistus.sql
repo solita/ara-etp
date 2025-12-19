@@ -24,7 +24,7 @@ select energiatodistus.*,
 from energiatodistus
   inner join kayttaja on kayttaja.id = energiatodistus.laatija_id
   left join energiatodistus korvaava_energiatodistus on korvaava_energiatodistus.korvattu_energiatodistus_id = energiatodistus.id
-  left join perusparannuspassi ppp on ppp.energiatodistus_id = energiatodistus.id and ppp.valid = true
+  left join perusparannuspassi ppp on ppp.energiatodistus_id = energiatodistus.id
 where energiatodistus.id = :id
   and energiatodistus.tila_id <> (select poistettu FROM et_tilat);
 
