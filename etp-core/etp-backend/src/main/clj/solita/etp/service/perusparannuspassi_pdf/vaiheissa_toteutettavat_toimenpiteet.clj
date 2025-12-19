@@ -22,12 +22,6 @@
          :e-luku e-luku
          :e-luokka e-luokka}))))
 
-(defn- unwrap-monet [v]
-  (if (and (map? v) (or (contains? v :val) (contains? v :value)))
-    (let [val (or (:val v) (:value v))]
-      (unwrap-monet val))
-    v))
-
 (def ^:private table-style "width: 100%; border-collapse: collapse; table-layout: fixed;")
 (def ^:private cell-style "border: 1px solid #2c5234; padding: 6px 8px;")
 (def ^:private header-cell-style "width: 20%; border: 1px solid #2c5234; background-color: #2c5234; color: #ffffff; font-weight: bold; text-align: left; padding: 10px 5px; font-size: 14px;")
@@ -35,9 +29,9 @@
 (def ^:private row-header-style "border: 1px solid #2c5234; padding: 6px 8px; text-align: left; font-weight: normal; width: 70%;")
 
 (defn- format-year-range [vaihe seuraava-vaihe]
-  (let [alku-pvm (unwrap-monet (get-in vaihe [:tulokset :vaiheen-alku-pvm]))
+  (let [alku-pvm (get-in vaihe [:tulokset :vaiheen-alku-pvm])
         seuraava-alku-pvm (when seuraava-vaihe
-                            (unwrap-monet (get-in seuraava-vaihe [:tulokset :vaiheen-alku-pvm])))
+                            (get-in seuraava-vaihe [:tulokset :vaiheen-alku-pvm]))
         start-year (cond
                      (number? alku-pvm) (int alku-pvm)
                      alku-pvm (.getYear alku-pvm)
@@ -54,17 +48,17 @@
       (if start-year (str " " start-year) ""))))
 
 (defn- calculate-totals [tulokset]
-  (let [get-val (fn [k] (or (unwrap-monet (get tulokset k)) 0))
+  (let [get-val (fn [k] (or (get tulokset k) 0))
         ostoenergian-kokonaistarve (reduce + (map get-val (vals perusparannuspassi-service/energy-keys-laskennallinen)))
         toteutunut-ostoenergian-kulutus (reduce + (map get-val perusparannuspassi-service/energy-keys-toteutunut))
-        toteutunut-energiakustannus (or (unwrap-monet (get tulokset :toteutunut-energiakustannus))
+        toteutunut-energiakustannus (or (get tulokset :toteutunut-energiakustannus)
                                         (reduce + (for [[short-key _] perusparannuspassi-service/energy-keys-laskennallinen]
                                                     (let [toteutunut-key (keyword (str "toteutunut-ostoenergia-" (name short-key)))
                                                           energy (get-val toteutunut-key)
                                                           price-key (get perusparannuspassi-service/price-keys short-key)
                                                           price (get-val price-key)]
                                                       (* energy price 0.01)))))
-        hiilidioksidipaastot (or (unwrap-monet (get tulokset :hiilidioksidipaastot))
+        hiilidioksidipaastot (or (get tulokset :hiilidioksidipaastot)
                                  (reduce + (for [[short-key laskennallinen-key] perusparannuspassi-service/energy-keys-laskennallinen]
                                              (let [energy (get-val laskennallinen-key)
                                                    factor (get perusparannuspassi-service/paastokertoimet short-key 0)]
@@ -75,8 +69,7 @@
      :hiilidioksidipaastot hiilidioksidipaastot}))
 
 (defn- render-toimenpide-ehdotukset [vaihe seuraava-vaihe kieli l toimenpide-ehdotukset-defs]
-  (let [toimenpide-ehdotukset-items (->> (get-in vaihe [:toimenpiteet :toimenpide-ehdotukset])
-                                         (map unwrap-monet))
+  (let [toimenpide-ehdotukset-items (get-in vaihe [:toimenpiteet :toimenpide-ehdotukset])
         label-key (if (= (keyword kieli) :sv) :label-sv :label-fi)
         toimenpide-ehdotukset (map (fn [item]
                                      (let [id (if (map? item) (:id item) item)
@@ -134,7 +127,7 @@
       [:tr
        (for [key [:kaukolampo :sahko :uusiutuvat-pat :fossiiliset-pat :kaukojaahdytys]]
          [:td {:style cell-style}
-          (or (unwrap-monet (get tulokset (get perusparannuspassi-service/energy-keys-laskennallinen key))) "-")])]]]))
+          (or (get tulokset (get perusparannuspassi-service/energy-keys-laskennallinen key)) "-")])]]]))
 
 (defn- render-energiankulutus-kustannukset-ja-co2-paastot [vaihe l]
   (let [tulokset (:tulokset vaihe)
@@ -146,7 +139,7 @@
      [:h2 (l :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen)]
      [:table {:role "presentation" :style "width: 100%; border-collapse: collapse;"}
       (for [[label value unit] [[(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen) ostoenergian-kokonaistarve (l :kwh-vuosi)]
-                                [(l :uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta) (unwrap-monet (get tulokset :uusiutuvan-energian-hyodynnetty-osuus)) (l :prosenttia)]
+                                [(l :uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta) (get tulokset :uusiutuvan-energian-hyodynnetty-osuus) (l :prosenttia)]
                                 [(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus) toteutunut-ostoenergian-kulutus (l :kwh-vuosi)]
                                 [(l :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio) (format "%.2f" (double toteutunut-energiakustannus)) (l :euroa-vuosi)]
                                 [(l :energiankaytosta-aiheutuvat-hiilidioksidipaastot-laskennallinen) (format "%.2f" (double hiilidioksidipaastot)) (l :tco2ekv-vuosi)]]]
