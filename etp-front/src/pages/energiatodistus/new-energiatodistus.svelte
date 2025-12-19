@@ -73,7 +73,7 @@
     const onSuccesfulResponse = etResult => {
       toggleOverlay(false);
       announceSuccess($_('energiatodistus.messages.save-success'));
-      onSuccessfulSave(Maybe.None());
+      onSuccessfulSave({ newPerusparannuspassiId: Maybe.None() });
       replace(`/energiatodistus/${params.version}/${etResult.id}`);
     };
 
