@@ -98,8 +98,5 @@
     toimenpideEhdotuksetLuokittelu={R.prop('toimenpide-ehdotus', luokittelut)}
     {inputLanguage} />
 
-  <Lisatietoja
-    bind:perusparannuspassi
-    {schema}
-    {inputLanguage} />
+  <Lisatietoja bind:perusparannuspassi {schema} {inputLanguage} />
 </div>
