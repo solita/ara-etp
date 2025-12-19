@@ -6,24 +6,14 @@
   import * as et from './energiatodistus-utils';
   import * as EtUtils from './energiatodistus-utils';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Formats from '@Utility/formats';
   import * as Validations from '@Utility/validation';
   import * as schemas from './schema';
   import { _ } from '@Language/i18n';
-
-  import H1 from '@Component/H/H1';
-  import H2 from '@Component/H/H2';
-  import Checkbox from '@Component/Checkbox/Checkbox';
-  import PaakayttajanKommentti from './paakayttajan-kommentti';
-  import EnergiatodistusKorvattu from './korvaavuus/korvattu';
-  import EnergiatodistusKorvaava from './korvaavuus/korvaava';
-  import Laskutus from './laskutus';
   import { pppRequired } from './perusparannuspassi-utils.js';
 
-  import ET2018Form from './ET2018Form';
-  import ET2013Form from './ET2013Form';
   import Signing from './signing/SigningDialog.svelte';
-  import Input from './Input';
+  import EtForm from './et-form.svelte';
+  import PppForm from './ppp-form.svelte';
   import * as EtValidations from './validation';
   import * as Inputs from './inputs';
   import * as Postinumero from '@Component/address/postinumero-fi';
@@ -33,23 +23,34 @@
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
   import { announcementsForModule } from '@Utility/announce';
+  import ET2018Form from './ET2018Form';
+  import ET2013Form from './ET2013Form';
 
   export let version;
+  export let valvonta;
+  export let pppValidation;
+
   export let energiatodistus;
   export let luokittelut;
-  export let whoami;
   export let validation;
-  export let valvonta;
-  export let laskutusosoitteet;
+  export let whoami;
   export let verkkolaskuoperaattorit;
+  export let laskutusosoitteet;
+
   export let perusparannuspassi;
-  export let pppvalidation;
 
   export let submit;
   export let title = '';
 
   const { announceError, clearAnnouncements } =
     announcementsForModule('Energiatodistus');
+
+  const forms = {
+    '2018': ET2018Form,
+    '2013': ET2013Form,
+    '2026': ET2018Form // Use ET2018Form for 2026 initially
+  };
+  const ETForm = forms[version];
 
   const required = energiatodistus =>
     energiatodistus['bypass-validation-limits']
@@ -92,13 +93,6 @@
   let korvausError = Maybe.None();
   export let dirty = false;
 
-  const forms = {
-    '2018': ET2018Form,
-    '2013': ET2013Form,
-    '2026': ET2018Form // Use ET2018Form for 2026 initially
-  };
-  const ETForm = forms[version];
-
   $: disabled = !R.and(
     energiatodistus['laatija-id'].fold(true)(R.equals(whoami.id)),
     R.propEq(EtUtils.tila.draft, 'tila-id', energiatodistus)
@@ -133,6 +127,15 @@
     )
   );
 
+  const setPppIdIfItChanged = newPerusparannuspassiId => {
+    if (Maybe.isSome(newPerusparannuspassiId)) {
+      const newId = Maybe.get(newPerusparannuspassiId);
+      if (newId !== perusparannuspassi.id) {
+        perusparannuspassi = R.assoc('id', newId, perusparannuspassi);
+      }
+    }
+  };
+
   const validateAndSubmit = onSuccessfulSave => () => {
     const invalid = R.filter(
       R.propSatisfies(
@@ -144,10 +147,15 @@
 
     if (R.isEmpty(invalid) && korvausError.isNone()) {
       clearAnnouncements();
-      submit(energiatodistus, (...args) => {
-        dirty = false;
-        onSuccessfulSave(...args);
-      });
+      submit(
+        energiatodistus,
+        perusparannuspassi,
+        (newPerusparannuspassiId, ...args) => {
+          setPppIdIfItChanged(newPerusparannuspassiId);
+          dirty = false;
+          onSuccessfulSave(...args);
+        }
+      );
     } else {
       showKorvausErrorMessage(korvausError);
       showInvalidPropertiesMessage(invalid);
@@ -183,7 +191,7 @@
         ...EtValidations.missingProperties(
           pppRequired(
             perusparannuspassi,
-            pppvalidation,
+            pppValidation,
             energiatodistus['bypass-validation-limits']
           ),
           R.assocPath(
@@ -223,7 +231,7 @@
   };
 </script>
 
-{#if !R.isNil(ETForm)}
+{#if R.isNotNil(ETForm)}
   <DirtyConfirmation {dirty} />
   <div class="relative flex w-full">
     <div class="sticky top-3em z-10 flex justify-end self-start px-6">
@@ -250,97 +258,33 @@
           dirty = true;
         }}
         on:reset={reset}>
-        <div class="mt-3 w-full">
-          <H1 text={title} />
-
-          {#if EtUtils.isSigned(energiatodistus)}
-            <div class="mb-5">
-              Voimassa:
-              {Maybe.fold(
-                '',
-                Formats.inclusiveStartDate,
-                energiatodistus.allekirjoitusaika
-              )} -
-              {Maybe.fold(
-                '',
-                Formats.inclusiveEndDate,
-                energiatodistus['voimassaolo-paattymisaika']
-              )}
-            </div>
-          {/if}
-          <div class="perustiedot__container mb-12">
-            <H2
-              id="perustiedot"
-              text={$_('energiatodistus.perustiedot-header')} />
-            <div class="mb-5">
-              <Checkbox
-                bind:model={energiatodistus}
-                lens={R.lensPath(['draft-visible-to-paakayttaja'])}
-                label={$_('energiatodistus.draft-visible-to-paakayttaja')}
-                {disabled} />
-            </div>
-
-            {#if R.or(energiatodistus['bypass-validation-limits'], Kayttajat.isPaakayttaja(whoami))}
-              <div class="mb-5">
-                <Checkbox
-                  bind:model={energiatodistus}
-                  lens={R.lensPath(['bypass-validation-limits'])}
-                  label={$_('energiatodistus.bypass-validation-limits')}
-                  disabled={disabledForPaakayttaja} />
-              </div>
-            {/if}
-
-            {#if energiatodistus['bypass-validation-limits']}
-              <div class="mb-5">
-                <Input
-                  disabled={disabledForPaakayttaja}
-                  {schema}
-                  center={false}
-                  bind:model={energiatodistus}
-                  path={['bypass-validation-limits-reason']} />
-              </div>
-            {/if}
-
-            <PaakayttajanKommentti
-              {whoami}
-              {schema}
-              path={['kommentti']}
-              bind:model={energiatodistus} />
-
-            <EnergiatodistusKorvaava
-              postinumerot={luokittelut.postinumerot}
-              {whoami}
-              korvaavaEnergiatodistusId={energiatodistus[
-                'korvaava-energiatodistus-id'
-              ]} />
-            <EnergiatodistusKorvattu
-              bind:energiatodistus
-              bind:dirty
-              {whoami}
-              postinumerot={luokittelut.postinumerot}
-              bind:error={korvausError} />
-          </div>
-
-          <Laskutus
-            {schema}
-            {whoami}
-            bind:energiatodistus
-            {verkkolaskuoperaattorit}
-            {laskutusosoitteet} />
-          <ETForm
-            bind:energiatodistus
-            bind:eTehokkuus
+        <EtForm
+          {ETForm}
+          {version}
+          {luokittelut}
+          {whoami}
+          {validation}
+          {laskutusosoitteet}
+          {verkkolaskuoperaattorit}
+          {title}
+          {disabled}
+          {disabledForPaakayttaja}
+          {inputLanguage}
+          bind:energiatodistus
+          bind:eTehokkuus
+          bind:dirty
+          bind:korvausError />
+        {#if version === '2026'}
+          <PppForm
+            {energiatodistus}
             {inputLanguage}
-            {disabled}
-            {schema}
             {luokittelut}
-            {validation}
-            {whoami} />
-        </div>
+            bind:dirty
+            schema={schemas.perusparannuspassi}
+            {pppValidation}
+            bind:perusparannuspassi />
+        {/if}
       </form>
-      <!-- Slot for PPP form -->
-      <!-- Todo: better placement, separate toolbar from this view too-->
-      <slot />
     </div>
   </div>
 {:else}

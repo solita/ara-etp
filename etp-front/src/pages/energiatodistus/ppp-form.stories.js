@@ -6,7 +6,7 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as R from 'ramda';
 
-const pppvalidation = {
+const pppValidation = {
   requiredAll: []
 };
 
@@ -323,6 +323,6 @@ Default.args = {
   schema: saveSchema,
   inputLanguage: 'fi',
   luokittelut,
-  pppvalidation,
+  pppValidation,
   ...testData()
 };

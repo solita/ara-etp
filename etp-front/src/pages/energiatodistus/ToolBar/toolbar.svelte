@@ -14,7 +14,6 @@
   import Sisallysluettelo from './sisallysluettelo.svelte';
 
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
-  import * as PppApi from '@Pages/energiatodistus/perusparannuspassi-api';
 
   import * as Toolbar from './toolbar-utils';
 

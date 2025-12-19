@@ -74,7 +74,13 @@ export const deserialize = R.compose(
   evolveForVersion('deserializer'),
   R.tap(assertVersion),
   R.evolve(deserializer),
-  deep.map(R.F, Maybe.fromNull)
+  deep.map(R.F, Maybe.fromNull),
+  // A better place to do this would be the backend but tests are coupled to this behaviour.
+  // perusparannuspassi-id is only returned for 2026 version and in other versions it is added here as null.
+  R.when(
+    R.complement(R.has('perusparannuspassi-id')),
+    R.assoc('perusparannuspassi-id', null)
+  )
 );
 
 export const serialize = R.compose(
