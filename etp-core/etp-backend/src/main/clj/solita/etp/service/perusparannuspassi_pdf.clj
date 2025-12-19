@@ -328,7 +328,6 @@
 
    dl.lt-korjausrakentamisen-saadokset {
     font-size: 14px;
-    align-items: left;
    }
 
    table.lt-mahdollisuus-liittya {
@@ -342,9 +341,8 @@
    table.lt-mahdollisuus-liittya th,
    table.lt-mahdollisuus-liittya td {
      display: table-cell;
-     fs-border-rendering: no-bevel;
      border: 1px solid #2c5234;
-     padding: 5px 8px
+     padding: 5px 8px;
      font-size: 14px;
    }
 
@@ -353,12 +351,10 @@
      width: 100%;
      border-collapse: collapse;
      -fs-border-rendering: no-bevel;
-     align-items: left;
    }
 
    table.lt-lisatietoja th,
    table.lt-lisatietoja td {
-     align-items: left;
      display: table-cell;
      -fs-border-rendering: no-bevel;
      border: 1px solid #2c5234;
@@ -389,9 +385,7 @@
      padding: 5px 8px;
      font-size: 14px;
      margin: 0;
-    }
-
-   }"))
+    }"))
 
 
 (defn- page-header [title]
