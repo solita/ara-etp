@@ -53,8 +53,7 @@ select
 from perusparannuspassi ppp
          join energiatodistus et on ppp.energiatodistus_id = et.id
 where ppp.energiatodistus_id = :energiatodistus-id
-  and et.laatija_id = :laatija-id
-  and ppp.valid = true;
+  and et.laatija_id = :laatija-id;
 
 -- name: delete-perusparannuspassi!
 update perusparannuspassi set
