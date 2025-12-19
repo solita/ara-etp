@@ -99,7 +99,6 @@
     {inputLanguage} />
 
   <Lisatietoja
-    {energiatodistus}
     bind:perusparannuspassi
     {schema}
     {inputLanguage} />
