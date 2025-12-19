@@ -53,8 +53,7 @@ select
 from perusparannuspassi ppp
          join energiatodistus et on ppp.energiatodistus_id = et.id
 where ppp.energiatodistus_id = :energiatodistus-id
-  and et.laatija_id = :laatija-id
-  and ppp.valid = true;
+  and et.laatija_id = :laatija-id;
 
 -- name: delete-perusparannuspassi!
 update perusparannuspassi set
@@ -87,23 +86,3 @@ select column_name
 from ppp_vaihe_validation_required_column
 where versio = :versio and valid and not (bypass_allowed and :bypass-validation)
 order by ordinal asc;
-
--- name: find-deleted-by-energiatodistus-id
-select
-    id
-from perusparannuspassi
-where energiatodistus_id = :energiatodistus-id
-  and valid = false;
-
--- name: resurrect-perusparannuspassi!
-update perusparannuspassi
-set
-    valid = true
-where id = :id;
-
--- name: resurrect-perusparannuspassi-vaiheet!
-update perusparannuspassi_vaihe
-set
-    valid = true
-where
-    perusparannuspassi_id = :perusparannuspassi-id;

@@ -150,10 +150,10 @@
       submit(
         energiatodistus,
         perusparannuspassi,
-        (newPerusparannuspassiId, ...args) => {
+        ({ newPerusparannuspassiId }) => {
           setPppIdIfItChanged(newPerusparannuspassiId);
           dirty = false;
-          onSuccessfulSave(...args);
+          onSuccessfulSave();
         }
       );
     } else {
