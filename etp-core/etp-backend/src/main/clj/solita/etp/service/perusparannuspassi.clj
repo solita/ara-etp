@@ -3,7 +3,6 @@
    [clojure.java.jdbc :as jdbc]
    [clojure.set :as set]
    [clojure.string :as str]
-   [clojure.tools.logging :as log]
    [flathead.flatten :as flat]
    [solita.etp.db :as db]
    [solita.etp.exception :as exception]
@@ -195,63 +194,39 @@
   (assert-patevyystaso! whoami)
   (jdbc/with-db-transaction
     [tx db]
-    (let [{:keys [versio tila-id laatija-id]}
-          (perusparannuspassi-db/select-for-ppp-add-requirements tx ppp)]
-      ;; This is first, to avoid leaking information about the existence of the ET.
-      ;; A nil laatija-id produces the same forbidden error as a wrong laatija-id.
-      (assert-correct-et-owner! whoami laatija-id)
-      (when-not versio
-        (exception/throw-ex-info!
-         {:type    :energiatodistus-not-found
-          :message (str "Energiatodistus with id " (:energiatodistus-id ppp) " not found.")}))
-      (assert-2026! versio)
-      (assert-draft! tila-id)
+    (assert-insert-requirements! tx whoami ppp)
+    (let [ppp (ppp->db-row ppp)
+          {:keys [id]} (db/with-db-exception-translation
+                         jdbc/insert! tx :perusparannuspassi (dissoc ppp :vaiheet)
+                         db/default-opts)]
 
-      ;; Check if there's a soft-deleted PPP for this energiatodistus
-      (let [deleted-ppp (first (perusparannuspassi-db/find-deleted-by-energiatodistus-id
-                                tx
-                                {:energiatodistus-id (:energiatodistus-id ppp)}))]
-        (if deleted-ppp
-          ;; Resurrect the soft-deleted PPP
-          (let [ppp-id (:id deleted-ppp)]
-            (log/info "Resurrecting PPP ID:" ppp-id)
-            (perusparannuspassi-db/resurrect-perusparannuspassi! tx {:id ppp-id})
-            {:id ppp-id :warnings []})
+      ;; Insert
+      (doseq [vaihe (:vaiheet ppp)]
+        (db/with-db-exception-translation
+          jdbc/insert! tx :perusparannuspassi-vaihe (-> vaihe
+                                                        without-toimenpide-ehdotukset
+                                                        (assoc :perusparannuspassi-id id)
+                                                        ppp-vaihe->db-row)
+          db/default-opts)
 
-          ;; No soft-deleted PPP exists, insert a new one
-          (let [ppp-db-row (-> ppp (dissoc :vaiheet) ppp->db-row)
-                warnings (validate-ppp-db-row! tx ppp-db-row versio)
-              vaihe-warnings (reduce concat
-                                     (for [vaihe-db-row (->> ppp :vaiheet (map ->vaihe-update-db-row))]
-                                       (validate-ppp-vaihe-db-row! tx vaihe-db-row versio)))
-              {:keys [id]} (db/with-db-exception-translation
-                             jdbc/insert! tx :perusparannuspassi (dissoc ppp-db-row :vaiheet)
-                             db/default-opts)]
+        (doseq [[ordinal toimenpide-ehdotus-id]
+                (map vector (range) (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id)))]
+          (db/with-db-exception-translation
+            jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
+            {:perusparannuspassi_id id
+             :vaihe_nro             (:vaihe-nro vaihe)
+             :toimenpide_ehdotus_id toimenpide-ehdotus-id
+             :ordinal               ordinal}
+            db/default-opts)))
 
-          ;; Insert vaiheet
-          (doseq [vaihe (:vaiheet ppp)]
-            (db/with-db-exception-translation
-              jdbc/insert! tx :perusparannuspassi-vaihe (->vaihe-insert-db-row vaihe id)
-              db/default-opts)
-
-            (doseq [[ordinal toimenpide-ehdotus-id]
-                    (map vector (range) (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id)))]
-              (db/with-db-exception-translation
-                jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
-                {:perusparannuspassi_id id
-                 :vaihe_nro             (:vaihe-nro vaihe)
-                 :toimenpide_ehdotus_id toimenpide-ehdotus-id
-                 :ordinal               ordinal}
-                db/default-opts)))
-
-          (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
-            (jdbc/insert! tx :perusparannuspassi-vaihe
-                          {:perusparannuspassi-id id
-                           :vaihe-nro             vaihe-nro
-                           :valid                 false}
-                          db/default-opts))
-          {:id       id
-           :warnings (concat warnings vaihe-warnings)}))))))
+      (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
+        (jdbc/insert! tx :perusparannuspassi-vaihe
+                      {:perusparannuspassi-id id
+                       :vaihe-nro             vaihe-nro
+                       :valid                 false}
+                      db/default-opts))
+      {:id       id
+       :warnings []})))
 
 (defn assert-update-requirements! [db whoami current-ppp new-ppp]
   (let [{:keys [tila-id laatija-id]}
