@@ -1410,7 +1410,11 @@
       "havainnointikaynti": "Havainnointikäynnin päivämäärä (sv)",
       "passin-esittely": "Passin esittelyn päivämäärä (sv)",
       "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A\u2070-luokassa (sv)",
-      "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa (sv)"
+      "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa (sv)",
+      "lisatiedot": {
+        "header": "Lisätietoja (sv)"
+      },
+      "lisatietoja": "Lisätiedot (sv)"
     },
     "rakennuksen-perustiedot": {
       "label-context": "$unused",
@@ -1500,7 +1504,7 @@
         "kaukolampo": "Kaukolämpö (sv)",
         "sahko": "Sähkö (sv)",
         "uusiutuva-polttoaine": "Uusiutuvat polttoaineet (sv)",
-        "fossiilnen-polttoaine": "Fossiiliset polttoaineet (sv)",
+        "fossiilinen-polttoaine": "Fossiiliset polttoaineet (sv)",
         "kaukojaahdytys": "Kaukojäähdytys (sv)"
       },
       "energian-hinta": {

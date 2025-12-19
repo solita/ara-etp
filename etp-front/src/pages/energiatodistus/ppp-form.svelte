@@ -19,6 +19,7 @@
   import LaskennallinenEnergiaKustannukset from './form-parts-ppp/laskennan-tulokset-kustannukset-laskennallinen-ostoenergia';
   import ToteutunutOstoenergiaKustannukset from './form-parts-ppp/laskennan-tulokset-kustannukset-toteutunut-ostoenergia';
   import Toimenpiteet from './form-parts-ppp/toimenpiteet';
+  import Lisatietoja from './form-parts-ppp/lisatietoja.svelte';
 
   export let energiatodistus;
   export let inputLanguage;
@@ -169,6 +170,8 @@
           luokittelut
         )}
         {inputLanguage} />
+
+      <Lisatietoja bind:perusparannuspassi {schema} {inputLanguage} />
     </div>
   {/if}
 </div>
