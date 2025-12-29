@@ -177,21 +177,25 @@
       without-toimenpide-ehdotukset
       ppp-vaihe->db-row))
 
+(defn assert-insert-requirements! [whoami ppp versio tila-id laatija-id]
+    ;; This is first, to avoid leaking information about the existence of the ET.
+    ;; A nil laatija-id produces the same forbidden error as a wrong laatija-id.
+    (assert-correct-et-owner! whoami laatija-id)
+    (when-not versio
+      (exception/throw-ex-info!
+        {:type    :energiatodistus-not-found
+         :message (str "Energiatodistus with id " (:energiatodistus-id ppp) " not found.")}))
+    (assert-2026! versio)
+    (assert-draft! tila-id))
+
+
 (defn insert-perusparannuspassi! [db whoami ppp]
   (assert-patevyystaso! whoami)
   (jdbc/with-db-transaction
     [tx db]
     (let [{:keys [versio tila-id laatija-id]}
           (perusparannuspassi-db/select-for-ppp-add-requirements tx ppp)]
-      ;; This is first, to avoid leaking information about the existence of the ET.
-      ;; A nil laatija-id produces the same forbidden error as a wrong laatija-id.
-      (assert-correct-et-owner! whoami laatija-id)
-      (when-not versio
-        (exception/throw-ex-info!
-          {:type    :energiatodistus-not-found
-           :message (str "Energiatodistus with id " (:energiatodistus-id ppp) " not found.")}))
-      (assert-2026! versio)
-      (assert-draft! tila-id)
+      (assert-insert-requirements! whoami ppp versio tila-id laatija-id)
       (let [ppp-db-row (-> ppp (dissoc :vaiheet) ppp->db-row)
             warnings (validate-ppp-db-row! tx ppp-db-row versio)
             vaihe-warnings (reduce concat
