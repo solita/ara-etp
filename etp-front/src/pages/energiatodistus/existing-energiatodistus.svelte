@@ -53,7 +53,7 @@
       ({ newPerusparannuspassiId }) => {
         toggleOverlay(false);
         announceSuccess($_('energiatodistus.messages.save-success'));
-        onSuccessfulSave(newPerusparannuspassiId);
+        onSuccessfulSave({ newPerusparannuspassiId });
       },
       R.chain(
         Future.after(400),
