@@ -1,6 +1,5 @@
 (ns solita.etp.service.perusparannuspassi-pdf
   (:require
-    [clojure.java.io :as io]
     [hiccup.core :as hiccup]
     [solita.etp.config :as config]
     [solita.etp.service.localization :as loc]
@@ -15,7 +14,7 @@
     [solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot :as laskennan-taustatiedot]
     [solita.etp.service.luokittelu :as luokittelu-service]
     [solita.etp.service.perusparannuspassi-pdf.lisatietoja :as lisatietoja])
-  (:import (org.apache.axis.utils ByteArrayOutputStream)))
+  (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
                             "sv" "UTKAST"})
@@ -432,7 +431,7 @@
 
 (defn- generate-perusparannuspassi-ohtp-pdf
   "Use OpenHTMLToPDF to generate a PPP PDF, return as a byte array"
-  [{:keys [energiatodistus perusparannuspassi kieli] :as params}]
+  [{:keys [perusparannuspassi kieli] :as params}]
   (let [output-stream (ByteArrayOutputStream.)
         l (kieli loc/ppp-pdf-localization)
         pages [{:title (l :perusparannuspassi)
@@ -491,15 +490,15 @@
            :mahdollisuus-liittya  mahdollisuus-liittya
            :uusiutuva-energia     uusiutuva-energia
            :lammitysmuodot        lammitysmuodot
-           :ilmanvaihtotyypit     ilmanvaihtotyypit})]
+           :ilmanvaihtotyypit     ilmanvaihtotyypit})
+        watermark-text (cond
+                         draft? (draft-watermark-texts kieli)
+                         (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
+                         :else nil)]
 
-    (let [watermark-text (cond
-                           draft? (draft-watermark-texts kieli)
-                           (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
-                           :else nil)]
-      (if (some? watermark-text)
-        (watermark-pdf/apply-watermark-to-bytes pdf-bytes watermark-text)
-        pdf-bytes))))
+    (if (some? watermark-text)
+      (watermark-pdf/apply-watermark-to-bytes pdf-bytes watermark-text)
+      pdf-bytes)))
 
 (defn- generate-pdf-as-input-stream
   "Generate a perusparannuspassi PDF and return it as an InputStream.
@@ -508,7 +507,7 @@
    uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?]
   (let [pdf-bytes (generate-perusparannuspassi-pdf perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
                                                    mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?)]
-    (java.io.ByteArrayInputStream. pdf-bytes)))
+    (ByteArrayInputStream. pdf-bytes)))
 
 (defn find-perusparannuspassi-pdf
   "Find or generate a perusparannuspassi PDF.
