@@ -429,11 +429,8 @@
        [:body
         pages-html]])))
 
-(defn- generate-perusparannuspassi-ohtp-pdf
-  "Use OpenHTMLToPDF to generate a PPP PDF, return as a byte array"
-  [{:keys [perusparannuspassi kieli] :as params}]
-  (let [output-stream (ByteArrayOutputStream.)
-        l (kieli loc/ppp-pdf-localization)
+(defn generate-perusparannuspassi-html [{:keys [perusparannuspassi kieli] :as params}]
+  (let [l (kieli loc/ppp-pdf-localization)
         pages [{:title (l :perusparannuspassi)
                 :content
                 [:div
@@ -469,7 +466,13 @@
                 :content
                 [:div
                  (lisatietoja/lisatietoja params)]}]]
-    (-> (generate-document-html pages (:id perusparannuspassi))
+    (generate-document-html pages (:id perusparannuspassi))))
+
+(defn- generate-perusparannuspassi-ohtp-pdf
+  "Use OpenHTMLToPDF to generate a PPP PDF, return as a byte array"
+  [params]
+  (let [output-stream (ByteArrayOutputStream.)]
+    (-> (generate-perusparannuspassi-html params)
         (pdf-service/html->pdf output-stream))
     (-> output-stream .toByteArray)))
 
@@ -535,3 +538,36 @@
       ;; Always show draft watermark for now (no signing yet)
       (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
                                     mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?))))
+
+(defn find-perusparannuspassi-html
+  "Find or generate HTML for a perusparannuspassi PDF.
+
+   Parameters:
+   - db: Database connection
+   - whoami: Current user
+   - ppp-id: Perusparannuspassi ID
+   - kieli: Language code ('fi' or 'sv')
+
+   Returns: InputStream of the PDF, or nil if not found"
+  [db whoami ppp-id kieli]
+  (when-let [perusparannuspassi (perusparannuspassi-service/find-perusparannuspassi db whoami ppp-id)]
+    (let [energiatodistus-id (:energiatodistus-id perusparannuspassi)
+          energiatodistus (energiatodistus-service/find-energiatodistus db whoami energiatodistus-id)
+          versio (:versio energiatodistus)
+          kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
+          alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
+          mahdollisuus-liittya (luokittelu-service/find-mahdollisuus-liittya db)
+          uusiutuva-energia (luokittelu-service/find-uusiutuva-energia db)
+          lammitysmuodot (luokittelu-service/find-lammitysmuodot db)
+          ilmanvaihtotyypit (luokittelu-service/find-ilmanvaihtotyypit db)
+          draft? true]
+      ;; Always show draft watermark for now (no signing yet)
+      (generate-perusparannuspassi-html {:energiatodistus       energiatodistus
+                                         :perusparannuspassi    perusparannuspassi
+                                         :kayttotarkoitukset    kayttotarkoitukset
+                                         :alakayttotarkoitukset alakayttotarkoitukset
+                                         :kieli                 (keyword kieli)
+                                         :mahdollisuus-liittya  mahdollisuus-liittya
+                                         :uusiutuva-energia     uusiutuva-energia
+                                         :lammitysmuodot        lammitysmuodot
+                                         :ilmanvaihtotyypit     ilmanvaihtotyypit}))))

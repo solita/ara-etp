@@ -16,6 +16,9 @@
 (defn- valid-ppp-pdf-filename? [filename id kieli]
   (= filename (format "perusparannuspassi-%s-%s.pdf" id kieli)))
 
+(defn- valid-ppp-html-filename? [filename id kieli]
+  (= filename (format "perusparannuspassi-%s-%s.html" id kieli)))
+
 (defn pdf-route []
   ["/pdf/:kieli/:filename"
    {:get {:summary    "Lataa perusparannuspassi PDF-tiedostona"
@@ -28,9 +31,25 @@
           :handler    (fn [{{{:keys [id kieli filename]} :path} :parameters :keys [db whoami]}]
                         (if (valid-ppp-pdf-filename? filename id kieli)
                           (api-response/pdf-response
-                           (ppp-pdf/find-perusparannuspassi-pdf db whoami id kieli)
-                           filename
-                           (str "Perusparannuspassi " id " does not exist."))
+                            (ppp-pdf/find-perusparannuspassi-pdf db whoami id kieli)
+                            filename
+                            (str "Perusparannuspassi " id " does not exist."))
+                          (r/not-found "File not found")))}}])
+
+(defn html-route []
+  ["/html/:kieli/:filename"
+   {:get {:summary    "Lataa perusparannuspassi HTML-tiedostona"
+          :access     (some-fn rooli-service/laatija? rooli-service/paakayttaja?)
+          :parameters {:path {:id common-schema/Key
+                              :kieli schema/Str
+                              :filename schema/Str}}
+          :responses  {200 {:body nil}
+                       404 {:body schema/Str}}
+          :handler    (fn [{{{:keys [id kieli filename]} :path} :parameters :keys [db whoami]}]
+                        (if (valid-ppp-html-filename? filename id kieli)
+                          (api-response/html-response
+                            (ppp-pdf/find-perusparannuspassi-html db whoami id kieli)
+                            (str "Perusparannuspassi " id " does not exist."))
                           (r/not-found "File not found")))}}])
 
 (def private-routes
@@ -53,6 +72,7 @@
                               {:type :invalid-value :response 400}]))}}]
     ["/:id"
      (pdf-route)
+     (html-route)
      [""
       {:get    {:summary    "Hae perusparannuspassi tunnisteella (id)"
                 :parameters {:path {:id common-schema/Key}}
