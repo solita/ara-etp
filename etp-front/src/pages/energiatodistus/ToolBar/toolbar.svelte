@@ -26,6 +26,7 @@
   export let eTehokkuus = Maybe.None();
   export let dirty;
   export let whoami;
+  export let perusparannuspassi = Maybe.None();
 
   const i18n = $_;
   const { announceError, announceSuccess } =
@@ -264,6 +265,19 @@
         </button>
       {/each}
     {/each}
+    {#if perusparannuspassi.id}
+      <button
+        disabled={pendingExecution}
+        on:click={save(() =>
+          openUrl(
+            `/api/private/perusparannuspassit/2026/${perusparannuspassi.id}/pdf/fi/perusparannuspassi-${perusparannuspassi.id}-fi.pdf`
+          )
+        )}>
+        <span class="font-icon text-2xl">picture_as_pdf</span>
+        <span class="description block"
+          >{i18n('energiatodistus.toolbar.preview-ppp')}</span>
+      </button>
+    {/if}
   {/if}
   {#if R.includes(Toolbar.module.download, fields)}
     {#each pdfUrls as pdfUrl}
