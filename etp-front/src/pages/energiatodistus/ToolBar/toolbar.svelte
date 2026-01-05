@@ -26,7 +26,7 @@
   export let eTehokkuus = Maybe.None();
   export let dirty;
   export let whoami;
-  export let perusparannuspassi = Maybe.None();
+  export let perusparannuspassi;
 
   const i18n = $_;
   const { announceError, announceSuccess } =
