@@ -244,6 +244,7 @@
         dirty={dirty || R.isNil(energiatodistus.id)}
         {whoami}
         {valvonta}
+        {perusparannuspassi}
         bind:inputLanguage />
     </div>
     <div
