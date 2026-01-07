@@ -1,4 +1,4 @@
-insert into havainnointikayntitype(id, label_fi, label_sv, ordinal)
+insert into havainnointikayntityyppi(id, label_fi, label_sv, ordinal)
 values
 (1, 'Paikan päällä käynti', 'Paikan päällä käynti (sv)', 1),
 (2, 'Virtuaalikäynti', 'Virtuaalikäynti (sv)', 2)
