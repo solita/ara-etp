@@ -118,7 +118,28 @@
         :kwh-vuosi                         "kWh/vuosi"
         :prosenttia                        "%"
         :euroa-vuosi                       "€/vuosi"
-        :tco2ekv-vuosi                     "tCO2ekv/vuosi"}
+        :tco2ekv-vuosi                     "tCO2ekv/vuosi"
+
+        ;; Vaiheistuksen yhteenveto
+        :laskennallinen-kokonaisenergiankulutus-e-luku "Laskennallinen kokonaisenergiankulutus (E-luku)"
+        :energiatehokkuusluokka            "Energiatehokkuusluokka"
+        :vakioidun-ostoenergian-muutokset  "Vakioidulla käytöllä lasketun ostoenergian muutokset edelliseen vaiheeseen verrattuna"
+        :ostoenergian-muutos-kwh-vuosi     "Ostoenergian muutos [kWh/vuosi]"
+        :ostoenergian-muutos-prosentti     "Ostoenergian muutos [%]"
+        :painotetun-energiankulutuksen-muutos-kwh "Painotetun energiankulutuksen muutos [kWh/vuosi]"
+        :painotetun-energiankulutuksen-muutos-prosentti "Painotetun energiankulutuksen muutos [%]"
+        :saasto-energialaskussa            "Säästö energialaskussa [€/vuosi]*"
+        :toteutuneen-mitatun-ostoenergian-muutokset "Toteutuneen mitatun ostoenergian muutokset edelliseen vaiheeseen verrattuna"
+        :uusiutuvan-energian-laskennalliset-maarat "Uusiutuvan energian laskennalliset määrät vaiheittain"
+        :uusiutuvan-energian-kokonaistuotto "Uusiutuvan energian kokonaistuotto [kWh/vuosi"
+        :rakennuksen-hyodyntama-osuus      "Rakennuksen hyödyntämä osuus uusiutuvan energian tuotosta [%]"
+        :hiilidioksidipaastojen-muutokset  "Hiilidioksidipäästöjen laskennalliset muutokset edelliseen vaiheeseen verrattuna"
+        :hiilidioksidipaastojen-vahenema   "Energiankäytöstä aiheutuvien hiilidioksidipäästöjen vähenemä \n[tCO2ekv/vuosi]**"
+        :energialaskuissa-kaytetyt-hinnat  "*Energialaskuissa käytetyt energian hinnat, sis. siirto- ja perusmaksut"
+        :snt-kwh                           "snt/kWh"
+        :uusiutuvat-polttoaineet           "Uusiutuvat polttoaineet"
+        :fossiiliset-polttoaineet          "Fossiiliset polttoaineet"
+        :co2ekv-vahenema-huomautus         "** Laskennallisen ostoenergian mukaisesti laskettava CO2ekv vähenemä"}
    :sv {:rakennuksen-nimi                  "Byggnadens namn"
         :rakennuksen-osoite                "Byggnadens adress"
         :pysyva-rakennustunnus             "Permanent byggnadsbeteckning"
@@ -234,7 +255,28 @@
         :kwh-vuosi                         "kWh/år"
         :prosenttia                        "%"
         :euroa-vuosi                       "€/år"
-        :tco2ekv-vuosi                     "tCO2ekv/år"}})
+        :tco2ekv-vuosi                     "tCO2ekv/år"
+
+        ;; Vaiheistuksen yhteenveto
+        :laskennallinen-kokonaisenergiankulutus-e-luku "Beräknad total energiförbrukning (E-tal)"
+        :energiatehokkuusluokka            "Energieffektivitetsklass"
+        :vakioidun-ostoenergian-muutokset  "Förändringar i köpt energi beräknad med standardiserad användning jämfört med föregående fas"
+        :ostoenergian-muutos-kwh-vuosi     "Förändring i köpt energi [kWh/år]"
+        :ostoenergian-muutos-prosentti     "Förändring i köpt energi [%]"
+        :painotetun-energiankulutuksen-muutos-kwh "Förändring i viktad energiförbrukning [kWh/år]"
+        :painotetun-energiankulutuksen-muutos-prosentti "Förändring i viktad energiförbrukning [%]"
+        :saasto-energialaskussa            "Besparingar i energiräkningen [€/år]*"
+        :toteutuneen-mitatun-ostoenergian-muutokset "Förändringar i faktisk uppmätt köpt energi jämfört med föregående fas"
+        :uusiutuvan-energian-laskennalliset-maarat "Beräknade mängder förnybar energi per fas"
+        :uusiutuvan-energian-kokonaistuotto "Total produktion av förnybar energi [kWh/år"
+        :rakennuksen-hyodyntama-osuus      "Byggnadens utnyttjade andel av förnybar energiproduktion [%]"
+        :hiilidioksidipaastojen-muutokset  "Beräknade förändringar i koldioxidutsläpp jämfört med föregående fas"
+        :hiilidioksidipaastojen-vahenema   "Minskning av koldioxidutsläpp från energianvändning \n[tCO2ekv/år]**"
+        :energialaskuissa-kaytetyt-hinnat  "*Energipriser som används i energiräkningarna, inkl. överföring och grundavgifter"
+        :snt-kwh                           "cnt/kWh"
+        :uusiutuvat-polttoaineet           "Förnybara bränslen"
+        :fossiiliset-polttoaineet          "Fossila bränslen"
+        :co2ekv-vahenema-huomautus         "** CO2ekv-minskning beräknad enligt beräknad köpt energi"}})
 
 (defn et-perustiedot-kayttotarkoitus->description
   "To use this you must provide the list of alakayttotarkoitukset as fetched from the DB for the correct version. At the
