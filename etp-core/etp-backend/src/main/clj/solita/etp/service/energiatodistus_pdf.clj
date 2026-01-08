@@ -8,6 +8,7 @@
             [solita.common.time :as common-time]
             [solita.common.xlsx :as xlsx]
             [solita.etp.etp2026 :as etp2026]
+            [solita.etp.service.energiatodistus-2026-pdf :as etp2026-pdf]
             [solita.etp.config :as config]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
@@ -726,25 +727,31 @@
 
 ;; Set as dynamic so that it can be mocked in tests.
 (defn ^:dynamic generate-pdf-as-file [complete-energiatodistus kieli draft? laatija-allekirjoitus-id]
-  (let [xlsx-path (fill-xlsx-template complete-energiatodistus kieli draft?)
-        pdf-path (xlsx->pdf xlsx-path)]
-    (io/delete-file xlsx-path)
-    (add-e-luokka-image pdf-path
-                        (-> complete-energiatodistus
-                            :tulokset
-                            :e-luokka)
-                        (:versio complete-energiatodistus))
+  (if (= 2026 (:versio complete-energiatodistus))
+    (let [pdf-bytes (etp2026-pdf/generate-pdf complete-energiatodistus kieli draft?)
+          temp-file (java.io.File/createTempFile "energiatodistus-2026-" ".pdf")]
+      (with-open [fos (java.io.FileOutputStream. temp-file)]
+        (.write fos pdf-bytes))
+      (.getAbsolutePath temp-file))
+    (let [xlsx-path (fill-xlsx-template complete-energiatodistus kieli draft?)
+          pdf-path (xlsx->pdf xlsx-path)]
+      (io/delete-file xlsx-path)
+      (add-e-luokka-image pdf-path
+                          (-> complete-energiatodistus
+                              :tulokset
+                              :e-luokka)
+                          (:versio complete-energiatodistus))
 
-    (set-metadata pdf-path
-                  (:laatija-fullname complete-energiatodistus)
-                  laatija-allekirjoitus-id
-                  (or (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]) "Energiatodistus"))
-    (cond
-      draft?
-      (watermark-pdf/add-watermark pdf-path (draft-watermark-texts kieli))
-      (contains? #{"local-dev" "dev" "test"} config/environment-alias)
-      (watermark-pdf/add-watermark pdf-path (test-watermark-texts kieli))
-      :else pdf-path)))
+      (set-metadata pdf-path
+                    (:laatija-fullname complete-energiatodistus)
+                    laatija-allekirjoitus-id
+                    (or (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]) "Energiatodistus"))
+      (cond
+        draft?
+        (watermark-pdf/add-watermark pdf-path (draft-watermark-texts kieli))
+        (contains? #{"local-dev" "dev" "test"} config/environment-alias)
+        (watermark-pdf/add-watermark pdf-path (test-watermark-texts kieli))
+        :else pdf-path))))
 
 (defn generate-pdf-as-input-stream [energiatodistus kieli draft? laatija-allekirjoitus-id]
   (let [pdf-path (generate-pdf-as-file energiatodistus kieli draft? laatija-allekirjoitus-id)
