@@ -61,6 +61,7 @@
         :ei                                "Ei"
         :a0-selite                         "A0 on päästötön rakennus"
         :a-plus-selite                     "A+ rakennus on erittäin energiatehokas, päästötön ja energiapositiivinen"
+        :toimenpide-ehdotukset             "Toimenpide-ehdotukset"
 
         :laskennan-taustatiedot-otsikko    "Laskennan taustatiedot"
         :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti:"
@@ -99,8 +100,25 @@
         :lisatietoja-otsikko               "Lisätietoja"
         :perusparannuspassi-info           "Perusparannuspassi on tilaajalle vapaaehtoinen. Energiatodistus voidaan laatia ilman perusparannuspassia.\n
                                             Perusparannuspassissa esitetyt eri vaiheiden toteutuneet kulutukset ja kustannukset ovat arvioita. Laskel-\n
-                                            missa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen\nverrattuna."}
+                                            missa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen\nverrattuna."
 
+        :toimenpideseloste                 "Toimenpideseloste"
+        :energiankulutuksen-muutos-lahtotilanteesta "Energiankulutuksen muutos lähtötilanteesta, laskennallinen [kWh/vuosi]"
+        :kaukolampo                        "Kaukolämpö"
+        :sahko                             "Sähkö"
+        :uusiutuvat-pat                    "Uusiutuvat PA:t"
+        :fossiiliset-pat                   "Fossiiliset PA:t"
+        :kaukojaahdytys                    "Kaukojäähdytys"
+        :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen "Energiankulutus, kustannukset ja CO₂-päästöt vaiheen jälkeen"
+        :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen "Ostoenergian kokonaistarve vaiheen jälkeen, laskennallinen"
+        :uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta "Uusiutuvan energian osuus ostoenergian kokonaistarpeesta"
+        :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus "Ostoenergian kokonaistarve vaiheen jälkeen, toteutunut kulutus"
+        :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio "Toteutuneen ostoenergian vuotuinen energiakustannus, arvio*"
+        :energiankaytosta-aiheutuvat-hiilidioksidipaastot-laskennallinen "Energiankäytöstä aiheutuvat hiilidioksidipäästöt, laskennallinen"
+        :kwh-vuosi                         "kWh/vuosi"
+        :prosenttia                        "%"
+        :euroa-vuosi                       "€/vuosi"
+        :tco2ekv-vuosi                     "tCO2ekv/vuosi"}
    :sv {:rakennuksen-nimi                  "Byggnadens namn"
         :rakennuksen-osoite                "Byggnadens adress"
         :pysyva-rakennustunnus             "Permanent byggnadsbeteckning"
@@ -160,6 +178,7 @@
         :ei                                "Nej"
         :a0-selite                         "A0 är en utsläppsfri byggnad"
         :a-plus-selite                     "A+ byggnad är mycket energieffektiv, utsläppsfri och energipositiv"
+        :toimenpide-ehdotukset             "Åtgärdsförslag"
 
         :laskennan-taustatiedot-otsikko    "Laskennan taustatiedot (sv)"
         :lt-otsikko                        "Lähtötilanteen ja perusparannuksen tavoitetilanteen tiedot voimassa olevan lainsäädännön mukaisesti: (sv)"
@@ -197,8 +216,25 @@
         :lisatietoja-otsikko               "Lisätietoja (sv)"
         :perusparannuspassi-info           "Perusparannuspassi on tilaajalle vapaaehtoinen. Energiatodistus voidaan laatia ilman perusparannuspassia.\n
                                             Perusparannuspassissa esitetyt eri vaiheiden toteutuneet kulutukset ja kustannukset ovat arvioita. Laskel-\n
-                                            missa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen\nverrattuna.(sv)"}})
+                                            missa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen\nverrattuna.(sv)"
 
+        :toimenpideseloste                 "Åtgärdsbeskrivning"
+        :energiankulutuksen-muutos-lahtotilanteesta "Förändring av energiförbrukning från utgångsläget, beräknad [kWh/år]"
+        :kaukolampo                        "Fjärrvärme"
+        :sahko                             "El"
+        :uusiutuvat-pat                    "Förnybara bränslen"
+        :fossiiliset-pat                   "Fossila bränslen"
+        :kaukojaahdytys                    "Fjärrkyla"
+        :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen "Energiförbrukning, kostnader och CO₂-utsläpp efter fasen"
+        :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen "Total energiförbrukning efter fasen, beräknad"
+        :uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta "Andel förnybar energi av total energiförbrukning"
+        :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus "Total energiförbrukning efter fasen, faktisk förbrukning"
+        :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio "Årlig energikostnad för faktisk energiförbrukning, uppskattning*"
+        :energiankaytosta-aiheutuvat-hiilidioksidipaastot-laskennallinen "Koldioxidutsläpp från energianvändning, beräknad"
+        :kwh-vuosi                         "kWh/år"
+        :prosenttia                        "%"
+        :euroa-vuosi                       "€/år"
+        :tco2ekv-vuosi                     "tCO2ekv/år"}})
 
 (defn et-perustiedot-kayttotarkoitus->description
   "To use this you must provide the list of alakayttotarkoitukset as fetched from the DB for the correct version. At the

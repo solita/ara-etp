@@ -13,7 +13,9 @@
     [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :refer [toimenpiteiden-vaikutukset]]
     [solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot :as laskennan-taustatiedot]
     [solita.etp.service.luokittelu :as luokittelu-service]
-    [solita.etp.service.perusparannuspassi-pdf.lisatietoja :as lisatietoja])
+    [solita.etp.service.perusparannuspassi-pdf.lisatietoja :as lisatietoja]
+    [solita.etp.service.perusparannuspassi-pdf.vaiheissa-toteutettavat-toimenpiteet :as vaiheissa-toteutettavat-toimenpiteet]
+    [solita.etp.service.toimenpide-ehdotus :as toimenpide-ehdotus-service])
   (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
@@ -21,7 +23,6 @@
 
 (def test-watermark-texts {"fi" "TESTI"
                            "sv" "TEST"})
-
 
 ;; CSS styles for the document
 (defn- styles []
@@ -98,6 +99,10 @@
     }
 
     h3 {
+      font-size: 11pt;
+    }
+
+    p {
       font-size: 11pt;
     }
 
@@ -396,9 +401,9 @@
    (str "Perusparannuspassin tunnus: " ppp-tunnus " | " page-num "/" total-pages)])
 
 (defn- render-page [page-data page-num total-pages ppp-tunnus]
-  (let [{:keys [title content]} page-data]
+  (let [{:keys [title content header]} page-data]
     [:div {:class "page"}
-     (page-header title)
+     (or header (page-header title))
      [:div {:class "page-content"}
       content]
      (page-footer ppp-tunnus page-num total-pages)]))
@@ -441,22 +446,10 @@
                  [:h2 (l :perusparannuspassissa-ehdotettujen-toimenpiteiden-vaikutukset)]
                  (toimenpiteiden-vaikutukset params)
                  (etusivu-laatija/etusivu-laatija params)]}
-               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "1")
-                :content
-                [:div
-                 [:p "Sisältö vaiheesta 1 tähän"]]}
-               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "2")
-                :content
-                [:div
-                 [:p "Sisältö vaiheesta 2 tähän"]]}
-               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "3")
-                :content
-                [:div
-                 [:p "Sisältö vaiheesta 3 tähän"]]}
-               {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) "4")
-                :content
-                [:div
-                 [:p "Sisältö vaiheesta 4 tähän"]]}
+               (vaiheissa-toteutettavat-toimenpiteet/render-page params 1)
+               (vaiheissa-toteutettavat-toimenpiteet/render-page params 2)
+               (vaiheissa-toteutettavat-toimenpiteet/render-page params 3)
+               (vaiheissa-toteutettavat-toimenpiteet/render-page params 4)
                {:title (l :vaiheistuksen-yhteenveto)
                 :content
                 [:div
@@ -473,10 +466,10 @@
         (pdf-service/html->pdf output-stream))
     (-> output-stream .toByteArray)))
 
-(defn- generate-perusparannuspassi-pdf
+(defn generate-perusparannuspassi-pdf
   "Generate a perusparannuspassi PDF and return it as a byte array."
   [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
-   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?]
+   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?]
   (let [kieli-keyword (keyword kieli)
         pdf-bytes
 
@@ -490,7 +483,8 @@
            :mahdollisuus-liittya  mahdollisuus-liittya
            :uusiutuva-energia     uusiutuva-energia
            :lammitysmuodot        lammitysmuodot
-           :ilmanvaihtotyypit     ilmanvaihtotyypit})
+           :ilmanvaihtotyypit     ilmanvaihtotyypit
+           :toimenpide-ehdotukset toimenpide-ehdotukset})
         watermark-text (cond
                          draft? (draft-watermark-texts kieli)
                          (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
@@ -504,9 +498,9 @@
   "Generate a perusparannuspassi PDF and return it as an InputStream.
    Applies watermarks via post-processing with PDFBox."
   [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
-   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?]
+   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?]
   (let [pdf-bytes (generate-perusparannuspassi-pdf perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
-                                                   mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?)]
+                                                   mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?)]
     (ByteArrayInputStream. pdf-bytes)))
 
 (defn find-perusparannuspassi-pdf
@@ -531,7 +525,8 @@
           uusiutuva-energia (luokittelu-service/find-uusiutuva-energia db)
           lammitysmuodot (luokittelu-service/find-lammitysmuodot db)
           ilmanvaihtotyypit (luokittelu-service/find-ilmanvaihtotyypit db)
+          toimenpide-ehdotukset (toimenpide-ehdotus-service/find-all db)
           draft? true]
       ;; Always show draft watermark for now (no signing yet)
       (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
-                                    mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit kieli draft?))))
+                                    mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?))))
