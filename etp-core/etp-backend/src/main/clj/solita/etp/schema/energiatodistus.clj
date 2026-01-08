@@ -296,7 +296,19 @@
                 [(xschema/optional-properties UserDefinedEnergia)])))
 
 (def EnergiatodistusSave2026
-  EnergiatodistusSave2018)
+  (-> EnergiatodistusSave2018
+      (assoc-in [:perustiedot :havainnointikayntityyppi-id] common-schema/Key)
+
+      (assoc-in [:huomiot :lammitys-kayttoikaa-jaljella-arvio-vuosina] common-schema/IntNonNegative)
+      (assoc-in [:huomiot :lammitys-asetukset-tehostettavissa] schema/Bool)
+      (assoc-in [:huomiot :iv-ilmastointi-kayttoikaa-jaljella-arvio-vuosina] common-schema/IntNonNegative)
+      (assoc-in [:huomiot :iv-ilmastointi-asetukset-tehostettavissa] schema/Bool)
+
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkosahko-kokonaistuotanto] common-schema/NonNegative)
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :tuulisahko-kokonaistuotanto] common-schema/NonNegative)
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :lampopumppu-kokonaistuotanto] common-schema/NonNegative)
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :muulampo-kokonaistuotanto] common-schema/NonNegative)
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :muusahko-kokonaistuotanto] common-schema/NonNegative)))
 
 (defn ->EnergiatodistusSaveExternal [schema]
   (-> schema
