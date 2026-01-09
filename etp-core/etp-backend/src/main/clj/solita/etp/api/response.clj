@@ -81,6 +81,12 @@
 (defn pdf-response [body filename not-found]
   (file-response body filename "application/pdf" true not-found))
 
+(defn html-response [body not-found]
+  (update (get-response body not-found)
+          :headers
+          merge
+          {"Content-Type" "text/html; charset=utf-8"}))
+
 (defn xlsx-response [body filename not-found]
   (file-response body
                  filename
