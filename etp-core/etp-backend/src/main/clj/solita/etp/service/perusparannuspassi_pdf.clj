@@ -16,7 +16,9 @@
     [solita.etp.service.perusparannuspassi-pdf.vaiheistuksen-yhteenveto :refer [vaiheistuksen-yhteenveto]]
     [solita.etp.service.perusparannuspassi-pdf.lisatietoja :as lisatietoja]
     [solita.etp.service.toimenpide-ehdotus :as toimenpide-ehdotus-service]
-    [solita.etp.service.watermark-pdf :as watermark-pdf])
+    [solita.etp.service.watermark-pdf :as watermark-pdf]
+    [solita.etp.service.energiatodistus-pdf.etusivu-yleistiedot :as et-etusivu-yleistiedot]
+    [solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia :as et-laskennallinen-ostoenergia])
   (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
@@ -464,8 +466,88 @@
      padding: 5px 8px;
      font-size: 14px;
      margin: 0;
-    }"))
+   }
 
+   dl.et-etusivu-yleistiedot {
+    display: table;
+    width: 100%;
+    background-color: white;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+   }
+
+   dl.et-etusivu-yleistiedot div {
+    display: table-row;
+   }
+
+   dl.et-etusivu-yleistiedot dt,
+   dl.et-etusivu-yleistiedot dd {
+    display: table-cell;
+    -fs-border-rendering: no-bevel;
+    padding: 6.5px 8px;
+   }
+
+    dl.et-etusivu-yleistiedot dt {
+      color: #23323e;
+      font-weight: bold;
+      white-space: nowrap;
+      width: 1px;
+     }
+
+    dl.et-etusivu-yleistiedot dd {
+      background-color: white;
+    }
+
+    dl.et-etusivu-yleistiedot div:last-child dd {
+      font-weight: bold;
+      color: #23323e;
+      white-space: nowrap;
+    }
+
+    table.ostoenergia {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table.ostoenergia th,
+    table.ostoenergia td {
+      display: table-cell;
+      -fs-border-rendering: no-bevel;
+      border: 1px solid #bdc6cc;
+      padding: 5px 8px;
+      font-size: 14px;
+      border-collapse: collapse;
+      font-weight: bold;
+      text-align: center;
+      font-size: 14px;
+      color: #23323e;
+     }
+
+     table.ostoenergia th:first-child,
+     table.ostoenergia td:first-child {
+      border-left: none;
+    }
+
+    table.ostoenergia th:last-child,
+    table.ostoenergia td:last-child {
+      border-right: none;
+     }
+
+     table.ostoenergia th.empty,
+     table.ostoenergia th.oe-otsikko {
+      border: none;
+      background: none;
+     }
+
+     dl.et-etussivu-ostoenergia-tiedot {
+       color: #23323e;
+       font-weight: bold;
+       white-space: nowrap;
+       width: 1px;
+     }
+
+   "))
 
 (defn- page-header [title]
   [:div {:class "page-header"}
@@ -531,7 +613,12 @@
                {:title "Lisätietoja"
                 :content
                 [:div
-                 (lisatietoja/lisatietoja params)]}]]
+                 (lisatietoja/lisatietoja params)]}
+               {:title "Enerdiatodistus  testi "
+                :content
+                [:div (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)
+                 (et-laskennallinen-ostoenergia/ostoenergia params)
+                 (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]}]]
     (generate-document-html pages (:id perusparannuspassi))))
 
 (defn- generate-perusparannuspassi-ohtp-pdf
