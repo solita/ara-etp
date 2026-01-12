@@ -277,6 +277,31 @@
         :uusiutuvat-polttoaineet           "Förnybara bränslen"
         :fossiiliset-polttoaineet          "Fossila bränslen"
         :co2ekv-vahenema-huomautus         "** CO2ekv-minskning beräknad enligt beräknad köpt energi"}})
+(def et-pdf-localization
+  {:fi {:rakennuksen-nimi-ja-osoite        "Rakennuksen nimi ja osoite"
+        :pysyva-rakennustunnus             "Pysyvä rakennustunnus"
+        :rakennuksen-valmistumisvuosi      "Rakennuksen valmistumisvuosi"
+        :rakennuksen-kayttotarkoitusluokka "Rakennuksen käyttötarkoitusluokka"
+        :energiatodistuksen-tunnus         "Energiatodstuksen tunnus"
+        :energiatodistus-laadittu          "Energiatodistus on laadittu"
+        :todistuksen-laatimispaiva         "Todistuksen laatimispäivä"
+        :todistuksen-voimassaolopaiva      "Todistuksen voimassaolopäivä"
+
+        :kaukolampo                        "Kauko-\nlämpö"
+        :sahko                             "Sähkö"
+        :uusiutuva-polttoaine              "Uusiutuva\npolttoaine"
+        :fossiilinen-polttoaine            "Fossiilinen\npolttoaine"
+        :kaukojaahdytys                    "Kauko-\njäähdytys"
+        :laskennallinen-ostoenergia        "Laskennallinen ostoenergia\nkWh/m2/vuosi"
+        :energimuodon-kerroin              "Energiamuodon kerroin"
+        :energiakulutus                    "Energiamuodon\nkertoimella painotettu\nenergiakulutus"
+
+        :energiakaytosta-syntyvat          "Energiakäytöstä syntyvät päästöt"
+        :uusiutuva-energian-osuus          "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä"
+        :kasvihuonepaastot                 "Elinkaaren aikaiset kasvihuonepaastot(GWP)"}})
+
+
+
 
 (defn et-perustiedot-kayttotarkoitus->description
   "To use this you must provide the list of alakayttotarkoitukset as fetched from the DB for the correct version. At the

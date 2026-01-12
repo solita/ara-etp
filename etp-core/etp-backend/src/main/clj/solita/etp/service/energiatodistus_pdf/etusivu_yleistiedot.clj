@@ -1,0 +1,42 @@
+(ns solita.etp.service.energiatodistus-pdf.etusivu-yleistiedot
+  (:require
+    [solita.common.time :as time]
+    [solita.etp.service.localization :as loc]))
+
+(defn- description-list [key-vals]
+  (into [:dl.et-etusivu-yleistiedot]
+        (mapv
+          (fn [{:keys [dt dd dds]}]
+            (into
+              [:div]
+              (cond
+                dt  [[:dt (str dt ":")] [:dd dd]]
+                dds (mapv (fn [dd] [:dd dd]) dds))))
+          key-vals)))
+
+(defn et-etusivu-yleistiedot [{:keys [energiatodistus kieli alakayttotarkoitukset]}]
+  (let [l  (kieli loc/et-pdf-localization)]
+    (description-list
+      [{:dt (l :rakennuksen-nimi-ja-osoite)
+        :dd [:div
+             (get-in energiatodistus [:perustiedot (case kieli
+                                                     :fi :nimi-fi
+                                                     :sv :nimi-sv)])
+              [:br]
+             (get-in energiatodistus [:perustiedot (case kieli
+                                                     :fi :katuosoite-fi
+                                                     :sv :katuosoite-sv)])]}
+       {:dt (l :pysyva-rakennustunnus)
+        :dd (get-in energiatodistus [:perustiedot :rakennustunnus])}
+       {:dt (l :rakennuksen-valmistumisvuosi)
+        :dd (get-in energiatodistus [:perustiedot :valmistumisvuosi])}
+       {:dt (l :rakennuksen-kayttotarkoitusluokka)
+        :dd (-> energiatodistus (get-in [:perustiedot :kayttotarkoitus]) (loc/et-perustiedot-kayttotarkoitus->description alakayttotarkoitukset kieli))}
+       {:dt (l :energiatodistuksen-tunnus)
+        :dd (:id energiatodistus)}
+       {:dds
+        [(str (l :todistuksen-laatimispaiva) ": "
+              (-> energiatodistus (get-in [:allekirjoitusaika]) time/format-date))
+
+         (str (l :todistuksen-voimassaolopaiva) ": "
+              (-> energiatodistus (get-in [:voimassaolo-paattymisaika]) time/format-date))]}])))
