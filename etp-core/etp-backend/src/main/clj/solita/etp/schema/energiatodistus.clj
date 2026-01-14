@@ -323,6 +323,9 @@
   (->EnergiatodistusSaveExternal EnergiatodistusSave2013))
 (def EnergiatodistusSave2018External
   (->EnergiatodistusSaveExternal EnergiatodistusSave2018))
+;; TODO: AE-2585: Decide external 2026 API details
+#_(def EnergiatodistusSave2026External
+  (->EnergiatodistusSaveExternal EnergiatodistusSave2026))
 
 (def Energiatehokkuus
   {:e-luku (schema/maybe schema/Num)
