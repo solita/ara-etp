@@ -9,8 +9,7 @@
             [solita.etp.service.luokittelu :as luokittelu]
             [solita.etp.service.polttoaine :as polttoaine]
             [solita.common.map :as map]
-            [solita.common.formats :as formats]
-            [solita.etp.service.e-luokka :as e-luokka-service]))
+            [solita.common.formats :as formats]))
 
 (def ^:private co2-kertoimet
   {:kaukolampo         0.059
