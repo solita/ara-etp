@@ -468,7 +468,7 @@
      margin: 0;
    }
 
-   dl.et-etusivu-yleistiedot {
+  dl.et-etusivu-yleistiedot {
     display: table;
     width: 100%;
     background-color: white;
@@ -476,78 +476,103 @@
     -fs-border-rendering: no-bevel;
    }
 
-   dl.et-etusivu-yleistiedot div {
+  dl.et-etusivu-yleistiedot div {
     display: table-row;
-   }
+  }
 
-   dl.et-etusivu-yleistiedot dt,
-   dl.et-etusivu-yleistiedot dd {
+  dl.et-etusivu-yleistiedot dt,
+  dl.et-etusivu-yleistiedot dd {
     display: table-cell;
     -fs-border-rendering: no-bevel;
-    padding: 6.5px 8px;
-   }
+    padding: 5px 5px;
+  }
 
-    dl.et-etusivu-yleistiedot dt {
-      color: #23323e;
-      font-weight: bold;
-      white-space: nowrap;
-      width: 1px;
-     }
+  dl.et-etusivu-yleistiedot dt {
+    color: #23323e;
+    font-weight: bold;
+    white-space: nowrap;
+    width: 1px;
+  }
 
-    dl.et-etusivu-yleistiedot dd {
-      background-color: white;
-    }
+  dl.et-etusivu-yleistiedot dd {
+    background-color: white;
+  }
 
-    dl.et-etusivu-yleistiedot div:last-child dd {
-      font-weight: bold;
-      color: #23323e;
-      white-space: nowrap;
-    }
+  dl.et-etusivu-yleistiedot div:last-child dd {
+    font-weight: bold;
+    color: #23323e;
+    white-space: nowrap;
+  }
 
-    table.ostoenergia {
-      display: table;
-      width: 100%;
-      border-collapse: collapse;
-    }
+  table.ostoenergia {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
 
-    table.ostoenergia th,
-    table.ostoenergia td {
-      display: table-cell;
-      -fs-border-rendering: no-bevel;
-      border: 1px solid #bdc6cc;
-      padding: 5px 8px;
-      font-size: 14px;
-      border-collapse: collapse;
-      font-weight: bold;
-      text-align: center;
-      font-size: 14px;
-      color: #23323e;
-     }
+  table.ostoenergia th,
+  table.ostoenergia td {
+    border: 1px solid #bdc6cc;
+    padding: 2px 2px;
+    font-weight: normal;
+    font-size: 13px;
+    text-align: center;
+    color: #23323e;
+  }
 
-     table.ostoenergia th:first-child,
-     table.ostoenergia td:first-child {
-      border-left: none;
-    }
+  table.ostoenergia th:first-child,
+  table.ostoenergia td:first-child {
+    border-left: none;
+    border-right: none;
+    font-weight: bold;
+    text-align: left;
+    width: 25%;
+  }
 
-    table.ostoenergia th:last-child,
-    table.ostoenergia td:last-child {
-      border-right: none;
-     }
+  table.ostoenergia th.oe-otsikko {
+    font-weight: bold;
+  }
 
-     table.ostoenergia th.empty,
-     table.ostoenergia th.oe-otsikko {
-      border: none;
-      background: none;
-     }
+  table.ostoenergia th:nth-child(2),
+  table.ostoenergia td:nth-child(2) {
+    border-left: none;
+  }
 
-     dl.et-etussivu-ostoenergia-tiedot {
-       color: #23323e;
-       font-weight: bold;
-       white-space: nowrap;
-       width: 1px;
-     }
+  table.ostoenergia th:last-child,
+  table.ostoenergia td:last-child {
+    border-right: none;
+  }
 
-   "))
+  table.ostoenergia th.empty,
+  table.ostoenergia th.oe-otsikko {
+    border: none;
+    background: none;
+  }
+
+  dl.et-etusivu-yleistiedot-ostoenergia {
+    display: table;width: 100%;
+    background-color: white;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+  }
+
+  dl.et-etusivu-yleistiedot-ostoenergia div {
+    display: table-row;
+  }
+
+  dl.et-etusivu-yleistiedot-ostoenergia dt,
+  dl.et-etusivu-yleistiedot-ostoenergia dd {
+    display: table-cell;
+    padding: 5px 5px;
+  }
+
+  dl.et-etusivu-yleistiedot-ostoenergia dt {
+    color: #23323e;
+    font-weight: bold;
+    white-space: nowrap;
+    width: 1px;
+  }"))
 
 (defn- page-header [title]
   [:div {:class "page-header"}
