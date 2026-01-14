@@ -8,6 +8,7 @@
             [solita.common.time :as common-time]
             [solita.common.xlsx :as xlsx]
             [solita.etp.etp2026 :as etp2026]
+            [solita.etp.service.energiatodistus-2026-pdf :as etp2026-pdf]
             [solita.etp.config :as config]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
@@ -768,5 +769,7 @@
                              (= (-> % :perustiedot :kieli) nil)) %)))] ; Old todistus entries have language set as nil. We'll just have to give it a try
     (if allekirjoitusaika
       (find-existing-pdf aws-s3-client id kieli)
-      (generate-pdf-as-input-stream complete-energiatodistus kieli true nil))))
+      (if (= 2026 (:versio complete-energiatodistus))
+        (io/input-stream (etp2026-pdf/generate-pdf complete-energiatodistus kieli true))
+        (generate-pdf-as-input-stream complete-energiatodistus kieli true nil)))))
 
