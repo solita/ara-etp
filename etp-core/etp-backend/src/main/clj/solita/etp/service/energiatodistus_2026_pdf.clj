@@ -2,7 +2,10 @@
   (:require [hiccup.core :as hiccup]
             [solita.etp.service.pdf :as pdf-service]
             [solita.etp.service.watermark-pdf :as watermark-pdf]
-            [solita.etp.config :as config])
+            [solita.etp.config :as config]
+            [solita.etp.service.localization :as loc]
+            [solita.etp.service.energiatodistus-pdf.etusivu-yleistiedot :as et-etusivu-yleistiedot]
+            [solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia :as et-laskennallinen-ostoenergia])
   (:import [java.io ByteArrayOutputStream]))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
@@ -29,31 +32,31 @@
       font-size: 11pt;
     }
 
-    .page {
-      page-break-after: always;
+   .page {
+      border: 8px solid #23323e;
+      box-sizing: border-box;
+      min-height: 257mm;
       position: relative;
-      width: 210mm;
-      min-height: 297mm;
-      padding: 0;
+      margin-bottom: 20mm;
     }
 
-    .page:last-child {
-      page-break-after: auto;
-    }
+   .page-header {
+      background-color: #23323e;
+      height: 35mm;
+      width: 100%;
+      padding: 4mm 8mm 0 8mm;
+      color: white;
+      font-size: 24pt;
+      font-weight: bold;
+      font-family: roboto, sans-serif;
+   }
 
-    .page-content {
-      padding: 20mm;
-    }
-
-    .page-footer {
-       position: absolute;
-       bottom: 1cm;
-       left: 0;
-       right: 0;
-       text-align: center;
-       font-size: 10pt;
-       color: #666;
-       font-family: roboto, sans-serif;
+    .page-title {
+      color: white;
+      font-size: 24pt;
+      font-weight: bold;
+      margin: 0;
+      font-family: roboto, sans-serif;
     }
 
     h1 {
@@ -92,12 +95,18 @@
 (defn- generate-energiatodistus-ohtp-pdf
   "Use OpenHTMLToPDF to generate PDF, return as a byte array"
   [energiatodistus kieli]
-  (let [output-stream (ByteArrayOutputStream.)
-        ;; Placeholder content for now
-        pages [{:title "Energiatodistus 2026"
-                :content [:div
-                          [:p "Tämä on energiatodistuksen 2026 placeholder-sisältö."]
-                          [:p (str "Kieli: " kieli)]]}]]
+  (let [_ (println "kieli:" kieli)
+        output-stream (ByteArrayOutputStream.)
+        l (kieli loc/et-pdf-localization kieli)
+
+        pages [{:title (l :energiatodistus)
+                  :content
+                  [:div
+                   ;(et-etusivu-yleistiedot/et-etusivu-yleistiedot [energiatodistus kieli alakayttotarkoitukset])
+                   ;(et-laskennallinen-ostoenergia/ostoenergia energiatodistus kieli)
+                   ;(et-laskennallinen-ostoenergia/ostoenergia-tiedot [energiatodistus kieli])
+                   ]}]]
+
     (-> (generate-document-html pages (:id energiatodistus))
         (pdf-service/html->pdf output-stream))
     (-> output-stream .toByteArray)))
