@@ -44,6 +44,60 @@
       font-size: 11pt;
     }
 
+    .page {
+      page-break-after: always;
+      position: relative;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 0;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    .page-content {
+      padding: 20mm;
+    }
+
+    .page-footer {
+       position: absolute;
+       bottom: 1cm;
+       left: 0;
+       right: 0;
+       text-align: center;
+       font-size: 10pt;
+       color: #666;
+       font-family: roboto, sans-serif;
+    }
+
+   .page {
+      border: 8px solid #23323e;
+      box-sizing: border-box;
+      min-height: 257mm;
+      position: relative;
+      margin-bottom: 20mm;
+    }
+
+   .page-header {
+      background-color: #23323e;
+      height: 35mm;
+      width: 100%;
+      padding: 4mm 8mm 0 8mm;
+      color: white;
+      font-size: 24pt;
+      font-weight: bold;
+      font-family: roboto, sans-serif;
+   }
+
+    .page-title {
+      color: white;
+      font-size: 24pt;
+      font-weight: bold;
+      margin: 0;
+      font-family: roboto, sans-serif;
+    }
+
    .page {
       border: 8px solid #23323e;
       box-sizing: border-box;
