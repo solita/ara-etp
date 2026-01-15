@@ -278,7 +278,8 @@
         :fossiiliset-polttoaineet          "Fossila bränslen"
         :co2ekv-vahenema-huomautus         "** CO2ekv-minskning beräknad enligt beräknad köpt energi"}})
 (def et-pdf-localization
-  {:fi {:rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite"
+  {:fi {:energiatodistus                            "Energiatodistus"
+        :rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite"
         :pysyva-rakennustunnus                      "Pysyvä rakennustunnus"
         :rakennuksen-valmistumisvuosi               "Rakennuksen valmistumisvuosi"
         :rakennuksen-kayttotarkoitusluokka          "Rakennuksen käyttötarkoitusluokka"
