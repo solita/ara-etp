@@ -288,6 +288,56 @@ export const energiatodistus2013 = R.compose(
 );
 
 export const energiatodistus2026 = R.compose(
+  R.assocPath(['perustiedot', 'havainnointikayntityyppi-id'], ValidNone()),
+  R.assocPath(
+    ['huomiot', 'lammitys-kayttoikaa-jaljella-arvio-vuosina'],
+    ValidNone()
+  ),
+  R.assocPath(['huomiot', 'lammitys-asetukset-tehostettavissa'], ValidNone()),
+  R.assocPath(
+    ['huomiot', 'iv-ilmastointi-kayttoikaa-jaljella-arvio-vuosina'],
+    ValidNone()
+  ),
+  R.assocPath(
+    ['huomiot', 'iv-ilmastointi-asetukset-tehostettavissa'],
+    ValidNone()
+  ),
+  R.assocPath(
+    [
+      'tulokset',
+      'uusiutuvat-omavaraisenergiat',
+      'aurinkosahko-kokonaistuotanto'
+    ],
+    ValidNone()
+  ),
+  R.assocPath(
+    [
+      'tulokset',
+      'uusiutuvat-omavaraisenergiat',
+      'aurinkolampo-kokonaistuotanto'
+    ],
+    ValidNone()
+  ),
+  R.assocPath(
+    ['tulokset', 'uusiutuvat-omavaraisenergiat', 'tuulisahko-kokonaistuotanto'],
+    ValidNone()
+  ),
+  R.assocPath(
+    [
+      'tulokset',
+      'uusiutuvat-omavaraisenergiat',
+      'lampopumppu-kokonaistuotanto'
+    ],
+    ValidNone()
+  ),
+  R.assocPath(
+    ['tulokset', 'uusiutuvat-omavaraisenergiat', 'muulampo-kokonaistuotanto'],
+    ValidNone()
+  ),
+  R.assocPath(
+    ['tulokset', 'uusiutuvat-omavaraisenergiat', 'muusahko-kokonaistuotanto'],
+    ValidNone()
+  ),
   R.assoc('versio', 2026),
   energiatodistus2018
 );
