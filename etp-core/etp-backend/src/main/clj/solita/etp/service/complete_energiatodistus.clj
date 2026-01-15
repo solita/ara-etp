@@ -543,8 +543,7 @@
       (into {}
             (for [[energiamuoto maara] kaytettavat-energiamuodot]
               (let [kerroin (get-in e-luokka-service/energiamuotokerroin
-                                    [2026 energiamuoto]
-                                    0M)]
+                                    [2026 energiamuoto])]
 
                 [energiamuoto
                  (Math/round (double
