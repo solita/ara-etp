@@ -271,6 +271,8 @@
   [["/energiatodistukset"
     ["/2013" (crud-api/post 2013 energiatodistus-schema/EnergiatodistusSave2013External)]
     ["/2018" (crud-api/post 2018 energiatodistus-schema/EnergiatodistusSave2018External)]
+    ;; TODO: AE-2585: Decide external 2026 API details
+    #_["/2026" (crud-api/post 2026 energiatodistus-schema/EnergiatodistusSave2026External)]
     ["/legacy"
      ["/2013" (xml-api/post 2013)]
      ["/2018" (xml-api/post 2018)]]]])
