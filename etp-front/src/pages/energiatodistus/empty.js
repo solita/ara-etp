@@ -293,15 +293,12 @@ export const energiatodistus2026 = R.compose(
     ['huomiot', 'lammitys-kayttoikaa-jaljella-arvio-vuosina'],
     ValidNone()
   ),
-  R.assocPath(['huomiot', 'lammitys-asetukset-tehostettavissa'], ValidNone()),
+  R.assocPath(['huomiot', 'lammitys-asetukset-tehostettavissa'], false),
   R.assocPath(
     ['huomiot', 'iv-ilmastointi-kayttoikaa-jaljella-arvio-vuosina'],
     ValidNone()
   ),
-  R.assocPath(
-    ['huomiot', 'iv-ilmastointi-asetukset-tehostettavissa'],
-    ValidNone()
-  ),
+  R.assocPath(['huomiot', 'iv-ilmastointi-asetukset-tehostettavissa'], false),
   R.assocPath(
     [
       'tulokset',

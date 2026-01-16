@@ -300,9 +300,9 @@
       (assoc-in [:perustiedot :havainnointikayntityyppi-id] (xschema/optional-properties common-schema/Key))
 
       (assoc-in [:huomiot :lammitys-kayttoikaa-jaljella-arvio-vuosina] (xschema/optional-properties common-schema/IntNonNegative))
-      (assoc-in [:huomiot :lammitys-asetukset-tehostettavissa] (schema/maybe schema/Bool))
+      (assoc-in [:huomiot :lammitys-asetukset-tehostettavissa] (xschema/optional-properties schema/Bool))
       (assoc-in [:huomiot :iv-ilmastointi-kayttoikaa-jaljella-arvio-vuosina] (xschema/optional-properties common-schema/IntNonNegative))
-      (assoc-in [:huomiot :iv-ilmastointi-asetukset-tehostettavissa] (schema/maybe schema/Bool))
+      (assoc-in [:huomiot :iv-ilmastointi-asetukset-tehostettavissa] (xschema/optional-properties schema/Bool))
 
       (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkosahko-kokonaistuotanto] (xschema/optional-properties common-schema/NonNegative))
       (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkolampo-kokonaistuotanto] (xschema/optional-properties common-schema/NonNegative))
