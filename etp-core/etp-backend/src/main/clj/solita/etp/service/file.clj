@@ -1,6 +1,5 @@
 (ns solita.etp.service.file
   (:require [clojure.java.io :as io]
-            [solita.etp.exception :as exception]
             [solita.common.aws.s3 :as s3])
   (:import (clojure.lang ExceptionInfo)
            (java.io File FileInputStream)))
@@ -53,14 +52,20 @@
 
 (defn key->version-ids [aws-s3-client key]
   "Given a key returns the ids of its versions"
-  (let [all-versions-with-key-prefix (s3/list-object-versions aws-s3-client key)]
-    ;; Only max 1000 results are returned.
-    (when (:IsTruncated all-versions-with-key-prefix)
-      (exception/throw-ex-info! :unimplemented-exception "Implement pagination for ListObjectVersions!"))
-    ;; Take only the version-ids where key is an exact match.
-    (->> (:Versions all-versions-with-key-prefix)
-         (filter #(= key (:Key %)))
-         (map :VersionId))))
+  (loop [next-key-marker nil
+         next-version-id-marker nil
+         acc []]
+    (let [{:keys [Versions IsTruncated NextKeyMarker NextVersionIdMarker]}
+          (s3/list-object-versions aws-s3-client
+                                   {:prefix                 key
+                                    :next-key-marker        next-key-marker
+                                    :next-version-id-marker next-version-id-marker})]
+      (let [acc' (into acc Versions)]
+        (if IsTruncated
+          (recur NextKeyMarker NextVersionIdMarker acc')
+          (->> acc'
+               (filter #(= key (:Key %)))
+               (map :VersionId)))))))
 
 (defn file-exists? [aws-s3-client key]
   (try
