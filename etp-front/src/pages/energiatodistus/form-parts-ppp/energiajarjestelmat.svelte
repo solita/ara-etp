@@ -88,9 +88,7 @@
         </th>
         <th
           class="et-table--th et-table--th-left-aligned et-table--th__twocells">
-          {$_(
-            'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.nykyinen'
-          )}
+          {$_('perusparannuspassi.lahtotilanne')}
         </th>
         <th
           class="et-table--th et-table--th-left-aligned et-table--th__twocells">
