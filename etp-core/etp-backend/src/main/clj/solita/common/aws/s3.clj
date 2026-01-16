@@ -22,11 +22,13 @@
                      :Key    key}))
 
 (defn list-object-versions
-  [{:keys [client bucket]} prefix]
+  [{:keys [client bucket]} {:keys [prefix next-key-marker next-version-id-marker]}]
   (aws.utils/invoke client
                     :ListObjectVersions
-                    {:Bucket bucket
-                     :Prefix prefix}))
+                    (cond-> {:Bucket bucket
+                             :Prefix prefix}
+                            next-key-marker (assoc :KeyMarker next-key-marker)
+                            next-version-id-marker (assoc :NextVersionIdMarker next-version-id-marker))))
 
 (defn delete-object [{:keys [client bucket]} key]
   (aws.utils/invoke client
