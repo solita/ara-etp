@@ -309,7 +309,8 @@
       (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :tuulisahko-kokonaistuotanto] common-schema/NonNegative)
       (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :lampopumppu-kokonaistuotanto] common-schema/NonNegative)
       (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :muulampo-kokonaistuotanto] common-schema/NonNegative)
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :muusahko-kokonaistuotanto] common-schema/NonNegative)))
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :muusahko-kokonaistuotanto] common-schema/NonNegative)
+      xschema/optional-properties))
 
 (defn ->EnergiatodistusSaveExternal [schema]
   (-> schema
