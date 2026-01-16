@@ -80,6 +80,26 @@
     )
   )(schemas['v' + version]);
 
+  const pppSaveSchema = R.compose(
+    R.reduce(
+      schemas.assocRequired,
+      R.__,
+      pppRequired(
+        perusparannuspassi,
+        pppValidation,
+        energiatodistus['bypass-validation-limits']
+      )
+    ),
+    schema =>
+      perusparannuspassi['bypass-validation-limits']
+        ? schema
+        : R.reduce(
+            schemas.redefineNumericValidation,
+            schema,
+            pppValidation.numeric
+          )
+  )(schemas.perusparannuspassi);
+
   const signatureSchema = schemas.appendRequiredValidators(
     R.assoc('$signature', true, saveSchema),
     isRequiredPredicate => isRequiredPredicate(inputLanguage)(energiatodistus)
@@ -119,6 +139,22 @@
     }
   };
 
+  const showInvalidPPPPropertiesMessage = invalidProperties => {
+    if (!R.isEmpty(invalidProperties)) {
+      const invalidTxt = R.compose(
+        R.join(', '),
+        R.map(Inputs.propertyLabel($_, 'perusparannuspassi')),
+        R.map(R.nth(0))
+      )(invalidProperties);
+
+      announceError(
+        $_('perusparannuspassi.messages.validation-error') + invalidTxt
+      );
+
+      Inputs.scrollIntoView(document, invalidProperties[0][0]);
+    }
+  };
+
   const showKorvausErrorMessage = R.forEach(
     R.compose(
       announceError,
@@ -145,7 +181,31 @@
       EtValidations.invalidProperties(saveSchema, energiatodistus)
     );
 
-    if (R.isEmpty(invalid) && korvausError.isNone()) {
+    const invalidPPP = [];
+
+    if (perusparannuspassi && perusparannuspassi.valid) {
+      console.log("Validating PPP...", perusparannuspassi);
+      invalidPPP.push(
+        ...R.filter(
+          R.propSatisfies(
+            EtValidations.isValidationRequired(whoami, energiatodistus),
+            0
+          ),
+          EtValidations.invalidProperties(
+            pppSaveSchema,
+            R.assocPath(
+              ['perustiedot', 'kieli'],
+              energiatodistus.perustiedot.kieli,
+              perusparannuspassi
+            )
+          )
+        )
+      );
+    }
+
+    const allInvalid = [...invalid, ...invalidPPP];
+
+    if (R.isEmpty(allInvalid) && korvausError.isNone()) {
       clearAnnouncements();
       submit(
         energiatodistus,
@@ -159,6 +219,7 @@
     } else {
       showKorvausErrorMessage(korvausError);
       showInvalidPropertiesMessage(invalid);
+      showInvalidPPPPropertiesMessage(invalidPPP);
     }
   };
 

@@ -1435,6 +1435,9 @@
   "perusparannuspassi": {
     "id": "Perusparannuspassin tunnus",
     "lahtotilanne": "Lähtötilanne",
+    "messages": {
+      "validation-error": "Perusparannuspassin lomakkeella virheitä, tarkista kentät:"
+    },
     "passin-perustiedot": {
       "label-context": "$unused",
       "header": "Passin perustiedot",
