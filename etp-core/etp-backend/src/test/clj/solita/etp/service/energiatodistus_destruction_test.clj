@@ -761,3 +761,77 @@
     (t/testing "Viesti liite audit for viestiketju-1-id does not exist after deletion"
       (t/is (empty? (select-viesti-liite-audit viestiketju-1-id)))
       (t/is (not (empty? (select-viesti-liite-audit viestiketju-2-id)))))))
+
+(t/deftest ^{:broken-test "Not really broken, but too heavy"} destroy-liite-when-there-are-many-liiteet-test
+
+  (let [laatijat (laatija-test-data/generate-and-insert! 1)
+        laatija-id (-> laatijat keys sort first)
+        select-liitteet #(jdbc/query ts/*db* ["select * from liite where energiatodistus_id = ?" %])
+        select-liitteet-audit #(jdbc/query ts/*db* ["select * from audit.liite where energiatodistus_id = ?" %])
+        energiatodistukset (energiatodistus-test-data/generate-and-insert!
+                             2
+                             2013
+                             true
+                             laatija-id)
+        [energiatodistus-id-1 energiatodistus-id-2] (-> energiatodistukset keys sort)
+        file-liitteet-1 (liite-test-data/generate-and-insert-files! 2
+                                                                    laatija-id
+                                                                    energiatodistus-id-1)
+        link-liitteet-1 (liite-test-data/generate-and-insert-links! 2
+                                                                    laatija-id
+                                                                    energiatodistus-id-1)
+        file-liitteet-2 (liite-test-data/generate-and-insert-files! 15000
+                                                                    laatija-id
+                                                                    energiatodistus-id-2)
+        link-liitteet-2 (liite-test-data/generate-and-insert-links! 2
+                                                                    laatija-id
+                                                                    energiatodistus-id-2)
+        file-liitteet-keys-1 (->> file-liitteet-1
+                                  keys
+                                  (map #(liite-service/file-key %)))
+        link-liitteet-keys-1 (->> link-liitteet-1
+                                  keys
+                                  (map #(liite-service/file-key %)))
+        file-liitteet-keys-2 (->> file-liitteet-2
+                                  keys
+                                  (map #(liite-service/file-key %)))
+        link-liitteet-keys-2 (->> link-liitteet-2
+                                  keys
+                                  (map #(liite-service/file-key %)))]
+
+    (t/testing "The liitteet exist before deletion"
+      (let [liitteet-1-in-db (select-liitteet energiatodistus-id-1)
+            liitteet-2-in-db (select-liitteet energiatodistus-id-2)]
+        (t/is (every? file-exists? file-liitteet-keys-1))
+        (t/is (every? file-exists? file-liitteet-keys-2))
+
+        (t/is (not-any? file-exists? link-liitteet-keys-1))
+        (t/is (not-any? file-exists? link-liitteet-keys-2))
+
+        (t/is (= 4 (count liitteet-1-in-db)))
+        (t/is (= 15002 (count liitteet-2-in-db)))))
+
+    (t/testing "Audit for liitteet exist before deletion"
+      (t/is (not-empty (select-liitteet-audit energiatodistus-id-1)))
+      (t/is (not-empty (select-liitteet-audit energiatodistus-id-2))))
+
+    ;; Destroy et-1 liiteet
+    (expire-energiatodistus-and-its-valvonta energiatodistus-id-1)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
+
+    (t/testing "The liitteet for energiatodistus-1 are deleted but exist for energiatodistus-2"
+      (let [liitteet-1-in-db (select-liitteet energiatodistus-id-1)
+            liitteet-2-in-db (select-liitteet energiatodistus-id-2)]
+
+        (t/is (not-any? file-exists? file-liitteet-keys-1))
+        (t/is (every? file-exists? file-liitteet-keys-2))
+
+        (t/is (not-any? file-exists? link-liitteet-keys-1))
+        (t/is (not-any? file-exists? link-liitteet-keys-2))
+
+        (t/is (= 0 (count liitteet-1-in-db)))
+        (t/is (= 15002 (count liitteet-2-in-db)))))
+
+    (t/testing "Audit for energiatodistus-1's liitteet do not exist after deletion"
+      (t/is (empty? (select-liitteet-audit energiatodistus-id-1)))
+      (t/is (not-empty (select-liitteet-audit energiatodistus-id-2))))))
