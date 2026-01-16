@@ -184,7 +184,6 @@
     const invalidPPP = [];
 
     if (perusparannuspassi && perusparannuspassi.valid) {
-      console.log("Validating PPP...", perusparannuspassi);
       invalidPPP.push(
         ...R.filter(
           R.propSatisfies(
