@@ -1434,6 +1434,10 @@
   },
   "perusparannuspassi": {
     "id": "Perusparannuspassin tunnus",
+    "lahtotilanne": "Lähtötilanne",
+    "messages": {
+      "validation-error": "Perusparannuspassin lomakkeella virheitä, tarkista kentät:"
+    },
     "passin-perustiedot": {
       "label-context": "$unused",
       "header": "Passin perustiedot",
@@ -1474,7 +1478,6 @@
       "energiajarjestelmat": {
         "header": "Energiajärjestelmät",
         "title": "Energiajärjestelmä",
-        "nykyinen": "Nykyinen",
         "ehdotettu-taso": "Ehdotettu taso",
         "lisatiedot-kuvaus": "Ilmoita mahdolliset muut energiajärjestelmät lisätiedoissa.",
         "paalammitysjarjestelma": "Päälämmitysjärjestelmä",
