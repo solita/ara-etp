@@ -142,9 +142,9 @@
       (assert-status post-res 201 "Expected status 201 from ET creation")
       (let [et-id (-> post-res :body (j/read-value object-mapper) :id)]
 
-        (t/testing "PPP with kaukolampo-hinta at 3 cents should succeed with warnings (outside warning range 5-20)"
+        (t/testing "PPP with kaukolampo-hinta at 21 cents should succeed with warnings (outside warning range 0-20)"
           (let [ppp (-> (ppp-test-data/generate-add et-id)
-                        (assoc-in [:tulokset :kaukolampo-hinta] 3))
+                        (assoc-in [:tulokset :kaukolampo-hinta] 21))
                 ppp-body (-> ppp j/write-value-as-string)
                 post-res (ts/handler (-> (mock/request :post "/api/private/perusparannuspassit/2026")
                                          (mock/header "Accept" "application/json")
@@ -159,9 +159,9 @@
               (t/is (some #(= "tulokset.kaukolampo-hinta" (:property %)) warnings)
                     "Expected warning for tulokset.kaukolampo-hinta"))))
 
-        (t/testing "PPP with kaukolampo-hinta at 1 cent should fail with 400 (outside error range 2-100)"
+        (t/testing "PPP with kaukolampo-hinta at 201 cent should fail with 400 (outside error range 0-200)"
           (let [ppp (-> (ppp-test-data/generate-add et-id)
-                        (assoc-in [:tulokset :kaukolampo-hinta] 1))
+                        (assoc-in [:tulokset :kaukolampo-hinta] 201))
                 ppp-body (-> ppp j/write-value-as-string)
                 post-res (ts/handler (-> (mock/request :post "/api/private/perusparannuspassit/2026")
                                          (mock/header "Accept" "application/json")
@@ -197,8 +197,8 @@
             ppp-id (-> create-res :body (j/read-value object-mapper) :id)]
         (assert-status create-res 201 "Expected status 201 from initial PPP creation")
 
-        (t/testing "PUT: Update PPP with kaukolampo-hinta at 3 cents should succeed with warnings (outside warning range 5-20)"
-          (let [warning-ppp (assoc-in initial-ppp [:tulokset :kaukolampo-hinta] 3)
+        (t/testing "PUT: Update PPP with kaukolampo-hinta at 21 cents should succeed with warnings (outside warning range 0-20)"
+          (let [warning-ppp (assoc-in initial-ppp [:tulokset :kaukolampo-hinta] 21)
                 warning-ppp-body (-> warning-ppp j/write-value-as-string)
                 put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2026/" ppp-id))
                                         (mock/header "Accept" "application/json")
@@ -213,8 +213,8 @@
               (t/is (some #(= "tulokset.kaukolampo-hinta" (:property %)) warnings)
                     "Expected warning for tulokset.kaukolampo-hinta"))))
 
-        (t/testing "PUT: Update PPP with kaukolampo-hinta at 1 cent should fail with 400 (outside error range 2-100)"
-          (let [invalid-ppp (assoc-in initial-ppp [:tulokset :kaukolampo-hinta] 1)
+        (t/testing "PUT: Update PPP with kaukolampo-hinta at 201 cent should fail with 400 (outside error range 0-200)"
+          (let [invalid-ppp (assoc-in initial-ppp [:tulokset :kaukolampo-hinta] 201)
                 invalid-ppp-body (-> invalid-ppp j/write-value-as-string)
                 put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2026/" ppp-id))
                                         (mock/header "Accept" "application/json")
