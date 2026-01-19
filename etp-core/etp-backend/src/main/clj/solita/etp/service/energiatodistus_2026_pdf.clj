@@ -99,11 +99,19 @@
     }
 
    .page {
-      border: 8px solid #23323e;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 70px;
       box-sizing: border-box;
-      min-height: 257mm;
+      page-break-after: always;
       position: relative;
-      margin-bottom: 20mm;
+    }
+
+   .page-border-container {
+      border: 12px solid #23323e;
+      min-height: calc(297mm - 140px);
+      padding: 20mm;
+      position: relative;
     }
 
    .page-header {
