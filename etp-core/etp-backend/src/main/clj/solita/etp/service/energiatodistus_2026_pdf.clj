@@ -20,17 +20,7 @@
   (str
    "@page {
       size: A4;
-      margin: 10mm;
-      @bottom-center {
-        content: counter(page) \" / \" counter(pages);
-        font-family: roboto, sans-serif;
-        font-size: 10pt;
-      }
-      @bottom-right {
-        content: string(id-string);
-        font-family: roboto, sans-serif;
-        font-size: 10pt;
-      }
+      margin: 0;
     }
 
     * {
@@ -44,82 +34,89 @@
       font-size: 11pt;
     }
 
-    .page {
-      page-break-after: always;
-      position: relative;
-      width: 210mm;
-      min-height: 297mm;
-      padding: 0;
-    }
-
-    .page:last-child {
-      page-break-after: auto;
-    }
-
-    .page-content {
-      padding: 20mm;
-    }
-
-    .page-footer {
-       position: absolute;
-       bottom: 1cm;
-       left: 0;
-       right: 0;
-       text-align: center;
-       font-size: 10pt;
-       color: #666;
-       font-family: roboto, sans-serif;
-    }
-
-   .page {
-      border: 8px solid #23323e;
-      box-sizing: border-box;
-      min-height: 257mm;
-      position: relative;
-      margin-bottom: 20mm;
-    }
-
-   .page-header {
-      background-color: #23323e;
-      height: 35mm;
-      width: 100%;
-      padding: 4mm 8mm 0 8mm;
-      color: white;
-      font-size: 24pt;
-      font-weight: bold;
-      font-family: roboto, sans-serif;
-   }
-
-    .page-title {
-      color: white;
-      font-size: 24pt;
-      font-weight: bold;
-      margin: 0;
-      font-family: roboto, sans-serif;
-    }
-
    .page {
       width: 210mm;
-      min-height: 297mm;
+      height: 297mm;
       padding: 70px;
       box-sizing: border-box;
       page-break-after: always;
       position: relative;
     }
 
+   .page:last-child {
+      page-break-after: auto;
+    }
+
    .page-border-container {
       border: 12px solid #23323e;
-      min-height: calc(297mm - 140px);
-      padding: 20mm;
+      height: calc(100% - 24px);
+      padding: 0;
       position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+   .page-content {
+      flex: 1;
+      padding: 0;
+    }
+
+   .page-section {
+      border-bottom: 12px solid #23323e;
+      padding: 10px 3px;
+    }
+
+   .page-section:last-child {
+      border-bottom: none;
+    }
+
+   .todo-placeholder {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16pt;
+      color: #999;
+    }
+
+   .page-footer {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      font-size: 10pt;
+      color: #666;
+      text-align: center;
+      font-family: roboto, sans-serif;
     }
 
    .page-header {
       background-color: #23323e;
-      height: 35mm;
+      height: 100px;
       width: 100%;
-      padding: 4mm 8mm 0 8mm;
+      padding: 20px 10mm;
+      margin: 0;
       color: white;
+      font-family: roboto, sans-serif;
+      text-align: center;
+   }
+
+    .page-title {
+      color: white;
+      font-size: 25px;
+      font-weight: bold;
+      margin: 0 0 8px 0;
+      font-family: roboto, sans-serif;
+      text-transform: uppercase;
+    }
+
+    .page-subtitle {
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      margin: 0;
+      font-family: roboto, sans-serif;
+    }
       font-size: 24pt;
       font-weight: bold;
       font-family: roboto, sans-serif;
@@ -254,19 +251,22 @@
       width: 1px;
     }"))
 
-(defn- page-header [title]
+(defn- page-header [title subtitle]
   [:div {:class "page-header"}
-   [:h1 {:class "page-title"} title]])
+   [:h1 {:class "page-title"} title]
+   [:p {:class "page-subtitle"} subtitle]])
 
 (defn- page-footer [et-tunnus page-num total-pages]
-  [:div {:class "page-footer"}])
+  [:div {:class "page-footer"}
+   (str "Todistustunnus " et-tunnus " | " page-num " / " total-pages)])
 
 (defn- render-page [page-data page-num total-pages et-tunnus]
-  (let [{:keys [title content header]} page-data]
+  (let [{:keys [title subtitle content header]} page-data]
     [:div {:class "page"}
-     (or header (page-header title))
-     [:div {:class "page-content"}
-      content]
+     [:div {:class "page-border-container"}
+      (or header (page-header title subtitle))
+      [:div {:class "page-content"}
+       content]]
      (page-footer et-tunnus page-num total-pages)]))
 
 (defn generate-document-html
@@ -290,13 +290,18 @@
 (defn generate-energiatodistus-html
   "Use OpenHTMLToPDF to generate PDF, return as a byte array"
   [{:keys [energiatodistus kieli] :as params}]
-  (let [l (kieli loc/ppp-pdf-localization)
+  (let [l (kieli loc/et-pdf-localization)
         pages [{:title (l :energiatodistus)
+                :subtitle (l :energiatodistus-2026-subtitle)
                 :content
                 [:div
-                 (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)
-                 (et-laskennallinen-ostoenergia/ostoenergia params)
-                 (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]}]]
+                 [:div {:class "page-section"}
+                  (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
+                 [:div {:class "page-section"}
+                  [:div {:class "todo-placeholder"} "TODO"]]
+                 [:div {:class "page-section"}
+                  (et-laskennallinen-ostoenergia/ostoenergia params)
+                  (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]}]]
 
     (generate-document-html pages (:id energiatodistus))))
 

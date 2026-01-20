@@ -279,6 +279,7 @@
         :co2ekv-vahenema-huomautus         "** CO2ekv-minskning beräknad enligt beräknad köpt energi"}})
 (def et-pdf-localization
   {:fi {:energiatodistus                            "Energiatodistus"
+        :energiatodistus-2026-subtitle              "Vuoden 2026 lainsäädännön mukainen energiatodistus"
         :rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite"
         :pysyva-rakennustunnus                      "Pysyvä rakennustunnus"
         :rakennuksen-valmistumisvuosi               "Rakennuksen valmistumisvuosi"
@@ -302,6 +303,7 @@
         :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP)"}
 
    :sv {:rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite (sv)"
+        :energiatodistus-2026-subtitle              "Energicertifikat i enlighet med 2026 års lagstiftning"
         :pysyva-rakennustunnus                      "Pysyvä rakennustunnus (sv)"
         :rakennuksen-valmistumisvuosi               "Rakennuksen valmistumisvuosi (sv)"
         :rakennuksen-kayttotarkoitusluokka          "Rakennuksen käyttötarkoitusluokka (sv)"
