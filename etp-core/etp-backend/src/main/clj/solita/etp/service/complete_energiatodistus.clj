@@ -562,6 +562,8 @@
        1000.0)
     0.0))
 
+;TODO: Before the et-pdf is finalized, check that this is correct and add to the et-pdf etusivu
+#_
 (defn uusiutuvan-osuus-paastoista
   [tulokset]
   (let [kaytettavat-energiamuodot (:kaytettavat-energiamuodot tulokset)

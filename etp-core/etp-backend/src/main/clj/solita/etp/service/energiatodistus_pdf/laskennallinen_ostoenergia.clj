@@ -59,12 +59,15 @@
         tulokset (:tulokset energiatodistus)
         kasvihuonepaastot (energiatodistus/co2-paastot-et (:kaytettavat-energiamuodot tulokset))
         rounded (when kasvihuonepaastot (Math/round (double kasvihuonepaastot)))
-        uusiutuvan-osuus (energiatodistus/uusiutuvan-osuus-paastoista (:tulokset energiatodistus))]
+        ;uusiutuvan-osuus (energiatodistus/uusiutuvan-osuus-paastoista (:tulokset energiatodistus))
+        ;TODO get back to the uusiutuvan-energian-osuus when it's clear what to calculate
+
+        ]
 
     (description-list
       [{:dt (l :energiakaytosta-syntyvat-kasvihuonepaastot)
         :dd (str rounded " kgCO2ekv/m2/vuosi")}
        {:dt (l :uusiutuva-energian-osuus)
-        :dd uusiutuvan-osuus}
+        :dd (str "TODO: Do the calculations when we're sure what to calculate")}
        {:dt (l :kasvihuonepaastot)
         :dd (str "TODO: kunhan päästään GWP juttuihin")}])))
