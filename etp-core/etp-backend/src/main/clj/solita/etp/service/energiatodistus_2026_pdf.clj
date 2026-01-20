@@ -125,6 +125,7 @@
       margin: 0 auto;
       border-collapse: collapse;
       margin: 10px 15px;
+      table-layout: fixed;
     }
 
     table.ostoenergia th,
@@ -153,11 +154,24 @@
     table.ostoenergia th:nth-child(2),
     table.ostoenergia td:nth-child(2) {
       border-left: none;
+      width: 15%;
     }
 
     table.ostoenergia th:last-child,
     table.ostoenergia td:last-child {
       border-right: none;
+      width: 70px;
+    }
+
+    table.ostoenergia th:nth-child(3),
+    table.ostoenergia td:nth-child(3),
+    table.ostoenergia th:nth-child(4),
+    table.ostoenergia td:nth-child(4),
+    table.ostoenergia th:nth-child(5),
+    table.ostoenergia td:nth-child(5),
+    table.ostoenergia th:nth-child(6),
+    table.ostoenergia td:nth-child(6) {
+      width: 70px;
     }
 
     table.ostoenergia th.empty,
