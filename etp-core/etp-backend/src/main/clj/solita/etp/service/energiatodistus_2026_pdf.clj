@@ -20,17 +20,7 @@
   (str
    "@page {
       size: A4;
-      margin: 10mm;
-      @bottom-center {
-        content: counter(page) \" / \" counter(pages);
-        font-family: roboto, sans-serif;
-        font-size: 10pt;
-      }
-      @bottom-right {
-        content: string(id-string);
-        font-family: roboto, sans-serif;
-        font-size: 10pt;
-      }
+      margin: 0;
     }
 
     * {
@@ -45,19 +35,88 @@
     }
 
    .page {
-      border: 8px solid #23323e;
+      width: 210mm;
+      height: 297mm;
+      padding: 70px;
       box-sizing: border-box;
-      min-height: 257mm;
+      page-break-after: always;
       position: relative;
-      margin-bottom: 20mm;
+    }
+
+   .page:last-child {
+      page-break-after: auto;
+    }
+
+   .page-border-container {
+      border: 12px solid #23323e;
+      height: calc(100% - 24px);
+      padding: 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+   .page-content {
+      flex: 1;
+      padding: 0;
+    }
+
+   .page-section {
+      border-bottom: 12px solid #23323e;
+      padding: 10px 3px;
+    }
+
+   .page-section:last-child {
+      border-bottom: none;
+    }
+
+   .todo-placeholder {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16pt;
+      color: #999;
+    }
+
+   .page-footer {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      font-size: 10pt;
+      color: #666;
+      text-align: center;
+      font-family: roboto, sans-serif;
     }
 
    .page-header {
       background-color: #23323e;
-      height: 35mm;
+      height: 100px;
       width: 100%;
-      padding: 4mm 8mm 0 8mm;
+      padding: 20px 10mm;
+      margin: 0;
       color: white;
+      font-family: roboto, sans-serif;
+      text-align: center;
+   }
+
+    .page-title {
+      color: white;
+      font-size: 25px;
+      font-weight: bold;
+      margin: 0 0 8px 0;
+      font-family: roboto, sans-serif;
+      text-transform: uppercase;
+    }
+
+    .page-subtitle {
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      margin: 0;
+      font-family: roboto, sans-serif;
+    }
       font-size: 24pt;
       font-weight: bold;
       font-family: roboto, sans-serif;
@@ -242,13 +301,18 @@
 (defn generate-energiatodistus-html
   "Use OpenHTMLToPDF to generate PDF, return as a byte array"
   [{:keys [energiatodistus kieli] :as params}]
-  (let [l (kieli loc/ppp-pdf-localization)
+  (let [l (kieli loc/et-pdf-localization)
         pages [{:title (l :energiatodistus)
+                :subtitle (l :energiatodistus-2026-subtitle)
                 :content
                 [:div
-                 (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)
-                 (et-laskennallinen-ostoenergia/ostoenergia params)
-                 (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]}]]
+                 [:div {:class "page-section"}
+                  (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
+                 [:div {:class "page-section"}
+                  [:div {:class "todo-placeholder"} "TODO"]]
+                 [:div {:class "page-section"}
+                  (et-laskennallinen-ostoenergia/ostoenergia params)
+                  (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]}]]
 
     (generate-document-html pages (:id energiatodistus))))
 

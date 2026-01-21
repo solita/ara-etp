@@ -11,13 +11,6 @@
             [solita.common.map :as map]
             [solita.common.formats :as formats]))
 
-(def ^:private co2-kertoimet
-  {:kaukolampo         0.059
-   :sahko              0.05
-   :uusiutuvat-pat     0.027
-   :fossiiliset-pat    0.306
-   :kaukojaahdytys     0.014})
-
 (defn safe-div [x y]
   (when (and x y (> y 0))
     (/ x y)))
