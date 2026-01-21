@@ -770,7 +770,6 @@
                              (= (-> % :perustiedot :kieli) nil)) %)))] ; Old todistus entries have language set as nil. We'll just have to give it a try
     (if allekirjoitusaika
       (find-existing-pdf aws-s3-client id kieli)
-      #_
       (if (= 2026 (:versio complete-energiatodistus))
         (do
           (log/info "Generating 2026 PDF for id" id)
