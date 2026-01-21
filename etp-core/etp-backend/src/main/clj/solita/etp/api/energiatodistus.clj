@@ -29,8 +29,7 @@
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.json :as json]
             [solita.etp.service.rooli :as rooli-service]
-            [solita.etp.service.viesti :as viesti-service]
-            [solita.etp.service.energiatodistus-2026-pdf :as et-pdf-2026])
+            [solita.etp.service.viesti :as viesti-service])
   (:import (com.fasterxml.jackson.core JsonParseException)
            (java.time Instant)))
 
@@ -61,23 +60,6 @@
                                                                                  kieli)
                            filename
                            (str "Energiatodistus " id " does not exists."))
-                          (r/not-found "File not found")))}}])
-
-(defn pdf-route-2026 []
-  ["/pdf/2026/:kieli/:filename"
-   {:get {:summary    "Lataa energiatodistuys2026 PDF-tiedostona"
-          :access     (some-fn rooli-service/laatija? rooli-service/paakayttaja?)
-          :parameters {:path {:id common-schema/Key
-                              :kieli schema/Str
-                              :filename schema/Str}}
-          :responses  {200 {:body nil}
-                       404 {:body schema/Str}}
-          :handler    (fn [{{{:keys [id kieli filename]} :path} :parameters :keys [db whoami]}]
-                        (if (valid-pdf-filename? filename id kieli)
-                          (api-response/pdf-response
-                            (et-pdf-2026/find-energiatodistus2026-pdf db whoami id kieli)
-                            filename
-                            (str "energiatodistus" id " does not exist."))
                           (r/not-found "File not found")))}}])
 
 (defn- parse-where [where]
@@ -237,7 +219,6 @@
                              energiatodistus-schema/EnergiatodistusSave2026
                              rooli-service/ppp-laatija?)
         (pdf-route 2026)
-        (pdf-route-2026)
         crud-api/discarded
         liite-api/routes
         signing-api/routes]]]
