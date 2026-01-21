@@ -32,13 +32,13 @@
 <div>
   <H5
     text={i18n(
-      'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.header'
+      'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.header'
     )} />
 
   <dl class="ppp-description-list">
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-kaukolampo-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-kaukolampo-muutos'
       )}
     </dt>
     <dd>
@@ -57,7 +57,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-sahko-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-sahko-muutos'
       )}
     </dt>
     <dd>
@@ -76,7 +76,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-uusiutuvat-pat-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-uusiutuvat-pat-muutos'
       )}
     </dt>
     <dd>
@@ -95,7 +95,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-fossiiliset-pat-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-fossiiliset-pat-muutos'
       )}
     </dt>
     <dd>
@@ -114,7 +114,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-kaukojaahdytys-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-kaukojaahdytys-muutos'
       )}
     </dt>
     <dd>
