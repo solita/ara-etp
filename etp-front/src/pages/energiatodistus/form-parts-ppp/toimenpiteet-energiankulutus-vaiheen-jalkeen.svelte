@@ -21,7 +21,6 @@
     const allMetrics = PppUtils.calculateDerivedValues(et, ppp);
 
     return {
-      previous: allMetrics[vaihe['vaihe-nro'] - 1],
       current: allMetrics[vaihe['vaihe-nro']]
     };
   };
