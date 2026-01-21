@@ -30,7 +30,11 @@
 
 (defn ostoenergia [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
-        painotetut (energiatodistus/painotetut-ostoenergiat energiatodistus)]
+        painotettu-kaukolampo (^[double] Math/round (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala-kertoimella]))
+        painotettu-sahko (^[double] Math/round (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :sahko-nettoala-kertoimella]))
+        painotettu-uusutuva (^[double] Math/round (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-nettoala-kertoimella]))
+        painotettu-fossiilinen (^[double] Math/round (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-nettoala-kertoimella]))
+        painotettu-kaukojaahdytys (^[double] Math/round (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-nettoala-kertoimella]))]
     (table-ostoenergia kieli
      [{:dt (l :laskennallinen-ostoenergia)
        :dd [(str "kWhE/m2/vuosi")
@@ -41,18 +45,18 @@
             (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys])]}
       {:dt (l :energimuodon-kerroin)
        :dd [(str "")
-            (str "0.5")
-            (str "1.2")
-            (str "0.5")
-            (str "1")
-            (str "0.28")]}
+            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin])
+            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :sahko-kerroin])
+            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-kerroin])
+            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-kerroin])
+            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-kerroin])]}
       {:dt (l :energiakulutus)
        :dd [(str "kWhE/m2/vuosi")
-            (:kaukolampo painotetut)
-            (:sahko painotetut)
-            (:uusiutuva-polttoaine painotetut)
-            (:fossiilinen-polttoaine painotetut)
-            (:kaukojaahdytys painotetut)]}])))
+            painotettu-kaukolampo
+            painotettu-sahko
+            painotettu-uusutuva
+            painotettu-fossiilinen
+            painotettu-kaukojaahdytys]}])))
 
 (defn ostoenergia-tiedot [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
@@ -61,7 +65,6 @@
         rounded (when kasvihuonepaastot (Math/round (double kasvihuonepaastot)))
         ;uusiutuvan-osuus (energiatodistus/uusiutuvan-osuus-paastoista (:tulokset energiatodistus))
         ;TODO get back to the uusiutuvan-energian-osuus when it's clear what to calculate
-
         ]
 
     (description-list
