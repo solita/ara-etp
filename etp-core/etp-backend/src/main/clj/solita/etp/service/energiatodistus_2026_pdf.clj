@@ -21,6 +21,7 @@
    "@page {
       size: A4;
       margin: 0;
+
     }
 
     * {
@@ -48,7 +49,7 @@
     }
 
    .page-border-container {
-      border: 12px solid #23323e;
+      border: 8px solid #23323e;
       height: calc(100% - 24px);
       padding: 0;
       position: relative;
@@ -62,7 +63,7 @@
     }
 
    .page-section {
-      border-bottom: 12px solid #23323e;
+      border-bottom: 8px solid #23323e;
       padding: 10px 3px;
     }
 
@@ -246,6 +247,7 @@
       border-collapse: collapse;
       -fs-border-rendering: no-bevel;
       margin: 10px 10px;
+      font-size: 13px;
     }
 
     dl.et-etusivu-yleistiedot-ostoenergia div {
@@ -265,19 +267,22 @@
       width: 1px;
     }"))
 
-(defn- page-header [title]
+(defn- page-header [title subtitle]
   [:div {:class "page-header"}
-   [:h1 {:class "page-title"} title]])
+   [:h1 {:class "page-title"} title]
+   [:p {:class "page-subtitle"} subtitle]])
 
 (defn- page-footer [et-tunnus page-num total-pages]
-  [:div {:class "page-footer"}])
+  [:div {:class "page-footer"}
+   (str "Todistustunnus " et-tunnus " | " page-num " / " total-pages)])
 
 (defn- render-page [page-data page-num total-pages et-tunnus]
-  (let [{:keys [title content header]} page-data]
+  (let [{:keys [title subtitle content header]} page-data]
     [:div {:class "page"}
-     (or header (page-header title))
-     [:div {:class "page-content"}
-      content]
+     [:div {:class "page-border-container"}
+      (or header (page-header title subtitle))
+      [:div {:class "page-content"}
+       content]]
      (page-footer et-tunnus page-num total-pages)]))
 
 (defn generate-document-html
