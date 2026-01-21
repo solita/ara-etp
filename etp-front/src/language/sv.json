@@ -1573,11 +1573,11 @@
       "e-luku-jalkeen": "E-luku vaiheen jälkeen (sv)",
       "energiankulutus-vaiheen-jalkeen": {
         "header": "Energiankulutus vaiheen jälkeen (sv)",
-        "ostoenergian-tarve-kaukolampo-muutos": "Kaukolämpö (sv)",
-        "ostoenergian-tarve-sahko-muutos": "Sähkö (sv)",
-        "ostoenergian-tarve-uusiutuvat-pat-muutos": "Uusiutuvat polttoaineet (sv)",
-        "ostoenergian-tarve-fossiiliset-pat-muutos": "Fossiiliset polttoaineet (sv)",
-        "ostoenergian-tarve-kaukojaahdytys-muutos": "Kaukojäähdytys (sv)"
+        "ostoenergian-tarve-kaukolampo": "Kaukolämpö (sv)",
+        "ostoenergian-tarve-sahko": "Sähkö (sv)",
+        "ostoenergian-tarve-uusiutuvat-pat": "Uusiutuvat polttoaineet (sv)",
+        "ostoenergian-tarve-fossiiliset-pat": "Fossiiliset polttoaineet (sv)",
+        "ostoenergian-tarve-kaukojaahdytys": "Kaukojäähdytys (sv)"
       },
       "vaiheen-alku-pvm-vaihe-alkaa": "Vaihe alkaa (sv)",
       "e-luokka-vaiheen-jalkeen": "E-luokka vaiheen jälkeen (sv)",

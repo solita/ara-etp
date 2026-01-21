@@ -1603,11 +1603,11 @@
       "e-luku-jalkeen": "E-luku vaiheen jälkeen",
       "energiankulutus-vaiheen-jalkeen": {
         "header": "Energiankulutus vaiheen jälkeen",
-        "ostoenergian-tarve-kaukolampo-muutos": "Kaukolämpö",
-        "ostoenergian-tarve-sahko-muutos": "Sähkö",
-        "ostoenergian-tarve-uusiutuvat-pat-muutos": "Uusiutuvat polttoaineet",
-        "ostoenergian-tarve-fossiiliset-pat-muutos": "Fossiiliset polttoaineet",
-        "ostoenergian-tarve-kaukojaahdytys-muutos": "Kaukojäähdytys"
+        "ostoenergian-tarve-kaukolampo": "Kaukolämpö",
+        "ostoenergian-tarve-sahko": "Sähkö",
+        "ostoenergian-tarve-uusiutuvat-pat": "Uusiutuvat polttoaineet",
+        "ostoenergian-tarve-fossiiliset-pat": "Fossiiliset polttoaineet",
+        "ostoenergian-tarve-kaukojaahdytys": "Kaukojäähdytys"
       },
       "vaiheen-alku-pvm-vaihe-alkaa": "Vaihe alkaa",
       "e-luokka-vaiheen-jalkeen": "E-luokka vaiheen jälkeen",

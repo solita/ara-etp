@@ -38,7 +38,7 @@
   <dl class="ppp-description-list">
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-kaukolampo-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-kaukolampo'
       )}
     </dt>
     <dd>
@@ -57,7 +57,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-sahko-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-sahko'
       )}
     </dt>
     <dd>
@@ -76,7 +76,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-uusiutuvat-pat-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-uusiutuvat-pat'
       )}
     </dt>
     <dd>
@@ -95,7 +95,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-fossiiliset-pat-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-fossiiliset-pat'
       )}
     </dt>
     <dd>
@@ -114,7 +114,7 @@
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-kaukojaahdytys-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-kaukojaahdytys'
       )}
     </dt>
     <dd>
