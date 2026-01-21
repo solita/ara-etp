@@ -387,6 +387,11 @@
                                          :valvonta$pending (false? value)
                                          :valvonta (false? value)
                                          :draft_visible_to_paakayttaja (false? value)
+
+                                         ;;New et26 booleans should be false
+                                         :h$lammitys_asetukset_tehostettavissa (false? value)
+                                         :h$iv_ilmastointi_asetukset_tehostettavissa (false? value)
+
                                          ;; Other values are null
                                          (nil? value))})
        energiatodistus-map))

@@ -54,7 +54,12 @@
         {R.sum(
           R.map(
             EitherMaybe.orSome(0),
-            R.values(energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'])
+            R.compose(
+              R.values,
+              R.pick([
+                'aurinkosahko, tuulisahko, aurinkolampo, muulampo, muusahko, lampopumppu'
+              ])
+            )(energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'])
           )
         )}
       </td>

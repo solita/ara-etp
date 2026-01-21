@@ -26,13 +26,6 @@ const Integer = (min, max) => ({
   validators: validations.MaybeInterval(min, max)
 });
 
-const Year = () => ({
-  parse: parsers.optionalParser(parsers.parseInteger),
-  format: formats.optionalYear,
-  deserialize: Either.Right,
-  validators: validations.MaybeInterval(2026, 2200)
-});
-
 const Currency = {
   parse: parsers.optionalParser(parsers.parseNumber),
   format: formats.optionalCurrency,
@@ -57,7 +50,7 @@ const DateValue = () => ({
   validators: []
 });
 
-export const YearOnlyDate = () => ({
+export const PPPVaiheYear = () => ({
   parse: parsers.optionalParser(parsers.parseYear),
   format: formats.optionalYear,
 
@@ -73,7 +66,7 @@ export const YearOnlyDate = () => ({
     )
   ),
 
-  validators: []
+  validators: validations.MaybeInterval(new Date().getFullYear(), 2050)
 });
 
 const Rakennustunnus = {
@@ -414,7 +407,7 @@ export const perusparannuspassi = {
     'alapohja-ehdotettu-taso': FloatNonNegative,
     'ikkunat-ehdotettu-taso': FloatNonNegative,
     'ulkoovet-ehdotettu-taso': FloatNonNegative,
-    lisatietoja: String(2, 1500)
+    lisatietoja: String(2, 44)
   },
   tulokset: {
     'kaukolampo-hinta': Currency,
@@ -430,8 +423,8 @@ export const perusparannuspassi = {
         toimenpideseloste: String(2, 1500)
       },
       tulokset: {
-        'vaiheen-alku-pvm': YearOnlyDate(),
-        'vaiheen-loppu-pvm': YearOnlyDate(),
+        'vaiheen-alku-pvm': PPPVaiheYear(),
+        'vaiheen-loppu-pvm': PPPVaiheYear(),
         'ostoenergian-tarve-kaukolampo': FloatNonNegative,
         'ostoenergian-tarve-sahko': FloatNonNegative,
         'ostoenergian-tarve-uusiutuvat-pat': FloatNonNegative,
