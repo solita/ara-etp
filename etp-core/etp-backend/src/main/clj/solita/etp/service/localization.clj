@@ -103,7 +103,7 @@
                                             missa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen\nverrattuna."
 
         :toimenpideseloste                 "Toimenpideseloste"
-        :energiankulutuksen-muutos-lahtotilanteesta "Energiankulutuksen muutos lähtötilanteesta, laskennallinen [kWh/vuosi]"
+        :energiankulutus-vaiheen-jalkeen   "Energiankulutus vaiheen jälkeen, laskennallinen [kWh/vuosi]"
         :kaukolampo                        "Kaukolämpö"
         :sahko                             "Sähkö"
         :uusiutuvat-pat                    "Uusiutuvat PA:t"
@@ -240,7 +240,7 @@
                                             missa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen\nverrattuna.(sv)"
 
         :toimenpideseloste                 "Åtgärdsbeskrivning"
-        :energiankulutuksen-muutos-lahtotilanteesta "Förändring av energiförbrukning från utgångsläget, beräknad [kWh/år]"
+        :energiankulutus-vaiheen-jalkeen   "Förändring av energiförbrukning från utgångsläget, beräknad [kWh/år]"
         :kaukolampo                        "Fjärrvärme"
         :sahko                             "El"
         :uusiutuvat-pat                    "Förnybara bränslen"

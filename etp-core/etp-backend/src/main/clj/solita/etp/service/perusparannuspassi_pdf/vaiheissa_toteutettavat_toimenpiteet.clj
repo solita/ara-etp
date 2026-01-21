@@ -118,7 +118,7 @@
 (defn- render-energiankulutuksen-muutos [vaihe l]
   (let [tulokset (:tulokset vaihe)]
     [:div {:style "margin-top: 24px;"}
-     [:h2 (l :energiankulutuksen-muutos-lahtotilanteesta)]
+     [:h2 (l :energiankulutus-vaiheen-jalkeen)]
      [:table {:role "presentation" :style table-style}
       [:tr
        (for [header [:kaukolampo :sahko :uusiutuvat-pat :fossiiliset-pat :kaukojaahdytys]]
