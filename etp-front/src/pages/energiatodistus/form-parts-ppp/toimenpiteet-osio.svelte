@@ -6,7 +6,7 @@
 
   import Perustiedot from './toimenpiteet-toimenpide-perustiedot.svelte';
   import ToimenpideEhdotukset from './toimenpiteet-toimenpide-ehdotukset.svelte';
-  import EnergiankulutuksenMuutos from './toimenpiteet-energiankulutuksen-muutos.svelte';
+  import ToimenpiteetEnergiankulutusVaiheenJalkeen from './toimenpiteet-energiankulutus-vaiheen-jalkeen.svelte';
 
   import H4 from '@Component/H/H4';
   const i18n = $_;
@@ -56,7 +56,7 @@
         {vaihe}
         {inputLanguage}
         {luokittelut} />
-      <EnergiankulutuksenMuutos
+      <ToimenpiteetEnergiankulutusVaiheenJalkeen
         {perusparannuspassi}
         {energiatodistus}
         {vaihe} />
