@@ -534,32 +534,14 @@
      (energiatodistus-service/find-energiatodistus db whoami id)
      (complete-energiatodistus (luokittelut db)))))
 
-(defn painotetut-ostoenergiat
-  [energiatodistus]
-  (let [kaytettavat-energiamuodot(get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])
-        lammitetty-ala (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])]
-
-    (with-precision 20
-      (into {}
-            (for [[energiamuoto maara] kaytettavat-energiamuodot]
-              (let [kerroin (get-in e-luokka-service/energiamuotokerroin
-                                    [2026 energiamuoto])]
-
-                [energiamuoto
-                 (Math/round (double
-                     (/ (* (bigdec (or maara 0))
-                           (bigdec kerroin))
-                        lammitetty-ala)))]))))))
-
 (defn co2-paastot-et
   [tulokset]
   (if tulokset
-    (/ (+ (* (or (:kaukolampo tulokset) 0) (:kaukolampo co2-kertoimet))
+   (+ (* (or (:kaukolampo tulokset) 0) (:kaukolampo co2-kertoimet))
           (* (or (:sahko tulokset) 0) (:sahko co2-kertoimet))
           (* (or (:uusiutuva-polttoaine tulokset) 0) (:uusiutuvat-pat co2-kertoimet))
           (* (or (:fossiilinen-polttoaine tulokset) 0) (:fossiiliset-pat co2-kertoimet))
           (* (or (:kaukojaahdytys tulokset) 0) (:kaukojaahdytys co2-kertoimet)))
-       1000.0)
     0.0))
 
 ;TODO: Before the et-pdf is finalized, check that this is correct and add to the et-pdf etusivu
