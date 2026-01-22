@@ -1,24 +1,26 @@
 (ns solita.etp.service.energiatodistus-destruction-test
-  (:require [clojure.test :as t]
+  (:require [clojure.java.jdbc :as jdbc]
+            [clojure.test :as t]
+            [solita.common.aws.s3 :as s3]
             [solita.common.time :as time]
-            [clojure.java.jdbc :as jdbc]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
-            [solita.etp.service.valvonta-oikeellisuus :as valvonta-oikeellisuus-service]
             [solita.etp.service.energiatodistus-destruction :as service]
-            [solita.etp.service.viesti-test :as viesti-test]
-            [solita.etp.service.valvonta-oikeellisuus.asha :as vo-asha-service]
-            [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.energiatodistus-tila :as tila-service]
+            [solita.etp.service.file :as file]
             [solita.etp.service.file :as file-service]
+            [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.liite :as liite-service]
+            [solita.etp.service.valvonta-oikeellisuus :as valvonta-oikeellisuus-service]
+            [solita.etp.service.valvonta-oikeellisuus.asha :as vo-asha-service]
             [solita.etp.service.viesti :as viesti-service]
+            [solita.etp.service.viesti-test :as viesti-test]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
-            [solita.etp.test-data.liite :as liite-test-data]
-            [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
-            [solita.etp.whoami :as test-whoami]
-            [solita.etp.test-system :as ts])
-  (:import (java.time Instant LocalDate ZoneId Duration)))
+            [solita.etp.test-data.laatija :as laatija-test-data]
+            [solita.etp.test-data.liite :as liite-test-data]
+            [solita.etp.test-system :as ts]
+            [solita.etp.whoami :as test-whoami])
+  (:import (java.time Duration Instant LocalDate ZoneId)))
 
 (t/use-fixtures :each ts/fixture)
 
@@ -761,3 +763,40 @@
     (t/testing "Viesti liite audit for viestiketju-1-id does not exist after deletion"
       (t/is (empty? (select-viesti-liite-audit viestiketju-1-id)))
       (t/is (not (empty? (select-viesti-liite-audit viestiketju-2-id)))))))
+
+(t/deftest ^{:broken-test "causes test bucket to bot be deleted since the bucket cleanup should also handle pagination"}
+           destroy-when-needs-to-paginate-liite-test
+  (let [laatijat (laatija-test-data/generate-and-insert! 1)
+        laatija-id (-> laatijat keys sort first)
+        destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}
+        energiatodistukset (energiatodistus-test-data/generate-and-insert!
+                             1
+                             2013
+                             true
+                             laatija-id)
+        [energiatodistus-id-1] (-> energiatodistukset keys sort)
+
+        ;; This should create liitteet/1
+        _ (liite-test-data/generate-and-insert-files! 1
+                                                      laatija-id
+                                                      energiatodistus-id-1)
+        ;; Add more than 1000 versions that have liitteet/1 prefix into the bucket
+        _ (dotimes [_ 501] (s3/put-object ts/*aws-s3-client* "liitteet/1"
+                                          (byte-array 2)))
+        _ (dotimes [_ 501] (s3/put-object ts/*aws-s3-client* "liitteet/10"
+                                          (byte-array 2)))
+        _ (dotimes [_ 1001] (s3/put-object ts/*aws-s3-client* "liitteet/100"
+                                          (byte-array 2)))]
+
+    ;; Destroy et-1 liiteet (liitteet/1)
+    (expire-energiatodistus-and-its-valvonta energiatodistus-id-1)
+    (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
+
+    (t/testing "All versions of liite 1 have the destruction tag and others don't"
+      (let [liite-1-version-ids (file/key->version-ids ts/*aws-s3-client* "liitteet/1")
+            liite-10-version-ids (file/key->version-ids ts/*aws-s3-client* "liitteet/10")]
+
+        ;; 1 + 502 verions.
+        (t/is (= 502 (count liite-1-version-ids)))
+        (run! #(t/is (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* "liitteet/1" "EnergiatodistusDestruction" %))) liite-1-version-ids)
+        (run! #(t/is (not (= destruction-tag (file-service/get-file-tag ts/*aws-s3-client* "liitteet/10" "EnergiatodistusDestruction" %)))) liite-10-version-ids)))))
