@@ -141,7 +141,11 @@
       display: none;
     }
 
-    dl.et-etusivu-yleistiedot {
+    .etusivu-yleistiedot {
+      font-size: 11pt;
+    }
+
+    .etusivu-yleistiedot dl {
       display: table;
       width: 90%;
       background-color: white;
@@ -150,19 +154,19 @@
       margin: 10px 15px;
     }
 
-    dl.et-etusivu-yleistiedot div {
+    .etusivu-yleistiedot dl div {
       display: table-row;
     }
 
-    dl.et-etusivu-yleistiedot dt,
-    dl.et-etusivu-yleistiedot dd {
+    .etusivu-yleistiedot dl dt,
+    .etusivu-yleistiedot dl dd {
       display: table-cell;
       fs-border-rendering: no-bevel;
       padding-top: 3px;
       padding-bottom: 3px;
     }
 
-    dl.et-etusivu-yleistiedot dt {
+    .etusivu-yleistiedot dl dt {
       color: #23323e;
       font-weight: bold;
       white-space: nowrap;
@@ -170,17 +174,21 @@
       padding-right: 30px;
     }
 
-    dl.et-etusivu-yleistiedot dd {
+    .etusivu-yleistiedot dl dd {
       background-color: white;
     }
 
-    dl.et-etusivu-yleistiedot div:last-child dd {
+    .etusivu-yleistiedot dl div:last-child dd {
       font-weight: bold;
       color: #23323e;
       white-space: nowrap;
     }
 
-    table.ostoenergia {
+    .etusivu-ostoenergia {
+      font-size: 13px;
+    }
+
+    .etusivu-ostoenergia table {
       width: 95%;
       margin: 0 auto;
       border-collapse: collapse;
@@ -188,8 +196,8 @@
       table-layout: fixed;
     }
 
-    table.ostoenergia th,
-    table.ostoenergia td {
+    .etusivu-ostoenergia th,
+    .etusivu-ostoenergia td {
       border: 1px solid #bdc6cc;
       padding: 2px 2px;
       font-weight: normal;
@@ -198,8 +206,8 @@
       color: #23323e;
     }
 
-    table.ostoenergia th:first-child,
-    table.ostoenergia td:first-child {
+    .etusivu-ostoenergia th:first-child,
+    .etusivu-ostoenergia td:first-child {
       border-left: none;
       border-right: none;
       font-weight: bold;
@@ -207,40 +215,40 @@
       width: 25%;
     }
 
-    table.ostoenergia th.oe-otsikko {
+    .etusivu-ostoenergia th.oe-otsikko {
       font-weight: bold;
     }
 
-    table.ostoenergia th:nth-child(2),
-    table.ostoenergia td:nth-child(2) {
+    .etusivu-ostoenergia th:nth-child(2),
+    .etusivu-ostoenergia td:nth-child(2) {
       border-left: none;
       width: 15%;
     }
 
-    table.ostoenergia th:last-child,
-    table.ostoenergia td:last-child {
+    .etusivu-ostoenergia th:last-child,
+    .etusivu-ostoenergia td:last-child {
       border-right: none;
       width: 70px;
     }
 
-    table.ostoenergia th:nth-child(3),
-    table.ostoenergia td:nth-child(3),
-    table.ostoenergia th:nth-child(4),
-    table.ostoenergia td:nth-child(4),
-    table.ostoenergia th:nth-child(5),
-    table.ostoenergia td:nth-child(5),
-    table.ostoenergia th:nth-child(6),
-    table.ostoenergia td:nth-child(6) {
+    .etusivu-ostoenergia th:nth-child(3),
+    .etusivu-ostoenergia td:nth-child(3),
+    .etusivu-ostoenergia th:nth-child(4),
+    .etusivu-ostoenergia td:nth-child(4),
+    .etusivu-ostoenergia th:nth-child(5),
+    .etusivu-ostoenergia td:nth-child(5),
+    .etusivu-ostoenergia th:nth-child(6),
+    .etusivu-ostoenergia td:nth-child(6) {
       width: 70px;
     }
 
-    table.ostoenergia th.empty,
-    table.ostoenergia th.oe-otsikko {
+    .etusivu-ostoenergia th.empty,
+    .etusivu-ostoenergia th.oe-otsikko {
       border: none;
       background: none;
     }
 
-    dl.et-etusivu-yleistiedot-ostoenergia {
+    .etusivu-ostoenergia dl {
       display: table;
       width: 90%;
       background-color: white;
@@ -250,17 +258,17 @@
       font-size: 13px;
     }
 
-    dl.et-etusivu-yleistiedot-ostoenergia div {
+    .etusivu-ostoenergia dl div {
       display: table-row;
     }
 
-    dl.et-etusivu-yleistiedot-ostoenergia dt,
-    dl.et-etusivu-yleistiedot-ostoenergia dd {
+    .etusivu-ostoenergia dl dt,
+    .etusivu-ostoenergia dl dd {
       display: table-cell;
       padding: 5px 5px;
     }
 
-    dl.et-etusivu-yleistiedot-ostoenergia dt {
+    .etusivu-ostoenergia dl dt {
       color: #23323e;
       font-weight: bold;
       white-space: nowrap;

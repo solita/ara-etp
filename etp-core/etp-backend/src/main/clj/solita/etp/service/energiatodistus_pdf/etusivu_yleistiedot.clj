@@ -4,7 +4,7 @@
     [solita.etp.service.localization :as loc]))
 
 (defn- description-list [key-vals]
-  (into [:dl.et-etusivu-yleistiedot]
+  (into [:dl]
         (mapv
           (fn [{:keys [dt dd dds]}]
             (into
@@ -16,8 +16,9 @@
 
 (defn et-etusivu-yleistiedot [{:keys [energiatodistus kieli alakayttotarkoitukset]}]
   (let [l  (kieli loc/et-pdf-localization)]
-    (description-list
-      [{:dt (l :rakennuksen-nimi-ja-osoite)
+    [:div {:class "etusivu-yleistiedot"}
+     (description-list
+       [{:dt (l :rakennuksen-nimi-ja-osoite)
         :dd [:div
              (get-in energiatodistus [:perustiedot (case kieli
                                                      :fi :nimi-fi
@@ -34,9 +35,11 @@
         :dd (-> energiatodistus (get-in [:perustiedot :kayttotarkoitus]) (loc/et-perustiedot-kayttotarkoitus->description alakayttotarkoitukset kieli))}
        {:dt (l :energiatodistuksen-tunnus)
         :dd (:id energiatodistus)}
+       {:dt (l :energiatodistus-laadittu)
+        :dd ""}
        {:dds
         [(str (l :todistuksen-laatimispaiva) ": "
               (-> energiatodistus (get-in [:allekirjoitusaika]) time/format-date))
 
          (str (l :todistuksen-voimassaolopaiva) ": "
-              (-> energiatodistus (get-in [:voimassaolo-paattymisaika]) time/format-date))]}])))
+              (-> energiatodistus (get-in [:voimassaolo-paattymisaika]) time/format-date))]}])]))

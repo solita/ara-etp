@@ -5,25 +5,26 @@
 
 (defn- table-ostoenergia [kieli items]
   (let [l (kieli loc/et-pdf-localization)]
-    [:table.ostoenergia
-     [:thead
-      [:tr
-       [:th.ostoenergia.empty]
-       [:th.ostoenergia.empty]
-       [:th.oe-otsikko (l :kaukolampo)]
-       [:th.oe-otsikko (l :sahko)]
-       [:th.oe-otsikko (l :uusiutuva-polttoaine)]
-       [:th.oe-otsikko (l :fossiilinen-polttoaine)]
-       [:th.oe-otsikko (l :kaukojaahdytys)]]]
-     [:tbody
-      (for [{:keys [dt dd]} items]
-        (into
-          [:tr [:td dt]]
-          (for [row dd]
-            [:td (or row "")])))]]))
+    [:div {:class "etusivu-ostoenergia"}
+     [:table
+      [:thead
+       [:tr
+        [:th.empty]
+        [:th.empty]
+        [:th.oe-otsikko (l :kaukolampo)]
+        [:th.oe-otsikko (l :sahko)]
+        [:th.oe-otsikko (l :uusiutuva-polttoaine)]
+        [:th.oe-otsikko (l :fossiilinen-polttoaine)]
+        [:th.oe-otsikko (l :kaukojaahdytys)]]]
+      [:tbody
+       (for [{:keys [dt dd]} items]
+         (into
+           [:tr [:td dt]]
+           (for [row dd]
+             [:td (or row "")])))]]]))
 
 (defn- description-list [key-vals]
-  (into [:dl.et-etusivu-yleistiedot-ostoenergia]
+  (into [:dl]
         (mapv #(vec [:div
                      [:dt (str (:dt %) ":")]
                      [:dd (:dd %)]]) key-vals)))
@@ -67,10 +68,11 @@
         ;TODO get back to the uusiutuvan-energian-osuus when it's clear what to calculate
         ]
 
-    (description-list
-      [{:dt (l :energiakaytosta-syntyvat-kasvihuonepaastot)
-        :dd (str rounded " kgCO2ekv/m2/vuosi")}
-       {:dt (l :uusiutuva-energian-osuus)
-        :dd (str "TODO: Add later when the calculations are ready")}
-       {:dt (l :kasvihuonepaastot)
-        :dd (str "TODO: Add gwp things when they are ready")}])))
+    [:div {:class "etusivu-ostoenergia"}
+     (description-list
+       [{:dt (l :energiakaytosta-syntyvat-kasvihuonepaastot)
+         :dd (str rounded " kgCO2ekv/m2/vuosi")}
+        {:dt (l :uusiutuva-energian-osuus)
+         :dd (str "TODO: Add later when the calculations are ready")}
+        {:dt (l :kasvihuonepaastot)
+         :dd (str "TODO: Add gwp things when they are ready")}])]))
