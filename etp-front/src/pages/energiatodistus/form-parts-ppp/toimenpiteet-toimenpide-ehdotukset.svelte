@@ -54,7 +54,10 @@
       <div>
         <Select
           variant={SelectVariants.LIGHT}
-          items={R.pluck('id', toimenpideEhdotukset)}
+          items={R.compose(
+            R.pluck('id'),
+            R.filter(R.prop('valid'))
+          )(toimenpideEhdotukset)}
           parse={Maybe.Some}
           format={toimenpideEhdotusLabel(LocaleUtils.label($locale))}
           validation={false}
