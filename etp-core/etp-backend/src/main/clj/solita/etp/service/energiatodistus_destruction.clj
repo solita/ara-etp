@@ -29,7 +29,12 @@
         version-ids (file/key->version-ids aws-s3-client file-key)]
     (run! #(file/put-file-tag aws-s3-client file-key destruction-tag %) version-ids)))
 
-(defn- handle-deletion-from-s3 [aws-s3-client file-key]
+(defn- handle-deletion-from-s3
+  "This will first tag all versions of the object for destruction and then delete the current version which
+  puts a DeleteMarker as current version. A lifecycle rule will then delete all non-current versions that have the tag.
+  This will leave only a DeleteMarker in place of the object in S3 which can then be cleaned up by other means once they
+  are seen as a problem."
+  [aws-s3-client file-key]
   (tag-versions-for-destruction aws-s3-client file-key)
   (file/delete-file aws-s3-client file-key))
 
