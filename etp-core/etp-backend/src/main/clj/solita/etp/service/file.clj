@@ -60,12 +60,12 @@
                                    {:prefix                 key
                                     :next-key-marker        next-key-marker
                                     :next-version-id-marker next-version-id-marker})]
-      (let [acc' (into acc Versions)]
+      (let [acc' (into acc (->> Versions
+                                (filter #(= key (:Key %)))
+                                (map :VersionId)))]
         (if IsTruncated
           (recur NextKeyMarker NextVersionIdMarker acc')
-          (->> acc'
-               (filter #(= key (:Key %)))
-               (map :VersionId)))))))
+          acc')))))
 
 (defn file-exists? [aws-s3-client key]
   (try
