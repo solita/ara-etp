@@ -14,8 +14,11 @@
                 dds (mapv (fn [dd] [:dd dd]) dds))))
           key-vals)))
 
-(defn et-etusivu-yleistiedot [{:keys [energiatodistus kieli alakayttotarkoitukset]}]
-  (let [l  (kieli loc/et-pdf-localization)]
+(defn et-etusivu-yleistiedot [{:keys [energiatodistus kieli alakayttotarkoitukset laatimisvaiheet]}]
+  (let [l  (kieli loc/et-pdf-localization)
+        kuvaus-kieli (case kieli :fi :label-fi :sv :label-sv)
+        laatimisvaihe-id (get-in energiatodistus [:perustiedot :laatimisvaihe])
+        laatimisvaihe-kuvaus (some #(when (= (:id %) laatimisvaihe-id) (kuvaus-kieli %)) laatimisvaiheet)]
     [:div {:class "etusivu-yleistiedot"}
      (description-list
        [{:dt (l :rakennuksen-nimi-ja-osoite)
@@ -36,7 +39,7 @@
        {:dt (l :energiatodistuksen-tunnus)
         :dd (:id energiatodistus)}
        {:dt (l :energiatodistus-laadittu)
-        :dd ""}
+        :dd laatimisvaihe-kuvaus}
        {:dds
         [(str (l :todistuksen-laatimispaiva) ": "
               (-> energiatodistus (get-in [:allekirjoitusaika]) time/format-date))

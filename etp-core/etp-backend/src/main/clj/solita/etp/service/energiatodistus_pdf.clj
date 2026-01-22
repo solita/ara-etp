@@ -15,7 +15,8 @@
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.file :as file-service]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
-            [solita.etp.service.watermark-pdf :as watermark-pdf])
+            [solita.etp.service.watermark-pdf :as watermark-pdf]
+            [solita.etp.service.luokittelu :as luokittelu-service])
   (:import (java.io ByteArrayOutputStream File)
            (java.time Clock LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
@@ -773,7 +774,8 @@
       (if (= 2026 (:versio complete-energiatodistus))
         (do
           (log/info "Generating 2026 PDF for id" id)
-          (let [alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)]
-            (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf complete-energiatodistus alakayttotarkoitukset kieli true))))
+          (let [alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
+                laatimisvaiheet (luokittelu-service/find-laatimisvaiheet db)]
+            (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf complete-energiatodistus alakayttotarkoitukset laatimisvaiheet kieli true))))
         (generate-pdf-as-input-stream complete-energiatodistus kieli true nil)))))
 

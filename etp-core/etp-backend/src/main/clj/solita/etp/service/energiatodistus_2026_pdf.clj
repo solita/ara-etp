@@ -339,7 +339,7 @@
 
 (defn generate-energiatodistus-pdf
   "Generate a energiatodistus PDF and return it as a byte array."
-  [energiatodistus alakayttotarkoitukset kieli draft?]
+  [energiatodistus alakayttotarkoitukset laatimisvaiheet kieli draft?]
   (let [kieli-keyword (keyword kieli)
         pdf-bytes
 
@@ -347,6 +347,7 @@
         (generate-energiatodistus-ohtp-pdf
           {:energiatodistus       energiatodistus
            :alakayttotarkoitukset alakayttotarkoitukset
+           :laatimisvaiheet       laatimisvaiheet
            :kieli                 kieli-keyword})
         watermark-text (cond
                          draft? (draft-watermark-texts kieli)
@@ -356,20 +357,3 @@
     (if (some? watermark-text)
       (watermark-pdf/apply-watermark-to-bytes pdf-bytes watermark-text)
       pdf-bytes)))
-
-(defn- generate-pdf-as-input-stream
-  "Generate a energiatodistus PDF and return it as an InputStream.
-   Applies watermarks via post-processing with PDFBox."
-  [energiatodistus alakayttotarkoitukset kieli draft?]
-  (let [pdf-bytes (generate-energiatodistus-pdf energiatodistus alakayttotarkoitukset kieli draft?)]
-    (ByteArrayInputStream. pdf-bytes)))
-
-
-(defn find-energiatodistus2026-pdf
-  [db whoami et-id kieli]
-  (when-let [energiatodistus (energiatodistus-service/find-energiatodistus db whoami et-id)]
-    (let [versio (:versio energiatodistus)
-          alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
-          draft? true]
-      ;; Always show draft watermark for now (no signing yet)
-      (generate-pdf-as-input-stream energiatodistus alakayttotarkoitukset kieli draft?))))
