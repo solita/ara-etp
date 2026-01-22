@@ -92,7 +92,7 @@
         on:click={onDeletePPP} />
     {/if}
   </div>
-  <div class="flex items-start items-center bg-tertiary p-4">
+  <div class="flex items-center bg-tertiary p-4">
     <span class="mr-2 font-icon text-2xl">info_outline</span>
     <span>
       {$_(
@@ -165,10 +165,7 @@
         {energiatodistus}
         bind:perusparannuspassi
         pppSchema={schema}
-        toimenpideEhdotuksetLuokittelu={R.prop(
-          'toimenpide-ehdotus',
-          luokittelut
-        )}
+        {luokittelut}
         {inputLanguage} />
 
       <Lisatietoja bind:perusparannuspassi {schema} {inputLanguage} />

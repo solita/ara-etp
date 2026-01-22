@@ -18,6 +18,12 @@
           :responses {200 {:body [common-schema/Luokittelu]}}
           :handler   (fn [{:keys [db]}] (r/response (find-all db)))}}])
 
+(defn ->toimenpide-ehdotus-route [route]
+  (update-in route
+             [1 :get :responses 200 :body 0]
+             (fn [s]
+               (merge s {:group-id common-schema/Key}))))
+
 (def routes
   [(classification-route "/kielisyys" "kielisyydet" kielisyys/find-kielisyys)
    (classification-route "/laatimisvaiheet" "laatimisvaiheet" laatimisvaihe/find-laatimisvaiheet)
@@ -27,7 +33,9 @@
    (classification-route "/mahdollisuus-liittya-energiatehokkaaseen" "mahdollisuus-liittya-energiatehokkaaseen" luokittelu-service/find-mahdollisuus-liittya)
    (classification-route "/uusiutuva-energia" "uusiutuva-energia" luokittelu-service/find-uusiutuva-energia)
    (classification-route "/jaahdytys" "jaahdytys" luokittelu-service/find-jaahdytys)
-   (classification-route "/toimenpide-ehdotus" "toimenpide-ehdotus" toimenpide-ehdotus-service/find-all)
+   (-> (classification-route "/toimenpide-ehdotus" "toimenpide-ehdotus" toimenpide-ehdotus-service/find-all)
+       ->toimenpide-ehdotus-route)
+   (classification-route "/toimenpide-ehdotus-group" "toimenpide-ehdotus-group" toimenpide-ehdotus-service/find-toimenpide-ehdotus-groups)
 
    ["/kayttotarkoitusluokat/:versio"
     {:get {:summary    "Hae energiatodistuksen käyttötarkoitusluokat"

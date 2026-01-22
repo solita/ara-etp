@@ -348,7 +348,8 @@ const luokittelut = {
   ),
   uusiutuvaEnergia: Fetch.cached(fetch, '/uusiutuva-energia'),
   jaahdytys: Fetch.cached(fetch, '/jaahdytys'),
-  'toimenpide-ehdotus': Fetch.cached(fetch, '/toimenpide-ehdotus')
+  'toimenpide-ehdotus': Fetch.cached(fetch, '/toimenpide-ehdotus'),
+  'toimenpide-ehdotus-group': Fetch.cached(fetch, '/toimenpide-ehdotus-group')
 };
 
 const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({

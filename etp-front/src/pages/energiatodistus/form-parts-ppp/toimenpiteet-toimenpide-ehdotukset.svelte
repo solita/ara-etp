@@ -19,9 +19,32 @@
   export let pppSchema;
   export let vaihe;
   export let inputLanguage;
-  export let toimenpideEhdotuksetLuokittelu;
+  export let luokittelut;
+
+  const toimenpideEhdotukset = R.prop('toimenpide-ehdotus', luokittelut);
+  const toimenpideEhdotusGroup = R.prop(
+    'toimenpide-ehdotus-group',
+    luokittelut
+  );
 
   const vaiheIndex = vaihe => vaihe['vaihe-nro'] - 1;
+
+  const toimenpideEhdotusLabel = label => toimenpideEhdotusId => {
+    const toimendpideEhdotusGroupId = R.compose(
+      Maybe.orSome(0),
+      R.map(R.prop('group-id')),
+      Maybe.findById(toimenpideEhdotusId)
+    )(toimenpideEhdotukset);
+
+    return (
+      ETUtils.selectFormat(
+        label,
+        toimenpideEhdotusGroup
+      )(toimendpideEhdotusGroupId) +
+      ' / ' +
+      ETUtils.selectFormat(label, toimenpideEhdotukset)(toimenpideEhdotusId)
+    );
+  };
 </script>
 
 <div>
@@ -31,12 +54,9 @@
       <div>
         <Select
           variant={SelectVariants.LIGHT}
-          items={R.pluck('id', toimenpideEhdotuksetLuokittelu)}
+          items={R.pluck('id', toimenpideEhdotukset)}
           parse={Maybe.Some}
-          format={ETUtils.selectFormat(
-            LocaleUtils.label($locale),
-            toimenpideEhdotuksetLuokittelu
-          )}
+          format={toimenpideEhdotusLabel(LocaleUtils.label($locale))}
           validation={false}
           required={false}
           allowNone={true}
