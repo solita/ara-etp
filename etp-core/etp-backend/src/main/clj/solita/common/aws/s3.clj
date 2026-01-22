@@ -25,8 +25,8 @@
   [{:keys [client bucket]} {:keys [prefix next-key-marker next-version-id-marker]}]
   (aws.utils/invoke client
                     :ListObjectVersions
-                    (cond-> {:Bucket bucket
-                             :Prefix prefix}
+                    (cond-> {:Bucket bucket}
+                            prefix (assoc :Prefix prefix)
                             next-key-marker (assoc :KeyMarker next-key-marker)
                             next-version-id-marker (assoc :NextVersionIdMarker next-version-id-marker))))
 

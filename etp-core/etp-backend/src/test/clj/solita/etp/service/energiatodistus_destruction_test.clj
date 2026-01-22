@@ -764,8 +764,7 @@
       (t/is (empty? (select-viesti-liite-audit viestiketju-1-id)))
       (t/is (not (empty? (select-viesti-liite-audit viestiketju-2-id)))))))
 
-(t/deftest ^{:broken-test "causes test bucket to bot be deleted since the bucket cleanup should also handle pagination"}
-           destroy-when-needs-to-paginate-liite-test
+(t/deftest destroy-when-needs-to-paginate-liite-test
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
         laatija-id (-> laatijat keys sort first)
         destruction-tag {:Key "EnergiatodistusDestruction" :Value "True"}
