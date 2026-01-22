@@ -65,6 +65,7 @@ services:
       WEBPACK_ALLOWED_HOSTS: auto
       WEBPACK_HOST: 0.0.0.0
       WEBPACK_PORT: 3009
+      ETP_2026: true
     healthcheck:
       test: curl -k https://localhost:3009 || exit 1
       interval: 10s
