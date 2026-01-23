@@ -11,6 +11,13 @@
             [solita.common.map :as map]
             [solita.common.formats :as formats]))
 
+(def ^:private co2-kertoimet
+  {:kaukolampo         0.059
+   :sahko              0.05
+   :uusiutuvat-pat     0.027
+   :fossiiliset-pat    0.306
+   :kaukojaahdytys     0.014})
+
 (defn safe-div [x y]
   (when (and x y (> y 0))
     (/ x y)))
@@ -526,3 +533,27 @@
    (some->
      (energiatodistus-service/find-energiatodistus db whoami id)
      (complete-energiatodistus (luokittelut db)))))
+
+(defn co2-paastot-et
+  [tulokset]
+  (if tulokset
+   (+ (* (or (:kaukolampo tulokset) 0) (:kaukolampo co2-kertoimet))
+          (* (or (:sahko tulokset) 0) (:sahko co2-kertoimet))
+          (* (or (:uusiutuva-polttoaine tulokset) 0) (:uusiutuvat-pat co2-kertoimet))
+          (* (or (:fossiilinen-polttoaine tulokset) 0) (:fossiiliset-pat co2-kertoimet))
+          (* (or (:kaukojaahdytys tulokset) 0) (:kaukojaahdytys co2-kertoimet)))
+    0.0))
+
+;TODO: Before the et-pdf is finalized, check that this is correct and add to the et-pdf etusivu
+#_
+(defn uusiutuvan-osuus-paastoista
+  [tulokset]
+  (let [kaytettavat-energiamuodot (:kaytettavat-energiamuodot tulokset)
+        kokonaispaastot (reduce + 0 (vals kaytettavat-energiamuodot))
+        uusiutuvat (:uusiutuvat-omavaraisenergiat tulokset)
+        uusiutuva-energia (reduce + 0 (vals uusiutuvat))]
+    (if (pos? kokonaispaastot)
+      (str (Math/round (* 100.0 (/ (double uusiutuva-energia) (double kokonaispaastot))))
+           " %")
+      "0 %")))
+

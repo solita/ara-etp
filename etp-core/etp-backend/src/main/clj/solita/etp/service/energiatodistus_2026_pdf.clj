@@ -1,9 +1,14 @@
 (ns solita.etp.service.energiatodistus-2026-pdf
   (:require [hiccup.core :as hiccup]
+            [solita.etp.config :as config]
             [solita.etp.service.pdf :as pdf-service]
+            [solita.etp.service.localization :as loc]
             [solita.etp.service.watermark-pdf :as watermark-pdf]
-            [solita.etp.config :as config])
-  (:import [java.io ByteArrayOutputStream]))
+            [solita.etp.service.energiatodistus-pdf.etusivu-yleistiedot :as et-etusivu-yleistiedot]
+            [solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia :as et-laskennallinen-ostoenergia]
+            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service])
+  (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
                             "sv" "UTKAST"})
@@ -15,17 +20,8 @@
   (str
    "@page {
       size: A4;
-      margin: 20mm;
-      @bottom-center {
-        content: counter(page) \" / \" counter(pages);
-        font-family: roboto, sans-serif;
-        font-size: 10pt;
-      }
-      @bottom-right {
-        content: string(id-string);
-        font-family: roboto, sans-serif;
-        font-size: 10pt;
-      }
+      margin: 0;
+
     }
 
     * {
@@ -39,6 +35,102 @@
       font-size: 11pt;
     }
 
+   .page {
+      width: 210mm;
+      height: 297mm;
+      padding: 70px;
+      box-sizing: border-box;
+      page-break-after: always;
+      position: relative;
+    }
+
+   .page:last-child {
+      page-break-after: auto;
+    }
+
+   .page-border-container {
+      border: 8px solid #23323e;
+      height: calc(100% - 24px);
+      padding: 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+   .page-content {
+      flex: 1;
+      padding: 0;
+    }
+
+   .page-section {
+      border-bottom: 8px solid #23323e;
+      padding: 10px 3px;
+    }
+
+   .page-section:last-child {
+      border-bottom: none;
+    }
+
+   .todo-placeholder {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16pt;
+      color: #999;
+    }
+
+   .page-footer {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      font-size: 10pt;
+      color: #666;
+      text-align: center;
+      font-family: roboto, sans-serif;
+    }
+
+   .page-header {
+      background-color: #23323e;
+      height: 100px;
+      width: 100%;
+      padding: 20px 10mm;
+      margin: 0;
+      color: white;
+      font-family: roboto, sans-serif;
+      text-align: center;
+   }
+
+    .page-title {
+      color: white;
+      font-size: 25px;
+      font-weight: bold;
+      margin: 0 0 8px 0;
+      font-family: roboto, sans-serif;
+      text-transform: uppercase;
+    }
+
+    .page-subtitle {
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      margin: 0;
+      font-family: roboto, sans-serif;
+    }
+      font-size: 24pt;
+      font-weight: bold;
+      font-family: roboto, sans-serif;
+   }
+
+    .page-title {
+      color: white;
+      font-size: 24pt;
+      font-weight: bold;
+      margin: 0;
+      font-family: roboto, sans-serif;
+    }
+
     h1 {
       font-size: 24pt;
       margin-bottom: 20px;
@@ -48,11 +140,167 @@
       string-set: id-string content();
       display: none;
     }
-   "))
+
+    .etusivu-yleistiedot {
+      font-size: 11pt;
+    }
+
+    .etusivu-yleistiedot dl {
+      display: table;
+      width: 90%;
+      background-color: white;
+      border-collapse: collapse;
+      -fs-border-rendering: no-bevel;
+      margin: 10px 15px;
+    }
+
+    .etusivu-yleistiedot dl div {
+      display: table-row;
+    }
+
+    .etusivu-yleistiedot dl dt,
+    .etusivu-yleistiedot dl dd {
+      display: table-cell;
+      fs-border-rendering: no-bevel;
+      padding-top: 3px;
+      padding-bottom: 3px;
+    }
+
+    .etusivu-yleistiedot dl dt {
+      color: #23323e;
+      font-weight: bold;
+      white-space: nowrap;
+      width: 45%;
+      padding-right: 30px;
+    }
+
+    .etusivu-yleistiedot dl dd {
+      background-color: white;
+    }
+
+    .etusivu-yleistiedot dl div:last-child dd {
+      font-weight: bold;
+      color: #23323e;
+      white-space: nowrap;
+    }
+
+    .etusivu-ostoenergia {
+      font-size: 13px;
+    }
+
+    .etusivu-ostoenergia table {
+      width: 95%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      margin: 10px 15px;
+      table-layout: fixed;
+    }
+
+    .etusivu-ostoenergia th,
+    .etusivu-ostoenergia td {
+      border: 1px solid #bdc6cc;
+      padding: 2px 2px;
+      font-weight: normal;
+      font-size: 13px;
+      text-align: center;
+      color: #23323e;
+    }
+
+    .etusivu-ostoenergia th:first-child,
+    .etusivu-ostoenergia td:first-child {
+      border-left: none;
+      border-right: none;
+      font-weight: bold;
+      text-align: left;
+      width: 25%;
+    }
+
+    .etusivu-ostoenergia th.oe-otsikko {
+      font-weight: bold;
+    }
+
+    .etusivu-ostoenergia th:nth-child(2),
+    .etusivu-ostoenergia td:nth-child(2) {
+      border-left: none;
+      width: 15%;
+    }
+
+    .etusivu-ostoenergia th:last-child,
+    .etusivu-ostoenergia td:last-child {
+      border-right: none;
+      width: 70px;
+    }
+
+    .etusivu-ostoenergia th:nth-child(3),
+    .etusivu-ostoenergia td:nth-child(3),
+    .etusivu-ostoenergia th:nth-child(4),
+    .etusivu-ostoenergia td:nth-child(4),
+    .etusivu-ostoenergia th:nth-child(5),
+    .etusivu-ostoenergia td:nth-child(5),
+    .etusivu-ostoenergia th:nth-child(6),
+    .etusivu-ostoenergia td:nth-child(6) {
+      width: 70px;
+    }
+
+    .etusivu-ostoenergia th.empty,
+    .etusivu-ostoenergia th.oe-otsikko {
+      border: none;
+      background: none;
+    }
+
+    .etusivu-ostoenergia dl {
+      display: table;
+      width: 90%;
+      background-color: white;
+      border-collapse: collapse;
+      -fs-border-rendering: no-bevel;
+      margin: 10px 10px;
+      font-size: 13px;
+    }
+
+    .etusivu-ostoenergia dl div {
+      display: table-row;
+    }
+
+    .etusivu-ostoenergia dl dt,
+    .etusivu-ostoenergia dl dd {
+      display: table-cell;
+      padding: 5px 5px;
+    }
+
+    .etusivu-ostoenergia dl dt {
+      color: #23323e;
+      font-weight: bold;
+      white-space: nowrap;
+      width: 1px;
+    }"))
+
+(defn- page-header [title subtitle]
+  [:div {:class "page-header"}
+   [:h1 {:class "page-title"} title]
+   [:p {:class "page-subtitle"} subtitle]])
+
+(defn- page-footer [et-tunnus page-num total-pages]
+  [:div {:class "page-footer"}
+   (str "Todistustunnus " et-tunnus " | " page-num " / " total-pages)])
+
+(defn- render-page [page-data page-num total-pages et-tunnus]
+  (let [{:keys [title subtitle content header]} page-data]
+    [:div {:class "page"}
+     [:div {:class "page-border-container"}
+      (or header (page-header title subtitle))
+      [:div {:class "page-content"}
+       content]]
+     (page-footer et-tunnus page-num total-pages)]))
 
 (defn generate-document-html
   "Generate complete HTML document for Energiatodistus 2026 PDF."
-  [content-hiccup id]
+  [pages et-tunnus]
+  (let [total-pages (count pages)
+        pages-html (map-indexed
+                     (fn [idx page-data]
+                       (render-page page-data (inc idx) total-pages et-tunnus))
+                     pages)]
   (hiccup/html
    [:html
     [:head
@@ -60,28 +308,52 @@
      [:title "Energiatodistus"]
      [:style (styles)]]
     [:body
-     [:div.id-string id]
-     content-hiccup]]))
+     pages-html]])))
+
+
+(defn generate-energiatodistus-html
+  "Use OpenHTMLToPDF to generate PDF, return as a byte array"
+  [{:keys [energiatodistus kieli] :as params}]
+  (let [l (kieli loc/et-pdf-localization)
+        pages [{:title (l :energiatodistus)
+                :subtitle (l :energiatodistus-2026-subtitle)
+                :content
+                [:div
+                 [:div {:class "page-section"}
+                  (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
+                 [:div {:class "page-section"}
+                  [:div {:class "todo-placeholder"} "TODO"]]
+                 [:div {:class "page-section"}
+                  (et-laskennallinen-ostoenergia/ostoenergia params)
+                  (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]}]]
+
+    (generate-document-html pages (:id energiatodistus))))
 
 (defn- generate-energiatodistus-ohtp-pdf
-  "Use OpenHTMLToPDF to generate PDF, return as a byte array"
-  [energiatodistus kieli]
-  (let [output-stream (ByteArrayOutputStream.)
-        ;; Placeholder content for now
-        content [:div
-                 [:h1 "Energiatodistus 2026"]
-                 [:p "Tämä on energiatodistuksen 2026 placeholder-sisältö."]
-                 [:p (str "Todistuksen ID: " (:id energiatodistus))]
-                 [:p (str "Kieli: " kieli)]]]
-    (-> (generate-document-html content (:id energiatodistus))
+  "Use OpenHTMLToPDF to generate a energiatodistus PDF, return as a byte array"
+  [params]
+  (let [output-stream (ByteArrayOutputStream.)]
+    (-> (generate-energiatodistus-html params)
         (pdf-service/html->pdf output-stream))
     (-> output-stream .toByteArray)))
 
-(defn generate-pdf [energiatodistus kieli draft?]
-  (let [pdf-bytes (generate-energiatodistus-ohtp-pdf energiatodistus kieli)]
-    (cond
-      draft?
-      (watermark-pdf/apply-watermark-to-bytes pdf-bytes (get draft-watermark-texts kieli "LUONNOS"))
-      (contains? #{"local-dev" "dev" "test"} config/environment-alias)
-      (watermark-pdf/apply-watermark-to-bytes pdf-bytes (get test-watermark-texts kieli "TESTI"))
-      :else pdf-bytes)))
+(defn generate-energiatodistus-pdf
+  "Generate a energiatodistus PDF and return it as a byte array."
+  [energiatodistus alakayttotarkoitukset laatimisvaiheet kieli draft?]
+  (let [kieli-keyword (keyword kieli)
+        pdf-bytes
+
+        ;; Generate the PDF to byte array
+        (generate-energiatodistus-ohtp-pdf
+          {:energiatodistus       energiatodistus
+           :alakayttotarkoitukset alakayttotarkoitukset
+           :laatimisvaiheet       laatimisvaiheet
+           :kieli                 kieli-keyword})
+        watermark-text (cond
+                         draft? (draft-watermark-texts kieli)
+                         (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
+                         :else nil)]
+
+    (if (some? watermark-text)
+      (watermark-pdf/apply-watermark-to-bytes pdf-bytes watermark-text)
+      pdf-bytes)))

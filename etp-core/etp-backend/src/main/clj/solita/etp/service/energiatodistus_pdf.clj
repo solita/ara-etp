@@ -14,7 +14,9 @@
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.file :as file-service]
-            [solita.etp.service.watermark-pdf :as watermark-pdf])
+            [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
+            [solita.etp.service.watermark-pdf :as watermark-pdf]
+            [solita.etp.service.luokittelu :as luokittelu-service])
   (:import (java.io ByteArrayOutputStream File)
            (java.time Clock LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
@@ -616,18 +618,18 @@
         dir (.getParent file)
         result-pdf (str/replace path #".xlsx$" ".pdf")
         {:keys [exit] :as sh-result} (libreoffice/run-with-args
-                                       "--convert-to"
-                                       "pdf"
-                                       filename
-                                       :dir
-                                       dir)]
+                                      "--convert-to"
+                                      "pdf"
+                                      filename
+                                      :dir
+                                      dir)]
     (if (and (zero? exit) (.exists (io/as-file result-pdf)))
       result-pdf
       (throw (ex-info "XLSX to PDF conversion failed"
                       (assoc sh-result
-                        :type :xlsx-pdf-conversion-failure
-                        :xlsx filename
-                        :pdf-result? (.exists (io/as-file result-pdf))))))))
+                             :type :xlsx-pdf-conversion-failure
+                             :xlsx filename
+                             :pdf-result? (.exists (io/as-file result-pdf))))))))
 
 (defn input-stream->bytes [is]
   (with-open [is is
@@ -639,14 +641,14 @@
                  ^Float x ^Float y
                  ^Float width ^Float height]
   (with-open
-    [doc (PDDocument/load (io/file pdf-path))
-     contents (PDPageContentStream. doc
-                                    (.getPage doc page)
-                                    PDPageContentStream$AppendMode/APPEND
-                                    true)]
+   [doc (PDDocument/load (io/file pdf-path))
+    contents (PDPageContentStream. doc
+                                   (.getPage doc page)
+                                   PDPageContentStream$AppendMode/APPEND
+                                   true)]
     (let
-      [image-bytes (-> image-path io/resource io/input-stream input-stream->bytes)
-       image (PDImageXObject/createFromByteArray doc image-bytes image-path)]
+     [image-bytes (-> image-path io/resource io/input-stream input-stream->bytes)
+      image (PDImageXObject/createFromByteArray doc image-bytes image-path)]
 
       (.drawImage contents ^PDImageXObject image x y width height)
       (.close contents)
@@ -770,6 +772,10 @@
     (if allekirjoitusaika
       (find-existing-pdf aws-s3-client id kieli)
       (if (= 2026 (:versio complete-energiatodistus))
-        (io/input-stream (etp2026-pdf/generate-pdf complete-energiatodistus kieli true))
+        (do
+          (log/info "Generating 2026 PDF for id" id)
+          (let [alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
+                laatimisvaiheet (luokittelu-service/find-laatimisvaiheet db)]
+            (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf complete-energiatodistus alakayttotarkoitukset laatimisvaiheet kieli true))))
         (generate-pdf-as-input-stream complete-energiatodistus kieli true nil)))))
 

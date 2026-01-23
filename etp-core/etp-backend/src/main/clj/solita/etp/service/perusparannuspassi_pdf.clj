@@ -464,8 +464,7 @@
      padding: 5px 8px;
      font-size: 14px;
      margin: 0;
-    }"))
-
+   }"))
 
 (defn- page-header [title]
   [:div {:class "page-header"}
