@@ -521,7 +521,7 @@ const Template = args => ({
 export const Default = Template.bind({});
 Default.args = {
   energiatodistus: testEnergiatodistus(),
-  toimenpideEhdotuksetLuokittelu: toimenpideEhdotukset,
+  luokittelut: luokittelut,
   pppSchema: saveSchema,
   inputLanguage: 'fi',
   perusparannuspassi: testPpp(442)
