@@ -31,11 +31,11 @@
 
 (defn ostoenergia [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
-        painotettu-kaukolampo (^[double] Math/round (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala-kertoimella]))
-        painotettu-sahko (^[double] Math/round (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :sahko-nettoala-kertoimella]))
-        painotettu-uusutuva (^[double] Math/round (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-nettoala-kertoimella]))
-        painotettu-fossiilinen (^[double] Math/round (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-nettoala-kertoimella]))
-        painotettu-kaukojaahdytys (^[double] Math/round (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-nettoala-kertoimella]))]
+        painotettu-kaukolampo (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala-kertoimella]) 0))
+        painotettu-sahko (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :sahko-nettoala-kertoimella]) 0))
+        painotettu-uusutuva (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-nettoala-kertoimella]) 0))
+        painotettu-fossiilinen (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-nettoala-kertoimella]) 0))
+        painotettu-kaukojaahdytys (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-nettoala-kertoimella]) 0))]
     (table-ostoenergia kieli
      [{:dt (l :laskennallinen-ostoenergia)
        :dd [(str "kWhE/m2/vuosi")
