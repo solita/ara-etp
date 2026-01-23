@@ -13,7 +13,7 @@
   export let energiatodistus;
   export let perusparannuspassi;
   export let pppSchema;
-  export let toimenpideEhdotuksetLuokittelu;
+  export let luokittelut;
   export let inputLanguage;
 </script>
 
@@ -26,7 +26,7 @@
         {energiatodistus}
         bind:perusparannuspassi
         {pppSchema}
-        {toimenpideEhdotuksetLuokittelu}
+        {luokittelut}
         {vaihe}
         {inputLanguage} />
     {/if}

@@ -6,7 +6,7 @@
   "Find all toimenpide-ehdotus entries with their ordered by ordinal"
   [db]
   (jdbc/query db
-              ["SELECT id, label_fi, label_sv, valid FROM toimenpide_ehdotus ORDER BY ordinal ASC"]
+              ["SELECT id, label_fi, label_sv, valid, group_id FROM toimenpide_ehdotus ORDER BY ordinal ASC"]
               db/default-opts))
 
 (defn find-toimenpide-ehdotus-groups

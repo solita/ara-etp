@@ -18,7 +18,7 @@
 
   export let inputLanguage;
 
-  export let toimenpideEhdotuksetLuokittelu;
+  export let luokittelut;
 
   export let open = false;
   const toggleOpen = () => (open = R.not(open));
@@ -55,7 +55,7 @@
         {pppSchema}
         {vaihe}
         {inputLanguage}
-        {toimenpideEhdotuksetLuokittelu} />
+        {luokittelut} />
       <EnergiankulutuksenMuutos
         {perusparannuspassi}
         {energiatodistus}
