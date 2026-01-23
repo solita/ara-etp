@@ -21,7 +21,6 @@
     const allMetrics = PppUtils.calculateDerivedValues(et, ppp);
 
     return {
-      previous: allMetrics[vaihe['vaihe-nro'] - 1],
       current: allMetrics[vaihe['vaihe-nro']]
     };
   };
@@ -32,101 +31,76 @@
 <div>
   <H5
     text={i18n(
-      'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.header'
+      'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.header'
     )} />
 
   <dl class="ppp-description-list">
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-kaukolampo-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-kaukolampo'
       )}
     </dt>
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberDiffFormat)
-      )(
-        R.lift(R.subtract)(
-          metrics.current.laskennallinenKulutus.kaukolampo,
-          metrics.previous.laskennallinenKulutus.kaukolampo
-        )
-      )}
+        R.map(formats.numberFormat)
+      )(metrics.current.laskennallinenKulutus.kaukolampo)}
       {#each Maybe.toArray(metrics.current.laskennallinenKulutus.kaukolampo) as _}
         <VuosikulutusUnit />
       {/each}
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-sahko-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-sahko'
       )}
     </dt>
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberDiffFormat)
-      )(
-        R.lift(R.subtract)(
-          metrics.current.laskennallinenKulutus.sahko,
-          metrics.previous.laskennallinenKulutus.sahko
-        )
-      )}
+        R.map(formats.numberFormat)
+      )(metrics.current.laskennallinenKulutus.sahko)}
       {#each Maybe.toArray(metrics.current.laskennallinenKulutus.sahko) as _}
         <VuosikulutusUnit />
       {/each}
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-uusiutuvat-pat-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-uusiutuvat-pat'
       )}
     </dt>
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberDiffFormat)
-      )(
-        R.lift(R.subtract)(
-          metrics.current.laskennallinenKulutus['uusiutuva-polttoaine'],
-          metrics.previous.laskennallinenKulutus['uusiutuva-polttoaine']
-        )
-      )}
+        R.map(formats.numberFormat)
+      )(metrics.current.laskennallinenKulutus['uusiutuva-polttoaine'])}
       {#each Maybe.toArray(metrics.current.laskennallinenKulutus['uusiutuva-polttoaine']) as _}
         <VuosikulutusUnit />
       {/each}
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-fossiiliset-pat-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-fossiiliset-pat'
       )}
     </dt>
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberDiffFormat)
-      )(
-        R.lift(R.subtract)(
-          metrics.current.laskennallinenKulutus['fossiilinen-polttoaine'],
-          metrics.previous.laskennallinenKulutus['fossiilinen-polttoaine']
-        )
-      )}
+        R.map(formats.numberFormat)
+      )(metrics.current.laskennallinenKulutus['fossiilinen-polttoaine'])}
       {#each Maybe.toArray(metrics.current.laskennallinenKulutus['fossiilinen-polttoaine']) as _}
         <VuosikulutusUnit />
       {/each}
     </dd>
     <dt>
       {i18n(
-        'perusparannuspassi.toimenpiteet.energiankulutuksen-muutos.ostoenergian-tarve-kaukojaahdytys-muutos'
+        'perusparannuspassi.toimenpiteet.energiankulutus-vaiheen-jalkeen.ostoenergian-tarve-kaukojaahdytys'
       )}
     </dt>
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberDiffFormat)
-      )(
-        R.lift(R.subtract)(
-          metrics.current.laskennallinenKulutus.kaukojaahdytys,
-          metrics.previous.laskennallinenKulutus.kaukojaahdytys
-        )
-      )}
+        R.map(formats.numberFormat)
+      )(metrics.current.laskennallinenKulutus.kaukojaahdytys)}
       {#each Maybe.toArray(metrics.current.laskennallinenKulutus.kaukojaahdytys) as _}
         <VuosikulutusUnit />
       {/each}
