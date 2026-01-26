@@ -259,30 +259,35 @@
   {disabled}
   {schema}
   {inputLanguage}
+  versio={2026}
   huomio={'ymparys'}
   bind:energiatodistus />
 <Huomio
   {disabled}
   {schema}
   {inputLanguage}
+  versio={2026}
   huomio={'alapohja-ylapohja'}
   bind:energiatodistus />
 <Huomio
   {disabled}
   {schema}
   {inputLanguage}
+  versio={2026}
   huomio={'lammitys'}
   bind:energiatodistus />
 <Huomio
   {disabled}
   {schema}
   {inputLanguage}
+  versio={2026}
   huomio={'iv-ilmastointi'}
   bind:energiatodistus />
 <Huomio
   {disabled}
   {schema}
   {inputLanguage}
+  versio={2026}
   huomio={'valaistus-muut'}
   bind:energiatodistus />
 

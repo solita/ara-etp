@@ -30,6 +30,14 @@ const deserializer = {
   perustiedot: {
     'julkinen-rakennus': Maybe.get,
     uudisrakennus: Maybe.get
+  },
+  huomiot: {
+    lammitys: {
+      'asetukset-tehostettavissa': Maybe.get
+    },
+    'iv-ilmastointi': {
+      'asetukset-tehostettavissa': Maybe.get
+    }
   }
 };
 

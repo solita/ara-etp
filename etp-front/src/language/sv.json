@@ -98,6 +98,7 @@
   },
   "units": {
     "year": "år",
+    "years": "år",
     "pieces": "St",
     "celsius": "°C",
     "days": "dagar",
@@ -1156,6 +1157,8 @@
         "header": "Anmärkningar - ventilations- och luftkonditioneringssystem",
         "label-context": "$unused",
         "teksti": "Anmärkningar - ventilations- och luftkonditioneringssystem",
+        "kayttoikaa-jaljella-arvio-vuosina": "Arvio ilmanvaihtojärjestelmän jäljellä olevasta teknisestä käyttöiästä (sv)",
+        "nykyinen-jarjestelma-tehostettavissa": "Nykyinen ilmanvaihtojärjestelmä voidaan mukauttaa toimimaan tehokkaammilla lämpötila-asetuksilla? (sv)",
         "toimenpide": [
           {
             "label-context": "Anmärkningar / Ventilations- och luftkonditioneringssystem",
@@ -1186,6 +1189,8 @@
         "header": "Anmärkningar, uppvärmningssystem för utrymmen och tappvatten",
         "label-context": "$unused",
         "teksti": "Anmärkningar, uppvärmningssystem för utrymmen och tappvatten",
+        "kayttoikaa-jaljella-arvio-vuosina": "Arvio lämmitysjärjestelmän jäljellä olevasta teknisestä käyttöiästä (sv)",
+        "nykyinen-jarjestelma-tehostettavissa": "Tilojen nykyinen lämmitysjärjestelmä voidaan mukauttaa toimimaan tehokkaammilla lämpötila-asetuksilla? (sv)",
         "toimenpide": [
           {
             "label-context": "Anmärkningar / Uppvärmningssystem",
