@@ -333,7 +333,19 @@ export const v2013 = R.compose(
   R.dissocPath(['perustiedot', 'laatimisvaihe'])
 )(v2018);
 
-export const v2026 = v2018;
+export const v2026 = R.mergeDeepLeft(
+  {
+    huomiot: {
+      lammitys: { 'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative },
+      //'lammitys-asetukset-tehostettavissa' Booleans are not in schema
+      'iv-ilmastointi': {
+        'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
+      }
+      //'iv-ilmastointi-asetukset-tehostettavissa' Booleans are not in schema
+    }
+  },
+  v2018
+);
 
 export const redefineNumericValidation = (schema, constraint) => {
   const path = R.append(R.__, R.split('.', constraint.property));

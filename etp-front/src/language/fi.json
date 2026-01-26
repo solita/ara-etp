@@ -101,6 +101,7 @@
   "units": {
     "days": "vrk",
     "year": "vuosi",
+    "years": "vuotta",
     "pieces": "kpl",
     "celsius": "°C",
     "screen-reader": {
@@ -1185,6 +1186,8 @@
         "header": "Huomiot - Ilmanvaihto- ja ilmastointijärjestelmät",
         "label-context": "$unused",
         "teksti": "Ilmanvaihto- ja ilmastointijärjestelmien huomiot",
+        "kayttoikaa-jaljella-arvio-vuosina": "Arvio ilmanvaihtojärjestelmän jäljellä olevasta teknisestä käyttöiästä",
+        "nykyinen-jarjestelma-tehostettavissa": "Nykyinen ilmanvaihtojärjestelmä voidaan mukauttaa toimimaan tehokkaammilla lämpötila-asetuksilla?",
         "toimenpide": [
           {
             "label-context": "Huomiot / Ilmanvaihto",
@@ -1215,6 +1218,8 @@
         "header": "Huomiot - Tilojen ja käyttöveden lämmitysjärjestelmät",
         "label-context": "$unused",
         "teksti": "Tilojen ja käyttöveden lämmitysjärjestelmien huomiot",
+        "kayttoikaa-jaljella-arvio-vuosina": "Arvio lämmitysjärjestelmän jäljellä olevasta teknisestä käyttöiästä",
+        "nykyinen-jarjestelma-tehostettavissa": "Tilojen nykyinen lämmitysjärjestelmä voidaan mukauttaa toimimaan tehokkaammilla lämpötila-asetuksilla?",
         "toimenpide": [
           {
             "label-context": "Huomiot / Lämmitysjärjestelmät",
