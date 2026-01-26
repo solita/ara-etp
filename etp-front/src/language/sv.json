@@ -1132,7 +1132,8 @@
     "huomiot": {
       "header": {
         "2013": "Förslag till åtgärder för att förbättra energiprestandan",
-        "2018": "Åtgärdsförslag för att förbättra e-talet"
+        "2018": "Åtgärdsförslag för att förbättra e-talet",
+        "2026": "Åtgärdsförslag för att förbättra e-talet"
       },
       "label-context": "$unused",
       "table-header": "Åtgärdsförslag",

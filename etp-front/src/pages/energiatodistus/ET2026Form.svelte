@@ -254,7 +254,7 @@
 <HR />
 <H2
   id="toimenpide-ehdotukset"
-  text={$_('energiatodistus.huomiot.header.2018')} />
+  text={$_('energiatodistus.huomiot.header.2026')} />
 <Huomio
   {disabled}
   {schema}
