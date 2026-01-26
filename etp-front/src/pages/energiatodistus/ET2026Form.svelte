@@ -243,7 +243,7 @@
   id="toteutunut-ostoenergiankulutus"
   text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
 <EnergiaverkostaOstetut
-  versio={2018}
+  versio={2026}
   {disabled}
   {schema}
   {inputLanguage}

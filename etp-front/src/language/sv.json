@@ -1043,7 +1043,8 @@
       "ostettu-energia": {
         "header": {
           "2013": "Köpt energi",
-          "2018": "Energi köpt från energinät"
+          "2018": "Energi köpt från energinät",
+          "2026": "Energi köpt från energinät"
         },
         "labels": {
           "kaukolampo": "Fjärrvärme",
