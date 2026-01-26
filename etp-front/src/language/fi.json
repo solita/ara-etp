@@ -1071,6 +1071,7 @@
       "table-header": "Energialähteet",
       "ostettu-energia": {
         "header": {
+          "2026": "Energiaverkosta ostettu energia",
           "2018": "Energiaverkosta ostettu energia",
           "2013": "Ostettu energia"
         },
