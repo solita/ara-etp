@@ -290,15 +290,18 @@ export const energiatodistus2013 = R.compose(
 export const energiatodistus2026 = R.compose(
   R.assocPath(['perustiedot', 'havainnointikayntityyppi-id'], ValidNone()),
   R.assocPath(
-    ['huomiot', 'lammitys-kayttoikaa-jaljella-arvio-vuosina'],
+    ['huomiot', 'lammitys', 'kayttoikaa-jaljella-arvio-vuosina'],
     ValidNone()
   ),
-  R.assocPath(['huomiot', 'lammitys-asetukset-tehostettavissa'], false),
+  R.assocPath(['huomiot', 'lammitys', 'asetukset-tehostettavissa'], false),
   R.assocPath(
-    ['huomiot', 'iv-ilmastointi-kayttoikaa-jaljella-arvio-vuosina'],
+    ['huomiot', 'iv-ilmastointi', 'kayttoikaa-jaljella-arvio-vuosina'],
     ValidNone()
   ),
-  R.assocPath(['huomiot', 'iv-ilmastointi-asetukset-tehostettavissa'], false),
+  R.assocPath(
+    ['huomiot', 'iv-ilmastointi', 'asetukset-tehostettavissa'],
+    false
+  ),
   R.assocPath(
     [
       'tulokset',
