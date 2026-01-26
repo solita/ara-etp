@@ -171,7 +171,7 @@
   <ELuku {eTehokkuus} idSuffix="perustiedot" />
 </div>
 <ToimenpideEhdotukset
-  versio={'2018'}
+  versio={'2026'}
   {disabled}
   {inputLanguage}
   {schema}
