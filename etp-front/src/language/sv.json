@@ -885,7 +885,8 @@
         "kaytettavat-energiamuodot": "Använda energi\u00ADformer",
         "ostoenergia": {
           "2013": "Beräknad mängd energi",
-          "2018": "Köpt energi beräknad vid standard\u00ADanvändning"
+          "2018": "Köpt energi beräknad vid standard\u00ADanvändning",
+          "2026": "Köpt energi beräknad vid standard\u00ADanvändning"
         },
         "energiamuodon-kerroin": "Energi\u00ADforms\u00ADfaktor",
         "kertoimella-painotettu-energiankulutus": "Energi\u00ADförbrukning viktad med energi\u00ADforms\u00ADfaktorn",

@@ -913,6 +913,7 @@
         "label-context": "E-luvun erittely",
         "kaytettavat-energiamuodot": "Käytet\u00ADtävät energia\u00ADmuodot",
         "ostoenergia": {
+          "2026": "Vakioi\u00ADdulla käytöllä laskettu osto\u00ADenergia",
           "2018": "Vakioi\u00ADdulla käytöllä laskettu osto\u00ADenergia",
           "2013": "Laskettu osto\u00ADenergia"
         },
