@@ -287,7 +287,7 @@
   bind:energiatodistus />
 
 <Suositukset
-  versio={2018}
+  versio={2026}
   {disabled}
   {schema}
   {inputLanguage}
