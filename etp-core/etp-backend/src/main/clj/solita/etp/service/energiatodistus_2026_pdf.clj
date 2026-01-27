@@ -18,10 +18,7 @@
                            "sv" "TEST"})
 
 (defn- styles []
-  (let [res (or (io/resource "energiatodistus-2026.css")
-                (throw (ex-info "Styles resource 'energiatodistus-2026.css' not found on classpath"
-                                {:resource "energiatodistus-2026.css"})))]
-    (slurp res)))
+  (slurp (io/resource "energiatodistus-2026.css")))
 
 (defn- page-header [title subtitle]
   [:div {:class "page-header"}
