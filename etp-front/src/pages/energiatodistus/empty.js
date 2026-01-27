@@ -306,7 +306,8 @@ export const energiatodistus2026 = R.compose(
     [
       'tulokset',
       'uusiutuvat-omavaraisenergiat',
-      'aurinkosahko-kokonaistuotanto'
+      'kokonaistuotanto',
+      'aurinkosahko'
     ],
     ValidNone()
   ),
@@ -314,28 +315,45 @@ export const energiatodistus2026 = R.compose(
     [
       'tulokset',
       'uusiutuvat-omavaraisenergiat',
-      'aurinkolampo-kokonaistuotanto'
+      'kokonaistuotanto',
+      'aurinkolampo'
     ],
-    ValidNone()
-  ),
-  R.assocPath(
-    ['tulokset', 'uusiutuvat-omavaraisenergiat', 'tuulisahko-kokonaistuotanto'],
     ValidNone()
   ),
   R.assocPath(
     [
       'tulokset',
       'uusiutuvat-omavaraisenergiat',
-      'lampopumppu-kokonaistuotanto'
+      'kokonaistuotanto',
+      'tuulisahko'
     ],
     ValidNone()
   ),
   R.assocPath(
-    ['tulokset', 'uusiutuvat-omavaraisenergiat', 'muulampo-kokonaistuotanto'],
+    [
+      'tulokset',
+      'uusiutuvat-omavaraisenergiat',
+      'kokonaistuotanto',
+      'lampopumppu'
+    ],
     ValidNone()
   ),
   R.assocPath(
-    ['tulokset', 'uusiutuvat-omavaraisenergiat', 'muusahko-kokonaistuotanto'],
+    [
+      'tulokset',
+      'uusiutuvat-omavaraisenergiat',
+      'kokonaistuotanto',
+      'muulampo'
+    ],
+    ValidNone()
+  ),
+  R.assocPath(
+    [
+      'tulokset',
+      'uusiutuvat-omavaraisenergiat',
+      'kokonaistuotanto',
+      'muusahko'
+    ],
     ValidNone()
   ),
   R.assoc('versio', 2026),
