@@ -296,7 +296,7 @@ export const energiatodistus2026 = R.compose(
     huomiot: {
       lammitys: {
         'kayttoikaa-jaljella-arvio-vuosina': ValidNone(),
-        'lammitys-asetukset-tehostettavissa': false
+        'asetukset-tehostettavissa': false
       },
       'iv-ilmastointi': {
         'kayttoikaa-jaljella-arvio-vuosina': ValidNone(),
