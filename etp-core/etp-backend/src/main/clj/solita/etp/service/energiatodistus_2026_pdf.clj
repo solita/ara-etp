@@ -50,15 +50,12 @@
 
    .page-border-container {
       border: 8px solid #23323e;
-      height: calc(100% - 24px);
+      height: 250mm;
       padding: 0;
       position: relative;
-      display: flex;
-      flex-direction: column;
     }
 
    .page-content {
-      flex: 1;
       padding: 0;
     }
 
@@ -69,15 +66,6 @@
 
    .page-section:last-child {
       border-bottom: none;
-    }
-
-   .todo-placeholder {
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16pt;
-      color: #999;
     }
 
    .page-footer {
@@ -125,7 +113,6 @@
     }
 
     .id-string {
-      string-set: id-string content();
       display: none;
     }
 
@@ -138,8 +125,7 @@
       width: 90%;
       background-color: white;
       border-collapse: collapse;
-      -fs-border-rendering: no-bevel;
-      margin: 0px 5px;
+      margin: 0px 5px 5px 0px;
     }
 
     .etusivu-yleistiedot dl div {
@@ -149,9 +135,7 @@
     .etusivu-yleistiedot dl dt,
     .etusivu-yleistiedot dl dd {
       display: table-cell;
-      fs-border-rendering: no-bevel;
-      padding-top: 3px;
-      padding-bottom: 3px;
+      padding: 3px;
     }
 
     .etusivu-yleistiedot dl dt {
@@ -170,10 +154,6 @@
       font-weight: bold;
       color: #23323e;
       white-space: nowrap;
-    }
-
-    .etusivu-ostoenergia {
-      font-size: 12px;
     }
 
     .etusivu-ostoenergia table {
@@ -241,9 +221,8 @@
       width: 98%;
       background-color: white;
       border-collapse: collapse;
-      -fs-border-rendering: no-bevel;
       margin: 5px 5px;
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .etusivu-ostoenergia dl div {
@@ -253,7 +232,7 @@
     .etusivu-ostoenergia dl dt,
     .etusivu-ostoenergia dl dd {
       display: table-cell;
-      padding: 0px 5px;
+      padding: 0px 0px 3px 0px;
     }
 
     .etusivu-ostoenergia dl dt {
@@ -267,35 +246,27 @@
       font-size: 12px;
       padding: 5px 5px;
     }
-    .etusivu-eluku .row {
-      display: flex;
-      flex-wrap: nowrap;
-      align-items: flex-start;
-    }
+
     .etusivu-eluku .label {
       font-weight: bold;
       color: #23323e;
       text-align: left;
-      flex: 0 0 auto;
       white-space: nowrap;
     }
     .etusivu-eluku .value {
-      flex: 1 1 0;
       min-width: 0;
-      word-break: break-word;
     }
 
    .etusivu-grafiikka-otsikko {
       font-weight: bold;
       color: #23323e;
-      font-size: 13px;
+      font-size: 12px;
       margin: 0px 5px 5px 5px;
    }
 
    .etusivu-grafiikka svg {
       display: block;
       width: 100%;
-      margin: 5p 5px 5px 5px;
       padding: 0px 0px 0px 5px;
    }
 
