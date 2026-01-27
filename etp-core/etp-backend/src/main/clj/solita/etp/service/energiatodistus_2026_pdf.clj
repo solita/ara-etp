@@ -6,8 +6,8 @@
             [solita.etp.service.watermark-pdf :as watermark-pdf]
             [solita.etp.service.energiatodistus-pdf.etusivu-yleistiedot :as et-etusivu-yleistiedot]
             [solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia :as et-laskennallinen-ostoenergia]
-            [solita.etp.service.energiatodistus :as energiatodistus-service]
-            [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service])
+            [solita.etp.service.energiatodistus-pdf.etusivu-eluku :as et-etusivu-eluku]
+            [solita.etp.service.energiatodistus-pdf.etusivu-grafiikka :as et-etusivu-grafiikka])
   (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
@@ -38,7 +38,7 @@
    .page {
       width: 210mm;
       height: 297mm;
-      padding: 70px;
+      padding: 20mm;
       box-sizing: border-box;
       page-break-after: always;
       position: relative;
@@ -93,9 +93,9 @@
 
    .page-header {
       background-color: #23323e;
-      height: 100px;
+      height: 80px;
       width: 100%;
-      padding: 20px 10mm;
+      padding: 5px 10mm;
       margin: 0;
       color: white;
       font-family: roboto, sans-serif;
@@ -118,18 +118,6 @@
       margin: 0;
       font-family: roboto, sans-serif;
     }
-      font-size: 24pt;
-      font-weight: bold;
-      font-family: roboto, sans-serif;
-   }
-
-    .page-title {
-      color: white;
-      font-size: 24pt;
-      font-weight: bold;
-      margin: 0;
-      font-family: roboto, sans-serif;
-    }
 
     h1 {
       font-size: 24pt;
@@ -142,7 +130,7 @@
     }
 
     .etusivu-yleistiedot {
-      font-size: 11pt;
+      font-size: 12px;
     }
 
     .etusivu-yleistiedot dl {
@@ -151,7 +139,7 @@
       background-color: white;
       border-collapse: collapse;
       -fs-border-rendering: no-bevel;
-      margin: 10px 15px;
+      margin: 0px 5px;
     }
 
     .etusivu-yleistiedot dl div {
@@ -185,23 +173,23 @@
     }
 
     .etusivu-ostoenergia {
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .etusivu-ostoenergia table {
-      width: 95%;
+      width: 98%;
       margin: 0 auto;
       border-collapse: collapse;
-      margin: 10px 15px;
+      margin: 5px 5px;
       table-layout: fixed;
     }
 
     .etusivu-ostoenergia th,
     .etusivu-ostoenergia td {
       border: 1px solid #bdc6cc;
-      padding: 2px 2px;
+      padding: 1px 1px;
       font-weight: normal;
-      font-size: 13px;
+      font-size: 12px;
       text-align: center;
       color: #23323e;
     }
@@ -250,11 +238,11 @@
 
     .etusivu-ostoenergia dl {
       display: table;
-      width: 90%;
+      width: 98%;
       background-color: white;
       border-collapse: collapse;
       -fs-border-rendering: no-bevel;
-      margin: 10px 10px;
+      margin: 5px 5px;
       font-size: 13px;
     }
 
@@ -265,7 +253,7 @@
     .etusivu-ostoenergia dl dt,
     .etusivu-ostoenergia dl dd {
       display: table-cell;
-      padding: 5px 5px;
+      padding: 0px 5px;
     }
 
     .etusivu-ostoenergia dl dt {
@@ -273,7 +261,45 @@
       font-weight: bold;
       white-space: nowrap;
       width: 1px;
-    }"))
+    }
+
+    .etusivu-eluku {
+      font-size: 12px;
+      padding: 5px 5px;
+    }
+    .etusivu-eluku .row {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: flex-start;
+    }
+    .etusivu-eluku .label {
+      font-weight: bold;
+      color: #23323e;
+      text-align: left;
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+    .etusivu-eluku .value {
+      flex: 1 1 0;
+      min-width: 0;
+      word-break: break-word;
+    }
+
+   .etusivu-grafiikka-otsikko {
+      font-weight: bold;
+      color: #23323e;
+      font-size: 13px;
+      margin: 0px 5px 5px 5px;
+   }
+
+   .etusivu-grafiikka svg {
+      display: block;
+      width: 100%;
+      margin: 5p 5px 5px 5px;
+      padding: 5px;
+   }
+
+   "))
 
 (defn- page-header [title subtitle]
   [:div {:class "page-header"}
@@ -322,7 +348,8 @@
                  [:div {:class "page-section"}
                   (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
                  [:div {:class "page-section"}
-                  [:div {:class "todo-placeholder"} "TODO"]]
+                  (et-etusivu-grafiikka/et-etusivu-grafiikka params)
+                  (et-etusivu-eluku/et-etusivu-eluku-teksti params)]
                  [:div {:class "page-section"}
                   (et-laskennallinen-ostoenergia/ostoenergia params)
                   (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]}]]
