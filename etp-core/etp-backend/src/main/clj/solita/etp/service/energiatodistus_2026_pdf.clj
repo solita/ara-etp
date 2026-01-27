@@ -37,8 +37,7 @@
     [:div {:class "page"}
      [:div {:class "page-border-container"}
       (or header (page-header title subtitle))
-      [:div {:class "page-content"}
-       content]]
+      content]
      (page-footer et-tunnus page-num total-pages)]))
 
 (defn generate-document-html
@@ -70,11 +69,13 @@
                  [:div {:class "page-section"}
                   (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
                  [:div {:class "page-section"}
-                  (et-etusivu-grafiikka/et-etusivu-grafiikka params)
-                  (et-etusivu-eluku/et-etusivu-eluku-teksti params)]
+                  [:div {:class "etusivu-grafiikka-eluku-section"}
+                   (et-etusivu-grafiikka/et-etusivu-grafiikka params)
+                   (et-etusivu-eluku/et-etusivu-eluku-teksti params)]]
                  [:div {:class "page-section"}
-                  (et-laskennallinen-ostoenergia/ostoenergia params)
-                  (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]}]]
+                  [:div {:class "etusivu-ostoenergia-section"}
+                   (et-laskennallinen-ostoenergia/ostoenergia params)
+                   (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}]]
 
     (generate-document-html pages (:id energiatodistus))))
 

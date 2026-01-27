@@ -1,181 +1,184 @@
 @page {
-  size: A4;
-  margin: 0;
+    size: A4;
+    margin: 0;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: roboto, sans-serif;
-  font-size: 11pt;
+    margin: 0;
+    padding: 0;
+    font-family: roboto, sans-serif;
+    font-size: 11pt;
 }
 
 .page {
-  width: 210mm;
-  height: 297mm;
-  padding: 20mm;
-  box-sizing: border-box;
-  page-break-after: always;
-  position: relative;
+    width: 210mm;
+    height: 297mm;
+    padding: 7mm;
+    box-sizing: border-box;
+    page-break-after: always;
+    position: relative;
 }
 
 .page:last-child {
-  page-break-after: auto;
+    page-break-after: auto;
 }
 
 .page-border-container {
-  border: 8px solid #23323e;
-  height: 250mm;
-  padding: 0;
-  position: relative;
-}
-
-.page-content {
-  padding: 0;
+    background-color: #23323e;
+    height: 277mm;
+    width: 100%;
+    padding: 2.5mm;
+    position: relative;
 }
 
 .page-section {
-  border-bottom: 8px solid #23323e;
-  padding: 10px 3px;
-}
-
-.page-section:last-child {
-  border-bottom: none;
+    background-color: white;
+    padding: 2mm 3mm;
+    margin-bottom: 2.5mm;
 }
 
 .page-footer {
-  position: absolute;
-  bottom: 10px;
-  left: 0;
-  right: 0;
-  font-size: 10pt;
-  color: #666;
-  text-align: center;
-  font-family: roboto, sans-serif;
+    position: absolute;
+    bottom: 7mm;
+    left: 0;
+    right: 0;
+    font-size: 10pt;
+    color: #666;
+    text-align: center;
+    font-family: roboto, sans-serif;
 }
 
 .page-header {
-  background-color: #23323e;
-  height: 80px;
-  width: 100%;
-  padding: 5px 10mm;
-  margin: 0;
-  color: white;
-  font-family: roboto, sans-serif;
-  text-align: center;
+    background-color: #23323e;
+    height: 80px;
+    width: 100%;
+    padding: 5px 10mm;
+    margin: 0;
+    color: white;
+    font-family: roboto, sans-serif;
+    text-align: center;
 }
 
 .page-title {
-  color: white;
-  font-size: 25px;
-  font-weight: bold;
-  margin: 0 0 8px 0;
-  font-family: roboto, sans-serif;
-  text-transform: uppercase;
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    font-family: roboto, sans-serif;
+    text-transform: uppercase;
 }
 
 .page-subtitle {
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-  margin: 0;
-  font-family: roboto, sans-serif;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
+    font-family: roboto, sans-serif;
 }
 
 h1 {
-  font-size: 24pt;
-  margin-bottom: 20px;
+    font-size: 24pt;
+    margin-bottom: 20px;
 }
 
 .id-string {
-  display: none;
+    display: none;
 }
 
 .etusivu-yleistiedot {
-  font-size: 12px;
+    font-size: 12px;
+    height: 52mm;
 }
 
 .etusivu-yleistiedot dl {
-  display: table;
-  width: 90%;
-  background-color: white;
-  border-collapse: collapse;
-  margin: 0px 5px 5px 0px;
+    display: table;
+    width: 100%;
+    background-color: white;
+    border-collapse: collapse;
+    margin: 0px 5px 5px 0px;
 }
 
 .etusivu-yleistiedot dl div {
-  display: table-row;
+    display: table-row;
 }
 
 .etusivu-yleistiedot dl dt,
 .etusivu-yleistiedot dl dd {
-  display: table-cell;
-  padding: 3px;
+    display: table-cell;
+    padding: 3px;
 }
 
 .etusivu-yleistiedot dl dt {
-  color: #23323e;
-  font-weight: bold;
-  white-space: nowrap;
-  width: 45%;
-  padding-right: 30px;
+    color: #23323e;
+    font-weight: bold;
+    white-space: nowrap;
+    width: 45%;
+    padding-right: 30px;
 }
 
 .etusivu-yleistiedot dl dd {
-  background-color: white;
+    background-color: white;
 }
 
 .etusivu-yleistiedot dl div:last-child dd {
-  font-weight: bold;
-  color: #23323e;
-  white-space: nowrap;
+    font-weight: bold;
+    color: #23323e;
+    white-space: nowrap;
+}
+
+.etusivu-grafiikka-eluku-section {
+    height: 123.5mm;
+}
+
+.etusivu-ostoenergia-section {
+    height: 54mm;
 }
 
 .etusivu-ostoenergia table {
-  width: 98%;
-  margin: 0 auto;
-  border-collapse: collapse;
-  margin: 5px 5px;
-  table-layout: fixed;
+    width: 98%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    margin: 5px 5px;
+    table-layout: fixed;
 }
 
 .etusivu-ostoenergia th,
 .etusivu-ostoenergia td {
-  border: 1px solid #bdc6cc;
-  padding: 1px 1px;
-  font-weight: normal;
-  font-size: 12px;
-  text-align: center;
-  color: #23323e;
+    border: 1px solid #bdc6cc;
+    padding: 1px 1px;
+    font-weight: normal;
+    font-size: 12px;
+    text-align: center;
+    color: #23323e;
 }
 
 .etusivu-ostoenergia th:first-child,
 .etusivu-ostoenergia td:first-child {
-  border-left: none;
-  border-right: none;
-  font-weight: bold;
-  text-align: left;
-  width: 25%;
+    border-left: none;
+    border-right: none;
+    font-weight: bold;
+    text-align: left;
+    width: 25%;
 }
 
 .etusivu-ostoenergia th.oe-otsikko {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .etusivu-ostoenergia th:nth-child(2),
 .etusivu-ostoenergia td:nth-child(2) {
-  border-left: none;
-  width: 15%;
+    border-left: none;
+    width: 15%;
 }
 
 .etusivu-ostoenergia th:last-child,
 .etusivu-ostoenergia td:last-child {
-  border-right: none;
-  width: 70px;
+    border-right: none;
+    width: 70px;
 }
 
 .etusivu-ostoenergia th:nth-child(3),
@@ -186,49 +189,49 @@ h1 {
 .etusivu-ostoenergia td:nth-child(5),
 .etusivu-ostoenergia th:nth-child(6),
 .etusivu-ostoenergia td:nth-child(6) {
-  width: 70px;
+    width: 70px;
 }
 
 .etusivu-ostoenergia th.empty,
 .etusivu-ostoenergia th.oe-otsikko {
-  border: none;
-  background: none;
+    border: none;
+    background: none;
 }
 
 .etusivu-ostoenergia dl {
-  display: table;
-  width: 98%;
-  background-color: white;
-  border-collapse: collapse;
-  margin: 5px 5px;
-  font-size: 12px;
+    display: table;
+    width: 98%;
+    background-color: white;
+    border-collapse: collapse;
+    margin: 5px 5px;
+    font-size: 12px;
 }
 
 .etusivu-ostoenergia dl div {
-  display: table-row;
+    display: table-row;
 }
 
 .etusivu-ostoenergia dl dt,
 .etusivu-ostoenergia dl dd {
-  display: table-cell;
-  padding: 0px 0px 3px 0px;
+    display: table-cell;
+    padding: 0px 0px 3px 0px;
 }
 
 .etusivu-ostoenergia dl dt {
-  color: #23323e;
-  font-weight: bold;
-  white-space: nowrap;
-  width: 1px;
+    color: #23323e;
+    font-weight: bold;
+    white-space: nowrap;
+    width: 1px;
 }
 
 .etusivu-eluku {
-  font-size: 12px;
-  padding: 5px 5px;
+    font-size: 12px;
+    padding: 5px 5px;
 }
 
 .etusivu-eluku .label {
-  font-weight: bold;
-  color: #23323e;
-  text-align: left;
-  white-space: nowrap;
+    font-weight: bold;
+    color: #23323e;
+    text-align: left;
+    white-space: nowrap;
 }
