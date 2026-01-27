@@ -288,75 +288,34 @@ export const energiatodistus2013 = R.compose(
 );
 
 export const energiatodistus2026 = R.compose(
-  R.assocPath(['perustiedot', 'havainnointikayntityyppi-id'], ValidNone()),
-  R.assocPath(
-    ['huomiot', 'lammitys', 'kayttoikaa-jaljella-arvio-vuosina'],
-    ValidNone()
-  ),
-  R.assocPath(['huomiot', 'lammitys', 'asetukset-tehostettavissa'], false),
-  R.assocPath(
-    ['huomiot', 'iv-ilmastointi', 'kayttoikaa-jaljella-arvio-vuosina'],
-    ValidNone()
-  ),
-  R.assocPath(
-    ['huomiot', 'iv-ilmastointi', 'asetukset-tehostettavissa'],
-    false
-  ),
-  R.assocPath(
-    [
-      'tulokset',
-      'uusiutuvat-omavaraisenergiat',
-      'kokonaistuotanto',
-      'aurinkosahko'
-    ],
-    ValidNone()
-  ),
-  R.assocPath(
-    [
-      'tulokset',
-      'uusiutuvat-omavaraisenergiat',
-      'kokonaistuotanto',
-      'aurinkolampo'
-    ],
-    ValidNone()
-  ),
-  R.assocPath(
-    [
-      'tulokset',
-      'uusiutuvat-omavaraisenergiat',
-      'kokonaistuotanto',
-      'tuulisahko'
-    ],
-    ValidNone()
-  ),
-  R.assocPath(
-    [
-      'tulokset',
-      'uusiutuvat-omavaraisenergiat',
-      'kokonaistuotanto',
-      'lampopumppu'
-    ],
-    ValidNone()
-  ),
-  R.assocPath(
-    [
-      'tulokset',
-      'uusiutuvat-omavaraisenergiat',
-      'kokonaistuotanto',
-      'muulampo'
-    ],
-    ValidNone()
-  ),
-  R.assocPath(
-    [
-      'tulokset',
-      'uusiutuvat-omavaraisenergiat',
-      'kokonaistuotanto',
-      'muusahko'
-    ],
-    ValidNone()
-  ),
-  R.assoc('versio', 2026),
+  R.mergeDeepLeft({
+    versio: 2026,
+    perustiedot: {
+      'havainnointikayntityyppi-id': ValidNone()
+    },
+    huomiot: {
+      lammitys: {
+        'kayttoikaa-jaljella-arvio-vuosina': ValidNone(),
+        'lammitys-asetukset-tehostettavissa': false
+      },
+      'iv-ilmastointi': {
+        'kayttoikaa-jaljella-arvio-vuosina': ValidNone(),
+        'asetukset-tehostettavissa': false
+      }
+    },
+    tulokset: {
+      'uusiutuvat-omavaraisenergiat': {
+        kokonaistuotanto: {
+          aurinkosahko: ValidNone(),
+          aurinkolampo: ValidNone(),
+          tuulisahko: ValidNone(),
+          lampopumppu: ValidNone(),
+          muulampo: ValidNone(),
+          muusahko: ValidNone()
+        }
+      }
+    }
+  }),
   energiatodistus2018
 );
 
