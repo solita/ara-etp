@@ -29,13 +29,15 @@
       (long (Math/round (* 100.0 (double ratio)))))))
 
 (defn- build-vaihe-data
-  "Build a vec of lahtotilanne (shaped like a vaihe) and valid PPP vaiheet"
+  "Build a vec of lahtotilanne (shaped like a vaihe) and valid PPP vaiheet.
+   Only includes vaiheet that have a starting date (vaiheen-alku-pvm).
+   This filters out vaiheet where data was added but later deleted."
   [perusparannuspassi]
   (let [lahtotilanne (-> perusparannuspassi :lahtotilanne)
         ppp-vaiheet (->> (:vaiheet perusparannuspassi)
-                         (filter :valid)
-                         (filter #(some? (get-in % [:tulokset :vaiheen-alku-pvm]))))]
-    (vec (cons lahtotilanne ppp-vaiheet))))
+                         ;; Filter to only include vaiheet with a starting date
+                         ;; This excludes vaiheet where the user added then deleted data
+                         (filter #(some? (get-in % [:tulokset :vaiheen-alku-pvm]))))]    (vec (cons lahtotilanne ppp-vaiheet))))
 
 (defn mid-header-tr [text]
   [:tr [:th {:class "th1" :scope "rowgroup" :colspan 6} text]])

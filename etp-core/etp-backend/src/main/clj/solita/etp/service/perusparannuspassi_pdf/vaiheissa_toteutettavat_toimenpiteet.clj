@@ -9,7 +9,9 @@
         vaiheet (:vaiheet perusparannuspassi)
         vaihe (first (filter #(= (:vaihe-nro %) vaihe-nro) vaiheet))
         seuraava-vaihe (first (filter #(= (:vaihe-nro %) (inc vaihe-nro)) vaiheet))]
-    (when vaihe
+    ;; Only return vaihe data if it has a starting date
+    ;; This filters out vaiheet where data was added but later deleted
+    (when (and vaihe (some? (get-in vaihe [:tulokset :vaiheen-alku-pvm])))
       (let [versio 2018
             e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus vaihe)
             e-luokka (-> (e-luokka-service/e-luokka kayttotarkoitukset alakayttotarkoitukset versio
@@ -42,7 +44,8 @@
                           :else nil)
         end-year (if next-start-year
                    (dec next-start-year)
-                   (when start-year (+ start-year 4)))]
+                   ;; For the last vaihe, use 2050 as the end year
+                   (when start-year 2050))]
     (if (and start-year end-year)
       (str " " start-year "–" end-year)
       (if start-year (str " " start-year) ""))))
@@ -152,7 +155,9 @@
   (let [{:keys [kieli toimenpide-ehdotukset]} params
         l (kieli loc/ppp-pdf-localization)
         vaihe-data (get-vaihe-data params vaihe-nro)]
-    (if vaihe-data
+    ;; Only render the page if vaihe has data (including a start date)
+    ;; Return nil for vaiheet without data so they can be filtered out
+    (when vaihe-data
       (let [{:keys [vaihe e-luku e-luokka]} vaihe-data
             title-text (format (l :vaiheessa-n-toteutettavat-toimenpiteet) vaihe-nro)
             parts (clojure.string/split title-text (re-pattern (str "(?<=" vaihe-nro ")")))]
@@ -181,7 +186,4 @@
                  [:tr
                   [:td {:style "vertical-align: bottom;"}
                    (render-energiankulutuksen-muutos vaihe l)
-                   (render-energiankulutus-kustannukset-ja-co2-paastot vaihe l)]]]})
-      {:title (format (l :vaiheessa-n-toteutettavat-toimenpiteet) vaihe-nro)
-       :content [:div
-                 [:p (str "Vaihetta " vaihe-nro " ei määritelty.")]]})))
+                   (render-energiankulutus-kustannukset-ja-co2-paastot vaihe l)]]]}))))

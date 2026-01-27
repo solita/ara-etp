@@ -148,7 +148,7 @@ export default {
           isDev: true,
           environment: 'dev',
           publicSiteUrl: 'https://localhost:3000',
-          isEtp2026: !!process.env.ETP_2026
+          isEtp2026: true
         })
       );
       return middlewares;
