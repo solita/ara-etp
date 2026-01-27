@@ -31,9 +31,9 @@
       text]]))
 
 (def arrows
-  [{:text "A+ ‹ A0-20%" :color "#02af50" :text-color "#ffffff" :luokka "A+"}
-   {:text "A0 ‹ 40" :color "#39d611" :luokka "A0"}
-   {:text "A ‹ 80" :color "#3bee07" :luokka "A"}
+  [{:text "A+ &lt; A0-20%" :color "#02af50" :text-color "#ffffff" :luokka "A+"}
+   {:text "A0 &lt; 40" :color "#39d611" :luokka "A0"}
+   {:text "A &lt; 80" :color "#3bee07" :luokka "A"}
    {:text "B 80-100" :color "#93d14f" :luokka "B"}
    {:text "C 120-150" :color "#b5f40b" :luokka "C"}
    {:text "D 150-220" :color "#fff000" :luokka "D"}
