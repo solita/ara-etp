@@ -300,7 +300,20 @@
 
         :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät päästöt"
         :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä"
-        :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP)"}
+        :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP)"
+        :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku)"
+        :paastoton-rakennus                         "Päästötön rakennus"
+        :a+luokka-otsikko                           "A+-luokka"
+        :a+luokka-teksti                            "Rakennus täyttää A0-luokan vaatimukset, on sitä 20 % energiatehokkaampi ja tuottaa\n
+                                                     uusiutuvaa energiaa yli oman tarpeensa."
+        :a0luokka-otsikko                           "A0-luokka"
+        :a0luokka-teksti                            "E-lukuvaatimuksen lisäksi paikan päällä tuotettu energia on fossiilivapaata ja rakennus kykenee\n
+                                                    reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan"
+        :eluku-otsikko                              "E-luku"
+        :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
+                                                    Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
+                                                    kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa rakennusten E-lukujen vertailun, muttei\n
+                                                    vertailua toteutuneeseen kulutukseen."}
 
    :sv {:rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite (sv)"
         :energiatodistus-2026-subtitle              "Energicertifikat i enlighet med 2026 års lagstiftning"
@@ -324,6 +337,18 @@
         :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät päästöt (sv)"
         :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä (sv)"
         :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP) (sv)"
+        :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku) (sv)"
+        :paastoton-rakennus                         "Päästötön rakennus (sv)"
+        :a+luokka-otsikko                           "A+-luokka"
+        :a+luokka-teksti                            "Rakennus täyttää A0-luokan vaatimukset, on sitä 20 % energiatehokkaampi ja tuottaa\n
+                                                     uusiutuvaa energiaa yli oman tarpeensa. (sv)"
+        :a0luokka-otsikko                           "A0-luokka (sv)"
+        :a0luokka-teksti                            "E-lukuvaatimuksen lisäksi paikan päällä tuotettu energia on fossiilivapaata ja rakennus kykenee\n
+                                                     reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan (sv)"
+        :eluku-otsikko                              "E-luku (sv)"
+        :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
+                                                     Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
+                                                     kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa rakennusten E-lukujen vertailun, muttei\nvertailua toteutuneeseen kulutukseen. (sv)"
 
         }})
 
