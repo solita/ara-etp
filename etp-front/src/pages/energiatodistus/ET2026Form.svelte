@@ -230,7 +230,11 @@
   {schema}
   bind:energiatodistus
   versio={2026} />
-<UusiutuvatOmavaraisenergiat {disabled} {schema} bind:energiatodistus />
+<UusiutuvatOmavaraisenergiat
+  {disabled}
+  {schema}
+  bind:energiatodistus
+  versio={2026} />
 <TeknistenjarjestelmienEnergiankulutus
   {disabled}
   {schema}

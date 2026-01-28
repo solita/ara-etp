@@ -15,6 +15,7 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
+  export let versio = 2018;
 
   $: omavaraisenergiatPerLammitettyNettoala = R.compose(
     EtUtils.perLammitettyNettoala(energiatodistus),
@@ -24,29 +25,82 @@
 
 <H3
   text={$_(
-    'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.header.2018'
+    'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.header.' + versio
   )} />
 
 <div class="border-right-0 min-w-full overflow-x-auto md:overflow-x-hidden">
   <table class="et-table mb-12">
-    <thead class="et-table--thead">
-      <tr class="et-table--tr">
-        <th
-          class="et-table--th et-table--th__twocells et-table--th-left-aligned">
-          {$_(
-            `energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.table-header`
-          )}
-        </th>
-        <th
-          class="et-table--th et-table--th-right-aligned et-table--th__twocells">
-          <VuosituottoUnit />
-        </th>
-        <th
-          class="et-table--th et-table--th-right-aligned et-table--th__twocells">
-          <VuosituottoAreaUnit />
-        </th>
-      </tr>
-    </thead>
+    {#if R.equals(versio, 2026)}
+      <colgroup>
+        <col class="w-1/4" />
+        <col class="w-1/4" />
+        <col class="w-1/4" />
+        <col class="w-1/4" />
+      </colgroup>
+      <thead class="et-table--thead">
+        <tr class="et-table--tr">
+          <th
+            scope="col"
+            rowspan="2"
+            class="et-table--th et-table--th-left-aligned align-top">
+            {$_(
+              'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.table-header'
+            )}
+          </th>
+
+          <th
+            scope="colgroup"
+            colspan="2"
+            class="et-table--th et-table--th-group et-table--th-left-aligned">
+            {$_(
+              'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.table-rakennuksen-hyodyntama-osuus-header'
+            )}
+          </th>
+
+          <th scope="col" class="et-table--th et-table--th-left-aligned">
+            {$_(
+              'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.table-kokonaistuotto-header'
+            )}
+          </th>
+        </tr>
+
+        <tr class="et-table--tr">
+          <th
+            scope="col"
+            class="et-table--th et-table--th-left-aligned et-table--with-left-border">
+            <VuosituottoUnit />
+          </th>
+          <th
+            scope="col"
+            class="et-table--th et-table--th-left-aligned et-table--no-left-border">
+            <VuosituottoAreaUnit />
+          </th>
+
+          <th scope="col" class="et-table--th et-table--th-left-aligned">
+            <VuosituottoUnit />
+          </th>
+        </tr>
+      </thead>
+    {:else}
+      <thead class="et-table--thead">
+        <tr class="et-table--tr">
+          <th
+            class="et-table--th et-table--th__twocells et-table--th-left-aligned">
+            {$_(
+              `energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.table-header`
+            )}
+          </th>
+          <th
+            class="et-table--th et-table--th-right-aligned et-table--th__twocells">
+            <VuosituottoUnit />
+          </th>
+          <th
+            class="et-table--th et-table--th-right-aligned et-table--th__twocells">
+            <VuosituottoAreaUnit />
+          </th>
+        </tr>
+      </thead>
+    {/if}
 
     <tbody class="et-table--tbody">
       {#each ['aurinkosahko', 'aurinkolampo', 'tuulisahko', 'lampopumppu', 'muusahko', 'muulampo'] as energiamuoto}
@@ -75,6 +129,21 @@
               R.prop(energiamuoto)
             )(omavaraisenergiatPerLammitettyNettoala)}
           </td>
+          {#if R.equals(versio, 2026)}
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={[
+                  'tulokset',
+                  'uusiutuvat-omavaraisenergiat',
+                  'kokonaistuotanto',
+                  energiamuoto
+                ]} />
+            </td>
+          {/if}
         </tr>
       {/each}
     </tbody>
