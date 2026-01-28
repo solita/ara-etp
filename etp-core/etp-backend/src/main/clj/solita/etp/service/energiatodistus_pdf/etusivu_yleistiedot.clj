@@ -29,7 +29,13 @@
               [:br]
              (get-in energiatodistus [:perustiedot (case kieli
                                                      :fi :katuosoite-fi
-                                                     :sv :katuosoite-sv)])]}
+                                                     :sv :katuosoite-sv)])
+             [:br]
+             (get-in energiatodistus [:perustiedot :postinumero])
+             " "
+             (get-in energiatodistus [:perustiedot (case kieli
+                                                     :fi :postitoimipaikka-fi
+                                                     :sv :postitoimipaikka-sv)])]}
        {:dt (l :pysyva-rakennustunnus)
         :dd (get-in energiatodistus [:perustiedot :rakennustunnus])}
        {:dt (l :rakennuksen-valmistumisvuosi)
