@@ -9,7 +9,7 @@
         tw tip-width
         cy (+ y (/ h 2))
         letter-padding 5
-        numbers-x 25]
+        numbers-x 22]
     [:g
      [:polygon
       {:points (str
@@ -25,7 +25,7 @@
        :y (+ y (/ h 2))
        :dy "0.35em"
        :text-anchor "start"
-       :font-size 11
+       :font-size 13
        :font-family "roboto, sans-serif"
        :font-weight "bold"
        :fill text-color}
@@ -36,31 +36,31 @@
        :y (+ y (/ h 2))
        :dy "0.35em"
        :text-anchor "start"
-       :font-size 11
+       :font-size 13
        :font-family "roboto, sans-serif"
        :font-weight "bold"
        :fill text-color}
       numbers]]))
 
 (def arrows
-  [{:letter "A+" :numbers "&lt; A0-20%" :color "#02af50" :text-color "#ffffff" :luokka "A+"}
-   {:letter "A0" :numbers "&lt; 40" :color "#39d611" :luokka "A0"}
-   {:letter "A" :numbers "&lt; 80" :color "#3bee07" :luokka "A"}
-   {:letter "B" :numbers "80-100" :color "#93d14f" :luokka "B"}
-   {:letter "C" :numbers "120-150" :color "#b5f40b" :luokka "C"}
-   {:letter "D" :numbers "150-220" :color "#fff000" :luokka "D"}
-   {:letter "E" :numbers "220-300" :color "#ffc300" :luokka "E"}
-   {:letter "F" :numbers "300-400" :color "#ec670b" :text-color "#ffffff" :luokka "F"}
-   {:letter "G" :numbers "> 400" :color "#d82e10" :text-color "#ffffff" :luokka "G"}])
+  [{:letter "A+" :numbers "&lt; A0-20%" :color "#009641" :luokka "A+"}
+   {:letter "A0" :numbers "&lt; 40" :color "#52ae32" :luokka "A0"}
+   {:letter "A" :numbers "&lt; 80" :color "#c8d302" :luokka "A"}
+   {:letter "B" :numbers "80-100" :color "#ffed00" :luokka "B"}
+   {:letter "C" :numbers "120-150" :color "#fbb900" :luokka "C"}
+   {:letter "D" :numbers "150-220" :color "#ec6608" :luokka "D"}
+   {:letter "E" :numbers "220-300" :color "#e50104" :text-color "#ffffff" :luokka "E"}
+   {:letter "F" :numbers "300-400" :color "#e40202" :text-color "#ffffff"  :luokka "F"}
+   {:letter "G" :numbers "> 400" :color "#e40202" :text-color "#ffffff" :luokka "G"}])
 
-(def arrow-height 20)
-(def arrow-spacing 4)
-(def min-body-width 90)
-(def width-increment 15)
+(def arrow-height 26)
+(def arrow-spacing 5)
+(def min-body-width 110)
+(def width-increment 20)
 (def tip-width 10)
-(def tip-width-increment 2)
-(def indicator-line-length 330)
-(def e-luokka-indicator-margin 150)
+(def tip-width-increment 3)
+(def indicator-line-length 370)
+(def e-luokka-indicator-margin 190)
 (def svg-width (+ indicator-line-length e-luokka-indicator-margin))
 
 (defn e-luokka-indicator
@@ -68,15 +68,15 @@
   (let [row-height (+ arrow-height arrow-spacing)
         arrow-index (first (keep-indexed (fn [i a] (when (= (:luokka a) e-luokka) i)) arrows))
         arrow-y (when arrow-index (* arrow-index row-height))
-        indicator-width 140
-        indicator-tip-width 15
+        indicator-width 160
+        indicator-tip-width 20
         x-end (+ indicator-line-length e-luokka-indicator-margin)
         x-start (- x-end indicator-width)
         x-tip (- x-start indicator-tip-width)
         h arrow-height
         cy (when arrow-y (+ arrow-y (/ h 2)))
-        luokka-x (+ x-tip 15)
-        luku-x (+ x-tip 35)]
+        luokka-x (+ x-tip 20)
+        luku-x (+ x-tip 40)]
     (when arrow-index
       [:g
        [:polygon
@@ -92,7 +92,7 @@
          :y cy
          :dy "0.35em"
          :text-anchor "start"
-         :font-size 11
+         :font-size 13
          :font-family "roboto, sans-serif"
          :font-weight "bold"
          :fill "#ffffff"}
@@ -102,7 +102,7 @@
          :y cy
          :dy "0.35em"
          :text-anchor "start"
-         :font-size 11
+         :font-size 13
          :font-family "roboto, sans-serif"
          :font-weight "bold"
          :fill "#ffffff"}
@@ -126,7 +126,7 @@
       {:x line-end-x
        :y (- line-y 4)
        :text-anchor "end"
-       :font-size 11
+       :font-size 13
        :fill "#000000"}
       label]]))
 
