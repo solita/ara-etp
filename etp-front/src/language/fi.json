@@ -953,11 +953,14 @@
       },
       "uusiutuvat-omavaraisenergiat": {
         "header": {
+          "2026": "Rakennuksen hyödyntämä ja tuottama uusiutuva energia",
           "2018": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
           "2013": "Uusiutuva omavaraisenergia, hyödyksikäytetty osuus"
         },
         "label-context": "Uusiutuvat omavaraisenergiat",
         "table-header": "Energiaratkaisu",
+        "table-kokonaistuotto-header": "Kokonaistuotto",
+        "table-rakennuksen-hyodyntama-osuus-header": "Rakennuksen hyödyntämä osuus",
         "labels": {
           "aurinkosahko": "Aurinkosähkö",
           "tuulisahko": "Tuulisähkö",

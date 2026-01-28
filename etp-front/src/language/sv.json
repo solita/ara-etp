@@ -930,8 +930,11 @@
         },
         "header": {
           "2013": "Utnyttjad andel av förnybar egenproducerad energi",
-          "2018": "Energi som utvunnits från energi i byggnadens närmiljö, tillvaratagen andel (månatlig specifikation i tilläggsuppgifterna)"
+          "2018": "Energi som utvunnits från energi i byggnadens närmiljö, tillvaratagen andel (månatlig specifikation i tilläggsuppgifterna)",
+          "2026": "Rakennuksen hyödyntämä ja tuottama uusiutuva energia (sv)"
         },
+        "table-kokonaistuotto-header": "Kokonaistuotto (sv)",
+        "table-rakennuksen-hyodyntama-osuus-header": "Rakennuksen hyödyntämä osuus (sv)",
         "label-context": "Förnybara självförsörjningsenergier",
         "table-header": "Energilösning",
         "labels": {

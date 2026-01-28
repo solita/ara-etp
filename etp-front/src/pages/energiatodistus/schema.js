@@ -335,13 +335,30 @@ export const v2013 = R.compose(
 
 export const v2026 = R.mergeDeepLeft(
   {
+    perustiedot: {
+      'havainnointikayntityyppi-id': IntegerNonNegative
+    },
     huomiot: {
-      lammitys: { 'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative },
-      //'lammitys-asetukset-tehostettavissa' Booleans are not in schema
+      lammitys: {
+        'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
+        //'asetukset-tehostettavissa' Booleans are not in schema
+      },
       'iv-ilmastointi': {
         'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
+        //'asetukset-tehostettavissa' Booleans are not in schema
       }
-      //'iv-ilmastointi-asetukset-tehostettavissa' Booleans are not in schema
+    },
+    tulokset: {
+      'uusiutuvat-omavaraisenergiat': {
+        kokonaistuotanto: {
+          aurinkosahko: IntegerNonNegative,
+          aurinkolampo: IntegerNonNegative,
+          tuulisahko: IntegerNonNegative,
+          lampopumppu: IntegerNonNegative,
+          muulampo: IntegerNonNegative,
+          muusahko: IntegerNonNegative
+        }
+      }
     }
   },
   v2018
