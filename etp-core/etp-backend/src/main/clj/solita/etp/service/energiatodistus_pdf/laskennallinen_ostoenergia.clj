@@ -73,6 +73,6 @@
        [{:dt (l :energiakaytosta-syntyvat-kasvihuonepaastot)
          :dd (str rounded " kgCO2ekv/m2/vuosi")}
         {:dt (l :uusiutuva-energian-osuus)
-         :dd (str "TODO: Add later when the calculations are ready")}
+         :dd (str "TODO: Add later when ready")}
         {:dt (l :kasvihuonepaastot)
-         :dd (str "TODO: Add gwp things when they are ready")}])]))
+         :dd (str "TODO: Add gwp later when ready")}])]))
