@@ -291,7 +291,7 @@ export const energiatodistus2026 = R.compose(
   R.mergeDeepLeft({
     versio: 2026,
     perustiedot: {
-      'havainnointikayntityyppi-id': ValidNone()
+      'havainnointikayntityyppi-id': Maybe.None()
     },
     huomiot: {
       lammitys: {
