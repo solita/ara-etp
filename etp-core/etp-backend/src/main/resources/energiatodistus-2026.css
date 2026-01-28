@@ -90,7 +90,7 @@ h1 {
 }
 
 .etusivu-yleistiedot {
-    font-size: 12px;
+    font-size: 14px;
     height: 52mm;
 }
 
@@ -109,7 +109,7 @@ h1 {
 .etusivu-yleistiedot dl dt,
 .etusivu-yleistiedot dl dd {
     display: table-cell;
-    padding: 3px;
+    padding: 2px;
 }
 
 .etusivu-yleistiedot dl dt {
@@ -139,7 +139,7 @@ h1 {
 }
 
 .etusivu-ostoenergia table {
-    width: 98%;
+    width: 100%;
     margin: 0 auto;
     border-collapse: collapse;
     margin: 5px 5px;
@@ -151,7 +151,7 @@ h1 {
     border: 1px solid #bdc6cc;
     padding: 1px 1px;
     font-weight: normal;
-    font-size: 12px;
+    font-size: 14px;
     text-align: center;
     color: #23323e;
 }
@@ -204,7 +204,7 @@ h1 {
     background-color: white;
     border-collapse: collapse;
     margin: 5px 5px;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .etusivu-ostoenergia dl div {
@@ -225,8 +225,8 @@ h1 {
 }
 
 .etusivu-eluku {
-    font-size: 12px;
-    padding: 5px 5px;
+    font-size: 14px;
+    padding: 15px 0px 0px 0px;
 }
 
 .etusivu-eluku .label {
@@ -234,4 +234,10 @@ h1 {
     color: #23323e;
     text-align: left;
     white-space: nowrap;
+    padding: 0px 3px 0px 0px;
+}
+
+.etusivu-grafiikka-otsikko {
+   font-weight: bold;
+   padding: 5px 5px 5px 0px;
 }
