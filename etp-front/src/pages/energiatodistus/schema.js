@@ -335,9 +335,6 @@ export const v2013 = R.compose(
 
 export const v2026 = R.mergeDeepLeft(
   {
-    perustiedot: {
-      'havainnointikayntityyppi-id': IntegerNonNegative
-    },
     huomiot: {
       lammitys: {
         'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative

@@ -578,6 +578,7 @@
       "laatimisvaihe": "Upprättandes period",
       "uudisrakennus": "Nybyggnad",
       "havainnointikaynti": "Datum för iakttagelser på plats",
+      "havainnointikayntityyppi-id": "Havainnointikäynti toteutettu (sv)",
       "katuosoite": "Gatuadress",
       "katuosoite-*": "Gatuadress",
       "postinumero": "Postnummer",

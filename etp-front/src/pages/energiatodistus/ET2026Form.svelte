@@ -146,6 +146,23 @@
           bind:model={energiatodistus}
           path={['perustiedot', 'havainnointikaynti']} />
       </div>
+      <div class="w-full py-4 lg:w-1/2">
+        <Select
+          id={'perustiedot.havainnointikayntityyppi-id'}
+          label={$_('energiatodistus.perustiedot.havainnointikayntityyppi-id')}
+          required={true}
+          validation={schema.$signature}
+          allowNone={false}
+          {disabled}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['perustiedot', 'havainnointikayntityyppi-id'])}
+          parse={Maybe.Some}
+          format={et.selectFormat(
+            labelLocale,
+            luokittelut.havainnointikayntityyppi
+          )}
+          items={R.pluck('id', luokittelut.havainnointikayntityyppi)} />
+      </div>
     {/if}
 
     <div class="w-full py-4 lg:w-1/2">
