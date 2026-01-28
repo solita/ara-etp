@@ -298,7 +298,7 @@
         :energimuodon-kerroin                       "Energiamuodon kerroin"
         :energiakulutus                             "Energiamuodon\nkertoimella painotettu\nenergiakulutus"
 
-        :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvuhionekaasupäästöt"
+        :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvihuonekaasupäästöt"
         :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä"
         :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku)"
@@ -334,7 +334,7 @@
         :energimuodon-kerroin                       "Energiamuodon kerroin (sv)"
         :energiakulutus                             "Energiamuodon\nkertoimella painotettu\nenergiakulutus (sv)"
 
-        :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvuhionekaasupäästöt (sv)"
+        :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvihuonekaasupäästöt (sv)"
         :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä (sv)"
         :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP) (sv)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku) (sv)"
