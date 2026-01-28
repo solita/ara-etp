@@ -1,5 +1,6 @@
 (ns solita.etp.service.energiatodistus-2026-pdf
   (:require [hiccup.core :as hiccup]
+            [clojure.java.io :as io]
             [solita.etp.config :as config]
             [solita.etp.service.pdf :as pdf-service]
             [solita.etp.service.localization :as loc]
@@ -8,7 +9,7 @@
             [solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia :as et-laskennallinen-ostoenergia]
             [solita.etp.service.energiatodistus-pdf.etusivu-eluku :as et-etusivu-eluku]
             [solita.etp.service.energiatodistus-pdf.etusivu-grafiikka :as et-etusivu-grafiikka])
-  (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
+  (:import [java.io ByteArrayOutputStream]))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
                             "sv" "UTKAST"})
@@ -17,288 +18,7 @@
                            "sv" "TEST"})
 
 (defn- styles []
-  (str
-   "@page {
-      size: A4;
-      margin: 0;
-
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: roboto, sans-serif;
-      font-size: 11pt;
-    }
-
-   .page {
-      width: 210mm;
-      height: 297mm;
-      padding: 20mm;
-      box-sizing: border-box;
-      page-break-after: always;
-      position: relative;
-    }
-
-   .page:last-child {
-      page-break-after: auto;
-    }
-
-   .page-border-container {
-      border: 8px solid #23323e;
-      height: calc(100% - 24px);
-      padding: 0;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-
-   .page-content {
-      flex: 1;
-      padding: 0;
-    }
-
-   .page-section {
-      border-bottom: 8px solid #23323e;
-      padding: 10px 3px;
-    }
-
-   .page-section:last-child {
-      border-bottom: none;
-    }
-
-   .todo-placeholder {
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16pt;
-      color: #999;
-    }
-
-   .page-footer {
-      position: absolute;
-      bottom: 10px;
-      left: 0;
-      right: 0;
-      font-size: 10pt;
-      color: #666;
-      text-align: center;
-      font-family: roboto, sans-serif;
-    }
-
-   .page-header {
-      background-color: #23323e;
-      height: 80px;
-      width: 100%;
-      padding: 5px 10mm;
-      margin: 0;
-      color: white;
-      font-family: roboto, sans-serif;
-      text-align: center;
-   }
-
-    .page-title {
-      color: white;
-      font-size: 25px;
-      font-weight: bold;
-      margin: 0 0 8px 0;
-      font-family: roboto, sans-serif;
-      text-transform: uppercase;
-    }
-
-    .page-subtitle {
-      color: white;
-      font-size: 12px;
-      font-weight: bold;
-      margin: 0;
-      font-family: roboto, sans-serif;
-    }
-
-    h1 {
-      font-size: 24pt;
-      margin-bottom: 20px;
-    }
-
-    .id-string {
-      string-set: id-string content();
-      display: none;
-    }
-
-    .etusivu-yleistiedot {
-      font-size: 12px;
-    }
-
-    .etusivu-yleistiedot dl {
-      display: table;
-      width: 90%;
-      background-color: white;
-      border-collapse: collapse;
-      -fs-border-rendering: no-bevel;
-      margin: 0px 5px;
-    }
-
-    .etusivu-yleistiedot dl div {
-      display: table-row;
-    }
-
-    .etusivu-yleistiedot dl dt,
-    .etusivu-yleistiedot dl dd {
-      display: table-cell;
-      fs-border-rendering: no-bevel;
-      padding-top: 3px;
-      padding-bottom: 3px;
-    }
-
-    .etusivu-yleistiedot dl dt {
-      color: #23323e;
-      font-weight: bold;
-      white-space: nowrap;
-      width: 45%;
-      padding-right: 30px;
-    }
-
-    .etusivu-yleistiedot dl dd {
-      background-color: white;
-    }
-
-    .etusivu-yleistiedot dl div:last-child dd {
-      font-weight: bold;
-      color: #23323e;
-      white-space: nowrap;
-    }
-
-    .etusivu-ostoenergia {
-      font-size: 12px;
-    }
-
-    .etusivu-ostoenergia table {
-      width: 98%;
-      margin: 0 auto;
-      border-collapse: collapse;
-      margin: 5px 5px;
-      table-layout: fixed;
-    }
-
-    .etusivu-ostoenergia th,
-    .etusivu-ostoenergia td {
-      border: 1px solid #bdc6cc;
-      padding: 1px 1px;
-      font-weight: normal;
-      font-size: 12px;
-      text-align: center;
-      color: #23323e;
-    }
-
-    .etusivu-ostoenergia th:first-child,
-    .etusivu-ostoenergia td:first-child {
-      border-left: none;
-      border-right: none;
-      font-weight: bold;
-      text-align: left;
-      width: 25%;
-    }
-
-    .etusivu-ostoenergia th.oe-otsikko {
-      font-weight: bold;
-    }
-
-    .etusivu-ostoenergia th:nth-child(2),
-    .etusivu-ostoenergia td:nth-child(2) {
-      border-left: none;
-      width: 15%;
-    }
-
-    .etusivu-ostoenergia th:last-child,
-    .etusivu-ostoenergia td:last-child {
-      border-right: none;
-      width: 70px;
-    }
-
-    .etusivu-ostoenergia th:nth-child(3),
-    .etusivu-ostoenergia td:nth-child(3),
-    .etusivu-ostoenergia th:nth-child(4),
-    .etusivu-ostoenergia td:nth-child(4),
-    .etusivu-ostoenergia th:nth-child(5),
-    .etusivu-ostoenergia td:nth-child(5),
-    .etusivu-ostoenergia th:nth-child(6),
-    .etusivu-ostoenergia td:nth-child(6) {
-      width: 70px;
-    }
-
-    .etusivu-ostoenergia th.empty,
-    .etusivu-ostoenergia th.oe-otsikko {
-      border: none;
-      background: none;
-    }
-
-    .etusivu-ostoenergia dl {
-      display: table;
-      width: 98%;
-      background-color: white;
-      border-collapse: collapse;
-      -fs-border-rendering: no-bevel;
-      margin: 5px 5px;
-      font-size: 13px;
-    }
-
-    .etusivu-ostoenergia dl div {
-      display: table-row;
-    }
-
-    .etusivu-ostoenergia dl dt,
-    .etusivu-ostoenergia dl dd {
-      display: table-cell;
-      padding: 0px 5px;
-    }
-
-    .etusivu-ostoenergia dl dt {
-      color: #23323e;
-      font-weight: bold;
-      white-space: nowrap;
-      width: 1px;
-    }
-
-    .etusivu-eluku {
-      font-size: 12px;
-      padding: 5px 5px;
-    }
-    .etusivu-eluku .row {
-      display: flex;
-      flex-wrap: nowrap;
-      align-items: flex-start;
-    }
-    .etusivu-eluku .label {
-      font-weight: bold;
-      color: #23323e;
-      text-align: left;
-      flex: 0 0 auto;
-      white-space: nowrap;
-    }
-    .etusivu-eluku .value {
-      flex: 1 1 0;
-      min-width: 0;
-      word-break: break-word;
-    }
-
-   .etusivu-grafiikka-otsikko {
-      font-weight: bold;
-      color: #23323e;
-      font-size: 13px;
-      margin: 0px 5px 5px 5px;
-   }
-
-   .etusivu-grafiikka svg {
-      display: block;
-      width: 100%;
-      margin: 5p 5px 5px 5px;
-   }
-
-   "))
+  (slurp (io/resource "energiatodistus-2026.css")))
 
 (defn- page-header [title subtitle]
   [:div {:class "page-header"}
@@ -314,8 +34,7 @@
     [:div {:class "page"}
      [:div {:class "page-border-container"}
       (or header (page-header title subtitle))
-      [:div {:class "page-content"}
-       content]]
+      content]
      (page-footer et-tunnus page-num total-pages)]))
 
 (defn generate-document-html
@@ -347,11 +66,13 @@
                  [:div {:class "page-section"}
                   (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
                  [:div {:class "page-section"}
-                  (et-etusivu-grafiikka/et-etusivu-grafiikka params)
-                  (et-etusivu-eluku/et-etusivu-eluku-teksti params)]
+                  [:div {:class "etusivu-grafiikka-eluku-section"}
+                   (et-etusivu-grafiikka/et-etusivu-grafiikka params)
+                   (et-etusivu-eluku/et-etusivu-eluku-teksti params)]]
                  [:div {:class "page-section"}
-                  (et-laskennallinen-ostoenergia/ostoenergia params)
-                  (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]}]]
+                  [:div {:class "etusivu-ostoenergia-section"}
+                   (et-laskennallinen-ostoenergia/ostoenergia params)
+                   (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}]]
 
     (generate-document-html pages (:id energiatodistus))))
 
