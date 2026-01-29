@@ -314,6 +314,7 @@
                                                     Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
                                                     kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa rakennusten E-lukujen vertailun, muttei\n
                                                     vertailua toteutuneeseen kulutukseen."
+        :lahtotiedot-title                          "E-luvun laskennan lähtötiedot"
         :te-rakennusvaippa-otsikko                  "Toimenpide-ehdotukset: Rakennuksen vaippa"
         :rakennusvaippa-teksti                      "Toimenpide-ehdotusten tavoitteena on parantaa rakennuksen energiatehokkuutta, sisäympäristön laatua ja\n
                                                      vähentää energiankäytön kasvihuonekaasupäästöjä. Vaikutukset arvioidaan rakennuksen vakioidulla käytöllä."
@@ -380,6 +381,7 @@
                                                      Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
                                                      kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa rakennusten E-lukujen vertailun, muttei
                                                      \nvertailua toteutuneeseen kulutukseen. (sv)"
+        :lahtotiedot-title                          "E-talets beräkningsgrunddata"
         :te-rakennusvaippa-otsikko                  "Toimenpide-ehdotukset: Rakennuksen vaippa (sv)"
         :rakennusvaippa-teksti                      "Toimenpide-ehdotusten tavoitteena on parantaa rakennuksen energiatehokkuutta, sisäympäristön laatua ja\n
                                                      vähentää energiankäytön kasvihuonekaasupäästöjä. Vaikutukset arvioidaan rakennuksen vakioidulla käytöllä. (sv)"

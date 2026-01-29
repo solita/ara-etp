@@ -357,3 +357,111 @@ h1 {
    font-weight: bold;
    padding: 5px 5px 5px 0px;
 }
+
+/* =====================================================
+   Lähtötiedot page styles
+   ===================================================== */
+
+.lahtotiedot-page-section {
+    height: 270mm;
+    overflow: hidden;
+}
+
+.lahtotiedot-content {
+    font-size: 11px;
+    line-height: 1.35;
+    color: #111;
+}
+
+.lahtotiedot-section {
+    margin: 8px 0 10px;
+}
+
+.lahtotiedot-section-title {
+    background-color: #2f3a46;
+    color: white;
+    padding: 5px 8px;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 0.01em;
+}
+
+.lahtotiedot-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 6px 2px 4px;
+}
+
+.lahtotiedot-label {
+    font-weight: bold;
+    min-width: 160px;
+    color: #111;
+}
+
+.lahtotiedot-value {
+    font-weight: bold;
+    color: #111;
+}
+
+.lahtotiedot-unit {
+    color: #555;
+    margin-left: 4px;
+    white-space: nowrap;
+}
+
+.lahtotiedot-two-col {
+    display: block;
+}
+
+.lahtotiedot-two-col .lahtotiedot-row {
+    padding: 3px 2px;
+}
+
+.lahtotiedot-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
+    font-size: 11px;
+}
+
+.lahtotiedot-table-margin {
+    margin-top: 8px;
+}
+
+.lahtotiedot-table th,
+.lahtotiedot-table td {
+    border-bottom: 1px solid #cfd6de;
+    padding: 4px 6px;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.lahtotiedot-table thead th {
+    border-bottom: 2px solid #cfd6de;
+}
+
+.lahtotiedot-th {
+    font-weight: bold;
+    color: #111;
+    font-size: 11px;
+}
+
+.lahtotiedot-th-sub {
+    font-weight: 600;
+    color: #555;
+    font-size: 10px;
+}
+
+.lahtotiedot-table .num {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.lahtotiedot-table td:first-child {
+    width: 30%;
+}
+
+.lahtotiedot-table strong {
+    font-weight: bold;
+}
