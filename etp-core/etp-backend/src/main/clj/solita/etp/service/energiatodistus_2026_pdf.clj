@@ -8,7 +8,8 @@
             [solita.etp.service.energiatodistus-pdf.etusivu-yleistiedot :as et-etusivu-yleistiedot]
             [solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia :as et-laskennallinen-ostoenergia]
             [solita.etp.service.energiatodistus-pdf.etusivu-eluku :as et-etusivu-eluku]
-            [solita.etp.service.energiatodistus-pdf.etusivu-grafiikka :as et-etusivu-grafiikka])
+            [solita.etp.service.energiatodistus-pdf.etusivu-grafiikka :as et-etusivu-grafiikka]
+            [solita.etp.service.energiatodistus-pdf.lahtotiedot :as et-lahtotiedot])
   (:import [java.io ByteArrayOutputStream]))
 
 (def draft-watermark-texts {"fi" "LUONNOS"
@@ -72,7 +73,12 @@
                  [:div {:class "page-section"}
                   [:div {:class "etusivu-ostoenergia-section"}
                    (et-laskennallinen-ostoenergia/ostoenergia params)
-                   (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}]]
+                   (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}
+               {:title (l :lahtotiedot-title)
+                :subtitle ""
+                :content
+                [:div {:class "page-section lahtotiedot-page-section"}
+                 (et-lahtotiedot/lahtotiedot-page-content params)]}]]
 
     (generate-document-html pages (:id energiatodistus))))
 

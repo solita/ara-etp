@@ -313,7 +313,8 @@
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                     Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
                                                     kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa rakennusten E-lukujen vertailun, muttei\n
-                                                    vertailua toteutuneeseen kulutukseen."}
+                                                    vertailua toteutuneeseen kulutukseen."
+        :lahtotiedot-title                          "E-luvun laskennan lähtötiedot"}
 
    :sv {:rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite (sv)"
         :energiatodistus-2026-subtitle              "Energicertifikat i enlighet med 2026 års lagstiftning"
@@ -349,6 +350,7 @@
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                      Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
                                                      kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa rakennusten E-lukujen vertailun, muttei\nvertailua toteutuneeseen kulutukseen. (sv)"
+        :lahtotiedot-title                          "E-talets beräkningsgrunddata"
 
         }})
 
