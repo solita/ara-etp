@@ -204,7 +204,7 @@ jobs:
           cache-from: type=gha,scope=ocsp
           cache-to: type=gha,mode=max,scope=ocsp
 
-  e2e:
+  e2e-test:
     needs: [discover-specs, build-images]
     runs-on: ubuntu-24.04
     permissions:
@@ -250,6 +250,100 @@ jobs:
         run: |
           mkdir -p /home/runner/work/ara-etp/ara-etp/etp-core/docker/smtp/received-emails
           ./start-e2e-env.sh --ci
+
+      - name: Cypress (single spec)
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: e2e-tests/cypress
+          wait-on: 'https://localhost:3009'
+          command: npx cypress run --spec ${{ matrix.spec }}
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots-${{ matrix.spec }}
+          path: e2e-tests/cypress/cypress/screenshots
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-videos-${{ matrix.spec }}
+          path: e2e-tests/cypress/cypress/videos
+
+      - name: Collect docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v2
+        with:
+          dest: './logs'
+
+      - name: Tar logs
+        if: failure()
+        run: tar cvzf ./logs.tgz ./logs
+
+      - name: Compute safe artifact name
+        id: artifact_name
+        shell: bash
+        run: |
+          SAFE_SPEC="${{ matrix.spec }}"
+          SAFE_SPEC="${SAFE_SPEC//\//-}"
+          SAFE_SPEC="${SAFE_SPEC//\./-}"
+          echo "safe_spec=$SAFE_SPEC" >> "$GITHUB_OUTPUT"
+
+      - name: Upload logs to GitHub
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-${{ steps.artifact_name.outputs.safe_spec }}
+          path: ./logs.tgz
+
+  e2e-test-etp2026:
+    needs: [discover-specs, build-images]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: read
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        spec: ${{ fromJson(needs.discover-specs.outputs.specs) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull images
+        run: |
+          docker pull ${{ needs.build-images.outputs.ETP_IMAGE_REGISTRY }}/etp-backend:${{ needs.build-images.outputs.ETP_BACKEND_TAG }}
+          docker pull ${{ needs.build-images.outputs.ETP_IMAGE_REGISTRY }}/etp-db:${{ needs.build-images.outputs.ETP_DB_TAG }}
+          docker pull ${{ needs.build-images.outputs.ETP_IMAGE_REGISTRY }}/etp-front:${{ needs.build-images.outputs.ETP_FRONT_TAG }}
+          docker pull ${{ needs.build-images.outputs.ETP_IMAGE_REGISTRY }}/etp-public:${{ needs.build-images.outputs.ETP_PUBLIC_TAG }}
+          docker pull ${{ needs.build-images.outputs.ETP_IMAGE_REGISTRY }}/etp-sftp:${{ needs.build-images.outputs.ETP_SFTP_TAG }}
+          docker pull ${{ needs.build-images.outputs.ETP_IMAGE_REGISTRY }}/etp-smtp:${{ needs.build-images.outputs.ETP_SMTP_TAG }}
+          docker pull ${{ needs.build-images.outputs.ETP_IMAGE_REGISTRY }}/ocsp-test-pki:${{ needs.build-images.outputs.ETP_OCSP_TAG }}
+
+      - name: Setup e2e-env
+        working-directory: e2e-tests/cypress
+        env:
+          ETP_IMAGE_REGISTRY: ${{ needs.build-images.outputs.ETP_IMAGE_REGISTRY }}
+          ETP_BACKEND_TAG:    ${{ needs.build-images.outputs.ETP_BACKEND_TAG }}
+          ETP_DB_TAG:         ${{ needs.build-images.outputs.ETP_DB_TAG }}
+          ETP_FRONT_TAG:      ${{ needs.build-images.outputs.ETP_FRONT_TAG }}
+          ETP_PUBLIC_TAG:     ${{ needs.build-images.outputs.ETP_PUBLIC_TAG }}
+          ETP_SFTP_TAG:       ${{ needs.build-images.outputs.ETP_SFTP_TAG }}
+          ETP_SMTP_TAG:       ${{ needs.build-images.outputs.ETP_SMTP_TAG }}
+          ETP_OCSP_TAG:       ${{ needs.build-images.outputs.ETP_OCSP_TAG }}
+        run: |
+          mkdir -p /home/runner/work/ara-etp/ara-etp/etp-core/docker/smtp/received-emails
+          ./start-e2e-env.sh --ci --etp2026
 
       - name: Cypress (single spec)
         uses: cypress-io/github-action@v6

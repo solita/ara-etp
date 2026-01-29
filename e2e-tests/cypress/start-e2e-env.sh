@@ -4,11 +4,18 @@ set -euxo pipefail
 # Usage:
 #   ./start-e2e-env.sh        # local dev (builds images, uses docker-compose.yml)
 #   ./start-e2e-env.sh --ci   # CI mode (pull-only, uses docker-compose.ci.yml)
+#   ./start-e2e-env.sh --etp-2026
+#   ./start-e2e-env.sh --ci --etp-2026
 
 CI_MODE=false
+ETP_2026=false
 
 if [[ "${1:-}" == "--ci" ]]; then
   CI_MODE=true
+fi
+
+if [[ "${1:-}" == "--etp2026" ]]; then
+  ETP_2026=true
 fi
 
 # Choose compose file:
