@@ -354,16 +354,34 @@ jobs:
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
 
+      - name: Compute safe artifact suffix
+        id: art
+        shell: bash
+        env:
+          SPEC: ${{ matrix.spec }}
+        run: |
+          echo "matrix.spec = '$SPEC'"
+
+          SAFE="${SPEC:-unknown-spec}"
+          SAFE="${SAFE//\//-}"
+          SAFE="${SAFE//./-}"
+          SAFE="${SAFE// /_}"
+
+          # Avoid super-long names (artifact name limit is finite)
+          SAFE="${SAFE:0:150}"
+
+          echo "suffix=${SAFE}-job${{ strategy.job-index }}-attempt${{ github.run_attempt }}" >> "$GITHUB_OUTPUT"
+
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-screenshots-${{ matrix.spec }}
+          name: cypress-screenshots-${{ steps.art.outputs.suffix }}
           path: e2e-tests/cypress/cypress/screenshots
 
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-videos-${{ matrix.spec }}
+          name: cypress-videos-${{ steps.art.outputs.suffix }}
           path: e2e-tests/cypress/cypress/videos
 
       - name: Collect docker logs on failure
@@ -376,20 +394,11 @@ jobs:
         if: failure()
         run: tar cvzf ./logs.tgz ./logs
 
-      - name: Compute safe artifact name
-        id: artifact_name
-        shell: bash
-        run: |
-          SAFE_SPEC="${{ matrix.spec }}"
-          SAFE_SPEC="${SAFE_SPEC//\//-}"
-          SAFE_SPEC="${SAFE_SPEC//\./-}"
-          echo "safe_spec=$SAFE_SPEC" >> "$GITHUB_OUTPUT"
-
       - name: Upload logs to GitHub
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: logs-${{ steps.artifact_name.outputs.safe_spec }}
+          name: logs-${{ steps.art.outputs.suffix }}
           path: ./logs.tgz
 
   format:
