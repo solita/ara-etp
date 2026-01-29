@@ -7,86 +7,321 @@ on:
     branches:
       - main
 
+env:
+  REGISTRY: ghcr.io
+
 jobs:
-  test:
+  discover-specs:
     runs-on: ubuntu-24.04
+    outputs:
+      specs: ${{ steps.set-matrix.outputs.specs }}
     steps:
       - uses: actions/checkout@v4
-      # Buildx supports GH Actions cache. Build images using it, and load the images to host for docker compose to use
+
+      - id: set-matrix
+        working-directory: e2e-tests/cypress
+        run: |
+          SPECS=$(find cypress/e2e -name "henkilotunnus.cy.js" | sort | jq -R -s -c 'split("\n")[:-1]')
+          echo "specs=$SPECS" >> "$GITHUB_OUTPUT"
+
+  build-images:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image_ns: ${{ steps.vars.outputs.image_ns }}
+      backend_tag: ${{ steps.tags.outputs.backend_tag }}
+      db_tag: ${{ steps.tags.outputs.db_tag }}
+      front_tag: ${{ steps.tags.outputs.front_tag }}
+      sftp_tag: ${{ steps.tags.outputs.sftp_tag }}
+      smtp_tag: ${{ steps.tags.outputs.smtp_tag }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: vars
+        shell: bash
+        run: |
+          # GHCR requires lowercase image names/namespace
+          IMAGE_NS="$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
+          echo "image_ns=$IMAGE_NS" >> "$GITHUB_OUTPUT"
+
+      - id: tags
+        name: Compute content-hash tags per image context
+        shell: bash
+        run: |
+          # These change ONLY if the directory content changes
+          # Could use github.sha too, but that would trigger rebuilds even if unrelated parts change.
+          echo "backend_tag=$(git rev-parse HEAD:etp-core/etp-backend)" >> "$GITHUB_OUTPUT"
+          echo "db_tag=$(git rev-parse HEAD:etp-core/etp-db)" >> "$GITHUB_OUTPUT"
+          echo "front_tag=$(git rev-parse HEAD:etp-front)" >> "$GITHUB_OUTPUT"
+          echo "sftp_tag=$(git rev-parse HEAD:etp-core/docker/sftp)" >> "$GITHUB_OUTPUT"
+          echo "smtp_tag=$(git rev-parse HEAD:etp-core/docker/smtp)" >> "$GITHUB_OUTPUT"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3.7.1
-      - name: Build backend
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: backend_exists
+        name: Check backend image exists
+        shell: bash
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ steps.vars.outputs.image_ns }}/etp-backend:${{ steps.tags.outputs.backend_tag }}"
+          if docker manifest inspect "$IMAGE" >/dev/null 2>&1; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Build & push backend (if missing)
         uses: docker/build-push-action@v6.18.0
+        if: ${{ steps.backend_exists.outputs.exists != 'true' }}
         with:
           context: etp-core/etp-backend
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ steps.vars.outputs.image_ns }}/etp-backend:${{ steps.tags.outputs.backend_tag }}
           cache-from: type=gha,scope=backend
           cache-to: type=gha,mode=max,scope=backend
-          load: true
-      - name: Build etp-db
+
+      - id: db_exists
+        name: Check db image exists
+        shell: bash
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ steps.vars.outputs.image_ns }}/etp-db:${{ steps.tags.outputs.db_tag }}"
+          if docker manifest inspect "$IMAGE" >/dev/null 2>&1; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Build & push etp-db (if missing)
         uses: docker/build-push-action@v6.18.0
+        if: ${{ steps.db_exists.outputs.exists != 'true' }}
         with:
           context: etp-core/etp-db
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ steps.vars.outputs.image_ns }}/etp-db:${{ steps.tags.outputs.db_tag }}
           cache-from: type=gha,scope=db
           cache-to: type=gha,mode=max,scope=db
-          load: true
-      - name: Build frontend
+
+      - id: front_exists
+        name: Check frontend image exists
+        shell: bash
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ steps.vars.outputs.image_ns }}/etp-front:${{ steps.tags.outputs.front_tag }}"
+          if docker manifest inspect "$IMAGE" >/dev/null 2>&1; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Build & push frontend (if missing)
         uses: docker/build-push-action@v6.18.0
+        if: ${{ steps.front_exists.outputs.exists != 'true' }}
         with:
           context: etp-front
           file: etp-front/e2e.Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ steps.vars.outputs.image_ns }}/etp-front:${{ steps.tags.outputs.front_tag }}
           cache-from: type=gha,scope=frontend
           cache-to: type=gha,mode=max,scope=frontend
-          load: true
-      - name: Build sftp
+
+      - id: sftp_exists
+        name: Check sftp image exists
+        shell: bash
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ steps.vars.outputs.image_ns }}/etp-sftp:${{ steps.tags.outputs.sftp_tag }}"
+          if docker manifest inspect "$IMAGE" >/dev/null 2>&1; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Build & push sftp (if missing)
         uses: docker/build-push-action@v6.18.0
+        if: ${{ steps.sftp_exists.outputs.exists != 'true' }}
         with:
           context: etp-core/docker/sftp
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ steps.vars.outputs.image_ns }}/etp-sftp:${{ steps.tags.outputs.sftp_tag }}
           cache-from: type=gha,scope=sftp
           cache-to: type=gha,mode=max,scope=sftp
-          load: true
-      - name: Build smtp
+
+      - id: smtp_exists
+        name: Check smtp image exists
+        shell: bash
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ steps.vars.outputs.image_ns }}/etp-smtp:${{ steps.tags.outputs.smtp_tag }}"
+          if docker manifest inspect "$IMAGE" >/dev/null 2>&1; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Build & push smtp (if missing)
         uses: docker/build-push-action@v6.18.0
+        if: ${{ steps.smtp_exists.outputs.exists != 'true' }}
         with:
           context: etp-core/docker/smtp
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ steps.vars.outputs.image_ns }}/etp-smtp:${{ steps.tags.outputs.smtp_tag }}
           cache-from: type=gha,scope=smtp
           cache-to: type=gha,mode=max,scope=smtp
-          load: true
+
+  e2e:
+    needs: [discover-specs, build-images]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: read
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        spec: ${{ fromJson(needs.discover-specs.outputs.specs) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull images
+        run: |
+          docker pull ${{ env.REGISTRY }}/${{ needs.build-images.outputs.image_ns }}/etp-backend:${{ needs.build-images.outputs.backend_tag }}
+          docker pull ${{ env.REGISTRY }}/${{ needs.build-images.outputs.image_ns }}/etp-db:${{ needs.build-images.outputs.db_tag }}
+          docker pull ${{ env.REGISTRY }}/${{ needs.build-images.outputs.image_ns }}/etp-front:${{ needs.build-images.outputs.front_tag }}
+          docker pull ${{ env.REGISTRY }}/${{ needs.build-images.outputs.image_ns }}/etp-sftp:${{ needs.build-images.outputs.sftp_tag }}
+          docker pull ${{ env.REGISTRY }}/${{ needs.build-images.outputs.image_ns }}/etp-smtp:${{ needs.build-images.outputs.smtp_tag }}
+
       - name: Setup e2e-env
         working-directory: e2e-tests/cypress
+        env:
+          ETP_IMAGE_REGISTRY: ${{ env.REGISTRY }}/${{ needs.build-images.outputs.image_ns }}
+          ETP_BACKEND_TAG: ${{ needs.build-images.outputs.backend_tag }}
+          ETP_DB_TAG: ${{ needs.build-images.outputs.db_tag }}
+          ETP_FRONT_TAG: ${{ needs.build-images.outputs.front_tag }}
+          ETP_SFTP_TAG: ${{ needs.build-images.outputs.sftp_tag }}
+          ETP_SMTP_TAG: ${{ needs.build-images.outputs.smtp_tag }}
         run: |
           mkdir -p /home/runner/work/ara-etp/ara-etp/etp-core/docker/smtp/received-emails
           ./start-e2e-env.sh
-      - name: Cypress
+
+      - name: Cypress (single spec)
         uses: cypress-io/github-action@v6
         with:
           working-directory: e2e-tests/cypress
           wait-on: 'https://localhost:3009'
+          command: npx cypress run --spec ${{ matrix.spec }}
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
+
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-${{ matrix.spec }}
           path: e2e-tests/cypress/cypress/screenshots
+
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-videos
+          name: cypress-videos-${{ matrix.spec }}
           path: e2e-tests/cypress/cypress/videos
+
       - name: Collect docker logs on failure
         if: failure()
         uses: jwalton/gh-docker-logs@v2
         with:
           dest: './logs'
+
       - name: Tar logs
         if: failure()
         run: tar cvzf ./logs.tgz ./logs
+
       - name: Upload logs to GitHub
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: logs.tgz
+          name: logs-${{ matrix.spec }}.tgz
           path: ./logs.tgz
+
+  #test:
+  #  needs: discover-specs
+  #  runs-on: ubuntu-24.04
+  #  strategy:
+  #    fail-fast: false
+  #    max-parallel: 4
+  #    matrix:
+  #      spec: ${{ fromJson(needs.discover-specs.outputs.specs) }}
+  #  steps:
+  #    - uses: actions/checkout@v4
+  #    # Buildx supports GH Actions cache. Build images using it, and load the images to host for docker compose to use
+  #    - name: Set up Docker Buildx
+  #      uses: docker/setup-buildx-action@v3.7.1
+  #    - name: Build backend
+  #      uses: docker/build-push-action@v6.18.0
+  #      with:
+  #        context: etp-core/etp-backend
+  #        cache-from: type=gha,scope=backend
+  #        cache-to: type=gha,mode=max,scope=backend
+  #        load: true
+  #    - name: Build etp-db
+  #      uses: docker/build-push-action@v6.18.0
+  #      with:
+  #        context: etp-core/etp-db
+  #        cache-from: type=gha,scope=db
+  #        cache-to: type=gha,mode=max,scope=db
+  #        load: true
+  #    - name: Build frontend
+  #      uses: docker/build-push-action@v6.18.0
+  #      with:
+  #        context: etp-front
+  #        file: etp-front/e2e.Dockerfile
+  #        cache-from: type=gha,scope=frontend
+  #        cache-to: type=gha,mode=max,scope=frontend
+  #        load: true
+  #    - name: Build sftp
+  #      uses: docker/build-push-action@v6.18.0
+  #      with:
+  #        context: etp-core/docker/sftp
+  #        cache-from: type=gha,scope=sftp
+  #        cache-to: type=gha,mode=max,scope=sftp
+  #        load: true
+  #    - name: Build smtp
+  #      uses: docker/build-push-action@v6.18.0
+  #      with:
+  #        context: etp-core/docker/smtp
+  #        cache-from: type=gha,scope=smtp
+  #        cache-to: type=gha,mode=max,scope=smtp
+  #        load: true
+  #    - name: Setup e2e-env
+  #      working-directory: e2e-tests/cypress
+  #      run: |
+  #        mkdir -p /home/runner/work/ara-etp/ara-etp/etp-core/docker/smtp/received-emails
+  #        ./start-e2e-env.sh
+  #    - name: Cypress
+  #      uses: cypress-io/github-action@v6
+  #      with:
+  #        working-directory: e2e-tests/cypress
+  #        wait-on: 'https://localhost:3009'
+  #        command: npm run cypress:run -- --spec ${{ matrix.spec }}
+  #      env:
+  #        NODE_TLS_REJECT_UNAUTHORIZED: 0
+  #    - uses: actions/upload-artifact@v4
+  #      if: failure()
+  #      with:
+  #        name: cypress-screenshots
+  #        path: e2e-tests/cypress/cypress/screenshots
+  #    - uses: actions/upload-artifact@v4
+  #      if: failure()
+  #      with:
+  #        name: cypress-videos
+  #        path: e2e-tests/cypress/cypress/videos
+  #    - name: Collect docker logs on failure
+  #      if: failure()
+  #      uses: jwalton/gh-docker-logs@v2
+  #      with:
+  #        dest: './logs'
+  #    - name: Tar logs
+  #      if: failure()
+  #      run: tar cvzf ./logs.tgz ./logs
+  #    - name: Upload logs to GitHub
+  #      if: failure()
+  #      uses: actions/upload-artifact@v4
+  #      with:
+  #        name: logs.tgz
+  #        path: ./logs.tgz
 
 
   format:
