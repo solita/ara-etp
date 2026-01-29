@@ -193,7 +193,9 @@
                                 :vaiheen-loppu-pvm nil
                                 ;; Renewable energy fields from energiatodistus
                                 :uusiutuvan-energian-kokonaistuotto (sum-uusiutuvat-omavaraisenergiat
-                                                                      (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat]))
+                                                                      (-> energiatodistus
+                                                                          (get-in [:tulokset :uusiutuvat-omavaraisenergiat])
+                                                                          (dissoc :kokonaistuotanto)))
                                 :uusiutuvan-energian-hyodynnetty-osuus nil}}]
     ;; Use complete-vaihe to add all calculated fields
     (complete-vaihe basic-vaihe energiatodistus ppp-tulokset luokittelut)))
