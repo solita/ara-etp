@@ -29,12 +29,17 @@
   [:div {:class "page-footer"}
    (str "Todistustunnus " et-tunnus " | " page-num " / " total-pages)])
 
+(defn- wrap-page-border [page-border? content]
+       (if page-border?
+         [:div {:class "page-border-container"} content]
+         content))
+
 (defn- render-page [page-data page-num total-pages et-tunnus]
-  (let [{:keys [title subtitle content header]} page-data]
+  (let [{:keys [content page-border?]} page-data]
     [:div {:class "page"}
-     [:div {:class "page-border-container"}
-      (or header (page-header title subtitle))
-      content]
+     (wrap-page-border
+       page-border?
+       content)
      (page-footer et-tunnus page-num total-pages)]))
 
 (defn generate-document-html
@@ -59,10 +64,10 @@
   "Use OpenHTMLToPDF to generate PDF, return as a byte array"
   [{:keys [energiatodistus kieli] :as params}]
   (let [l (kieli loc/et-pdf-localization)
-        pages [{:title (l :energiatodistus)
-                :subtitle (l :energiatodistus-2026-subtitle)
+        pages [{:page-border? true
                 :content
                 [:div
+                 (page-header (l :energiatodistus) (l :energiatodistus-2026-subtitle))
                  [:div {:class "page-section"}
                   (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
                  [:div {:class "page-section"}
