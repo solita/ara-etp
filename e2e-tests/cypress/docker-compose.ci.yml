@@ -1,0 +1,184 @@
+version: '3.7'
+
+name: 'etp-e2e'
+
+services:
+  db:
+    image: postgres:15.8-alpine
+    command: postgres -c 'max_connections=500'
+    volumes:
+      - type: bind
+        source: ../../etp-core/docker/initdb
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+    ports:
+      - 127.0.0.1:5444:5432
+    environment:
+      POSTGRES_PASSWORD: etp
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 1s
+      timeout: 5s
+      retries: 30
+
+  # DB migrator image (built once and pushed)
+  etp-db-for-etp_dev:
+    image: ${ETP_IMAGE_REGISTRY}/etp-db:${ETP_DB_TAG}
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/etp_dev
+    command: ./db.sh migrate test
+    depends_on:
+      db:
+        condition: service_healthy
+
+  etp-db-for-postgres:
+    image: ${ETP_IMAGE_REGISTRY}/etp-db:${ETP_DB_TAG}
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/postgres
+    command: ./db.sh migrate
+    depends_on:
+      db:
+        condition: service_healthy
+
+  minio:
+    image: minio/minio:RELEASE.2024-02-17T01-15-57Z
+    networks: [minio]
+    volumes:
+      - data:/files
+    command: server /files --console-address ":9001"
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+
+  minio_create_default_bucket:
+    image: minio/mc:RELEASE.2025-08-13T08-35-41Z-cpuv1
+    depends_on:
+      minio:
+        condition: service_started
+    networks: [minio]
+    entrypoint: >
+      /bin/sh -c '
+        until /usr/bin/mc alias set local http://minio:9000 minio minio123 --api S3v4; do sleep 1; done;
+        /usr/bin/mc mb --ignore-existing local/files --region=eu-central-1;
+        /usr/bin/mc anonymous set download local/files 2>/dev/null || /usr/bin/mc policy set public local/files || true;
+      '
+
+  sftp:
+    image: ${ETP_IMAGE_REGISTRY}/etp-sftp:${ETP_SFTP_TAG}
+
+  smtp:
+    image: ${ETP_IMAGE_REGISTRY}/etp-smtp:${ETP_SMTP_TAG}
+    volumes:
+      - type: bind
+        source: ../../etp-core/docker/smtp/received-emails
+        target: /received-emails
+
+  ocsp-responder-int:
+    image: ${ETP_IMAGE_REGISTRY}/ocsp-test-pki:${ETP_OCSP_TAG}
+    volumes:
+      - type: bind
+        source: ../../etp-core/docker/ocsp-test-pki/pki-int
+        target: /etc/pki
+        read_only: true
+
+  ocsp-responder-root:
+    image: ${ETP_IMAGE_REGISTRY}/ocsp-test-pki:${ETP_OCSP_TAG}
+    volumes:
+      - type: bind
+        source: ../../etp-core/docker/ocsp-test-pki/pki-root
+        target: /etc/pki
+        read_only: true
+
+  kms:
+    image: nsmithuk/local-kms:3.12.0
+    volumes:
+      - type: bind
+        source: ../../etp-core/docker/kms
+        target: /init
+        read_only: true
+
+  backend:
+    image: ${ETP_IMAGE_REGISTRY}/etp-backend:${ETP_BACKEND_TAG}
+    environment:
+      DB_HOST: db
+      DB_DATABASE: cypress_test
+      SMTP_HOST: smtp
+      SMTP_PORT: 25
+      LASKUTUS_SFTP_HOST: sftp
+      LASKUTUS_SFTP_PORT: 22
+      S3_HOST: minio
+      S3_PORT: 9000
+      SYSTEM_SIGNATURE_SESSION_TIMEOUT_MINUTES: 52560000
+      KMS_PORT: 8080
+      KMS_HOST: kms
+    env_file:
+      - ./backend.env
+    ports:
+      - 127.0.0.1:3444:8080
+    healthcheck:
+      test: curl -k http://localhost:8080/api/health || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 0m
+    depends_on:
+      db:
+        condition: service_started
+      kms:
+        condition: service_started
+      minio:
+        condition: service_started
+      ocsp-responder-int:
+        condition: service_started
+      ocsp-responder-root:
+        condition: service_started
+      minio_create_default_bucket:
+        condition: service_completed_successfully
+      etp-db-for-etp_dev:
+        condition: service_completed_successfully
+
+    entrypoint: >
+      sh -c "
+        socat TCP-LISTEN:2060,fork,reuseaddr TCP:ocsp-responder-root:2060 &
+        socat TCP-LISTEN:2061,fork,reuseaddr TCP:ocsp-responder-int:2060 &
+        exec ./start.sh
+      "
+
+  frontend:
+    image: ${ETP_IMAGE_REGISTRY}/etp-front:${ETP_FRONT_TAG}
+    environment:
+      WEBPACK_PROXY_TARGET: http://backend:8080
+      WEBPACK_ALLOWED_HOSTS: auto
+      WEBPACK_HOST: 0.0.0.0
+      WEBPACK_PORT: 3009
+      ETP_2026: true
+    healthcheck:
+      test: curl -k https://localhost:3009 || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 0m
+    ports:
+      - 127.0.0.1:3009:3009
+
+  frontend-public:
+    image: ${ETP_IMAGE_REGISTRY}/etp-public:${ETP_PUBLIC_TAG}
+    environment:
+      WEBPACK_PROXY_TARGET: http://backend:8080
+      WEBPACK_ALLOWED_HOSTS: auto
+      WEBPACK_HOST: 0.0.0.0
+      WEBPACK_PORT: 5059
+    healthcheck:
+      test: curl -k http://localhost:5059 || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 0m
+    ports:
+      - 127.0.0.1:5059:5059
+
+volumes:
+  data:
+
+networks:
+  minio:
