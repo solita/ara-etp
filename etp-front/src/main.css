@@ -33,8 +33,16 @@
   .et-table--th-right-aligned {
     @apply text-right;
   }
-  .et-table--tr > .et-table--th:not(:first-child),
-  .et-table--tr > .et-table--td:not(:first-child) {
+  .et-table--with-left-border {
+    @apply border-l-1 border-tableborder;
+  }
+  .et-table--no-left-border {
+    @apply border-l-0;
+  }
+  .et-table--tr
+    > .et-table--th:not(:first-child):not(.et-table--no-left-border),
+  .et-table--tr
+    > .et-table--td:not(:first-child):not(.et-table--no-left-border) {
     @apply border-l-1 border-tableborder;
   }
   .et-table--thead {

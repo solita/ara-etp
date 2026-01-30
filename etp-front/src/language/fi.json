@@ -101,6 +101,7 @@
   "units": {
     "days": "vrk",
     "year": "vuosi",
+    "years": "vuotta",
     "pieces": "kpl",
     "celsius": "°C",
     "screen-reader": {
@@ -601,6 +602,7 @@
       "laatimisvaihe": "Laatimisvaihe",
       "uudisrakennus": "Uudisrakennus",
       "havainnointikaynti": "Havainnointikäynnin päivämäärä",
+      "havainnointikayntityyppi-id": "Havainnointikäynti toteutettu",
       "katuosoite": "Katuosoite",
       "katuosoite-*": "Katuosoite",
       "postinumero": "Postinumero",
@@ -614,6 +616,10 @@
       "julkinen-rakennus": "Julkinen rakennus",
       "keskeiset-suositukset": "Keskeiset suositukset",
       "keskeiset-suositukset-heading": {
+        "2026": {
+          "h2": "Toimenpide-ehdotuksia e-luvun parantamiseksi",
+          "h3": "Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi (ei koske uusia rakennuksia)"
+        },
         "2018": {
           "h2": "Toimenpide-ehdotuksia e-luvun parantamiseksi",
           "h3": "Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi (ei koske uusia rakennuksia)"
@@ -909,6 +915,7 @@
         "label-context": "E-luvun erittely",
         "kaytettavat-energiamuodot": "Käytet\u00ADtävät energia\u00ADmuodot",
         "ostoenergia": {
+          "2026": "Vakioi\u00ADdulla käytöllä laskettu osto\u00ADenergia",
           "2018": "Vakioi\u00ADdulla käytöllä laskettu osto\u00ADenergia",
           "2013": "Laskettu osto\u00ADenergia"
         },
@@ -947,11 +954,14 @@
       },
       "uusiutuvat-omavaraisenergiat": {
         "header": {
+          "2026": "Rakennuksen hyödyntämä ja tuottama uusiutuva energia",
           "2018": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
           "2013": "Uusiutuva omavaraisenergia, hyödyksikäytetty osuus"
         },
         "label-context": "Uusiutuvat omavaraisenergiat",
         "table-header": "Energiaratkaisu",
+        "table-kokonaistuotto-header": "Kokonaistuotto",
+        "table-rakennuksen-hyodyntama-osuus-header": "Rakennuksen hyödyntämä osuus",
         "labels": {
           "aurinkosahko": "Aurinkosähkö",
           "tuulisahko": "Tuulisähkö",
@@ -1066,6 +1076,7 @@
       "table-header": "Energialähteet",
       "ostettu-energia": {
         "header": {
+          "2026": "Energiaverkosta ostettu energia",
           "2018": "Energiaverkosta ostettu energia",
           "2013": "Ostettu energia"
         },
@@ -1154,6 +1165,7 @@
     },
     "huomiot": {
       "header": {
+        "2026": "Toimenpide-ehdotukset e-luvun parantamiseksi",
         "2018": "Toimenpide-ehdotukset e-luvun parantamiseksi",
         "2013": "Toimenpide-ehdotukset energiatehokkuuden parantamiseksi"
       },
@@ -1167,6 +1179,7 @@
         "eluvun-muutos": "E-luvun muutos"
       },
       "suositukset-header": {
+        "2026": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
         "2018": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
         "2013": "Suosituksia rakennuksen käyttöön ja ylläpitoon"
       },
@@ -1177,6 +1190,8 @@
         "header": "Huomiot - Ilmanvaihto- ja ilmastointijärjestelmät",
         "label-context": "$unused",
         "teksti": "Ilmanvaihto- ja ilmastointijärjestelmien huomiot",
+        "kayttoikaa-jaljella-arvio-vuosina": "Arvio ilmanvaihtojärjestelmän jäljellä olevasta teknisestä käyttöiästä",
+        "nykyinen-jarjestelma-tehostettavissa": "Nykyinen ilmanvaihtojärjestelmä voidaan mukauttaa toimimaan tehokkaammilla lämpötila-asetuksilla?",
         "toimenpide": [
           {
             "label-context": "Huomiot / Ilmanvaihto",
@@ -1207,6 +1222,8 @@
         "header": "Huomiot - Tilojen ja käyttöveden lämmitysjärjestelmät",
         "label-context": "$unused",
         "teksti": "Tilojen ja käyttöveden lämmitysjärjestelmien huomiot",
+        "kayttoikaa-jaljella-arvio-vuosina": "Arvio lämmitysjärjestelmän jäljellä olevasta teknisestä käyttöiästä",
+        "nykyinen-jarjestelma-tehostettavissa": "Tilojen nykyinen lämmitysjärjestelmä voidaan mukauttaa toimimaan tehokkaammilla lämpötila-asetuksilla?",
         "toimenpide": [
           {
             "label-context": "Huomiot / Lämmitysjärjestelmät",

@@ -30,6 +30,14 @@ const deserializer = {
   perustiedot: {
     'julkinen-rakennus': Maybe.get,
     uudisrakennus: Maybe.get
+  },
+  huomiot: {
+    lammitys: {
+      'asetukset-tehostettavissa': Maybe.get
+    },
+    'iv-ilmastointi': {
+      'asetukset-tehostettavissa': Maybe.get
+    }
   }
 };
 
@@ -349,7 +357,8 @@ const luokittelut = {
   uusiutuvaEnergia: Fetch.cached(fetch, '/uusiutuva-energia'),
   jaahdytys: Fetch.cached(fetch, '/jaahdytys'),
   'toimenpide-ehdotus': Fetch.cached(fetch, '/toimenpide-ehdotus'),
-  'toimenpide-ehdotus-group': Fetch.cached(fetch, '/toimenpide-ehdotus-group')
+  'toimenpide-ehdotus-group': Fetch.cached(fetch, '/toimenpide-ehdotus-group'),
+  havainnointikayntityyppi: Fetch.cached(fetch, '/havainnointikayntityyppi')
 };
 
 const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({
