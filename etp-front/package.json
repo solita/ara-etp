@@ -3,8 +3,11 @@
   "version": "0.0.1",
   "license": "EUPL v1.2",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
-    "dev": "webpack serve",
+    "build": "vite build",
+    "build:webpack": "cross-env NODE_ENV=production webpack",
+    "dev": "vite",
+    "dev:webpack": "webpack serve",
+    "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
     "test-storybook": "test-storybook",
@@ -12,14 +15,17 @@
     "test": "npx --node-options=\"--experimental-vm-modules\" jest",
     "coverage": "npx --node-options=\"--experimental-vm-modules\" jest --coverage=true --coverageDirectory=coverage",
     "tdd": "npx --node-options=\"--experimental-vm-modules\" jest --watchAll",
-    "format": "prettier --write src modheaders.json webpack.config.js",
+    "format": "prettier --write src modheaders.json webpack.config.js vite.config.js",
     "check-format": "prettier --check src",
     "build:docs": "jsdoc -r -c ./jsdoc/conf.json",
     "watch:docs": "nodemon --exec npm run build:docs --watch src"
   },
   "type": "module",
   "browserslist": [
-    "defaults"
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions"
   ],
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -36,6 +42,8 @@
     "@storybook/svelte": "^8.0.5",
     "@storybook/svelte-webpack5": "^8.0.5",
     "@storybook/test-runner": "^0.19.0",
+    "@sveltejs/vite-plugin-svelte": "^3.1.2",
+    "@vitejs/plugin-basic-ssl": "^1.2.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/svelte": "^5.0.0",
     "autoprefixer": "10.4.21",
@@ -71,6 +79,7 @@
     "svelte-loader": "^3.2.0",
     "svelte-preprocess": "^5.0.3",
     "tailwindcss": "^3.0.0",
+    "vite": "^5.4.21",
     "wait-on": "^8.0.0",
     "webpack": "^5.90.3",
     "webpack-bundle-analyzer": "^4.0.0",
