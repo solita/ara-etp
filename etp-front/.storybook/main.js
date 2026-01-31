@@ -5,12 +5,11 @@ module.exports = {
     '@storybook/addon-actions',
     '@storybook/addon-links',
     '@storybook/addon-a11y',
-    '@storybook/addon-viewport',
-    '@storybook/addon-webpack5-compiler-babel'
+    '@storybook/addon-viewport'
   ],
 
   framework: {
-    name: '@storybook/svelte-webpack5',
+    name: '@storybook/svelte-vite',
     options: {}
   },
 

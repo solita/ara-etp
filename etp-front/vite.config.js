@@ -84,7 +84,7 @@ export default defineConfig(({ mode }) => {
       }),
       basicSsl()
     ],
-    publicDir: 'static',
+    publicDir: 'assets',
     resolve: {
       extensions: ['.mjs', '.js', '.svelte', '.ts', '.jsx', '.tsx', '.json'],
       alias: {
