@@ -1,5 +1,5 @@
 import Quill from 'quill';
-import MagicUrl from './magic-url.cjs';
+import MagicUrl from './magic-url.js';
 import * as Objects from '@Utility/objects';
 
 Quill.register('modules/magicUrl', MagicUrl);
