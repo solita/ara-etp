@@ -108,15 +108,15 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
-      port: process.env.WEBPACK_PORT ? parseInt(process.env.WEBPACK_PORT) : 3000,
-      host: process.env.WEBPACK_HOST || undefined,
+      port: process.env.ETP_DEV_PORT ? parseInt(process.env.ETP_DEV_PORT) : 3000,
+      host: process.env.ETP_DEV_HOST || undefined,
       headers: {
         'Content-Security-Policy':
           "default-src 'self'; script-src 'self'; connect-src 'self' localhost:53952 ws://localhost:3000 wss://localhost:3000; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.quilljs.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:"
       },
       proxy: {
         '/api': {
-          target: process.env.WEBPACK_PROXY_TARGET || 'http://localhost:8080',
+          target: process.env.ETP_DEV_PROXY_TARGET || 'http://localhost:8080',
           secure: false,
           changeOrigin: true,
           configure: proxy => {
