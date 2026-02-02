@@ -95,6 +95,29 @@
        (or (:toteutunut-ostoenergia-fossiiliset-pat tulokset) 0)
        (or (:toteutunut-ostoenergia-kaukojaahdytys tulokset) 0))))
 
+(defn- calculate-year-range
+  "Calculate the year range string for a vaihe.
+   Takes the current vaihe and the next vaihe (if any).
+   Returns a string like '2030–2035' or '2045–2050' for the last vaihe."
+  [vaihe next-vaihe]
+  (let [alku-pvm (get-in vaihe [:tulokset :vaiheen-alku-pvm])
+        seuraava-alku-pvm (when next-vaihe
+                            (get-in next-vaihe [:tulokset :vaiheen-alku-pvm]))
+        start-year (cond
+                     (number? alku-pvm) (int alku-pvm)
+                     alku-pvm (.getYear alku-pvm)
+                     :else nil)
+        next-start-year (cond
+                          (number? seuraava-alku-pvm) (int seuraava-alku-pvm)
+                          seuraava-alku-pvm (.getYear seuraava-alku-pvm)
+                          :else nil)
+        end-year (if next-start-year
+                   (dec next-start-year)
+                   ;; For the last vaihe, use 2050 as the end year
+                   (when start-year 2050))]
+    (when (and start-year end-year)
+      (str start-year "–" end-year))))
+
 (defn- complete-vaihe
   "Enrich a PPP vaihe with calculated fields.
    Adds calculated fields both to :tulokset and at the top level for consistency.
@@ -175,6 +198,16 @@
     ;; Use complete-vaihe to add all calculated fields
     (complete-vaihe basic-vaihe energiatodistus ppp-tulokset luokittelut)))
 
+(defn- add-year-ranges
+  "Add year-range to each vaihe based on consecutive vaihe start dates.
+   Last vaihe gets 2050 as end year."
+  [vaiheet]
+  (->> (partition 2 1 [nil] vaiheet)
+       (mapv (fn [[vaihe next-vaihe]]
+               (if-let [year-range (calculate-year-range vaihe next-vaihe)]
+                 (assoc vaihe :year-range year-range)
+                 vaihe)))))
+
 (defn complete-perusparannuspassi
   "Enrich a perusparannuspassi by augmenting all vaiheet with calculated fields.
    Takes a perusparannuspassi, its associated energiatodistus, and luokittelut map.
@@ -186,9 +219,9 @@
     (-> perusparannuspassi
         (update :vaiheet
                 (fn [vaiheet]
-                  (mapv (fn [vaihe]
-                          (complete-vaihe vaihe energiatodistus ppp-tulokset luokittelut))
-                        vaiheet)))
+                  (->> vaiheet
+                       (mapv #(complete-vaihe % energiatodistus ppp-tulokset luokittelut))
+                       add-year-ranges)))
         (assoc :lahtotilanne lahtotilanne))))
 
 (defn luokittelut

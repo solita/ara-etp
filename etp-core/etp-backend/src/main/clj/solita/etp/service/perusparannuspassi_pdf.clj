@@ -510,27 +510,29 @@
 
 (defn generate-perusparannuspassi-html [{:keys [perusparannuspassi kieli] :as params}]
   (let [l (kieli loc/ppp-pdf-localization)
-        pages [{:title (l :perusparannuspassi)
-                :content
-                [:div
-                 (etusivu-yleistiedot/etusivu-yleistiedot params)
-                 [:h2 (l :perusparannuspassissa-ehdotettujen-toimenpiteiden-vaikutukset)]
-                 (toimenpiteiden-vaikutukset params)
-                 (etusivu-laatija/etusivu-laatija params)]}
-               (vaiheissa-toteutettavat-toimenpiteet/render-page params 1)
-               (vaiheissa-toteutettavat-toimenpiteet/render-page params 2)
-               (vaiheissa-toteutettavat-toimenpiteet/render-page params 3)
-               (vaiheissa-toteutettavat-toimenpiteet/render-page params 4)
-               {:title (l :vaiheistuksen-yhteenveto)
-                :content (vaiheistuksen-yhteenveto params)}
-               {:title (l :laskennan-taustatiedot-otsikko)
-                :content
-                (into [:div]
-                      (vals (laskennan-taustatiedot/generate-all-laskennan-taustatiedot params)))}
-               {:title "Lisätietoja"
-                :content
-                [:div
-                 (lisatietoja/lisatietoja params)]}]]
+        ;; Generate vaihe pages, filtering out nil (vaiheet without data)
+        vaihe-pages (->> (range 1 5)
+                         (map #(vaiheissa-toteutettavat-toimenpiteet/render-page params %))
+                         (remove nil?))
+        pages (concat
+               [{:title (l :perusparannuspassi)
+                 :content
+                 [:div
+                  (etusivu-yleistiedot/etusivu-yleistiedot params)
+                  [:h2 (l :perusparannuspassissa-ehdotettujen-toimenpiteiden-vaikutukset)]
+                  (toimenpiteiden-vaikutukset params)
+                  (etusivu-laatija/etusivu-laatija params)]}]
+               vaihe-pages
+               [{:title (l :vaiheistuksen-yhteenveto)
+                 :content (vaiheistuksen-yhteenveto params)}
+                {:title (l :laskennan-taustatiedot-otsikko)
+                 :content
+                 (into [:div]
+                       (vals (laskennan-taustatiedot/generate-all-laskennan-taustatiedot params)))}
+                {:title "Lisätietoja"
+                 :content
+                 [:div
+                  (lisatietoja/lisatietoja params)]}])]
     (generate-document-html pages (:id perusparannuspassi))))
 
 (defn- generate-perusparannuspassi-ohtp-pdf
