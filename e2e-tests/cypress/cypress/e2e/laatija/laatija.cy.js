@@ -1,4 +1,5 @@
 import { FIXTURES } from '../../fixtures/laatija';
+import { isEtp2026Enabled } from '../../support/featureFlags';
 
 const baseUrl = Cypress.config('baseUrl');
 
@@ -453,6 +454,16 @@ context('Laatija', () => {
       cy.get('[data-cy="wwwosoite"]').type('example.com').blur();
 
       cy.get('@input').should('not.be.disabled');
+    });
+  });
+  describe('ETP 2026 feature', () => {
+    it('runs only when the flag is on', () => {
+        cy.visit('/#/energiatodistus/all');
+
+        if (!isEtp2026Enabled())
+            cy.get('[data-cy="Luo ET 2026"]').should('exist');
+        else
+            cy.get('[data-cy="Luo ET 2026"]').should('not.exist');
     });
   });
 });

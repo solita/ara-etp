@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
+ETP_2026=false
+[[ " $* " == *" --etp2026 "* ]] && ETP_2026='true'
+export ETP_2026
+
 # Optimised start order
 # Start building frontend
 # Start etp-db, which requires database to be ready
