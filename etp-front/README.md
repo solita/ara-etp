@@ -38,11 +38,9 @@ in the `modheaders.json` file, and there are two ways to use them:
 1) Use the Modheader extension in the browser to set the headers. The extension can import the
    `modheaders.json` file and then lets you choose which set of headers to use.
 2) Set the `ETP_DEV_FRONT_USER` environment variable to the email address of the user
-   whose JWT headers will be injected in the development server's proxy. Optionally you can also set
-   the `WEBPACK_PORT` environment variable to change the port the development server runs on,
-   enabling you to run multiple instances of the frontend at the same time.
+   whose JWT headers will be injected in the development server's proxy.
 
-Set the environment variable or the correct Modheader profile as needed, then start  [webpack](https://webpack.js.org):
+Set the environment variable or the correct Modheader profile as needed, then start Vite:
 
 ```bash
 npm run dev
@@ -55,7 +53,7 @@ Navigate to [https://localhost:3000](https://localhost:3000). You should see you
 in `src`, save it, the page should reload automatically.
 
 Note: To activate the work-in-progress ETP 2026 features, set the ETP_2026 environment variable to
-a non-emtpy string. This tells the webpack dev server to generate a frontend config.json with
+a non-emtpy string. This tells the Vite dev server to generate a frontend config.json with
 the parameters required for that.
 
 ## Testing
