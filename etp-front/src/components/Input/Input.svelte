@@ -121,7 +121,7 @@
   <div class="sr-only" id={`${id}-error-label`}>{validationResult.message}</div>
 
   {#if !valid}
-    <div class="validation-label">
+    <div data-cy={`validation-label-for=${name}`} class="validation-label">
       {#if validationResult.type === 'error'}
         <span class="font-icon text-error">error</span>
       {:else if validationResult.type === 'warning'}

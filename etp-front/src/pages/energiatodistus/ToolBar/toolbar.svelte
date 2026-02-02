@@ -209,7 +209,10 @@
 <div class="toolbar relative flex flex-col text-secondary">
   <Sisallysluettelo {version} />
   {#if R.includes(Toolbar.module.save, fields)}
-    <button disabled={!dirty || pendingExecution} on:click={save(noop)}>
+    <button
+      data-cy="save-button"
+      disabled={!dirty || pendingExecution}
+      on:click={save(noop)}>
       <span class="font-icon text-2xl">save</span>
       <span class="description">
         {id.isSome()

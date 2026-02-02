@@ -126,6 +126,7 @@
     <div class="w-full py-4 lg:w-1/2">
       <Select
         id={'perustiedot.laatimisvaihe'}
+        name={'perustiedot.laatimisvaihe'}
         label={$_('energiatodistus.perustiedot.laatimisvaihe')}
         required={true}
         validation={schema.$signature}
@@ -149,6 +150,7 @@
       <div class="w-full py-4 lg:w-1/2">
         <Select
           id={'perustiedot.havainnointikayntityyppi-id'}
+          name={'perustiedot.havainnointikayntityyppi-id'}
           label={$_('energiatodistus.perustiedot.havainnointikayntityyppi-id')}
           required={true}
           validation={schema.$signature}

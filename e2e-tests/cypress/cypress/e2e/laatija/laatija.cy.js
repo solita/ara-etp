@@ -457,13 +457,107 @@ context('Laatija', () => {
     });
   });
   describe('ETP 2026 feature', () => {
-    it('runs only when the flag is on', () => {
-        cy.visit('/#/energiatodistus/all');
+    it('should show ET26 creation button only when the feature is enabled', () => {
+      cy.visit('/#/energiatodistus/all');
 
-        if (!isEtp2026Enabled())
-            cy.get('[data-cy="Luo ET 2026"]').should('exist');
-        else
-            cy.get('[data-cy="Luo ET 2026"]').should('not.exist');
+      if (!isEtp2026Enabled())
+        cy.get('[data-cy="Luo ET 2026"]').should('exist');
+      else cy.get('[data-cy="Luo ET 2026"]').should('not.exist');
     });
   });
+  (isEtp2026Enabled() ? describe : describe.skip)(
+    'Energiatodistus 2026 form',
+    () => {
+      it('The whole process', () => {
+        cy.intercept({
+          method: 'PUT',
+          pathname: /\/api\/private\/energiatodistukset\/2026\/*/
+        }).as('save');
+
+        cy.visit('/#/energiatodistus/all');
+
+        cy.get('[data-cy="Luo ET 2026"]').click();
+
+        cy.get('[data-cy="save-button"]').click();
+
+        cy.selectInSelect(
+          'perustiedot.laatimisvaihe',
+          'Olemassa oleva rakennus'
+        );
+        cy.selectInSelect(
+          'perustiedot.havainnointikayntityyppi-id',
+          'Virtuaalikäynti'
+        );
+
+        cy.get(
+          '[data-cy="tulokset.uusiutuvat-omavaraisenergiat.kokonaistuotanto.aurinkosahko"]'
+        )
+          .type('10000000000')
+          .blur();
+        cy.get(
+          '[data-cy="validation-label-for=tulokset.uusiutuvat-omavaraisenergiat.kokonaistuotanto.aurinkosahko"]'
+        )
+          .should('be.visible')
+          .and('contain.text', 'Suurin sallittu arvo on 9999999999.');
+
+        cy.get('[data-cy="save-button"]').click();
+        cy.get('[data-cy="form-alert-text"]').should(
+          'contain.text',
+          'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.kokonaistuotanto.label-context / energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.kokonaistuotanto.aurinkosahko'
+        );
+
+        cy.get(
+          '[data-cy="huomiot.iv-ilmastointi.kayttoikaa-jaljella-arvio-vuosina"]'
+        )
+          .type('10000000000')
+          .blur();
+        cy.get('[data-cy="huomiot.iv-ilmastointi.asetukset-tehostettavissa"]')
+          .should('not.be.disabled')
+          .check({ force: true })
+          .should('be.checked');
+
+        cy.get('[data-cy="huomiot.lammitys.asetukset-tehostettavissa"]')
+          .should('not.be.disabled')
+          .check({ force: true })
+          .should('be.checked');
+        cy.get(
+          '[data-cy="huomiot.iv-ilmastointi.kayttoikaa-jaljella-arvio-vuosina"]'
+        )
+          .clear()
+          .type('25')
+          .blur();
+        cy.get(
+          '[data-cy="tulokset.uusiutuvat-omavaraisenergiat.kokonaistuotanto.aurinkosahko"]'
+        )
+          .clear()
+          .type('10000')
+          .blur();
+
+        cy.get('[data-cy="save-button"]').click();
+        cy.wait('@save');
+        cy.get('[data-cy="form-alert-text"]').should('not.exist');
+
+        cy.get('[data-cy="lahtotiedot.rakennusvaippa.ulkoseinat.U"]')
+          .type('10')
+          .blur();
+        cy.get(
+          '[data-cy="validation-label-for=lahtotiedot.rakennusvaippa.ulkoseinat.U"]'
+        )
+          .should('be.visible')
+          .and('contain.text', 'Suurin sallittu arvo on 2.');
+        cy.get('[data-cy="lahtotiedot.rakennusvaippa.ulkoseinat.U"]')
+          .clear()
+          .type('2')
+          .blur();
+        cy.get(
+          '[data-cy="validation-label-for=lahtotiedot.rakennusvaippa.ulkoseinat.U"]'
+        )
+          .should('be.visible')
+          .and('contain.text', 'Tyypillisesti pienempi kuin 0.81');
+
+        cy.get('[data-cy="save-button"]').click();
+        cy.wait('@save');
+      });
+    }
+  );
 });

@@ -30,6 +30,7 @@
       <Checkbox
         bind:model={energiatodistus}
         lens={R.lensPath(['huomiot', huomio, 'asetukset-tehostettavissa'])}
+        dataCy={`huomiot.${huomio}.asetukset-tehostettavissa`}
         label={$_(
           `energiatodistus.huomiot.${huomio}.nykyinen-jarjestelma-tehostettavissa`
         )}
