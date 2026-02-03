@@ -32,7 +32,7 @@
                   {:nimi "Valaistus" :kayttoaste "1" :lampokuorma "1"}]})
 
 (defn- section-title [title]
-  [:div {:class "lahtotiedot-section-title"} title])
+  [:h3 {:class "lahtotiedot-section-title"} title])
 
 (defn- label-value-row [label value & [unit]]
   [:div {:class "lahtotiedot-row"}
@@ -77,14 +77,14 @@
      [:table {:class "lahtotiedot-table"}
       [:thead
        [:tr
-        [:th {:class "lahtotiedot-th"} "Ilmanvaihtojärjestelmä"]
+        [:th {:class "lahtotiedot-th"}]
         (table-header-cell [:span "Ilmavirta" [:br] [:span {:class "lahtotiedot-th-sub"} "m³/s"]])
         (table-header-cell [:span "SFP-luku" [:br] [:span {:class "lahtotiedot-th-sub"} "kW/(m³/s)"]])
         [:th {:class "lahtotiedot-th"} "LTO:n vuosihyötysuhde"]]]
       [:tbody
        (for [row (:jarjestelmat iv)]
          [:tr
-          [:td]
+          [:td [:strong "Ilmanvaihtojärjestelmä"]]
           [:td {:class "num"} (:ilmavirta row)]
           [:td {:class "num"} (:sfp row)]
           [:td {:class "num"} (:lto row)]])]]]))
@@ -150,9 +150,11 @@
   "Generate the content for the E-luvun laskennan lähtötiedot page.
    Takes params map but currently uses mock data."
   [_params]
-  [:div {:class "lahtotiedot-content"}
-   (rakennusvaippa-section mock-data)
-   (ilmanvaihto-section mock-data)
-   (lammitys-section mock-data)
-   (jaahdytys-section mock-data)
-   (lampokuormat-section mock-data)])
+  [:div {:class "lahtotiedot-page"}
+   [:h2 {:class "lahtotiedot-page-title"} "E-LUVUN LASKENNAN LÄHTÖTIEDOT"]
+   [:div {:class "lahtotiedot-content"}
+    (rakennusvaippa-section mock-data)
+    (ilmanvaihto-section mock-data)
+    (lammitys-section mock-data)
+    (jaahdytys-section mock-data)
+    (lampokuormat-section mock-data)]])
