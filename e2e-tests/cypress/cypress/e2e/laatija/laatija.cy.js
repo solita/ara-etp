@@ -461,8 +461,8 @@ context('Laatija', () => {
       cy.visit('/#/energiatodistus/all');
 
       if (!isEtp2026Enabled())
-        cy.get('[data-cy="Luo ET 2026"]').should('exist');
-      else cy.get('[data-cy="Luo ET 2026"]').should('not.exist');
+        cy.get('[data-cy="create-new-et26"]').should('exist');
+      else cy.get('[data-cy="create-new-et26"]').should('not.exist');
     });
   });
   (isEtp2026Enabled() ? describe : describe.skip)(
@@ -476,7 +476,7 @@ context('Laatija', () => {
 
         cy.visit('/#/energiatodistus/all');
 
-        cy.get('[data-cy="Luo ET 2026"]').click();
+        cy.get('[data-cy="create-new-et26"]').click();
 
         cy.get('[data-cy="save-button"]').click();
 

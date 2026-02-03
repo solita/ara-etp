@@ -1,8 +1,10 @@
 <script>
   import * as Maybe from '@Utility/maybe-utils';
+  import * as R from 'ramda';
 
   export let href;
   export let text = '';
+  export let dataCy;
   export let target = '_self';
   export let icon = Maybe.None();
   export let disabled = false;
@@ -28,7 +30,7 @@
   {target}
   class:disabled
   class:font-bold={bold}
-  data-cy={text}
+  data-cy={R.defaultTo(text, dataCy)}
   on:click>
   {#each Maybe.toArray(icon) as i}
     <span class="mr-1 font-icon">{i}</span>
