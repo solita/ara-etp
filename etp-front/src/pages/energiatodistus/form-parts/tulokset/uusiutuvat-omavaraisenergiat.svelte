@@ -136,7 +136,7 @@
                 {schema}
                 compact={true}
                 bind:model={energiatodistus}
-                name={`tulokset.uusiutuvat-omavaraisenergiat.kokonaistuotanto.${energiamuoto}`}
+                name={`tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.${energiamuoto}`}
                 path={[
                   'tulokset',
                   'uusiutuvat-omavaraisenergiat',

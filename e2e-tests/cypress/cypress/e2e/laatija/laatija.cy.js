@@ -490,12 +490,12 @@ context('Laatija', () => {
         );
 
         cy.get(
-          '[data-cy="tulokset.uusiutuvat-omavaraisenergiat.kokonaistuotanto.aurinkosahko"]'
+          '[data-cy="tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko"]'
         )
           .type('10000000000')
           .blur();
         cy.get(
-          '[data-cy="validation-label-for=tulokset.uusiutuvat-omavaraisenergiat.kokonaistuotanto.aurinkosahko"]'
+          '[data-cy="validation-label-for=tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko"]'
         )
           .should('be.visible')
           .and('contain.text', 'Suurin sallittu arvo on 9999999999.');
@@ -503,7 +503,7 @@ context('Laatija', () => {
         cy.get('[data-cy="save-button"]').click();
         cy.get('[data-cy="form-alert-text"]').should(
           'contain.text',
-          'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.kokonaistuotanto.label-context / energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.kokonaistuotanto.aurinkosahko'
+          'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.label-context / energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko'
         );
 
         cy.get(
@@ -527,7 +527,7 @@ context('Laatija', () => {
           .type('25')
           .blur();
         cy.get(
-          '[data-cy="tulokset.uusiutuvat-omavaraisenergiat.kokonaistuotanto.aurinkosahko"]'
+          '[data-cy="tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko"]'
         )
           .clear()
           .type('10000')

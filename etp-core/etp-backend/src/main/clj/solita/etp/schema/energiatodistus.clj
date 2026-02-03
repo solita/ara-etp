@@ -304,12 +304,12 @@
       (assoc-in [:huomiot :iv-ilmastointi :kayttoikaa-jaljella-arvio-vuosina] common-schema/IntNonNegative)
       (assoc-in [:huomiot :iv-ilmastointi :asetukset-tehostettavissa] schema/Bool)
 
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :kokonaistuotanto :aurinkosahko] common-schema/NonNegative)
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :kokonaistuotanto :aurinkolampo] common-schema/NonNegative)
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :kokonaistuotanto :tuulisahko] common-schema/NonNegative)
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :kokonaistuotanto :lampopumppu] common-schema/NonNegative)
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :kokonaistuotanto :muulampo] common-schema/NonNegative)
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :kokonaistuotanto :muusahko] common-schema/NonNegative)
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko] common-schema/NonNegative)
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo] common-schema/NonNegative)
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko] common-schema/NonNegative)
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu] common-schema/NonNegative)
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo] common-schema/NonNegative)
+      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko] common-schema/NonNegative)
       xschema/optional-properties))
 
 (defn ->EnergiatodistusSaveExternal [schema]

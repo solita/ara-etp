@@ -304,15 +304,13 @@ export const energiatodistus2026 = R.compose(
       }
     },
     tulokset: {
-      'uusiutuvat-omavaraisenergiat': {
-        kokonaistuotanto: {
-          aurinkosahko: ValidNone(),
-          aurinkolampo: ValidNone(),
-          tuulisahko: ValidNone(),
-          lampopumppu: ValidNone(),
-          muulampo: ValidNone(),
-          muusahko: ValidNone()
-        }
+      'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
+        aurinkosahko: ValidNone(),
+        aurinkolampo: ValidNone(),
+        tuulisahko: ValidNone(),
+        lampopumppu: ValidNone(),
+        muulampo: ValidNone(),
+        muusahko: ValidNone()
       }
     }
   }),

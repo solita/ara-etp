@@ -346,15 +346,13 @@ export const v2026 = R.mergeDeepLeft(
       }
     },
     tulokset: {
-      'uusiutuvat-omavaraisenergiat': {
-        kokonaistuotanto: {
-          aurinkosahko: IntegerNonNegative,
-          aurinkolampo: IntegerNonNegative,
-          tuulisahko: IntegerNonNegative,
-          lampopumppu: IntegerNonNegative,
-          muulampo: IntegerNonNegative,
-          muusahko: IntegerNonNegative
-        }
+      'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
+        aurinkosahko: IntegerNonNegative,
+        aurinkolampo: IntegerNonNegative,
+        tuulisahko: IntegerNonNegative,
+        lampopumppu: IntegerNonNegative,
+        muulampo: IntegerNonNegative,
+        muusahko: IntegerNonNegative
       }
     }
   },
