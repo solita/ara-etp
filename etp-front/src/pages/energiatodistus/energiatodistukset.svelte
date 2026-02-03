@@ -269,7 +269,8 @@
               <Link
                 text={i18n('energiatodistus.luo2026')}
                 href="#/energiatodistus/2026/new"
-                icon={Maybe.Some('add_circle_outline')} />
+                icon={Maybe.Some('add_circle_outline')}
+                dataCy="create-new-et26" />
             </div>
           {/if}
           <div class="my-auto flex flex-row">

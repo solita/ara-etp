@@ -35,6 +35,8 @@
 (def find-hallinto-oikeudet #(select-luokittelu % "hallinto_oikeus"))
 (def find-karajaoikeudet #(select-luokittelu % "karajaoikeus"))
 
+(def find-havainnointikayntityypit #(select-luokittelu % "havainnointikayntityyppi"))
+
 (defn- path= [value path object]
   (= value (get-in object path)))
 

@@ -3,6 +3,9 @@
   import { _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
 
+  import Checkbox from '@Component/Checkbox/Checkbox';
+  import VuosiUnit from '@Pages/energiatodistus/form-parts/units/year';
+
   import H3 from '@Component/H/H3';
   import Input from '@Pages/energiatodistus/Input';
   import Textarea from '@Pages/energiatodistus/Textarea';
@@ -14,12 +17,36 @@
   export let energiatodistus;
   export let huomio;
   export let inputLanguage;
+  export let versio = 2018;
 
   const base = `energiatodistus.huomiot.${huomio}`;
 </script>
 
 <H3 text={$_(`${base}.header`)} />
 
+{#if R.and(R.equals(versio, 2026), R.includes( huomio, ['lammitys', 'iv-ilmastointi'] ))}
+  <div class="my-4 flex flex-col gap-x-8">
+    <div class="w-full py-4">
+      <Checkbox
+        bind:model={energiatodistus}
+        lens={R.lensPath(['huomiot', huomio, 'asetukset-tehostettavissa'])}
+        dataCy={`huomiot.${huomio}.asetukset-tehostettavissa`}
+        label={$_(
+          `energiatodistus.huomiot.${huomio}.nykyinen-jarjestelma-tehostettavissa`
+        )}
+        {disabled} />
+    </div>
+    <div class="py-4 lg:w-2/5">
+      <Input
+        {disabled}
+        {schema}
+        center={false}
+        bind:model={energiatodistus}
+        path={['huomiot', huomio, 'kayttoikaa-jaljella-arvio-vuosina']}
+        unit={VuosiUnit} />
+    </div>
+  </div>
+{/if}
 <div class="mb-6 w-full">
   <Textarea
     {disabled}

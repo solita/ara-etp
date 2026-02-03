@@ -42,6 +42,6 @@
   class:success={type === 'success'}
   class="alert">
   <span class="icon">{icon}</span>
-  <span class="alert-text">{text}</span>
+  <span class="alert-text" data-cy="form-alert-text">{text}</span>
   <span class="close" on:click={close}>close</span>
 </div>

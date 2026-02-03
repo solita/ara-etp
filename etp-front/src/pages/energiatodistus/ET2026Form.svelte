@@ -1,0 +1,333 @@
+<script>
+  import * as R from 'ramda';
+
+  import { locale, _ } from '@Language/i18n';
+  import * as Maybe from '@Utility/maybe-utils';
+  import * as et from './energiatodistus-utils';
+  import * as Laatimisvaiheet from './laatimisvaiheet';
+  import * as LocaleUtils from '@Language/locale-utils';
+
+  import H2 from '@Component/H/H2';
+  import H3 from '@Component/H/H3';
+  import Select from '@Component/Select/Select';
+  import HR from '@Component/HR/HR';
+
+  import Input from './Input';
+  import BasicInput from '@Component/Input/Input';
+  import Textarea from './Textarea';
+
+  import RakennuksenPerustiedot from './RakennuksenPerustiedot';
+  import ToimenpideEhdotukset from './ToimenpideEhdotukset';
+  import EnergiatodistusLaatija from './EnergiatodistusLaatija';
+
+  import Rakennusvaippa from './form-parts/lahtotiedot/rakennusvaippa';
+  import Ikkunat from './form-parts/lahtotiedot/ikkunat';
+  import Ilmanvaihtojarjestelma from './form-parts/lahtotiedot/ilmanvaihtojarjestelma';
+  import Lammitysjarjestelma from './form-parts/lahtotiedot/lammitysjarjestelma';
+  import Jaahdytysjarjestelma from './form-parts/lahtotiedot/jaahdytysjarjestelma';
+  import SisaisetLampokuormat from './form-parts/lahtotiedot/sisaiset-lampokuormat';
+  import Lamminkayttovesi from './form-parts/lahtotiedot/lamminkayttovesi';
+
+  import ELuku from './form-parts/tulokset/e-luku';
+  import ELuvunErittely from './form-parts/tulokset/e-luvun-erittely';
+  import UusiutuvatOmavaraisenergiat from './form-parts/tulokset/uusiutuvat-omavaraisenergiat';
+  import TeknistenjarjestelmienEnergiankulutus from './form-parts/tulokset/teknistenjarjestelmien-energiankulutus';
+  import Nettotarve from './form-parts/tulokset/nettotarve';
+  import Lampokuormat from './form-parts/tulokset/lampokuormat';
+
+  import EnergiaverkostaOstetut from './form-parts/toteutunut-kulutus/energiaverkosta-ostetut';
+  import OstetutPolttoaineet from './form-parts/toteutunut-kulutus/ostetut-polttoaineet';
+  import ToteutunutOstoenergia from './form-parts/toteutunut-kulutus/toteutunut-ostoenergia';
+
+  import Huomio from './form-parts/huomiot/huomio';
+  import Suositukset from './form-parts/huomiot/suositukset';
+
+  import Area from './form-parts/units/area';
+
+  export let energiatodistus;
+  export let inputLanguage;
+  export let luokittelut;
+  export let schema;
+  export let disabled = false;
+  export let validation;
+  export let eTehokkuus = Maybe.None();
+  export let whoami;
+
+  $: labelLocale = LocaleUtils.label($locale);
+</script>
+
+<style>
+  /* Min-height is bigger than other textarea so that the table of contents
+  links are visible, even after scrolling to last textarea via anchor link*/
+  .lisamerkintoja-textarea :global(textarea) {
+    min-height: 400px;
+    max-height: 600px;
+  }
+</style>
+
+<div class="mb-8">
+  <H3 text={$_('energiatodistus.perustiedot.header')} />
+  <div class="flex flex-col gap-x-8 lg:flex-row">
+    {#if R.complement(R.isNil)(energiatodistus.id)}
+      <div class="w-full py-2 lg:w-1/2">
+        <BasicInput
+          id="energiatodistus.id"
+          name="energiatodistus.id"
+          label={$_('energiatodistus.id')}
+          disabled={true}
+          bind:model={energiatodistus}
+          lens={R.lensProp('id')}
+          i18n={$_} />
+      </div>
+    {/if}
+    {#if R.complement(R.isNil)(energiatodistus['laatija-fullname'])}
+      <div class="w-full py-2 lg:w-1/2">
+        <EnergiatodistusLaatija {whoami} {energiatodistus} />
+      </div>
+    {/if}
+  </div>
+  <div class="flex flex-col gap-x-8 lg:flex-row">
+    <div class="w-full py-4 lg:w-1/2">
+      <Input
+        {disabled}
+        {schema}
+        center={false}
+        bind:model={energiatodistus}
+        path={['perustiedot', 'yritys', 'nimi']} />
+    </div>
+
+    <div class="w-full py-4 lg:w-1/2">
+      <Input
+        {disabled}
+        {schema}
+        center={false}
+        bind:model={energiatodistus}
+        path={['perustiedot', 'tilaaja']} />
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-x-8">
+    <div class="w-full py-4 lg:w-1/2">
+      <Select
+        id={'perustiedot.kieli'}
+        name={'perustiedot.kieli'}
+        label={$_('energiatodistus.perustiedot.kieli')}
+        required={true}
+        validation={schema.$signature}
+        {disabled}
+        bind:model={energiatodistus}
+        lens={R.lensPath(['perustiedot', 'kieli'])}
+        allowNone={false}
+        parse={Maybe.Some}
+        format={et.selectFormat(labelLocale, luokittelut.kielisyys)}
+        items={R.pluck('id', luokittelut.kielisyys)} />
+    </div>
+
+    <div class="w-full py-4 lg:w-1/2">
+      <Select
+        id={'perustiedot.laatimisvaihe'}
+        name={'perustiedot.laatimisvaihe'}
+        label={$_('energiatodistus.perustiedot.laatimisvaihe')}
+        required={true}
+        validation={schema.$signature}
+        {disabled}
+        bind:model={energiatodistus}
+        lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
+        parse={Maybe.Some}
+        format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet)}
+        items={R.pluck('id', luokittelut.laatimisvaiheet)} />
+    </div>
+    {#if Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
+      <div class="w-full py-4 lg:w-1/2">
+        <Input
+          {disabled}
+          {schema}
+          required={true}
+          center={false}
+          bind:model={energiatodistus}
+          path={['perustiedot', 'havainnointikaynti']} />
+      </div>
+      <div class="w-full py-4 lg:w-1/2">
+        <Select
+          id={'perustiedot.havainnointikayntityyppi-id'}
+          name={'perustiedot.havainnointikayntityyppi-id'}
+          label={$_('energiatodistus.perustiedot.havainnointikayntityyppi-id')}
+          required={true}
+          validation={schema.$signature}
+          allowNone={false}
+          {disabled}
+          bind:model={energiatodistus}
+          lens={R.lensPath(['perustiedot', 'havainnointikayntityyppi-id'])}
+          parse={Maybe.Some}
+          format={et.selectFormat(
+            labelLocale,
+            luokittelut.havainnointikayntityyppi
+          )}
+          items={R.pluck('id', luokittelut.havainnointikayntityyppi)} />
+      </div>
+    {/if}
+
+    <div class="w-full py-4 lg:w-1/2">
+      <Input
+        {disabled}
+        {schema}
+        center={false}
+        bind:model={energiatodistus}
+        path={['tulokset', 'laskentatyokalu']} />
+    </div>
+  </div>
+</div>
+<div class="mb-8">
+  <RakennuksenPerustiedot
+    {schema}
+    {inputLanguage}
+    {disabled}
+    {whoami}
+    bind:energiatodistus
+    postinumerot={luokittelut.postinumerot}
+    kayttotarkoitusluokat={luokittelut.kayttotarkoitusluokat}
+    alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
+  <ELuku {eTehokkuus} idSuffix="perustiedot" />
+</div>
+<ToimenpideEhdotukset
+  versio={'2026'}
+  {disabled}
+  {inputLanguage}
+  {schema}
+  bind:energiatodistus />
+
+<HR />
+<H2
+  id="laskennan-lahtotiedot"
+  text={$_('energiatodistus.lahtotiedot.header')} />
+
+<div class="flex w-full">
+  <div class="mb-12 w-1/3">
+    <Input
+      {disabled}
+      {schema}
+      center={false}
+      bind:model={energiatodistus}
+      path={['lahtotiedot', 'lammitetty-nettoala']}
+      unit={Area} />
+  </div>
+</div>
+
+<Rakennusvaippa {disabled} {schema} bind:energiatodistus />
+<Ikkunat {disabled} {schema} bind:energiatodistus />
+<Ilmanvaihtojarjestelma
+  {disabled}
+  {schema}
+  bind:energiatodistus
+  ilmanvaihtotyypit={luokittelut.ilmanvaihtotyypit}
+  {inputLanguage} />
+
+<Lammitysjarjestelma
+  {disabled}
+  {schema}
+  bind:energiatodistus
+  lammitysmuoto={luokittelut.lammitysmuoto}
+  lammonjako={luokittelut.lammonjako}
+  {inputLanguage} />
+<Jaahdytysjarjestelma {disabled} {schema} bind:energiatodistus />
+<Lamminkayttovesi {disabled} {schema} bind:energiatodistus />
+<SisaisetLampokuormat
+  {disabled}
+  {schema}
+  kuormat={validation.kuormat}
+  alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat}
+  bind:energiatodistus />
+
+<HR />
+
+<H2 id="tulokset" text={$_('energiatodistus.tulokset.header')} />
+
+<ELuku {eTehokkuus} idSuffix="tulokset" />
+<ELuvunErittely
+  bind:eTehokkuus
+  {disabled}
+  {schema}
+  bind:energiatodistus
+  versio={2026} />
+<UusiutuvatOmavaraisenergiat
+  {disabled}
+  {schema}
+  bind:energiatodistus
+  versio={2026} />
+<TeknistenjarjestelmienEnergiankulutus
+  {disabled}
+  {schema}
+  bind:energiatodistus />
+<Nettotarve {disabled} {schema} bind:energiatodistus />
+<Lampokuormat {disabled} {schema} bind:energiatodistus />
+
+<HR />
+<H2
+  id="toteutunut-ostoenergiankulutus"
+  text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
+<EnergiaverkostaOstetut
+  versio={2026}
+  {disabled}
+  {schema}
+  {inputLanguage}
+  bind:energiatodistus />
+<OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
+<ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
+
+<HR />
+<H2
+  id="toimenpide-ehdotukset"
+  text={$_('energiatodistus.huomiot.header.2026')} />
+<Huomio
+  {disabled}
+  {schema}
+  {inputLanguage}
+  versio={2026}
+  huomio={'ymparys'}
+  bind:energiatodistus />
+<Huomio
+  {disabled}
+  {schema}
+  {inputLanguage}
+  versio={2026}
+  huomio={'alapohja-ylapohja'}
+  bind:energiatodistus />
+<Huomio
+  {disabled}
+  {schema}
+  {inputLanguage}
+  versio={2026}
+  huomio={'lammitys'}
+  bind:energiatodistus />
+<Huomio
+  {disabled}
+  {schema}
+  {inputLanguage}
+  versio={2026}
+  huomio={'iv-ilmastointi'}
+  bind:energiatodistus />
+<Huomio
+  {disabled}
+  {schema}
+  {inputLanguage}
+  versio={2026}
+  huomio={'valaistus-muut'}
+  bind:energiatodistus />
+
+<Suositukset
+  versio={2026}
+  {disabled}
+  {schema}
+  {inputLanguage}
+  bind:energiatodistus />
+
+<HR />
+<H2 id="lisamerkintoja" text={$_('energiatodistus.lisamerkintoja')} />
+<div class="lisamerkintoja-textarea mb-4 w-full py-4">
+  <Textarea
+    {disabled}
+    {schema}
+    inputLanguage={Maybe.Some(inputLanguage)}
+    bind:model={energiatodistus}
+    path={['lisamerkintoja']} />
+</div>

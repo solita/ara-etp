@@ -1,3 +1,12 @@
+param(
+  [switch]$Etp2026
+)
+
+if ($Etp2026) {
+  $env:ETP_2026 = 'true'
+} else {
+  $env:ETP_2026 = 'false'
+}
 
 Invoke-Command -ScriptBlock {
     Set-PSDebug -Trace 1
