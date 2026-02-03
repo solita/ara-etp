@@ -1,5 +1,4 @@
 # Cypress tests
-
 ### Running the tests
 
 To run the tests you must first start the `e2e Docker stack`. To do so on systems
@@ -37,5 +36,9 @@ overridden by `override.yml` so that you can run it while also running the e2e s
 > **NB:** The `e2e Docker stack` might not yet use all of the components (minio, etc.)
 > correctly. Typically you can fix this by making their location (e.g. localhost:1234) configurable
 > through an environment variable and setting it to the container's name (e.g. container:1234).
+
+In `cypress.config.js` you can temporarily change the `baseUrl` to point to your local frontend so that you  don't
+have to the image after every change. Then you might want to also comment out resetting the database and setting the
+headers if your test does.
 
 Best practises can be found at https://docs.cypress.io/guides/references/best-practices
