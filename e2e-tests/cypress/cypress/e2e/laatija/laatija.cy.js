@@ -460,7 +460,7 @@ context('Laatija', () => {
     it('should show ET26 creation button only when the feature is enabled', () => {
       cy.visit('/#/energiatodistus/all');
 
-      if (!isEtp2026Enabled())
+      if (isEtp2026Enabled())
         cy.get('[data-cy="create-new-et26"]').should('exist');
       else cy.get('[data-cy="create-new-et26"]').should('not.exist');
     });
