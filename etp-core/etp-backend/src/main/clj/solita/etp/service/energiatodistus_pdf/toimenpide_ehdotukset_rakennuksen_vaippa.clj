@@ -71,9 +71,10 @@
                                              toimenpide))))
 
 (defn generate-all-toimepide-ehdotukset-rakennuksen-vaippa [params]
-  {:te-ulkoseinat (toimenpide-ehdotukset-ulkoseinat params)
-   :te-list-ulko (toimenpide-ehdotukset-list-ulko params)
-   :te-table-ulko (toimenpide-ehdotukset-table-ulko params)
-   :te-pohjat(toimenpide-ehdotukset-pohjat params)
-   :te-list-pohjat (toimenpide-ehdotukset-list-pohjat params)
-   :te-table-pohjat(toimenpide-ehdotukset-table-pohjat params)})
+  (into [:div]
+        [(toimenpide-ehdotukset-ulkoseinat params)
+         (toimenpide-ehdotukset-list-ulko params)
+         (toimenpide-ehdotukset-table-ulko params)
+         (toimenpide-ehdotukset-pohjat params)
+         (toimenpide-ehdotukset-list-pohjat params)
+         (toimenpide-ehdotukset-table-pohjat params)]))

@@ -87,10 +87,11 @@
                                              toimenpide))))
 
 (defn generate-all-toimepide-ehdotukset-rakennuksen-vaippa [params]
-  {:te-lammitys (toimenpide-ehdotukset-lammitys params)
-   :te-list-lammitys (toimenpide-ehdotukset-list-lammitys params)
-   :te-table-lammitys (toimenpide-ehdotukset-table-lammitys params)
-   :te-arvio-teknisesta-kayttoiasta (arvio-teknisesta-kayttoiasta params)
-   :te-ilmanvaihto (toimenpide-ehdotukset-ilmanvaihto params)
-   :te-list-ilmanvaihto (toimenpide-ehdotukset-list-ilmanvaihto params)
-   :te-table-ilmanvaihto (toimenpide-ehdotukset-table-ilmanvaihto params)})
+  (into [:div]
+        [(toimenpide-ehdotukset-lammitys params)
+         (toimenpide-ehdotukset-list-lammitys params)
+         (toimenpide-ehdotukset-table-lammitys params)
+         (arvio-teknisesta-kayttoiasta params)
+         (toimenpide-ehdotukset-ilmanvaihto params)
+         (toimenpide-ehdotukset-list-ilmanvaihto params)
+         (toimenpide-ehdotukset-table-ilmanvaihto params)]))

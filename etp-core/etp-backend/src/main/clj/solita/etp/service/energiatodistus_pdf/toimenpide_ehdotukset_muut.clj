@@ -47,7 +47,8 @@
                                           :sv :suositukset-sv)])]))
 
 (defn generate-all-toimepide-ehdotukset-muut [params]
-  {:te-lammitys (toimenpide-ehdotukset-muut params)
-   :te-list-lammitys (toimenpide-ehdotukset-list-muut params)
-   :te-table-lammitys (toimenpide-ehdotukset-table-muut params)
-   :te-suositukset (toimenpide-ehdotukset-suositukset params)})
+  (into [:div]
+        [(toimenpide-ehdotukset-muut params)
+         (toimenpide-ehdotukset-list-muut params)
+         (toimenpide-ehdotukset-table-muut params)
+         (toimenpide-ehdotukset-suositukset params)]))

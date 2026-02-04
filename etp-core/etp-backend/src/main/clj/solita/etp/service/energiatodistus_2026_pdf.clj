@@ -97,14 +97,11 @@
                         (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}]
         toimenpide-pages (if show-toimenpide?
                            [{:content
-                             (into [:di]
-                                   (vals (te-rakennusvaippa/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)))}
+                            (te-rakennusvaippa/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)}
                             {:content
-                             (into [:div]
-                                   (vals (te-lammitys-ilmanvaihto/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)))}
+                             (te-lammitys-ilmanvaihto/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)}
                             {:content
-                             (into [:div]
-                                   (vals (te-muut/generate-all-toimepide-ehdotukset-muut params)))}]
+                             (te-muut/generate-all-toimepide-ehdotukset-muut params)}]
                            [])
         pages (into base-pages toimenpide-pages)]
 
