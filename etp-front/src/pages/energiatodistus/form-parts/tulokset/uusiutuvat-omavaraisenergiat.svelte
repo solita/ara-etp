@@ -139,8 +139,7 @@
                 name={`tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.${energiamuoto}`}
                 path={[
                   'tulokset',
-                  'uusiutuvat-omavaraisenergiat',
-                  'kokonaistuotanto',
+                  'uusiutuvat-omavaraisenergiat-kokonaistuotanto',
                   energiamuoto
                 ]} />
             </td>
