@@ -28,15 +28,16 @@
 
 (defn toimenpide-ehdotukset-table-ulko [{:keys [kieli energiatodistus]}]
   (let [toimenpide (get-in energiatodistus [:huomiot :ymparys :toimenpide] [])]
-    (et/table-toimenpide-ehdtukset kieli
-      (map-indexed (fn [idx item]
-                     {:dt (str (inc idx) ".")
-                      :dd [(:lampo item)
-                           (:sahko item)
-                           (:jaahdytys item)
-                           (:eluvun-muutos item)
-                           (str "todo")]})
-                   toimenpide))))
+    [:div {:class "toimenpide-ehdotukset"}
+     (et/table-toimenpide-ehdotukset kieli
+                                     (map-indexed (fn [idx item]
+                        {:dt (str (inc idx) ".")
+                         :dd [(:lampo item)
+                              (:sahko item)
+                              (:jaahdytys item)
+                              (:eluvun-muutos item)
+                              (str "todo")]})
+                      toimenpide))]))
 
 (defn toimenpide-ehdotukset-pohjat [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
@@ -60,15 +61,16 @@
 
 (defn toimenpide-ehdotukset-table-pohjat [{:keys [kieli energiatodistus]}]
   (let [toimenpide (get-in energiatodistus [:huomiot :alapohja-ylapohja :toimenpide] [])]
-    (et/table-toimenpide-ehdtukset kieli
-                                (map-indexed (fn [idx item]
-                                               {:dt (str (inc idx) ".")
-                                                :dd [(:lampo item)
-                                                     (:sahko item)
-                                                     (:jaahdytys item)
-                                                     (:eluvun-muutos item)
-                                                     (str "todo")]})
-                                             toimenpide))))
+    [:div {:class "toimenpide-ehdotukset"}
+     (et/table-toimenpide-ehdotukset kieli
+                                     (map-indexed (fn [idx item]
+                                                {:dt (str (inc idx) ".")
+                                                 :dd [(:lampo item)
+                                                      (:sahko item)
+                                                      (:jaahdytys item)
+                                                      (:eluvun-muutos item)
+                                                      (str "todo")]})
+                                              toimenpide))]))
 
 (defn generate-all-toimepide-ehdotukset-rakennuksen-vaippa [params]
   (into [:div]

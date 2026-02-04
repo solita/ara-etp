@@ -36,15 +36,16 @@
 
 (defn toimenpide-ehdotukset-table-lammitys [{:keys [kieli energiatodistus]}]
   (let [toimenpide (get-in energiatodistus [:huomiot :lammitys :toimenpide] [])]
-    (et/table-toimenpide-ehdtukset kieli
-                                (map-indexed (fn [idx item]
-                                               {:dt (str (inc idx) ".")
-                                                :dd [(:lampo item)
-                                                     (:sahko item)
-                                                     (:jaahdytys item)
-                                                     (:eluvun-muutos item)
-                                                     (str "todo")]})
-                                             toimenpide))))
+    [:div {:class "toimenpide-ehdotukset"}
+     (et/table-toimenpide-ehdotukset kieli
+                                     (map-indexed (fn [idx item]
+                                                {:dt (str (inc idx) ".")
+                                                 :dd [(:lampo item)
+                                                      (:sahko item)
+                                                      (:jaahdytys item)
+                                                      (:eluvun-muutos item)
+                                                      (str "todo")]})
+                                              toimenpide))]))
 
 (defn arvio-teknisesta-kayttoiasta [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)
@@ -76,15 +77,16 @@
 
 (defn toimenpide-ehdotukset-table-ilmanvaihto[{:keys [kieli energiatodistus]}]
   (let [toimenpide (get-in energiatodistus [:huomiot :iv-ilmastointi :toimenpide] [])]
-    (et/table-toimenpide-ehdtukset kieli
-                                (map-indexed (fn [idx item]
+    [:div {:class "toimenpide-ehdotukset"}
+    (et/table-toimenpide-ehdotukset kieli
+                                    (map-indexed (fn [idx item]
                                                {:dt (str (inc idx) ".")
                                                 :dd [(:lampo item)
                                                      (:sahko item)
                                                      (:jaahdytys item)
                                                      (:eluvun-muutos item)
                                                      (str "todo")]})
-                                             toimenpide))))
+                                             toimenpide))]))
 
 (defn generate-all-toimepide-ehdotukset-rakennuksen-vaippa [params]
   (into [:div]

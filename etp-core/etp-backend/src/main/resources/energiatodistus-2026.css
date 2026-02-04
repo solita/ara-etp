@@ -98,42 +98,42 @@ body {
     width: 100%;
 }
 
-table.toimenpide-ehdotukset {
+.toimenpide-ehdotukset table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 5px;
 }
 
-table.toimenpide-ehdotukset th {
+.toimenpide-ehdotukset table th {
     padding: 1px;
     text-align: center;
     white-space: pre-wrap;
 }
 
-table.toimenpide-ehdotukset th.header-text {
+.toimenpide-ehdotukset table th.header-text {
     font-weight: bold;
     padding: 0;
     margin: 0;
 }
 
-table.toimenpide-ehdotukset th.header-unit {
+.toimenpide-ehdotukset table th.header-unit {
     font-weight: normal;
     padding: 0;
     margin: 0;
 }
 
-table.toimenpide-ehdotukset th.empty {
+.toimenpide-ehdotukset table th.empty {
     border: none;
     background-color: white;
 }
 
-table.toimenpide-ehdotukset td {
+.toimenpide-ehdotukset table td {
     border: 1px solid #bdc6cc;
     border-right: none;
     text-align: center;
 }
 
-table.toimenpide-ehdotukset td:first-child {
+.toimenpide-ehdotukset table td:first-child {
     background-color: #23323e;
     color: white;
     font-weight: bold;

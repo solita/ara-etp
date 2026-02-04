@@ -28,15 +28,16 @@
 
 (defn toimenpide-ehdotukset-table-muut [{:keys [kieli energiatodistus]}]
   (let [toimenpide (get-in energiatodistus [:huomiot :valaistus-muut :toimenpide] [])]
-    (et/table-toimenpide-ehdtukset kieli
-                                   (map-indexed (fn [idx item]
-                                                  {:dt (str (inc idx) ".")
-                                                   :dd [(:lampo item)
-                                                        (:sahko item)
-                                                        (:jaahdytys item)
-                                                        (:eluvun-muutos item)
-                                                        (str "todo")]})
-                                                toimenpide))))
+    [:div {:class "toimenpide-ehdotukset"}
+     (et/table-toimenpide-ehdotukset kieli
+                                     (map-indexed (fn [idx item]
+                                                   {:dt (str (inc idx) ".")
+                                                    :dd [(:lampo item)
+                                                         (:sahko item)
+                                                         (:jaahdytys item)
+                                                         (:eluvun-muutos item)
+                                                         (str "todo")]})
+                                                 toimenpide))]))
 
 (defn toimenpide-ehdotukset-suositukset [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]

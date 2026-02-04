@@ -3,14 +3,14 @@
     [solita.etp.service.localization :as loc]))
 
 (defn description-list [key-vals]
-  (into [:dl.toimenpide-ehdotukset]
+  (into [:dl]
         (mapv #(vec [:div
                      [:dt (str (:dt %))]
                      [:dd (:dd %)]]) key-vals)))
 
-(defn table-toimenpide-ehdtukset [kieli items]
+(defn table-toimenpide-ehdotukset [kieli items]
   (let [l (kieli loc/et-pdf-localization)]
-    [:table.toimenpide-ehdotukset
+    [:table {:class "table"}
      [:thead
       [:tr
        [:th.empty]
