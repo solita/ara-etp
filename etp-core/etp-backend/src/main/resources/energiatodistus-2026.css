@@ -35,6 +35,127 @@ body {
     position: relative;
 }
 
+.toimenpide-ehdotukset h1 {
+    background-color: white;
+    color: #23323e;
+    height: auto;
+    padding: 0px;
+    font-size: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.toimenpide-ehdotukset h2 {
+    background-color: #23323e;
+    color: white;
+    padding: 2px;
+    font-size: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.toimenpide-ehdotukset h3 {
+    background-color: white;
+    color: #23323e;
+    height: auto;
+    font-size: 15px;
+    text-align: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+.toimenpide-ehdotukset dl {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.toimenpide-ehdotukset dl div {
+    display: table-row;
+    border-left: none;
+
+}
+
+.toimenpide-ehdotukset dt,
+.toimenpide-ehdotukset dd {
+    display: table-cell;
+    padding: 3px 5px 3px 5px;
+    border-bottom: 1px solid #bdc6cc;
+}
+
+.toimenpide-ehdotukset dt {
+    font-weight: bold;
+    background-color: #23323e;
+    color: white;
+    text-align: center;
+}
+
+.toimenpide-ehdotukset dd {
+    width: 100%;
+}
+
+table.toimenpide-ehdotukset {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+}
+
+table.toimenpide-ehdotukset th {
+    padding: 1px;
+    text-align: center;
+    white-space: pre-wrap;
+}
+
+table.toimenpide-ehdotukset th.header-text {
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+
+table.toimenpide-ehdotukset th.header-unit {
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
+}
+
+table.toimenpide-ehdotukset th.empty {
+    border: none;
+    background-color: white;
+}
+
+table.toimenpide-ehdotukset td {
+    border: 1px solid #bdc6cc;
+    border-right: none;
+    text-align: center;
+}
+
+table.toimenpide-ehdotukset td:first-child {
+    background-color: #23323e;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    width: 15px;
+    padding: 3px 5px 3px 3px;
+    border-bottom: 1px solid #bdc6cc;
+}
+
+.toimenpide-ehdotukset .label {
+    font-weight: bold;
+    color: #23323e;
+    text-align: left;
+    white-space: nowrap;
+    margin: 5px 5px 5px 0px;
+}
+
+.toimenpide-ehdotukset .row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .page-section {
     background-color: white;
     padding: 2mm 3mm;
