@@ -2,14 +2,20 @@
   (:require [hiccup.core :as hiccup]
             [clojure.java.io :as io]
             [solita.etp.config :as config]
+            [solita.etp.db :as db]
             [solita.etp.service.pdf :as pdf-service]
             [solita.etp.service.localization :as loc]
             [solita.etp.service.watermark-pdf :as watermark-pdf]
             [solita.etp.service.energiatodistus-pdf.etusivu-yleistiedot :as et-etusivu-yleistiedot]
             [solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia :as et-laskennallinen-ostoenergia]
             [solita.etp.service.energiatodistus-pdf.etusivu-eluku :as et-etusivu-eluku]
-            [solita.etp.service.energiatodistus-pdf.etusivu-grafiikka :as et-etusivu-grafiikka])
+            [solita.etp.service.energiatodistus-pdf.etusivu-grafiikka :as et-etusivu-grafiikka]
+            [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_rakennuksen_vaippa :as te-rakennusvaippa]
+            [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_lammitys_ilmanvaihto :as te-lammitys-ilmanvaihto]
+            [solita.etp.service.energiatodistus-pdf.toimenpide-ehdotukset-muut :as te-muut])
   (:import [java.io ByteArrayOutputStream]))
+
+(db/require-queries 'perusparannuspassi)
 
 (def draft-watermark-texts {"fi" "LUONNOS"
                             "sv" "UTKAST"})
@@ -60,24 +66,47 @@
      pages-html]])))
 
 
+(defn- show-toimenpide-pages? [db energiatodistus laatija-id]
+  (let [e-luokka (get-in energiatodistus [:tulokset :e-luokka])
+        ppp (first (perusparannuspassi-db/find-by-energiatodistus-id db
+                     {:energiatodistus-id (:id energiatodistus)
+                      :laatija-id laatija-id}))
+        has-valid-ppp? (and (some? ppp) (:valid ppp))]
+    (and (not (contains? #{"A" "A0" "A+"} e-luokka))
+         (not has-valid-ppp?))))
+
 (defn generate-energiatodistus-html
   "Use OpenHTMLToPDF to generate PDF, return as a byte array"
-  [{:keys [energiatodistus kieli] :as params}]
+  [{:keys [db energiatodistus kieli] :as params}]
   (let [l (kieli loc/et-pdf-localization)
-        pages [{:page-border? true
-                :content
-                [:div
-                 (page-header (l :energiatodistus) (l :energiatodistus-2026-subtitle))
-                 [:div {:class "page-section"}
-                  (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
-                 [:div {:class "page-section"}
-                  [:div {:class "etusivu-grafiikka-eluku-section"}
-                   (et-etusivu-grafiikka/et-etusivu-grafiikka params)
-                   (et-etusivu-eluku/et-etusivu-eluku-teksti params)]]
-                 [:div {:class "page-section"}
-                  [:div {:class "etusivu-ostoenergia-section"}
-                   (et-laskennallinen-ostoenergia/ostoenergia params)
-                   (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}]]
+        laatija-id (:laatija-id energiatodistus)
+        show-toimenpide? (show-toimenpide-pages? db energiatodistus laatija-id)
+        base-pages [{:page-border? true
+                     :content
+                     [:div
+                      (page-header (l :energiatodistus) (l :energiatodistus-2026-subtitle))
+                      [:div {:class "page-section"}
+                       (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
+                      [:div {:class "page-section"}
+                       [:div {:class "etusivu-grafiikka-eluku-section"}
+                        (et-etusivu-grafiikka/et-etusivu-grafiikka params)
+                        (et-etusivu-eluku/et-etusivu-eluku-teksti params)]]
+                      [:div {:class "page-section"}
+                       [:div {:class "etusivu-ostoenergia-section"}
+                        (et-laskennallinen-ostoenergia/ostoenergia params)
+                        (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}]
+        toimenpide-pages (if show-toimenpide?
+                           [{:content
+                             (into [:di]
+                                   (vals (te-rakennusvaippa/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)))}
+                            {:content
+                             (into [:div]
+                                   (vals (te-lammitys-ilmanvaihto/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)))}
+                            {:content
+                             (into [:div]
+                                   (vals (te-muut/generate-all-toimepide-ehdotukset-muut params)))}]
+                           [])
+        pages (into base-pages toimenpide-pages)]
 
     (generate-document-html pages (:id energiatodistus))))
 
@@ -91,13 +120,14 @@
 
 (defn generate-energiatodistus-pdf
   "Generate a energiatodistus PDF and return it as a byte array."
-  [energiatodistus alakayttotarkoitukset laatimisvaiheet kieli draft?]
+  [db energiatodistus alakayttotarkoitukset laatimisvaiheet kieli draft?]
   (let [kieli-keyword (keyword kieli)
         pdf-bytes
 
         ;; Generate the PDF to byte array
         (generate-energiatodistus-ohtp-pdf
-          {:energiatodistus       energiatodistus
+          {:db                    db
+           :energiatodistus       energiatodistus
            :alakayttotarkoitukset alakayttotarkoitukset
            :laatimisvaiheet       laatimisvaiheet
            :kieli                 kieli-keyword})
