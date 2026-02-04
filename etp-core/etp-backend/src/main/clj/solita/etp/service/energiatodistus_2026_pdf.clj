@@ -81,30 +81,29 @@
   (let [l (kieli loc/et-pdf-localization)
         laatija-id (:laatija-id energiatodistus)
         show-toimenpide? (show-toimenpide-pages? db energiatodistus laatija-id)
-        base-pages [{:page-border? true
-                     :content
-                     [:div
-                      (page-header (l :energiatodistus) (l :energiatodistus-2026-subtitle))
-                      [:div {:class "page-section"}
-                       (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
-                      [:div {:class "page-section"}
-                       [:div {:class "etusivu-grafiikka-eluku-section"}
-                        (et-etusivu-grafiikka/et-etusivu-grafiikka params)
-                        (et-etusivu-eluku/et-etusivu-eluku-teksti params)]]
-                      [:div {:class "page-section"}
-                       [:div {:class "etusivu-ostoenergia-section"}
-                        (et-laskennallinen-ostoenergia/ostoenergia params)
-                        (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}]
-        toimenpide-pages (if show-toimenpide?
-                           [{:content
-                            (te-rakennusvaippa/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)}
-                            {:content
-                             (te-lammitys-ilmanvaihto/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)}
-                            {:content
-                             (te-muut/generate-all-toimepide-ehdotukset-muut params)}]
-                           [])
-        pages (into base-pages toimenpide-pages)]
-
+        pages (concat
+                [{:page-border? true
+                  :content
+                  [:div
+                   (page-header (l :energiatodistus) (l :energiatodistus-2026-subtitle))
+                   [:div {:class "page-section"}
+                    (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
+                   [:div {:class "page-section"}
+                    [:div {:class "etusivu-grafiikka-eluku-section"}
+                     (et-etusivu-grafiikka/et-etusivu-grafiikka params)
+                     (et-etusivu-eluku/et-etusivu-eluku-teksti params)]]
+                   [:div {:class "page-section"}
+                    [:div {:class "etusivu-ostoenergia-section"}
+                     (et-laskennallinen-ostoenergia/ostoenergia params)
+                     (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}]
+                (if show-toimenpide?
+                  [{:content
+                    (te-rakennusvaippa/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)}
+                   {:content
+                    (te-lammitys-ilmanvaihto/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)}
+                   {:content
+                    (te-muut/generate-all-toimepide-ehdotukset-muut params)}]
+                  []))]
     (generate-document-html pages (:id energiatodistus))))
 
 (defn- generate-energiatodistus-ohtp-pdf
