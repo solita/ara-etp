@@ -8,7 +8,7 @@ This application is for accredited certificate experts and public authorities.
 
 ## Dependencies
 
-[Node.js](https://nodejs.org) has to be installed. At the moment of writing the required version is Node 20, but there
+[Node.js](https://nodejs.org) has to be installed. At the moment of writing the required version is Node 24, but there
 is a `.nvmrc` file that can be used with [node version manager](https://github.com/nvm-sh/nvm) to automatically
 get the currently-required version.
 
