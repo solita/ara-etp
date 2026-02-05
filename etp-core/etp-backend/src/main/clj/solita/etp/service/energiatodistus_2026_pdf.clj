@@ -91,7 +91,7 @@
 
 (defn generate-energiatodistus-pdf
   "Generate a energiatodistus PDF and return it as a byte array."
-  [energiatodistus alakayttotarkoitukset laatimisvaiheet kieli draft?]
+  [energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotakoitukset draft?]
   (let [kieli-keyword (keyword kieli)
         pdf-bytes
 
@@ -100,7 +100,8 @@
           {:energiatodistus       energiatodistus
            :alakayttotarkoitukset alakayttotarkoitukset
            :laatimisvaiheet       laatimisvaiheet
-           :kieli                 kieli-keyword})
+           :kieli                 kieli-keyword
+           :kayttotarkoitukset    kayttotakoitukset})
         watermark-text (cond
                          draft? (draft-watermark-texts kieli)
                          (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
