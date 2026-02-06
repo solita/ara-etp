@@ -313,7 +313,37 @@
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                     Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
                                                     kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa rakennusten E-lukujen vertailun, muttei\n
-                                                    vertailua toteutuneeseen kulutukseen."}
+                                                    vertailua toteutuneeseen kulutukseen."
+        :te-rakennusvaippa-otsikko                  "Toimenpide-ehdotukset: Rakennuksen vaippa"
+        :rakennusvaippa-teksti                      "Toimenpide-ehdotusten tavoitteena on parantaa rakennuksen energiatehokkuutta, sisäympäristön laatua ja\n
+                                                     vähentää energiankäytön kasvihuonekaasupäästöjä. Vaikutukset arvioidaan rakennuksen vakioidulla käytöllä."
+        :huomiot-ymparys-otsikko                    "Huomiot – ulkoseinät, ulko-ovet ja ikkunat"
+        :te-toimenpide-muutokset                    "Toimenpide-ehdotukset ja arvioidut muutokset"
+        :te-lampo-muutos                            "Lämpö,\nostoenergian\nmuutos"
+        :te-sahko-muutos                            "Sähkö,\nostoenergian\nmuutos"
+        :te-jaahdytyden-muutos                      "Jäähdytys,\nostoenergian\nmuutos"
+        :eluvun-muutos                              "E-luku,\nmuuutos"
+        :kasvihuonepaastojen-muutos                 "Energiankäytön\nkasvihuonekaasu-\npäästöjen muutos"
+        :huomiot-pohjat-otsikko                     "Huomiot – ylä- ja alapohja"
+        :te-lammitys-ilmanvaihto-otsikko            "Toimenpide-ehdotukset: Lämmitys- ja ilmanvaihtojärjestelmät"
+        :lammitys-ilmanvaihto-teksti                "Toimenpide-ehdotusten tavoitteena on parantaa rakennuksen energiatehokkuutta,
+                                                    sisäympäristön laatua ja vähen-\ntää energiankäytöstä johtuvia kasvihuonekaasupäästöjä.
+                                                    Vaikutukset arvioidaan rakennuksen vakioidulla käytöllä.\n
+                                                    LVI-järjestelmien osalta on arvioitava voidaanko ne mukauttaa toimimaan tehokkaammilla
+                                                    lämpötila-asetuksilla"
+        :huomiot-lammitys-otsikko                   "Huomiot - tilojen ja käyttöveden lämmitysjäjestelmät"
+        :te-arvio-teknisesta-kayttoiasta-otsikko    "Arvio lämmitysjärjestelmän jäljellä olevasta teknisestä käyttöiästä"
+        :vuotta                                     "vuotta"
+        :huomiot-ilmanvaihto-otsikko                "Huomiot - ilmanvaihto- ja ilmastointijärjestelmät"
+        :te-muut-otsikko                            "Toimenpide-ehdotukset: muut"
+        :te-muut-teksti                             "Toimenpide-ehdotusten tavoitteena on parantaa rakennuksen energiatehokkuutta,
+                                                     sisäympäristön laatua ja vähen-\ntää energiankäytöstä johtuvia kasvihuonekaasupäästöjä.
+                                                     Vaikutukset arvioidaan rakennuksen vakioidulla käytöllä."
+        :te-muut-valaistus-otsikko                  "Huomiot – valaistus, jäähdytysjärjestelmät, sähköiset erillislämmitykset ja muut järjestelmät"
+        :te-suositukset-otsikko                     "Suosituksia rakennuksen käyttöön ja ylläpitoon (ei vaikuta E-lukuun)"
+
+
+        }
 
    :sv {:rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite (sv)"
         :energiatodistus-2026-subtitle              "Energicertifikat i enlighet med 2026 års lagstiftning"
@@ -348,7 +378,37 @@
         :eluku-otsikko                              "E-luku (sv)"
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                      Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
-                                                     kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa rakennusten E-lukujen vertailun, muttei\nvertailua toteutuneeseen kulutukseen. (sv)"
+                                                     kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa rakennusten E-lukujen vertailun, muttei
+                                                     \nvertailua toteutuneeseen kulutukseen. (sv)"
+        :te-rakennusvaippa-otsikko                  "Toimenpide-ehdotukset: Rakennuksen vaippa (sv)"
+        :rakennusvaippa-teksti                      "Toimenpide-ehdotusten tavoitteena on parantaa rakennuksen energiatehokkuutta, sisäympäristön laatua ja\n
+                                                     vähentää energiankäytön kasvihuonekaasupäästöjä. Vaikutukset arvioidaan rakennuksen vakioidulla käytöllä. (sv)"
+        :huomiot-ymparys-otsikko                    "Huomiot – ulkoseinät, ulko-ovet ja ikkunat (sv)"
+        :te-toimenpide-muutokset                    "Toimenpide-ehdotukset ja arvioidut muutokset (sv)"
+        :te-lampo-muutos                            "Lämpö,\nostoenergian\nmuutos (sv)"
+        :te-sahko-muutos                            "Sähkö,\nostoenergian\nmuutos (sv)"
+        :te-jaahdytyden-muutos                      "Jäähdytys,\nostoenergian\nmuutos (sv)"
+        :eluvun-muutos                              "E-luku,\nmuuutos (sv)"
+        :kasvihuonepaastojen-muutos                 "Energiankäytön\nkasvihuonekaasu-\npäästöjen muutos (sv)"
+        :huomiot-pohjat-otsikko                     "Huomiot – ylä- ja alapohja"
+
+        :te-lammitys-ilmanvaihto-otsikko            "Toimenpide-ehdotukset: Lämmitys- ja ilmanvaihtojärjestelmät(sv)"
+        :lammitys-ilmanvaihto-teksti                "Toimenpide-ehdotusten tavoitteena on parantaa rakennuksen energiatehokkuutta,
+                                                    sisäympäristön laatua ja vähen-\ntää energiankäytöstä johtuvia kasvihuonekaasupäästöjä.
+                                                    Vaikutukset arvioidaan rakennuksen vakioidulla käytöllä.\n
+                                                    LVI-järjestelmien osalta on arvioitava voidaanko ne mukauttaa toimimaan tehokkaammilla
+                                                    lämpötila-asetuksilla (sv)"
+        :huomiot-lammitys-otsikko                   "Huomiot - tilojen ja käyttöveden lämmitysjäjestelmät (sv)"
+        :te-arvio-teknisesta-kayttoiasta-otsikko    "Arvio lämmitysjärjestelmän jäljellä olevasta teknisestä käyttöiästä (sv)"
+        :vuotta                                     "vuotta (sv)"
+        :huomiot-ilmanvaihto-otsikko                "Huomiot - ilmanvaihto- ja ilmastointijärjestelmät (sv)"
+        :te-muut-otsikko                            "Huomiot – muut (sv)"
+        :te-muut-teksti                             "Toimenpide-ehdotusten tavoitteena on parantaa rakennuksen energiatehokkuutta,
+                                                     sisäympäristön laatua ja vähen-\ntää energiankäytöstä johtuvia kasvihuonekaasupäästöjä.
+                                                     Vaikutukset arvioidaan rakennuksen vakioidulla käytöllä.(sv)"
+        :te-muut-valaistus-otsikko                   "Huomiot – valaistus, jäähdytysjärjestelmät, sähköiset erillislämmitykset ja muut järjestelmät (sv)"
+        :te-suositukset-otsikko                     "Suosituksia rakennuksen käyttöön ja ylläpitoon (ei vaikuta E-lukuun) (sv)"
+
 
         }})
 

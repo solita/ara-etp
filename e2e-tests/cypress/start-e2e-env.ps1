@@ -3,9 +3,12 @@ param(
 )
 
 if ($Etp2026) {
-  $env:ETP_2026 = 'true'
+  Set-Item -Path Env:ETP_2026 -Value 'true'
 } else {
-  $env:ETP_2026 = 'false'
+  # Ensure it is completely unset
+  if (Test-Path Env:ETP_2026) {
+    Remove-Item -Path Env:ETP_2026
+  }
 }
 
 Invoke-Command -ScriptBlock {

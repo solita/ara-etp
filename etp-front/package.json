@@ -5,8 +5,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "dev": "webpack serve",
-    "storybook": "cross-env NODE_OPTIONS=--openssl-legacy-provider storybook dev -p 6006",
-    "storybook:build": "cross-env NODE_OPTIONS=--openssl-legacy-provider storybook build",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build",
     "test-storybook": "test-storybook",
     "test-storybook:update": "test-storybook --updateSnapshot",
     "test": "npx --node-options=\"--experimental-vm-modules\" jest",

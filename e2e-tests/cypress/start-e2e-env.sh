@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 set -euxo pipefail
 
-ETP_2026=false
-[[ " $* " == *" --etp2026 "* ]] && ETP_2026='true'
-export ETP_2026
+ETP_2026=
+if [[ " $* " == *" --etp2026 "* ]]; then
+  export ETP_2026='true'   # set and export only when flag is used
+else
+  unset ETP_2026           # completely unset when flag is not used
+fi
 
 # Optimised start order
 # Start building frontend

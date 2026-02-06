@@ -6,7 +6,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import GenerateJsonPlugin from 'generate-json-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import mockHeaders from './modheaders.json' assert { type: 'json' };
+import mockHeaders from './modheaders.json' with { type: 'json' };
 
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
