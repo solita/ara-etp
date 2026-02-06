@@ -10,6 +10,7 @@
             [solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia :as et-laskennallinen-ostoenergia]
             [solita.etp.service.energiatodistus-pdf.etusivu-eluku :as et-etusivu-eluku]
             [solita.etp.service.energiatodistus-pdf.etusivu-grafiikka :as et-etusivu-grafiikka]
+            [solita.etp.service.energiatodistus-pdf.koontisivu :as koontisivu]
             [solita.etp.service.energiatodistus-pdf.lahtotiedot :as et-lahtotiedot]
             [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_rakennuksen_vaippa :as te-rakennusvaippa]
             [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_lammitys_ilmanvaihto :as te-lammitys-ilmanvaihto]
@@ -98,6 +99,7 @@
                     [:div {:class "etusivu-ostoenergia-section"}
                      (et-laskennallinen-ostoenergia/ostoenergia params)
                      (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}
+                 (koontisivu/koontisivu params)
                  {:page-border? false
                   :content (et-lahtotiedot/lahtotiedot-page-content params)}]
                 (if show-toimenpide?

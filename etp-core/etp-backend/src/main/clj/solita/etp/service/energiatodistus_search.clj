@@ -90,6 +90,8 @@
    ["korvaava_energiatodistus.id as korvaava_energiatodistus_id"]
    (partial schema-contains? :perusparannuspassi-id)
    ["perusparannuspassi.id as perusparannuspassi_id"]
+   (partial schema-contains? :perusparannuspassi-valid)
+   ["perusparannuspassi.valid as perusparannuspassi_valid"]
    (partial schema-contains? :valvonta)
    ["coalesce(last_toimenpide.ongoing, false) valvonta$ongoing"
     "last_toimenpide.type_id valvonta$type_id"]})
