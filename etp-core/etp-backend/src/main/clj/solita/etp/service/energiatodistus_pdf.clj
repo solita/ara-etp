@@ -775,8 +775,8 @@
         (do
           (log/info "Generating 2026 PDF for id" id)
           (let [alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
-                kayttotakoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
+                kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
                 laatimisvaiheet (luokittelu-service/find-laatimisvaiheet db)]
-            (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf complete-energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotakoitukset true))))
+            (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf complete-energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotarkoitukset true))))
         (generate-pdf-as-input-stream complete-energiatodistus kieli true nil)))))
 
