@@ -98,10 +98,7 @@
                      (et-laskennallinen-ostoenergia/ostoenergia params)
                      (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}
                  {:page-border? false
-                  :content
-                  [:div
-                   (page-header (l :lahtotiedot-title) "")
-                   (et-lahtotiedot/lahtotiedot-page-content params)]}]
+                  :content (et-lahtotiedot/lahtotiedot-page-content params)}]
                 (if show-toimenpide?
                   [{:content
                     (te-rakennusvaippa/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)}
