@@ -342,8 +342,16 @@
         :te-muut-valaistus-otsikko                  "Huomiot – valaistus, jäähdytysjärjestelmät, sähköiset erillislämmitykset ja muut järjestelmät"
         :te-suositukset-otsikko                     "Suosituksia rakennuksen käyttöön ja ylläpitoon (ei vaikuta E-lukuun)"
 
+        :lisamerkintoja-otsikko                     "Lisämerkintöjä"
+        :lisatietoja-otsikko                        "Lisätietoja energiatehokkuudesta"
+        :lisatietoja-energiatehokkuus               "Hae tietoa toimista parantaa energiatehokkuutta ja lisätä uusiutuvan energian käyttöä"
+        :lisatietoja-urlit                          "www.motiva.fi sekä\n wwww.energiatehokaskoti.fi"
+        :lisatietoja-rahoitus                       "Rahoituksen tietopalvelu kokoaa tietoa energiatehokkuuden parantamiseen tarkoitetuista tuista ja muista\nrahoitusmuodoista"
+        :lisatietoja-energianeuvonta                "Kuluttajien energianeuvonta tarjoaa maksutonta opastusta suomaisille kotitalouksille ja taloyhtiöille.\nKuluttajatvoivat
+                                                    ottaa yhteyttä joko valtakunnalliseen Asiaa energiasta -neuvontaan tai maakunnissa toimiviin\nenergianeuvojiin. Lisätietoa osoitteessa"
+        :motiva                                     "www.motiva.fi"
 
-        }
+   }
 
    :sv {:rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite (sv)"
         :energiatodistus-2026-subtitle              "Energicertifikat i enlighet med 2026 års lagstiftning"
@@ -406,8 +414,17 @@
         :te-muut-teksti                             "Toimenpide-ehdotusten tavoitteena on parantaa rakennuksen energiatehokkuutta,
                                                      sisäympäristön laatua ja vähen-\ntää energiankäytöstä johtuvia kasvihuonekaasupäästöjä.
                                                      Vaikutukset arvioidaan rakennuksen vakioidulla käytöllä.(sv)"
-        :te-muut-valaistus-otsikko                   "Huomiot – valaistus, jäähdytysjärjestelmät, sähköiset erillislämmitykset ja muut järjestelmät (sv)"
+        :te-muut-valaistus-otsikko                  "Huomiot – valaistus, jäähdytysjärjestelmät, sähköiset erillislämmitykset ja muut järjestelmät (sv)"
         :te-suositukset-otsikko                     "Suosituksia rakennuksen käyttöön ja ylläpitoon (ei vaikuta E-lukuun) (sv)"
+
+        :lisamerkintoja-otsikko                     "Lisämerkintöjä (sv)"
+        :lisatietoja-otsikko                        "Lisätietoja energiatehokkuudesta (sv)"
+        :lisatietoja-energiatehokkuus               "Hae tietoa toimista parantaa energiatehokkuutta ja lisätä uusiutuvan energian käyttöä (sv)"
+        :lisatietoja-urlit                          "www.motiva.fi sekä\n wwww.energiatehokaskoti.fi (sv)"
+        :lisatietoja-rahoitus                       "Rahoituksen tietopalvelu kokoaa tietoa energiatehokkuuden parantamiseen tarkoitetuista tuista ja muista\nrahoitusmuodoista (sv)"
+        :lisatietoja-energianeuvonta                "Kuluttajien energianeuvonta tarjoaa maksutonta opastusta suomaisille kotitalouksille ja taloyhtiöille.\nKuluttajatvoivat
+                                                    ottaa yhteyttä joko valtakunnalliseen Asiaa energiasta -neuvontaan tai maakunnissa toimiviin\nenergianeuvojiin. Lisätietoa osoitteessa (sv)"
+        :motiva                                     "www.motiva.fi (sv)"
 
 
         }})

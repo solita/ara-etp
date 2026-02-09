@@ -357,3 +357,57 @@ h1 {
    font-weight: bold;
    padding: 5px 5px 5px 0px;
 }
+
+.lisamerkintoja h1 {
+    background-color: white;
+    color: #23323e;
+    height: auto;
+    padding: 0px;
+    font-size: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.lisamerkintoja h2 {
+    background-color: #23323e;
+    color: white;
+    padding: 2px;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.lisamerkintoja-separator {
+    background-color: #23323e;
+    padding: 12px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.lisamerkintoja dl {
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.lisamerkintoja dl div {
+    display: block;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.lisamerkintoja dl dt {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.lisamerkintoja dl dd {
+    display: inline;
+    margin: 0;
+    padding: 5px;
+}
+

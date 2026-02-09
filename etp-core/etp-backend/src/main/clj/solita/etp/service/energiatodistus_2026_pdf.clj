@@ -12,7 +12,8 @@
             [solita.etp.service.energiatodistus-pdf.etusivu-grafiikka :as et-etusivu-grafiikka]
             [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_rakennuksen_vaippa :as te-rakennusvaippa]
             [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_lammitys_ilmanvaihto :as te-lammitys-ilmanvaihto]
-            [solita.etp.service.energiatodistus-pdf.toimenpide-ehdotukset-muut :as te-muut])
+            [solita.etp.service.energiatodistus-pdf.toimenpide-ehdotukset-muut :as te-muut]
+            [solita.etp.service.energiatodistus-pdf.lisamerkintoja :as et-lisamerkintoja])
   (:import [java.io ByteArrayOutputStream]))
 
 (db/require-queries 'perusparannuspassi)
@@ -103,7 +104,11 @@
                     (te-lammitys-ilmanvaihto/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)}
                    {:content
                     (te-muut/generate-all-toimepide-ehdotukset-muut params)}]
-                  []))]
+                  [])
+                [{:page-border? false
+                  :content
+                  [:div {:class "page-section"}
+                   (et-lisamerkintoja/generate-lisamerkintoja params)]}])]
     (generate-document-html pages (:id energiatodistus))))
 
 (defn- generate-energiatodistus-ohtp-pdf
