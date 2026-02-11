@@ -391,8 +391,8 @@
                                          :draft_visible_to_paakayttaja (false? value)
 
                                          ;;New et26 booleans should be false
-                                         :h$lammitys$asetukset_tehostettavissa (false? value)
-                                         :h$iv_ilmastointi$asetukset_tehostettavissa (false? value)
+                                         :lt$rakennus_kykenee_reagoimaan_ulkoisiin_signaaleihin (false? value)
+                                         :lt$lammitys$lammonjakojarjestelma_mukautettavissa (false? value)
 
                                          ;; Other values are null
                                          (nil? value))})
