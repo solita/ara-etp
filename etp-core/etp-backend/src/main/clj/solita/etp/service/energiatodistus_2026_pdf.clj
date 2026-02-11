@@ -10,6 +10,7 @@
             [solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia :as et-laskennallinen-ostoenergia]
             [solita.etp.service.energiatodistus-pdf.etusivu-eluku :as et-etusivu-eluku]
             [solita.etp.service.energiatodistus-pdf.etusivu-grafiikka :as et-etusivu-grafiikka]
+            [solita.etp.service.energiatodistus-pdf.lahtotiedot :as et-lahtotiedot]
             [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_rakennuksen_vaippa :as te-rakennusvaippa]
             [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_lammitys_ilmanvaihto :as te-lammitys-ilmanvaihto]
             [solita.etp.service.energiatodistus-pdf.toimenpide-ehdotukset-muut :as te-muut]
@@ -96,7 +97,9 @@
                    [:div {:class "page-section"}
                     [:div {:class "etusivu-ostoenergia-section"}
                      (et-laskennallinen-ostoenergia/ostoenergia params)
-                     (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}]
+                     (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}
+                 {:page-border? false
+                  :content (et-lahtotiedot/lahtotiedot-page-content params)}]
                 (if show-toimenpide?
                   [{:content
                     (te-rakennusvaippa/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)}
@@ -121,7 +124,7 @@
 
 (defn generate-energiatodistus-pdf
   "Generate a energiatodistus PDF and return it as a byte array."
-  [db energiatodistus alakayttotarkoitukset laatimisvaiheet kieli draft?]
+  [db energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotarkoitukset draft?]
   (let [kieli-keyword (keyword kieli)
         pdf-bytes
 
@@ -131,7 +134,8 @@
            :energiatodistus       energiatodistus
            :alakayttotarkoitukset alakayttotarkoitukset
            :laatimisvaiheet       laatimisvaiheet
-           :kieli                 kieli-keyword})
+           :kieli                 kieli-keyword
+           :kayttotarkoitukset    kayttotarkoitukset})
         watermark-text (cond
                          draft? (draft-watermark-texts kieli)
                          (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)

@@ -1,6 +1,7 @@
 (ns solita.etp.service.energiatodistus-pdf.etusivu-grafiikka
   (:require
-    [solita.etp.service.localization :as loc]))
+    [solita.etp.service.localization :as loc]
+    [solita.etp.service.e-luokka :as e-luokka]))
 
 (defn arrow
   [{:keys [x y height body-width tip-width color letter numbers text-color]}]
@@ -9,7 +10,7 @@
         tw tip-width
         cy (+ y (/ h 2))
         letter-padding 5
-        numbers-x 22]
+        numbers-x 32]
     [:g
      [:polygon
       {:points (str
@@ -43,15 +44,39 @@
       numbers]]))
 
 (def arrows
-  [{:letter "A+" :numbers "&lt; A0-20%" :color "#009641" :luokka "A+"}
-   {:letter "A0" :numbers "&lt; 40" :color "#52ae32" :luokka "A0"}
-   {:letter "A" :numbers "&lt; 80" :color "#c8d302" :luokka "A"}
-   {:letter "B" :numbers "80-100" :color "#ffed00" :luokka "B"}
-   {:letter "C" :numbers "120-150" :color "#fbb900" :luokka "C"}
-   {:letter "D" :numbers "150-220" :color "#ec6608" :luokka "D"}
-   {:letter "E" :numbers "220-300" :color "#e50104" :text-color "#ffffff" :luokka "E"}
-   {:letter "F" :numbers "300-400" :color "#e40202" :text-color "#ffffff"  :luokka "F"}
-   {:letter "G" :numbers "> 400" :color "#e40202" :text-color "#ffffff" :luokka "G"}])
+  [{:letter "A+" :color "#009641" :luokka "A+"}
+   {:letter "A0" :color "#52ae32" :luokka "A0"}
+   {:letter "A" :color "#c8d302" :luokka "A"}
+   {:letter "B" :color "#ffed00" :luokka "B"}
+   {:letter "C" :color "#fbb900" :luokka "C"}
+   {:letter "D" :color "#ec6608" :luokka "D"}
+   {:letter "E" :color "#e50104" :text-color "#ffffff" :luokka "E"}
+   {:letter "F" :color "#e40202" :text-color "#ffffff" :luokka "F"}
+   {:letter "G" :color "#e40202" :text-color "#ffffff" :luokka "G"}])
+
+(defn build-ranges [raja-asteikko]
+  (into {}
+        (map-indexed
+          (fn [idx [value letter]]
+            (let [[prev _] (get raja-asteikko (dec idx))]
+              [letter
+               (if prev
+                 (str (inc prev) "-" value)
+                 (str "&lt; " value))]))
+          raja-asteikko)))
+
+(defn set-arrow-thresholds [rajat]
+  (let [ranges   (build-ranges (:raja-asteikko rajat))
+        last-val (-> rajat :raja-asteikko last first)]
+    (map
+      (fn [{:keys [letter] :as arrow}]
+        (assoc arrow :numbers
+                     (case letter
+                     "A+" "&lt; A0-20%"
+                     "A0" "&lt; 40"
+                     "G"  (str "&gt; " last-val)
+                     (get ranges letter))))
+      arrows)))
 
 (def arrow-height 26)
 (def arrow-spacing 5)
@@ -64,7 +89,7 @@
 (def svg-width (+ indicator-line-length e-luokka-indicator-margin))
 
 (defn e-luokka-indicator
-  [{:keys [e-luokka e-luku]}]
+  [{:keys [e-luokka e-luku arrows]}]
   (let [row-height (+ arrow-height arrow-spacing)
         arrow-index (first (keep-indexed (fn [i a] (when (= (:luokka a) e-luokka) i)) arrows))
         arrow-y (when arrow-index (* arrow-index row-height))
@@ -130,8 +155,9 @@
        :fill "#000000"}
       label]]))
 
-(defn stacked-arrows [{:keys [kieli e-luokka e-luku]}]
+(defn stacked-arrows [{:keys [kieli e-luokka e-luku rajat]}]
   (let [l (kieli loc/et-pdf-localization)
+        arrows (set-arrow-thresholds rajat)
         num-arrows (count arrows)
         row-height (+ arrow-height arrow-spacing)
         total-height (* row-height num-arrows)
@@ -158,12 +184,16 @@
       (concat
         arrow-elements
         [(indicator-line {:arrow-index 1 :label (l :paastoton-rakennus)})
-         (e-luokka-indicator {:e-luokka e-luokka :e-luku e-luku})]))))
+         (e-luokka-indicator {:e-luokka e-luokka :e-luku e-luku :arrows arrows})]))))
 
-(defn et-etusivu-grafiikka [{:keys [kieli energiatodistus]}]
+(defn et-etusivu-grafiikka [{:keys [kieli energiatodistus kayttotarkoitukset alakayttotarkoitukset]}]
   (let [l (kieli loc/et-pdf-localization)
         e-luokka (get-in energiatodistus [:tulokset :e-luokka])
-        e-luku (get-in energiatodistus [:tulokset :e-luku])]
+        e-luku (get-in energiatodistus [:tulokset :e-luku])
+        versio (get-in energiatodistus [:versio])
+        alakayttotarkoitus-id (get-in energiatodistus [:perustiedot :kayttotarkoitus])
+        nettoala (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
+        rajat (e-luokka/e-luokka-rajat kayttotarkoitukset alakayttotarkoitukset versio alakayttotarkoitus-id nettoala)]
     [:div {:class "etusivu-grafiikka"}
      [:div {:class "etusivu-grafiikka-otsikko"} (l :energiatehokkuusluokka-otsikko)]
-     (stacked-arrows {:kieli kieli :e-luokka e-luokka :e-luku e-luku})]))
+     (stacked-arrows {:kieli kieli :e-luokka e-luokka :e-luku e-luku :rajat rajat})]))
