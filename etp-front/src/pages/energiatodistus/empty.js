@@ -295,14 +295,19 @@ export const energiatodistus2026 = R.compose(
     },
     huomiot: {
       lammitys: {
-        'kayttoikaa-jaljella-arvio-vuosina': ValidNone(),
-        'asetukset-tehostettavissa': false
-      },
-      'iv-ilmastointi': {
-        'kayttoikaa-jaljella-arvio-vuosina': ValidNone(),
-        'asetukset-tehostettavissa': false
+        'kayttoikaa-jaljella-arvio-vuosina': ValidNone()
       }
     },
+    'toteutunut-ostoenergiankulutus': {
+      'tietojen-alkuperavuosi': ValidNone(),
+      'lisatietoja-fi': Maybe.None(),
+      'lisatietoja-sv': Maybe.None()
+    },
+    lahtotiedot: {
+      'rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin': false,
+      lammitys: { 'lammonjakojarjestelma-mukautettavissa': false }
+    },
+
     tulokset: {
       'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
         aurinkosahko: ValidNone(),

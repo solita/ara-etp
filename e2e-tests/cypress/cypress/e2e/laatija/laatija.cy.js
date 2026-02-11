@@ -507,26 +507,6 @@ context('Laatija', () => {
         );
 
         cy.get(
-          '[data-cy="huomiot.iv-ilmastointi.kayttoikaa-jaljella-arvio-vuosina"]'
-        )
-          .type('10000000000')
-          .blur();
-        cy.get('[data-cy="huomiot.iv-ilmastointi.asetukset-tehostettavissa"]')
-          .should('not.be.disabled')
-          .check({ force: true })
-          .should('be.checked');
-
-        cy.get('[data-cy="huomiot.lammitys.asetukset-tehostettavissa"]')
-          .should('not.be.disabled')
-          .check({ force: true })
-          .should('be.checked');
-        cy.get(
-          '[data-cy="huomiot.iv-ilmastointi.kayttoikaa-jaljella-arvio-vuosina"]'
-        )
-          .clear()
-          .type('25')
-          .blur();
-        cy.get(
           '[data-cy="tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko"]'
         )
           .clear()

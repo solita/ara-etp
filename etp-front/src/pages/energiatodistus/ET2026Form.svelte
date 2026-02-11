@@ -43,6 +43,7 @@
   import Suositukset from './form-parts/huomiot/suositukset';
 
   import Area from './form-parts/units/area';
+  import Checkbox from '@Component/Checkbox/Checkbox.svelte';
 
   export let energiatodistus;
   export let inputLanguage;
@@ -201,7 +202,7 @@
   id="laskennan-lahtotiedot"
   text={$_('energiatodistus.lahtotiedot.header')} />
 
-<div class="flex w-full">
+<div class="w-full flex-col">
   <div class="mb-12 w-1/3">
     <Input
       {disabled}
@@ -210,6 +211,19 @@
       bind:model={energiatodistus}
       path={['lahtotiedot', 'lammitetty-nettoala']}
       unit={Area} />
+  </div>
+  <div class="w-full py-4">
+    <Checkbox
+      bind:model={energiatodistus}
+      lens={R.lensPath([
+        'lahtotiedot',
+        'rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin'
+      ])}
+      label={$_(
+        'energiatodistus.lahtotiedot.rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin'
+      )}
+      dataCy="energiatodistus.lahtotiedot.rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin"
+      {disabled} />
   </div>
 </div>
 
@@ -223,6 +237,7 @@
   {inputLanguage} />
 
 <Lammitysjarjestelma
+  versio={2026}
   {disabled}
   {schema}
   bind:energiatodistus
@@ -272,7 +287,12 @@
   {inputLanguage}
   bind:energiatodistus />
 <OstetutPolttoaineet {disabled} {schema} bind:energiatodistus />
-<ToteutunutOstoenergia {disabled} {schema} bind:energiatodistus />
+<ToteutunutOstoenergia
+  {disabled}
+  {schema}
+  bind:energiatodistus
+  {inputLanguage}
+  versio={2026} />
 
 <HR />
 <H2

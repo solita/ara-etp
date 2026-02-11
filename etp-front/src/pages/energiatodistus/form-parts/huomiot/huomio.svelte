@@ -24,18 +24,8 @@
 
 <H3 text={$_(`${base}.header`)} />
 
-{#if R.and(R.equals(versio, 2026), R.includes( huomio, ['lammitys', 'iv-ilmastointi'] ))}
+{#if R.and(R.equals(versio, 2026), R.includes(huomio, ['lammitys']))}
   <div class="my-4 flex flex-col gap-x-8">
-    <div class="w-full py-4">
-      <Checkbox
-        bind:model={energiatodistus}
-        lens={R.lensPath(['huomiot', huomio, 'asetukset-tehostettavissa'])}
-        dataCy={`huomiot.${huomio}.asetukset-tehostettavissa`}
-        label={$_(
-          `energiatodistus.huomiot.${huomio}.nykyinen-jarjestelma-tehostettavissa`
-        )}
-        {disabled} />
-    </div>
     <div class="py-4 lg:w-2/5">
       <Input
         {disabled}

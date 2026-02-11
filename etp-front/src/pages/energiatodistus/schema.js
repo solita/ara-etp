@@ -338,12 +338,16 @@ export const v2026 = R.mergeDeepLeft(
     huomiot: {
       lammitys: {
         'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
-        //'asetukset-tehostettavissa' Booleans are not in schema
-      },
-      'iv-ilmastointi': {
-        'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
-        //'asetukset-tehostettavissa' Booleans are not in schema
       }
+    },
+    //lahtotiedot: {
+    //  'rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin': Booleans are not in schema
+    //  lammitys: {'lammonjakojarjestelma-mukautettavissa': Booleans are not in schema}
+    //},
+
+    'toteutunut-ostoenergiankulutus': {
+      'tietojen-alkuperavuosi': IntegerNonNegative,
+      lisatietoja: String(2, 500)
     },
     tulokset: {
       'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {

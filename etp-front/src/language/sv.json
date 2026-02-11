@@ -617,6 +617,7 @@
       "ala": "A",
       "U": "U",
       "lammitetty-nettoala": "Uppvärmd nettoarea",
+      "rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin": "Rakennus kykenee reagoimaan ulkoisiin signaaleihin (sv)",
       "rakennusvaippa": {
         "header": "Klimatskal",
         "label-context": "Klimatskal",
@@ -795,6 +796,7 @@
           "id": "Värmedistribution",
           "kuvaus": "Beskrivning av värmedistributionen"
         },
+        "lammonjakojarjestelma-mukautettavissa": "Rakennuksen sisäinen lämmönjakojärjestelmä kykenee toimimaan alhaisissa tai tapauksen mukaan tehokkaammassa lämpötilassa (sv)",
         "tuotonhyotysuhde": "Verknings\u00ADgrad för produktionen",
         "jaonjaluovutuksenhyotysuhde": "Verknings-graden för distribution och avgivning",
         "lampokerroin": "Temperatur-koefficient",
@@ -1132,7 +1134,9 @@
       "polttoaineet-vuosikulutus-yhteensa": "Bränsle (kWh/år)",
       "polttoaineet-neliovuosikulutus-yhteensa": "Bränsle (kWh/(m²år))",
       "toteutunut-vuosikulutus-yhteensä": "Totalt (kWh/år)",
-      "toteutunut-neliovuosikulutus-yhteensä": "Totalt (kWh/(m²år))"
+      "toteutunut-neliovuosikulutus-yhteensä": "Totalt (kWh/(m²år))",
+      "tietojen-alkuperavuosi": "Tiedot ovat vuodelta (sv)",
+      "lisatietoja": "Lisätietoja (sv)"
     },
     "huomiot": {
       "header": {
@@ -1161,8 +1165,6 @@
         "header": "Anmärkningar - ventilations- och luftkonditioneringssystem",
         "label-context": "$unused",
         "teksti": "Anmärkningar - ventilations- och luftkonditioneringssystem",
-        "kayttoikaa-jaljella-arvio-vuosina": "Arvio ilmanvaihtojärjestelmän jäljellä olevasta teknisestä käyttöiästä (sv)",
-        "nykyinen-jarjestelma-tehostettavissa": "Nykyinen ilmanvaihtojärjestelmä voidaan mukauttaa toimimaan tehokkaammilla lämpötila-asetuksilla? (sv)",
         "toimenpide": [
           {
             "label-context": "Anmärkningar / Ventilations- och luftkonditioneringssystem",
@@ -1194,7 +1196,6 @@
         "label-context": "$unused",
         "teksti": "Anmärkningar, uppvärmningssystem för utrymmen och tappvatten",
         "kayttoikaa-jaljella-arvio-vuosina": "Arvio lämmitysjärjestelmän jäljellä olevasta teknisestä käyttöiästä (sv)",
-        "nykyinen-jarjestelma-tehostettavissa": "Tilojen nykyinen lämmitysjärjestelmä voidaan mukauttaa toimimaan tehokkaammilla lämpötila-asetuksilla? (sv)",
         "toimenpide": [
           {
             "label-context": "Anmärkningar / Uppvärmningssystem",

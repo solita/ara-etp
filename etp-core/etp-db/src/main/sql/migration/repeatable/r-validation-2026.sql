@@ -77,7 +77,9 @@ values
 (2026, 'lt$lkvn_kaytto$lammitysenergian_nettotarve', 64, false),
 
 (2026, 'h$ymparys$teksti_fi', 65, false),
-(2026, 'h$ymparys$teksti_sv', 66, false)
+(2026, 'h$ymparys$teksti_sv', 66, false),
+
+(2026, 'to$tietojen_alkuperavuosi', 67, false)
 
 on conflict (column_name, versio) do update set
   ordinal = excluded.ordinal,

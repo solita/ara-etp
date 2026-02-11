@@ -1,13 +1,11 @@
 (ns solita.etp.schema.energiatodistus
-  (:require [solita.common.map :as m]
+  (:require [flathead.deep :as deep]
             [schema.core :as schema]
-            [solita.etp.schema.common :as common-schema]
+            [solita.common.map]
+            [solita.common.map :as map]
             [solita.common.schema :as xschema]
-            [solita.etp.schema.geo :as geo-schema]
-            [clojure.string :as str]
-            [solita.etp.exception :as exception]
-            [solita.common.map :as map])
-  (:import (schema.core Predicate EnumSchema Constrained)))
+            [solita.etp.schema.common :as common-schema]
+            [solita.etp.schema.geo :as geo-schema]))
 
 (def YritysPostinumero common-schema/String8)
 
@@ -150,8 +148,8 @@
    :lampo common-schema/NonNegative})
 
 (def Kuukausierittely (schema/maybe
-                       {:tuotto (xschema/optional-properties UusiutuvatOmavaraisenergiat)
-                        :kulutus (xschema/optional-properties SahkoLampo)}))
+                        {:tuotto  (xschema/optional-properties UusiutuvatOmavaraisenergiat)
+                         :kulutus (xschema/optional-properties SahkoLampo)}))
 
 (def OptionalKuukausierittely (schema/constrained [Kuukausierittely]
                                                   #(contains? #{0 12} (count %))
@@ -191,7 +189,7 @@
     :valaistus         common-schema/NonNegative,
     :kvesi             common-schema/NonNegative},
 
-   :laskentatyokalu common-schema/String60})
+   :laskentatyokalu  common-schema/String60})
 
 (def ToteutunutOstoenergiankulutus
   {:ostettu-energia
@@ -202,15 +200,15 @@
     :kaukojaahdytys-vuosikulutus  common-schema/NonNegative},
 
    :ostetut-polttoaineet
-     {:kevyt-polttooljy      common-schema/NonNegative,
-      :pilkkeet-havu-sekapuu common-schema/NonNegative,
-      :pilkkeet-koivu        common-schema/NonNegative,
-      :puupelletit           common-schema/NonNegative,
-      :muu
-       [{:nimi           common-schema/String30,
-         :yksikko        common-schema/String12,
-         :muunnoskerroin common-schema/NonNegative,
-         :maara-vuodessa common-schema/NonNegative}]},
+   {:kevyt-polttooljy      common-schema/NonNegative,
+    :pilkkeet-havu-sekapuu common-schema/NonNegative,
+    :pilkkeet-koivu        common-schema/NonNegative,
+    :puupelletit           common-schema/NonNegative,
+    :muu
+    [{:nimi           common-schema/String30,
+      :yksikko        common-schema/String12,
+      :muunnoskerroin common-schema/NonNegative,
+      :maara-vuodessa common-schema/NonNegative}]},
 
    :sahko-vuosikulutus-yhteensa          common-schema/NonNegative,
    :kaukolampo-vuosikulutus-yhteensa     common-schema/NonNegative,
@@ -297,19 +295,21 @@
 
 (def EnergiatodistusSave2026
   (-> EnergiatodistusSave2018
-      (assoc-in [:perustiedot :havainnointikayntityyppi-id] common-schema/Key)
-
-      (assoc-in [:huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina] common-schema/IntNonNegative)
-      (assoc-in [:huomiot :lammitys :asetukset-tehostettavissa] schema/Bool)
-      (assoc-in [:huomiot :iv-ilmastointi :kayttoikaa-jaljella-arvio-vuosina] common-schema/IntNonNegative)
-      (assoc-in [:huomiot :iv-ilmastointi :asetukset-tehostettavissa] schema/Bool)
-
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko] common-schema/NonNegative)
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo] common-schema/NonNegative)
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko] common-schema/NonNegative)
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu] common-schema/NonNegative)
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo] common-schema/NonNegative)
-      (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko] common-schema/NonNegative)
+      (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key}
+                        :huomiot                        {:lammitys {:kayttoikaa-jaljella-arvio-vuosina common-schema/IntNonNegative}}
+                        :lahtotiedot                    {:rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin schema/Bool
+                                                         :lammitys
+                                                         {:lammonjakojarjestelma-mukautettavissa schema/Bool}}
+                        :toteutunut-ostoenergiankulutus {:tietojen-alkuperavuosi common-schema/Year
+                                                         :lisatietoja-fi         common-schema/String500
+                                                         :lisatietoja-sv         common-schema/String500}
+                        :tulokset                       {:uusiutuvat-omavaraisenergiat-kokonaistuotanto
+                                                         {:aurinkosahko common-schema/NonNegative
+                                                          :aurinkolampo common-schema/NonNegative
+                                                          :tuulisahko   common-schema/NonNegative
+                                                          :lampopumppu  common-schema/NonNegative
+                                                          :muulampo     common-schema/NonNegative
+                                                          :muusahko     common-schema/NonNegative}}})
       xschema/optional-properties))
 
 (defn ->EnergiatodistusSaveExternal [schema]
@@ -327,21 +327,21 @@
   (->EnergiatodistusSaveExternal EnergiatodistusSave2018))
 ;; TODO: AE-2585: Decide external 2026 API details
 #_(def EnergiatodistusSave2026External
-  (->EnergiatodistusSaveExternal EnergiatodistusSave2026))
+    (->EnergiatodistusSaveExternal EnergiatodistusSave2026))
 
 (def Energiatehokkuus
-  {:e-luku (schema/maybe schema/Num)
+  {:e-luku   (schema/maybe schema/Num)
    :e-luokka (schema/maybe schema/Str)})
 
 (def Status
-  {:tila-id common-schema/Key
-   :allekirjoitusaika (schema/maybe common-schema/Instant)
-   :voimassaolo-paattymisaika (schema/maybe common-schema/Instant)
-   :laskutusaika (schema/maybe common-schema/Instant)
+  {:tila-id                     common-schema/Key
+   :allekirjoitusaika           (schema/maybe common-schema/Instant)
+   :voimassaolo-paattymisaika   (schema/maybe common-schema/Instant)
+   :laskutusaika                (schema/maybe common-schema/Instant)
    :korvaava-energiatodistus-id (schema/maybe common-schema/Key)})
 
 (def Laatija
-  {:laatija-id common-schema/Key
+  {:laatija-id       common-schema/Key
    :laatija-fullname schema/Str})
 
 (defn energiatodistus-versio [versio save-schema]
