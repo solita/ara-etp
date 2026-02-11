@@ -32,6 +32,7 @@
               :laatija-fullname
               :laatija-id
               :perusparannuspassi-id
+              :perusparannuspassi-valid
               :korvaava-energiatodistus-id
               :versio
               :tila-id

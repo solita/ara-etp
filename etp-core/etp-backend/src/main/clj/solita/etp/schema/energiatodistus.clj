@@ -364,7 +364,8 @@
 (def Energiatodistus2026
   "Energiatodistus 2026"
   (assoc (energiatodistus-versio 2026 EnergiatodistusSave2026)
-    :perusparannuspassi-id (schema/maybe common-schema/Key)))
+    :perusparannuspassi-id (schema/maybe common-schema/Key)
+    :perusparannuspassi-valid (schema/maybe schema/Bool)))
 
 (defn versio? [versio et] (-> et :versio (= versio)))
 

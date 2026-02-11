@@ -26,11 +26,11 @@
   (t/is (= (service/select {})
            "select energiatodistus.*"))
   (t/is (= (service/select energiatodistus-schema/Energiatodistus)
-           "select energiatodistus.*,\nfullname(kayttaja.*) laatija_fullname,\nkorvaava_energiatodistus.id as korvaava_energiatodistus_id,\nperusparannuspassi.id as perusparannuspassi_id"))
+           "select energiatodistus.*,\nfullname(kayttaja.*) laatija_fullname,\nkorvaava_energiatodistus.id as korvaava_energiatodistus_id,\nperusparannuspassi.id as perusparannuspassi_id,\nperusparannuspassi.valid as perusparannuspassi_valid"))
   (t/is (= (service/select energiatodistus-public-schema/Energiatodistus)
            "select energiatodistus.*,\nkorvaava_energiatodistus.id as korvaava_energiatodistus_id"))
   (t/is (= (service/select valvonta-schema/Energiatodistus+Valvonta)
-           "select energiatodistus.*,\nfullname(kayttaja.*) laatija_fullname,\nkorvaava_energiatodistus.id as korvaava_energiatodistus_id,\nperusparannuspassi.id as perusparannuspassi_id,\ncoalesce(last_toimenpide.ongoing, false) valvonta$ongoing,\nlast_toimenpide.type_id valvonta$type_id")))
+           "select energiatodistus.*,\nfullname(kayttaja.*) laatija_fullname,\nkorvaava_energiatodistus.id as korvaava_energiatodistus_id,\nperusparannuspassi.id as perusparannuspassi_id,\nperusparannuspassi.valid as perusparannuspassi_valid,\ncoalesce(last_toimenpide.ongoing, false) valvonta$ongoing,\nlast_toimenpide.type_id valvonta$type_id")))
 
 (defn sign-energiatodistukset! [laatija-id-et-id-pairs]
   (doseq [[laatija-id energiatodistus-id] laatija-id-et-id-pairs]

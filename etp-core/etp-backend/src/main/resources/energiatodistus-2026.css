@@ -14,6 +14,10 @@ body {
     font-size: 14px;
 }
 
+.mock-data {
+    background-color: rgb(240, 0, 0);
+}
+
 .page {
     width: 210mm;
     height: 297mm;
@@ -205,6 +209,78 @@ h1 {
     margin-bottom: 20px;
 }
 
+h2 {
+    font-size: 13pt;
+    color: #23323e;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 0mm;
+    margin-bottom: 2mm;
+}
+
+dt {
+    font-weight: bold;
+    color: #23323e;
+}
+
+strong {
+    font-weight: bold;
+    color: #23323e;
+}
+
+dl {
+    margin-top: 0;
+    margin-bottom: 2mm;
+}
+
+dl.table-description-list {
+    display: table;
+    width: 100%;
+}
+
+dl.table-description-list div {
+    display: table-row;
+}
+
+dl.table-description-list div.nontabular-row {
+    display: inline;
+}
+
+dl.table-description-list dt,
+dl.table-description-list dd {
+    display: table-cell;
+}
+
+table.common-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+table.common-table thead > tr > th {
+    font-weight: bold;
+    color: #23323e;
+    text-align: center;
+    vertical-align: bottom;
+}
+
+table.common-table tbody th {
+    border: 0.7px solid #ced4dd;
+    border-left: none;
+    text-align: left;
+    font-weight: normal;
+    color: #2a3b49;
+}
+
+table.common-table td {
+    border: 0.7px solid #ced4dd;
+    text-align: center;
+}
+
+table.common-table td:last-child {
+    border-right: none;
+}
+
 .id-string {
     display: none;
 }
@@ -354,8 +430,63 @@ h1 {
 }
 
 .etusivu-grafiikka-otsikko {
-   font-weight: bold;
-   padding: 5px 5px 5px 0px;
+    font-weight: bold;
+    padding: 5px 5px 5px 0px;
+}
+
+.koontisivu #koontisivu-yleiset-tiedot {
+    height: 142.5mm;
+}
+
+.koontisivu #koontisivu-suuruudet {
+    margin-bottom: 2mm;
+}
+
+.koontisivu #koontisivu-suuruudet dl, dt, dd {
+    display: inline;
+    text-align: left;
+}
+
+.koontisivu #koontisivu-suuruudet dt {
+    /* width: 40mm; */
+}
+
+.koontisivu #koontisivu-suuruudet dd {
+    width: 40mm;
+    margin-right: 10mm;
+}
+
+.koontisivu #koontisivu-suuruudet div {
+    margin-top: 3mm;
+}
+
+.koontisivu #koontisivu-lammonjakojarjestelma {
+    width: 164mm;
+}
+
+.koontisivu #toteutunut-energia-info {
+    margin-top: 2mm;
+    padding: 1mm;
+    background-color: #f3f4f7;
+}
+
+.koontisivu #toteutunut-energia-info p {
+    margin: 0;
+}
+.koontisivu #koontisivu-keskeiset-toimenpiteet-section {
+    height: 90mm;
+}
+
+.koontisivu #koontisivu-keskeiset-toimenpiteet {
+    height: 52mm;
+}
+
+.koontisivu #koontisivu-havaintokaynti-tyokalu {
+    height: 16mm;
+}
+
+.koontisivu #koontisivu-laatijan-tiedot {
+    height: 16mm;
 }
 
 /* =====================================================

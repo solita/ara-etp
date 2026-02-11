@@ -106,7 +106,8 @@
 (defn complete-energiatodistus
   [energiatodistus {:keys [postinumerot kielisyydet laatimisvaiheet
                            kayttotarkoitukset alakayttotarkoitukset
-                           ilmanvaihtotyypit lammitysmuodot lammonjaot]}]
+                           ilmanvaihtotyypit lammitysmuodot lammonjaot
+                           havainnointikayntityypit]}]
   (with-precision 20
     (let [{:keys [versio]} energiatodistus
           postinumero (find-by-id postinumerot (-> energiatodistus
@@ -148,8 +149,12 @@
                             :lammonjako
                             :id)
           use-lammonjako-kuvaus? (luokittelu/lammonjako-kuvaus-required?
-                                  energiatodistus)
+                                   energiatodistus)
           lammonjako (find-by-id lammonjaot lammonjako-id)
+          havainnointikayntityyppi-id (-> energiatodistus
+                                          :perustiedot
+                                          :havainnointikayntityyppi-id)
+          havainnointikayntityyppi (find-by-id havainnointikayntityypit havainnointikayntityyppi-id)
           ;; Käyttötarkoitus is actually alakäyttötarkoitus in database
           alakayttotarkoitus-id (-> energiatodistus
                                     :perustiedot
@@ -168,6 +173,8 @@
           (assoc-in [:perustiedot :kieli-sv] (:label-sv kielisyys))
           (assoc-in [:perustiedot :laatimisvaihe-fi] (:label-fi laatimisvaihe))
           (assoc-in [:perustiedot :laatimisvaihe-sv] (:label-sv laatimisvaihe))
+          (assoc-in [:perustiedot :havainnointikayntityyppi-fi] (:label-fi havainnointikayntityyppi))
+          (assoc-in [:perustiedot :havainnointikayntityyppi-sv] (:label-sv havainnointikayntityyppi))
           (assoc-in [:perustiedot :alakayttotarkoitus-fi] (:label-fi alakayttotarkoitus))
           (assoc-in [:perustiedot :alakayttotarkoitus-sv] (:label-sv alakayttotarkoitus))
           (assoc-in [:perustiedot :paakayttotarkoitus-id] paakayttotarkoitus-id)
@@ -513,16 +520,17 @@
                         [:lahtotiedot :lammitys :lammin-kayttovesi :lampohavio-lammittamaton-tila])))))
 
 (defn luokittelut [db]
-  {:postinumerot          (geo/find-all-postinumerot db)
-   :kielisyydet           (kielisyys/find-kielisyys db)
-   :laatimisvaiheet       (laatimisvaihe/find-laatimisvaiheet db)
-   :kayttotarkoitukset    (into {} (map #(vector % (kayttotarkoitus-service/find-kayttotarkoitukset db %)))
-                                [2013 2018])
-   :alakayttotarkoitukset (into {} (map #(vector % (kayttotarkoitus-service/find-alakayttotarkoitukset db %)))
-                                [2013 2018])
-   :ilmanvaihtotyypit     (luokittelu/find-ilmanvaihtotyypit db)
-   :lammitysmuodot        (luokittelu/find-lammitysmuodot db)
-   :lammonjaot            (luokittelu/find-lammonjaot db)})
+  {:postinumerot             (geo/find-all-postinumerot db)
+   :kielisyydet              (kielisyys/find-kielisyys db)
+   :laatimisvaiheet          (laatimisvaihe/find-laatimisvaiheet db)
+   :kayttotarkoitukset       (into {} (map #(vector % (kayttotarkoitus-service/find-kayttotarkoitukset db %)))
+                                   [2013 2018])
+   :alakayttotarkoitukset    (into {} (map #(vector % (kayttotarkoitus-service/find-alakayttotarkoitukset db %)))
+                                   [2013 2018])
+   :ilmanvaihtotyypit        (luokittelu/find-ilmanvaihtotyypit db)
+   :lammitysmuodot           (luokittelu/find-lammitysmuodot db)
+   :lammonjaot               (luokittelu/find-lammonjaot db)
+   :havainnointikayntityypit (luokittelu/find-havainnointikayntityypit db)})
 
 (defn find-complete-energiatodistus
   ([db id]
