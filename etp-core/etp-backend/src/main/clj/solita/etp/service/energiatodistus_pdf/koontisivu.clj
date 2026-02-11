@@ -103,7 +103,11 @@
          [:dt (l :havainnointikaynti-ajankohta)]
          [:dd (str (-> energiatodistus :perustiedot :havainnointikaynti)
                    " "
-                   (-> energiatodistus :perustiedot :havainnointikayntityyppi-id (or (l :havainnointikayntityyppi-ei-asetettu))))]]
+                   (-> energiatodistus
+                       :perustiedot
+                       (get-in [(kieli {:fi :havainnointikayntityyppi-fi
+                                        :sv :havainnointikayntityyppi-sv})])
+                       (or (l :havainnointikayntityyppi-ei-asetettu))))]]
         [:div
          [:dt (l :laskentatyokalu-nimi-versio)]
          [:dd (-> energiatodistus :tulokset :laskentatyokalu)]]]]
