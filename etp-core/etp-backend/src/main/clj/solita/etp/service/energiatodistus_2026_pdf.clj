@@ -99,9 +99,7 @@
                     [:div {:class "etusivu-ostoenergia-section"}
                      (et-laskennallinen-ostoenergia/ostoenergia params)
                      (et-laskennallinen-ostoenergia/ostoenergia-tiedot params)]]]}
-                 (koontisivu/koontisivu params)
-                 {:page-border? false
-                  :content (et-lahtotiedot/lahtotiedot-page-content params)}]
+                 (koontisivu/koontisivu params)]
                 (if show-toimenpide?
                   [{:content
                     (te-rakennusvaippa/generate-all-toimepide-ehdotukset-rakennuksen-vaippa params)}
@@ -111,6 +109,8 @@
                     (te-muut/generate-all-toimepide-ehdotukset-muut params)}]
                   [])
                 [{:page-border? false
+                  :content (et-lahtotiedot/lahtotiedot-page-content params)}
+                 {:page-border? false
                   :content
                   [:div {:class "page-section"}
                    (et-lisamerkintoja/generate-lisamerkintoja params)]}])]
