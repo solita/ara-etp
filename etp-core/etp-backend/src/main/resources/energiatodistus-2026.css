@@ -762,6 +762,12 @@ table.common-table td:last-child {
 .tulokset-table td:first-child {
     text-align: left;
     color: #23323e;
+    border-left: none;
+}
+
+.tulokset-table th:last-child,
+.tulokset-table td:last-child {
+    border-right: none;
 }
 
 .tulokset-table thead th {
@@ -804,8 +810,7 @@ table.common-table td:last-child {
     background-color: white;
 }
 
-.tulokset-indent {
-    padding-left: 18px;
+.tulokset-table td.tulokset-indent {
+    padding-left: 23px;
     font-weight: bold;
 }
-
