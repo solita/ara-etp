@@ -134,12 +134,12 @@
       bind:model={energiatodistus}
       lens={R.compose(
         lammonjakoLens,
-        R.lensProp('lammonjakojarjestelma-mukautettavissa')
+        R.lensProp('lammonjako-lampotilajousto')
       )}
       label={$_(
         'energiatodistus.lahtotiedot.lammitys.lammonjakojarjestelma-mukautettavissa'
       )}
-      dataCy="energiatodistus.lahtotiedot.lammitys.lammonjakojarjestelma-mukautettavissa"
+      dataCy="energiatodistus.lahtotiedot.lammitys.lammonjako-lampotilajousto"
       {disabled} />
   </div>
 {/if}

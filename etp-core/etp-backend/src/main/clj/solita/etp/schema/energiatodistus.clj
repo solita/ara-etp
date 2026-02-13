@@ -307,9 +307,9 @@
 (def EnergiatodistusSave2026
   (-> EnergiatodistusSave2018
       (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key}
-                        :lahtotiedot                    {:rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin schema/Bool
+                        :lahtotiedot                    {:energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin schema/Bool
                                                          :lammitys
-                                                         {:lammonjakojarjestelma-mukautettavissa schema/Bool}}
+                                                         {:lammonjako-lampotilajousto schema/Bool}}
                         :toteutunut-ostoenergiankulutus {:tietojen-alkuperavuosi common-schema/Year
                                                          :lisatietoja-fi         common-schema/String500
                                                          :lisatietoja-sv         common-schema/String500}

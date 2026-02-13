@@ -217,12 +217,12 @@
       bind:model={energiatodistus}
       lens={R.lensPath([
         'lahtotiedot',
-        'rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin'
+        'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin'
       ])}
       label={$_(
         'energiatodistus.lahtotiedot.rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin'
       )}
-      dataCy="energiatodistus.lahtotiedot.rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin"
+      dataCy="energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin"
       {disabled} />
   </div>
 </div>

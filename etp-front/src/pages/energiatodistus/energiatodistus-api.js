@@ -33,8 +33,8 @@ const deserializer = {
     uudisrakennus: Maybe.get
   },
   lahtotiedot: {
-    'rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin': Maybe.get,
-    lammitys: { 'lammonjakojarjestelma-mukautettavissa': Maybe.get }
+    'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': Maybe.get,
+    lammitys: { 'lammonjako-lampotilajousto': Maybe.get }
   }
 };
 

@@ -334,8 +334,8 @@ export const energiatodistus2026 = _ =>
         'lisatietoja-sv': Maybe.None()
       },
       lahtotiedot: {
-        'rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin': false,
-        lammitys: { 'lammonjakojarjestelma-mukautettavissa': false }
+        'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': false,
+        lammitys: { 'lammonjako-lampotilajousto': false }
       },
 
       tulokset: {

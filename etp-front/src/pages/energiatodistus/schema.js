@@ -348,6 +348,9 @@ export const v2013 = R.compose(
   R.dissocPath(['perustiedot', 'laatimisvaihe'])
 )(v2018);
 
+/*
+Note: booleans are not in the frontend's schemas. For example lt$lammitys$lammonjako_lampotilajousto is not.
+ */
 export const v2026 = R.mergeDeepRight(
   v2018,
   {
@@ -363,11 +366,6 @@ export const v2026 = R.mergeDeepRight(
       ymparys: Huomio2026,
       'alapohja-ylapohja': Huomio2026
     },
-    //lahtotiedot: {
-    //  'rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin': Booleans are not in schema
-    //  lammitys: {'lammonjakojarjestelma-mukautettavissa': Booleans are not in schema}
-    //},
-
     'toteutunut-ostoenergiankulutus': {
       'tietojen-alkuperavuosi': IntegerNonNegative,
       lisatietoja: String(2, 500)
