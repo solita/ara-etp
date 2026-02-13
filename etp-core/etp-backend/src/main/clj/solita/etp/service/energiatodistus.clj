@@ -127,14 +127,14 @@
     (map #(flat/flat->tree #"\$" %))))
 
 (defn replace-abbreviation->fullname [path]
-  (let [;; This is important so that to is tried before t for example.
-        db-dbreviations-sorted (sort-by (comp count name val) > db-abbreviations)]
+  (let [;; This is important so that "to" is tried before "t" for example.
+        db-abbreviations-sorted (sort-by (comp count name val) > db-abbreviations)]
     (reduce (fn [result [fullname abbreviation]]
               (if (str/starts-with? result (name abbreviation))
                 (reduced (str/replace-first
                            result (name abbreviation) (name fullname)))
                 result))
-            path db-dbreviations-sorted)))
+            path db-abbreviations-sorted)))
 
 (defn to-property-name [column-name]
   (-> column-name
