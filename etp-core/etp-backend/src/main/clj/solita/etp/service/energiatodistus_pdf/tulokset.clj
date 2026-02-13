@@ -210,10 +210,10 @@
 (defn- e-luku
   [energiatodistus l]
   (let [e-luku (get-in energiatodistus [:tulokset :e-luku])]
-    [:div {:class "tulokset-pill-row"}
-     [:div {:class "tulokset-pill"}
+    [:div {:class "tulokset-eluku-row"}
+     [:div {:class "tulokset-eluku-banner"}
       (l :eluku-otsikko)
-      [:span {:class "tulokset-pill-value"} (fmt e-luku)]
+      [:span {:class "tulokset-eluku-value"} (fmt e-luku)]
       "kWh/m²/vuosi"]]))
 
 (defn tulokset-page-content
