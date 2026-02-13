@@ -351,37 +351,31 @@ export const v2013 = R.compose(
 /*
 Note: booleans are not in the frontend's schemas. For example lt$lammitys$lammonjako_lampotilajousto is not.
  */
-export const v2026 = R.mergeDeepRight(
-  v2018,
-  {
-    huomiot: {
-      'iv-ilmastointi': Huomio2026,
-      'valaistus-muut': Huomio2026,
-      lammitys: R.mergeDeepRight(
-        Huomio2026,
-        {
-          'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
-        }
-      ),
-      ymparys: Huomio2026,
-      'alapohja-ylapohja': Huomio2026
-    },
-    'toteutunut-ostoenergiankulutus': {
-      'tietojen-alkuperavuosi': IntegerNonNegative,
-      lisatietoja: String(2, 500)
-    },
-    tulokset: {
-      'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
-        aurinkosahko: IntegerNonNegative,
-        aurinkolampo: IntegerNonNegative,
-        tuulisahko: IntegerNonNegative,
-        lampopumppu: IntegerNonNegative,
-        muulampo: IntegerNonNegative,
-        muusahko: IntegerNonNegative
-      }
+export const v2026 = R.mergeDeepRight(v2018, {
+  huomiot: {
+    'iv-ilmastointi': Huomio2026,
+    'valaistus-muut': Huomio2026,
+    lammitys: R.mergeDeepRight(Huomio2026, {
+      'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
+    }),
+    ymparys: Huomio2026,
+    'alapohja-ylapohja': Huomio2026
+  },
+  'toteutunut-ostoenergiankulutus': {
+    'tietojen-alkuperavuosi': IntegerNonNegative,
+    lisatietoja: String(2, 500)
+  },
+  tulokset: {
+    'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
+      aurinkosahko: IntegerNonNegative,
+      aurinkolampo: IntegerNonNegative,
+      tuulisahko: IntegerNonNegative,
+      lampopumppu: IntegerNonNegative,
+      muulampo: IntegerNonNegative,
+      muusahko: IntegerNonNegative
     }
   }
-);
+});
 
 export const redefineNumericValidation = (schema, constraint) => {
   const path = R.append(R.__, R.split('.', constraint.property));
