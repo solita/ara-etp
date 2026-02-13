@@ -679,3 +679,134 @@ table.common-table td:last-child {
     padding: 5px;
 }
 
+/* =====================================================
+   Tulokset (E-luvun laskennan tulokset) page styles
+   ===================================================== */
+
+.tulokset-page {
+    padding: 0;
+}
+
+.tulokset-page-title {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+    margin: 0 0 8px 0;
+    color: #23323e;
+    text-transform: uppercase;
+}
+
+.tulokset-pill-row {
+    display: block;
+    margin: 4px 0 10px;
+}
+
+.tulokset-pill {
+    background-color: #2f3a46;
+    color: white;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-size: 13px;
+    display: inline;
+}
+
+.tulokset-pill-value {
+    padding: 0 6px;
+    display: inline;
+}
+
+.tulokset-content {
+    font-size: 11px;
+    line-height: 1.35;
+    color: #111;
+}
+
+.tulokset-section {
+    margin: 8px 0 10px;
+}
+
+.tulokset-section-bar {
+    background-color: #2f3a46;
+    color: white;
+    padding: 5px 8px;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    margin: 0;
+}
+
+.tulokset-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
+    font-size: 11px;
+    table-layout: fixed;
+}
+
+.tulokset-table th,
+.tulokset-table td {
+    padding: 4px 6px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.tulokset-table th {
+    color: #23323e;
+    border: none;
+}
+
+.tulokset-table td {
+    color: #111;
+    border: 1px solid #cfd6de;
+}
+
+.tulokset-table th:first-child,
+.tulokset-table td:first-child {
+    text-align: left;
+    color: #23323e;
+}
+
+.tulokset-table thead th {
+    border-bottom: 1px solid #cfd6de;
+}
+
+.tulokset-th {
+    font-weight: bold;
+    color: #23323e;
+    font-size: 11px;
+    text-align: center;
+    white-space: pre-wrap;
+}
+
+.tulokset-th-sub {
+    font-weight: 600;
+    color: #23323e;
+    font-size: 10px;
+}
+
+.tulokset-table .num {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.tulokset-table strong {
+    font-weight: bold;
+}
+
+.tulokset-label {
+    font-weight: bold;
+    width: 38%;
+}
+
+.tulokset-subgroup {
+    font-weight: bold;
+    color: #111;
+    background-color: white;
+}
+
+.tulokset-indent {
+    padding-left: 18px;
+    font-weight: bold;
+}
+
