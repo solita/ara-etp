@@ -65,7 +65,8 @@
    :lampo
    :sahko
    :jaahdytys
-   :eluvun-muutos])
+   :eluvun-muutos
+   :kasvihuonepaastojen-muutos])
 
 (def db-userdefined_energiamuoto-type
   [:nimi

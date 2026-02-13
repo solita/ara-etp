@@ -142,6 +142,21 @@ const Huomio = {
   )
 };
 
+const Huomio2026 = {
+  teksti: String(2, 1000),
+  toimenpide: R.repeat(
+    {
+      nimi: String(2, 100),
+      lampo: AnyFloat,
+      sahko: AnyFloat,
+      jaahdytys: AnyFloat,
+      'eluvun-muutos': AnyFloat,
+      'kasvihuonepaastojen-muutos': AnyFloat
+    },
+    3
+  )
+};
+
 const YritysPostinumero = String(2, 8);
 
 const Yritys = {
@@ -333,12 +348,20 @@ export const v2013 = R.compose(
   R.dissocPath(['perustiedot', 'laatimisvaihe'])
 )(v2018);
 
-export const v2026 = R.mergeDeepLeft(
+export const v2026 = R.mergeDeepRight(
+  v2018,
   {
     huomiot: {
-      lammitys: {
-        'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
-      }
+      'iv-ilmastointi': Huomio2026,
+      'valaistus-muut': Huomio2026,
+      lammitys: R.mergeDeepRight(
+        Huomio2026,
+        {
+          'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
+        }
+      ),
+      ymparys: Huomio2026,
+      'alapohja-ylapohja': Huomio2026
     },
     //lahtotiedot: {
     //  'rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin': Booleans are not in schema
@@ -359,8 +382,7 @@ export const v2026 = R.mergeDeepLeft(
         muusahko: IntegerNonNegative
       }
     }
-  },
-  v2018
+  }
 );
 
 export const redefineNumericValidation = (schema, constraint) => {

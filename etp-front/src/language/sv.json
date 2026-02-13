@@ -1151,7 +1151,8 @@
         "lampo": "Värme, förändring i köpt energi",
         "sahko": "El, förändring i köpt energi",
         "jaahdytys": "Kylning, förändring i köpt energi",
-        "eluvun-muutos": "E-tal, förändring"
+        "eluvun-muutos": "E-tal, förändring",
+        "kasvihuonepaastojen-muutos": "Energiankäytön kasvihuone\u00ADkaasupäästöjen muutos (sv)"
       },
       "suositukset-header": {
         "2013": "Rekommendationer för byggnadens användning och underhåll",

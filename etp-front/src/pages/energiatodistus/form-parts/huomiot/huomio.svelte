@@ -84,6 +84,15 @@
             )}</span>
           <span class="block"><ELukuUnit /></span>
         </th>
+        {#if R.equals(versio, 2026)}
+          <th class="et-table--th et-table--th-right-aligned">
+            <span
+              >{$_(
+                'energiatodistus.huomiot.toimenpide-table.kasvihuonepaastojen-muutos'
+              )}</span>
+            <span class="block"><ELukuUnit /></span>
+          </th>
+        {/if}
       </tr>
     </thead>
     <tbody class="et-table--tbody">
@@ -132,6 +141,22 @@
                 'eluvun-muutos'
               ]} />
           </td>
+          {#if R.equals(versio, 2026)}
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={[
+                  'huomiot',
+                  huomio,
+                  'toimenpide',
+                  index,
+                  'kasvihuonepaastojen-muutos'
+                ]} />
+            </td>
+          {/if}
         </tr>
       {/each}
     </tbody>

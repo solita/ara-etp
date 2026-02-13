@@ -225,6 +225,17 @@
                  :jaahdytys     schema/Num
                  :eluvun-muutos schema/Num}]})
 
+(def Huomio2026
+  (deep/deep-merge
+    Huomio
+    {:toimenpide [{:nimi-fi                    common-schema/String100
+                   :nimi-sv                    common-schema/String100
+                   :lampo                      schema/Num
+                   :sahko                      schema/Num
+                   :jaahdytys                  schema/Num
+                   :eluvun-muutos              schema/Num
+                   :kasvihuonepaastojen-muutos schema/Num}]}))
+
 (def Huomiot
   {:suositukset-fi    common-schema/String1500
    :suositukset-sv    common-schema/String1500
@@ -296,7 +307,6 @@
 (def EnergiatodistusSave2026
   (-> EnergiatodistusSave2018
       (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key}
-                        :huomiot                        {:lammitys {:kayttoikaa-jaljella-arvio-vuosina common-schema/IntNonNegative}}
                         :lahtotiedot                    {:rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin schema/Bool
                                                          :lammitys
                                                          {:lammonjakojarjestelma-mukautettavissa schema/Bool}}
@@ -309,7 +319,13 @@
                                                           :tuulisahko   common-schema/NonNegative
                                                           :lampopumppu  common-schema/NonNegative
                                                           :muulampo     common-schema/NonNegative
-                                                          :muusahko     common-schema/NonNegative}}})
+                                                          :muusahko     common-schema/NonNegative}}
+                        :huomiot                        {:iv-ilmastointi    Huomio2026
+                                                         :valaistus-muut    Huomio2026
+                                                         :lammitys          (deep/deep-merge Huomio2026
+                                                                                             {:kayttoikaa-jaljella-arvio-vuosina common-schema/IntNonNegative})
+                                                         :ymparys           Huomio2026
+                                                         :alapohja-ylapohja Huomio2026}})
       xschema/optional-properties))
 
 (defn ->EnergiatodistusSaveExternal [schema]

@@ -10,3 +10,7 @@ alter table energiatodistus
     add column if not exists to$tietojen_alkuperavuosi integer,
     add column if not exists to$lisatietoja_fi text,
     add column if not exists to$lisatietoja_sv text;
+
+alter type toimenpide
+    add attribute kasvihuonepaastojen_muutos numeric;
+
