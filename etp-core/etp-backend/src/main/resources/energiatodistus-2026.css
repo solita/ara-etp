@@ -678,6 +678,7 @@ table.common-table td:last-child {
 
 .tulokset-page {
     padding: 0;
+    page-break-inside: avoid;
 }
 
 .tulokset-page-title {
@@ -685,23 +686,23 @@ table.common-table td:last-child {
     font-size: 18px;
     font-weight: bold;
     letter-spacing: 0.02em;
-    margin: 0 0 4px 0;
+    margin: 0 0 2px 0;
     color: #23323e;
     text-transform: uppercase;
 }
 
 .tulokset-eluku-row {
     display: block;
-    margin: 2px 0 6px;
+    margin: 0 0 2px;
 }
 
 .tulokset-eluku-banner {
     background-color: #2f3a46;
     color: white;
-    padding: 4px 10px;
+    padding: 2px 8px;
     font-weight: bold;
-    font-size: 13px;
-    display: inline;
+    font-size: 14px;
+    display: block;
 }
 
 .tulokset-eluku-value {
@@ -710,19 +711,20 @@ table.common-table td:last-child {
 }
 
 .tulokset-content {
-    font-size: 11px;
-    line-height: 1.3;
-    color: #111;
+    font-size: 14px;
+    line-height: 1.2;
+    color: #23323e;
+    font-family: roboto, sans-serif;
 }
 
 .tulokset-section {
-    margin: 4px 0 6px;
+    margin: 2px 0 3px;
 }
 
 .tulokset-section-bar {
     background-color: #2f3a46;
     color: white;
-    padding: 3px 8px;
+    padding: 2px 8px;
     font-weight: bold;
     font-size: 14px;
     letter-spacing: 0.01em;
@@ -732,9 +734,10 @@ table.common-table td:last-child {
 .tulokset-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 2px;
-    font-size: 11px;
-    table-layout: fixed;
+    border-spacing: 0;
+    margin-top: 0;
+    font-size: 14px;
+    page-break-inside: avoid;
 }
 
 .tulokset-table th,
@@ -742,6 +745,7 @@ table.common-table td:last-child {
     padding: 2px 4px;
     vertical-align: middle;
     text-align: center;
+    line-height: 1.15;
 }
 
 .tulokset-table th {
@@ -750,7 +754,7 @@ table.common-table td:last-child {
 }
 
 .tulokset-table td {
-    color: #111;
+    color: #23323e;
     border: 1px solid #cfd6de;
 }
 
@@ -762,12 +766,14 @@ table.common-table td:last-child {
 
 .tulokset-table thead th {
     border-bottom: none;
+    padding-bottom: 1px;
+    padding-top: 1px;
 }
 
 .tulokset-th {
     font-weight: bold;
     color: #23323e;
-    font-size: 11px;
+    font-size: 13px;
     text-align: center;
     white-space: pre-wrap;
 }
@@ -775,7 +781,7 @@ table.common-table td:last-child {
 .tulokset-th-sub {
     font-weight: 600;
     color: #23323e;
-    font-size: 10px;
+    font-size: 12px;
 }
 
 .tulokset-table .num {
@@ -789,7 +795,7 @@ table.common-table td:last-child {
 
 .tulokset-label {
     font-weight: bold;
-    width: 38%;
+    white-space: nowrap;
 }
 
 .tulokset-subgroup {
