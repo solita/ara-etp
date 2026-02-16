@@ -362,7 +362,10 @@ export const v2026 = R.mergeDeepRight(v2018, {
     'alapohja-ylapohja': Huomio2026
   },
   'toteutunut-ostoenergiankulutus': {
-    'tietojen-alkuperavuosi': IntegerNonNegative,
+    'tietojen-alkuperavuosi': {
+      ...Integer(100, new Date().getFullYear()),
+      format: formats.optionalYear
+    },
     lisatietoja: String(2, 500)
   },
   tulokset: {
