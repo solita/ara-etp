@@ -126,7 +126,7 @@
    :lampokuormat (extract-lampokuormat-data energiatodistus l)})
 
 (defn- section-title [title]
-  [:h3 {:class "lahtotiedot-section-title"} title])
+  [:h3 title])
 
 (defn- label-value-row [label value & [unit]]
   [:div {:class "lahtotiedot-row"}
@@ -247,7 +247,7 @@
   (let [l (kieli loc/et-pdf-localization)
         data (extract-lahtotiedot energiatodistus kieli l)]
     [:div {:class "lahtotiedot-page"}
-     [:h2 {:class "lahtotiedot-page-title"} (l :lahtotiedot-title)]
+     [:h2 (l :lahtotiedot-title)]
      [:div {:class "lahtotiedot-content"}
       (rakennusvaippa-section data l)
       (ilmanvaihto-section data l)
