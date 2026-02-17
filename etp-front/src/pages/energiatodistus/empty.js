@@ -3,6 +3,7 @@ import * as R from 'ramda';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 import * as EtUtils from './energiatodistus-utils';
+import * as Deep from '@Utility/deep-objects';
 
 const ValidNone = R.compose(Either.Right, Maybe.None);
 
@@ -46,11 +47,29 @@ const emptyToimenpide = _ => ({
   'eluvun-muutos': ValidNone()
 });
 
+const emptyToimenpide2026 = _ =>
+  Deep.mergeRight(
+    R.anyPass([Either.isEither, Maybe.isMaybe]),
+    emptyToimenpide(),
+    {
+      'kasvihuonepaastojen-muutos': ValidNone()
+    }
+  );
+
 const emptyHuomio = _ => ({
   'teksti-fi': Maybe.None(),
   'teksti-sv': Maybe.None(),
   toimenpide: [emptyToimenpide(), emptyToimenpide(), emptyToimenpide()]
 });
+
+const emptyHuomio2026 = _ =>
+  Deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]), emptyHuomio(), {
+    toimenpide: [
+      emptyToimenpide2026(),
+      emptyToimenpide2026(),
+      emptyToimenpide2026()
+    ]
+  });
 
 const emptySahkoLampo = _ => ({
   sahko: ValidNone(),
@@ -287,35 +306,50 @@ export const energiatodistus2013 = R.compose(
   energiatodistus2018
 );
 
-export const energiatodistus2026 = R.compose(
-  R.mergeDeepLeft({
-    versio: 2026,
-    perustiedot: {
-      'havainnointikayntityyppi-id': Maybe.None()
-    },
-    huomiot: {
-      lammitys: {
-        'kayttoikaa-jaljella-arvio-vuosina': ValidNone(),
-        'asetukset-tehostettavissa': false
+export const energiatodistus2026 = _ =>
+  Deep.mergeRight(
+    R.anyPass([Either.isEither, Maybe.isMaybe]),
+    energiatodistus2018(),
+    {
+      versio: 2026,
+      perustiedot: {
+        'havainnointikayntityyppi-id': Maybe.None()
       },
-      'iv-ilmastointi': {
-        'kayttoikaa-jaljella-arvio-vuosina': ValidNone(),
-        'asetukset-tehostettavissa': false
-      }
-    },
-    tulokset: {
-      'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
-        aurinkosahko: ValidNone(),
-        aurinkolampo: ValidNone(),
-        tuulisahko: ValidNone(),
-        lampopumppu: ValidNone(),
-        muulampo: ValidNone(),
-        muusahko: ValidNone()
+      huomiot: {
+        lammitys: Deep.mergeRight(
+          R.anyPass([Either.isEither, Maybe.isMaybe]),
+          emptyHuomio2026(),
+          {
+            'kayttoikaa-jaljella-arvio-vuosina': ValidNone()
+          }
+        ),
+        'alapohja-ylapohja': emptyHuomio2026(),
+        'iv-ilmastointi': emptyHuomio2026(),
+        ymparys: emptyHuomio2026(),
+        'valaistus-muut': emptyHuomio2026()
+      },
+      'toteutunut-ostoenergiankulutus': {
+        'tietojen-alkuperavuosi': ValidNone(),
+        'lisatietoja-fi': Maybe.None(),
+        'lisatietoja-sv': Maybe.None()
+      },
+      lahtotiedot: {
+        'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': false,
+        lammitys: { 'lammonjako-lampotilajousto': false }
+      },
+
+      tulokset: {
+        'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
+          aurinkosahko: ValidNone(),
+          aurinkolampo: ValidNone(),
+          tuulisahko: ValidNone(),
+          lampopumppu: ValidNone(),
+          muulampo: ValidNone(),
+          muusahko: ValidNone()
+        }
       }
     }
-  }),
-  energiatodistus2018
-);
+  );
 
 const emptyPerusparannusPassinPerustiedot = _ => ({
   havainnointikaynti: ValidNone(),

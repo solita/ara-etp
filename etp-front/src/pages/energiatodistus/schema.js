@@ -142,6 +142,21 @@ const Huomio = {
   )
 };
 
+const Huomio2026 = {
+  teksti: String(2, 1000),
+  toimenpide: R.repeat(
+    {
+      nimi: String(2, 100),
+      lampo: AnyFloat,
+      sahko: AnyFloat,
+      jaahdytys: AnyFloat,
+      'eluvun-muutos': AnyFloat,
+      'kasvihuonepaastojen-muutos': AnyFloat
+    },
+    3
+  )
+};
+
 const YritysPostinumero = String(2, 8);
 
 const Yritys = {
@@ -333,31 +348,37 @@ export const v2013 = R.compose(
   R.dissocPath(['perustiedot', 'laatimisvaihe'])
 )(v2018);
 
-export const v2026 = R.mergeDeepLeft(
-  {
-    huomiot: {
-      lammitys: {
-        'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
-        //'asetukset-tehostettavissa' Booleans are not in schema
-      },
-      'iv-ilmastointi': {
-        'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
-        //'asetukset-tehostettavissa' Booleans are not in schema
-      }
-    },
-    tulokset: {
-      'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
-        aurinkosahko: IntegerNonNegative,
-        aurinkolampo: IntegerNonNegative,
-        tuulisahko: IntegerNonNegative,
-        lampopumppu: IntegerNonNegative,
-        muulampo: IntegerNonNegative,
-        muusahko: IntegerNonNegative
-      }
-    }
+/*
+Note: booleans are not in the frontend's schemas. For example lt$lammitys$lammonjako_lampotilajousto is not.
+ */
+export const v2026 = R.mergeDeepRight(v2018, {
+  huomiot: {
+    'iv-ilmastointi': Huomio2026,
+    'valaistus-muut': Huomio2026,
+    lammitys: R.mergeDeepRight(Huomio2026, {
+      'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
+    }),
+    ymparys: Huomio2026,
+    'alapohja-ylapohja': Huomio2026
   },
-  v2018
-);
+  'toteutunut-ostoenergiankulutus': {
+    'tietojen-alkuperavuosi': {
+      ...Integer(100, new Date().getFullYear()),
+      format: formats.optionalYear
+    },
+    lisatietoja: String(2, 500)
+  },
+  tulokset: {
+    'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
+      aurinkosahko: IntegerNonNegative,
+      aurinkolampo: IntegerNonNegative,
+      tuulisahko: IntegerNonNegative,
+      lampopumppu: IntegerNonNegative,
+      muulampo: IntegerNonNegative,
+      muusahko: IntegerNonNegative
+    }
+  }
+});
 
 export const redefineNumericValidation = (schema, constraint) => {
   const path = R.append(R.__, R.split('.', constraint.property));

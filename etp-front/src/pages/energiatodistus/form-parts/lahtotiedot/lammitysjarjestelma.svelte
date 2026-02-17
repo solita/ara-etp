@@ -13,6 +13,7 @@
   import Input from '@Pages/energiatodistus/Input';
   import VuosikulutusPerAlaUnit from '@Pages/energiatodistus/form-parts/units/annual-energy-over-area';
   import VuosikulutusUnit from '@Pages/energiatodistus/form-parts/units/annual-energy';
+  import Checkbox from '@Component/Checkbox/Checkbox.svelte';
 
   export let disabled;
   export let schema;
@@ -22,6 +23,7 @@
   export let lammonjako;
 
   export let inputLanguage;
+  export let versio = 2018;
 
   const lammitysLens = R.lensPath(['lahtotiedot', 'lammitys']);
   const lammitysmuoto1Lens = R.compose(
@@ -125,6 +127,19 @@
     label={$_('energiatodistus.lahtotiedot.lammitys.lammonjako.id')}
     {disabled} />
 </div>
+
+{#if R.equals(versio, 2026)}
+  <div class="w-full py-4">
+    <Checkbox
+      bind:model={energiatodistus}
+      lens={R.compose(lammonjakoLens, R.lensProp('lammonjako-lampotilajousto'))}
+      label={$_(
+        'energiatodistus.lahtotiedot.lammitys.lammonjakojarjestelma-mukautettavissa'
+      )}
+      dataCy="energiatodistus.lahtotiedot.lammitys.lammonjako-lampotilajousto"
+      {disabled} />
+  </div>
+{/if}
 
 {#if Validation.isLammonjakoKuvausRequired(energiatodistus)}
   <div

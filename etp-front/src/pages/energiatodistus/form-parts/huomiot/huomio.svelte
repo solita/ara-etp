@@ -24,18 +24,8 @@
 
 <H3 text={$_(`${base}.header`)} />
 
-{#if R.and(R.equals(versio, 2026), R.includes( huomio, ['lammitys', 'iv-ilmastointi'] ))}
+{#if R.and(R.equals(versio, 2026), R.includes(huomio, ['lammitys']))}
   <div class="my-4 flex flex-col gap-x-8">
-    <div class="w-full py-4">
-      <Checkbox
-        bind:model={energiatodistus}
-        lens={R.lensPath(['huomiot', huomio, 'asetukset-tehostettavissa'])}
-        dataCy={`huomiot.${huomio}.asetukset-tehostettavissa`}
-        label={$_(
-          `energiatodistus.huomiot.${huomio}.nykyinen-jarjestelma-tehostettavissa`
-        )}
-        {disabled} />
-    </div>
     <div class="py-4 lg:w-2/5">
       <Input
         {disabled}
@@ -94,6 +84,15 @@
             )}</span>
           <span class="block"><ELukuUnit /></span>
         </th>
+        {#if R.equals(versio, 2026)}
+          <th class="et-table--th et-table--th-right-aligned">
+            <span
+              >{$_(
+                'energiatodistus.huomiot.toimenpide-table.kasvihuonepaastojen-muutos'
+              )}</span>
+            <span class="block"><ELukuUnit /></span>
+          </th>
+        {/if}
       </tr>
     </thead>
     <tbody class="et-table--tbody">
@@ -142,6 +141,22 @@
                 'eluvun-muutos'
               ]} />
           </td>
+          {#if R.equals(versio, 2026)}
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={[
+                  'huomiot',
+                  huomio,
+                  'toimenpide',
+                  index,
+                  'kasvihuonepaastojen-muutos'
+                ]} />
+            </td>
+          {/if}
         </tr>
       {/each}
     </tbody>

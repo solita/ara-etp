@@ -13,7 +13,8 @@ import * as Query from '@Utility/query';
 /*
 This deserializer is for all energiatodistus versions.
 
-By default, every value is in Maybe.
+By default, every value is in Maybe. Note that booleans are
+handled differently and just unwrapped here.
 
 If key does not exists in the specific version
 then the deserialize function is not used
@@ -31,13 +32,9 @@ const deserializer = {
     'julkinen-rakennus': Maybe.get,
     uudisrakennus: Maybe.get
   },
-  huomiot: {
-    lammitys: {
-      'asetukset-tehostettavissa': Maybe.get
-    },
-    'iv-ilmastointi': {
-      'asetukset-tehostettavissa': Maybe.get
-    }
+  lahtotiedot: {
+    'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': Maybe.get,
+    lammitys: { 'lammonjako-lampotilajousto': Maybe.get }
   }
 };
 

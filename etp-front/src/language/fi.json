@@ -641,6 +641,7 @@
       "ala": "A",
       "U": "U",
       "lammitetty-nettoala": "Lämmitetty nettoala",
+      "rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin": "Rakennus kykenee reagoimaan ulkoisiin signaaleihin",
       "rakennusvaippa": {
         "header": "Rakennusvaippa",
         "label-context": "Rakennusvaippa",
@@ -824,6 +825,7 @@
           "id": "Lämmönjako",
           "kuvaus": "Lämmönjaon kuvaus"
         },
+        "lammonjakojarjestelma-mukautettavissa": "Rakennuksen sisäinen lämmönjakojärjestelmä kykenee toimimaan alhaisissa tai tapauksen mukaan tehokkaammassa lämpötilassa",
         "tuotonhyotysuhde": "Tuoton hyöty\u00ADsuhde",
         "jaonjaluovutuksenhyotysuhde": "Jaon ja luovu\u00ADtuksen hyöty\u00ADsuhde",
         "lampokerroin": "Lämpö\u00ADkerroin",
@@ -1161,7 +1163,9 @@
       "polttoaineet-vuosikulutus-yhteensa": "Polttoaineet (kWh/vuosi)",
       "polttoaineet-neliovuosikulutus-yhteensa": "Polttoaineet (kWh/(m²vuosi))",
       "toteutunut-vuosikulutus-yhteensä": "Yhteensä (kWh/vuosi)",
-      "toteutunut-neliovuosikulutus-yhteensä": "Yhteensä (kWh/(m²vuosi))"
+      "toteutunut-neliovuosikulutus-yhteensä": "Yhteensä (kWh/(m²vuosi))",
+      "tietojen-alkuperavuosi": "Tiedot ovat vuodelta",
+      "lisatietoja": "Lisätietoja"
     },
     "huomiot": {
       "header": {
@@ -1176,7 +1180,8 @@
         "lampo": "Lämpö, osto\u00ADenergian muutos",
         "sahko": "Sähkö, osto\u00ADenergian muutos",
         "jaahdytys": "Jäähdytys, osto\u00ADenergian muutos",
-        "eluvun-muutos": "E-luvun muutos"
+        "eluvun-muutos": "E-luvun muutos",
+        "kasvihuonepaastojen-muutos": "Energiankäytön kasvihuone\u00ADkaasupäästöjen muutos"
       },
       "suositukset-header": {
         "2026": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
@@ -1190,8 +1195,6 @@
         "header": "Huomiot - Ilmanvaihto- ja ilmastointijärjestelmät",
         "label-context": "$unused",
         "teksti": "Ilmanvaihto- ja ilmastointijärjestelmien huomiot",
-        "kayttoikaa-jaljella-arvio-vuosina": "Arvio ilmanvaihtojärjestelmän jäljellä olevasta teknisestä käyttöiästä",
-        "nykyinen-jarjestelma-tehostettavissa": "Nykyinen ilmanvaihtojärjestelmä voidaan mukauttaa toimimaan tehokkaammilla lämpötila-asetuksilla?",
         "toimenpide": [
           {
             "label-context": "Huomiot / Ilmanvaihto",
@@ -1223,7 +1226,6 @@
         "label-context": "$unused",
         "teksti": "Tilojen ja käyttöveden lämmitysjärjestelmien huomiot",
         "kayttoikaa-jaljella-arvio-vuosina": "Arvio lämmitysjärjestelmän jäljellä olevasta teknisestä käyttöiästä",
-        "nykyinen-jarjestelma-tehostettavissa": "Tilojen nykyinen lämmitysjärjestelmä voidaan mukauttaa toimimaan tehokkaammilla lämpötila-asetuksilla?",
         "toimenpide": [
           {
             "label-context": "Huomiot / Lämmitysjärjestelmät",

@@ -10,10 +10,13 @@
   import Input from '@Pages/energiatodistus/Input';
   import VuosikulutusPerAlaUnit from '@Pages/energiatodistus/form-parts/units/annual-energy-over-area';
   import VuosikulutusUnit from '@Pages/energiatodistus/form-parts/units/annual-energy';
+  import Textarea from '@Pages/energiatodistus/Textarea';
 
   export let disabled;
   export let schema;
   export let energiatodistus;
+  export let inputLanguage;
+  export let versio = 2018;
 
   $: ostoenergiat = EtUtils.toteutuneetOstoenergiat(energiatodistus);
 
@@ -31,6 +34,26 @@
   text={$_(
     'energiatodistus.toteutunut-ostoenergiankulutus.toteutuneet-yhteensa-header'
   )} />
+
+{#if R.equals(versio, 2026)}
+  <div class="w-full flex-col">
+    <div class="w-1/3">
+      <Input
+        {disabled}
+        {schema}
+        bind:model={energiatodistus}
+        path={['toteutunut-ostoenergiankulutus', 'tietojen-alkuperavuosi']} />
+    </div>
+    <div class="mb-4 w-full pt-4">
+      <Textarea
+        {disabled}
+        {schema}
+        inputLanguage={Maybe.Some(inputLanguage)}
+        bind:model={energiatodistus}
+        path={['toteutunut-ostoenergiankulutus', 'lisatietoja']} />
+    </div>
+  </div>
+{/if}
 
 <div class="min-w-full overflow-x-auto md:overflow-x-hidden">
   <table class="et-table et-table__noborder border-r-0">

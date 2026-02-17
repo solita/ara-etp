@@ -8,7 +8,7 @@
             [solita.etp.schema.common :as common-schema]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
-            [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
+            [solita.etp.service.energiatodistus-pdf]
             [solita.etp.service.energiatodistus-signing :as energiatodistus-signing-service]
             [solita.etp.service.laatija :as laatija-service]
             [solita.etp.test-data.generators :as generators]
@@ -85,35 +85,23 @@
   "Here we don't know what version the add is, but we deduce it from its structure."
   [add]
   (cond (-> add :perustiedot (contains? :uudisrakennus)) 2013
-        ;; TODO: Need to consider 2026 version here.
+        (-> add :perustiedot (contains? :havainnointikayntityyppi-id)) 2026
         :else 2018))
 
 (defn insert!
-  ([energiatodistus-adds laatija-id]
-   (mapv #(:id (energiatodistus-service/add-energiatodistus!
-                 (ts/db-user laatija-id)
-                 {:id laatija-id}
-                 (add->versio %)
-                 %))
-         energiatodistus-adds))
-  ([energiatodistus-adds laatija-id {:keys [force-2026?]}]
-   (if force-2026?
-     (mapv #(:id (energiatodistus-service/add-energiatodistus!
-                   (ts/db-user laatija-id)
-                   {:id laatija-id}
-                   2026
-                   %))
-           energiatodistus-adds)
-     (insert! energiatodistus-adds laatija-id))))
+  [energiatodistus-adds laatija-id]
+  (mapv #(:id (energiatodistus-service/add-energiatodistus!
+                (ts/db-user laatija-id)
+                {:id laatija-id}
+                (add->versio %)
+                %)) energiatodistus-adds))
 
 (defn generate-and-insert!
   ([versio ready-for-signing? laatija-id]
    (first (generate-and-insert! 1 versio ready-for-signing? laatija-id)))
   ([n versio ready-for-signing? laatija-id]
    (let [energiatodistus-adds (generate-adds n versio ready-for-signing?)]
-     (if (= versio 2026)
-       (zipmap (insert! energiatodistus-adds laatija-id {:force-2026? true}) energiatodistus-adds)
-       (zipmap (insert! energiatodistus-adds laatija-id) energiatodistus-adds)))))
+     (zipmap (insert! energiatodistus-adds laatija-id) energiatodistus-adds))))
 
 (defn generate-pdf-as-file-mock [_ _ _ _]
   (let [in "src/test/resources/energiatodistukset/signing-process/generate-pdf-as-file.pdf"

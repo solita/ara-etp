@@ -65,7 +65,8 @@
    :lampo
    :sahko
    :jaahdytys
-   :eluvun-muutos])
+   :eluvun-muutos
+   :kasvihuonepaastojen-muutos])
 
 (def db-userdefined_energiamuoto-type
   [:nimi
@@ -125,13 +126,16 @@
     (map db/kebab-case-keys)
     (map #(flat/flat->tree #"\$" %))))
 
-(defn replace-abbreviation->fullname [path]
-  (reduce (fn [result [fullname abbreviation]]
-            (if (str/starts-with? result (name abbreviation))
-              (reduced (str/replace-first
-                         result (name abbreviation) (name fullname)))
-              result))
-          path db-abbreviations))
+(defn replace-abbreviation->fullname
+  [path]
+  (if-let [dollar-idx (str/index-of path "$")]
+    (let [prefix (subs path 0 dollar-idx)
+          k      (keyword prefix)]
+      (if-let [fullname (get (set/map-invert db-abbreviations) k)]
+        ;; replace only that exact prefix at the start (i.e. before the first '$')
+        (str (name fullname) (subs path dollar-idx))
+        path))
+    path))
 
 (defn to-property-name [column-name]
   (-> column-name
