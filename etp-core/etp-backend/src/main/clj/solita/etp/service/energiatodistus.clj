@@ -126,15 +126,16 @@
     (map db/kebab-case-keys)
     (map #(flat/flat->tree #"\$" %))))
 
-(defn replace-abbreviation->fullname [path]
-  (let [;; This is important so that "to" is tried before "t" for example.
-        db-abbreviations-sorted (sort-by (comp count name val) > db-abbreviations)]
-    (reduce (fn [result [fullname abbreviation]]
-              (if (str/starts-with? result (name abbreviation))
-                (reduced (str/replace-first
-                           result (name abbreviation) (name fullname)))
-                result))
-            path db-abbreviations-sorted)))
+(defn replace-abbreviation->fullname
+  [path]
+  (if-let [dollar-idx (str/index-of path "$")]
+    (let [prefix (subs path 0 dollar-idx)
+          k      (keyword prefix)]
+      (if-let [fullname (get (set/map-invert db-abbreviations) k)]
+        ;; replace only that exact prefix at the start (i.e. before the first '$')
+        (str (name fullname) (subs path dollar-idx))
+        path))
+    path))
 
 (defn to-property-name [column-name]
   (-> column-name
