@@ -194,6 +194,7 @@
         alakayttotarkoitus-id (get-in energiatodistus [:perustiedot :kayttotarkoitus])
         nettoala (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
         rajat (e-luokka/e-luokka-rajat kayttotarkoitukset alakayttotarkoitukset versio alakayttotarkoitus-id nettoala)]
-    [:div {:class "etusivu-grafiikka"}
-     [:div {:class "etusivu-grafiikka-otsikko"} (l :energiatehokkuusluokka-otsikko)]
-     (stacked-arrows {:kieli kieli :e-luokka e-luokka :e-luku e-luku :rajat rajat})]))
+    (when (and e-luokka e-luku)
+      [:div {:class "etusivu-grafiikka"}
+       [:div {:class "etusivu-grafiikka-otsikko"} (l :energiatehokkuusluokka-otsikko)]
+       (stacked-arrows {:kieli kieli :e-luokka e-luokka :e-luku e-luku :rajat rajat})])))
