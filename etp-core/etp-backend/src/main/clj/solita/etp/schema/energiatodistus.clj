@@ -322,8 +322,8 @@
                                                           :muusahko     common-schema/NonNegative}}
                         :huomiot                        {:iv-ilmastointi    Huomio2026
                                                          :valaistus-muut    Huomio2026
-                                                         :lammitys          (deep/deep-merge Huomio2026
-                                                                                             {:kayttoikaa-jaljella-arvio-vuosina common-schema/IntNonNegative})
+                                                         :lammitys          (assoc Huomio2026
+                                                                              :kayttoikaa-jaljella-arvio-vuosina common-schema/IntNonNegative)
                                                          :ymparys           Huomio2026
                                                          :alapohja-ylapohja Huomio2026}})
       xschema/optional-properties))
