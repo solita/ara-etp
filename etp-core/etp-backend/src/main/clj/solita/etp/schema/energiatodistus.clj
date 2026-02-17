@@ -226,15 +226,15 @@
                  :eluvun-muutos schema/Num}]})
 
 (def Huomio2026
-  (deep/deep-merge
-    Huomio
-    {:toimenpide [{:nimi-fi                    common-schema/String100
-                   :nimi-sv                    common-schema/String100
-                   :lampo                      schema/Num
-                   :sahko                      schema/Num
-                   :jaahdytys                  schema/Num
-                   :eluvun-muutos              schema/Num
-                   :kasvihuonepaastojen-muutos schema/Num}]}))
+  {:teksti-fi  common-schema/String1000
+   :teksti-sv  common-schema/String1000,
+   :toimenpide [{:nimi-fi                    common-schema/String100
+                 :nimi-sv                    common-schema/String100
+                 :lampo                      schema/Num
+                 :sahko                      schema/Num
+                 :jaahdytys                  schema/Num
+                 :eluvun-muutos              schema/Num
+                 :kasvihuonepaastojen-muutos schema/Num}]})
 
 (def Huomiot
   {:suositukset-fi    common-schema/String1500
