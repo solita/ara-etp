@@ -23,7 +23,10 @@
                    (str " " (l :m3)))]]
          [:div
           [:dt (l :rakennus-kykenee-reagoimaan)]
-          [:dd [:span {:class "mock-data"} "Ei"]]]]]
+          [:dd (-> energiatodistus
+                   :lahtotiedot :lammitys :lammonjako-lampotilajousto
+                   {false :ei true :kylla}
+                   l)]]]]
        [:h2 (l :lammitysjarjestelma-kuvaus)]
        [:dl {:class "table-description-list"}
         [:div
@@ -40,7 +43,10 @@
              :class "table-description-list"}
         [:div
          [:dt (l :lammonjakojarjestelma-lampotila)]
-         [:dd [:span {:class "mock-data"} "Ei"]]]]
+         [:dd (-> energiatodistus
+                  :lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin
+                  {false :ei true :kylla}
+                  l)]]]
        [:h2 (l :ilmanvaihtojärjestelmän-kuvaus)]
        [:dl {:class "table-description-list"}
         [:div
@@ -51,8 +57,9 @@
        [:h2 (l :toteutunut-ostoenergy-ja-uusiutuva)]
        [:dl
         [:dt (l :tiedot-ovat-vuodelta)]
-        [:dd [:span {:class "mock-data"} "2026"]]]
-       [:p {:class "mock-data"} "(lisätietoa toteutuneesta ostoenergiankulutuksesta ja tuotetusta uusiutuvasta energiasta)"]
+        [:dd (-> energiatodistus :toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi)]]
+       [:p (-> energiatodistus :toteutunut-ostoenergiankulutus (kieli {:fi :lisatietoja-fi
+                                                                       :sv :lisatietoja-sv}))]
        [:table {:class "common-table"}
         [:thead
          [:tr
