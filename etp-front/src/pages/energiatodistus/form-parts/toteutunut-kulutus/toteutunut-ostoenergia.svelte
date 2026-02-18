@@ -22,29 +22,6 @@
 
   $: toteutuneetOstoenergiatPerLammitettyNettoala =
     EtUtils.perLammitettyNettoala(energiatodistus, ostoenergiat);
-
-  const energiamuodot = R.cond([
-    [
-      R.either(R.equals(2013), R.equals(2018)),
-      R.always([
-        'sahko-vuosikulutus-yhteensa',
-        'kaukolampo-vuosikulutus-yhteensa',
-        'polttoaineet-vuosikulutus-yhteensa',
-        'kaukojaahdytys-vuosikulutus-yhteensa'
-      ])
-    ],
-    [
-      R.equals(2026),
-      R.always([
-        'sahko-vuosikulutus-yhteensa',
-        'kaukolampo-vuosikulutus-yhteensa',
-        'uusiutuvat-polttoaineet-vuosikulutus-yhteensa',
-        'fossiiliset-polttoaineet-vuosikulutus-yhteensa',
-        'kaukojaahdytys-vuosikulutus-yhteensa',
-        'uusiutuva-energia-vuosituotto-yhteensa'
-      ])
-    ]
-  ]);
 </script>
 
 <H3
@@ -89,7 +66,7 @@
       </tr>
     </thead>
     <tbody class="et-table--tbody">
-      {#each energiamuodot(versio) as energiamuoto}
+      {#each EtUtils.fieldsWithToteutunutOstoenergia[versio] as energiamuoto}
         <tr class="et-table--tr">
           <td class="et-table--td">
             {$_(

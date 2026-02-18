@@ -300,35 +300,34 @@ export const eluku = (versio, nettoala, energiamuodot) =>
     R.map(unnestValidation)
   )(energiamuodot);
 
-const fieldsWithToteutunutOstoenergia = R.cond([
-  [
-    R.either(R.equals(2013), R.equals(2018)),
-    R.always([
-      'sahko-vuosikulutus-yhteensa',
-      'kaukolampo-vuosikulutus-yhteensa',
-      'polttoaineet-vuosikulutus-yhteensa',
-      'kaukojaahdytys-vuosikulutus-yhteensa'
-    ])
-  ],
-  [
-    R.equals(2026),
-    R.always([
-      'sahko-vuosikulutus-yhteensa',
-      'kaukolampo-vuosikulutus-yhteensa',
-      'uusiutuvat-polttoaineet-vuosikulutus-yhteensa',
-      'fossiiliset-polttoaineet-vuosikulutus-yhteensa',
-      'kaukojaahdytys-vuosikulutus-yhteensa',
-      'uusiutuva-energia-vuosituotto-yhteensa'
-    ])
-  ]
-]);
+const energiamuodotUntil2018 = [
+    'sahko-vuosikulutus-yhteensa',
+    'kaukolampo-vuosikulutus-yhteensa',
+    'polttoaineet-vuosikulutus-yhteensa',
+    'kaukojaahdytys-vuosikulutus-yhteensa'
+];
+
+const energiamuodot2026 = [
+    'sahko-vuosikulutus-yhteensa',
+    'kaukolampo-vuosikulutus-yhteensa',
+    'uusiutuvat-polttoaineet-vuosikulutus-yhteensa',
+    'fossiiliset-polttoaineet-vuosikulutus-yhteensa',
+    'kaukojaahdytys-vuosikulutus-yhteensa',
+    'uusiutuva-energia-vuosituotto-yhteensa'
+];
+
+export const fieldsWithToteutunutOstoenergia = {
+    2013: energiamuodotUntil2018,
+    2018: energiamuodotUntil2018,
+    2026: energiamuodot2026
+};
 
 const toteutunutOstoenergia = R.path(['toteutunut-ostoenergiankulutus']);
 
 export const toteutuneetOstoenergiat = versio =>
   R.compose(
     R.map(unnestValidation),
-    R.pick(fieldsWithToteutunutOstoenergia(versio)),
+    R.pick(fieldsWithToteutunutOstoenergia[versio]),
     toteutunutOstoenergia
   );
 
