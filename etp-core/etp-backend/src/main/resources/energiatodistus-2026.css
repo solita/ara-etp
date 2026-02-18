@@ -504,15 +504,10 @@ table.common-table td:last-child {
    Column width utility classes for colgroups
    ===================================================== */
 
-.col-w16 { width: 16%; }
-.col-w18 { width: 18%; }
+.col-w10 { width: 10%; }
 .col-w20 { width: 20%; }
-.col-w21 { width: 21%; }
-.col-w22 { width: 22%; }
-.col-w23 { width: 23%; }
 .col-w25 { width: 25%; }
 .col-w30 { width: 30%; }
-.col-w33 { width: 33%; }
 .col-w40 { width: 40%; }
 .col-w50 { width: 50%; }
 .col-w60 { width: 60%; }

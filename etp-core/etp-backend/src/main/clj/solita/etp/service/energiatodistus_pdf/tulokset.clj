@@ -36,11 +36,11 @@
      [:table {:class "tulokset-table tulokset-ostoenergia-table"}
       [:colgroup
        [:col {:class "col-w20"}]
-       [:col {:class "col-w16"}]
-       [:col {:class "col-w16"}]
-       [:col {:class "col-w16"}]
-       [:col {:class "col-w16"}]
-       [:col {:class "col-w16"}]]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w10"}]
+       [:col {:class "col-w10"}]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :rowspan "2" :style "text-align:left;"} "\u00a0"]

@@ -150,10 +150,10 @@
      "m³/(h m²)")
    [:table {:class "lahtotiedot-table"}
     [:colgroup
-     [:col {:class "col-w33"}]
-     [:col {:class "col-w22"}]
-     [:col {:class "col-w22"}]
-     [:col {:class "col-w23"}]]
+     [:col {:class "col-w30"}]
+     [:col {:class "col-w20"}]
+     [:col {:class "col-w20"}]
+     [:col {:class "col-w30"}]]
     [:thead
      [:tr
       [:th {:class "lahtotiedot-th"}]
@@ -175,10 +175,10 @@
      (label-value-row (l :lahtotiedot-ilmanvaihto-kuvaus) (:kuvaus iv))
      [:table {:class "lahtotiedot-table"}
       [:colgroup
-       [:col {:class "col-w33"}]
-       [:col {:class "col-w22"}]
-       [:col {:class "col-w22"}]
-       [:col {:class "col-w23"}]]
+       [:col {:class "col-w30"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w30"}]]
       [:thead
        [:tr
         [:th {:class "lahtotiedot-th"}]
@@ -202,11 +202,11 @@
       (label-value-row (l :lahtotiedot-lammonjako) (:lammonjako lam))]
      [:table {:class "lahtotiedot-table"}
       [:colgroup
-       [:col {:class "col-w25"}]
-       [:col {:class "col-w18"}]
-       [:col {:class "col-w18"}]
-       [:col {:class "col-w18"}]
-       [:col {:class "col-w21"}]]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]]
       [:thead
        [:tr
         [:th {:class "lahtotiedot-th"}]
