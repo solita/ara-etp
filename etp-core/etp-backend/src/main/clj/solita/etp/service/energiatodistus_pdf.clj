@@ -777,6 +777,6 @@
           (let [alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
                 kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
                 laatimisvaiheet (luokittelu-service/find-laatimisvaiheet db)]
-            (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf db complete-energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotarkoitukset true))))
+            (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf db whoami complete-energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotarkoitukset true))))
         (generate-pdf-as-input-stream complete-energiatodistus kieli true nil)))))
 

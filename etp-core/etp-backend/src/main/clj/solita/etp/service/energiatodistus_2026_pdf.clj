@@ -6,6 +6,7 @@
             [solita.etp.service.pdf :as pdf-service]
             [solita.etp.service.localization :as loc]
             [solita.etp.service.watermark-pdf :as watermark-pdf]
+            [solita.etp.service.perusparannuspassi-pdf :as ppp-pdf]
             [solita.etp.service.energiatodistus-pdf.etusivu-yleistiedot :as et-etusivu-yleistiedot]
             [solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia :as et-laskennallinen-ostoenergia]
             [solita.etp.service.energiatodistus-pdf.etusivu-eluku :as et-etusivu-eluku]
@@ -17,7 +18,7 @@
             [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_lammitys_ilmanvaihto :as te-lammitys-ilmanvaihto]
             [solita.etp.service.energiatodistus-pdf.toimenpide-ehdotukset-muut :as te-muut]
             [solita.etp.service.energiatodistus-pdf.lisamerkintoja :as et-lisamerkintoja])
-  (:import [java.io ByteArrayOutputStream]))
+  (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
 (db/require-queries 'perusparannuspassi)
 
@@ -69,15 +70,29 @@
     [:body
      pages-html]])))
 
+(defn- find-valid-ppp
+  [db energiatodistus laatija-id]
+  (let [ppp (first (perusparannuspassi-db/find-by-energiatodistus-id db
+                     {:energiatodistus-id (:id energiatodistus)
+                      :laatija-id laatija-id}))]
+    (when (and (some? ppp) (:valid ppp))
+      ppp)))
 
 (defn- show-toimenpide-pages? [db energiatodistus laatija-id]
   (let [e-luokka (get-in energiatodistus [:tulokset :e-luokka])
-        ppp (first (perusparannuspassi-db/find-by-energiatodistus-id db
-                     {:energiatodistus-id (:id energiatodistus)
-                      :laatija-id laatija-id}))
-        has-valid-ppp? (and (some? ppp) (:valid ppp))]
+        has-valid-ppp? (some? (find-valid-ppp db energiatodistus laatija-id))]
     (and (not (contains? #{"A" "A0" "A+"} e-luokka))
          (not has-valid-ppp?))))
+
+(defn- find-and-generate-ppp-pdf
+  [db whoami energiatodistus kieli]
+  (let [laatija-id (:laatija-id energiatodistus)]
+    (when-let [ppp-for-pdf (find-valid-ppp db energiatodistus laatija-id)]
+        (let [ppp-pdf-stream (ppp-pdf/find-perusparannuspassi-pdf db whoami (:id ppp-for-pdf) kieli)]
+          (when ppp-pdf-stream
+            (let [buffer (ByteArrayOutputStream.)]
+              (io/copy ppp-pdf-stream buffer)
+              (.toByteArray buffer)))))))
 
 (defn generate-energiatodistus-html
   "Use OpenHTMLToPDF to generate PDF, return as a byte array"
@@ -121,18 +136,23 @@
 
 (defn- generate-energiatodistus-ohtp-pdf
   "Use OpenHTMLToPDF to generate a energiatodistus PDF, return as a byte array"
-  [params]
-  (let [output-stream (ByteArrayOutputStream.)]
-    (-> (generate-energiatodistus-html params)
+  [params ppp-pdf-bytes]
+  (let [output-stream (ByteArrayOutputStream.)
+        html (generate-energiatodistus-html params)]
+    (-> html
         (pdf-service/html->pdf output-stream))
-    (-> output-stream .toByteArray)))
+    (let [et-pdf-bytes (.toByteArray output-stream)]
+      (if (some? ppp-pdf-bytes)
+        (pdf-service/merge-pdf
+          [(ByteArrayInputStream. et-pdf-bytes)
+           (ByteArrayInputStream. ppp-pdf-bytes)])
+        et-pdf-bytes))))
 
 (defn generate-energiatodistus-pdf
-  "Generate a energiatodistus PDF and return it as a byte array."
-  [db energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotarkoitukset draft?]
+  [db whoami energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotarkoitukset draft?]
   (let [kieli-keyword (keyword kieli)
+        ppp-pdf-bytes (find-and-generate-ppp-pdf db whoami energiatodistus kieli)
         pdf-bytes
-
         ;; Generate the PDF to byte array
         (generate-energiatodistus-ohtp-pdf
           {:db                    db
@@ -140,7 +160,8 @@
            :alakayttotarkoitukset alakayttotarkoitukset
            :laatimisvaiheet       laatimisvaiheet
            :kieli                 kieli-keyword
-           :kayttotarkoitukset    kayttotarkoitukset})
+           :kayttotarkoitukset    kayttotarkoitukset}
+          ppp-pdf-bytes)
         watermark-text (cond
                          draft? (draft-watermark-texts kieli)
                          (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
