@@ -20,14 +20,10 @@
 
   $: ostoenergiat = EtUtils.toteutuneetOstoenergiat(energiatodistus);
 
-  $: ostoenergiatSum = EtUtils.sumEtValues(ostoenergiat);
 
   $: toteutuneetOstoenergiatPerLammitettyNettoala =
     EtUtils.perLammitettyNettoala(energiatodistus, ostoenergiat);
 
-  $: toteutuneetOstoenergiatPerLammitettyNettoalaSum = R.compose(
-    EtUtils.sumEtValues
-  )(toteutuneetOstoenergiatPerLammitettyNettoala);
 </script>
 
 <H3
@@ -97,23 +93,6 @@
           </td>
         </tr>
       {/each}
-      <tr class="et-table--tr border-t-1 border-disabled">
-        <td class="et-table--td uppercase">{$_('energiatodistus.yhteensa')}</td>
-        <td class="et-table--td">
-          {R.compose(
-            formats.numberFormat,
-            Maybe.get,
-            R.map(fxmath.round(0))
-          )(ostoenergiatSum)}
-        </td>
-        <td class="et-table--td">
-          {R.compose(
-            formats.numberFormat,
-            fxmath.round(0),
-            Maybe.get
-          )(toteutuneetOstoenergiatPerLammitettyNettoalaSum)}
-        </td>
-      </tr>
     </tbody>
   </table>
 </div>
