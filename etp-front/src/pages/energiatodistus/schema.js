@@ -302,6 +302,7 @@ export const v2018 = {
       puupelletit: FloatNonNegative,
       muu: R.repeat(MuuPolttoaine, 4)
     },
+    //TODO: allow negative
     'sahko-vuosikulutus-yhteensa': FloatNonNegative,
     'kaukolampo-vuosikulutus-yhteensa': FloatNonNegative,
     'polttoaineet-vuosikulutus-yhteensa': FloatNonNegative,
@@ -348,37 +349,50 @@ export const v2013 = R.compose(
   R.dissocPath(['perustiedot', 'laatimisvaihe'])
 )(v2018);
 
+const notIn2026 = R.compose(
+  R.dissocPath([
+    'toteutunut-ostoenergiankulutus',
+    'polttoaineet-vuosikulutus-yhteensa'
+  ])
+);
+
 /*
 Note: booleans are not in the frontend's schemas. For example lt$lammitys$lammonjako_lampotilajousto is not.
  */
-export const v2026 = R.mergeDeepRight(v2018, {
-  huomiot: {
-    'iv-ilmastointi': Huomio2026,
-    'valaistus-muut': Huomio2026,
-    lammitys: R.mergeDeepRight(Huomio2026, {
-      'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
-    }),
-    ymparys: Huomio2026,
-    'alapohja-ylapohja': Huomio2026
-  },
-  'toteutunut-ostoenergiankulutus': {
-    'tietojen-alkuperavuosi': {
-      ...Integer(100, new Date().getFullYear()),
-      format: formats.optionalYear
+export const v2026 = R.compose(
+  notIn2026,
+  R.mergeDeepRight(R.__, {
+    huomiot: {
+      'iv-ilmastointi': Huomio2026,
+      'valaistus-muut': Huomio2026,
+      lammitys: R.mergeDeepRight(Huomio2026, {
+        'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
+      }),
+      ymparys: Huomio2026,
+      'alapohja-ylapohja': Huomio2026
     },
-    lisatietoja: String(2, 500)
-  },
-  tulokset: {
-    'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
-      aurinkosahko: IntegerNonNegative,
-      aurinkolampo: IntegerNonNegative,
-      tuulisahko: IntegerNonNegative,
-      lampopumppu: IntegerNonNegative,
-      muulampo: IntegerNonNegative,
-      muusahko: IntegerNonNegative
+    'toteutunut-ostoenergiankulutus': {
+      'tietojen-alkuperavuosi': {
+        ...Integer(100, new Date().getFullYear()),
+        format: formats.optionalYear
+      },
+      lisatietoja: String(2, 500),
+      'fossiiliset-polttoaineet-vuosikulutus-yhteensa': FloatNonNegative,
+      'uusiutuvat-polttoaineet-vuosikulutus-yhteensa': FloatNonNegative,
+      'uusiutuva-energia-vuosikulutus-yhteensa': FloatNonNegative
+    },
+    tulokset: {
+      'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
+        aurinkosahko: IntegerNonNegative,
+        aurinkolampo: IntegerNonNegative,
+        tuulisahko: IntegerNonNegative,
+        lampopumppu: IntegerNonNegative,
+        muulampo: IntegerNonNegative,
+        muusahko: IntegerNonNegative
+      }
     }
-  }
-});
+  })
+)(v2018);
 
 export const redefineNumericValidation = (schema, constraint) => {
   const path = R.append(R.__, R.split('.', constraint.property));
