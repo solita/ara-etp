@@ -1116,7 +1116,11 @@
           }
         }
       },
-      "toteutuneet-yhteensa-header": "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia (sv)",
+      "toteutuneet-yhteensa-header": {
+        "2013": "Faktisk köpt energi",
+        "2018": "Faktisk köpt energi",
+        "2026": "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia (sv)"
+      },
       "label-context": "Faktisk köpt energi",
       "toteutuneet-yhteensa-table-header": "Energianlähde (sv)",
       "labels": {

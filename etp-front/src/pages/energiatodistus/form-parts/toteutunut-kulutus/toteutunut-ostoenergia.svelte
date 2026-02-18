@@ -26,7 +26,8 @@
 
 <H3
   text={$_(
-    'energiatodistus.toteutunut-ostoenergiankulutus.toteutuneet-yhteensa-header'
+    'energiatodistus.toteutunut-ostoenergiankulutus.toteutuneet-yhteensa-header.' +
+      versio
   )} />
 
 {#if R.equals(versio, 2026)}

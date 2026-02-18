@@ -301,25 +301,25 @@ export const eluku = (versio, nettoala, energiamuodot) =>
   )(energiamuodot);
 
 const energiamuodotUntil2018 = [
-    'sahko-vuosikulutus-yhteensa',
-    'kaukolampo-vuosikulutus-yhteensa',
-    'polttoaineet-vuosikulutus-yhteensa',
-    'kaukojaahdytys-vuosikulutus-yhteensa'
+  'sahko-vuosikulutus-yhteensa',
+  'kaukolampo-vuosikulutus-yhteensa',
+  'polttoaineet-vuosikulutus-yhteensa',
+  'kaukojaahdytys-vuosikulutus-yhteensa'
 ];
 
 const energiamuodot2026 = [
-    'sahko-vuosikulutus-yhteensa',
-    'kaukolampo-vuosikulutus-yhteensa',
-    'uusiutuvat-polttoaineet-vuosikulutus-yhteensa',
-    'fossiiliset-polttoaineet-vuosikulutus-yhteensa',
-    'kaukojaahdytys-vuosikulutus-yhteensa',
-    'uusiutuva-energia-vuosituotto-yhteensa'
+  'sahko-vuosikulutus-yhteensa',
+  'kaukolampo-vuosikulutus-yhteensa',
+  'uusiutuvat-polttoaineet-vuosikulutus-yhteensa',
+  'fossiiliset-polttoaineet-vuosikulutus-yhteensa',
+  'kaukojaahdytys-vuosikulutus-yhteensa',
+  'uusiutuva-energia-vuosituotto-yhteensa'
 ];
 
 export const fieldsWithToteutunutOstoenergia = {
-    2013: energiamuodotUntil2018,
-    2018: energiamuodotUntil2018,
-    2026: energiamuodot2026
+  2013: energiamuodotUntil2018,
+  2018: energiamuodotUntil2018,
+  2026: energiamuodot2026
 };
 
 const toteutunutOstoenergia = R.path(['toteutunut-ostoenergiankulutus']);

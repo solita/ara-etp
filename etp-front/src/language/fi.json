@@ -1145,7 +1145,11 @@
           }
         }
       },
-      "toteutuneet-yhteensa-header": "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia",
+      "toteutuneet-yhteensa-header": {
+        "2013": "Toteutunut ostenergia",
+        "2018": "Toteutunut ostenergia",
+        "2026": "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia"
+      },
       "label-context": "Toteutunut ostoenergia",
       "toteutuneet-yhteensa-table-header": "Energianlähde",
       "labels": {
