@@ -302,8 +302,7 @@ export const v2018 = {
       puupelletit: FloatNonNegative,
       muu: R.repeat(MuuPolttoaine, 4)
     },
-    //TODO: allow negative
-    'sahko-vuosikulutus-yhteensa': FloatNonNegative,
+    'sahko-vuosikulutus-yhteensa': AnyFloat,
     'kaukolampo-vuosikulutus-yhteensa': FloatNonNegative,
     'polttoaineet-vuosikulutus-yhteensa': FloatNonNegative,
     'kaukojaahdytys-vuosikulutus-yhteensa': FloatNonNegative

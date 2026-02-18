@@ -210,7 +210,7 @@
       :muunnoskerroin common-schema/NonNegative,
       :maara-vuodessa common-schema/NonNegative}]},
 
-   :sahko-vuosikulutus-yhteensa          common-schema/NonNegative,
+   :sahko-vuosikulutus-yhteensa          schema/Num,
    :kaukolampo-vuosikulutus-yhteensa     common-schema/NonNegative,
    :polttoaineet-vuosikulutus-yhteensa   common-schema/NonNegative,
    :kaukojaahdytys-vuosikulutus-yhteensa common-schema/NonNegative})
