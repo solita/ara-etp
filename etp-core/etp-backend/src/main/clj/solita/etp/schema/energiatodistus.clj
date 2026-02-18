@@ -210,7 +210,7 @@
       :muunnoskerroin common-schema/NonNegative,
       :maara-vuodessa common-schema/NonNegative}]},
 
-   :sahko-vuosikulutus-yhteensa          common-schema/NonNegative,
+   :sahko-vuosikulutus-yhteensa          schema/Num,
    :kaukolampo-vuosikulutus-yhteensa     common-schema/NonNegative,
    :polttoaineet-vuosikulutus-yhteensa   common-schema/NonNegative,
    :kaukojaahdytys-vuosikulutus-yhteensa common-schema/NonNegative})
@@ -281,6 +281,10 @@
   (-> schema2018
       (map/dissoc-in [:perustiedot :laatimisvaihe])))
 
+(defn dissoc-not-in-2026 [schema2018]
+  (-> schema2018
+      (map/dissoc-in [:toteutunut-ostoenergiankulutus :polttoaineet-vuosikulutus-yhteensa])))
+
 (def UserDefinedEnergiamuoto
   {:nimi         common-schema/String50
    :muotokerroin common-schema/NonNegative
@@ -305,14 +309,17 @@
                 [(xschema/optional-properties UserDefinedEnergia)])))
 
 (def EnergiatodistusSave2026
-  (-> EnergiatodistusSave2018
+  (-> (dissoc-not-in-2026 EnergiatodistusSave2018)
       (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key}
                         :lahtotiedot                    {:energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin schema/Bool
                                                          :lammitys
                                                          {:lammonjako-lampotilajousto schema/Bool}}
                         :toteutunut-ostoenergiankulutus {:tietojen-alkuperavuosi common-schema/Year
                                                          :lisatietoja-fi         common-schema/String500
-                                                         :lisatietoja-sv         common-schema/String500}
+                                                         :lisatietoja-sv         common-schema/String500
+                                                         :uusiutuvat-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
+                                                         :fossiiliset-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
+                                                         :uusiutuva-energia-vuosituotto-yhteensa common-schema/NonNegative}
                         :tulokset                       {:uusiutuvat-omavaraisenergiat-kokonaistuotanto
                                                          {:aurinkosahko common-schema/NonNegative
                                                           :aurinkolampo common-schema/NonNegative

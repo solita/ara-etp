@@ -1116,14 +1116,21 @@
           }
         }
       },
-      "toteutuneet-yhteensa-header": "Faktisk köpt energi totalt",
+      "toteutuneet-yhteensa-header": {
+        "2013": "Faktisk köpt energi",
+        "2018": "Faktisk köpt energi",
+        "2026": "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia (sv)"
+      },
       "label-context": "Faktisk köpt energi",
-      "toteutuneet-yhteensa-table-header": "Källa för köpt energi",
+      "toteutuneet-yhteensa-table-header": "Energianlähde (sv)",
       "labels": {
         "sahko-vuosikulutus-yhteensa": "El",
         "kaukolampo-vuosikulutus-yhteensa": "Fjärrvärme",
+        "uusiutuvat-polttoaineet-vuosikulutus-yhteensa": "Uusiutuva polttoaine (sv)",
+        "fossiiliset-polttoaineet-vuosikulutus-yhteensa": "Fossiilinen polttoaine (sv)",
         "polttoaineet-vuosikulutus-yhteensa": "Bränsle",
-        "kaukojaahdytys-vuosikulutus-yhteensa": "Fjärrkylning"
+        "kaukojaahdytys-vuosikulutus-yhteensa": "Fjärrkylning",
+        "uusiutuva-energia-vuosituotto-yhteensa": "Tuotettu uusiutuva energia (sv)"
       },
       "sahko-vuosikulutus-yhteensa": "El (kWh/år)",
       "sahko-neliovuosikulutus-yhteensa": "El (kWh/m²år)",

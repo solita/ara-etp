@@ -18,21 +18,16 @@
   export let inputLanguage;
   export let versio = 2018;
 
-  $: ostoenergiat = EtUtils.toteutuneetOstoenergiat(energiatodistus);
-
-  $: ostoenergiatSum = EtUtils.sumEtValues(ostoenergiat);
+  $: ostoenergiat = EtUtils.toteutuneetOstoenergiat(versio)(energiatodistus);
 
   $: toteutuneetOstoenergiatPerLammitettyNettoala =
     EtUtils.perLammitettyNettoala(energiatodistus, ostoenergiat);
-
-  $: toteutuneetOstoenergiatPerLammitettyNettoalaSum = R.compose(
-    EtUtils.sumEtValues
-  )(toteutuneetOstoenergiatPerLammitettyNettoala);
 </script>
 
 <H3
   text={$_(
-    'energiatodistus.toteutunut-ostoenergiankulutus.toteutuneet-yhteensa-header'
+    'energiatodistus.toteutunut-ostoenergiankulutus.toteutuneet-yhteensa-header.' +
+      versio
   )} />
 
 {#if R.equals(versio, 2026)}
@@ -72,7 +67,7 @@
       </tr>
     </thead>
     <tbody class="et-table--tbody">
-      {#each ['sahko-vuosikulutus-yhteensa', 'kaukolampo-vuosikulutus-yhteensa', 'polttoaineet-vuosikulutus-yhteensa', 'kaukojaahdytys-vuosikulutus-yhteensa'] as energiamuoto}
+      {#each EtUtils.fieldsWithToteutunutOstoenergia[versio] as energiamuoto}
         <tr class="et-table--tr">
           <td class="et-table--td">
             {$_(
@@ -97,23 +92,6 @@
           </td>
         </tr>
       {/each}
-      <tr class="et-table--tr border-t-1 border-disabled">
-        <td class="et-table--td uppercase">{$_('energiatodistus.yhteensa')}</td>
-        <td class="et-table--td">
-          {R.compose(
-            formats.numberFormat,
-            Maybe.get,
-            R.map(fxmath.round(0))
-          )(ostoenergiatSum)}
-        </td>
-        <td class="et-table--td">
-          {R.compose(
-            formats.numberFormat,
-            fxmath.round(0),
-            Maybe.get
-          )(toteutuneetOstoenergiatPerLammitettyNettoalaSum)}
-        </td>
-      </tr>
     </tbody>
   </table>
 </div>
