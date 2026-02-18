@@ -340,7 +340,7 @@ export const energiatodistus2026 = _ =>
         'lisatietoja-sv': Maybe.None(),
         'fossiiliset-polttoaineet-vuosikulutus-yhteensa': ValidNone(),
         'uusiutuvat-polttoaineet-vuosikulutus-yhteensa': ValidNone(),
-        'uusiutuva-energia-vuosikulutus-yhteensa': ValidNone()
+        'uusiutuva-energia-vuosituotto-yhteensa': ValidNone()
       },
       lahtotiedot: {
         'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': false,

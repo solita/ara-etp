@@ -378,7 +378,7 @@ export const v2026 = R.compose(
       lisatietoja: String(2, 500),
       'fossiiliset-polttoaineet-vuosikulutus-yhteensa': FloatNonNegative,
       'uusiutuvat-polttoaineet-vuosikulutus-yhteensa': FloatNonNegative,
-      'uusiutuva-energia-vuosikulutus-yhteensa': FloatNonNegative
+      'uusiutuva-energia-vuosituotto-yhteensa': FloatNonNegative
     },
     tulokset: {
       'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {

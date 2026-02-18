@@ -318,7 +318,7 @@ const fieldsWithToteutunutOstoenergia = R.cond([
       'uusiutuvat-polttoaineet-vuosikulutus-yhteensa',
       'fossiiliset-polttoaineet-vuosikulutus-yhteensa',
       'kaukojaahdytys-vuosikulutus-yhteensa',
-      'uusiutuva-energia-vuosikulutus-yhteensa'
+      'uusiutuva-energia-vuosituotto-yhteensa'
     ])
   ]
 ]);

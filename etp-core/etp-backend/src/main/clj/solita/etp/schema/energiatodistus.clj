@@ -319,7 +319,7 @@
                                                          :lisatietoja-sv         common-schema/String500
                                                          :uusiutuvat-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
                                                          :fossiiliset-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
-                                                         :uusiutuva-energia-vuosikulutus-yhteensa common-schema/NonNegative}
+                                                         :uusiutuva-energia-vuosituotto-yhteensa common-schema/NonNegative}
                         :tulokset                       {:uusiutuvat-omavaraisenergiat-kokonaistuotanto
                                                          {:aurinkosahko common-schema/NonNegative
                                                           :aurinkolampo common-schema/NonNegative
