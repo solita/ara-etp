@@ -8,7 +8,7 @@
     [:div {:class "toimenpide-ehdotukset"}
      [:h1 (l :te-muut-otsikko)]
      (str (l :te-muut-teksti))
-     [:h2 (l :te-muut-valaistus-otsikko  )]
+     [:h3 (l :te-muut-valaistus-otsikko)]
      (get-in energiatodistus [:huomiot :valaistus-muut (case kieli
                                                    :fi :teksti-fi
                                                    :sv :teksti-sv)])]))
@@ -18,7 +18,7 @@
         toimenpide (get-in energiatodistus [:huomiot :valaistus-muut :toimenpide] [])
         nimi-key (case kieli :fi :nimi-fi :sv :nimi-sv)]
     [:div {:class "toimenpide-ehdotukset"}
-     [:h3 (l :te-toimenpide-muutokset)]
+     [:h4 (l :te-toimenpide-muutokset)]
      (et/description-list
        (map-indexed (fn [idx item]
                       {:dt (str (inc idx) ".")
@@ -42,7 +42,7 @@
 (defn toimenpide-ehdotukset-suositukset [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
-     [:h2 (l :te-suositukset-otsikko)]
+     [:h3 (l :te-suositukset-otsikko)]
      (get-in energiatodistus [:huomiot  (case kieli
                                           :fi :suositukset-fi
                                           :sv :suositukset-sv)])]))

@@ -16,7 +16,7 @@
     [:div {:class "toimenpide-ehdotukset"}
      [:h1 (l :te-lammitys-ilmanvaihto-otsikko)]
      (str (l :lammitys-ilmanvaihto-teksti))
-     [:h2 (l :huomiot-lammitys-otsikko)]
+     [:h3 (l :huomiot-lammitys-otsikko)]
      (get-in energiatodistus [:huomiot :lammitys (case kieli
                                                   :fi :teksti-fi
                                                   :sv :teksti-sv)])]))
@@ -26,7 +26,7 @@
         toimenpide (get-in energiatodistus [:huomiot :lammitys :toimenpide] [])
         nimi-key (case kieli :fi :nimi-fi :sv :nimi-sv)]
     [:div {:class "toimenpide-ehdotukset"}
-     [:h3 (l :te-toimenpide-muutokset)]
+     [:h4 (l :te-toimenpide-muutokset)]
      (et/description-list
        (map-indexed (fn [idx item]
                       {:dt (str (inc idx) ".")
@@ -58,7 +58,7 @@
 (defn toimenpide-ehdotukset-ilmanvaihto [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
-     [:h2 (l :huomiot-ilmanvaihto-otsikko)]
+     [:h3 (l :huomiot-ilmanvaihto-otsikko)]
      (get-in energiatodistus [:huomiot :iv-ilmastointi (case kieli
                                                             :fi :teksti-fi
                                                             :sv :teksti-sv)])]))
@@ -68,7 +68,7 @@
         toimenpide (get-in energiatodistus [:huomiot :iv-ilmastointi :toimenpide] [])
         nimi-key (case kieli :fi :nimi-fi :sv :nimi-sv)]
     [:div {:class "toimenpide-ehdotukset"}
-     [:h3 (l :te-toimenpide-muutokset)]
+     [:h4 (l :te-toimenpide-muutokset)]
      (et/description-list
        (map-indexed (fn [idx item]
                       {:dt (str (inc idx) ".")

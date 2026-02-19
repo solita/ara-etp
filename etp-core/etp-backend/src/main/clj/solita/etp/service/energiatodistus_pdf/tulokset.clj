@@ -35,12 +35,12 @@
     [:div {:class "tulokset-section"}
      [:table {:class "tulokset-table tulokset-ostoenergia-table"}
       [:colgroup
-       [:col {:style "width: 20%;"}]
-       [:col {:style "width: 16%;"}]
-       [:col {:style "width: 16%;"}]
-       [:col {:style "width: 16%;"}]
-       [:col {:style "width: 16%;"}]
-       [:col {:style "width: 16%;"}]]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w10"}]
+       [:col {:class "col-w10"}]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :rowspan "2" :style "text-align:left;"} "\u00a0"]
@@ -83,13 +83,13 @@
   (let [omavarais        (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat])
         kokonaistuotanto (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto])]
     [:div {:class "tulokset-section"}
-     [:div {:class "tulokset-section-bar"} (l :tulokset-uusiutuva-energia)]
+     [:h3 (l :tulokset-uusiutuva-energia)]
      [:table {:class "tulokset-table tulokset-uusiutuva-table"}
       [:colgroup
-       [:col {:style "width: 40%;"}]
-       [:col {:style "width: 20%;"}]
-       [:col {:style "width: 20%;"}]
-       [:col {:style "width: 20%;"}]]
+       [:col {:class "col-w40"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
@@ -124,13 +124,13 @@
   [energiatodistus l]
   (let [tj (get-in energiatodistus [:tulokset :tekniset-jarjestelmat])]
     [:div {:class "tulokset-section"}
-     [:div {:class "tulokset-section-bar"} (l :tulokset-tekniset-jarjestelmat)]
+     [:h3 (l :tulokset-tekniset-jarjestelmat)]
      [:table {:class "tulokset-table tulokset-tekniset-table"}
       [:colgroup
-       [:col {:style "width: 40%;"}]
-       [:col {:style "width: 20%;"}]
-       [:col {:style "width: 20%;"}]
-       [:col {:style "width: 20%;"}]]
+       [:col {:class "col-w40"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
@@ -178,12 +178,12 @@
   [energiatodistus l]
   (let [nt (get-in energiatodistus [:tulokset :nettotarve])]
     [:div {:class "tulokset-section"}
-     [:div {:class "tulokset-section-bar"} (l :tulokset-nettotarve)]
+     [:h3 (l :tulokset-nettotarve)]
      [:table {:class "tulokset-table tulokset-nettotarve-table"}
       [:colgroup
-       [:col {:style "width: 60%;"}]
-       [:col {:style "width: 20%;"}]
-       [:col {:style "width: 20%;"}]]
+       [:col {:class "col-w60"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
@@ -213,12 +213,12 @@
   [energiatodistus l]
   (let [lk (get-in energiatodistus [:tulokset :lampokuormat])]
     [:div {:class "tulokset-section"}
-     [:div {:class "tulokset-section-bar"} (l :tulokset-lampokuormat)]
+     [:h3 (l :tulokset-lampokuormat)]
      [:table {:class "tulokset-table tulokset-lampokuormat-table"}
       [:colgroup
-       [:col {:style "width: 60%;"}]
-       [:col {:style "width: 20%;"}]
-       [:col {:style "width: 20%;"}]]
+       [:col {:class "col-w60"}]
+       [:col {:class "col-w20"}]
+       [:col {:class "col-w20"}]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
