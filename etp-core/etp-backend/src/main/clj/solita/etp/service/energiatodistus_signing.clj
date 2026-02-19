@@ -89,7 +89,7 @@
     (do-when-signing
       complete-energiatodistus
       #(let [draft? false
-             ^String pdf-path (energiatodistus-pdf-service/generate-pdf-as-file complete-energiatodistus language draft? laatija-allekirjoitus-id)
+             ^String pdf-path (energiatodistus-pdf-service/generate-et-2013-2018-pdf-as-file complete-energiatodistus language draft? laatija-allekirjoitus-id)
              signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
              pdf-file-key (energiatodistus-service/file-key id language)
              energiatodistus-pdf (File. pdf-path)

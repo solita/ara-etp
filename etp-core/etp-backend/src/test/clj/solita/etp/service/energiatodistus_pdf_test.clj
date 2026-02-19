@@ -80,10 +80,10 @@
             :let [energiatodistus (energiatodistus-service/find-energiatodistus
                                     ts/*db*
                                     id)
-                  file-path (service/generate-pdf-as-file energiatodistus
-                                                          "sv"
-                                                          true
-                                                          "allekirjoitus-id")]]
+                  file-path (service/generate-et-2013-2018-pdf-as-file energiatodistus
+                                                                       "sv"
+                                                                       true
+                                                                       "allekirjoitus-id")]]
       (t/is (-> file-path io/as-file .exists))
 
       (t/testing "Test that the expected metadata is in place"
@@ -116,10 +116,10 @@
                                         ts/*db*
                                         id)
                                       (assoc-in [:perustiedot :nimi-sv] nil))
-                  file-path (service/generate-pdf-as-file energiatodistus
-                                                          "sv"
-                                                          true
-                                                          "allekirjoitus-id")]]
+                  file-path (service/generate-et-2013-2018-pdf-as-file energiatodistus
+                                                                       "sv"
+                                                                       true
+                                                                       "allekirjoitus-id")]]
       (t/testing "Test that the generation works even when building name is not set"
         (let [expected-title "Energiatodistus"
               document (-> file-path io/as-file PDDocument/load)
