@@ -126,7 +126,7 @@
    :lampokuormat (extract-lampokuormat-data energiatodistus l)})
 
 (defn- section-bar [title]
-  [:div {:class "lahtotiedot-section-bar"} title])
+  [:h3 title])
 
 (defn- label-value-row [label value & [unit]]
   [:div {:class "lahtotiedot-row"}

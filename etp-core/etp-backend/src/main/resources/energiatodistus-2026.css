@@ -51,16 +51,7 @@ body {
     margin-bottom: 5px;
 }
 
-.toimenpide-ehdotukset h2 {
-    background-color: #23323e;
-    color: white;
-    padding: 2px;
-    font-size: 15px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-.toimenpide-ehdotukset h3 {
+.toimenpide-ehdotukset h4 {
     background-color: white;
     color: #23323e;
     height: auto;
@@ -106,6 +97,7 @@ body {
     width: 100%;
     border-collapse: collapse;
     margin-top: 5px;
+    margin-bottom: 8px;
 }
 
 .toimenpide-ehdotukset table th {
@@ -546,16 +538,6 @@ table.common-table td:last-child {
     margin: 2px 0 3px;
 }
 
-.lahtotiedot-section-bar {
-    background-color: #2f3a46;
-    color: white;
-    padding: 2px 8px;
-    font-weight: bold;
-    font-size: 14px;
-    letter-spacing: 0.01em;
-    margin: 0;
-}
-
 .lahtotiedot-row {
     padding: 2px 0;
 }
@@ -595,6 +577,7 @@ table.common-table td:last-child {
     border-collapse: collapse;
     border-spacing: 0;
     margin-top: 0;
+    margin-bottom: 8px;
     font-size: 14px;
     page-break-inside: avoid;
 }
@@ -769,21 +752,12 @@ table.common-table td:last-child {
     margin: 2px 0 3px;
 }
 
-.tulokset-section-bar {
-    background-color: #2f3a46;
-    color: white;
-    padding: 2px 8px;
-    font-weight: bold;
-    font-size: 14px;
-    letter-spacing: 0.01em;
-    margin: 0;
-}
-
 .tulokset-table {
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
     margin-top: 0;
+    margin-bottom: 8px;
     font-size: 14px;
     page-break-inside: avoid;
 }
