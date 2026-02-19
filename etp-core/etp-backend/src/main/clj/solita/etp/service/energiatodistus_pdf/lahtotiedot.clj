@@ -125,7 +125,7 @@
    :jaahdytys (extract-jaahdytys-data energiatodistus)
    :lampokuormat (extract-lampokuormat-data energiatodistus l)})
 
-(defn- section-bar [title]
+(defn- section-title [title]
   [:h3 title])
 
 (defn- label-value-row [label value & [unit]]
@@ -143,7 +143,7 @@
 
 (defn- rakennusvaippa-section [data l]
   [:section {:class "lahtotiedot-section"}
-   (section-bar (l :lahtotiedot-rakennusvaippa))
+   (section-title (l :lahtotiedot-rakennusvaippa))
    (label-value-row
      [:span (l :lahtotiedot-ilmanvuotoluku) [:sub "50"]]
      (:ilmanvuotoluku data)
@@ -171,7 +171,7 @@
 (defn- ilmanvaihto-section [data l]
   (let [iv (:ilmanvaihto data)]
     [:section {:class "lahtotiedot-section"}
-     (section-bar (l :lahtotiedot-ilmanvaihtojarjestelma))
+     (section-title (l :lahtotiedot-ilmanvaihtojarjestelma))
      (label-value-row (l :lahtotiedot-ilmanvaihto-kuvaus) (:kuvaus iv))
      [:table {:class "lahtotiedot-table"}
       [:colgroup
@@ -196,7 +196,7 @@
 (defn- lammitys-section [data l]
   (let [lam (:lammitys data)]
     [:section {:class "lahtotiedot-section"}
-     (section-bar (l :lahtotiedot-lammitysjarjestelma))
+     (section-title (l :lahtotiedot-lammitysjarjestelma))
      [:div {:class "lahtotiedot-two-col"}
       (label-value-row (l :lahtotiedot-lammitys-kuvaus) (:kuvaus lam))
       (label-value-row (l :lahtotiedot-lammonjako) (:lammonjako lam))]
@@ -241,12 +241,12 @@
 
 (defn- jaahdytys-section [data l]
   [:section {:class "lahtotiedot-section"}
-   (section-bar (l :lahtotiedot-jaahdytysjarjestelma))
+   (section-title (l :lahtotiedot-jaahdytysjarjestelma))
    (label-value-row (l :lahtotiedot-kylmakerroin) (get-in data [:jaahdytys :kylmakerroin]))])
 
 (defn- lampokuormat-section [data l]
   [:section {:class "lahtotiedot-section"}
-   (section-bar (l :lahtotiedot-sisaiset-lampokuormat))
+   (section-title (l :lahtotiedot-sisaiset-lampokuormat))
    [:table {:class "lahtotiedot-table"}
     [:colgroup
      [:col {:class "col-w40"}]
