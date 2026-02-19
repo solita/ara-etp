@@ -119,9 +119,9 @@
     ^PAdESSignatureParameters (.readObject object-input-stream)))
 
 (defn sign-pdf-at-time! [energiatodistus-id laatija-id now]
-  (with-bindings {#'solita.etp.service.signing.pdf-sign/get-signature-parameters get-parameters-in-test
-                  #'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file  generate-pdf-as-file-mock
-                  #'solita.etp.service.signing.pdf-sign/get-tsp-source           test-timeserver/get-tsp-source-in-test}
+  (with-bindings {#'solita.etp.service.signing.pdf-sign/get-signature-parameters             get-parameters-in-test
+                  #'solita.etp.service.energiatodistus-pdf/generate-et-2013-2018-pdf-as-file generate-pdf-as-file-mock
+                  #'solita.etp.service.signing.pdf-sign/get-tsp-source                       test-timeserver/get-tsp-source-in-test}
     (let [language (-> (energiatodistus-service/find-energiatodistus
                          ts/*db*
                          energiatodistus-id)
