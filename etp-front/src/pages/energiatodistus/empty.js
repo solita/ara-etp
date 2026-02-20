@@ -344,7 +344,11 @@ export const energiatodistus2026 = _ =>
       },
       lahtotiedot: {
         'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': false,
-        lammitys: { 'lammonjako-lampotilajousto': false }
+        lammitys: {
+          lammonjako: {
+            lampotilajousto: false
+          }
+        }
       },
 
       tulokset: {

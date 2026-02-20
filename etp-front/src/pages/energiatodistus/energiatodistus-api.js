@@ -34,7 +34,11 @@ const deserializer = {
   },
   lahtotiedot: {
     'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': Maybe.get,
-    lammitys: { 'lammonjako-lampotilajousto': Maybe.get }
+    lammitys: {
+      lammonjako: {
+        lampotilajousto: Maybe.get
+      }
+    }
   }
 };
 
