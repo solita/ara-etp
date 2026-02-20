@@ -228,7 +228,7 @@
       (t/is (= (energiatodistus-tila id) :draft))
       (service/start-energiatodistus-signing! db whoami id)
       (t/is (= (energiatodistus-tila id) :in-signing))
-      (energiatodistus-test-data/sign-pdf! id laatija-id)
+      (energiatodistus-test-data/sign-pdf! id laatija-id whoami)
       (t/is (= (service/end-energiatodistus-signing! db
                                                      ts/*aws-s3-client*
                                                      whoami

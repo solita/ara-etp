@@ -7,7 +7,6 @@
     [clojure.tools.logging :as log]
     [solita.common.certificates :as certificates]
     [solita.common.time :as time]
-    [solita.etp.etp2026 :as etp2026]
     [solita.etp.common.audit-log :as audit-log]
     [solita.etp.config :as config]
     [solita.etp.exception :as exception]
@@ -82,26 +81,41 @@
   Generate the pdf.
   Upload to S3.
   Return the data that needs to be signed in base64."
-  [db aws-s3-client id language laatija-allekirjoitus-id]
-  (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus}
-             (-> (complete-energiatodistus-service/find-complete-energiatodistus db id)
-                 (update :versio #(etp2026/implement-2026-via-2018 % "Details for 2026 version of pdf not yet clear. Using 2018 version for now.")))]
+  [db whoami aws-s3-client id language laatija-allekirjoitus-id]
+  (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
       complete-energiatodistus
       #(let [draft? false
-             ^String pdf-path (energiatodistus-pdf-service/generate-pdf-as-file complete-energiatodistus language draft? laatija-allekirjoitus-id)
+             ^String pdf-path (energiatodistus-pdf-service/generate-et-pdf-as-file
+                                db
+                                whoami
+                                (assoc complete-energiatodistus :allekirjoitusaika (time/now))
+                                language
+                                draft?
+                                laatija-allekirjoitus-id)
              signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
              pdf-file-key (energiatodistus-service/file-key id language)
              energiatodistus-pdf (File. pdf-path)
              _ (signature-as-png signature-png-path laatija-fullname)
              signature-png (File. signature-png-path)
-             origin-y (case versio 2013 648 2018 666)
+             signature-options (case versio
+                                 2013 {:signature-png signature-png
+                                       :page          1
+                                       :origin-x      75
+                                       :origin-y      648
+                                       :zoom          134}
+                                 2018 {:signature-png signature-png
+                                       :page          1
+                                       :origin-x      75
+                                       :origin-y      666
+                                       :zoom          134}
+                                 2026 {:signature-png signature-png
+                                       :page     2
+                                       :origin-x 450
+                                       :origin-y 760
+                                       :zoom 130})
              digest-and-stuff (pdf-sign/unsigned-document->digest-and-params energiatodistus-pdf
-                                                                             {:signature-png signature-png
-                                                                              :page          1
-                                                                              :origin-x      75
-                                                                              :origin-y      origin-y
-                                                                              :zoom          134})]
+                                                                             signature-options)]
          (file-service/upsert-file-from-file aws-s3-client
                                              pdf-file-key
                                              energiatodistus-pdf)
@@ -199,10 +213,10 @@
     (audit-log-message laatija-allekirjoitus-id id "Starting failed!")))
 
 (defn- sign-with-system-digest
-  [{:keys [db laatija-allekirjoitus-id id aws-s3-client]} language]
+  [{:keys [db whoami laatija-allekirjoitus-id id aws-s3-client]} language]
   (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Getting the digest"))
   (do-sign-with-system
-    #(find-energiatodistus-digest db aws-s3-client id language laatija-allekirjoitus-id)
+    #(find-energiatodistus-digest db whoami aws-s3-client id language laatija-allekirjoitus-id)
     (audit-log-message laatija-allekirjoitus-id id "Getting the digest failed!")))
 
 (defn- sign-with-system-sign

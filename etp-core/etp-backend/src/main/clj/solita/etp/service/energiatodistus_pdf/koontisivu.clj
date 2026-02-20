@@ -1,11 +1,27 @@
 (ns solita.etp.service.energiatodistus-pdf.koontisivu
   (:require
     [solita.common.formats :as formats]
-    [solita.etp.service.localization :as loc]))
+    [solita.etp.service.localization :as loc]
+    [hiccup.core :refer [h]])
+  (:import
+    (java.time Instant ZoneId)
+    (java.time.format DateTimeFormatter)))
+
+(def ^:private datetime-formatter
+  (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
+             (ZoneId/of "Europe/Helsinki")))
 
 (defn- fmt
   "Format number with specified decimal places. Returns empty string for nil."
   [value decimals] (or (formats/format-number value decimals false) ""))
+
+(defn format-allekirjoitusaika
+  "Format an instant into the desired format in Europe/Helsinki time.
+  Returns empty string for nil."
+  [^Instant time]
+  (if time
+    (.format datetime-formatter time)
+    ""))
 
 (defn koontisivu [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)]
@@ -40,12 +56,14 @@
          [:dt (l :lammitysjarjestelma)]
          [:dd (-> energiatodistus
                   (get-in [:lahtotiedot :lammitys (kieli {:fi :lammitysmuoto-label-fi
-                                                          :sv :lammitysmuoto-label-sv})]))]]
+                                                          :sv :lammitysmuoto-label-sv})])
+                  h)]]
         [:div
          [:dt (l :lammonjako)]
          [:dd (-> energiatodistus
                   (get-in [:lahtotiedot :lammitys (kieli {:fi :lammonjako-label-fi
-                                                          :sv :lammonjako-label-sv})]))]]]
+                                                          :sv :lammonjako-label-sv})])
+                  h)]]]
        [:dl {:id    "koontisivu-lammonjakojarjestelma"
              :class "table-description-list"}
         [:div
@@ -60,13 +78,15 @@
          [:dt (l :ilmanvaihtojärjestelmä)]
          [:dd (-> energiatodistus
                   (get-in [:lahtotiedot :ilmanvaihto (kieli {:fi :label-fi
-                                                             :sv :label-sv})]))]]]
+                                                             :sv :label-sv})])
+                  h)]]]
        [:h2 (l :toteutunut-ostoenergy-ja-uusiutuva)]
        [:dl
         [:dt (l :tiedot-ovat-vuodelta)]
         [:dd (-> energiatodistus :toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi (fmt 0))]]
        [:p (-> energiatodistus :toteutunut-ostoenergiankulutus (kieli {:fi :lisatietoja-fi
-                                                                       :sv :lisatietoja-sv}))]
+                                                                       :sv :lisatietoja-sv})
+               h)]
        [:table {:class "common-table"}
         [:thead
          [:tr
@@ -104,10 +124,10 @@
        (if (-> energiatodistus :perusparannuspassi-valid)
          [:p (str (l :perusparannuspassi-laadinta)
                   " "
-                  (-> energiatodistus :perusparannuspassi-id))]
+                  (-> energiatodistus :perusparannuspassi-id h))]
          [:div
           [:p {:id "koontisivu-keskeiset-toimenpiteet"}
-           (-> energiatodistus :perustiedot (get-in [(kieli {:fi :keskeiset-suositukset-fi})]))]
+           (-> energiatodistus :perustiedot (get-in [(kieli {:fi :keskeiset-suositukset-fi})]) h)]
           [:p (l :toimenpiteet-yksityiskohtaisemmin)]])]
 
       [:div {:class "page-section"
@@ -115,25 +135,25 @@
        [:dl
         [:div
          [:dt (l :havainnointikaynti-ajankohta)]
-         [:dd (str (-> energiatodistus :perustiedot :havainnointikaynti)
+         [:dd (str (-> energiatodistus :perustiedot :havainnointikaynti h)
                    " "
                    (-> energiatodistus
                        :perustiedot
                        (get-in [(kieli {:fi :havainnointikayntityyppi-fi
                                         :sv :havainnointikayntityyppi-sv})])
-                       (or (l :havainnointikayntityyppi-ei-asetettu))))]]
+                       (or (l :havainnointikayntityyppi-ei-asetettu))
+                       h))]]
         [:div
          [:dt (l :laskentatyokalu-nimi-versio)]
-         [:dd (-> energiatodistus :tulokset :laskentatyokalu)]]]]
+         [:dd (-> energiatodistus :tulokset :laskentatyokalu h)]]]]
       [:div {:class "page-section"
              :id    "koontisivu-laatijan-tiedot"}
        [:dl
         [:div
          [:dt (l :yritys)]
-         [:dd (-> energiatodistus :perustiedot :yritys :nimi)]]
+         [:dd (-> energiatodistus :perustiedot :yritys :nimi h)]]
         [:div
          [:dt (l :sahkoinen-allekirjoitus)]
          [:dd
-          (str (-> energiatodistus :laatija-fullname) ", "
-               (-> energiatodistus :allekirjoituspaiva (or "(allekirjoituspvm)")) ", "
-               (-> energiatodistus :allekirjoitusaika (or "(allekirjoitusaika)")))]]]]]}))
+          (str (-> energiatodistus :laatija-fullname h) " - "
+               (-> energiatodistus :allekirjoitusaika format-allekirjoitusaika))]]]]]}))
