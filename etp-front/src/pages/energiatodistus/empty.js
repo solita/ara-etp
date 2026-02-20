@@ -347,6 +347,47 @@ export const energiatodistus2026 = _ =>
           muulampo: ValidNone(),
           muusahko: ValidNone()
         }
+      },
+      ilmastoselvitys: {
+        laatimisajankohta: ValidNone(),
+        laatija: ValidNone(),
+        yritys: Maybe.None(),
+        'yritys-osoite': Maybe.None(),
+        'yritys-postinumero': ValidNone(),
+        'yritys-postitoimipaikka': Maybe.None(),
+        'laadintaperuste': ValidNone(),
+        hiilijalanjalki: {
+          rakennus: {
+            'rakennustuotteiden-valmistus': ValidNone(),
+            'kuljetukset-tyomaavaihe': ValidNone(),
+            'rakennustuotteiden-vaihdot': ValidNone(),
+            energiankaytto: ValidNone(),
+            purkuvaihe: ValidNone()
+          },
+          rakennuspaikka: {
+            'rakennustuotteiden-valmistus': ValidNone(),
+            'kuljetukset-tyomaavaihe': ValidNone(),
+            'rakennustuotteiden-vaihdot': ValidNone(),
+            energiankaytto: ValidNone(),
+            purkuvaihe: ValidNone()
+          }
+        },
+        hiilikadenjalki: {
+          rakennus: {
+            uudelleenkaytto: ValidNone(),
+            kierratys: ValidNone(),
+            'ylimaarainen-uusiutuvaenergia': ValidNone(),
+            'hiilivarastovaikutus': ValidNone(),
+            karbonatisoituminen: ValidNone()
+          },
+          rakennuspaikka: {
+            uudelleenkaytto: ValidNone(),
+            kierratys: ValidNone(),
+            'ylimaarainen-uusiutuvaenergia': ValidNone(),
+            'hiilivarastovaikutus': ValidNone(),
+            karbonatisoituminen: ValidNone()
+          }
+        }
       }
     }
   );

@@ -304,6 +304,55 @@
       (assoc-in [:toteutunut-ostoenergiankulutus :ostettu-energia :muu]
                 [(xschema/optional-properties UserDefinedEnergia)])))
 
+
+
+(def Hiilijalanjalkirakennus
+   {:rakennustuotteiden-valmistus   schema/Num
+    :kuljetukset-tyomaavaihe        schema/Num
+    :rakennustuotteiden-vaihdot     schema/Num
+    :energiankaytto                 schema/Num
+    :purkuvaihe                     schema/Num})
+
+(def Hiilijalanjalkirakennuspaikka
+   {:rakennustuotteiden-valmistus   schema/Num
+    :kuljetukset-tyomaavaihe        schema/Num
+    :rakennustuotteiden-vaihdot     schema/Num
+    :energiankaytto                 schema/Num
+    :purkuvaihe                     schema/Num})
+
+(def Hiilikadenjalkirakennus
+  {:uudelleenkaytto                 schema/Num
+   :kierratys                       schema/Num
+   :ylimaarainen-uusiutuvaenergia   schema/Num
+   :hiilivarastovaikutus            schema/Num
+   :karbonatisoituminen             schema/Num})
+
+(def Hiilikadenjalkirakennuspaikka
+  {:uudelleenkaytto                 schema/Num
+   :kierratys                       schema/Num
+   :ylimaarainen-uusiutuvaenergia   schema/Num
+   :hiilivarastovaikutus            schema/Num
+   :karbonatisoituminen             schema/Num})
+
+(def Hiilijalanjalki
+  {:rakennus       Hiilijalanjalkirakennus
+   :rakennuspaikka Hiilijalanjalkirakennuspaikka})
+
+(def Hiilikadenjalki
+  {:rakennus        Hiilikadenjalkirakennus
+   :rakennuspaikka  Hiilikadenjalkirakennuspaikka})
+
+(def Ilmastoselvitys
+  {:laatimisajankohta        common-schema/Date
+   :laatija                  common-schema/String50
+   :yritys                   common-schema/String150
+   :yritys-osoite            common-schema/String50
+   :yritys-postinumero       geo-schema/PostinumeroFI
+   :yritys-postitoimipaikka  common-schema/String30
+   :laadintaperuste          common-schema/Key
+   :hiilijalanjalki          Hiilijalanjalki
+   :hiilikadenjalki          Hiilikadenjalki})
+
 (def EnergiatodistusSave2026
   (-> EnergiatodistusSave2018
       (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key}
@@ -325,7 +374,8 @@
                                                          :lammitys          (assoc Huomio2026
                                                                               :kayttoikaa-jaljella-arvio-vuosina common-schema/IntNonNegative)
                                                          :ymparys           Huomio2026
-                                                         :alapohja-ylapohja Huomio2026}})
+                                                         :alapohja-ylapohja Huomio2026}
+                        :ilmastoselvitys                 Ilmastoselvitys})
       xschema/optional-properties))
 
 (defn ->EnergiatodistusSaveExternal [schema]

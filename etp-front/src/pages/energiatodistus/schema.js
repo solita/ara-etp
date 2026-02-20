@@ -377,6 +377,46 @@ export const v2026 = R.mergeDeepRight(v2018, {
       muulampo: IntegerNonNegative,
       muusahko: IntegerNonNegative
     }
+  },
+  ilmastoselvitys: {
+    laatimisajankohta: DateValue(),
+    laatija: String(2, 500),
+    yritys: String(2, 500),
+    'yritys-osoite': String(2, 50),
+    'yritys-postinumero': YritysPostinumero,
+    'yritys-postitoimipaikka': String(2, 30),
+    hiilijalanjalki: {
+      rakennus: {
+        'rakennustuotteiden-valmistus': IntegerNonNegative,
+        'kuljetukset-tyomaavaihe': IntegerNonNegative,
+        'rakennustuotteiden-vaihdot': IntegerNonNegative,
+        energiankaytto: IntegerNonNegative,
+        purkuvaihe: IntegerNonNegative,
+      },
+      rakennuspaikka: {
+        'rakennustuotteiden-valmistus': IntegerNonNegative,
+        'kuljetukset-tyomaavaihe': IntegerNonNegative,
+        'rakennustuotteiden-vaihdot': IntegerNonNegative,
+        energiankaytto: IntegerNonNegative,
+        purkuvaihe: IntegerNonNegative
+        }
+      },
+    hiilikadenjalki: {
+      rakennus: {
+        uudelleenkaytto: IntegerNonNegative,
+        kierratys: IntegerNonNegative,
+        'ylimaarainen-uusiutuvaenergia': IntegerNonNegative,
+        'hiilivarastovaikutus': IntegerNonNegative,
+        karbonatisoituminen: IntegerNonNegative
+      },
+      rakennuspaikka: {
+        uudelleenkaytto: IntegerNonNegative,
+        kierratys: IntegerNonNegative,
+        'ylimaarainen-uusiutuvaenergia': IntegerNonNegative,
+        'hiilivarastovaikutus': IntegerNonNegative,
+        karbonatisoituminen: IntegerNonNegative
+      }
+    }
   }
 });
 
