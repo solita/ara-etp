@@ -313,13 +313,13 @@
       (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key}
                         :lahtotiedot                    {:energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin schema/Bool
                                                          :lammitys
-                                                         {:lammonjako-lampotilajousto schema/Bool}}
-                        :toteutunut-ostoenergiankulutus {:tietojen-alkuperavuosi common-schema/Year
-                                                         :lisatietoja-fi         common-schema/String500
-                                                         :lisatietoja-sv         common-schema/String500
-                                                         :uusiutuvat-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
+                                                         {:lammonjako {:lampotilajousto schema/Bool}}}
+                        :toteutunut-ostoenergiankulutus {:tietojen-alkuperavuosi                         common-schema/Year
+                                                         :lisatietoja-fi                                 common-schema/String500
+                                                         :lisatietoja-sv                                 common-schema/String500
+                                                         :uusiutuvat-polttoaineet-vuosikulutus-yhteensa  common-schema/NonNegative
                                                          :fossiiliset-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
-                                                         :uusiutuva-energia-vuosituotto-yhteensa common-schema/NonNegative}
+                                                         :uusiutuva-energia-vuosituotto-yhteensa         common-schema/NonNegative}
                         :tulokset                       {:uusiutuvat-omavaraisenergiat-kokonaistuotanto
                                                          {:aurinkosahko common-schema/NonNegative
                                                           :aurinkolampo common-schema/NonNegative

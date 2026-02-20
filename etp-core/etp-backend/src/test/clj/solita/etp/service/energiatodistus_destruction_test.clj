@@ -392,7 +392,7 @@
 
                                          ;;New et26 booleans should be false
                                          :lt$energiankulutuksen_valmius_reagoida_ulkoisiin_signaaleihin (false? value)
-                                         :lt$lammitys$lammonjako_lampotilajousto (false? value)
+                                         :lt$lammitys$lammonjako$lampotilajousto (false? value)
 
                                          ;; Other values are null
                                          (nil? value))})

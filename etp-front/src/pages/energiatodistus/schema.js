@@ -356,7 +356,7 @@ const notIn2026 = R.compose(
 );
 
 /*
-Note: booleans are not in the frontend's schemas. For example lt$lammitys$lammonjako_lampotilajousto is not.
+Note: booleans are not in the frontend's schemas. For example lt$lammitys$lammonjako$lampotilajousto is not.
  */
 export const v2026 = R.compose(
   notIn2026,

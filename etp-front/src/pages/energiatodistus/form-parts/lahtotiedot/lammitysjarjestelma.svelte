@@ -132,7 +132,7 @@
   <div class="w-full py-4">
     <Checkbox
       bind:model={energiatodistus}
-      lens={R.compose(lammonjakoLens, R.lensProp('lammonjako-lampotilajousto'))}
+      lens={R.compose(lammonjakoLens, R.lensProp('lampotilajousto'))}
       label={$_(
         'energiatodistus.lahtotiedot.lammitys.lammonjakojarjestelma-mukautettavissa'
       )}
