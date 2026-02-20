@@ -5,6 +5,7 @@
   export let title = '';
   export let disabled = false;
   export let largeIcon = false;
+  export let dataCy = undefined;
 </script>
 
 <style type="text/postcss">
@@ -29,7 +30,7 @@
   }
 </style>
 
-<button {type} {title} {disabled} on:click>
+<button {type} {title} {disabled} data-cy={dataCy} on:click>
   <span class="icon-outlined mr-1 font-icon {largeIcon ? 'text-3xl' : ''}"
     >{icon}</span>
   {text}

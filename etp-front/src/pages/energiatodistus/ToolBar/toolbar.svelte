@@ -237,6 +237,7 @@
   {/if}
   {#if id.isSome() && Kayttajat.isLaatija(whoami)}
     <button
+      data-cy="copy-button"
       disabled={pendingExecution}
       on:click={_ => {
         const newEtPage = _ =>

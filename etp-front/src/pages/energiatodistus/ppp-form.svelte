@@ -78,6 +78,7 @@
       text={$_('energiatodistus.perusparannuspassi.header')} />
     {#if !perusparannuspassi.valid}
       <TextButton
+        dataCy="add-ppp-button"
         icon="add_circle_outline"
         text={$_('energiatodistus.perusparannuspassi.add-button')}
         type="button"
@@ -85,6 +86,7 @@
         on:click={onAddPPP} />
     {:else}
       <TextButton
+        dataCy="delete-ppp-button"
         icon="delete_forever"
         text={$_('energiatodistus.perusparannuspassi.delete-button')}
         type="button"
