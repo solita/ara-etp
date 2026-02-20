@@ -540,4 +540,82 @@ context('Laatija', () => {
       });
     }
   );
+
+  (isEtp2026Enabled() ? describe : describe.skip)(
+    'Copy energiatodistus with perusparannuspassi',
+    () => {
+      it('should copy perusparannuspassi data when copying energiatodistus', () => {
+        cy.intercept({
+          method: 'POST',
+          pathname: /\/api\/private\/energiatodistukset\/2026$/
+        }).as('post');
+
+        cy.intercept({
+          method: 'PUT',
+          pathname: /\/api\/private\/energiatodistukset\/2026\/*/
+        }).as('save');
+
+        cy.intercept({
+          method: 'POST',
+          pathname: /\/api\/private\/perusparannuspassit\/2026$/
+        }).as('postPpp');
+
+        // Create a new ET 2026
+        cy.visit('/#/energiatodistus/all');
+        cy.get('[data-cy="create-new-et26"]').click();
+
+        // Set required fields for basic save
+        cy.selectInSelect(
+          'perustiedot.laatimisvaihe',
+          'Olemassa oleva rakennus'
+        );
+        cy.selectInSelect(
+          'perustiedot.havainnointikayntityyppi-id',
+          'Virtuaalikäynti'
+        );
+
+        // Save to create the energiatodistus
+        cy.get('[data-cy="save-button"]').click();
+        cy.wait('@post');
+        cy.wait('@save');
+
+        // Wait for navigation to the created energiatodistus
+        cy.location('hash').should('match', /\/energiatodistus\/2026\/\d+/);
+
+        // Scroll to PPP section and add PPP
+        cy.get('#perusparannuspassi').scrollIntoView();
+        cy.get('[data-cy="add-ppp-button"]').click();
+
+        // Fill in havainnointikäynnin päivämäärä
+        const testDate = '15.06.2025';
+        cy.get('[data-cy="passin-perustiedot.havainnointikaynti"]').type(
+          testDate
+        );
+
+        // Save the ET + PPP combo
+        cy.get('[data-cy="save-button"]').click();
+        cy.wait('@save');
+        cy.wait('@postPpp');
+
+        // Copy the energiatodistus using the toolbar
+        cy.get('[data-cy="copy-button"]').click();
+
+        // Should navigate to new ET with copy-from-id
+        cy.location('hash').should(
+          'match',
+          /\/energiatodistus\/2026\/new\?copy-from-id=\d+/
+        );
+
+        // Verify PPP section exists and is valid (should be added automatically)
+        cy.get('#perusparannuspassi').scrollIntoView();
+        cy.get('[data-cy="delete-ppp-button"]').should('exist');
+
+        // Verify the havainnointikäynnin päivämäärä is copied
+        cy.get('[data-cy="passin-perustiedot.havainnointikaynti"]').should(
+          'have.value',
+          testDate
+        );
+      });
+    }
+  );
 });
