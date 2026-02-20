@@ -762,6 +762,37 @@
         laatimisvaiheet (luokittelu-service/find-laatimisvaiheet db)]
     (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf db whoami complete-energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotarkoitukset draft?))))
 
+;; Set as dynamic so that it can be mocked in tests.
+(defn ^:dynamic generate-et-2026-pdf-as-file [db whoami complete-energiatodistus kieli draft? laatija-allekirjoitus-id]
+  (let [pdf-path (->> (java.util.UUID/randomUUID)
+                  .toString
+                  (format "energiatodistus-%s.pdf")
+                  (str tmp-dir))
+        input-stream (generate-et-2026-pdf-as-input-stream db whoami complete-energiatodistus kieli draft?)]
+    (io/make-parents pdf-path)
+    (io/copy input-stream (io/file pdf-path))
+
+    (set-metadata pdf-path
+                  (:laatija-fullname complete-energiatodistus)
+                  laatija-allekirjoitus-id
+                  (or (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]) "Energiatodistus"))
+    (when (and
+            ;; For ET 2026, the input stream for a draft already has the draft watermark in place
+            (not draft?)
+            (contains? #{"local-dev" "dev" "test"} config/environment-alias))
+      (watermark-pdf/add-watermark pdf-path (test-watermark-texts kieli)))
+    pdf-path))
+
+(defn generate-et-pdf-as-file [db whoami
+                               {:keys [versio] :as complete-energiatodistus}
+                               kieli draft? laatija-allekirjoitus-id]
+  (cond
+    (= 2026 versio)
+    (generate-et-2026-pdf-as-file db whoami complete-energiatodistus kieli draft? laatija-allekirjoitus-id)
+
+    (contains? #{2013 2018} versio)
+    (generate-et-2013-2018-pdf-as-file complete-energiatodistus kieli draft? laatija-allekirjoitus-id)))
+
 (defn find-existing-pdf [aws-s3-client id kieli]
   (let [file-key (energiatodistus-service/file-key id kieli)]
     (if (file-service/file-exists? aws-s3-client file-key)

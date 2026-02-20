@@ -32,6 +32,13 @@
     (io/copy (io/file in) (io/file out))
     out))
 
+(defn generate-2026-pdf-as-file-mock [_ _ _ _ _ _]
+  (let [in "src/test/resources/energiatodistukset/signing-process/generate-pdf-as-file.pdf"
+        out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
+    (io/make-parents out)
+    (io/copy (io/file in) (io/file out))
+    out))
+
 (def laatija-auth-time test-data.laatija/laatija-auth-time)
 
 (defn get-parameters-in-test [_]
@@ -43,6 +50,7 @@
   (with-bindings
     ;; Use an already existing pdf.
     {#'solita.etp.service.energiatodistus-pdf/generate-et-2013-2018-pdf-as-file generate-pdf-as-file-mock
+     #'solita.etp.service.energiatodistus-pdf/generate-et-2026-pdf-as-file      generate-2026-pdf-as-file-mock
      ;; Mock the clock because laatija is not allowed to use system signing if the session is too old.
      #'time/clock                                                               (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
                                                                                  (ZoneId/systemDefault))
