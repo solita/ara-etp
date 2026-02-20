@@ -56,6 +56,11 @@
     R.dissoc('id')
   );
 
+  const cleanPerusparannuspassiCopy = R.compose(
+    R.assoc('energiatodistus-id', null),
+    R.dissoc('id')
+  );
+
   $: copyFromId = R.compose(
     Maybe.fromNull,
     R.prop('copy-from-id'),
@@ -124,11 +129,25 @@
       R.chain(
         response =>
           R.map(
-            R.assoc('laskutusosoitteet', R.__, response),
-            laatijaApi.laskutusosoitteet(response.whoami.id)
+            R.mergeLeft(response),
+            Future.parallelObject(2, {
+              laskutusosoitteet: laatijaApi.laskutusosoitteet(
+                response.whoami.id
+              ),
+              perusparannuspassi: Maybe.fold(
+                Future.resolve(empty.perusparannuspassi(null)),
+                R.compose(
+                  R.map(cleanPerusparannuspassiCopy),
+                  pppApi.getPerusparannuspassi(fetch)
+                )
+              )(
+                Maybe.isSome(copyFromId)
+                  ? response.energiatodistus['perusparannuspassi-id']
+                  : Maybe.None()
+              )
+            })
           ),
         Future.parallelObject(7, {
-          perusparannuspassi: Future.resolve(empty.perusparannuspassi(null)),
           energiatodistus: Maybe.fold(
             Future.resolve(emptyEnergiatodistus(version)),
             R.compose(
