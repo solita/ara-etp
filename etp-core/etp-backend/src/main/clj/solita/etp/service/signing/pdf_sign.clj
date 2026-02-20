@@ -113,23 +113,45 @@
   (-> (ObjectInputStream. input-stream)
       .readObject))
 
-(defn ^:dynamic get-signature-parameters [{:keys [^File signature-png page origin-x origin-y zoom]}]
-  (let [signature-png (doto (InMemoryDocument. (io/input-stream signature-png))
-                        (.setMimeType (MimeType/fromFileExtension "png")))
+(defn- signature-image-parameters [^File signature-png page origin-x origin-y zoom width height]
+  (cond
+    ;; The case where the signature image is used
+    (and signature-png page origin-x origin-y zoom)
+    (let [signature-png (doto (InMemoryDocument. (io/input-stream signature-png))
+                          (.setMimeType (MimeType/fromFileExtension "png")))
 
-        ^SignatureFieldParameters sig-field-params (doto (SignatureFieldParameters.)
-                                                     (.setPage page)
-                                                     (.setOriginX origin-x)
-                                                     (.setOriginY origin-y))
+          ^SignatureFieldParameters field-parameters (doto (SignatureFieldParameters.)
+                                                       (.setPage page)
+                                                       (.setOriginX origin-x)
+                                                       (.setOriginY origin-y))]
+      (doto (SignatureImageParameters.)
+        (.setFieldParameters field-parameters)
+        (.setImage signature-png)
+        (.setZoom zoom)))
 
-        ^SignatureImageParameters sig-img (doto (SignatureImageParameters.)
-                                            (.setFieldParameters sig-field-params)
-                                            (.setImage signature-png)
-                                            (.setZoom zoom))
+    ;; No signature image, but still got dimensions for the clickable signature area
+    (and page origin-x origin-y width height)
+    (let [^SignatureFieldParameters field-parameters (doto (SignatureFieldParameters.)
+                                                       (.setPage page)
+                                                       (.setOriginX origin-x)
+                                                       (.setOriginY origin-y)
+                                                       (.setWidth width)
+                                                       (.setHeight height))]
+      (doto (SignatureImageParameters.)
+        (.setFieldParameters field-parameters)))))
 
+(defn ^:dynamic get-signature-parameters [{:keys [^File signature-png
+                                                  page origin-x origin-y zoom width height]}]
+  (let [^SignatureImageParameters image-parameters (signature-image-parameters signature-png
+                                                                               page
+                                                                               origin-x
+                                                                               origin-y
+                                                                               zoom
+                                                                               width
+                                                                               height)
         signature-parameters (doto (PAdESSignatureParameters.)
                                (.setSignatureLevel SignatureLevel/PAdES_BASELINE_B)
-                               (.setImageParameters sig-img)
+                               (.setImageParameters image-parameters)
                                (.setDigestAlgorithm DigestAlgorithm/SHA256))]
     signature-parameters))
 
