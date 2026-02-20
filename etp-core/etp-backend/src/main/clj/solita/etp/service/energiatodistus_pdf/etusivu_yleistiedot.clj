@@ -1,7 +1,8 @@
 (ns solita.etp.service.energiatodistus-pdf.etusivu-yleistiedot
   (:require
     [solita.common.time :as time]
-    [solita.etp.service.localization :as loc]))
+    [solita.etp.service.localization :as loc]
+    [hiccup.core :refer [h]]))
 
 (defn- description-list [key-vals]
   (into [:dl]
@@ -23,29 +24,29 @@
      (description-list
        [{:dt (l :rakennuksen-nimi-ja-osoite)
         :dd [:div
-             (get-in energiatodistus [:perustiedot (case kieli
-                                                     :fi :nimi-fi
-                                                     :sv :nimi-sv)])
+             (-> energiatodistus (get-in [:perustiedot (case kieli
+                                                         :fi :nimi-fi
+                                                         :sv :nimi-sv)]) h)
               [:br]
-             (get-in energiatodistus [:perustiedot (case kieli
-                                                     :fi :katuosoite-fi
-                                                     :sv :katuosoite-sv)])
+             (-> energiatodistus (get-in [:perustiedot (case kieli
+                                                         :fi :katuosoite-fi
+                                                         :sv :katuosoite-sv)]) h)
              [:br]
-             (get-in energiatodistus [:perustiedot :postinumero])
+             (-> energiatodistus (get-in [:perustiedot :postinumero]) h)
              " "
-             (get-in energiatodistus [:perustiedot (case kieli
-                                                     :fi :postitoimipaikka-fi
-                                                     :sv :postitoimipaikka-sv)])]}
+             (-> energiatodistus (get-in [:perustiedot (case kieli
+                                                         :fi :postitoimipaikka-fi
+                                                         :sv :postitoimipaikka-sv)]) h)]}
        {:dt (l :pysyva-rakennustunnus)
-        :dd (get-in energiatodistus [:perustiedot :rakennustunnus])}
+        :dd (-> energiatodistus (get-in [:perustiedot :rakennustunnus]) h)}
        {:dt (l :rakennuksen-valmistumisvuosi)
         :dd (get-in energiatodistus [:perustiedot :valmistumisvuosi])}
        {:dt (l :rakennuksen-kayttotarkoitusluokka)
-        :dd (-> energiatodistus (get-in [:perustiedot :kayttotarkoitus]) (loc/et-perustiedot-kayttotarkoitus->description alakayttotarkoitukset kieli))}
+        :dd (-> energiatodistus (get-in [:perustiedot :kayttotarkoitus]) (loc/et-perustiedot-kayttotarkoitus->description alakayttotarkoitukset kieli) h)}
        {:dt (l :energiatodistuksen-tunnus)
         :dd (:id energiatodistus)}
        {:dt (l :energiatodistus-laadittu)
-        :dd laatimisvaihe-kuvaus}
+        :dd (h laatimisvaihe-kuvaus)}
        {:dds
         [(str (l :todistuksen-laatimispaiva) ": "
               (-> energiatodistus (get-in [:allekirjoitusaika]) time/format-date))
