@@ -1,7 +1,8 @@
 (ns solita.etp.service.energiatodistus-pdf.toimenpide-ehdotukset-muut
   (:require
     [solita.etp.service.localization :as loc]
-    [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset :as et]))
+    [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset :as et]
+    [hiccup.core :refer [h]]))
 
 (defn toimenpide-ehdotukset-muut [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
@@ -9,9 +10,11 @@
      [:h1 (l :te-muut-otsikko)]
      (str (l :te-muut-teksti))
      [:h3 (l :te-muut-valaistus-otsikko)]
-     (get-in energiatodistus [:huomiot :valaistus-muut (case kieli
-                                                   :fi :teksti-fi
-                                                   :sv :teksti-sv)])]))
+     (-> energiatodistus
+         (get-in [:huomiot :valaistus-muut (case kieli
+                                             :fi :teksti-fi
+                                             :sv :teksti-sv)])
+         h)]))
 
 (defn toimenpide-ehdotukset-list-muut [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)
@@ -22,7 +25,7 @@
      (et/description-list
        (map-indexed (fn [idx item]
                       {:dt (str (inc idx) ".")
-                       :dd (get item nimi-key "")})
+                       :dd (-> item (get nimi-key "") h)})
                     toimenpide))]))
 
 
@@ -43,9 +46,11 @@
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
      [:h3 (l :te-suositukset-otsikko)]
-     (get-in energiatodistus [:huomiot  (case kieli
-                                          :fi :suositukset-fi
-                                          :sv :suositukset-sv)])]))
+     (-> energiatodistus
+         (get-in [:huomiot (case kieli
+                             :fi :suositukset-fi
+                             :sv :suositukset-sv)])
+         h)]))
 
 (defn generate-all-toimepide-ehdotukset-muut [params]
   (into [:div]

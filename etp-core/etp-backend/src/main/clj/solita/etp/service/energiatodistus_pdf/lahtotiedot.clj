@@ -1,7 +1,8 @@
 (ns solita.etp.service.energiatodistus-pdf.lahtotiedot
   "E-luvun laskennan lähtötiedot page for Energiatodistus 2026 PDF"
   (:require [solita.common.formats :as formats]
-            [solita.etp.service.localization :as loc]))
+            [solita.etp.service.localization :as loc]
+            [hiccup.core :refer [h]]))
 
 (defn- fmt
   "Format number with specified decimal places. Returns empty string for nil."
@@ -48,7 +49,7 @@
   (let [iv (get-in energiatodistus [:lahtotiedot :ilmanvaihto])
         kuvaus-key (if (= kieli :sv) :label-sv :label-fi)
         paaiv (:paaiv iv)]
-    {:kuvaus (get iv kuvaus-key)
+    {:kuvaus (-> iv (get kuvaus-key) h)
      :jarjestelmat [{:ilmavirta (fmt (:tulo paaiv))
                      :sfp (fmt (:sfp paaiv))
                      :lto (fmt-pct (:lto-vuosihyotysuhde iv))}]}))
@@ -70,8 +71,8 @@
         lammin-kayttovesi (:lammin-kayttovesi lammitys)
         takka (:takka lammitys)
         ilmalampopumppu (:ilmalampopumppu lammitys)]
-    {:kuvaus (get lammitys kuvaus-key)
-     :lammonjako (get lammitys lammonjako-key)
+    {:kuvaus (-> lammitys (get kuvaus-key) h)
+     :lammonjako (-> lammitys (get lammonjako-key) h)
      :jarjestelmat [{:nimi (l :lahtotiedot-tilojen-iv-lammitys)
                      :jaon-hyotysuhde (fmt (:jaon-hyotysuhde tilat-ja-iv))
                      :tuoton-hyotysuhde (fmt (:tuoton-hyotysuhde tilat-ja-iv))

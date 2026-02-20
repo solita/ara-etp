@@ -1,7 +1,8 @@
 (ns solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_lammitys_ilmanvaihto
   (:require
     [solita.etp.service.localization :as loc]
-    [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset :as et]))
+    [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset :as et]
+    [hiccup.core :refer [h]]))
 
 
 (defn- description-list [key-vals]
@@ -17,9 +18,11 @@
      [:h1 (l :te-lammitys-ilmanvaihto-otsikko)]
      (str (l :lammitys-ilmanvaihto-teksti))
      [:h3 (l :huomiot-lammitys-otsikko)]
-     (get-in energiatodistus [:huomiot :lammitys (case kieli
-                                                  :fi :teksti-fi
-                                                  :sv :teksti-sv)])]))
+     (-> energiatodistus
+         (get-in [:huomiot :lammitys (case kieli
+                                       :fi :teksti-fi
+                                       :sv :teksti-sv)])
+         h)]))
 
 (defn toimenpide-ehdotukset-list-lammitys [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)
@@ -30,7 +33,7 @@
      (et/description-list
        (map-indexed (fn [idx item]
                       {:dt (str (inc idx) ".")
-                       :dd (get item nimi-key "")})
+                       :dd (-> item (get nimi-key "") h)})
                     toimenpide))]))
 
 
@@ -59,9 +62,11 @@
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
      [:h3 (l :huomiot-ilmanvaihto-otsikko)]
-     (get-in energiatodistus [:huomiot :iv-ilmastointi (case kieli
-                                                            :fi :teksti-fi
-                                                            :sv :teksti-sv)])]))
+     (-> energiatodistus
+         (get-in [:huomiot :iv-ilmastointi (case kieli
+                                             :fi :teksti-fi
+                                             :sv :teksti-sv)])
+         h)]))
 
 (defn toimenpide-ehdotukset-list-ilmanvaihto [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)
@@ -72,7 +77,7 @@
      (et/description-list
        (map-indexed (fn [idx item]
                       {:dt (str (inc idx) ".")
-                       :dd (get item nimi-key "")})
+                       :dd (-> item (get nimi-key "") h)})
                     toimenpide))]))
 
 (defn toimenpide-ehdotukset-table-ilmanvaihto[{:keys [kieli energiatodistus]}]
