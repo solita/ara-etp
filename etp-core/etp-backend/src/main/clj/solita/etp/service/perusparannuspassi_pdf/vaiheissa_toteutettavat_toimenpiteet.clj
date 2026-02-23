@@ -1,5 +1,6 @@
 (ns solita.etp.service.perusparannuspassi-pdf.vaiheissa-toteutettavat-toimenpiteet
-  (:require [solita.etp.service.localization :as loc]
+  (:require [hiccup.core :refer [h]]
+            [solita.etp.service.localization :as loc]
             [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :as tv]
             [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]))
@@ -116,7 +117,7 @@
     (when (not-empty seloste)
       [:div {:style "margin-top: 24px;"}
        [:h2 (l :toimenpideseloste)]
-       [:p seloste]])))
+       [:p (h seloste)]])))
 
 (defn- render-energiankulutuksen-muutos [vaihe l]
   (let [tulokset (:tulokset vaihe)]

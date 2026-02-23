@@ -1,5 +1,6 @@
 (ns solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot
   (:require
+    [hiccup.core :refer [h]]
     [solita.etp.service.localization :as loc]))
 
 (defn- table-u-arvot [kieli items]
@@ -144,9 +145,11 @@
              uusiutuva-energia-ehdotus-kuvaus]}
 
        {:dt (l :lisatietoja-lt)
-        :dd [(get-in perusparannuspassi [:rakennuksen-perustiedot (case kieli
-                                                                    :fi :lisatietoja-fi
-                                                                    :sv :lisatietoja-sv)])]}])))
+        :dd [(-> perusparannuspassi
+                 (get-in [:rakennuksen-perustiedot (case kieli
+                                                     :fi :lisatietoja-fi
+                                                     :sv :lisatietoja-sv)])
+                 h)]}])))
 
 (defn- lt-vahimmaisvaatimustaso [{:keys [kieli]}]
   (let [l (kieli loc/ppp-pdf-localization)]
