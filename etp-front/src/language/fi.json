@@ -1145,14 +1145,21 @@
           }
         }
       },
-      "toteutuneet-yhteensa-header": "Toteutunut ostenergia yhteensä",
+      "toteutuneet-yhteensa-header": {
+        "2013": "Toteutunut ostenergia",
+        "2018": "Toteutunut ostenergia",
+        "2026": "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia"
+      },
       "label-context": "Toteutunut ostoenergia",
-      "toteutuneet-yhteensa-table-header": "Ostoenergian lähde",
+      "toteutuneet-yhteensa-table-header": "Energianlähde",
       "labels": {
         "sahko-vuosikulutus-yhteensa": "Sähkö",
         "kaukolampo-vuosikulutus-yhteensa": "Kaukolämpö",
+        "uusiutuvat-polttoaineet-vuosikulutus-yhteensa": "Uusiutuva polttoaine",
+        "fossiiliset-polttoaineet-vuosikulutus-yhteensa": "Fossiilinen polttoaine",
         "polttoaineet-vuosikulutus-yhteensa": "Polttoaineet",
-        "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys"
+        "kaukojaahdytys-vuosikulutus-yhteensa": "Kaukojäähdytys",
+        "uusiutuva-energia-vuosituotto-yhteensa": "Tuotettu uusiutuva energia"
       },
       "sahko-vuosikulutus-yhteensa": "Sähkö (kWh/vuosi)",
       "sahko-neliovuosikulutus-yhteensa": "Sähkö (kWh/m²vuosi)",

@@ -521,7 +521,7 @@ describe('Energiatodistus Utils: ', () => {
         'kaukojaahdytys-vuosikulutus-yhteensa': Maybe.Some(1)
       };
 
-      expect(expected).toEqual(EtUtils.toteutuneetOstoenergiat(et));
+      expect(expected).toEqual(EtUtils.toteutuneetOstoenergiat(2018)(et));
     });
   });
 

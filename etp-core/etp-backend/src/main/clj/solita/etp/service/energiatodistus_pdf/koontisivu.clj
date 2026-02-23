@@ -1,6 +1,11 @@
 (ns solita.etp.service.energiatodistus-pdf.koontisivu
   (:require
+    [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc]))
+
+(defn- fmt
+  "Format number with specified decimal places. Returns empty string for nil."
+  [value decimals] (or (formats/format-number value decimals false) ""))
 
 (defn koontisivu [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)]
@@ -16,14 +21,19 @@
           [:dt (l :vertailupinta-ala)]
           [:dd (-> energiatodistus
                    (get-in [:lahtotiedot :lammitetty-nettoala])
+                   (fmt 2)
                    (str " " (l :m2)))]
           [:dt (l :lammin-ilmatilavuus)]
           [:dd (-> energiatodistus
                    (get-in [:lahtotiedot :rakennusvaippa :ilmatilavuus])
+                   (fmt 2)
                    (str " " (l :m3)))]]
          [:div
           [:dt (l :rakennus-kykenee-reagoimaan)]
-          [:dd [:span {:class "mock-data"} "Ei"]]]]]
+          [:dd (-> energiatodistus
+                   :lahtotiedot :lammitys :lammonjako-lampotilajousto
+                   {false :ei true :kylla}
+                   l)]]]]
        [:h2 (l :lammitysjarjestelma-kuvaus)]
        [:dl {:class "table-description-list"}
         [:div
@@ -40,7 +50,10 @@
              :class "table-description-list"}
         [:div
          [:dt (l :lammonjakojarjestelma-lampotila)]
-         [:dd [:span {:class "mock-data"} "Ei"]]]]
+         [:dd (-> energiatodistus
+                  :lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin
+                  {false :ei true :kylla}
+                  l)]]]
        [:h2 (l :ilmanvaihtojärjestelmän-kuvaus)]
        [:dl {:class "table-description-list"}
         [:div
@@ -51,8 +64,9 @@
        [:h2 (l :toteutunut-ostoenergy-ja-uusiutuva)]
        [:dl
         [:dt (l :tiedot-ovat-vuodelta)]
-        [:dd [:span {:class "mock-data"} "2026"]]]
-       [:p {:class "mock-data"} "(lisätietoa toteutuneesta ostoenergiankulutuksesta ja tuotetusta uusiutuvasta energiasta)"]
+        [:dd (-> energiatodistus :toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi (fmt 0))]]
+       [:p (-> energiatodistus :toteutunut-ostoenergiankulutus (kieli {:fi :lisatietoja-fi
+                                                                       :sv :lisatietoja-sv}))]
        [:table {:class "common-table"}
         [:thead
          [:tr
@@ -66,20 +80,20 @@
         [:tbody
          [:tr
           [:th (l :kwh-vuosi)]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukolampo-vuosikulutus-yhteensa)]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :sahko-vuosikulutus-yhteensa)]
-          [:td [:span {:class "mock-data"} "—"]]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :polttoaineet-vuosikulutus-yhteensa)]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukojaahdytys-vuosikulutus-yhteensa)]
-          [:td [:span {:class "mock-data"} "—"]]]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukolampo-vuosikulutus-yhteensa (fmt 0))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :sahko-vuosikulutus-yhteensa (fmt 0))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa (fmt 0))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa (fmt 0))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukojaahdytys-vuosikulutus-yhteensa (fmt 0))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa (fmt 0))]]
          [:tr
           [:th (l :kwh-m2-vuosi)]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukolampo-vuosikulutus-yhteensa-nettoala)]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :sahko-vuosikulutus-yhteensa-nettoala)]
-          [:td [:span {:class "mock-data"} "—"]]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :polttoaineet-vuosikulutus-yhteensa-nettoala)]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukojaahdytys-vuosikulutus-yhteensa-nettoala)]
-          [:td [:span {:class "mock-data"} "—"]]]]]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukolampo-vuosikulutus-yhteensa-nettoala (fmt 1))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :sahko-vuosikulutus-yhteensa-nettoala (fmt 1))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa-nettoala (fmt 1))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa-nettoala (fmt 1))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukojaahdytys-vuosikulutus-yhteensa-nettoala (fmt 1))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa-nettoala (fmt 1))]]]]
        [:div
         [:div {:id "toteutunut-energia-info"}
          [:p (l :toteutunut-ostoenergia-info)]]]]

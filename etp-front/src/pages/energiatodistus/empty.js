@@ -306,11 +306,17 @@ export const energiatodistus2013 = R.compose(
   energiatodistus2018
 );
 
+const notIn2026 = R.compose(
+  R.dissocPath([
+    'toteutunut-ostoenergiankulutus',
+    'polttoaineet-vuosikulutus-yhteensa'
+  ])
+);
+
 export const energiatodistus2026 = _ =>
-  Deep.mergeRight(
-    R.anyPass([Either.isEither, Maybe.isMaybe]),
-    energiatodistus2018(),
-    {
+  R.compose(
+    notIn2026,
+    Deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]), R.__, {
       versio: 2026,
       perustiedot: {
         'havainnointikayntityyppi-id': Maybe.None()
@@ -331,7 +337,10 @@ export const energiatodistus2026 = _ =>
       'toteutunut-ostoenergiankulutus': {
         'tietojen-alkuperavuosi': ValidNone(),
         'lisatietoja-fi': Maybe.None(),
-        'lisatietoja-sv': Maybe.None()
+        'lisatietoja-sv': Maybe.None(),
+        'fossiiliset-polttoaineet-vuosikulutus-yhteensa': ValidNone(),
+        'uusiutuvat-polttoaineet-vuosikulutus-yhteensa': ValidNone(),
+        'uusiutuva-energia-vuosituotto-yhteensa': ValidNone()
       },
       lahtotiedot: {
         'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': false,
@@ -389,8 +398,8 @@ export const energiatodistus2026 = _ =>
           }
         }
       }
-    }
-  );
+    })
+  )(energiatodistus2018());
 
 const emptyPerusparannusPassinPerustiedot = _ => ({
   havainnointikaynti: ValidNone(),

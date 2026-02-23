@@ -8,7 +8,7 @@
    [:div {:class "toimenpide-ehdotukset"}
     [:h1 (l :te-rakennusvaippa-otsikko)]
     (str (l :rakennusvaippa-teksti))
-     [:h2 (l :huomiot-ymparys-otsikko)]
+     [:h3 (l :huomiot-ymparys-otsikko)]
      (get-in energiatodistus [:huomiot :ymparys (case kieli
                                                        :fi :teksti-fi
                                                        :sv :teksti-sv)])]))
@@ -18,7 +18,7 @@
         toimenpide (get-in energiatodistus [:huomiot :ymparys :toimenpide] [])
         nimi-key (case kieli :fi :nimi-fi :sv :nimi-sv)]
     [:div {:class "toimenpide-ehdotukset"}
-     [:h3 (l :te-toimenpide-muutokset)]
+     [:h4 (l :te-toimenpide-muutokset)]
      (et/description-list
        (map-indexed (fn [idx item]
                       {:dt (str (inc idx) ".")
@@ -42,7 +42,7 @@
 (defn toimenpide-ehdotukset-pohjat [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
-     [:h2 (l :huomiot-pohjat-otsikko)]
+     [:h3 (l :huomiot-pohjat-otsikko)]
      (get-in energiatodistus [:huomiot :alapohja-ylapohja (case kieli
                                                   :fi :teksti-fi
                                                   :sv :teksti-sv)])]))
@@ -52,7 +52,7 @@
         toimenpide (get-in energiatodistus [:huomiot :alapohja-ylapohja :toimenpide] [])
         nimi-key (case kieli :fi :nimi-fi :sv :nimi-sv)]
     [:div {:class "toimenpide-ehdotukset"}
-     [:h3 (l :te-toimenpide-muutokset)]
+     [:h4 (l :te-toimenpide-muutokset)]
      (et/description-list
        (map-indexed (fn [idx item]
                       {:dt (str (inc idx) ".")

@@ -498,7 +498,10 @@
           (assoc-div-nettoala [:toteutunut-ostoenergiankulutus :sahko-vuosikulutus-yhteensa])
           (assoc-div-nettoala [:toteutunut-ostoenergiankulutus :kaukolampo-vuosikulutus-yhteensa])
           (assoc-div-nettoala [:toteutunut-ostoenergiankulutus :polttoaineet-vuosikulutus-yhteensa])
+          (assoc-div-nettoala [:toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa])
+          (assoc-div-nettoala [:toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa])
           (assoc-div-nettoala [:toteutunut-ostoenergiankulutus :kaukojaahdytys-vuosikulutus-yhteensa])
+          (assoc-div-nettoala [:toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa])
           (combine-keys +
                         0
                         [:toteutunut-ostoenergiankulutus :summa]

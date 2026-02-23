@@ -278,7 +278,9 @@
         :fossiiliset-polttoaineet          "Fossila bränslen"
         :co2ekv-vahenema-huomautus         "** CO2ekv-minskning beräknad enligt beräknad köpt energi"}})
 (def et-pdf-localization
-  {:fi {:energiatodistus                            "Energiatodistus"
+  {:fi {:kylla                                      "Kyllä"
+        :ei                                         "Ei"
+        :energiatodistus                            "Energiatodistus"
         :energiatodistus-2026-subtitle              "Vuoden 2026 lainsäädännön mukainen energiatodistus"
         :rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite"
         :pysyva-rakennustunnus                      "Pysyvä rakennustunnus"
@@ -432,7 +434,7 @@
         :ilmanvaihtojärjestelmän-kuvaus             "Ilmanvaihtojärjestelmän kuvaus"
         :ilmanvaihtojärjestelmä                     "Ilmanvaihtojärjestelmä:"
         :toteutunut-ostoenergy-ja-uusiutuva         "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia"
-        :tiedot-ovat-vuodelta                       "Tiedot ovat vuodelta"
+        :tiedot-ovat-vuodelta                       "Tiedot ovat vuodelta:"
         :kaukolampo-table                           "Kaukolämpö"
         :sahko-table                                "Sähkö"
         :uusiutuva-polttoaine-table                 "Uusiutuva polttoaine"
@@ -454,7 +456,9 @@
 
    }
 
-   :sv {:rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite (sv)"
+   :sv {:kylla                                      "Ja"
+        :ei                                         "Nej"
+        :rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite (sv)"
         :energiatodistus-2026-subtitle              "Energicertifikat i enlighet med 2026 års lagstiftning"
         :pysyva-rakennustunnus                      "Pysyvä rakennustunnus (sv)"
         :rakennuksen-valmistumisvuosi               "Rakennuksen valmistumisvuosi (sv)"
@@ -608,7 +612,7 @@
         :ilmanvaihtojärjestelmän-kuvaus             "Ilmanvaihtojärjestelmän kuvaus (sv)"
         :ilmanvaihtojärjestelmä                     "Ilmanvaihtojärjestelmä: (sv)"
         :toteutunut-ostoenergy-ja-uusiutuva         "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia (sv)"
-        :tiedot-ovat-vuodelta                       "Tiedot ovat vuodelta (sv)"
+        :tiedot-ovat-vuodelta                       "Tiedot ovat vuodelta: (sv)"
         :kaukolampo-table                           "Kaukolämpö (sv)"
         :sahko-table                                "Sähkö (sv)"
         :uusiutuva-polttoaine-table                 "Uusiutuva polttoaine (sv)"
