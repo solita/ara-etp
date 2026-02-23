@@ -364,7 +364,7 @@ export const energiatodistus2026 = _ =>
         'yritys-osoite': Maybe.None(),
         'yritys-postinumero': ValidNone(),
         'yritys-postitoimipaikka': Maybe.None(),
-        'laadintaperuste': ValidNone(),
+        laadintaperuste: ValidNone(),
         hiilijalanjalki: {
           rakennus: {
             'rakennustuotteiden-valmistus': ValidNone(),
@@ -386,14 +386,14 @@ export const energiatodistus2026 = _ =>
             uudelleenkaytto: ValidNone(),
             kierratys: ValidNone(),
             'ylimaarainen-uusiutuvaenergia': ValidNone(),
-            'hiilivarastovaikutus': ValidNone(),
+            hiilivarastovaikutus: ValidNone(),
             karbonatisoituminen: ValidNone()
           },
           rakennuspaikka: {
             uudelleenkaytto: ValidNone(),
             kierratys: ValidNone(),
             'ylimaarainen-uusiutuvaenergia': ValidNone(),
-            'hiilivarastovaikutus': ValidNone(),
+            hiilivarastovaikutus: ValidNone(),
             karbonatisoituminen: ValidNone()
           }
         }
