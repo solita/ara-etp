@@ -75,6 +75,7 @@
   <div class="flex items-baseline justify-between">
     <H2
       id="perusparannuspassi"
+      dataCy="perusparannuspassi"
       text={$_('energiatodistus.perusparannuspassi.header')} />
     {#if !perusparannuspassi.valid}
       <TextButton

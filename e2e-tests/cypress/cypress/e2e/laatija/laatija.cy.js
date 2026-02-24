@@ -564,7 +564,7 @@ context('Laatija', () => {
         cy.visit('/#/energiatodistus/all');
         cy.get('[data-cy="create-new-et26"]').click();
 
-        // Set required fields for basic save
+        // Set some fields for basic save
         cy.selectInSelect(
           'perustiedot.laatimisvaihe',
           'Olemassa oleva rakennus'
@@ -582,7 +582,7 @@ context('Laatija', () => {
         cy.location('hash').should('match', /\/energiatodistus\/2026\/\d+/);
 
         // Scroll to PPP section and add PPP
-        cy.get('#perusparannuspassi').scrollIntoView();
+        cy.get('[data-cy="perusparannuspassi"]').scrollIntoView();
         cy.get('[data-cy="add-ppp-button"]').click();
 
         // Fill in havainnointikäynnin päivämäärä
@@ -596,48 +596,45 @@ context('Laatija', () => {
         cy.wait(['@save', '@postPpp']);
 
         // Capture the original PPP id before copying
-        cy.get('#perusparannuspassi').scrollIntoView();
-        cy.get('#perusparannuspassi\\.id')
+        let originalPppId;
+        cy.get('[data-cy="perusparannuspassi"]').scrollIntoView();
+        cy.get('[data-cy="perusparannuspassi.id"]')
           .invoke('val')
-          .then(originalPppId => {
-            const originalId = Number(originalPppId);
-
-            // Copy the energiatodistus using the toolbar
-            cy.get('[data-cy="copy-button"]').click();
-
-            // Should navigate to new ET with copy-from-id
-            cy.location('hash').should(
-              'match',
-              /\/energiatodistus\/2026\/new\?copy-from-id=\d+/
-            );
-
-            // Verify PPP section exists and is valid (should be added automatically)
-            cy.get('#perusparannuspassi').scrollIntoView();
-            cy.get('[data-cy="delete-ppp-button"]').should('exist');
-
-            // Verify the havainnointikäynnin päivämäärä is copied
-            cy.get('[data-cy="passin-perustiedot.havainnointikaynti"]').should(
-              'have.value',
-              testDate
-            );
-
-            // Save the copied energiatodistus
-            cy.get('[data-cy="save-button"]').click();
-            cy.wait(['@post', '@postPpp']);
-
-            // Wait for navigation to the newly created energiatodistus
-            cy.location('hash').should(
-              'match',
-              /\/energiatodistus\/2026\/\d+$/
-            );
-
-            // Verify the PPP has been assigned an id that is one greater than the original
-            cy.get('#perusparannuspassi').scrollIntoView();
-            cy.get('#perusparannuspassi\\.id').should(
-              'have.value',
-              String(originalId + 1)
-            );
+          .then(val => {
+            originalPppId = val;
           });
+
+        // Copy the energiatodistus using the toolbar
+        cy.get('[data-cy="copy-button"]').click();
+
+        // Should navigate to new ET with copy-from-id
+        cy.location('hash').should(
+          'match',
+          /\/energiatodistus\/2026\/new\?copy-from-id=\d+/
+        );
+
+        // Verify PPP section exists and is valid (should be added automatically)
+        cy.get('[data-cy="perusparannuspassi"]').scrollIntoView();
+        cy.get('[data-cy="delete-ppp-button"]').should('exist');
+
+        // Verify the havainnointikäynnin päivämäärä is copied
+        cy.get('[data-cy="passin-perustiedot.havainnointikaynti"]').should(
+          'have.value',
+          testDate
+        );
+
+        // Save the copied energiatodistus
+        cy.get('[data-cy="save-button"]').click();
+        cy.wait(['@post', '@postPpp']);
+
+        // Wait for navigation to the newly created energiatodistus
+        cy.location('hash').should('match', /\/energiatodistus\/2026\/\d+$/);
+
+        // Verify the PPP has been assigned an id that is one greater than the original
+        cy.get('[data-cy="perusparannuspassi"]').scrollIntoView();
+        cy.get('[data-cy="perusparannuspassi.id"]').should($el => {
+          expect($el.val()).to.equal(String(Number(originalPppId) + 1));
+        });
       });
     }
   );
