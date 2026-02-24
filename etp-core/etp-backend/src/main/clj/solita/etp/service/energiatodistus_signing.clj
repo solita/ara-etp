@@ -35,9 +35,8 @@
 (def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
                                timezone))
 
-(defn signature-as-png [path ^String laatija-fullname]
-  (let [now (time/now)
-        width (max 125 (* (count laatija-fullname) 6))
+(defn signature-as-png [path ^String laatija-fullname now]
+  (let [width (max 125 (* (count laatija-fullname) 6))
         img (BufferedImage. width 30 BufferedImage/TYPE_INT_ARGB)
         g (.getGraphics img)]
     (doto (.getGraphics img)
@@ -81,7 +80,7 @@
   Generate the pdf.
   Upload to S3.
   Return the data that needs to be signed in base64."
-  [db whoami aws-s3-client id language laatija-allekirjoitus-id]
+  [db whoami aws-s3-client id language laatija-allekirjoitus-id now]
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
       complete-energiatodistus
@@ -89,14 +88,14 @@
              ^String pdf-path (energiatodistus-pdf-service/generate-et-pdf-as-file
                                 db
                                 whoami
-                                (assoc complete-energiatodistus :allekirjoitusaika (time/now))
+                                (assoc complete-energiatodistus :allekirjoitusaika now)
                                 language
                                 draft?
                                 laatija-allekirjoitus-id)
              signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
              pdf-file-key (energiatodistus-service/file-key id language)
              energiatodistus-pdf (File. pdf-path)
-             _ (signature-as-png signature-png-path laatija-fullname)
+             _ (signature-as-png signature-png-path laatija-fullname now)
              signature-png (File. signature-png-path)
              signature-options (case versio
                                  2013 {:signature-png signature-png
@@ -213,10 +212,10 @@
     (audit-log-message laatija-allekirjoitus-id id "Starting failed!")))
 
 (defn- sign-with-system-digest
-  [{:keys [db whoami laatija-allekirjoitus-id id aws-s3-client]} language]
+  [{:keys [db whoami laatija-allekirjoitus-id id aws-s3-client now]} language]
   (audit-log/info (audit-log-message laatija-allekirjoitus-id id "Getting the digest"))
   (do-sign-with-system
-    #(find-energiatodistus-digest db whoami aws-s3-client id language laatija-allekirjoitus-id)
+    #(find-energiatodistus-digest db whoami aws-s3-client id language laatija-allekirjoitus-id now)
     (audit-log-message laatija-allekirjoitus-id id "Getting the digest failed!")))
 
 (defn- sign-with-system-sign

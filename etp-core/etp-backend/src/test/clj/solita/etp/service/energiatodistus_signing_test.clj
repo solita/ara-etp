@@ -70,9 +70,10 @@
         laatija-id (-> laatijat keys sort first)
         db (ts/db-user laatija-id)
         ids (keys energiatodistukset)
-        whoami {:id laatija-id}]
+        whoami {:id laatija-id}
+        now (time/now)]
     (doseq [id ids]
-      (t/is (= (service/find-energiatodistus-digest db whoami ts/*aws-s3-client* id "fi" "allekirjoitus-id")
+      (t/is (= (service/find-energiatodistus-digest db whoami ts/*aws-s3-client* id "fi" "allekirjoitus-id" now)
                :not-in-signing))
       (energiatodistus-service/start-energiatodistus-signing! db whoami id)
       (t/is (contains? (service/find-energiatodistus-digest db
@@ -80,7 +81,8 @@
                                                             ts/*aws-s3-client*
                                                             id
                                                             "fi"
-                                                            "allekirjoitus-id")
+                                                            "allekirjoitus-id"
+                                                            now)
                        :digest))
       (energiatodistus-service/end-energiatodistus-signing!
        db
@@ -93,7 +95,8 @@
                                                     ts/*aws-s3-client*
                                                     id
                                                     "fi"
-                                                    "allekirjoitus-id")
+                                                    "allekirjoitus-id"
+                                                    now)
                :already-signed)))))
 
 (t/deftest comparable-name-test
