@@ -253,7 +253,7 @@
 (defn sign-with-system
   "Does the whole process of signing with the system."
   [{:keys [db id] :as params}]
-  (let [language-id (-> (complete-energiatodistus-service/find-complete-energiatodistus db id) :perustiedot :kieli)]
+  (let [language-id (-> (energiatodistus-service/find-energiatodistus db id) :perustiedot :kieli)]
     (try
       (condp = language-id
         energiatodistus-service/finnish-language-id
