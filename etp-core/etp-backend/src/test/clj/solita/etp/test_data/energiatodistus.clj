@@ -58,6 +58,9 @@
      :draft-visible-to-paakayttaja    false
      :bypass-validation-limits        false
      :bypass-validation-limits-reason nil}
+    (cond-> {}
+            (contains? #{2026} versio)
+            (assoc :ilmastoselvitys {:ilmastoselvitus-laadintaperuste 0}))
     (schema-by-version-and-ready-for-signing versio
                                              ready-for-signing?)
     generators))
