@@ -77,12 +77,12 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-etp2026-${{ matrix.etp2026 }}
           path: e2e-tests/cypress/cypress/screenshots
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-videos
+          name: cypress-videos-etp2026-${{ matrix.etp2026 }}
           path: e2e-tests/cypress/cypress/videos
       - name: Collect docker logs on failure
         if: failure()
@@ -96,7 +96,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: logs.tgz
+          name: logs-etp2026-${{ matrix.etp2026 }}.tgz
           path: ./logs.tgz
 
 
