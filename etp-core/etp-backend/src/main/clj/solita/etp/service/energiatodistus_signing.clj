@@ -240,10 +240,10 @@
       (audit-log-message laatija-allekirjoitus-id id "Signing via KMS failed!"))))
 
 (defn- sign-with-system-end
-  [{:keys [db whoami laatija-allekirjoitus-id id aws-s3-client]}]
+  [{:keys [db whoami laatija-allekirjoitus-id id aws-s3-client now]}]
   (audit-log/info (audit-log-message laatija-allekirjoitus-id id "End signing"))
   (do-sign-with-system
-    #(energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id)
+    #(energiatodistus-service/end-energiatodistus-signing! db aws-s3-client whoami id {:allekirjoitusaika now})
     (audit-log-message laatija-allekirjoitus-id id "End signing failed!")))
 
 (defn- sign-single-pdf-with-system [params language]
