@@ -69,9 +69,15 @@
 
   let resources = Maybe.None();
 
-  const submit = (energiatodistus, perusparannuspassi, onSuccessfulSave) => {
+  const submit = (
+    energiatodistus,
+    perusparannuspassi,
+    onSuccessfulSave,
+    onUnsuccessfulSave
+  ) => {
     const onUnsuccessfulResponse = response => {
       toggleOverlay(false);
+      if (onUnsuccessfulSave) onUnsuccessfulSave();
       announceError(i18n(Response.errorKey(i18nRoot, 'load', response)));
     };
 

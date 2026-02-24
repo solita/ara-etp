@@ -38,12 +38,18 @@
 
   let showMissingProperties;
 
-  const submit = (energiatodistus, perusparannuspassi, onSuccessfulSave) => {
+  const submit = (
+    energiatodistus,
+    perusparannuspassi,
+    onSuccessfulSave,
+    onUnsuccessfulSave
+  ) => {
     toggleOverlay(true);
 
     Future.fork(
       response => {
         toggleOverlay(false);
+        if (onUnsuccessfulSave) onUnsuccessfulSave();
         if (R.pathEq('missing-value', ['body', 'type'], response)) {
           showMissingProperties(response.body.missing);
         } else {
