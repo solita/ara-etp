@@ -1,17 +1,20 @@
 (ns solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_rakennuksen_vaippa
   (:require
     [solita.etp.service.localization :as loc]
-    [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset :as et]))
+    [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset :as et]
+    [hiccup.core :refer [h]]))
 
 (defn toimenpide-ehdotukset-ulkoseinat [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
-   [:div {:class "toimenpide-ehdotukset"}
-    [:h1 (l :te-rakennusvaippa-otsikko)]
-    (str (l :rakennusvaippa-teksti))
+    [:div {:class "toimenpide-ehdotukset"}
+     [:h1 (l :te-rakennusvaippa-otsikko)]
+     (str (l :rakennusvaippa-teksti))
      [:h3 (l :huomiot-ymparys-otsikko)]
-     (get-in energiatodistus [:huomiot :ymparys (case kieli
-                                                       :fi :teksti-fi
-                                                       :sv :teksti-sv)])]))
+     (-> energiatodistus
+         (get-in [:huomiot :ymparys (case kieli
+                                      :fi :teksti-fi
+                                      :sv :teksti-sv)])
+         h)]))
 
 (defn toimenpide-ehdotukset-list-ulko [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)
@@ -22,7 +25,7 @@
      (et/description-list
        (map-indexed (fn [idx item]
                       {:dt (str (inc idx) ".")
-                       :dd (get item nimi-key "")})
+                       :dd (-> item (get nimi-key "") h)})
                     toimenpide))]))
 
 
@@ -43,9 +46,11 @@
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
      [:h3 (l :huomiot-pohjat-otsikko)]
-     (get-in energiatodistus [:huomiot :alapohja-ylapohja (case kieli
-                                                  :fi :teksti-fi
-                                                  :sv :teksti-sv)])]))
+     (-> energiatodistus
+         (get-in [:huomiot :alapohja-ylapohja (case kieli
+                                                :fi :teksti-fi
+                                                :sv :teksti-sv)])
+         h)]))
 
 (defn toimenpide-ehdotukset-list-pohjat [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)
@@ -56,7 +61,7 @@
      (et/description-list
        (map-indexed (fn [idx item]
                       {:dt (str (inc idx) ".")
-                       :dd (get item nimi-key "")})
+                       :dd (-> item (get nimi-key "") h)})
                     toimenpide))]))
 
 (defn toimenpide-ehdotukset-table-pohjat [{:keys [kieli energiatodistus]}]

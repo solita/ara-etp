@@ -1,5 +1,6 @@
 (ns solita.etp.service.energiatodistus-pdf.koontisivu
   (:require
+    [hiccup.core :refer [h]]
     [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc]))
 
@@ -40,12 +41,14 @@
          [:dt (l :lammitysjarjestelma)]
          [:dd (-> energiatodistus
                   (get-in [:lahtotiedot :lammitys (kieli {:fi :lammitysmuoto-label-fi
-                                                          :sv :lammitysmuoto-label-sv})]))]]
+                                                          :sv :lammitysmuoto-label-sv})])
+                  h)]]
         [:div
          [:dt (l :lammonjako)]
          [:dd (-> energiatodistus
                   (get-in [:lahtotiedot :lammitys (kieli {:fi :lammonjako-label-fi
-                                                          :sv :lammonjako-label-sv})]))]]]
+                                                          :sv :lammonjako-label-sv})])
+                  h)]]]
        [:dl {:id    "koontisivu-lammonjakojarjestelma"
              :class "table-description-list"}
         [:div
@@ -60,13 +63,17 @@
          [:dt (l :ilmanvaihtojärjestelmä)]
          [:dd (-> energiatodistus
                   (get-in [:lahtotiedot :ilmanvaihto (kieli {:fi :label-fi
-                                                             :sv :label-sv})]))]]]
+                                                             :sv :label-sv})])
+                  h)]]]
        [:h2 (l :toteutunut-ostoenergy-ja-uusiutuva)]
        [:dl
         [:dt (l :tiedot-ovat-vuodelta)]
         [:dd (-> energiatodistus :toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi (fmt 0))]]
-       [:p (-> energiatodistus :toteutunut-ostoenergiankulutus (kieli {:fi :lisatietoja-fi
-                                                                       :sv :lisatietoja-sv}))]
+       [:p (-> energiatodistus
+               :toteutunut-ostoenergiankulutus
+               (kieli {:fi :lisatietoja-fi
+                       :sv :lisatietoja-sv})
+               h)]
        [:table {:class "common-table"}
         [:thead
          [:tr
@@ -104,10 +111,10 @@
        (if (-> energiatodistus :perusparannuspassi-valid)
          [:p (str (l :perusparannuspassi-laadinta)
                   " "
-                  (-> energiatodistus :perusparannuspassi-id))]
+                  (-> energiatodistus :perusparannuspassi-id h))]
          [:div
           [:p {:id "koontisivu-keskeiset-toimenpiteet"}
-           (-> energiatodistus :perustiedot (get-in [(kieli {:fi :keskeiset-suositukset-fi})]))]
+           (-> energiatodistus :perustiedot (get-in [(kieli {:fi :keskeiset-suositukset-fi})]) h)]
           [:p (l :toimenpiteet-yksityiskohtaisemmin)]])]
 
       [:div {:class "page-section"
@@ -115,25 +122,26 @@
        [:dl
         [:div
          [:dt (l :havainnointikaynti-ajankohta)]
-         [:dd (str (-> energiatodistus :perustiedot :havainnointikaynti)
+         [:dd (str (-> energiatodistus :perustiedot :havainnointikaynti h)
                    " "
                    (-> energiatodistus
                        :perustiedot
                        (get-in [(kieli {:fi :havainnointikayntityyppi-fi
                                         :sv :havainnointikayntityyppi-sv})])
-                       (or (l :havainnointikayntityyppi-ei-asetettu))))]]
+                       (or (l :havainnointikayntityyppi-ei-asetettu))
+                       h))]]
         [:div
          [:dt (l :laskentatyokalu-nimi-versio)]
-         [:dd (-> energiatodistus :tulokset :laskentatyokalu)]]]]
+         [:dd (-> energiatodistus :tulokset :laskentatyokalu h)]]]]
       [:div {:class "page-section"
              :id    "koontisivu-laatijan-tiedot"}
        [:dl
         [:div
          [:dt (l :yritys)]
-         [:dd (-> energiatodistus :perustiedot :yritys :nimi)]]
+         [:dd (-> energiatodistus :perustiedot :yritys :nimi h)]]
         [:div
          [:dt (l :sahkoinen-allekirjoitus)]
          [:dd
-          (str (-> energiatodistus :laatija-fullname) ", "
+          (str (-> energiatodistus :laatija-fullname h) ", "
                (-> energiatodistus :allekirjoituspaiva (or "(allekirjoituspvm)")) ", "
                (-> energiatodistus :allekirjoitusaika (or "(allekirjoitusaika)")))]]]]]}))

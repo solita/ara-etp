@@ -1,5 +1,6 @@
 (ns solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot
   (:require
+    [hiccup.core :refer [h]]
     [solita.common.time :as time]
     [solita.etp.service.localization :as loc]))
 
@@ -13,15 +14,19 @@
   (let [l (kieli loc/ppp-pdf-localization)]
     (description-list
       [{:dt (l :rakennuksen-nimi)
-        :dd (get-in energiatodistus [:perustiedot (case kieli
-                                                    :fi :nimi-fi
-                                                    :sv :nimi-sv)])}
+        :dd (-> energiatodistus
+                (get-in [:perustiedot (case kieli
+                                        :fi :nimi-fi
+                                        :sv :nimi-sv)])
+                h)}
        {:dt (l :rakennuksen-osoite)
-        :dd (get-in energiatodistus [:perustiedot (case kieli
-                                                    :fi :katuosoite-fi
-                                                    :sv :katuosoite-sv)])}
+        :dd (-> energiatodistus
+                (get-in [:perustiedot (case kieli
+                                        :fi :katuosoite-fi
+                                        :sv :katuosoite-sv)])
+                h)}
        {:dt (l :pysyva-rakennustunnus)
-        :dd (get-in energiatodistus [:perustiedot :rakennustunnus])}
+        :dd (-> energiatodistus (get-in [:perustiedot :rakennustunnus]) h)}
        {:dt (l :energiatodistuksen-todistustunnus)
         :dd (:id energiatodistus)}
        {:dt (l :perusparannuspassin-tunnus)
@@ -31,4 +36,7 @@
        {:dt (l :passin-esittelyn-paivamaara)
         :dd (-> perusparannuspassi (get-in [:passin-perustiedot :passin-esittely]) time/format-date)}
        {:dt (l :rakennuksen-kayttotarkoitusluokka)
-        :dd (-> energiatodistus (get-in [:perustiedot :kayttotarkoitus]) (loc/et-perustiedot-kayttotarkoitus->description alakayttotarkoitukset kieli))}])))
+        :dd (-> energiatodistus
+                (get-in [:perustiedot :kayttotarkoitus])
+                (loc/et-perustiedot-kayttotarkoitus->description alakayttotarkoitukset kieli)
+                h)}])))

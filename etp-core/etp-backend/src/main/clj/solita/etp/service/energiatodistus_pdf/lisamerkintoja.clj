@@ -1,6 +1,7 @@
 (ns solita.etp.service.energiatodistus-pdf.lisamerkintoja
   (:require
-    [solita.etp.service.localization :as loc]))
+    [solita.etp.service.localization :as loc]
+    [hiccup.core :refer [h]]))
 
 (defn description-list [key-vals]
   (into [:dl]
@@ -14,9 +15,11 @@
     [:div {:class "lisamerkintoja"}
      [:h1 (l :lisamerkintoja-otsikko)]
      [:div {:class "lisamerkintoja-separator"}]
-     (get energiatodistus (case kieli
-                            :fi :lisamerkintoja-fi
-                            :sv :lisamerkintoja-sv))]))
+     (-> energiatodistus
+         (get (case kieli
+                :fi :lisamerkintoja-fi
+                :sv :lisamerkintoja-sv))
+         h)]))
 
 (defn lisatietoja [{:keys [kieli]}]
   (let [l (kieli loc/et-pdf-localization)]
