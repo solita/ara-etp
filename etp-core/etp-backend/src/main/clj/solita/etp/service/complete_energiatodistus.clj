@@ -107,7 +107,7 @@
   [energiatodistus {:keys [postinumerot kielisyydet laatimisvaiheet
                            kayttotarkoitukset alakayttotarkoitukset
                            ilmanvaihtotyypit lammitysmuodot lammonjaot
-                           havainnointikayntityypit]}]
+                           havainnointikayntityypit ilmastoselvitys-laadintaperusteet]}]
   (with-precision 20
     (let [{:keys [versio]} energiatodistus
           postinumero (find-by-id postinumerot (-> energiatodistus
@@ -165,7 +165,15 @@
                                      (find-by-id (alakayttotarkoitukset versio))
                                      :kayttotarkoitusluokka-id)
           paakayttotarkoitus (-> (get kayttotarkoitukset versio)
-                                 (find-by-id paakayttotarkoitus-id))]
+                                 (find-by-id paakayttotarkoitus-id))
+          ilmastoselvitys-laadintaperuste-id (-> energiatodistus
+                                                 :ilmastoselvitys
+                                                 :laadintaperuste)
+          ilmastoselvitys-laadintaperuste (find-by-id ilmastoselvitys-laadintaperusteet ilmastoselvitys-laadintaperuste-id)
+          ilmastoselvitys-yritys-postinumero (find-by-id postinumerot (-> energiatodistus
+                                                                           :ilmastoselvitys
+                                                                           :yritys-postinumero
+                                                                           formats/string->int))]
       (-> energiatodistus
           (assoc-in [:perustiedot :postitoimipaikka-fi] (:label-fi postinumero))
           (assoc-in [:perustiedot :postitoimipaikka-sv] (:label-sv postinumero))
@@ -180,6 +188,10 @@
           (assoc-in [:perustiedot :paakayttotarkoitus-id] paakayttotarkoitus-id)
           (assoc-in [:perustiedot :paakayttotarkoitus-fi] (:label-fi paakayttotarkoitus))
           (assoc-in [:perustiedot :paakayttotarkoitus-sv] (:label-sv paakayttotarkoitus))
+          (assoc-in [:ilmastoselvitys :laadintaperuste-fi] (:label-fi ilmastoselvitys-laadintaperuste))
+          (assoc-in [:ilmastoselvitys :laadintaperuste-sv] (:label-sv ilmastoselvitys-laadintaperuste))
+          (assoc-in [:ilmastoselvitys :yritys-postitoimipaikka-fi] (:label-fi ilmastoselvitys-yritys-postinumero))
+          (assoc-in [:ilmastoselvitys :yritys-postitoimipaikka-sv] (:label-sv ilmastoselvitys-yritys-postinumero))
           (update-in [:tulokset :kaytettavat-energiamuodot] (partial merge (energiamuotokertoimet versio)))
           (update-in [:tulokset :kuukausierittely] kuukausierittely-hyodynnetty)
           (assoc-kuukausierittely-summat)
@@ -533,7 +545,8 @@
    :ilmanvaihtotyypit        (luokittelu/find-ilmanvaihtotyypit db)
    :lammitysmuodot           (luokittelu/find-lammitysmuodot db)
    :lammonjaot               (luokittelu/find-lammonjaot db)
-   :havainnointikayntityypit (luokittelu/find-havainnointikayntityypit db)})
+   :havainnointikayntityypit (luokittelu/find-havainnointikayntityypit db)
+   :ilmastoselvitys-laadintaperusteet (luokittelu/find-ilmastoselvitys-laadintaperusteet db)})
 
 (defn find-complete-energiatodistus
   ([db id]
