@@ -168,12 +168,8 @@
                                  (find-by-id paakayttotarkoitus-id))
           ilmastoselvitys-laadintaperuste-id (-> energiatodistus
                                                  :ilmastoselvitys
-                                                 :laadintaperuste)
-          ilmastoselvitys-laadintaperuste (find-by-id ilmastoselvitys-laadintaperusteet ilmastoselvitys-laadintaperuste-id)
-          ilmastoselvitys-yritys-postinumero (find-by-id postinumerot (-> energiatodistus
-                                                                           :ilmastoselvitys
-                                                                           :yritys-postinumero
-                                                                           formats/string->int))]
+                                                 :ilmastoselvitys-laadintaperuste)
+          ilmastoselvitys-laadintaperuste (find-by-id ilmastoselvitys-laadintaperusteet ilmastoselvitys-laadintaperuste-id)]
       (-> energiatodistus
           (assoc-in [:perustiedot :postitoimipaikka-fi] (:label-fi postinumero))
           (assoc-in [:perustiedot :postitoimipaikka-sv] (:label-sv postinumero))
@@ -190,8 +186,6 @@
           (assoc-in [:perustiedot :paakayttotarkoitus-sv] (:label-sv paakayttotarkoitus))
           (assoc-in [:ilmastoselvitys :laadintaperuste-fi] (:label-fi ilmastoselvitys-laadintaperuste))
           (assoc-in [:ilmastoselvitys :laadintaperuste-sv] (:label-sv ilmastoselvitys-laadintaperuste))
-          (assoc-in [:ilmastoselvitys :yritys-postitoimipaikka-fi] (:label-fi ilmastoselvitys-yritys-postinumero))
-          (assoc-in [:ilmastoselvitys :yritys-postitoimipaikka-sv] (:label-sv ilmastoselvitys-yritys-postinumero))
           (update-in [:tulokset :kaytettavat-energiamuodot] (partial merge (energiamuotokertoimet versio)))
           (update-in [:tulokset :kuukausierittely] kuukausierittely-hyodynnetty)
           (assoc-kuukausierittely-summat)
@@ -546,7 +540,7 @@
    :lammitysmuodot           (luokittelu/find-lammitysmuodot db)
    :lammonjaot               (luokittelu/find-lammonjaot db)
    :havainnointikayntityypit (luokittelu/find-havainnointikayntityypit db)
-   :ilmastoselvitys-laadintaperusteet (luokittelu/find-ilmastoselvitys-laadintaperusteet db)})
+   :ilmastoselvitys-laadintaperuste (luokittelu/find-ilmastoselvitys-laadintaperusteet db)})
 
 (defn find-complete-energiatodistus
   ([db id]
