@@ -32,6 +32,13 @@
     (io/copy (io/file in) (io/file out))
     out))
 
+(defn generate-2026-pdf-as-file-mock [_ _ _ _ _ _]
+  (let [in "src/test/resources/energiatodistukset/signing-process/generate-pdf-as-file.pdf"
+        out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
+    (io/make-parents out)
+    (io/copy (io/file in) (io/file out))
+    out))
+
 (def laatija-auth-time test-data.laatija/laatija-auth-time)
 
 (defn get-parameters-in-test [_]
@@ -42,12 +49,13 @@
 (t/deftest sign-with-system-test
   (with-bindings
     ;; Use an already existing pdf.
-    {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file  generate-pdf-as-file-mock
+    {#'solita.etp.service.energiatodistus-pdf/generate-et-2013-2018-pdf-as-file generate-pdf-as-file-mock
+     #'solita.etp.service.energiatodistus-pdf/generate-et-2026-pdf-as-file      generate-2026-pdf-as-file-mock
      ;; Mock the clock because laatija is not allowed to use system signing if the session is too old.
-     #'time/clock                                                   (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
+     #'time/clock                                                               (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
                                                                                  (ZoneId/systemDefault))
-     #'solita.etp.service.signing.pdf-sign/get-tsp-source           test-timeserver/get-tsp-source-in-test
-     #'solita.etp.service.signing.pdf-sign/get-signature-parameters get-parameters-in-test}
+     #'solita.etp.service.signing.pdf-sign/get-tsp-source                       test-timeserver/get-tsp-source-in-test
+     #'solita.etp.service.signing.pdf-sign/get-signature-parameters             get-parameters-in-test}
     (let [; Add laatija
           laatija-id (test-data.laatija/insert-suomifi-laatija!)
 
@@ -171,7 +179,7 @@
               signing-process (future
                                 (with-bindings
                                   ;; Use an already existing pdf.
-                                  {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file generate-pdf-as-file-mock}
+                                  {#'solita.etp.service.energiatodistus-pdf/generate-et-2013-2018-pdf-as-file generate-pdf-as-file-mock}
                                   (ts/handler (-> (mock/request :post url)
                                                   (test-data.laatija/with-suomifi-laatija)
                                                   (mock/header "Accept" "application/json")))))
@@ -192,7 +200,7 @@
               signing-process (future
                                 (with-bindings
                                   ;; Use an already existing pdf.
-                                  {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file generate-pdf-as-file-mock}
+                                  {#'solita.etp.service.energiatodistus-pdf/generate-et-2013-2018-pdf-as-file generate-pdf-as-file-mock}
                                   (ts/handler (-> (mock/request :post url)
                                                   (test-data.laatija/with-suomifi-laatija)
                                                   (mock/header "Accept" "application/json")))))
@@ -264,7 +272,7 @@
 (t/deftest sign-with-system-session-test
   (with-bindings
     ;; Use an already existing pdf.
-    {#'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file generate-pdf-as-file-mock}
+    {#'solita.etp.service.energiatodistus-pdf/generate-et-2013-2018-pdf-as-file generate-pdf-as-file-mock}
     (let [; Add laatija
           laatija-id (test-data.laatija/insert-suomifi-laatija!)
           todistus-2018-fi (-> (test-data.energiatodistus/generate-add 2018 true) (assoc-in [:perustiedot :kieli] 0))

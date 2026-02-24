@@ -2,11 +2,26 @@
   (:require
     [hiccup.core :refer [h]]
     [solita.common.formats :as formats]
-    [solita.etp.service.localization :as loc]))
+    [solita.etp.service.localization :as loc])
+  (:import
+    (java.time Instant ZoneId)
+    (java.time.format DateTimeFormatter)))
+
+(def ^:private datetime-formatter
+  (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
+             (ZoneId/of "Europe/Helsinki")))
 
 (defn- fmt
   "Format number with specified decimal places. Returns empty string for nil."
   [value decimals] (or (formats/format-number value decimals false) ""))
+
+(defn format-allekirjoitusaika
+  "Format an instant into the desired format in Europe/Helsinki time.
+  Returns empty string for nil."
+  [^Instant time]
+  (if time
+    (.format datetime-formatter time)
+    ""))
 
 (defn koontisivu [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)]
@@ -142,6 +157,5 @@
         [:div
          [:dt (l :sahkoinen-allekirjoitus)]
          [:dd
-          (str (-> energiatodistus :laatija-fullname h) ", "
-               (-> energiatodistus :allekirjoituspaiva (or "(allekirjoituspvm)")) ", "
-               (-> energiatodistus :allekirjoitusaika (or "(allekirjoitusaika)")))]]]]]}))
+          (str (-> energiatodistus :laatija-fullname h) " - "
+               (-> energiatodistus :allekirjoitusaika format-allekirjoitusaika))]]]]]}))

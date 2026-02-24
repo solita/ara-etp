@@ -6,6 +6,7 @@
             [solita.common.logic :as logic]
             [solita.common.schema :as xschema]
             [solita.etp.schema.common :as common-schema]
+            [solita.etp.service.signing.pdf-sign]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-pdf]
@@ -113,15 +114,26 @@
     (io/copy (io/file in) (io/file out))
     out))
 
+(defn generate-2026-pdf-as-file-mock [_ _ _ _ _ _]
+  (let [in "src/test/resources/energiatodistukset/signing-process/generate-pdf-as-file.pdf"
+        out (->> (java.util.UUID/randomUUID)
+                 .toString
+                 (format "%s/energiatodistus-in-system-signing-test.pdf")
+                 (str "tmp-energiatodistukset/"))]
+    (io/make-parents out)
+    (io/copy (io/file in) (io/file out))
+    out))
+
 (defn get-parameters-in-test [_]
   (with-open [in (FileInputStream. "src/test/resources/energiatodistukset/signing-process/stateful-parameters")
               object-input-stream (ObjectInputStream. in)]
     ^PAdESSignatureParameters (.readObject object-input-stream)))
 
-(defn sign-pdf-at-time! [energiatodistus-id laatija-id now]
-  (with-bindings {#'solita.etp.service.signing.pdf-sign/get-signature-parameters get-parameters-in-test
-                  #'solita.etp.service.energiatodistus-pdf/generate-pdf-as-file  generate-pdf-as-file-mock
-                  #'solita.etp.service.signing.pdf-sign/get-tsp-source           test-timeserver/get-tsp-source-in-test}
+(defn sign-pdf-at-time! [energiatodistus-id laatija-id now whoami]
+  (with-bindings {#'solita.etp.service.signing.pdf-sign/get-signature-parameters             get-parameters-in-test
+                  #'solita.etp.service.energiatodistus-pdf/generate-et-2013-2018-pdf-as-file generate-pdf-as-file-mock
+                  #'solita.etp.service.energiatodistus-pdf/generate-et-2026-pdf-as-file      generate-2026-pdf-as-file-mock
+                  #'solita.etp.service.signing.pdf-sign/get-tsp-source                       test-timeserver/get-tsp-source-in-test}
     (let [language (-> (energiatodistus-service/find-energiatodistus
                          ts/*db*
                          energiatodistus-id)
@@ -131,10 +143,12 @@
       (doseq [language-code (energiatodistus-service/language-id->codes language)]
         (energiatodistus-signing-service/find-energiatodistus-digest
           ts/*db*
+          whoami
           ts/*aws-s3-client*
           energiatodistus-id
           language-code
-          laatija-allekirjoitus-id)
+          laatija-allekirjoitus-id
+          now)
         (energiatodistus-signing-service/sign-energiatodistus-pdf
           ts/*db*
           ts/*aws-s3-client*
@@ -154,7 +168,7 @@
                                                             whoami
                                                             energiatodistus-id)
     (when-not skip-pdf?
-      (sign-pdf-at-time! energiatodistus-id laatija-id now))
+      (sign-pdf-at-time! energiatodistus-id laatija-id now whoami))
     (energiatodistus-service/end-energiatodistus-signing! db
                                                           ts/*aws-s3-client*
                                                           whoami
@@ -165,8 +179,8 @@
 (def time-when-test-cert-not-expired (Instant/parse "2022-05-20T12:00:00Z"))
 (def time-when-test-cert-expired (Instant/parse "2022-05-25T12:00:00Z"))
 
-(defn sign-pdf! [energiatodistus-id laatija-id]
-  (sign-pdf-at-time! energiatodistus-id laatija-id time-when-test-cert-not-expired))
+(defn sign-pdf! [energiatodistus-id laatija-id whoami]
+  (sign-pdf-at-time! energiatodistus-id laatija-id time-when-test-cert-not-expired whoami))
 
 (defn sign! [energiatodistus-id laatija-id skip-pdf?]
   (sign-at-time! energiatodistus-id laatija-id skip-pdf? time-when-test-cert-not-expired))

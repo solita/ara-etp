@@ -728,7 +728,7 @@
     (.save document pdf-path)))
 
 ;; Set as dynamic so that it can be mocked in tests.
-(defn ^:dynamic generate-pdf-as-file [complete-energiatodistus kieli draft? laatija-allekirjoitus-id]
+(defn ^:dynamic generate-et-2013-2018-pdf-as-file [complete-energiatodistus kieli draft? laatija-allekirjoitus-id]
   (let [xlsx-path (fill-xlsx-template complete-energiatodistus kieli draft?)
         pdf-path (xlsx->pdf xlsx-path)]
     (io/delete-file xlsx-path)
@@ -749,11 +749,49 @@
       (watermark-pdf/add-watermark pdf-path (test-watermark-texts kieli))
       :else pdf-path)))
 
-(defn generate-pdf-as-input-stream [energiatodistus kieli draft? laatija-allekirjoitus-id]
-  (let [pdf-path (generate-pdf-as-file energiatodistus kieli draft? laatija-allekirjoitus-id)
+(defn generate-et-2013-2018-pdf-as-input-stream [energiatodistus kieli draft? laatija-allekirjoitus-id]
+  (let [pdf-path (generate-et-2013-2018-pdf-as-file energiatodistus kieli draft? laatija-allekirjoitus-id)
         is (io/input-stream pdf-path)]
     (io/delete-file pdf-path)
     is))
+
+(defn generate-et-2026-pdf-as-input-stream [db whoami complete-energiatodistus kieli draft?]
+  (log/info "Generating 2026 PDF for id" (:id complete-energiatodistus))
+  (let [alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
+        kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
+        laatimisvaiheet (luokittelu-service/find-laatimisvaiheet db)]
+    (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf db whoami complete-energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotarkoitukset draft?))))
+
+;; Set as dynamic so that it can be mocked in tests.
+(defn ^:dynamic generate-et-2026-pdf-as-file [db whoami complete-energiatodistus kieli draft? laatija-allekirjoitus-id]
+  (let [pdf-path (->> (java.util.UUID/randomUUID)
+                  .toString
+                  (format "energiatodistus-%s.pdf")
+                  (str tmp-dir))
+        input-stream (generate-et-2026-pdf-as-input-stream db whoami complete-energiatodistus kieli draft?)]
+    (io/make-parents pdf-path)
+    (io/copy input-stream (io/file pdf-path))
+
+    (set-metadata pdf-path
+                  (:laatija-fullname complete-energiatodistus)
+                  laatija-allekirjoitus-id
+                  (or (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]) "Energiatodistus"))
+    (when (and
+            ;; For ET 2026, the input stream for a draft already has the draft watermark in place
+            (not draft?)
+            (contains? #{"local-dev" "dev" "test"} config/environment-alias))
+      (watermark-pdf/add-watermark pdf-path (test-watermark-texts kieli)))
+    pdf-path))
+
+(defn generate-et-pdf-as-file [db whoami
+                               {:keys [versio] :as complete-energiatodistus}
+                               kieli draft? laatija-allekirjoitus-id]
+  (cond
+    (= 2026 versio)
+    (generate-et-2026-pdf-as-file db whoami complete-energiatodistus kieli draft? laatija-allekirjoitus-id)
+
+    (contains? #{2013 2018} versio)
+    (generate-et-2013-2018-pdf-as-file complete-energiatodistus kieli draft? laatija-allekirjoitus-id)))
 
 (defn find-existing-pdf [aws-s3-client id kieli]
   (let [file-key (energiatodistus-service/file-key id kieli)]
@@ -763,6 +801,12 @@
            io/input-stream)
       (log/warn "requested file" file-key "not found in S3"))))
 
+(defn- generate-et-pdf-as-input-stream [db whoami kieli complete-energiatodistus]
+  (let [draft? true]
+    (if (= 2026 (:versio complete-energiatodistus))
+      (generate-et-2026-pdf-as-input-stream db whoami complete-energiatodistus kieli draft?)
+      (generate-et-2013-2018-pdf-as-input-stream complete-energiatodistus kieli draft? nil))))
+
 (defn find-energiatodistus-pdf [db aws-s3-client whoami id kieli]
   (when-let [{:keys [allekirjoitusaika] :as complete-energiatodistus}
              (-> (complete-energiatodistus-service/find-complete-energiatodistus db whoami id)
@@ -771,12 +815,4 @@
                              (= (-> % :perustiedot :kieli) nil)) %)))] ; Old todistus entries have language set as nil. We'll just have to give it a try
     (if allekirjoitusaika
       (find-existing-pdf aws-s3-client id kieli)
-      (if (= 2026 (:versio complete-energiatodistus))
-        (do
-          (log/info "Generating 2026 PDF for id" id)
-          (let [alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
-                kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
-                laatimisvaiheet (luokittelu-service/find-laatimisvaiheet db)]
-            (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf db whoami complete-energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotarkoitukset true))))
-        (generate-pdf-as-input-stream complete-energiatodistus kieli true nil)))))
-
+      (generate-et-pdf-as-input-stream db whoami kieli complete-energiatodistus))))
