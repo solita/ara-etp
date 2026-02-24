@@ -73,7 +73,7 @@ jobs:
           wait-on: 'https://localhost:3009'
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
-          ETP_2026: "${{ matrix.etp2026 }}"
+          CYPRESS_ETP_2026: "${{ matrix.etp2026 }}"
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
