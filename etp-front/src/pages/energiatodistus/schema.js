@@ -395,7 +395,7 @@ export const v2026 = R.compose(
       laatija: String(2, 500),
       yritys: String(2, 500),
       'yritys-osoite': String(2, 50),
-      'yritys-postinumero': YritysPostinumero,
+      'yritys-postinumero': String(2, 5),
       'yritys-postitoimipaikka': String(2, 30),
       hiilijalanjalki: {
         rakennus: {

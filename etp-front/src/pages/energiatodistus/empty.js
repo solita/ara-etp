@@ -362,7 +362,7 @@ export const energiatodistus2026 = _ =>
         laatija: ValidNone(),
         yritys: Maybe.None(),
         'yritys-osoite': Maybe.None(),
-        'yritys-postinumero': ValidNone(),
+        'yritys-postinumero': Maybe.None(),
         'yritys-postitoimipaikka': Maybe.None(),
         laadintaperuste: ValidNone(),
         hiilijalanjalki: {
