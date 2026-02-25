@@ -351,7 +351,7 @@
    :laatija                  common-schema/String50
    :yritys                   common-schema/String150
    :yritys-osoite            common-schema/String50
-   :yritys-postinumero       geo-schema/PostinumeroFI
+   :yritys-postinumero       common-schema/String8
    :yritys-postitoimipaikka  common-schema/String30
    :laadintaperuste          common-schema/Key
    :hiilijalanjalki          Hiilijalanjalki

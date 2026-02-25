@@ -268,7 +268,6 @@
     tree->flat
     #(set/rename-keys % db-abbreviations)
     #(update-in % [:perustiedot :postinumero] (logic/unless* nil? parseInt))
-    #(update-in % [:ilmastoselvitys :yritys-postinumero] (logic/unless* nil? parseInt))
     save-laskutusosoite-id
     (logic/when*
       #(= (:versio %) 2013)

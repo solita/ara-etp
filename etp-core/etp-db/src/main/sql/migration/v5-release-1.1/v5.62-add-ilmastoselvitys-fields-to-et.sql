@@ -5,7 +5,7 @@ alter table energiatodistus
     add column is$laatija text,
     add column is$yritys text,
     add column is$yritys_osoite text,
-    add column is$yritys_postinumero integer references postinumero (id),
+    add column is$yritys_postinumero text,
     add column is$yritys_postitoimipaikka text,
     add column is$laadintaperuste integer references ilmastoselvitys_laadintaperuste (id),
 
