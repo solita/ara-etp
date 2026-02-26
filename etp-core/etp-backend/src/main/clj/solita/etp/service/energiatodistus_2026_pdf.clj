@@ -78,9 +78,9 @@
     (when (and (some? ppp) (:valid ppp))
       ppp)))
 
-(defn- show-toimenpide-pages? [db energiatodistus laatija-id]
-  (let [e-luokka (get-in energiatodistus [:tulokset :e-luokka])
-        has-valid-ppp? (some? (find-valid-ppp db energiatodistus laatija-id))]
+(defn- show-toimenpide-pages? [energiatodistus]
+  (let [e-luokka (-> energiatodistus :tulokset :e-luokka)
+        has-valid-ppp? (-> energiatodistus :perusparannuspassi-valid)]
     (and (not (contains? #{"A" "A0" "A+"} e-luokka))
          (not has-valid-ppp?))))
 
@@ -96,10 +96,9 @@
 
 (defn generate-energiatodistus-html
   "Use OpenHTMLToPDF to generate PDF, return as a byte array"
-  [{:keys [db energiatodistus kieli] :as params}]
+  [{:keys [energiatodistus kieli] :as params}]
   (let [l (kieli loc/et-pdf-localization)
-        laatija-id (:laatija-id energiatodistus)
-        show-toimenpide? (show-toimenpide-pages? db energiatodistus laatija-id)
+        show-toimenpide? (show-toimenpide-pages? energiatodistus)
         pages (concat
                 [{:page-border? true
                   :content
