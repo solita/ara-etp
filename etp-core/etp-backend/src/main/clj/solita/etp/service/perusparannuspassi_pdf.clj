@@ -19,11 +19,11 @@
     [solita.etp.service.watermark-pdf :as watermark-pdf])
   (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
-(def draft-watermark-texts {"fi" "LUONNOS"
-                            "sv" "UTKAST"})
+(def ^:private draft-watermark-texts {"fi" "LUONNOS"
+                                      "sv" "UTKAST"})
 
-(def test-watermark-texts {"fi" "TESTI"
-                           "sv" "TEST"})
+(def ^:private test-watermark-texts {"fi" "TESTI"
+                                     "sv" "TEST"})
 
 ;; CSS styles for the document
 (defn- styles []
@@ -482,7 +482,7 @@
       content]
      (page-footer ppp-tunnus page-num total-pages)]))
 
-(defn generate-document-html
+(defn- generate-document-html
   "Generate complete HTML document for perusparannuspassi PDF.
 
    Parameters:
@@ -508,7 +508,7 @@
        [:body
         pages-html]])))
 
-(defn generate-perusparannuspassi-html [{:keys [perusparannuspassi kieli] :as params}]
+(defn- generate-perusparannuspassi-html [{:keys [perusparannuspassi kieli] :as params}]
   (let [l (kieli loc/ppp-pdf-localization)
         ;; Generate vaihe pages, filtering out nil (vaiheet without data)
         vaihe-pages (->> (range 1 5)
@@ -543,7 +543,7 @@
         (pdf-service/html->pdf output-stream))
     (-> output-stream .toByteArray)))
 
-(defn generate-perusparannuspassi-pdf
+(defn- generate-perusparannuspassi-pdf
   "Generate a perusparannuspassi PDF and return it as a byte array."
   [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
    uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?]
