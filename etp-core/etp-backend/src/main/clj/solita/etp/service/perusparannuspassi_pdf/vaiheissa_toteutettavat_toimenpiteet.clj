@@ -1,5 +1,6 @@
 (ns solita.etp.service.perusparannuspassi-pdf.vaiheissa-toteutettavat-toimenpiteet
-  (:require [hiccup.core :refer [h]]
+  (:require [clojure.string :as str]
+            [hiccup.core :refer [h]]
             [solita.etp.service.localization :as loc]
             [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :as tv]
@@ -140,7 +141,8 @@
                 toteutunut-energiakustannus
                 hiilidioksidipaastot]} (calculate-totals tulokset)]
     [:div {:style "margin-top: 24px;"}
-     [:h2 (l :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen)]
+     (let [[before after] (str/split (l :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen) #"\{subscript\}")]
+       [:h2 before [:sub "2"] after])
      [:table {:role "presentation" :style "width: 100%; border-collapse: collapse;"}
       (for [[label value unit] [[(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen) ostoenergian-kokonaistarve (l :kwh-vuosi)]
                                 [(l :uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta) (get tulokset :uusiutuvan-energian-hyodynnetty-osuus) (l :prosenttia)]
