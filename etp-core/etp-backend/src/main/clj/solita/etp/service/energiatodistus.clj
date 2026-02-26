@@ -57,7 +57,8 @@
    :lahtotiedot                    :lt
    :tulokset                       :t
    :toteutunut-ostoenergiankulutus :to
-   :huomiot                        :h})
+   :huomiot                        :h
+   :ilmastoselvitys                :is})
 
 (def db-toimenpide-type
   [:nimi-fi

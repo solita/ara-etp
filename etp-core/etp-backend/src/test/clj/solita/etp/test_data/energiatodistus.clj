@@ -41,24 +41,27 @@
 
 (defn generate-add [versio ready-for-signing?]
   (generators/complete
-    {:perustiedot                     (merge
-                                        {:kieli           (rand-int 2)
-                                         :kayttotarkoitus "YAT"}
-                                        (when (contains? #{2018 2026} versio)
-                                          {:laatimisvaihe (rand-int 2)})
-                                        (when (contains? #{2026} versio)
-                                          {:havainnointikayntityyppi-id (rand-int 2)}))
-     :lahtotiedot                     {:ilmanvaihto {:tyyppi-id (rand-int 7)}
-                                       :lammitys    {:lammitysmuoto-1 {:id (rand-int 10)}
-                                                     :lammitysmuoto-2 {:id (rand-int 10)}
-                                                     :lammonjako      {:id (rand-int 13)}}
-                                       :sis-kuorma  (sisainen-kuorma versio 1)}
-     :laskutettava-yritys-id          nil
-     :laskutusosoite-id               -1
-     :korvattu-energiatodistus-id     nil
-     :draft-visible-to-paakayttaja    false
-     :bypass-validation-limits        false
-     :bypass-validation-limits-reason nil}
+    (merge
+      {:perustiedot                     (merge
+                                          {:kieli           (rand-int 2)
+                                           :kayttotarkoitus "YAT"}
+                                          (when (contains? #{2018 2026} versio)
+                                            {:laatimisvaihe (rand-int 2)})
+                                          (when (contains? #{2026} versio)
+                                            {:havainnointikayntityyppi-id (rand-int 2)}))
+       :lahtotiedot                     {:ilmanvaihto {:tyyppi-id (rand-int 7)}
+                                         :lammitys    {:lammitysmuoto-1 {:id (rand-int 10)}
+                                                       :lammitysmuoto-2 {:id (rand-int 10)}
+                                                       :lammonjako      {:id (rand-int 13)}}
+                                         :sis-kuorma  (sisainen-kuorma versio 1)}
+       :laskutettava-yritys-id          nil
+       :laskutusosoite-id               -1
+       :korvattu-energiatodistus-id     nil
+       :draft-visible-to-paakayttaja    false
+       :bypass-validation-limits        false
+       :bypass-validation-limits-reason nil}
+      (when (contains? #{2026} versio)
+        {:ilmastoselvitys {:laadintaperuste (rand-int 2)}}))
     (schema-by-version-and-ready-for-signing versio
                                              ready-for-signing?)
     generators))
