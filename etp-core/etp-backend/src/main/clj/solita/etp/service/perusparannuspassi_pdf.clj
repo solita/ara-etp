@@ -543,7 +543,7 @@
         (pdf-service/html->pdf output-stream))
     (-> output-stream .toByteArray)))
 
-(defn- generate-perusparannuspassi-pdf
+(defn generate-perusparannuspassi-pdf
   "Generate a perusparannuspassi PDF and return it as a byte array."
   [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
    uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?]

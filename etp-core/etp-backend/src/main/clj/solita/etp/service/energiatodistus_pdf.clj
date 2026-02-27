@@ -16,7 +16,9 @@
             [solita.etp.service.file :as file-service]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
             [solita.etp.service.watermark-pdf :as watermark-pdf]
-            [solita.etp.service.luokittelu :as luokittelu-service])
+            [solita.etp.service.luokittelu :as luokittelu-service]
+            [solita.etp.service.complete-perusparannuspassi :as complete-ppp-service]
+            [solita.etp.service.toimenpide-ehdotus :as toimenpide-ehdotus-service])
   (:import (java.io ByteArrayOutputStream File)
            (java.time Clock LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
@@ -749,18 +751,27 @@
       (watermark-pdf/add-watermark pdf-path (test-watermark-texts kieli))
       :else pdf-path)))
 
-(defn generate-et-2013-2018-pdf-as-input-stream [energiatodistus kieli draft? laatija-allekirjoitus-id]
+(defn- generate-et-2013-2018-pdf-as-input-stream [energiatodistus kieli draft? laatija-allekirjoitus-id]
   (let [pdf-path (generate-et-2013-2018-pdf-as-file energiatodistus kieli draft? laatija-allekirjoitus-id)
         is (io/input-stream pdf-path)]
     (io/delete-file pdf-path)
     is))
 
-(defn generate-et-2026-pdf-as-input-stream [db whoami complete-energiatodistus kieli draft?]
+(defn- generate-et-2026-pdf-as-input-stream [db whoami complete-energiatodistus kieli draft?]
   (log/info "Generating 2026 PDF for id" (:id complete-energiatodistus))
-  (let [alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
-        kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
-        laatimisvaiheet (luokittelu-service/find-laatimisvaiheet db)]
-    (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf db whoami complete-energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotarkoitukset draft?))))
+  (let [luokittelut {:alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
+                     :kayttotarkoitukset    (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
+                     :laatimisvaiheet       (luokittelu-service/find-laatimisvaiheet db)
+                     :mahdollisuus-liittya  (luokittelu-service/find-mahdollisuus-liittya db)
+                     :uusiutuva-energia     (luokittelu-service/find-uusiutuva-energia db)
+                     :lammitysmuodot        (luokittelu-service/find-lammitysmuodot db)
+                     :ilmanvaihtotyypit     (luokittelu-service/find-ilmanvaihtotyypit db)
+                     :toimenpide-ehdotukset (toimenpide-ehdotus-service/find-all db)}
+        complete-ppp (when (:perusparannuspassi-valid complete-energiatodistus)
+                       (complete-ppp-service/find-complete-perusparannuspassi
+                         db whoami (:perusparannuspassi-id complete-energiatodistus)))]
+    (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf
+                       complete-energiatodistus luokittelut kieli draft? complete-ppp))))
 
 ;; Set as dynamic so that it can be mocked in tests.
 (defn ^:dynamic generate-et-2026-pdf-as-file [db whoami complete-energiatodistus kieli draft? laatija-allekirjoitus-id]
