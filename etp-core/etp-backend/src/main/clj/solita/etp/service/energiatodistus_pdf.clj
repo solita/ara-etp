@@ -771,7 +771,7 @@
                        (complete-ppp-service/find-complete-perusparannuspassi
                          db whoami (:perusparannuspassi-id complete-energiatodistus)))]
     (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf
-                       complete-energiatodistus luokittelut kieli draft? complete-ppp))))
+                       complete-energiatodistus complete-ppp kieli draft? luokittelut))))
 
 ;; Set as dynamic so that it can be mocked in tests.
 (defn ^:dynamic generate-et-2026-pdf-as-file [db whoami complete-energiatodistus kieli draft? laatija-allekirjoitus-id]

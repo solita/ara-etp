@@ -135,7 +135,7 @@
      :alakayttotarkoitukset, :kayttotarkoitukset, :laatimisvaiheet,
      :mahdollisuus-liittya, :uusiutuva-energia, :lammitysmuodot,
      :ilmanvaihtotyypit, :toimenpide-ehdotukset"
-  [complete-energiatodistus luokittelut kieli draft? complete-perusparannuspassi]
+  [complete-energiatodistus complete-perusparannuspassi kieli draft? luokittelut]
   (let [{:keys [alakayttotarkoitukset kayttotarkoitukset laatimisvaiheet]} luokittelut
         kieli-keyword (keyword kieli)
         ppp-pdf-bytes (when complete-perusparannuspassi
