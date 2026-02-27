@@ -2,7 +2,6 @@
   (:require [hiccup.core :as hiccup]
             [clojure.java.io :as io]
             [solita.etp.config :as config]
-            [solita.etp.db :as db]
             [solita.etp.service.pdf :as pdf-service]
             [solita.etp.service.localization :as loc]
             [solita.etp.service.watermark-pdf :as watermark-pdf]
@@ -20,7 +19,6 @@
             [solita.etp.service.energiatodistus-pdf.lisamerkintoja :as et-lisamerkintoja])
   (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
-(db/require-queries 'perusparannuspassi)
 
 (def draft-watermark-texts {"fi" "LUONNOS"
                             "sv" "UTKAST"})
@@ -70,36 +68,18 @@
     [:body
      pages-html]])))
 
-(defn- find-valid-ppp
-  [db energiatodistus laatija-id]
-  (let [ppp (first (perusparannuspassi-db/find-by-energiatodistus-id db
-                     {:energiatodistus-id (:id energiatodistus)
-                      :laatija-id laatija-id}))]
-    (when (and (some? ppp) (:valid ppp))
-      ppp)))
-
-(defn- show-toimenpide-pages? [db energiatodistus laatija-id]
-  (let [e-luokka (get-in energiatodistus [:tulokset :e-luokka])
-        has-valid-ppp? (some? (find-valid-ppp db energiatodistus laatija-id))]
+(defn- show-toimenpide-pages? [energiatodistus]
+  (let [e-luokka (-> energiatodistus :tulokset :e-luokka)
+        has-valid-ppp? (-> energiatodistus :perusparannuspassi-valid)]
     (and (not (contains? #{"A" "A0" "A+"} e-luokka))
          (not has-valid-ppp?))))
 
-(defn- find-and-generate-ppp-pdf
-  [db whoami energiatodistus kieli]
-  (let [laatija-id (:laatija-id energiatodistus)]
-    (when-let [ppp-for-pdf (find-valid-ppp db energiatodistus laatija-id)]
-        (let [ppp-pdf-stream (ppp-pdf/find-perusparannuspassi-pdf db whoami (:id ppp-for-pdf) kieli)]
-          (when ppp-pdf-stream
-            (let [buffer (ByteArrayOutputStream.)]
-              (io/copy ppp-pdf-stream buffer)
-              (.toByteArray buffer)))))))
 
 (defn generate-energiatodistus-html
   "Use OpenHTMLToPDF to generate PDF, return as a byte array"
-  [{:keys [db energiatodistus kieli] :as params}]
+  [{:keys [energiatodistus kieli] :as params}]
   (let [l (kieli loc/et-pdf-localization)
-        laatija-id (:laatija-id energiatodistus)
-        show-toimenpide? (show-toimenpide-pages? db energiatodistus laatija-id)
+        show-toimenpide? (show-toimenpide-pages? energiatodistus)
         pages (concat
                 [{:page-border? true
                   :content
@@ -134,7 +114,7 @@
                    (et-lisamerkintoja/generate-lisamerkintoja params)]}])]
     (generate-document-html pages (:id energiatodistus))))
 
-(defn- generate-energiatodistus-ohtp-pdf
+(defn generate-energiatodistus-ohtp-pdf
   "Use OpenHTMLToPDF to generate a energiatodistus PDF, return as a byte array"
   [params ppp-pdf-bytes]
   (let [output-stream (ByteArrayOutputStream.)
@@ -149,14 +129,26 @@
         et-pdf-bytes))))
 
 (defn generate-energiatodistus-pdf
-  [db whoami energiatodistus alakayttotarkoitukset laatimisvaiheet kieli kayttotarkoitukset draft?]
-  (let [kieli-keyword (keyword kieli)
-        ppp-pdf-bytes (find-and-generate-ppp-pdf db whoami energiatodistus kieli)
+  "Generate the full energiatodistus 2026 PDF, including perusparannuspassi if present.
+   This is the db-less variant — all data must be passed in as parameters.
+   luokittelut is a map of classification data with keys:
+     :alakayttotarkoitukset, :kayttotarkoitukset, :laatimisvaiheet,
+     :mahdollisuus-liittya, :uusiutuva-energia, :lammitysmuodot,
+     :ilmanvaihtotyypit, :toimenpide-ehdotukset"
+  [complete-energiatodistus complete-perusparannuspassi kieli draft? luokittelut]
+  (let [{:keys [alakayttotarkoitukset kayttotarkoitukset laatimisvaiheet]} luokittelut
+        kieli-keyword (keyword kieli)
+        ppp-pdf-bytes (when complete-perusparannuspassi
+                        (ppp-pdf/generate-perusparannuspassi-pdf
+                          complete-perusparannuspassi
+                          complete-energiatodistus
+                          luokittelut
+                          kieli
+                          draft?))
         pdf-bytes
         ;; Generate the PDF to byte array
         (generate-energiatodistus-ohtp-pdf
-          {:db                    db
-           :energiatodistus       energiatodistus
+          {:energiatodistus       complete-energiatodistus
            :alakayttotarkoitukset alakayttotarkoitukset
            :laatimisvaiheet       laatimisvaiheet
            :kieli                 kieli-keyword

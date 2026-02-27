@@ -19,11 +19,11 @@
     [solita.etp.service.watermark-pdf :as watermark-pdf])
   (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
-(def draft-watermark-texts {"fi" "LUONNOS"
-                            "sv" "UTKAST"})
+(def ^:private draft-watermark-texts {"fi" "LUONNOS"
+                                      "sv" "UTKAST"})
 
-(def test-watermark-texts {"fi" "TESTI"
-                           "sv" "TEST"})
+(def ^:private test-watermark-texts {"fi" "TESTI"
+                                     "sv" "TEST"})
 
 ;; CSS styles for the document
 (defn- styles []
@@ -482,7 +482,7 @@
       content]
      (page-footer ppp-tunnus page-num total-pages)]))
 
-(defn generate-document-html
+(defn- generate-document-html
   "Generate complete HTML document for perusparannuspassi PDF.
 
    Parameters:
@@ -508,7 +508,7 @@
        [:body
         pages-html]])))
 
-(defn generate-perusparannuspassi-html [{:keys [perusparannuspassi kieli] :as params}]
+(defn- generate-perusparannuspassi-html [{:keys [perusparannuspassi kieli] :as params}]
   (let [l (kieli loc/ppp-pdf-localization)
         ;; Generate vaihe pages, filtering out nil (vaiheet without data)
         vaihe-pages (->> (range 1 5)
@@ -544,24 +544,20 @@
     (-> output-stream .toByteArray)))
 
 (defn generate-perusparannuspassi-pdf
-  "Generate a perusparannuspassi PDF and return it as a byte array."
-  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
-   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?]
+  "Generate a perusparannuspassi PDF and return it as a byte array.
+   luokittelut is a map of classification data with keys:
+     :kayttotarkoitukset, :alakayttotarkoitukset, :mahdollisuus-liittya,
+     :uusiutuva-energia, :lammitysmuodot, :ilmanvaihtotyypit, :toimenpide-ehdotukset"
+  [perusparannuspassi energiatodistus luokittelut kieli draft?]
   (let [kieli-keyword (keyword kieli)
         pdf-bytes
 
         ;; Generate the PDF to byte array
         (generate-perusparannuspassi-ohtp-pdf
-          {:energiatodistus       energiatodistus
-           :perusparannuspassi    perusparannuspassi
-           :kayttotarkoitukset    kayttotarkoitukset
-           :alakayttotarkoitukset alakayttotarkoitukset
-           :kieli                 kieli-keyword
-           :mahdollisuus-liittya  mahdollisuus-liittya
-           :uusiutuva-energia     uusiutuva-energia
-           :lammitysmuodot        lammitysmuodot
-           :ilmanvaihtotyypit     ilmanvaihtotyypit
-           :toimenpide-ehdotukset toimenpide-ehdotukset})
+          (merge luokittelut
+                 {:energiatodistus    energiatodistus
+                  :perusparannuspassi perusparannuspassi
+                  :kieli              kieli-keyword}))
         watermark-text (cond
                          draft? (draft-watermark-texts kieli)
                          (contains? #{"local-dev" "dev" "test"} config/environment-alias) (test-watermark-texts kieli)
@@ -574,10 +570,8 @@
 (defn- generate-pdf-as-input-stream
   "Generate a perusparannuspassi PDF and return it as an InputStream.
    Applies watermarks via post-processing with PDFBox."
-  [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset mahdollisuus-liittya
-   uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?]
-  (let [pdf-bytes (generate-perusparannuspassi-pdf perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
-                                                   mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?)]
+  [perusparannuspassi energiatodistus luokittelut kieli draft?]
+  (let [pdf-bytes (generate-perusparannuspassi-pdf perusparannuspassi energiatodistus luokittelut kieli draft?)]
     (ByteArrayInputStream. pdf-bytes)))
 
 (defn find-perusparannuspassi-pdf
@@ -596,17 +590,16 @@
     (let [energiatodistus-id (:energiatodistus-id perusparannuspassi)
           energiatodistus (energiatodistus-service/find-energiatodistus db whoami energiatodistus-id)
           versio (:versio energiatodistus)
-          kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
-          alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
-          mahdollisuus-liittya (luokittelu-service/find-mahdollisuus-liittya db)
-          uusiutuva-energia (luokittelu-service/find-uusiutuva-energia db)
-          lammitysmuodot (luokittelu-service/find-lammitysmuodot db)
-          ilmanvaihtotyypit (luokittelu-service/find-ilmanvaihtotyypit db)
-          toimenpide-ehdotukset (toimenpide-ehdotus-service/find-all db)
+          luokittelut {:kayttotarkoitukset    (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
+                       :alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
+                       :mahdollisuus-liittya  (luokittelu-service/find-mahdollisuus-liittya db)
+                       :uusiutuva-energia     (luokittelu-service/find-uusiutuva-energia db)
+                       :lammitysmuodot        (luokittelu-service/find-lammitysmuodot db)
+                       :ilmanvaihtotyypit     (luokittelu-service/find-ilmanvaihtotyypit db)
+                       :toimenpide-ehdotukset (toimenpide-ehdotus-service/find-all db)}
           draft? true]
       ;; Always show draft watermark for now (no signing yet)
-      (generate-pdf-as-input-stream perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset
-                                    mahdollisuus-liittya uusiutuva-energia lammitysmuodot ilmanvaihtotyypit toimenpide-ehdotukset kieli draft?))))
+      (generate-pdf-as-input-stream perusparannuspassi energiatodistus luokittelut kieli draft?))))
 
 (defn find-perusparannuspassi-html
   "Find or generate HTML for a perusparannuspassi PDF.
@@ -623,22 +616,14 @@
     (let [energiatodistus-id (:energiatodistus-id perusparannuspassi)
           energiatodistus (energiatodistus-service/find-energiatodistus db whoami energiatodistus-id)
           versio (:versio energiatodistus)
-          kayttotarkoitukset (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
-          alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
-          mahdollisuus-liittya (luokittelu-service/find-mahdollisuus-liittya db)
-          uusiutuva-energia (luokittelu-service/find-uusiutuva-energia db)
-          lammitysmuodot (luokittelu-service/find-lammitysmuodot db)
-          ilmanvaihtotyypit (luokittelu-service/find-ilmanvaihtotyypit db)
-          toimenpide-ehdotukset (toimenpide-ehdotus-service/find-all db)
-          draft? true]
-      ;; Always show draft watermark for now (no signing yet)
-      (generate-perusparannuspassi-html {:energiatodistus       energiatodistus
-                                         :perusparannuspassi    perusparannuspassi
-                                         :kayttotarkoitukset    kayttotarkoitukset
-                                         :alakayttotarkoitukset alakayttotarkoitukset
-                                         :kieli                 (keyword kieli)
-                                         :mahdollisuus-liittya  mahdollisuus-liittya
-                                         :uusiutuva-energia     uusiutuva-energia
-                                         :lammitysmuodot        lammitysmuodot
-                                         :ilmanvaihtotyypit     ilmanvaihtotyypit
-                                         :toimenpide-ehdotukset toimenpide-ehdotukset}))))
+          luokittelut {:kayttotarkoitukset    (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
+                       :alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
+                       :mahdollisuus-liittya  (luokittelu-service/find-mahdollisuus-liittya db)
+                       :uusiutuva-energia     (luokittelu-service/find-uusiutuva-energia db)
+                       :lammitysmuodot        (luokittelu-service/find-lammitysmuodot db)
+                       :ilmanvaihtotyypit     (luokittelu-service/find-ilmanvaihtotyypit db)
+                       :toimenpide-ehdotukset (toimenpide-ehdotus-service/find-all db)}]
+      (generate-perusparannuspassi-html (merge luokittelut
+                                              {:energiatodistus    energiatodistus
+                                               :perusparannuspassi perusparannuspassi
+                                               :kieli              (keyword kieli)})))))
