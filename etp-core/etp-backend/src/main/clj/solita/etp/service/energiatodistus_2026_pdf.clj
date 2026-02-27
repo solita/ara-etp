@@ -136,21 +136,13 @@
      :mahdollisuus-liittya, :uusiutuva-energia, :lammitysmuodot,
      :ilmanvaihtotyypit, :toimenpide-ehdotukset"
   [complete-energiatodistus luokittelut kieli draft? complete-perusparannuspassi]
-  (let [{:keys [alakayttotarkoitukset kayttotarkoitukset laatimisvaiheet
-                mahdollisuus-liittya uusiutuva-energia lammitysmuodot
-                ilmanvaihtotyypit toimenpide-ehdotukset]} luokittelut
+  (let [{:keys [alakayttotarkoitukset kayttotarkoitukset laatimisvaiheet]} luokittelut
         kieli-keyword (keyword kieli)
         ppp-pdf-bytes (when complete-perusparannuspassi
                         (ppp-pdf/generate-perusparannuspassi-pdf
                           complete-perusparannuspassi
                           complete-energiatodistus
-                          kayttotarkoitukset
-                          alakayttotarkoitukset
-                          mahdollisuus-liittya
-                          uusiutuva-energia
-                          lammitysmuodot
-                          ilmanvaihtotyypit
-                          toimenpide-ehdotukset
+                          luokittelut
                           kieli
                           draft?))
         pdf-bytes
