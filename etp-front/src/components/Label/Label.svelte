@@ -16,7 +16,7 @@
 
 <style type="text/postcss">
   label {
-    @apply text-secondary;
+    @apply mb-2 inline-block text-secondary;
   }
 
   .required-marker {
