@@ -122,6 +122,30 @@
   export let saveComplete = _ => {};
   export let cancel = _ => {};
 
+  /**
+   * Wraps a save-like function (save or saveComplete) so that
+   * pendingExecution is set to true before the operation starts
+   * and reset to false on both success and unsuccessful save.
+   *
+   * The wrapped save/saveComplete signature is:
+   *   save(onSuccessfulSave, onUnsuccessfulSave) => () => void
+   */
+  const wrapSaveOperation = saveFn => onSuccessfulSave => () => {
+    if (pendingExecution) return;
+    pendingExecution = true;
+
+    const wrappedOnSuccess = () => {
+      pendingExecution = false;
+      onSuccessfulSave();
+    };
+
+    const wrappedOnUnsuccessfulSave = () => {
+      pendingExecution = false;
+    };
+
+    saveFn(wrappedOnSuccess, wrappedOnUnsuccessfulSave)();
+  };
+
   const openUrl = url => {
     window.open(url, '_blank');
   };
@@ -211,7 +235,7 @@
     <button
       data-cy="save-button"
       disabled={!dirty || pendingExecution}
-      on:click={save(noop)}>
+      on:click={wrapSaveOperation(save)(noop)}>
       <span class="font-icon text-2xl">save</span>
       <span class="description">
         {id.isSome()
@@ -228,7 +252,7 @@
     <button
       disabled={pendingExecution}
       data-cy="allekirjoita-button"
-      on:click={saveComplete(openSigning)}>
+      on:click={wrapSaveOperation(saveComplete)(openSigning)}>
       <span class="border-b-3 border-secondary font-icon text-2xl">
         create
       </span>
@@ -237,6 +261,7 @@
   {/if}
   {#if id.isSome() && Kayttajat.isLaatija(whoami)}
     <button
+      data-cy="copy-button"
       disabled={pendingExecution}
       on:click={_ => {
         const newEtPage = _ =>
@@ -245,7 +270,7 @@
           );
 
         if (et.shouldSaveBeforeCopy(energiatodistus)) {
-          save(newEtPage)();
+          wrapSaveOperation(save)(newEtPage)();
         } else {
           newEtPage();
         }
@@ -259,7 +284,7 @@
       {#each pdfUrl.toArray() as { href, lang }}
         <button
           disabled={pendingExecution}
-          on:click={save(() => openUrl(href))}>
+          on:click={wrapSaveOperation(save)(() => openUrl(href))}>
           <span class="font-icon text-2xl">picture_as_pdf</span>
           <span class="description block"
             >{i18n('energiatodistus.toolbar.preview')}

@@ -173,55 +173,59 @@
     }
   };
 
-  const validateAndSubmit = onSuccessfulSave => () => {
-    const invalid = R.filter(
-      R.propSatisfies(
-        EtValidations.isValidationRequired(whoami, energiatodistus),
-        0
-      ),
-      EtValidations.invalidProperties(saveSchema, energiatodistus)
-    );
+  const validateAndSubmit =
+    (onSuccessfulSave, onUnsuccessfulSave = () => {}) =>
+    () => {
+      const invalid = R.filter(
+        R.propSatisfies(
+          EtValidations.isValidationRequired(whoami, energiatodistus),
+          0
+        ),
+        EtValidations.invalidProperties(saveSchema, energiatodistus)
+      );
 
-    const invalidPPP = [];
+      const invalidPPP = [];
 
-    if (perusparannuspassi && perusparannuspassi.valid) {
-      invalidPPP.push(
-        ...R.filter(
-          R.propSatisfies(
-            EtValidations.isValidationRequired(whoami, energiatodistus),
-            0
-          ),
-          EtValidations.invalidProperties(
-            pppSaveSchema,
-            R.assocPath(
-              ['perustiedot', 'kieli'],
-              energiatodistus.perustiedot.kieli,
-              perusparannuspassi
+      if (perusparannuspassi && perusparannuspassi.valid) {
+        invalidPPP.push(
+          ...R.filter(
+            R.propSatisfies(
+              EtValidations.isValidationRequired(whoami, energiatodistus),
+              0
+            ),
+            EtValidations.invalidProperties(
+              pppSaveSchema,
+              R.assocPath(
+                ['perustiedot', 'kieli'],
+                energiatodistus.perustiedot.kieli,
+                perusparannuspassi
+              )
             )
           )
-        )
-      );
-    }
+        );
+      }
 
-    const allInvalid = [...invalid, ...invalidPPP];
+      const allInvalid = [...invalid, ...invalidPPP];
 
-    if (R.isEmpty(allInvalid) && korvausError.isNone()) {
-      clearAnnouncements();
-      submit(
-        energiatodistus,
-        perusparannuspassi,
-        ({ newPerusparannuspassiId }) => {
-          setPppIdIfItChanged(newPerusparannuspassiId);
-          dirty = false;
-          onSuccessfulSave();
-        }
-      );
-    } else {
-      showKorvausErrorMessage(korvausError);
-      showInvalidPropertiesMessage(invalid);
-      showInvalidPPPPropertiesMessage(invalidPPP);
-    }
-  };
+      if (R.isEmpty(allInvalid) && korvausError.isNone()) {
+        clearAnnouncements();
+        submit(
+          energiatodistus,
+          perusparannuspassi,
+          ({ newPerusparannuspassiId }) => {
+            setPppIdIfItChanged(newPerusparannuspassiId);
+            dirty = false;
+            onSuccessfulSave();
+          },
+          onUnsuccessfulSave
+        );
+      } else {
+        onUnsuccessfulSave();
+        showKorvausErrorMessage(korvausError);
+        showInvalidPropertiesMessage(invalid);
+        showInvalidPPPPropertiesMessage(invalidPPP);
+      }
+    };
 
   export const showMissingProperties = (missing, i18nRoot) => {
     return R.compose(
@@ -239,50 +243,57 @@
   };
 
   let etFormElement;
-  const validateCompleteAndSubmit = onSuccessfulSave => () => {
-    const missing = EtValidations.missingProperties(
-      required(energiatodistus),
-      energiatodistus
-    );
+  const validateCompleteAndSubmit =
+    (onSuccessfulSave, onUnsuccessfulSave = () => {}) =>
+    () => {
+      const missing = EtValidations.missingProperties(
+        required(energiatodistus),
+        energiatodistus
+      );
 
-    const missingPPP = [];
+      const missingPPP = [];
 
-    if (perusparannuspassi && perusparannuspassi.id) {
-      missingPPP.push(
-        ...EtValidations.missingProperties(
-          pppRequired(
-            perusparannuspassi,
-            pppValidation,
-            energiatodistus['bypass-validation-limits']
-          ),
-          R.assocPath(
-            ['perustiedot', 'kieli'],
-            energiatodistus.perustiedot.kieli,
-            perusparannuspassi
+      if (perusparannuspassi && perusparannuspassi.id) {
+        missingPPP.push(
+          ...EtValidations.missingProperties(
+            pppRequired(
+              perusparannuspassi,
+              pppValidation,
+              energiatodistus['bypass-validation-limits']
+            ),
+            R.assocPath(
+              ['perustiedot', 'kieli'],
+              energiatodistus.perustiedot.kieli,
+              perusparannuspassi
+            )
           )
-        )
-      );
-    }
+        );
+      }
 
-    const allMissing = [...missing, ...missingPPP];
+      const allMissing = [...missing, ...missingPPP];
 
-    if (R.isEmpty(allMissing)) {
-      validateAndSubmit(onSuccessfulSave)();
-    } else {
-      const missingETFields = showMissingProperties(missing, 'energiatodistus');
-      const missingPPPFields = showMissingProperties(
-        missingPPP,
-        'perusparannuspassi'
-      );
+      if (R.isEmpty(allMissing)) {
+        validateAndSubmit(onSuccessfulSave, onUnsuccessfulSave)();
+      } else {
+        onUnsuccessfulSave();
+        const missingETFields = showMissingProperties(
+          missing,
+          'energiatodistus'
+        );
+        const missingPPPFields = showMissingProperties(
+          missingPPP,
+          'perusparannuspassi'
+        );
 
-      const allMissingFields = missingETFields + ', ' + missingPPPFields;
-      showError(allMissingFields, allMissing);
-      schema = signatureSchema;
-      tick().then(_ => Validations.blurForm(etFormElement));
-    }
-  };
+        const allMissingFields = missingETFields + ', ' + missingPPPFields;
+        showError(allMissingFields, allMissing);
+        schema = signatureSchema;
+        tick().then(_ => Validations.blurForm(etFormElement));
+      }
+    };
 
   const noop = () => {};
+
   const reset = _ => {
     dirty = false;
     replace(
