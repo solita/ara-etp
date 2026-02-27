@@ -155,36 +155,48 @@
        :fill "#000000"}
       label]]))
 
+(defn- stacked-arrows-alt [kieli e-luokka e-luku]
+  (let [l (kieli loc/et-pdf-localization)]
+    (str
+      (l :energialuokka-teksti) " " e-luokka ". "
+      (l :energialuku-teksti) " " e-luku " kWhE/m2/vuosi. "
+      (l :asteikko-teksti))))
+
 (defn stacked-arrows [{:keys [kieli e-luokka e-luku rajat]}]
   (let [l (kieli loc/et-pdf-localization)
         arrows (set-arrow-thresholds rajat)
         num-arrows (count arrows)
         row-height (+ arrow-height arrow-spacing)
         total-height (* row-height num-arrows)
-        arrow-elements (for [[i {:keys [letter numbers color text-color]}] (map-indexed vector arrows)]
-                         (let [body-width (+ min-body-width (* width-increment i))
-                               tip-w (+ tip-width (* tip-width-increment i))]
-                           (arrow
-                             {:x 0
-                              :y (* i row-height)
-                              :height arrow-height
-                              :body-width body-width
-                              :tip-width tip-w
-                              :color color
-                              :letter letter
-                              :numbers numbers
-                              :text-color (or text-color "#000000")})))]
-    (into
-      [:svg
-       {:xmlns "http://www.w3.org/2000/svg"
-        :viewBox (str "0 0 " svg-width " " total-height)
-        :width "100%"
-        :height total-height
-        :preserveAspectRatio "xMinYMin meet"}]
+
+        alt-text (stacked-arrows-alt kieli e-luokka e-luku)
+
+        arrow-elements (for [[i {:keys [letter numbers color text-color]}](map-indexed vector arrows)]
+          (let [body-width (+ min-body-width (* width-increment i))
+                tip-w (+ tip-width (* tip-width-increment i))]
+            (arrow
+              {:x 0
+               :y (* i row-height)
+               :height arrow-height
+               :body-width body-width
+               :tip-width tip-w
+               :color color
+               :letter letter
+               :numbers numbers
+               :text-color (or text-color "#000000")})))]
+    [:svg
+     {:xmlns "http://www.w3.org/2000/svg"
+      :viewBox (str "0 0 " svg-width " " total-height)
+      :width "100%"
+      :height total-height
+      :preserveAspectRatio "xMinYMin meet"
+      :role "img"
+      :aria-label alt-text
+      :alt alt-text}
       (concat
         arrow-elements
         [(indicator-line {:arrow-index 1 :label (l :paastoton-rakennus)})
-         (e-luokka-indicator {:e-luokka e-luokka :e-luku e-luku :arrows arrows})]))))
+         (e-luokka-indicator {:e-luokka e-luokka :e-luku e-luku :arrows arrows})])]))
 
 (defn et-etusivu-grafiikka [{:keys [kieli energiatodistus kayttotarkoitukset alakayttotarkoitukset]}]
   (let [l (kieli loc/et-pdf-localization)
