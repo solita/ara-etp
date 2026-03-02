@@ -453,6 +453,9 @@
         :laskentatyokalu-nimi-versio                "Laskentatyökalun nimi ja versionumero:"
         :yritys                                     "Yritys"
         :sahkoinen-allekirjoitus                    "Sähköinen allekirjoitus"
+        :energialuokka-teksti                       "Energia-luokka on"
+        :energialuku-teksti                         "E-luku on"
+        :asteikko-teksti                            "Asteikko on A+-luokasta G-luokkaan, jossa A+-luokka on energiatehokkain ja G-luokka tehottomin."
 
    }
 
@@ -631,6 +634,9 @@
         :laskentatyokalu-nimi-versio                "Laskentatyökalun nimi ja versionumero: (sv)"
         :yritys                                     "Yritys (sv)"
         :sahkoinen-allekirjoitus                    "Sähköinen allekirjoitus (sv)"
+        :energialuokka-teksti                       "Energia-luokka on (sv)"
+        :energialuku-teksti                         "E-luku on (sv)"
+        :asteikko-teksti                            "Asteikko on A+-luokasta G-luokkaan, jossa A+-luokka on energiatehokkain ja G-luokka tehottomin. (sv)"
 
         }})
 
