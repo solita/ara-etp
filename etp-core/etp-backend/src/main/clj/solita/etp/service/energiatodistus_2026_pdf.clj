@@ -130,7 +130,7 @@
 
 (defn generate-energiatodistus-pdf
   "Generate the full energiatodistus 2026 PDF, including perusparannuspassi if present.
-   This is the db-less variant — all data must be passed in as parameters.
+
    luokittelut is a map of classification data with keys:
      :alakayttotarkoitukset, :kayttotarkoitukset, :laatimisvaiheet,
      :mahdollisuus-liittya, :uusiutuva-energia, :lammitysmuodot,
