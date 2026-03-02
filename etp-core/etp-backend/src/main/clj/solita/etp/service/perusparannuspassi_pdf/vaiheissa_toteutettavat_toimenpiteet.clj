@@ -63,11 +63,7 @@
                                                           price-key (get perusparannuspassi-service/price-keys short-key)
                                                           price (get-val price-key)]
                                                       (* energy price 0.01)))))
-        hiilidioksidipaastot (or (get tulokset :hiilidioksidipaastot)
-                                 (reduce + (for [[short-key laskennallinen-key] perusparannuspassi-service/energy-keys-laskennallinen]
-                                             (let [energy (get-val laskennallinen-key)
-                                                   factor (get perusparannuspassi-service/paastokertoimet short-key 0)]
-                                               (* energy factor)))))]
+        hiilidioksidipaastot (or (get tulokset :co2-paastot) "-")]
     {:ostoenergian-kokonaistarve ostoenergian-kokonaistarve
      :toteutunut-ostoenergian-kulutus toteutunut-ostoenergian-kulutus
      :toteutunut-energiakustannus toteutunut-energiakustannus

@@ -5,11 +5,11 @@
             [solita.etp.service.energiatodistus :as energiatodistus-service]))
 
 (def ^:private co2-kertoimet
-  {:kaukolampo         0.170
-   :sahko              0.104
-   :uusiutuvat-pat     0.0
-   :fossiiliset-pat    0.264
-   :kaukojaahdytys     0.120})
+  {:kaukolampo         0.059
+   :sahko              0.05
+   :uusiutuvat-pat     0.027
+   :fossiiliset-pat    0.306
+   :kaukojaahdytys     0.014})
 
 (def ^:private ppp-key->energiamuotokerroin-key
   {:ostoenergian-tarve-kaukolampo       :kaukolampo
