@@ -159,7 +159,7 @@
   (let [l (kieli loc/et-pdf-localization)]
     (str
       (l :energialuokka-teksti) " " e-luokka ". "
-      (l :energialuku-teksti) " " e-luku (l :kwh-m2-vuosi) ". "
+      (l :energialuku-teksti) " " e-luku  " " (l :kwh-m2-vuosi) ". "
       (l :asteikko-teksti))))
 
 (defn stacked-arrows [{:keys [kieli e-luokka e-luku rajat]}]
