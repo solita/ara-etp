@@ -32,7 +32,8 @@ values
 
 on conflict (column_name, versio) do update set
     ordinal = excluded.ordinal,
-    bypass_allowed = excluded.bypass_allowed;
+    bypass_allowed = excluded.bypass_allowed,
+    valid = excluded.valid;
 
 insert into ppp_vaihe_validation_required_column (versio, column_name, ordinal, bypass_allowed)
 values
