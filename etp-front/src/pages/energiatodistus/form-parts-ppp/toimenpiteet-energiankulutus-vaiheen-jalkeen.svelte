@@ -150,11 +150,10 @@
       )}
     </dt>
     <dd>
-      {R.compose(
-        Maybe.orSome('-'),
-        R.map(formats.numberFormat)
-      )(metrics.current.laskennallinenKustannus.total)}
-      {#each Maybe.toArray(metrics.current.laskennallinenKustannus.total) as _}
+      {R.compose(PppUtils.formatCost)(
+        metrics.current.toteutunutKustannus.total
+      )}
+      {#each Maybe.toArray(metrics.current.toteutunutKustannus.total) as _}
         <EurosPerVuosiUnit />
       {/each}
     </dd>
