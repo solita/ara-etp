@@ -610,7 +610,7 @@
    - ppp-id: Perusparannuspassi ID
    - kieli: Language code ('fi' or 'sv')
 
-   Returns: InputStream of the PDF, or nil if not found"
+   Returns: HTML string representation of the PDF, or nil if not found"
   [db whoami ppp-id kieli]
   (when-let [perusparannuspassi (complete-ppp/find-complete-perusparannuspassi db whoami ppp-id)]
     (let [energiatodistus-id (:energiatodistus-id perusparannuspassi)
