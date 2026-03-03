@@ -497,7 +497,7 @@ export const perusparannuspassi = {
   'passin-perustiedot': {
     havainnointikaynti: DateValue(),
     'passin-esittely': DateValue(),
-    lisatietoja: String(2, 1500)
+    lisatietoja: String(2, 3000)
   },
   'rakennuksen-perustiedot': {
     'ulkoseinat-ehdotettu-taso': FloatNonNegative,
