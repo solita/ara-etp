@@ -76,7 +76,8 @@
 
 
 (defn generate-energiatodistus-html
-  "Use OpenHTMLToPDF to generate PDF, return as a byte array"
+  "Generate a string of HTML, representing the ET2026 part of a PDF document
+  containing both ET2026 and possibly a PPP."
   [{:keys [energiatodistus kieli] :as params}]
   (let [l (kieli loc/et-pdf-localization)
         show-toimenpide? (show-toimenpide-pages? energiatodistus)
@@ -130,6 +131,7 @@
 
 (defn generate-energiatodistus-pdf
   "Generate the full energiatodistus 2026 PDF, including perusparannuspassi if present.
+  The result is an array of bytes representing the PDF file.
 
    luokittelut is a map of classification data with keys:
      :alakayttotarkoitukset, :kayttotarkoitukset, :laatimisvaiheet,
