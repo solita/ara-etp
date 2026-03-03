@@ -44,7 +44,7 @@
           <th class="et-table--th et-table--th-right-aligned"
             >{PppUtils.formatVaiheHeading(
               `${$_('perusparannuspassi.laskennan-tulokset.vaihe')} ${vaihe['vaihe-nro']}`,
-              $_('perusparannuspassi.laskennan-tulokset.kwh-per-vuosi'),
+              $_('perusparannuspassi.laskennan-tulokset.eur-per-vuosi'),
               vaihe.tulokset['vaiheen-alku-pvm'],
               $_('perusparannuspassi.laskennan-tulokset.ei-aloitusvuotta')
             )}</th>
