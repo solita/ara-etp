@@ -382,7 +382,9 @@
                                                                               :kayttoikaa-jaljella-arvio-vuosina common-schema/IntNonNegative)
                                                          :ymparys           Huomio2026
                                                          :alapohja-ylapohja Huomio2026}
-                        :ilmastoselvitys                 Ilmastoselvitys})
+                        :lisamerkintoja-fi              common-schema/String4600
+                        :lisamerkintoja-sv              common-schema/String4600
+                        :ilmastoselvitys                Ilmastoselvitys})
       xschema/optional-properties))
 
 (defn ->EnergiatodistusSaveExternal [schema]
