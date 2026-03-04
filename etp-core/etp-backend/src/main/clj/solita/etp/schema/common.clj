@@ -32,6 +32,7 @@
 (def String1000 (StringBase 1000))
 (def String1500 (StringBase 1500))
 (def String2500 (StringBase 2500))
+(def String3000 (StringBase 3000))
 (def String6300 (StringBase 6300))
 
 (def Year

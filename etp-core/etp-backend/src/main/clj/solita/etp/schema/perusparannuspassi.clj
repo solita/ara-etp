@@ -9,8 +9,8 @@
    :passin-esittely           common-schema/Date
    :tayttaa-aplus-vaatimukset schema/Bool
    :tayttaa-a0-vaatimukset    schema/Bool
-   :lisatietoja-fi            common-schema/String1500
-   :lisatietoja-sv            common-schema/String1500})
+   :lisatietoja-fi            common-schema/String3000
+   :lisatietoja-sv            common-schema/String3000})
 
 (def Rakennuksenperustiedot
   {:ulkoseinat-ehdotettu-taso                schema/Num
