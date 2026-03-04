@@ -5,7 +5,8 @@
             [solita.common.map :as map]
             [solita.common.schema :as xschema]
             [solita.etp.schema.common :as common-schema]
-            [solita.etp.schema.geo :as geo-schema]))
+            [solita.etp.schema.geo :as geo-schema]
+            [solita.etp.schema.perusparannuspassi :as ppp-schema]))
 
 (def YritysPostinumero common-schema/String8)
 
@@ -396,11 +397,20 @@
 
 (def EnergiatodistusSave2013External
   (->EnergiatodistusSaveExternal EnergiatodistusSave2013))
+
 (def EnergiatodistusSave2018External
   (->EnergiatodistusSaveExternal EnergiatodistusSave2018))
-;; TODO: AE-2585: Decide external 2026 API details
-#_(def EnergiatodistusSave2026External
-    (->EnergiatodistusSaveExternal EnergiatodistusSave2026))
+
+(def PerusparannuspassiSaveExternal
+  "PPP schema for external API - energiatodistus-id is omitted
+  because the PPP is created alongside the energiatodistus."
+  (-> ppp-schema/PerusparannuspassiSave
+      (dissoc :energiatodistus-id)
+      xschema/optional-properties))
+
+(def EnergiatodistusSave2026External
+  (assoc (->EnergiatodistusSaveExternal EnergiatodistusSave2026)
+    :perusparannuspassi (schema/maybe PerusparannuspassiSaveExternal)))
 
 (def Energiatehokkuus
   {:e-luku   (schema/maybe schema/Num)
