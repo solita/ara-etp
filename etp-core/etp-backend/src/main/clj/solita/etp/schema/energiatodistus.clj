@@ -410,7 +410,7 @@
 
 (def EnergiatodistusSave2026External
   (assoc (->EnergiatodistusSaveExternal EnergiatodistusSave2026)
-    :perusparannuspassi (schema/maybe PerusparannuspassiSaveExternal)))
+    (schema/optional-key :perusparannuspassi) (schema/maybe PerusparannuspassiSaveExternal)))
 
 (def Energiatehokkuus
   {:e-luku   (schema/maybe schema/Num)
