@@ -308,8 +308,8 @@ const energiamuodotUntil2018 = [
 ];
 
 const energiamuodot2026 = [
-  'sahko-vuosikulutus-yhteensa',
   'kaukolampo-vuosikulutus-yhteensa',
+  'sahko-vuosikulutus-yhteensa',
   'uusiutuvat-polttoaineet-vuosikulutus-yhteensa',
   'fossiiliset-polttoaineet-vuosikulutus-yhteensa',
   'kaukojaahdytys-vuosikulutus-yhteensa',
