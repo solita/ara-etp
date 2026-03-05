@@ -24,6 +24,7 @@ const config = {
     '^@Utility/(.*)$': '<rootDir>/src/utils/$1',
     '^@Language/(.*)$': '<rootDir>/src/language/$1',
     '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.css$': '<rootDir>/jest-style-mock.js',
   },
   extensionsToTreatAsEsm: ['.svelte'],
   collectCoverageFrom: [
