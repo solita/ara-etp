@@ -404,9 +404,7 @@
 (def PerusparannuspassiSaveExternal
   "PPP schema for external API - energiatodistus-id is omitted
   because the PPP is created alongside the energiatodistus."
-  (-> ppp-schema/PerusparannuspassiSave
-      (dissoc :energiatodistus-id)
-      xschema/optional-properties))
+  (dissoc ppp-schema/PerusparannuspassiSave :energiatodistus-id))
 
 (def EnergiatodistusSave2026External
   (assoc (->EnergiatodistusSaveExternal EnergiatodistusSave2026)
