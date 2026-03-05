@@ -109,20 +109,15 @@
   "Like api-response/with-exceptions but transforms the error body into
    a user-friendly JSON structure for external API consumers."
   [response-fn error-descriptions]
-  (log/info "with-external-exceptions called")
   (try
     (response-fn)
     (catch ExceptionInfo e
       (let [error (ex-data e)
-            _ (log/info "Caught ExceptionInfo:" (:type error) error)
             description (first (filter (partial matches-description? error)
                                        error-descriptions))]
-        (log/info "Matched description:" description)
         (if (nil? description)
+          (throw e)
           (do
-            (log/info "No matching description, re-throwing")
-            (throw e))
-          (let [formatted (format-error error)]
-            (log/info "Formatted response:" formatted)
+            (log/debug "External API error handled:" (:type error))
             {:status (:response description)
-             :body   formatted}))))))
+             :body   (format-error error)}))))))
