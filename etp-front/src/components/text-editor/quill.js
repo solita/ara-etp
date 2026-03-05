@@ -1,4 +1,5 @@
 import Quill from 'quill';
+import 'quill/dist/quill.snow.css';
 import MagicUrl from './magic-url.cjs';
 import * as Objects from '@Utility/objects';
 
