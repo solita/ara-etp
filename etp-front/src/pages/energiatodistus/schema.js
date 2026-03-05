@@ -390,6 +390,7 @@ export const v2026 = R.compose(
         muusahko: IntegerNonNegative
       }
     },
+    lisamerkintoja: String(2, 4600),
     ilmastoselvitys: {
       laatimisajankohta: DateValue(),
       laatija: String(2, 500),
