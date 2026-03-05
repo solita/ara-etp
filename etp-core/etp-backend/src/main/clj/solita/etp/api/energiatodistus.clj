@@ -7,6 +7,7 @@
             [solita.etp.api.energiatodistus-luokittelut :as luokittelut-api]
             [solita.etp.api.energiatodistus-signing :as signing-api]
             [solita.etp.api.energiatodistus-xml :as xml-api]
+            [solita.etp.api.external-response :as external-response]
             [solita.etp.api.response :as api-response]
             [solita.etp.api.stream :as api-stream]
             [solita.etp.config :as config]
@@ -278,7 +279,7 @@
        :parameters {:body energiatodistus-schema/EnergiatodistusSave2026External}
        :responses  {201 {:body common-schema/IdAndWarnings}}
        :handler    (fn [{:keys [db whoami parameters uri]}]
-                    (api-response/with-exceptions
+                    (external-response/with-external-exceptions
                       #(let [body (:body parameters)
                              ppp-data (:perusparannuspassi body)
                              et-data (dissoc body :perusparannuspassi)
