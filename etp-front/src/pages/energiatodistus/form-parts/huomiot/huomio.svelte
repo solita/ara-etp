@@ -11,6 +11,7 @@
   import Textarea from '@Pages/energiatodistus/Textarea';
   import ELukuUnit from '@Pages/energiatodistus/form-parts/units/e-luku';
   import VuosikulutusUnit from '@Pages/energiatodistus/form-parts/units/annual-energy';
+  import PaastojeMuutosUnit from '@Pages/energiatodistus/form-parts/units/paastojen-muutos.svelte';
 
   export let disabled;
   export let schema;
@@ -90,7 +91,7 @@
               >{$_(
                 'energiatodistus.huomiot.toimenpide-table.kasvihuonepaastojen-muutos'
               )}</span>
-            <span class="block"><ELukuUnit /></span>
+            <span class="block"><PaastojeMuutosUnit /></span>
           </th>
         {/if}
       </tr>
