@@ -375,7 +375,7 @@ export const v2026 = R.compose(
         ...Integer(100, new Date().getFullYear()),
         format: formats.optionalYear
       },
-      lisatietoja: String(2, 500),
+      lisatietoja: String(1, 100),
       'fossiiliset-polttoaineet-vuosikulutus-yhteensa': FloatNonNegative,
       'uusiutuvat-polttoaineet-vuosikulutus-yhteensa': FloatNonNegative,
       'uusiutuva-energia-vuosituotto-yhteensa': FloatNonNegative

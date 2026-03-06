@@ -364,8 +364,8 @@
                                                          :lammitys
                                                          {:lammonjako-lampotilajousto schema/Bool}}
                         :toteutunut-ostoenergiankulutus {:tietojen-alkuperavuosi common-schema/Year
-                                                         :lisatietoja-fi         common-schema/String500
-                                                         :lisatietoja-sv         common-schema/String500
+                                                         :lisatietoja-fi         common-schema/String100
+                                                         :lisatietoja-sv         common-schema/String100
                                                          :uusiutuvat-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
                                                          :fossiiliset-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
                                                          :uusiutuva-energia-vuosituotto-yhteensa common-schema/NonNegative}
