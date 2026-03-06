@@ -7,6 +7,7 @@
             [solita.etp.api.energiatodistus-luokittelut :as luokittelut-api]
             [solita.etp.api.energiatodistus-signing :as signing-api]
             [solita.etp.api.energiatodistus-xml :as xml-api]
+            [solita.etp.api.external-response :as external-response]
             [solita.etp.api.response :as api-response]
             [solita.etp.api.stream :as api-stream]
             [solita.etp.config :as config]
@@ -28,6 +29,7 @@
             [solita.etp.service.energiatodistus-xlsx :as energiatodistus-xlsx-service]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.json :as json]
+            [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]
             [solita.etp.service.rooli :as rooli-service]
             [solita.etp.service.viesti :as viesti-service])
   (:import (com.fasterxml.jackson.core JsonParseException)
@@ -271,8 +273,31 @@
   [["/energiatodistukset"
     ["/2013" (crud-api/post 2013 energiatodistus-schema/EnergiatodistusSave2013External)]
     ["/2018" (crud-api/post 2018 energiatodistus-schema/EnergiatodistusSave2018External)]
-    ;; TODO: AE-2585: Decide external 2026 API details
-    #_["/2026" (crud-api/post 2026 energiatodistus-schema/EnergiatodistusSave2026External)]
+    ["/2026-ppp"
+     {:post
+      {:summary    "Lisää 2026 energiatodistus ja optionaalisesti perusparannuspassi"
+       :parameters {:body energiatodistus-schema/EnergiatodistusSave2026External}
+       :responses  {201 {:body common-schema/IdAndWarnings}}
+       :handler    (fn [{:keys [db whoami parameters uri]}]
+                    (external-response/with-external-exceptions
+                      #(let [body (:body parameters)
+                             ppp-data (:perusparannuspassi body)
+                             et-data (dissoc body :perusparannuspassi)
+                             et-result (energiatodistus-service/add-energiatodistus!
+                                         db whoami 2026 et-data)
+                             ppp-result (when ppp-data
+                                          (perusparannuspassi-service/insert-perusparannuspassi!
+                                            db whoami
+                                            (assoc ppp-data :energiatodistus-id (:id et-result))))]
+                         (api-response/created uri
+                           {:id       (:id et-result)
+                            :warnings (concat (:warnings et-result)
+                                              (:warnings ppp-result))}))
+                      [{:type :invalid-replace :response 400}
+                       {:type :foreign-key-violation :response 400}
+                       {:type :invalid-value :response 400}
+                       {:type :invalid-sisainen-kuorma :response 400}
+                       {:type :invalid-laskutusosoite :response 400}]))}}]
     ["/legacy"
      ["/2013" (xml-api/post 2013)]
      ["/2018" (xml-api/post 2018)]]]])

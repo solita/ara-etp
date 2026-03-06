@@ -74,10 +74,61 @@
                  (service-name request))
       (base-handler e request))))
 
+(defn- walk-coercion-errors
+  "Recursively walks a schema coercion error structure and returns a flat
+   sequence of {:field \"path.to.field\" :error \"error-type\"} maps."
+  ([errors] (walk-coercion-errors [] errors))
+  ([path errors]
+   (cond
+     (string? errors)
+     [{:field (str/join "." (map name path))
+       :error errors}]
+
+     (map? errors)
+     (mapcat (fn [[k v]]
+               (walk-coercion-errors (conj path (if (keyword? k) k (keyword (str k)))) v))
+             errors)
+
+     (sequential? errors)
+     (keep-indexed (fn [i v]
+                     (when (some? v)
+                       {:field (str (str/join "." (map name path)) "[" i "]")
+                        :error (str v)}))
+                   errors)
+
+     :else
+     [{:field (str/join "." (map name path))
+       :error (str errors)}])))
+
+(defn- coercion-error-message [error-str]
+  (cond
+    (= error-str "missing-required-key") "Pakollinen kenttä puuttuu."
+    (= error-str "disallowed-key")       "Tuntematon kenttä."
+    (= error-str "invalid-key")          "Virheellinen avain."
+    (str/starts-with? (str error-str) "(not ") "Kentän arvo ei vastaa odotettua tyyppiä."
+    :else                                (str "Validointivirhe: " error-str)))
+
+(defn request-coercion-handler [e request]
+  (let [{:keys [errors in]} (ex-data e)
+        field-errors (walk-coercion-errors errors)]
+    (log/info "Request coercion failed in service:"
+              (service-name request)
+              "location:" in
+              "field-errors:" (count field-errors))
+    {:status 400
+     :body   {:error   "request-coercion"
+              :message "Pyynnön data ei vastaa odotettua skeemaa."
+              :details (mapv (fn [{:keys [field error]}]
+                               {:field   field
+                                :error   error
+                                :message (coercion-error-message error)})
+                             field-errors)}}))
+
 (def exception-middleware
   (exception/create-exception-middleware
     (assoc exception/default-handlers
       ::exception/default default-handler
       :unique-violation unique-exception-handler
       :forbidden forbidden-handler
+      ::coercion/request-coercion request-coercion-handler
       ::coercion/response-coercion (create-coercion-handler))))
