@@ -29,21 +29,29 @@
                      [:dt (str (:dt %) ":")]
                      [:dd (:dd %)]]) key-vals)))
 
+(defn- laskennallinen-helper [value nettoala]
+  (if nettoala
+    (^[double] Math/round (/ (double (or value 0)) (double nettoala)))
+    0))
+
+(defn- painotettu-helper [value]
+  (^[double] Math/round (or value 0)))
+
 (defn ostoenergia [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
         nettoala (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
 
-        laskennallinen-kaukolampo (if nettoala (^[double] Math/round (/ (double (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo]) 0)) (double nettoala))) 0)
-        laskennallinen-sahko (if nettoala (^[double] Math/round (/ (double (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :sahko]) 0)) (double nettoala))) 0)
-        laskennallinen-uusiutuva-polttoaine (if nettoala (^[double] Math/round (/ (double (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine]) 0)) (double nettoala))) 0)
-        laskennallinen-fossiilinen-polttoaine (if nettoala (^[double] Math/round (/ (double (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine]) 0)) (double nettoala))) 0)
-        laskennallinen-kaukojaahdytys (if nettoala (^[double] Math/round (/ (double (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys]) 0)) (double nettoala))) 0)
+        laskennallinen-kaukolampo (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :kaukolampo]) (laskennallinen-helper nettoala))
+        laskennallinen-sahko (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :sahko]) (laskennallinen-helper nettoala))
+        laskennallinen-uusiutuva-polttoaine (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine]) (laskennallinen-helper nettoala))
+        laskennallinen-fossiilinen-polttoaine (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine]) (laskennallinen-helper nettoala))
+        laskennallinen-kaukojaahdytys (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys]) (laskennallinen-helper nettoala))
 
-        painotettu-kaukolampo (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala-kertoimella]) 0))
-        painotettu-sahko (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :sahko-nettoala-kertoimella]) 0))
-        painotettu-uusutuva (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-nettoala-kertoimella]) 0))
-        painotettu-fossiilinen (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-nettoala-kertoimella]) 0))
-        painotettu-kaukojaahdytys (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-nettoala-kertoimella]) 0))]
+        painotettu-kaukolampo (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala-kertoimella]) (painotettu-helper))
+        painotettu-sahko (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :sahko-nettoala-kertoimella]) (painotettu-helper))
+        painotettu-uusutuva (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-nettoala-kertoimella]) (painotettu-helper))
+        painotettu-fossiilinen (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-nettoala-kertoimella]) (painotettu-helper))
+        painotettu-kaukojaahdytys (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-nettoala-kertoimella]) (painotettu-helper))]
 
     (table-ostoenergia kieli
      [{:dt (l :laskennallinen-ostoenergia)
