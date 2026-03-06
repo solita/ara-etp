@@ -113,6 +113,20 @@
          [:td {:style cell-style}
           (or (get tulokset (get perusparannuspassi-service/energy-keys-laskennallinen key)) "-")])]]]))
 
+(defn- parse-double-safe [v]
+  (cond
+    (number? v) (double v)
+    (string? v)
+    (try
+      (Double/parseDouble v)
+      (catch NumberFormatException _
+        nil))
+    :else nil))
+
+(defn- format-2dp [v]
+  (when-let [d (parse-double-safe v)]
+    (format "%.2f" d)))
+
 (defn- render-energiankulutus-kustannukset-ja-co2-paastot [vaihe l]
   (let [tulokset (:tulokset vaihe)]
     [:div {:style "margin-top: 24px;"}
@@ -122,8 +136,8 @@
       (for [[label value unit] [[(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen) (get tulokset :ostoenergia) (l :kwh-vuosi)]
                                 [(l :uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta) (get tulokset :uusiutuvan-energian-hyodynnetty-osuus) (l :prosenttia)]
                                 [(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus) (get tulokset :toteutunut-ostoenergia) (l :kwh-vuosi)]
-                                [(l :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio) (format "%.2f" (double (get tulokset :toteutunut-energia-kustannukset))) (l :euroa-vuosi)]
-                                [(l :energiankaytosta-aiheutuvat-hiilidioksidipaastot-laskennallinen) (format "%.2f" (double (get tulokset :co2-paastot))) (l :tco2ekv-vuosi)]]]
+                                [(l :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio) (-> tulokset :toteutunut-energia-kustannukset format-2dp) (l :euroa-vuosi)]
+                                [(l :energiankaytosta-aiheutuvat-hiilidioksidipaastot-laskennallinen) (-> tulokset :co2-paastot format-2dp) (l :tco2ekv-vuosi)]]]
         [:tr
          [:th {:scope "row" :style row-header-style} label]
          [:td {:style (str cell-style " width: 12%;")} (or value "-")]
