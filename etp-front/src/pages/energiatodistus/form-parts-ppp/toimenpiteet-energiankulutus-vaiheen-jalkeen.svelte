@@ -150,11 +150,10 @@
       )}
     </dt>
     <dd>
-      {R.compose(
-        Maybe.orSome('-'),
-        R.map(formats.numberFormat)
-      )(metrics.current.laskennallinenKustannus.total)}
-      {#each Maybe.toArray(metrics.current.laskennallinenKustannus.total) as _}
+      {R.compose(PppUtils.formatCost)(
+        metrics.current.toteutunutKustannus.total
+      )}
+      {#each Maybe.toArray(metrics.current.toteutunutKustannus.total) as _}
         <EurosPerVuosiUnit />
       {/each}
     </dd>
@@ -166,7 +165,7 @@
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberFormat),
+        R.map(formats.numberFormatPrecision(2)),
         R.map(R.divide(R.__, 1000))
       )(metrics.current.laskennallinenCO2.total)}
       {#each Maybe.toArray(metrics.current.laskennallinenCO2.total) as _}
