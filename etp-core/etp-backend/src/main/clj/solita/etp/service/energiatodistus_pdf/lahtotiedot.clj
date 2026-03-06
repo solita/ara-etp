@@ -19,24 +19,24 @@
   [energiatodistus l]
   (let [vaippa (get-in energiatodistus [:lahtotiedot :rakennusvaippa])]
     [{:nimi (l :lahtotiedot-ulkoseinat)
-      :a (fmt (get-in vaippa [:ulkoseinat :ala]))
-      :u (fmt (get-in vaippa [:ulkoseinat :U]))
-      :osuus (fmt-pct (get-in vaippa [:ulkoseinat :osuus-lampohaviosta]))}
+      :a (fmt (get-in vaippa [:ulkoseinat :ala]) 1)
+      :u (fmt (get-in vaippa [:ulkoseinat :U]) 1)
+      :osuus (fmt-pct (get-in vaippa [:ulkoseinat :osuus-lampohaviosta]) )}
      {:nimi (l :lahtotiedot-ylapohja)
-      :a (fmt (get-in vaippa [:ylapohja :ala]))
-      :u (fmt (get-in vaippa [:ylapohja :U]))
+      :a (fmt (get-in vaippa [:ylapohja :ala]) 1)
+      :u (fmt (get-in vaippa [:ylapohja :U]) 1)
       :osuus (fmt-pct (get-in vaippa [:ylapohja :osuus-lampohaviosta]))}
      {:nimi (l :lahtotiedot-alapohja)
-      :a (fmt (get-in vaippa [:alapohja :ala]))
-      :u (fmt (get-in vaippa [:alapohja :U]))
+      :a (fmt (get-in vaippa [:alapohja :ala]) 1)
+      :u (fmt (get-in vaippa [:alapohja :U]) 1)
       :osuus (fmt-pct (get-in vaippa [:alapohja :osuus-lampohaviosta]))}
      {:nimi (l :lahtotiedot-ikkunat)
-      :a (fmt (get-in vaippa [:ikkunat :ala]))
-      :u (fmt (get-in vaippa [:ikkunat :U]))
+      :a (fmt (get-in vaippa [:ikkunat :ala]) 1)
+      :u (fmt (get-in vaippa [:ikkunat :U]) 1)
       :osuus (fmt-pct (get-in vaippa [:ikkunat :osuus-lampohaviosta]))}
      {:nimi (l :lahtotiedot-ulkoovet)
-      :a (fmt (get-in vaippa [:ulkoovet :ala]))
-      :u (fmt (get-in vaippa [:ulkoovet :U]))
+      :a (fmt (get-in vaippa [:ulkoovet :ala]) 1)
+      :u (fmt (get-in vaippa [:ulkoovet :U]) 1)
       :osuus (fmt-pct (get-in vaippa [:ulkoovet :osuus-lampohaviosta]))}
      {:nimi (l :lahtotiedot-kylmasillat)
       :a ""
@@ -48,16 +48,17 @@
   [energiatodistus kieli]
   (let [iv (get-in energiatodistus [:lahtotiedot :ilmanvaihto])
         kuvaus-key (if (= kieli :sv) :label-sv :label-fi)
-        paaiv (:paaiv iv)]
+        paaiv (:paaiv iv)
+        ivjarjestelma (:ivjarjestelma iv)]
     {:kuvaus (-> iv (get kuvaus-key) h)
-     :jarjestelmat [{:ilmavirta (fmt (:tulo paaiv))
-                     :sfp (fmt (:sfp paaiv))
+     :jarjestelmat [{:ilmavirta (fmt (:tulo paaiv) 3)
+                     :sfp (fmt (:sfp ivjarjestelma) 3)
                      :lto (fmt-pct (:lto-vuosihyotysuhde iv))}]}))
 
 (defn- format-lampokerroin-tuotto-osuus
   "Format lämpökerroin and tuotto-osuus as 'kerroin/osuus'."
   [kerroin osuus]
-  (str (fmt kerroin 1)
+  (str (fmt kerroin 2)
        "/"
        (fmt-pct osuus)))
 
@@ -106,14 +107,14 @@
   [energiatodistus l]
   (let [sis-kuorma (get-in energiatodistus [:lahtotiedot :sis-kuorma])]
     [{:nimi (l :lahtotiedot-henkilot)
-      :kayttoaste (fmt (get-in sis-kuorma [:henkilot :kayttoaste]))
-      :lampokuorma (fmt (get-in sis-kuorma [:henkilot :lampokuorma]))}
+      :kayttoaste (fmt-pct (get-in sis-kuorma [:henkilot :kayttoaste]))
+      :lampokuorma (fmt (get-in sis-kuorma [:henkilot :lampokuorma]) 1)}
      {:nimi (l :lahtotiedot-kuluttajalaitteet)
-      :kayttoaste (fmt (get-in sis-kuorma [:kuluttajalaitteet :kayttoaste]))
-      :lampokuorma (fmt (get-in sis-kuorma [:kuluttajalaitteet :lampokuorma]))}
+      :kayttoaste (fmt-pct (get-in sis-kuorma [:kuluttajalaitteet :kayttoaste]))
+      :lampokuorma (fmt (get-in sis-kuorma [:kuluttajalaitteet :lampokuorma]) 1)}
      {:nimi (l :lahtotiedot-valaistus)
-      :kayttoaste (fmt (get-in sis-kuorma [:valaistus :kayttoaste]))
-      :lampokuorma (fmt (get-in sis-kuorma [:valaistus :lampokuorma]))}]))
+      :kayttoaste (fmt-pct (get-in sis-kuorma [:valaistus :kayttoaste]))
+      :lampokuorma (fmt (get-in sis-kuorma [:valaistus :lampokuorma]) 1)}]))
 
 (defn- extract-lahtotiedot
   "Extract all lähtötiedot from energiatodistus for PDF display."
