@@ -35,11 +35,11 @@
      (et/table-toimenpide-ehdotukset kieli
                                      (map-indexed (fn [idx item]
                                                    {:dt (str (inc idx) ".")
-                                                    :dd [(:lampo item)
-                                                         (:sahko item)
-                                                         (:jaahdytys item)
-                                                         (:eluvun-muutos item)
-                                                         (str "todo")]})
+                                                    :dd [(et/fmt (:lampo item) 0)
+                                                         (et/fmt (:sahko item) 0)
+                                                         (et/fmt (:jaahdytys item) 0)
+                                                         (et/fmt (:eluvun-muutos item) 0)
+                                                         (et/fmt (:kasvihuonepaastojen-muutos item) 0)]})
                                                  toimenpide))]))
 
 (defn toimenpide-ehdotukset-suositukset [{:keys [kieli energiatodistus]}]
