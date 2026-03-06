@@ -165,7 +165,7 @@
     <dd>
       {R.compose(
         Maybe.orSome('-'),
-        R.map(formats.numberFormat),
+        R.map(formats.numberFormatPrecision(2)),
         R.map(R.divide(R.__, 1000))
       )(metrics.current.laskennallinenCO2.total)}
       {#each Maybe.toArray(metrics.current.laskennallinenCO2.total) as _}
