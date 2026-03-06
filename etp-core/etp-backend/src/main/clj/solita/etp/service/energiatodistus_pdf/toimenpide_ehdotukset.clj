@@ -1,6 +1,7 @@
 (ns solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset
   (:require
-    [solita.etp.service.localization :as loc]))
+    [solita.etp.service.localization :as loc]
+    [solita.common.formats :as formats]))
 
 (defn description-list [key-vals]
   (into [:dl]
@@ -39,4 +40,4 @@
 
 (defn fmt
   "Format number with specified decimal places. Returns empty string for nil."
-  [value decimals] (or (format-number value decimals false) ""))
+  [value decimals] (or (formats/format-number value decimals false) ""))
