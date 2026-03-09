@@ -6,7 +6,7 @@
     [solita.etp.config :as config])
   (:import (eu.europa.esig.dss.alert ExceptionOnStatusAlert)
            (eu.europa.esig.dss.cades.signature CMSSignedDocument)
-           (eu.europa.esig.dss.enumerations MimeType SignatureLevel DigestAlgorithm SignatureAlgorithm)
+           (eu.europa.esig.dss.enumerations DigestAlgorithm MimeType SignatureAlgorithm SignatureLevel)
            (eu.europa.esig.dss.model DSSMessageDigest FileDocument InMemoryDocument SignatureValue)
            (eu.europa.esig.dss.model.x509 CertificateToken)
            (eu.europa.esig.dss.pades PAdESSignatureParameters SignatureFieldParameters SignatureImageParameters)
@@ -113,42 +113,26 @@
   (-> (ObjectInputStream. input-stream)
       .readObject))
 
-(defn- signature-image-parameters [^File signature-png page origin-x origin-y zoom width height]
-  (cond
-    ;; The case where the signature image is used
-    (and signature-png page origin-x origin-y zoom)
-    (let [signature-png (doto (InMemoryDocument. (io/input-stream signature-png))
-                          (.setMimeType (MimeType/fromFileExtension "png")))
+(defn- signature-image-parameters [^File signature-png page origin-x origin-y zoom]
+  (let [signature-png (doto (InMemoryDocument. (io/input-stream signature-png))
+                        (.setMimeType (MimeType/fromFileExtension "png")))
 
-          ^SignatureFieldParameters field-parameters (doto (SignatureFieldParameters.)
-                                                       (.setPage page)
-                                                       (.setOriginX origin-x)
-                                                       (.setOriginY origin-y))]
-      (doto (SignatureImageParameters.)
-        (.setFieldParameters field-parameters)
-        (.setImage signature-png)
-        (.setZoom zoom)))
-
-    ;; No signature image, but still got dimensions for the clickable signature area
-    (and page origin-x origin-y width height)
-    (let [^SignatureFieldParameters field-parameters (doto (SignatureFieldParameters.)
-                                                       (.setPage page)
-                                                       (.setOriginX origin-x)
-                                                       (.setOriginY origin-y)
-                                                       (.setWidth width)
-                                                       (.setHeight height))]
-      (doto (SignatureImageParameters.)
-        (.setFieldParameters field-parameters)))))
+        ^SignatureFieldParameters field-parameters (doto (SignatureFieldParameters.)
+                                                     (.setPage page)
+                                                     (.setOriginX origin-x)
+                                                     (.setOriginY origin-y))]
+    (doto (SignatureImageParameters.)
+      (.setFieldParameters field-parameters)
+      (.setImage signature-png)
+      (.setZoom zoom))))
 
 (defn ^:dynamic get-signature-parameters [{:keys [^File signature-png
-                                                  page origin-x origin-y zoom width height]}]
+                                                  page origin-x origin-y zoom]}]
   (let [^SignatureImageParameters image-parameters (signature-image-parameters signature-png
                                                                                page
                                                                                origin-x
                                                                                origin-y
-                                                                               zoom
-                                                                               width
-                                                                               height)
+                                                                               zoom)
         signature-parameters (doto (PAdESSignatureParameters.)
                                (.setSignatureLevel SignatureLevel/PAdES_BASELINE_B)
                                (.setImageParameters image-parameters)

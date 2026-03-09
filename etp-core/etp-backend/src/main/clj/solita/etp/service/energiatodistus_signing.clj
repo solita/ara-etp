@@ -121,8 +121,6 @@
                                        :origin-y      666
                                        :zoom          134}
                                  2026 {:signature-png signature-png
-                                       :height 100
-                                       :width 700
                                        :page     2
                                        :origin-x 25
                                        :origin-y 751
