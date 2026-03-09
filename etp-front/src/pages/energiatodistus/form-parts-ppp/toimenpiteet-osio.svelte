@@ -11,7 +11,10 @@
   import H4 from '@Component/H/H4';
   const i18n = $_;
 
+  import * as Maybe from '@Utility/maybe-utils';
+
   export let energiatodistus;
+  export let eTehokkuus = Maybe.None();
   export let perusparannuspassi;
   export let pppSchema;
   export let vaihe;
@@ -49,7 +52,12 @@
   </div>
   {#if R.equals(true, open)}
     <div transition:slide={{ duration: 200 }} class="grid gap-6">
-      <Perustiedot {perusparannuspassi} {pppSchema} {vaihe} {energiatodistus} />
+      <Perustiedot
+        {perusparannuspassi}
+        {pppSchema}
+        {vaihe}
+        {energiatodistus}
+        {eTehokkuus} />
       <ToimenpideEhdotukset
         bind:perusparannuspassi
         {pppSchema}

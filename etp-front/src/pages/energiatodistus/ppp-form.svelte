@@ -21,7 +21,10 @@
   import Toimenpiteet from './form-parts-ppp/toimenpiteet';
   import Lisatietoja from './form-parts-ppp/lisatietoja.svelte';
 
+  import * as Maybe from '@Utility/maybe-utils';
+
   export let energiatodistus;
+  export let eTehokkuus = Maybe.None();
   export let inputLanguage;
   export let luokittelut;
   export let schema;
@@ -143,6 +146,7 @@
       <LaskennallinenOstoenergia
         bind:perusparannuspassi
         {energiatodistus}
+        {eTehokkuus}
         {schema} />
       <UusiutuvaEnergia bind:perusparannuspassi {energiatodistus} {schema} />
       <ToteutunutOstoenergia
@@ -166,6 +170,7 @@
 
       <Toimenpiteet
         {energiatodistus}
+        {eTehokkuus}
         bind:perusparannuspassi
         pppSchema={schema}
         {luokittelut}
