@@ -109,16 +109,17 @@
        (uusiutuva-row (l :tulokset-muulampo)      omavarais kokonaistuotanto :muulampo)]]]))
 
 (defn- tekniset-cell
-  [value]
-  [:td {:class "num"} (if (some? value) (fmt value) "")])
+  ([value] (tekniset-cell value 0))
+  ([value decimals]
+   [:td {:class "num"} (if (some? value) (fmt value decimals) "")]))
 
 (defn- tekniset-row
   [label & {:keys [sahko lampo kaukojaahdytys class]}]
   [:tr
    [:td {:class (str "tulokset-label" (when class (str " " class)))} label]
-   (tekniset-cell sahko)
-   (tekniset-cell lampo)
-   (tekniset-cell kaukojaahdytys)])
+   (tekniset-cell sahko 1)
+   (tekniset-cell lampo 1)
+   (tekniset-cell kaukojaahdytys 1)])
 
 (defn- tekniset-section
   [energiatodistus l]

@@ -29,21 +29,38 @@
                      [:dt (str (:dt %) ":")]
                      [:dd (:dd %)]]) key-vals)))
 
+(defn- laskennallinen-helper [value nettoala]
+  (if nettoala
+    (^[double] Math/round (/ (double (or value 0)) (double nettoala)))
+    0))
+
+(defn- painotettu-helper [value]
+  (^[double] Math/round (or value 0)))
+
 (defn ostoenergia [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
-        painotettu-kaukolampo (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala-kertoimella]) 0))
-        painotettu-sahko (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :sahko-nettoala-kertoimella]) 0))
-        painotettu-uusutuva (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-nettoala-kertoimella]) 0))
-        painotettu-fossiilinen (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-nettoala-kertoimella]) 0))
-        painotettu-kaukojaahdytys (^[double] Math/round (or (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-nettoala-kertoimella]) 0))]
+        nettoala (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
+
+        laskennallinen-kaukolampo (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :kaukolampo]) (laskennallinen-helper nettoala))
+        laskennallinen-sahko (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :sahko]) (laskennallinen-helper nettoala))
+        laskennallinen-uusiutuva-polttoaine (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine]) (laskennallinen-helper nettoala))
+        laskennallinen-fossiilinen-polttoaine (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine]) (laskennallinen-helper nettoala))
+        laskennallinen-kaukojaahdytys (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys]) (laskennallinen-helper nettoala))
+
+        painotettu-kaukolampo (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala-kertoimella]) (painotettu-helper))
+        painotettu-sahko (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :sahko-nettoala-kertoimella]) (painotettu-helper))
+        painotettu-uusutuva (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-nettoala-kertoimella]) (painotettu-helper))
+        painotettu-fossiilinen (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-nettoala-kertoimella]) (painotettu-helper))
+        painotettu-kaukojaahdytys (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-nettoala-kertoimella]) (painotettu-helper))]
+
     (table-ostoenergia kieli
      [{:dt (l :laskennallinen-ostoenergia)
-       :dd [(str "kWhE/m2/vuosi")
-            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo])
-            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :sahko])
-            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine])
-            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine])
-            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys])]}
+       :dd [(l :kwh-m2-vuosi)
+            laskennallinen-kaukolampo
+            laskennallinen-sahko
+            laskennallinen-uusiutuva-polttoaine
+            laskennallinen-fossiilinen-polttoaine
+            laskennallinen-kaukojaahdytys]}
       {:dt (l :energimuodon-kerroin)
        :dd [(str "")
             (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin])
@@ -52,7 +69,7 @@
             (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-kerroin])
             (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-kerroin])]}
       {:dt (l :energiakulutus)
-       :dd [(str "kWhE/m2/vuosi")
+       :dd [(l :kwhE-m2-vuosi)
             painotettu-kaukolampo
             painotettu-sahko
             painotettu-uusutuva
@@ -71,7 +88,7 @@
     [:div {:class "etusivu-ostoenergia"}
      (description-list
        [{:dt (l :energiakaytosta-syntyvat-kasvihuonepaastot)
-         :dd (str rounded " kgCO2ekv/m2/vuosi")}
+         :dd (str rounded " " (l :kgCO2ekv-m2/vuosi))}
         {:dt (l :uusiutuva-energian-osuus)
          :dd (str "TODO: Add later when ready")}
         {:dt (l :kasvihuonepaastot)

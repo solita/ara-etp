@@ -37,17 +37,17 @@
           [:dt (l :vertailupinta-ala)]
           [:dd (-> energiatodistus
                    (get-in [:lahtotiedot :lammitetty-nettoala])
-                   (fmt 2)
+                   (fmt 1)
                    (str " " (l :m2)))]
           [:dt (l :lammin-ilmatilavuus)]
           [:dd (-> energiatodistus
                    (get-in [:lahtotiedot :rakennusvaippa :ilmatilavuus])
-                   (fmt 2)
+                   (fmt 0)
                    (str " " (l :m3)))]]
          [:div
           [:dt (l :rakennus-kykenee-reagoimaan)]
           [:dd (-> energiatodistus
-                   :lahtotiedot :lammitys :lammonjako-lampotilajousto
+                   :lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin
                    {false :ei true :kylla}
                    l)]]]]
        [:h2 (l :lammitysjarjestelma-kuvaus)]
@@ -69,7 +69,7 @@
         [:div
          [:dt (l :lammonjakojarjestelma-lampotila)]
          [:dd (-> energiatodistus
-                  :lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin
+                  :lahtotiedot :lammitys :lammonjako-lampotilajousto
                   {false :ei true :kylla}
                   l)]]]
        [:h2 (l :ilmanvaihtojärjestelmän-kuvaus)]
@@ -86,8 +86,8 @@
         [:dd (-> energiatodistus :toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi (fmt 0))]]
        [:p (-> energiatodistus
                :toteutunut-ostoenergiankulutus
-               (kieli {:fi :lisatietoja-fi
-                       :sv :lisatietoja-sv})
+               (get-in [(kieli {:fi :lisatietoja-fi
+                               :sv :lisatietoja-sv})])
                h)]
        [:table {:class "common-table"}
         [:thead
@@ -110,12 +110,12 @@
           [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa (fmt 0))]]
          [:tr
           [:th (l :kwh-m2-vuosi)]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukolampo-vuosikulutus-yhteensa-nettoala (fmt 1))]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :sahko-vuosikulutus-yhteensa-nettoala (fmt 1))]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa-nettoala (fmt 1))]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa-nettoala (fmt 1))]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukojaahdytys-vuosikulutus-yhteensa-nettoala (fmt 1))]
-          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa-nettoala (fmt 1))]]]]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukolampo-vuosikulutus-yhteensa-nettoala (fmt 0))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :sahko-vuosikulutus-yhteensa-nettoala (fmt 0))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa-nettoala (fmt 0))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa-nettoala (fmt 0))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :kaukojaahdytys-vuosikulutus-yhteensa-nettoala (fmt 0))]
+          [:td (-> energiatodistus :toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa-nettoala (fmt 0))]]]]
        [:div
         [:div {:id "toteutunut-energia-info"}
          [:p (l :toteutunut-ostoenergia-info)]]]]

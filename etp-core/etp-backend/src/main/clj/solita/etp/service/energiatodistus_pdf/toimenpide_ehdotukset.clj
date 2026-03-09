@@ -1,6 +1,7 @@
 (ns solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset
   (:require
-    [solita.etp.service.localization :as loc]))
+    [solita.etp.service.localization :as loc]
+    [solita.common.formats :as formats]))
 
 (defn description-list [key-vals]
   (into [:dl]
@@ -21,11 +22,11 @@
        [:th.header-text [:strong (str (l :kasvihuonepaastojen-muutos))]]]
       [:tr
        [:th.empty]
-       [:th.header-unit (str "kWh/vuosi")]
-       [:th.header-unit (str "kWh/vuosi")]
-       [:th.header-unit (str "kWh/vuosi")]
-       [:th.header-unit (str "kWhE/m2/vuosi")]
-       [:th.header-unit (str "kgCO2ekv/vuosi")]]]
+       [:th.header-unit (str (l :kwh-vuosi))]
+       [:th.header-unit (str (l :kwh-vuosi))]
+       [:th.header-unit (str (l :kwh-vuosi))]
+       [:th.header-unit (str (l :kwhE-m2-vuosi ))]
+       [:th.header-unit (str (l :kgCO2ekv/vuosi ))]]]
 
      [:tbody
       (map
@@ -35,3 +36,8 @@
            (for [row dd]
              [:td (or row "")])])
         items)]]))
+
+
+(defn fmt
+  "Format number with specified decimal places. Returns empty string for nil."
+  [value decimals] (or (formats/format-number value decimals false) ""))
