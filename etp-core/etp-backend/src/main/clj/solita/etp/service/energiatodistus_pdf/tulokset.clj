@@ -10,9 +10,10 @@
 
 (defn- fmt-summa
   "Format a sum value as bold, returning empty string for nil or zero."
-  [value]
-  (when (and (some? value) (not (zero? value)))
-    [:strong (fmt value)]))
+  ([value] (fmt-summa value 0))
+  ([value decimals]
+   (when (and (some? value) (not (zero? value)))
+     [:strong (fmt value decimals)])))
 
 (defn- ostoenergia-row
   [label energiamuoto prefix]
@@ -165,9 +166,9 @@
                      :class "tulokset-subgroup")
        [:tr
         [:td {:class "tulokset-label"} (l :tulokset-yhteensa)]
-        [:td {:class "num"} (fmt-summa (:sahko-summa tj))]
-        [:td {:class "num"} (fmt-summa (:lampo-summa tj))]
-        [:td {:class "num"} (fmt-summa (:kaukojaahdytys-summa tj))]]]]]))
+        [:td {:class "num"} (fmt-summa (:sahko-summa tj) 1)]
+        [:td {:class "num"} (fmt-summa (:lampo-summa tj) 1)]
+        [:td {:class "num"} (fmt-summa (:kaukojaahdytys-summa tj) 1)]]]]]))
 
 (defn- nettotarve-row [label vuosikulutus nettoala]
   [:tr
