@@ -182,12 +182,11 @@
                                 :ostoenergian-tarve-uusiutuvat-pat (or (:uusiutuva-polttoaine energiamuodot) 0)
                                 :ostoenergian-tarve-fossiiliset-pat (or (:fossiilinen-polttoaine energiamuodot) 0)
                                 :ostoenergian-tarve-kaukojaahdytys (or (:kaukojaahdytys energiamuodot) 0)
-                                ;; Toteutunut values are nil for lähtötilanne
-                                :toteutunut-ostoenergia-kaukolampo (get-in toteutunut-ostoenergiankulutus [:ostettu-energia :kaukojaahdytys-vuosikulutus])
-                                :toteutunut-ostoenergia-sahko (get-in toteutunut-ostoenergiankulutus [:ostettu-energia :kokonaissahko-vuosikulutus])
-                                :toteutunut-ostoenergia-uusiutuvat-pat nil
-                                :toteutunut-ostoenergia-fossiiliset-pat nil
-                                :toteutunut-ostoenergia-kaukojaahdytys (get-in toteutunut-ostoenergiankulutus [:ostettu-energia :kaukojaahdytys-vuosikulutus])
+                                :toteutunut-ostoenergia-kaukolampo (get-in toteutunut-ostoenergiankulutus [:kaukolampo-vuosikulutus-yhteensa])
+                                :toteutunut-ostoenergia-sahko (get-in toteutunut-ostoenergiankulutus [:sahko-vuosikulutus-yhteensa])
+                                :toteutunut-ostoenergia-uusiutuvat-pat (get-in toteutunut-ostoenergiankulutus [:uusiutuvat-polttoaineet-vuosikulutus-yhteensa])
+                                :toteutunut-ostoenergia-fossiiliset-pat (get-in toteutunut-ostoenergiankulutus [:fossiiliset-polttoaineet-vuosikulutus-yhteensa])
+                                :toteutunut-ostoenergia-kaukojaahdytys (get-in toteutunut-ostoenergiankulutus [:kaukojaahdytys-vuosikulutus-yhteensa])
                                 ;; Date fields are nil for lähtötilanne
                                 :vaiheen-alku-pvm nil
                                 :vaiheen-loppu-pvm nil
