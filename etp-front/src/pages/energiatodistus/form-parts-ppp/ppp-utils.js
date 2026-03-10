@@ -2,7 +2,6 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as R from 'ramda';
 import * as formats from '@Utility/formats';
 import * as fxmath from '@Utility/fxmath';
-import * as Either from '@Utility/either-utils';
 import * as EitherMaybe from '@Utility/either-maybe';
 
 export const formatCost = R.compose(
@@ -29,9 +28,7 @@ export const energiamuodot = [
     pppToteutunutEnergiamuoto: 'toteutunut-ostoenergia-kaukolampo',
     etEnergiamuoto: 'kaukolampo',
     getToteutunutEnergiaFromEt: et =>
-      et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-        'kaukolampo-vuosikulutus'
-      ],
+      et['toteutunut-ostoenergiankulutus']['kaukolampo-vuosikulutus-yhteensa'],
     pppPriceField: 'kaukolampo-hinta',
     paastokerroin: 0.059
   },
@@ -40,9 +37,7 @@ export const energiamuodot = [
     pppToteutunutEnergiamuoto: 'toteutunut-ostoenergia-sahko',
     etEnergiamuoto: 'sahko',
     getToteutunutEnergiaFromEt: et =>
-      et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-        'kokonaissahko-vuosikulutus'
-      ],
+      et['toteutunut-ostoenergiankulutus']['sahko-vuosikulutus-yhteensa'],
 
     pppPriceField: 'sahko-hinta',
     paastokerroin: 0.05
@@ -51,7 +46,10 @@ export const energiamuodot = [
     pppLaskennallinenEnergiamuoto: 'ostoenergian-tarve-uusiutuvat-pat',
     pppToteutunutEnergiamuoto: 'toteutunut-ostoenergia-uusiutuvat-pat',
     etEnergiamuoto: 'uusiutuva-polttoaine',
-    getToteutunutEnergiaFromEt: _ => Either.Right(Maybe.None()),
+    getToteutunutEnergiaFromEt: et =>
+      et['toteutunut-ostoenergiankulutus'][
+        'uusiutuvat-polttoaineet-vuosikulutus-yhteensa'
+      ],
     pppPriceField: 'uusiutuvat-pat-hinta',
     paastokerroin: 0.027
   },
@@ -59,7 +57,10 @@ export const energiamuodot = [
     pppLaskennallinenEnergiamuoto: 'ostoenergian-tarve-fossiiliset-pat',
     pppToteutunutEnergiamuoto: 'toteutunut-ostoenergia-fossiiliset-pat',
     etEnergiamuoto: 'fossiilinen-polttoaine',
-    getToteutunutEnergiaFromEt: _ => Either.Right(Maybe.None()),
+    getToteutunutEnergiaFromEt: et =>
+      et['toteutunut-ostoenergiankulutus'][
+        'fossiiliset-polttoaineet-vuosikulutus-yhteensa'
+      ],
     pppPriceField: 'fossiiliset-pat-hinta',
     paastokerroin: 0.306
   },
@@ -68,8 +69,8 @@ export const energiamuodot = [
     pppToteutunutEnergiamuoto: 'toteutunut-ostoenergia-kaukojaahdytys',
     etEnergiamuoto: 'kaukojaahdytys',
     getToteutunutEnergiaFromEt: et =>
-      et['toteutunut-ostoenergiankulutus']['ostettu-energia'][
-        'kaukojaahdytys-vuosikulutus'
+      et['toteutunut-ostoenergiankulutus'][
+        'kaukojaahdytys-vuosikulutus-yhteensa'
       ],
     pppPriceField: 'kaukojaahdytys-hinta',
     paastokerroin: 0.014
