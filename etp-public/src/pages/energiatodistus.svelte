@@ -61,7 +61,7 @@
       'fossiilinen-polttoaine': 1,
       kaukojaahdytys: 0.21,
       kaukolampo: 0.38,
-      sahko: 0.90,
+      sahko: 0.9,
       'uusiutuva-polttoaine': 0.38
     },
     2018: {
