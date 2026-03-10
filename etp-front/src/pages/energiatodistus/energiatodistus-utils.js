@@ -141,10 +141,10 @@ export const partOfSum = R.curry((sum, value) => R.lift(R.divide)(value, sum));
 export const energiamuotokertoimet = () => ({
   2026: {
     'fossiilinen-polttoaine': Maybe.Some(1),
-    kaukojaahdytys: Maybe.Some(0.28),
-    kaukolampo: Maybe.Some(0.5),
-    sahko: Maybe.Some(1.2),
-    'uusiutuva-polttoaine': Maybe.Some(0.5)
+    kaukojaahdytys: Maybe.Some(0.21),
+    kaukolampo: Maybe.Some(0.38),
+    sahko: Maybe.Some(0.90),
+    'uusiutuva-polttoaine': Maybe.Some(0.38)
   },
   2018: {
     'fossiilinen-polttoaine': Maybe.Some(1),

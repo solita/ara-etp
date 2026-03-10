@@ -427,6 +427,98 @@
                "energiatodistus.tulokset.kaytettavat-energiamuodot.sahko-painotettu-neliovuosikulutus"
                (/ sahko-kertoimella nettoala)]]]))))
 
+;; === AE-2614: ET2026 painotettu kulutus search tests ===
+
+(defn test-data-set-2026 []
+  (let [laatijat (laatija-test-data/generate-and-insert! 3)
+        laatija-ids (-> laatijat keys sort)
+        energiatodistus-adds (->> (energiatodistus-test-data/generate-adds
+                                    2
+                                    2026
+                                    true)
+                                  (map #(assoc-in %
+                                                  [:perustiedot :postinumero]
+                                                  "33100"))
+                                  (map #(assoc-in %
+                                                  [:perustiedot :yritys :nimi]
+                                                  nil)))
+        energiatodistus-ids (->> (interleave (cycle laatija-ids)
+                                             energiatodistus-adds)
+                                 (partition 2)
+                                 (mapcat #(energiatodistus-test-data/insert!
+                                            [(second %)]
+                                            (first %)))
+                                 sort)]
+    (sign-energiatodistukset! (->> (interleave
+                                     (cycle laatija-ids)
+                                     (take 2 energiatodistus-ids))
+                                   (partition 2)))
+    {:laatijat           laatijat
+     :energiatodistukset (zipmap energiatodistus-ids energiatodistus-adds)}))
+
+;; 2.1 - Verify painotettu-kulutus-sql works for version 2026 with sahko
+(t/deftest search-by-sahko-painotettu-neliovuosikulutus-2026-test
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        sahko (-> energiatodistus :tulokset :kaytettavat-energiamuodot :sahko)
+        ;; Given a 2026 energiatodistus with known sahko value
+        ;; When we calculate painotettu using the new 2026 coefficient (0.90)
+        sahko-kertoimella (* sahko (get-in e-luokka-service/energiamuotokerroin
+                                           [2026 :sahko]))]
+    ;; Then searching by painotettu and painotettu-neliovuosikulutus finds the correct ET
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["="
+               "energiatodistus.tulokset.kaytettavat-energiamuodot.sahko"
+               sahko]
+              ["="
+               "energiatodistus.tulokset.kaytettavat-energiamuodot.sahko-painotettu"
+               sahko-kertoimella]
+              ["="
+               "energiatodistus.tulokset.kaytettavat-energiamuodot.sahko-painotettu-neliovuosikulutus"
+               (/ sahko-kertoimella nettoala)]]]))))
+
+;; 2.2 - Verify painotettu-kulutus-sql works for version 2026 with kaukolampo
+(t/deftest search-by-kaukolampo-painotettu-2026-test
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        kaukolampo (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukolampo)
+        ;; Given a 2026 energiatodistus with known kaukolampo value
+        ;; When we calculate painotettu using the new 2026 coefficient (0.38)
+        kaukolampo-kertoimella (* kaukolampo (get-in e-luokka-service/energiamuotokerroin
+                                                     [2026 :kaukolampo]))]
+    ;; Then searching by painotettu finds the correct ET
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["="
+               "energiatodistus.tulokset.kaytettavat-energiamuodot.kaukolampo-painotettu"
+               kaukolampo-kertoimella]]]))))
+
+;; 2.3 - Verify painotettu-kulutus-sql works for version 2026 with kaukojaahdytys
+(t/deftest search-by-kaukojaahdytys-painotettu-2026-test
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        kaukojaahdytys (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukojaahdytys)
+        ;; Given a 2026 energiatodistus with known kaukojaahdytys value
+        ;; When we calculate painotettu using the new 2026 coefficient (0.21)
+        kaukojaahdytys-kertoimella (* kaukojaahdytys (get-in e-luokka-service/energiamuotokerroin
+                                                             [2026 :kaukojaahdytys]))]
+    ;; Then searching by painotettu finds the correct ET
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["="
+               "energiatodistus.tulokset.kaytettavat-energiamuodot.kaukojaahdytys-painotettu"
+               kaukojaahdytys-kertoimella]]]))))
+
 (t/deftest search-by-uusiutuvat-omavaraisenergiat-aurinkosahko-test
   (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set)
         id (-> energiatodistukset keys sort first)
