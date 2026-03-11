@@ -44,6 +44,7 @@
 
   import Area from './form-parts/units/area';
   import Checkbox from '@Component/Checkbox/Checkbox.svelte';
+  import Ilmastoselvitys from './form-parts/Ilmastoselvitys';
 
   export let energiatodistus;
   export let inputLanguage;
@@ -351,3 +352,11 @@
     bind:model={energiatodistus}
     path={['lisamerkintoja']} />
 </div>
+
+<HR />
+<Ilmastoselvitys
+  {disabled}
+  {schema}
+  {luokittelut}
+  {inputLanguage}
+  bind:energiatodistus />

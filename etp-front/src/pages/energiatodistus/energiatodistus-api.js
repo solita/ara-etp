@@ -340,7 +340,7 @@ export const undoDiscardEnergiatodistus = R.curry((fetch, version, id) =>
   )
 );
 
-const luokittelut = {
+export const luokittelut = {
   lammonjako: Fetch.cached(fetch, '/lammonjako'),
   lammitysmuoto: Fetch.cached(fetch, '/lammitysmuoto'),
   ilmanvaihtotyypit: Fetch.cached(fetch, '/ilmanvaihtotyyppi'),
@@ -356,7 +356,11 @@ const luokittelut = {
   jaahdytys: Fetch.cached(fetch, '/jaahdytys'),
   'toimenpide-ehdotus': Fetch.cached(fetch, '/toimenpide-ehdotus'),
   'toimenpide-ehdotus-group': Fetch.cached(fetch, '/toimenpide-ehdotus-group'),
-  havainnointikayntityyppi: Fetch.cached(fetch, '/havainnointikayntityyppi')
+  havainnointikayntityyppi: Fetch.cached(fetch, '/havainnointikayntityyppi'),
+  ilmastoselvitysLaadintaperusteet: Fetch.cached(
+    fetch,
+    '/ilmastoselvitys-laadintaperuste'
+  )
 };
 
 const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({
@@ -371,12 +375,12 @@ const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({
 }));
 
 export const luokittelutForVersion = version =>
-  Future.parallelObject(8, {
+  Future.parallelObject(9, {
     ...luokittelut,
     ...kayttotarkoitusluokittelut(version)
   });
 
-export const luokittelutAllVersions = Future.parallelObject(12, {
+export const luokittelutAllVersions = Future.parallelObject(13, {
   ...luokittelut,
   2018: Future.parallelObject(2, kayttotarkoitusluokittelut(2018)),
   2013: Future.parallelObject(2, kayttotarkoitusluokittelut(2013)),
