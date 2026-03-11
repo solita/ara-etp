@@ -3,8 +3,9 @@
 
   import { locale, _ } from '@Language/i18n';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Either from '@Utility/either-utils';
+  import * as EitherMaybe from '@Utility/either-maybe';
   import * as LocaleUtils from '@Language/locale-utils';
+  import * as formats from '@Utility/formats';
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
 
   import H2 from '@Component/H/H2';
@@ -19,25 +20,13 @@
 
   $: labelLocale = LocaleUtils.label($locale);
 
-  const extractNumericValue = value => {
-    if (Either.isEither(value) && Either.isRight(value)) {
-      const inner = Either.right(value);
-      if (Maybe.isMaybe(inner) && Maybe.isSome(inner)) {
-        return Maybe.get(inner);
-      }
-    }
-    return 0;
-  };
-
-  const sumFields = (section, subsection, fields) =>
+  const sumFields = (et, section, subsection, fields) =>
     fields.reduce(
       (sum, field) =>
         sum +
-        extractNumericValue(
-          R.path(
-            ['ilmastoselvitys', section, subsection, field],
-            energiatodistus
-          )
+        EitherMaybe.orSome(
+          0,
+          R.path(['ilmastoselvitys', section, subsection, field], et)
         ),
       0
     );
@@ -59,25 +48,18 @@
   ];
 
   $: jalanjalkiRakennusTotal = sumFields(
+    energiatodistus,
     'hiilijalanjalki',
     'rakennus',
     jalanjalkiFields
   );
   $: jalanjalkiRakennuspaikkaTotal = sumFields(
+    energiatodistus,
     'hiilijalanjalki',
     'rakennuspaikka',
     jalanjalkiFields
   );
-  $: kadenjalkiRakennusTotal = sumFields(
-    'hiilikadenjalki',
-    'rakennus',
-    kadenjalkiFields
-  );
-  $: kadenjalkiRakennuspaikkaTotal = sumFields(
-    'hiilikadenjalki',
-    'rakennuspaikka',
-    kadenjalkiFields
-  );
+
 </script>
 
 <H2
@@ -163,29 +145,29 @@
   <h3 class="font-bold">
     {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.header')}
   </h3>
-  <table class="w-full">
-    <thead>
-      <tr>
-        <th />
+  <table class="et-table">
+    <thead class="et-table--thead">
+      <tr class="et-table--tr">
+        <th class="et-table--th et-table--th-left-aligned" />
         {#each jalanjalkiFields as field}
-          <th class="px-2 text-sm">
+          <th class="et-table--th et-table--th-right-aligned">
             {$_(
               'energiatodistus.ilmastoselvitys.hiilijalanjalki.' + field
             )}
           </th>
         {/each}
-        <th class="px-2 text-sm">
+        <th class="et-table--th et-table--th-right-aligned">
           {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.yhteensa')}
         </th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td class="pr-2 font-medium">
+    <tbody class="et-table--tbody">
+      <tr class="et-table--tr">
+        <td class="et-table--td">
           {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus')}
         </td>
         {#each jalanjalkiFields as field}
-          <td class="px-1">
+          <td class="et-table--td">
             <Input
               {disabled}
               {schema}
@@ -195,16 +177,16 @@
               path={['ilmastoselvitys', 'hiilijalanjalki', 'rakennus', field]} />
           </td>
         {/each}
-        <td class="px-2 text-center">{jalanjalkiRakennusTotal}</td>
+        <td class="et-table--td">{formats.numberFormatPrecision(1, jalanjalkiRakennusTotal)}</td>
       </tr>
-      <tr>
-        <td class="pr-2 font-medium">
+      <tr class="et-table--tr">
+        <td class="et-table--td">
           {$_(
             'energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennuspaikka'
           )}
         </td>
         {#each jalanjalkiFields as field}
-          <td class="px-1">
+          <td class="et-table--td">
             <Input
               {disabled}
               {schema}
@@ -219,7 +201,7 @@
               ]} />
           </td>
         {/each}
-        <td class="px-2 text-center">{jalanjalkiRakennuspaikkaTotal}</td>
+        <td class="et-table--td">{formats.numberFormatPrecision(1, jalanjalkiRakennuspaikkaTotal)}</td>
       </tr>
     </tbody>
   </table>
@@ -229,29 +211,26 @@
   <h3 class="font-bold">
     {$_('energiatodistus.ilmastoselvitys.hiilikadenjalki.header')}
   </h3>
-  <table class="w-full">
-    <thead>
-      <tr>
-        <th />
+  <table class="et-table">
+    <thead class="et-table--thead">
+      <tr class="et-table--tr">
+        <th class="et-table--th et-table--th-left-aligned" />
         {#each kadenjalkiFields as field}
-          <th class="px-2 text-sm">
+          <th class="et-table--th et-table--th-right-aligned">
             {$_(
               'energiatodistus.ilmastoselvitys.hiilikadenjalki.' + field
             )}
           </th>
         {/each}
-        <th class="px-2 text-sm">
-          {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.yhteensa')}
-        </th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td class="pr-2 font-medium">
+    <tbody class="et-table--tbody">
+      <tr class="et-table--tr">
+        <td class="et-table--td">
           {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus')}
         </td>
         {#each kadenjalkiFields as field}
-          <td class="px-1">
+          <td class="et-table--td">
             <Input
               {disabled}
               {schema}
@@ -261,16 +240,15 @@
               path={['ilmastoselvitys', 'hiilikadenjalki', 'rakennus', field]} />
           </td>
         {/each}
-        <td class="px-2 text-center">{kadenjalkiRakennusTotal}</td>
       </tr>
-      <tr>
-        <td class="pr-2 font-medium">
+      <tr class="et-table--tr">
+        <td class="et-table--td">
           {$_(
             'energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennuspaikka'
           )}
         </td>
         {#each kadenjalkiFields as field}
-          <td class="px-1">
+          <td class="et-table--td">
             <Input
               {disabled}
               {schema}
@@ -285,7 +263,6 @@
               ]} />
           </td>
         {/each}
-        <td class="px-2 text-center">{kadenjalkiRakennuspaikkaTotal}</td>
       </tr>
     </tbody>
   </table>
