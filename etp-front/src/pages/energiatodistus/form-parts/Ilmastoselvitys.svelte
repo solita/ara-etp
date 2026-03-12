@@ -20,13 +20,16 @@
 
   $: labelLocale = LocaleUtils.label($locale);
 
-	const sumFields = (energiatodistusData, section, subsection, fields) =>
-		fields.reduce(
-			(sum, field) =>
-				sum +
-				EitherMaybe.orSome(
-					0,
-					R.path(['ilmastoselvitys', section, subsection, field], energiatodistusData)
+  const sumFields = (energiatodistusData, section, subsection, fields) =>
+    fields.reduce(
+      (sum, field) =>
+        sum +
+        EitherMaybe.orSome(
+          0,
+          R.path(
+            ['ilmastoselvitys', section, subsection, field],
+            energiatodistusData
+          )
         ),
       0
     );
