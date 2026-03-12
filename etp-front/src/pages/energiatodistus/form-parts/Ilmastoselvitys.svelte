@@ -62,6 +62,13 @@
 
 </script>
 
+<style type="text/postcss">
+  .et-table--thead .et-table--th {
+    hyphens: auto;
+    @apply overflow-hidden text-sm;
+  }
+</style>
+
 <H2
   id="ilmastoselvitys"
   text={$_('energiatodistus.ilmastoselvitys.header')} />
@@ -142,128 +149,134 @@
 </div>
 
 <div class="mb-8">
-  <h3 class="font-bold">
-    {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.header')}
-  </h3>
-  <table class="et-table">
-    <thead class="et-table--thead">
-      <tr class="et-table--tr">
-        <th class="et-table--th et-table--th-left-aligned" />
-        {#each jalanjalkiFields as field}
-          <th class="et-table--th et-table--th-right-aligned">
-            {$_(
-              'energiatodistus.ilmastoselvitys.hiilijalanjalki.' + field
-            )}
+  <div class="min-w-full overflow-x-auto">
+    <table class="et-table mb-6">
+      <thead class="et-table--thead">
+        <tr class="et-table--tr">
+          <th class="et-table--th et-table--th__twocells et-table--th-left-aligned">
+            {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.header')}
           </th>
-        {/each}
-        <th class="et-table--th et-table--th-right-aligned">
-          {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.yhteensa')}
-        </th>
-      </tr>
-    </thead>
-    <tbody class="et-table--tbody">
-      <tr class="et-table--tr">
-        <td class="et-table--td">
-          {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus')}
-        </td>
-        {#each jalanjalkiFields as field}
+          {#each jalanjalkiFields as field}
+            <th class="et-table--th et-table--th-right-aligned">
+              {$_(
+                'energiatodistus.ilmastoselvitys.hiilijalanjalki.' + field
+              )}
+            </th>
+          {/each}
+          <th class="et-table--th et-table--th-right-aligned">
+            {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.yhteensa')}
+          </th>
+        </tr>
+      </thead>
+      <tbody class="et-table--tbody">
+        <tr class="et-table--tr">
           <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              center={true}
-              bind:model={energiatodistus}
-              path={['ilmastoselvitys', 'hiilijalanjalki', 'rakennus', field]} />
+            {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus')}
           </td>
-        {/each}
-        <td class="et-table--td">{formats.numberFormatPrecision(1, jalanjalkiRakennusTotal)}</td>
-      </tr>
-      <tr class="et-table--tr">
-        <td class="et-table--td">
-          {$_(
-            'energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennuspaikka'
-          )}
-        </td>
-        {#each jalanjalkiFields as field}
+          {#each jalanjalkiFields as field}
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                center={true}
+                bind:model={energiatodistus}
+                path={['ilmastoselvitys', 'hiilijalanjalki', 'rakennus', field]} />
+            </td>
+          {/each}
           <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              center={true}
-              bind:model={energiatodistus}
-              path={[
-                'ilmastoselvitys',
-                'hiilijalanjalki',
-                'rakennuspaikka',
-                field
-              ]} />
+            {formats.numberFormatPrecision(1, jalanjalkiRakennusTotal)}
           </td>
-        {/each}
-        <td class="et-table--td">{formats.numberFormatPrecision(1, jalanjalkiRakennuspaikkaTotal)}</td>
-      </tr>
-    </tbody>
-  </table>
+        </tr>
+        <tr class="et-table--tr">
+          <td class="et-table--td">
+            {$_(
+              'energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennuspaikka'
+            )}
+          </td>
+          {#each jalanjalkiFields as field}
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                center={true}
+                bind:model={energiatodistus}
+                path={[
+                  'ilmastoselvitys',
+                  'hiilijalanjalki',
+                  'rakennuspaikka',
+                  field
+                ]} />
+            </td>
+          {/each}
+          <td class="et-table--td">
+            {formats.numberFormatPrecision(1, jalanjalkiRakennuspaikkaTotal)}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <div class="mb-8">
-  <h3 class="font-bold">
-    {$_('energiatodistus.ilmastoselvitys.hiilikadenjalki.header')}
-  </h3>
-  <table class="et-table">
-    <thead class="et-table--thead">
-      <tr class="et-table--tr">
-        <th class="et-table--th et-table--th-left-aligned" />
-        {#each kadenjalkiFields as field}
-          <th class="et-table--th et-table--th-right-aligned">
-            {$_(
-              'energiatodistus.ilmastoselvitys.hiilikadenjalki.' + field
-            )}
+  <div class="min-w-full overflow-x-auto">
+    <table class="et-table mb-6">
+      <thead class="et-table--thead">
+        <tr class="et-table--tr">
+          <th class="et-table--th et-table--th__twocells et-table--th-left-aligned">
+            {$_('energiatodistus.ilmastoselvitys.hiilikadenjalki.header')}
           </th>
-        {/each}
-      </tr>
-    </thead>
-    <tbody class="et-table--tbody">
-      <tr class="et-table--tr">
-        <td class="et-table--td">
-          {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus')}
-        </td>
-        {#each kadenjalkiFields as field}
+          {#each kadenjalkiFields as field}
+            <th class="et-table--th et-table--th-right-aligned">
+              {$_(
+                'energiatodistus.ilmastoselvitys.hiilikadenjalki.' + field
+              )}
+            </th>
+          {/each}
+        </tr>
+      </thead>
+      <tbody class="et-table--tbody">
+        <tr class="et-table--tr">
           <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              center={true}
-              bind:model={energiatodistus}
-              path={['ilmastoselvitys', 'hiilikadenjalki', 'rakennus', field]} />
+            {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus')}
           </td>
-        {/each}
-      </tr>
-      <tr class="et-table--tr">
-        <td class="et-table--td">
-          {$_(
-            'energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennuspaikka'
-          )}
-        </td>
-        {#each kadenjalkiFields as field}
+          {#each kadenjalkiFields as field}
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                center={true}
+                bind:model={energiatodistus}
+                path={['ilmastoselvitys', 'hiilikadenjalki', 'rakennus', field]} />
+            </td>
+          {/each}
+        </tr>
+        <tr class="et-table--tr">
           <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              center={true}
-              bind:model={energiatodistus}
-              path={[
-                'ilmastoselvitys',
-                'hiilikadenjalki',
-                'rakennuspaikka',
-                field
-              ]} />
+            {$_(
+              'energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennuspaikka'
+            )}
           </td>
-        {/each}
-      </tr>
-    </tbody>
-  </table>
+          {#each kadenjalkiFields as field}
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                center={true}
+                bind:model={energiatodistus}
+                path={[
+                  'ilmastoselvitys',
+                  'hiilikadenjalki',
+                  'rakennuspaikka',
+                  field
+                ]} />
+            </td>
+          {/each}
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

@@ -1261,19 +1261,19 @@
         "rakennus": "Rakennus (sv)",
         "rakennuspaikka": "Rakennuspaikka (sv)",
         "yhteensa": "Yhteensä (sv)",
-        "rakennustuotteiden-valmistus": "Rakennustuotteiden valmistus (sv)",
-        "kuljetukset-tyomaavaihe": "Kuljetukset ja työmaavaihe (sv)",
-        "rakennustuotteiden-vaihdot": "Rakennustuotteiden vaihdot (sv)",
-        "energiankaytto": "Energiankäyttö (sv)",
+        "rakennustuotteiden-valmistus": "Rakennus\u00ADtuotteiden valmistus (sv)",
+        "kuljetukset-tyomaavaihe": "Kuljetukset ja työmaa\u00ADvaihe (sv)",
+        "rakennustuotteiden-vaihdot": "Rakennus\u00ADtuotteiden vaihdot (sv)",
+        "energiankaytto": "Energian\u00ADkäyttö (sv)",
         "purkuvaihe": "Purkuvaihe (sv)"
       },
       "hiilikadenjalki": {
         "header": "Hiilikädenjälki (sv)",
-        "uudelleenkaytto": "Uudelleenkäyttö (sv)",
+        "uudelleenkaytto": "Uudelleen\u00ADkäyttö (sv)",
         "kierratys": "Kierrätys (sv)",
         "ylimaarainen-uusiutuvaenergia": "Ylimääräinen uusiutuva energia (sv)",
-        "hiilivarastovaikutus": "Hiilivarastovaikutus (sv)",
-        "karbonatisoituminen": "Karbonatisoituminen (sv)"
+        "hiilivarastovaikutus": "Hiili\u00ADvarasto\u00ADvaikutus (sv)",
+        "karbonatisoituminen": "Karbonati\u00ADsoituminen (sv)"
       }
     },
     "perusparannuspassi": {

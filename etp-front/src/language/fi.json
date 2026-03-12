@@ -1290,19 +1290,19 @@
         "rakennus": "Rakennus",
         "rakennuspaikka": "Rakennuspaikka",
         "yhteensa": "Yhteensä",
-        "rakennustuotteiden-valmistus": "Rakennustuotteiden valmistus",
-        "kuljetukset-tyomaavaihe": "Kuljetukset ja työmaavaihe",
-        "rakennustuotteiden-vaihdot": "Rakennustuotteiden vaihdot",
-        "energiankaytto": "Energiankäyttö",
+        "rakennustuotteiden-valmistus": "Rakennus\u00ADtuotteiden valmistus",
+        "kuljetukset-tyomaavaihe": "Kuljetukset ja työmaa\u00ADvaihe",
+        "rakennustuotteiden-vaihdot": "Rakennus\u00ADtuotteiden vaihdot",
+        "energiankaytto": "Energian\u00ADkäyttö",
         "purkuvaihe": "Purkuvaihe"
       },
       "hiilikadenjalki": {
         "header": "Hiilikädenjälki",
-        "uudelleenkaytto": "Uudelleenkäyttö",
+        "uudelleenkaytto": "Uudelleen\u00ADkäyttö",
         "kierratys": "Kierrätys",
         "ylimaarainen-uusiutuvaenergia": "Ylimääräinen uusiutuva energia",
-        "hiilivarastovaikutus": "Hiilivarastovaikutus",
-        "karbonatisoituminen": "Karbonatisoituminen"
+        "hiilivarastovaikutus": "Hiili\u00ADvarasto\u00ADvaikutus",
+        "karbonatisoituminen": "Karbonati\u00ADsoituminen"
       }
     },
     "perusparannuspassi": {
