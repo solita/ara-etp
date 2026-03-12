@@ -350,6 +350,7 @@
         {#if version === '2026'}
           <PppForm
             {energiatodistus}
+            {eTehokkuus}
             {inputLanguage}
             {luokittelut}
             bind:dirty

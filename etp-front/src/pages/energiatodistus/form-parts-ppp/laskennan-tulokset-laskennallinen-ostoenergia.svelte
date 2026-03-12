@@ -11,6 +11,7 @@
   import Input from '@Pages/energiatodistus/Input';
 
   export let energiatodistus;
+  export let eTehokkuus = Maybe.None();
   export let perusparannuspassi;
   export let schema;
 
@@ -22,6 +23,21 @@
         vaihe[pppLaskennallinenEnergiamuoto]
       ])
     )(PPPUtils.energiamuodot);
+
+  /**
+   * Classify a vaihe's e-luku into an e-luokka letter using raja-asteikko
+   * from the energiatodistus eTehokkuus. Returns '' if data is insufficient.
+   */
+  const vaiheEluokka = (eTehokkuus, versio, nettoala, vaiheEnergiamuodot) =>
+    Maybe.fold(
+      '',
+      ([rajaAsteikko, eLuku]) =>
+        ETUtils.eluokkaFromRajaAsteikko(rajaAsteikko, eLuku),
+      Maybe.toMaybeList([
+        R.map(R.prop('raja-asteikko'), eTehokkuus),
+        ETUtils.eluku(versio, nettoala, vaiheEnergiamuodot)
+      ])
+    );
 </script>
 
 <H4
@@ -97,12 +113,23 @@
       </tr>
     {/each}
     <tr class="et-table--tr">
-      <td class="et-table--td">TODO E-luokka</td>
-      <td class="et-table--td">TODO E-luokka</td>
-      {#each perusparannuspassi.vaiheet as vaihe}
+      <td class="et-table--td">{$_('energiatodistus.tulokset.e-luokka')}</td>
+      <td class="et-table--td"
+        >{vaiheEluokka(
+          eTehokkuus,
+          energiatodistus.versio,
+          energiatodistus.lahtotiedot['lammitetty-nettoala'],
+          energiatodistus.tulokset['kaytettavat-energiamuodot']
+        )}</td>
+      {#each perusparannuspassi.vaiheet as vaihe, vaiheIndex}
         <td class="et-table--td">
           {#if Maybe.isSome(EitherMaybe.toMaybe(vaihe.tulokset['vaiheen-alku-pvm']))}
-            TODO E-luokka
+            {vaiheEluokka(
+              eTehokkuus,
+              energiatodistus.versio,
+              energiatodistus.lahtotiedot['lammitetty-nettoala'],
+              etEnergiamuodotFromPppVaihe(vaihe.tulokset)
+            )}
           {/if}
         </td>
       {/each}

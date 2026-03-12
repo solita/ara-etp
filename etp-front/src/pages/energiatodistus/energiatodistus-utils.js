@@ -300,6 +300,16 @@ export const eluku = (versio, nettoala, energiamuodot) =>
     R.map(unnestValidation)
   )(energiamuodot);
 
+/**
+ * Classify e-luku into an e-luokka letter (A–G) using raja-asteikko limits.
+ * raja-asteikko is [[limit, letter], ...] sorted ascending by limit.
+ * Returns the letter of the first entry where eLuku <= limit, or 'G' if none match.
+ */
+export const eluokkaFromRajaAsteikko = (rajaAsteikko, eLuku) => {
+  const match = rajaAsteikko.find(([limit]) => eLuku <= limit);
+  return match ? match[1] : 'G';
+};
+
 const energiamuodotUntil2018 = [
   'sahko-vuosikulutus-yhteensa',
   'kaukolampo-vuosikulutus-yhteensa',

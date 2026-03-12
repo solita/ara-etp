@@ -9,6 +9,7 @@
   const i18n = $_;
 
   export let energiatodistus;
+  export let eTehokkuus = Maybe.None();
   export let perusparannuspassi;
   export let pppSchema;
   export let vaihe;
@@ -55,6 +56,26 @@
       ),
     format: Maybe.orSome('')
   };
+
+  /**
+   * Classify a vaihe's e-luku into an e-luokka letter using raja-asteikko
+   * from the energiatodistus eTehokkuus. Returns '' if data is insufficient.
+   */
+  $: eluokka = Maybe.fold(
+    '',
+    ([rajaAsteikko, eLuku]) =>
+      ETUtils.eluokkaFromRajaAsteikko(rajaAsteikko, eLuku),
+    Maybe.toMaybeList([
+      R.map(R.prop('raja-asteikko'), eTehokkuus),
+      ETUtils.eluku(
+        energiatodistus.versio,
+        energiatodistus.lahtotiedot['lammitetty-nettoala'],
+        etEnergiamuodotFromPppVaihe(
+          perusparannuspassi.vaiheet[vaiheIndex(vaihe)].tulokset
+        )
+      )
+    ])
+  );
 </script>
 
 <dl class="ppp-description-list">
@@ -80,7 +101,7 @@
   <dt>
     {i18n('perusparannuspassi.toimenpiteet.e-luokka-jalkeen')}
   </dt>
-  <dd>TODO E-luokka</dd>
+  <dd>{eluokka}</dd>
   <dt>
     {i18n('perusparannuspassi.toimenpiteet.e-luku-jalkeen')}
   </dt>

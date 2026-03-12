@@ -11,6 +11,7 @@
   const i18n = $_;
 
   export let energiatodistus;
+  export let eTehokkuus = Maybe.None();
   export let perusparannuspassi;
   export let pppSchema;
   export let luokittelut;
@@ -24,6 +25,7 @@
     {#if R.compose(Maybe.isSome, EM.toMaybe, R.view(R.lensPath( ['tulokset', 'vaiheen-alku-pvm'] )))(vaihe)}
       <Osio
         {energiatodistus}
+        {eTehokkuus}
         bind:perusparannuspassi
         {pppSchema}
         {luokittelut}
