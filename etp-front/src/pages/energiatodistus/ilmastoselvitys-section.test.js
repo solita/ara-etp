@@ -183,7 +183,7 @@ test('given energiatodistus with some rakennus values set, when rendered, then y
   const { container } = render(Ilmastoselvitys, props);
 
   // then
-  expect(container.textContent).toContain('13.7');
+  expect(container.textContent).toContain('13,7');
 });
 
 // Test 4.7: Yhteensä treats empty (None) values as zero
