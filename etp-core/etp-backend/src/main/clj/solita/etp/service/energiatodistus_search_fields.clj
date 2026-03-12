@@ -46,6 +46,8 @@
        (get-in e-luokka/energiamuotokerroin [2013 key])
        " when 2018 then "
        (get-in e-luokka/energiamuotokerroin [2018 key])
+       " when 2026 then "
+       (get-in e-luokka/energiamuotokerroin [2026 key])
        " end)"))
 
 (defn- painotettu-kulutus-entry [[key schema]]

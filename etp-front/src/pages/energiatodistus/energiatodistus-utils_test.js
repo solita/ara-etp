@@ -691,3 +691,153 @@ describe('e-luku calculations', () => {
     });
   });
 });
+
+// === AE-2614: ET2026 energiamuotokertoimet ===
+
+describe('ET2026 energiamuotokertoimet', () => {
+  // 3.1 - Correct 2026 coefficient values
+  describe('energiamuotokertoimet returns correct 2026 values', () => {
+    it('should have the new 2026 coefficients', () => {
+      // Given the energiamuotokertoimet function
+      // When we retrieve 2026 coefficients
+      const kertoimet = EtUtils.energiamuotokertoimet()[2026];
+
+      // Then all values match the new regulation
+      expect(kertoimet['fossiilinen-polttoaine']).toEqual(Maybe.Some(1));
+      expect(kertoimet.sahko).toEqual(Maybe.Some(0.9));
+      expect(kertoimet.kaukolampo).toEqual(Maybe.Some(0.38));
+      expect(kertoimet.kaukojaahdytys).toEqual(Maybe.Some(0.21));
+      expect(kertoimet['uusiutuva-polttoaine']).toEqual(Maybe.Some(0.38));
+    });
+  });
+
+  // 3.2 - Regression: 2018 values unchanged
+  describe('energiamuotokertoimet 2018 values unchanged', () => {
+    it('should still have the original 2018 coefficients', () => {
+      // Given the energiamuotokertoimet function
+      // When we retrieve 2018 coefficients
+      const kertoimet = EtUtils.energiamuotokertoimet()[2018];
+
+      // Then all values remain as they were
+      expect(kertoimet.sahko).toEqual(Maybe.Some(1.2));
+      expect(kertoimet.kaukolampo).toEqual(Maybe.Some(0.5));
+      expect(kertoimet.kaukojaahdytys).toEqual(Maybe.Some(0.28));
+      expect(kertoimet['fossiilinen-polttoaine']).toEqual(Maybe.Some(1));
+      expect(kertoimet['uusiutuva-polttoaine']).toEqual(Maybe.Some(0.5));
+    });
+  });
+
+  // 3.3 - E-luku with 2026: fossiilinen-polttoaine only
+  describe('eluku calculation with 2026 coefficients', () => {
+    it('fossiilinen-polttoaine only produces correct result', () => {
+      // Given only fossiilinen-polttoaine at 10000, nettoala=100
+      const energiamuodot = {
+        'fossiilinen-polttoaine': Either.Right(Maybe.Some(10000)),
+        sahko: Either.Right(Maybe.Some(0)),
+        kaukojaahdytys: Either.Right(Maybe.Some(0)),
+        kaukolampo: Either.Right(Maybe.Some(0)),
+        'uusiutuva-polttoaine': Either.Right(Maybe.Some(0))
+      };
+
+      // When E-luku is calculated with 2026 coefficients
+      const e_luku = EtUtils.eluku(
+        2026,
+        Either.Right(Maybe.Some(100)),
+        energiamuodot
+      );
+
+      // Then result = ceil(10000 * 1.0 / 100) = 100
+      expect(e_luku).toEqual(Maybe.Some(100));
+    });
+
+    // 3.4 - E-luku with 2026: all energy forms
+    it('all energy forms produces the correct 2026 result (differs from 2018)', () => {
+      // Given all energy forms at 10000, nettoala=100
+      const energiamuodot = {
+        'fossiilinen-polttoaine': Either.Right(Maybe.Some(10000)),
+        sahko: Either.Right(Maybe.Some(10000)),
+        kaukojaahdytys: Either.Right(Maybe.Some(10000)),
+        kaukolampo: Either.Right(Maybe.Some(10000)),
+        'uusiutuva-polttoaine': Either.Right(Maybe.Some(10000))
+      };
+
+      // When E-luku is calculated with 2026 coefficients
+      const e_luku = EtUtils.eluku(
+        2026,
+        Either.Right(Maybe.Some(100)),
+        energiamuodot
+      );
+
+      // Then result = ceil((10000*(1+0.90+0.21+0.38+0.38)) / 100) = ceil(28700/100) = 287
+      // (this differs from 2018 result of 348)
+      expect(e_luku).toEqual(Maybe.Some(287));
+    });
+
+    // 3.5 - E-luku with 2026: realistic nettoala
+    it('realistic nettoala produces correct ceiling-rounded result', () => {
+      // Given a pientalo: sahko=5000, kaukolampo=12000, nettoala=150
+      const energiamuodot = {
+        'fossiilinen-polttoaine': Either.Right(Maybe.Some(0)),
+        sahko: Either.Right(Maybe.Some(5000)),
+        kaukojaahdytys: Either.Right(Maybe.Some(0)),
+        kaukolampo: Either.Right(Maybe.Some(12000)),
+        'uusiutuva-polttoaine': Either.Right(Maybe.Some(0))
+      };
+
+      // When E-luku is calculated with 2026 coefficients
+      const e_luku = EtUtils.eluku(
+        2026,
+        Either.Right(Maybe.Some(150)),
+        energiamuodot
+      );
+
+      // Then painotettu = 5000*0.90 + 12000*0.38 = 4500 + 4560 = 9060
+      //      E-luku = ceil(9060/150) = ceil(60.4) = 61
+      expect(e_luku).toEqual(Maybe.Some(61));
+    });
+
+    // 3.6 - None nettoala
+    it('None nettoala produces None with 2026 version', () => {
+      // Given valid energy forms but None nettoala
+      const energiamuodot = {
+        'fossiilinen-polttoaine': Either.Right(Maybe.Some(10000)),
+        sahko: Either.Right(Maybe.None()),
+        kaukojaahdytys: Either.Right(Maybe.None()),
+        kaukolampo: Either.Right(Maybe.None()),
+        'uusiutuva-polttoaine': Either.Right(Maybe.None())
+      };
+
+      // When E-luku is calculated
+      const e_luku = EtUtils.eluku(
+        2026,
+        Either.Right(Maybe.None()),
+        energiamuodot
+      );
+
+      // Then result is None
+      expect(e_luku).toEqual(Maybe.None());
+    });
+
+    // 3.7 - None energy values
+    it('None energy values with 2026 version produces zero', () => {
+      // Given all energy forms are None, nettoala=100
+      const energiamuodot = {
+        'fossiilinen-polttoaine': Either.Right(Maybe.None()),
+        sahko: Either.Right(Maybe.None()),
+        kaukojaahdytys: Either.Right(Maybe.None()),
+        kaukolampo: Either.Right(Maybe.None()),
+        'uusiutuva-polttoaine': Either.Right(Maybe.None())
+      };
+
+      // When E-luku is calculated with 2026 coefficients
+      const e_luku = EtUtils.eluku(
+        2026,
+        Either.Right(Maybe.Some(100)),
+        energiamuodot
+      );
+
+      // Then result is 0
+      expect(e_luku).toEqual(Maybe.Some(0));
+    });
+  });
+});

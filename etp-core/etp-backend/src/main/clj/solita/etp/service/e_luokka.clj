@@ -169,10 +169,10 @@
 
 (def energiamuotokerroin
   {2026 {:fossiilinen-polttoaine 1M
-         :sahko 1.2M
-         :kaukojaahdytys 0.28M
-         :kaukolampo 0.5M
-         :uusiutuva-polttoaine 0.5M}
+         :sahko 0.90M
+         :kaukojaahdytys 0.21M
+         :kaukolampo 0.38M
+         :uusiutuva-polttoaine 0.38M}
    2018 {:fossiilinen-polttoaine 1M
          :sahko 1.2M
          :kaukojaahdytys 0.28M
