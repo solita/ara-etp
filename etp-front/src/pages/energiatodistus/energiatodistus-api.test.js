@@ -39,15 +39,16 @@ describe('Classification fetch for ilmastoselvitys', () => {
     expect(keys).toContain('ilmastoselvitysLaadintaperusteet');
   });
 
-  // Test 2.3: luokittelut also visible via luokittelutAllVersions spread
-  it('given the luokittelut object, when checking for ilmastoselvitysLaadintaperusteet, then it is present', () => {
-    // given
-    const luokittelutObject = api.luokittelut;
+    // Test 2.3: luokittelut ilmastoselvitysLaadintaperusteet is a Future (cached fetch)
+    it('given the luokittelut object, when checking ilmastoselvitysLaadintaperusteet value, then it is a defined Future', () => {
+      // given
+      const luokittelutObject = api.luokittelut;
 
-    // when
-    const hasKey = 'ilmastoselvitysLaadintaperusteet' in luokittelutObject;
+      // when
+      const value = luokittelutObject.ilmastoselvitysLaadintaperusteet;
 
-    // then
-    expect(hasKey).toBe(true);
-  });
+      // then
+      expect(value).toBeDefined();
+      expect(value).not.toBeNull();
+    });
 });

@@ -206,7 +206,7 @@ test('given energiatodistus with only one rakennus value set, when rendered, the
   const { container } = render(Ilmastoselvitys, props);
 
   // then
-  expect(container.textContent).toContain('5');
+  expect(container.textContent).toContain('5,0');
 });
 
 // Test 4.8: All fields are disabled when disabled prop is true

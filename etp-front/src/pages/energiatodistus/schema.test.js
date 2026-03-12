@@ -216,7 +216,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       ['hiilijalanjalki', 'rakennuspaikka', 'purkuvaihe']
     ];
 
-    const hiilikadenjaljiFields = [
+    const hiilikadenjalkiFields = [
       ['hiilikadenjalki', 'rakennus', 'uudelleenkaytto'],
       ['hiilikadenjalki', 'rakennus', 'kierratys'],
       ['hiilikadenjalki', 'rakennus', 'ylimaarainen-uusiutuvaenergia'],
@@ -229,7 +229,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       ['hiilikadenjalki', 'rakennuspaikka', 'karbonatisoituminen']
     ];
 
-    const allFields = [...hiilijalanjalkiFields, ...hiilikadenjaljiFields];
+    const allFields = [...hiilijalanjalkiFields, ...hiilikadenjalkiFields];
 
     it.each(allFields)(
       'given the field at %s.%s.%s, when validating negative float, then all validators pass',
