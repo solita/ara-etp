@@ -34,6 +34,16 @@
 (def timezone (ZoneId/of "Europe/Helsinki"))
 (def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
                                timezone))
+(defn- transparent-png
+  [path width height]
+  (let [img (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)]
+    (ImageIO/write img "PNG" (io/file path))))
+
+(defn signature-png-2026
+  "Some text or image is required whether to create a signature field even if we want it to be only a clickable box on
+  top of the signature section. For 2026 version we just want the box, so we create a transparent png."
+  [path]
+  (transparent-png path 727 65))
 
 (defn signature-as-png [path ^String laatija-fullname now]
   (let [width (max 125 (* (count laatija-fullname) 6))
@@ -95,7 +105,9 @@
              signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
              pdf-file-key (energiatodistus-service/file-key id language)
              energiatodistus-pdf (File. pdf-path)
-             _ (signature-as-png signature-png-path laatija-fullname now)
+             _ (if (= versio 2026)
+                 (signature-png-2026 signature-png-path)
+                 (signature-as-png signature-png-path laatija-fullname now))
              signature-png (File. signature-png-path)
              signature-options (case versio
                                  2013 {:signature-png signature-png
@@ -110,9 +122,9 @@
                                        :zoom          134}
                                  2026 {:signature-png signature-png
                                        :page     2
-                                       :origin-x 450
-                                       :origin-y 760
-                                       :zoom 130})
+                                       :origin-x 25
+                                       :origin-y 751
+                                       :zoom 100})
              digest-and-stuff (pdf-sign/unsigned-document->digest-and-params energiatodistus-pdf
                                                                              signature-options)]
          (file-service/upsert-file-from-file aws-s3-client
