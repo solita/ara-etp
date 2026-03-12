@@ -30,7 +30,9 @@ const deserializer = {
   'voimassaolo-paattymisaika': Maybe.map(dfns.parseJSON),
   perustiedot: {
     'julkinen-rakennus': Maybe.get,
-    uudisrakennus: Maybe.get
+    uudisrakennus: Maybe.get,
+    'tayttaa-aplus-vaatimukset': Maybe.get,
+    'tayttaa-a0-vaatimukset': Maybe.get
   },
   lahtotiedot: {
     'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': Maybe.get,

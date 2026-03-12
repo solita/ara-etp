@@ -222,12 +222,15 @@
                                                   (-> vaihe (get-in [:tulokset :vaiheen-alku-pvm]) some?)
                                                   #_(not (nil? (get-in vaihe [:tulokset :vaiheen-alku-pvm]))))))
                          (map (fn [vaihe]
-                                (let [versio 2018
+                                (let [versio 2026
+                                      passin-perustiedot (:passin-perustiedot perusparannuspassi)
                                       e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus vaihe)
                                       e-luokka (-> (e-luokka-service/e-luokka kayttotarkoitukset alakayttotarkoitukset versio
                                                                               (get-in energiatodistus [:perustiedot :kayttotarkoitus])
                                                                               (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
-                                                                              e-luku)
+                                                                              e-luku
+                                                                              (:tayttaa-aplus-vaatimukset passin-perustiedot)
+                                                                              (:tayttaa-a0-vaatimukset passin-perustiedot))
                                                    :e-luokka)]
                                   {:e-luku e-luku
                                    :e-luokka e-luokka}))))

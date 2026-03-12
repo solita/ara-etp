@@ -614,6 +614,8 @@
       "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
       "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
       "julkinen-rakennus": "Julkinen rakennus",
+      "tayttaa-a0-vaatimukset": "Rakennus täyttää A\u2070-luokan lisävaatimukset",
+      "tayttaa-aplus-vaatimukset": "Rakennus täyttää A⁺-luokan lisävaatimukset",
       "keskeiset-suositukset": "Keskeiset suositukset",
       "keskeiset-suositukset-heading": {
         "2026": {

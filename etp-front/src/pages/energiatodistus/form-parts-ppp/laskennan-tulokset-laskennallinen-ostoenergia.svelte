@@ -32,7 +32,13 @@
     Maybe.fold(
       '',
       ([rajaAsteikko, eLuku]) =>
-        ETUtils.eluokkaFromRajaAsteikko(rajaAsteikko, eLuku),
+        ETUtils.applyEluokkaDowngrade(
+          ETUtils.eluokkaFromRajaAsteikko(rajaAsteikko, eLuku),
+          perusparannuspassi['passin-perustiedot']?.[
+            'tayttaa-aplus-vaatimukset'
+          ],
+          perusparannuspassi['passin-perustiedot']?.['tayttaa-a0-vaatimukset']
+        ),
       Maybe.toMaybeList([
         R.map(R.prop('raja-asteikko'), eTehokkuus),
         ETUtils.eluku(versio, nettoala, vaiheEnergiamuodot)

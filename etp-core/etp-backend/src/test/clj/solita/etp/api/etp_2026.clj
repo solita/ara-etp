@@ -167,6 +167,7 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (= "A" (:e-luokka response-body)))
         (t/is (= 200 (:status get-res))))))
+  ;; 2026 endpoint uses false, false downgrade params → A+ becomes A
   (let [endpoint "/api/public/energiatodistukset/e-luokka/2026/YAT/100/25"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
@@ -408,6 +409,7 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (= "A" (:e-luokka response-body)))
         (t/is (= 200 (:status get-res))))))
+  ;; 2026 endpoint uses false, false downgrade params → A+ becomes A
   (let [endpoint "/api/private/e-luokka/2026/YAT/100/25"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)

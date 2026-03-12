@@ -159,7 +159,9 @@
        alakayttotarkoitus-id (-> energiatodistus :perustiedot :kayttotarkoitus)
        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)]
       (:e-luokka (e-luokka-service/find-e-luokka
-                   db versio alakayttotarkoitus-id nettoala e-luku)))))
+                   db versio alakayttotarkoitus-id nettoala e-luku
+                   (-> energiatodistus :perustiedot :tayttaa-aplus-vaatimukset)
+                   (-> energiatodistus :perustiedot :tayttaa-a0-vaatimukset))))))
 
 (defn assoc-e-tehokkuus [energiatodistus db versio]
   (-> energiatodistus

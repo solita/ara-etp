@@ -360,7 +360,9 @@
 
 (def EnergiatodistusSave2026
   (-> (dissoc-not-in-2026 EnergiatodistusSave2018)
-      (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key}
+      (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key
+                                                         :tayttaa-aplus-vaatimukset   schema/Bool
+                                                         :tayttaa-a0-vaatimukset      schema/Bool}
                         :lahtotiedot                    {:energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin schema/Bool
                                                          :lammitys
                                                          {:lammonjako-lampotilajousto schema/Bool}}

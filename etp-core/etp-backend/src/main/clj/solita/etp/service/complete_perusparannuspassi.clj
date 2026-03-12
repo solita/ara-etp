@@ -122,7 +122,7 @@
   "Enrich a PPP vaihe with calculated fields.
    Adds calculated fields both to :tulokset and at the top level for consistency.
    For invalid vaiheet, adds nil/0 placeholders."
-  [vaihe energiatodistus ppp-tulokset {:keys [kayttotarkoitukset alakayttotarkoitukset]}]
+  [vaihe energiatodistus ppp-tulokset {:keys [kayttotarkoitukset alakayttotarkoitukset]} passin-perustiedot]
   (if-not (:valid vaihe)
     ;; For invalid vaiheet, add nil placeholders to match structure
     (-> vaihe
@@ -145,7 +145,9 @@
                            versio
                            (get-in energiatodistus [:perustiedot :kayttotarkoitus])
                            (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
-                           e-luku)
+                           e-luku
+                           (:tayttaa-aplus-vaatimukset passin-perustiedot)
+                           (:tayttaa-a0-vaatimukset passin-perustiedot))
                          :e-luokka))
           ostoenergia (total-ostoenergia-ppp tulokset)
           painotettu (painotettu-ostoenergia tulokset)
@@ -172,7 +174,7 @@
 (defn- energiatodistus->lahtotilanne
   "Transform a complete energiatodistus into a vaihe-shaped lähtötilanne structure.
    Creates a basic vaihe structure and uses complete-vaihe to add calculated fields."
-  [energiatodistus ppp-tulokset luokittelut]
+  [energiatodistus ppp-tulokset luokittelut passin-perustiedot]
   (let [energiamuodot (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])
         toteutunut-ostoenergiankulutus (:toteutunut-ostoenergiankulutus energiatodistus)
         ;; Create a basic vaihe structure with PPP-style field names
@@ -196,7 +198,7 @@
                                                                           (get-in [:tulokset :uusiutuvat-omavaraisenergiat])))
                                 :uusiutuvan-energian-hyodynnetty-osuus nil}}]
     ;; Use complete-vaihe to add all calculated fields
-    (complete-vaihe basic-vaihe energiatodistus ppp-tulokset luokittelut)))
+    (complete-vaihe basic-vaihe energiatodistus ppp-tulokset luokittelut passin-perustiedot)))
 
 (defn- add-year-ranges
   "Add year-range to each vaihe based on consecutive vaihe start dates.
@@ -215,12 +217,15 @@
    Valid vaiheet get real calculated values, invalid vaiheet get nil/0 placeholders."
   [perusparannuspassi energiatodistus luokittelut]
   (let [ppp-tulokset (:tulokset perusparannuspassi)
-        lahtotilanne (energiatodistus->lahtotilanne energiatodistus ppp-tulokset luokittelut)]
+        passin-perustiedot (:passin-perustiedot perusparannuspassi)
+        ;; Lähtötilanne uses ET's own :tayttaa-aplus-vaatimukset / :tayttaa-a0-vaatimukset
+        ;; (from :perustiedot), not PPP's passin-perustiedot.
+        lahtotilanne (energiatodistus->lahtotilanne energiatodistus ppp-tulokset luokittelut (:perustiedot energiatodistus))]
     (-> perusparannuspassi
         (update :vaiheet
                 (fn [vaiheet]
                   (->> vaiheet
-                       (mapv #(complete-vaihe % energiatodistus ppp-tulokset luokittelut))
+                       (mapv #(complete-vaihe % energiatodistus ppp-tulokset luokittelut passin-perustiedot))
                        add-year-ranges)))
         (assoc :lahtotilanne lahtotilanne))))
 

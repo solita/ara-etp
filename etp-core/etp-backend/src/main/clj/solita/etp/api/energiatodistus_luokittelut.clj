@@ -67,5 +67,7 @@
                                                            versio
                                                            alakayttotarkoitusluokka
                                                            nettoala
-                                                           e-luku)
+                                                           e-luku
+                                                           false
+                                                           false)
                            "Could not find luokittelu with given versio and alakayttotarkoitusluokka"))}}]])

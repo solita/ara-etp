@@ -61,6 +61,8 @@
     R.compose(
       push,
       R.concat(`${$location}?`),
+      // Encode '+' as '%2B' so qs.parse won't decode it as a space (e.g. "A+" → "A ")
+      s => s.replace(/\+/g, '%2B'),
       params => qs.stringify(params, { encode: false }),
       R.dissoc('offset'),
       R.when(R.has('id'), R.dissoc('where')),
