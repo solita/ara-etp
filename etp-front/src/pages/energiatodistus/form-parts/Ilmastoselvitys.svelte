@@ -59,7 +59,6 @@
     'rakennuspaikka',
     jalanjalkiFields
   );
-
 </script>
 
 <style type="text/postcss">
@@ -69,9 +68,7 @@
   }
 </style>
 
-<H2
-  id="ilmastoselvitys"
-  text={$_('energiatodistus.ilmastoselvitys.header')} />
+<H2 id="ilmastoselvitys" text={$_('energiatodistus.ilmastoselvitys.header')} />
 
 <div class="mb-8">
   <div class="flex flex-col gap-x-8 lg:flex-row">
@@ -153,14 +150,13 @@
     <table class="et-table mb-6">
       <thead class="et-table--thead">
         <tr class="et-table--tr">
-          <th class="et-table--th et-table--th__twocells et-table--th-left-aligned">
+          <th
+            class="et-table--th et-table--th__twocells et-table--th-left-aligned">
             {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.header')}
           </th>
           {#each jalanjalkiFields as field}
             <th class="et-table--th et-table--th-right-aligned">
-              {$_(
-                'energiatodistus.ilmastoselvitys.hiilijalanjalki.' + field
-              )}
+              {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.' + field)}
             </th>
           {/each}
           <th class="et-table--th et-table--th-right-aligned">
@@ -181,7 +177,12 @@
                 compact={true}
                 center={true}
                 bind:model={energiatodistus}
-                path={['ilmastoselvitys', 'hiilijalanjalki', 'rakennus', field]} />
+                path={[
+                  'ilmastoselvitys',
+                  'hiilijalanjalki',
+                  'rakennus',
+                  field
+                ]} />
             </td>
           {/each}
           <td class="et-table--td">
@@ -224,14 +225,13 @@
     <table class="et-table mb-6">
       <thead class="et-table--thead">
         <tr class="et-table--tr">
-          <th class="et-table--th et-table--th__twocells et-table--th-left-aligned">
+          <th
+            class="et-table--th et-table--th__twocells et-table--th-left-aligned">
             {$_('energiatodistus.ilmastoselvitys.hiilikadenjalki.header')}
           </th>
           {#each kadenjalkiFields as field}
             <th class="et-table--th et-table--th-right-aligned">
-              {$_(
-                'energiatodistus.ilmastoselvitys.hiilikadenjalki.' + field
-              )}
+              {$_('energiatodistus.ilmastoselvitys.hiilikadenjalki.' + field)}
             </th>
           {/each}
         </tr>
@@ -249,7 +249,12 @@
                 compact={true}
                 center={true}
                 bind:model={energiatodistus}
-                path={['ilmastoselvitys', 'hiilikadenjalki', 'rakennus', field]} />
+                path={[
+                  'ilmastoselvitys',
+                  'hiilikadenjalki',
+                  'rakennus',
+                  field
+                ]} />
             </td>
           {/each}
         </tr>

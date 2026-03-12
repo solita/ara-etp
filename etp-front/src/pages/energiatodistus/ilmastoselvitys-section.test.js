@@ -91,7 +91,9 @@ test('given the ilmastoselvitys component with mock classifications, when render
 
   // The Select component renders a custom dropdown (not native <select>).
   // Verify the format function and items are wired by checking the hidden input name.
-  const hiddenInput = container.querySelector('input[name="ilmastoselvitys.laadintaperuste"]');
+  const hiddenInput = container.querySelector(
+    'input[name="ilmastoselvitys.laadintaperuste"]'
+  );
   expect(hiddenInput).not.toBeNull();
 });
 
@@ -224,7 +226,9 @@ test('given disabled is true, when rendered, then all inputs and selects are dis
   });
 
   // Verify the custom Select button div has the disabled class
-  const selectButton = container.querySelector('[id="ilmastoselvitys.laadintaperuste"]');
+  const selectButton = container.querySelector(
+    '[id="ilmastoselvitys.laadintaperuste"]'
+  );
   expect(selectButton.classList.contains('disabled')).toBe(true);
 });
 
