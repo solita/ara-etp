@@ -20,3 +20,9 @@
     (t/is (= (-> lammonjaot last :label-fi) "Muu lämmönjako"))
     (t/is (= 13 (count lammonjaot)))))
 
+(t/deftest find-ilmastoselvitys-laadintaperusteet-test
+  (let [laadintaperusteet (service/find-ilmastoselvitys-laadintaperusteet ts/*db*)]
+    (t/is (= 2 (count laadintaperusteet)))
+    (t/is (= "Uusi rakennus" (-> laadintaperusteet first :label-fi)))
+    (t/is (= "Perusparannus A+-luokkaan" (-> laadintaperusteet second :label-fi)))))
+

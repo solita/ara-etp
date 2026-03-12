@@ -1247,6 +1247,35 @@
       }
     },
     "lisamerkintoja": "Tilläggsuppgifter",
+    "ilmastoselvitys": {
+      "header": "Ilmastoselvitys (sv)",
+      "laatimisajankohta": "Laatimisajankohta (sv)",
+      "laatija": "Laatija (sv)",
+      "yritys": "Yritys (sv)",
+      "yritys-osoite": "Yrityksen osoite (sv)",
+      "yritys-postinumero": "Postinumero (sv)",
+      "yritys-postitoimipaikka": "Postitoimipaikka (sv)",
+      "laadintaperuste": "Laadintaperuste (sv)",
+      "hiilijalanjalki": {
+        "header": "Hiilijalanjälki (sv)",
+        "rakennus": "Rakennus (sv)",
+        "rakennuspaikka": "Rakennuspaikka (sv)",
+        "yhteensa": "Yhteensä (sv)",
+        "rakennustuotteiden-valmistus": "Rakennus\u00ADtuotteiden valmistus (sv)",
+        "kuljetukset-tyomaavaihe": "Kuljetukset ja työmaa\u00ADvaihe (sv)",
+        "rakennustuotteiden-vaihdot": "Rakennus\u00ADtuotteiden vaihdot (sv)",
+        "energiankaytto": "Energian\u00ADkäyttö (sv)",
+        "purkuvaihe": "Purkuvaihe (sv)"
+      },
+      "hiilikadenjalki": {
+        "header": "Hiilikädenjälki (sv)",
+        "uudelleenkaytto": "Uudelleen\u00ADkäyttö (sv)",
+        "kierratys": "Kierrätys (sv)",
+        "ylimaarainen-uusiutuvaenergia": "Ylimääräinen uusiutuva energia (sv)",
+        "hiilivarastovaikutus": "Hiili\u00ADvarasto\u00ADvaikutus (sv)",
+        "karbonatisoituminen": "Karbonati\u00ADsoituminen (sv)"
+      }
+    },
     "perusparannuspassi": {
       "header": "Perusparannuspassi (sv)",
       "add-button": "Lisää perusparannuspassi (sv)",
