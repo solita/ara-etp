@@ -143,7 +143,7 @@ export const energiamuotokertoimet = () => ({
     'fossiilinen-polttoaine': Maybe.Some(1),
     kaukojaahdytys: Maybe.Some(0.21),
     kaukolampo: Maybe.Some(0.38),
-    sahko: Maybe.Some(0.90),
+    sahko: Maybe.Some(0.9),
     'uusiutuva-polttoaine': Maybe.Some(0.38)
   },
   2018: {

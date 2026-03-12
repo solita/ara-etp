@@ -704,7 +704,7 @@ describe('ET2026 energiamuotokertoimet', () => {
 
       // Then all values match the new regulation
       expect(kertoimet['fossiilinen-polttoaine']).toEqual(Maybe.Some(1));
-      expect(kertoimet.sahko).toEqual(Maybe.Some(0.90));
+      expect(kertoimet.sahko).toEqual(Maybe.Some(0.9));
       expect(kertoimet.kaukolampo).toEqual(Maybe.Some(0.38));
       expect(kertoimet.kaukojaahdytys).toEqual(Maybe.Some(0.21));
       expect(kertoimet['uusiutuva-polttoaine']).toEqual(Maybe.Some(0.38));
