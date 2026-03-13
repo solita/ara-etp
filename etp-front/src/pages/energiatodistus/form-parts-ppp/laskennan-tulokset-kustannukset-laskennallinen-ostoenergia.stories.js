@@ -39,7 +39,7 @@ const mockEnergiatodistus = R.compose(
     ['tulokset', 'kaytettavat-energiamuodot', 'kaukojaahdytys'],
     Either.Right(Maybe.Some(300))
   )
-)(empty.energiatodistus2018(1));
+)(empty.energiatodistus2026(1));
 
 const mockPerusparannuspassi = R.compose(
   R.assocPath(['tulokset', 'kaukolampo-hinta'], Either.Right(Maybe.Some(8.5))),

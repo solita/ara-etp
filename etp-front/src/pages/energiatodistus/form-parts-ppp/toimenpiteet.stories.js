@@ -453,7 +453,7 @@ const luokittelut = {
 };
 
 const testEnergiatodistus = () => {
-  const energiatodistus = empty.energiatodistus2018();
+  const energiatodistus = empty.energiatodistus2026(1);
   energiatodistus.id = 442;
 
   energiatodistus.lahtotiedot['lammitetty-nettoala'] = Either.Right(
