@@ -111,7 +111,6 @@
               :value    0M :max 999999M, :min 0.1M,
               :property "lahtotiedot.rakennusvaippa.kylmasillat-UA"
               :message  "Property: lahtotiedot.rakennusvaippa.kylmasillat-UA has an invalid value: 0"}))
-    ;; TODO add some validation tests for 2026 version when there are some validation rules for it
     ))
 
 (t/deftest validation-test-invalid-sisainen-kuorma
@@ -132,6 +131,69 @@
                      (assoc-in [:perustiedot :kayttotarkoitus] "YAT")
                      (assoc-in [:lahtotiedot :sis-kuorma :henkilot]
                                {:kayttoaste 9999 :lampokuorma 9999}))))))))
+
+(t/deftest validation-2026-invalid-sisainen-kuorma-yat-test
+  ;; given: a 2026 energiatodistus with käyttötarkoitus 'YAT' (luokka 1)
+  ;;        and invalid sisäinen kuorma values
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        energiatodistus (energiatodistus-test-data/generate-add 2026 false)]
+    ;; when: attempting to add the energiatodistus with invalid sis-kuorma
+    ;; then: an :invalid-sisainen-kuorma exception is thrown with valid values for 2026/YAT
+    (t/is (xmap/submap?
+            {:type         :invalid-sisainen-kuorma
+             :valid-kuorma {:henkilot {:kayttoaste 0.6M, :lampokuorma 2M},
+                            :kuluttajalaitteet {:kayttoaste 0.6M, :lampokuorma 3M},
+                            :valaistus {:kayttoaste 0.1M}}}
+            (etp-test/catch-ex-data
+              #(service/add-energiatodistus!
+                 (ts/db-user laatija-id)
+                 (test-whoami/laatija laatija-id)
+                 2026
+                 (-> energiatodistus
+                     (assoc-in [:perustiedot :kayttotarkoitus] "YAT")
+                     (assoc-in [:lahtotiedot :sis-kuorma :henkilot]
+                               {:kayttoaste 9999 :lampokuorma 9999}))))))))
+
+(t/deftest validation-2026-invalid-sisainen-kuorma-toimisto-test
+  ;; given: a 2026 energiatodistus with käyttötarkoitus 'T' (luokka 3 — Toimistorakennukset)
+  ;;        and invalid sisäinen kuorma values
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        energiatodistus (energiatodistus-test-data/generate-add 2026 false)]
+    ;; when: attempting to add the energiatodistus with invalid sis-kuorma
+    ;; then: an :invalid-sisainen-kuorma exception is thrown with valid values for 2026/T (luokka 3)
+    (t/is (xmap/submap?
+            {:type         :invalid-sisainen-kuorma
+             :valid-kuorma {:henkilot {:kayttoaste 0.65M, :lampokuorma 5M},
+                            :kuluttajalaitteet {:kayttoaste 0.65M, :lampokuorma 12M},
+                            :valaistus {:kayttoaste 0.65M}}}
+            (etp-test/catch-ex-data
+              #(service/add-energiatodistus!
+                 (ts/db-user laatija-id)
+                 (test-whoami/laatija laatija-id)
+                 2026
+                 (-> energiatodistus
+                     (assoc-in [:perustiedot :kayttotarkoitus] "T")
+                     (assoc-in [:lahtotiedot :sis-kuorma :henkilot]
+                               {:kayttoaste 9999 :lampokuorma 9999}))))))))
+
+(t/deftest validation-2026-valid-sisainen-kuorma-accepted-test
+  ;; given: a 2026 energiatodistus with käyttötarkoitus 'YAT' (luokka 1)
+  ;;        and correct sisäinen kuorma values matching the DB rules
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        energiatodistus (energiatodistus-test-data/generate-add 2026 false)]
+    ;; when: adding the energiatodistus with valid sis-kuorma for YAT
+    ;; then: no exception is thrown, the energiatodistus is created successfully
+    (t/is (number? (:id (service/add-energiatodistus!
+                          (ts/db-user laatija-id)
+                          (test-whoami/laatija laatija-id)
+                          2026
+                          (-> energiatodistus
+                              (assoc-in [:perustiedot :kayttotarkoitus] "YAT")
+                              (assoc-in [:lahtotiedot :sis-kuorma]
+                                        (energiatodistus-test-data/sisainen-kuorma 2026 1)))))))))
 
 (t/deftest update-energiatodistus-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
