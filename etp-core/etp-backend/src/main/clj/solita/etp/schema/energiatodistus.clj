@@ -349,9 +349,9 @@
 
 (def Ilmastoselvitys
   {:laatimisajankohta       common-schema/Date
-   :laatija                 common-schema/String75
+   :laatija                 common-schema/String50
    :yritys                  common-schema/String150
-   :yritys-osoite           common-schema/String75
+   :yritys-osoite           common-schema/String50
    :yritys-postinumero      common-schema/String8
    :yritys-postitoimipaikka common-schema/String30
    :laadintaperuste         common-schema/Key
