@@ -22,7 +22,6 @@
 (def String8 (StringBase 8))
 (def String12 (StringBase 12))
 (def String30 (StringBase 30))
-(def String50 (StringBase 75))
 (def String60 (StringBase 60))
 (def String75 (StringBase 75))
 (def String100 (StringBase 100))
