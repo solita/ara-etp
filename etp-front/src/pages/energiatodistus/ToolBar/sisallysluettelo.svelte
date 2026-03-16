@@ -44,13 +44,17 @@
       label: i18n('energiatodistus.lisamerkintoja')
     },
     {
+      id: 'ilmastoselvitys',
+      label: i18n('energiatodistus.ilmastoselvitys.header')
+    },
+    {
       id: 'perusparannuspassi',
       label: i18n('energiatodistus.perusparannuspassi.header')
     }
   ];
 
   $: tocItems = allTocItems.filter(item => {
-    if (item.id === 'perusparannuspassi') {
+    if (item.id === 'perusparannuspassi' || item.id === 'ilmastoselvitys') {
       return isEtp2026Enabled(config) && version === 2026;
     }
     return true;

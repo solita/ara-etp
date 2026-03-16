@@ -400,34 +400,34 @@ export const v2026 = R.compose(
       'yritys-postitoimipaikka': String(2, 30),
       hiilijalanjalki: {
         rakennus: {
-          'rakennustuotteiden-valmistus': IntegerNonNegative,
-          'kuljetukset-tyomaavaihe': IntegerNonNegative,
-          'rakennustuotteiden-vaihdot': IntegerNonNegative,
-          energiankaytto: IntegerNonNegative,
-          purkuvaihe: IntegerNonNegative
+          'rakennustuotteiden-valmistus': AnyFloat,
+          'kuljetukset-tyomaavaihe': AnyFloat,
+          'rakennustuotteiden-vaihdot': AnyFloat,
+          energiankaytto: AnyFloat,
+          purkuvaihe: AnyFloat
         },
         rakennuspaikka: {
-          'rakennustuotteiden-valmistus': IntegerNonNegative,
-          'kuljetukset-tyomaavaihe': IntegerNonNegative,
-          'rakennustuotteiden-vaihdot': IntegerNonNegative,
-          energiankaytto: IntegerNonNegative,
-          purkuvaihe: IntegerNonNegative
+          'rakennustuotteiden-valmistus': AnyFloat,
+          'kuljetukset-tyomaavaihe': AnyFloat,
+          'rakennustuotteiden-vaihdot': AnyFloat,
+          energiankaytto: AnyFloat,
+          purkuvaihe: AnyFloat
         }
       },
       hiilikadenjalki: {
         rakennus: {
-          uudelleenkaytto: IntegerNonNegative,
-          kierratys: IntegerNonNegative,
-          'ylimaarainen-uusiutuvaenergia': IntegerNonNegative,
-          hiilivarastovaikutus: IntegerNonNegative,
-          karbonatisoituminen: IntegerNonNegative
+          uudelleenkaytto: AnyFloat,
+          kierratys: AnyFloat,
+          'ylimaarainen-uusiutuvaenergia': AnyFloat,
+          hiilivarastovaikutus: AnyFloat,
+          karbonatisoituminen: AnyFloat
         },
         rakennuspaikka: {
-          uudelleenkaytto: IntegerNonNegative,
-          kierratys: IntegerNonNegative,
-          'ylimaarainen-uusiutuvaenergia': IntegerNonNegative,
-          hiilivarastovaikutus: IntegerNonNegative,
-          karbonatisoituminen: IntegerNonNegative
+          uudelleenkaytto: AnyFloat,
+          kierratys: AnyFloat,
+          'ylimaarainen-uusiutuvaenergia': AnyFloat,
+          hiilivarastovaikutus: AnyFloat,
+          karbonatisoituminen: AnyFloat
         }
       }
     }

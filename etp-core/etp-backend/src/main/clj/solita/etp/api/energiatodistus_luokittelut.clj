@@ -37,6 +37,7 @@
        ->toimenpide-ehdotus-route)
    (classification-route "/toimenpide-ehdotus-group" "toimenpide-ehdotus-group" toimenpide-ehdotus-service/find-toimenpide-ehdotus-groups)
    (classification-route "/havainnointikayntityyppi" "havainnointikayntityyppi" luokittelu-service/find-havainnointikayntityypit)
+   (classification-route "/ilmastoselvitys-laadintaperuste" "ilmastoselvitys-laadintaperuste" luokittelu-service/find-ilmastoselvitys-laadintaperusteet)
 
    ["/kayttotarkoitusluokat/:versio"
     {:get {:summary    "Hae energiatodistuksen käyttötarkoitusluokat"
