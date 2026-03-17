@@ -16,7 +16,8 @@
             [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_rakennuksen_vaippa :as te-rakennusvaippa]
             [solita.etp.service.energiatodistus-pdf.toimenpide_ehdotukset_lammitys_ilmanvaihto :as te-lammitys-ilmanvaihto]
             [solita.etp.service.energiatodistus-pdf.toimenpide-ehdotukset-muut :as te-muut]
-            [solita.etp.service.energiatodistus-pdf.lisamerkintoja :as et-lisamerkintoja])
+            [solita.etp.service.energiatodistus-pdf.lisamerkintoja :as et-lisamerkintoja]
+            [solita.etp.service.energiatodistus-pdf.ilmastoselvitys :as ilmastoselvitys])
   (:import [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
 
@@ -83,6 +84,7 @@
   [{:keys [energiatodistus kieli] :as params}]
   (let [l (kieli loc/et-pdf-localization)
         show-toimenpide? (show-toimenpide-pages? energiatodistus)
+        show-ilmastoselvitys? (ilmastoselvitys/has-ilmastoselvitys? energiatodistus)
         pages (concat
                 [{:page-border? true
                   :content
@@ -114,7 +116,11 @@
                  {:page-border? false
                   :content
                   [:div {:class "page-section"}
-                   (et-lisamerkintoja/generate-lisamerkintoja params)]}])]
+                   (et-lisamerkintoja/generate-lisamerkintoja params)]}]
+                (if show-ilmastoselvitys?
+                  [{:page-border? false
+                    :content (ilmastoselvitys/ilmastoselvitys-page-content params)}]
+                  []))]
     (generate-document-html pages (:id energiatodistus))))
 
 (defn generate-energiatodistus-ohtp-pdf
@@ -138,9 +144,11 @@
    luokittelut is a map of classification data with keys:
      :alakayttotarkoitukset, :kayttotarkoitukset, :laatimisvaiheet,
      :mahdollisuus-liittya, :uusiutuva-energia, :lammitysmuodot,
-     :ilmanvaihtotyypit, :toimenpide-ehdotukset"
+     :ilmanvaihtotyypit, :toimenpide-ehdotukset,
+     :ilmastoselvitys-laadintaperusteet"
   [complete-energiatodistus complete-perusparannuspassi kieli draft? luokittelut]
-  (let [{:keys [alakayttotarkoitukset kayttotarkoitukset laatimisvaiheet]} luokittelut
+  (let [{:keys [alakayttotarkoitukset kayttotarkoitukset laatimisvaiheet
+                ilmastoselvitys-laadintaperusteet]} luokittelut
         kieli-keyword (keyword kieli)
         ppp-pdf-bytes (when complete-perusparannuspassi
                         (ppp-pdf/generate-perusparannuspassi-pdf
@@ -152,11 +160,12 @@
         pdf-bytes
         ;; Generate the PDF to byte array
         (generate-energiatodistus-ohtp-pdf
-          {:energiatodistus       complete-energiatodistus
-           :alakayttotarkoitukset alakayttotarkoitukset
-           :laatimisvaiheet       laatimisvaiheet
-           :kieli                 kieli-keyword
-           :kayttotarkoitukset    kayttotarkoitukset}
+          {:energiatodistus                    complete-energiatodistus
+           :alakayttotarkoitukset              alakayttotarkoitukset
+           :laatimisvaiheet                    laatimisvaiheet
+           :kieli                              kieli-keyword
+           :kayttotarkoitukset                 kayttotarkoitukset
+           :ilmastoselvitys-laadintaperusteet  ilmastoselvitys-laadintaperusteet}
           ppp-pdf-bytes)
         watermark-text (cond
                          draft? (draft-watermark-texts kieli)

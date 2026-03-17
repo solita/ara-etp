@@ -836,3 +836,103 @@ table.common-table td:last-child {
     padding-left: 23px;
     font-weight: bold;
 }
+
+.is-metatiedot dl {
+    display: table;
+    width: 100%;
+    background-color: white;
+    border-collapse: collapse;
+    margin: 5px 5px 10px 0px;
+}
+
+.is-metatiedot dl div {
+    display: table-row;
+}
+
+.is-metatiedot dl dt,
+.is-metatiedot dl dd {
+    display: table-cell;
+    padding: 4px 2px;
+}
+
+.is-metatiedot dl dt {
+    color: #23323e;
+    font-weight: bold;
+    white-space: nowrap;
+    width: 1px;
+    padding-right: 10px;
+}
+
+.is-metatiedot dl dd {
+    background-color: white;
+}
+
+.is-separator {
+    background-color: #23323e;
+    padding: 12px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+}
+
+.is-intro {
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.is-description {
+    margin-top: 5px;
+    margin-bottom: 12px;
+}
+
+.ilmastoselvitys table {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    margin: 4px 5px 20px 5px;
+    table-layout: fixed;
+}
+
+.ilmastoselvitys h3 {
+    margin-top: 20px;
+    margin-bottom: 2px;
+}
+
+.ilmastoselvitys th,
+.ilmastoselvitys td {
+    border: 1px solid #bdc6cc;
+    padding: 2px 3px;
+    font-weight: normal;
+    text-align: center;
+    color: #23323e;
+}
+
+.ilmastoselvitys th:first-child,
+.ilmastoselvitys td:first-child {
+    border-left: none;
+    border-right: 1px solid #bdc6cc;
+    font-weight: bold;
+    text-align: left;
+    width: 18%;
+}
+
+.ilmastoselvitys th:last-child,
+.ilmastoselvitys td:last-child {
+    border-right: none;
+}
+
+.ilmastoselvitys th.empty,
+.ilmastoselvitys th.is-otsikko {
+    border: none;
+    background: none;
+    font-weight: bold;
+    padding: 0 3px 0 3px;
+    vertical-align: bottom;
+}
+
+.ilmastoselvitys th.is-otsikko:nth-child(2) {
+    border-left: none;
+}
+
+.ilmastoselvitys .is-unit {
+    font-weight: normal;
+}

@@ -759,14 +759,15 @@
 
 (defn- generate-et-2026-pdf-as-input-stream [db whoami complete-energiatodistus kieli draft?]
   (log/info "Generating 2026 PDF for id" (:id complete-energiatodistus))
-  (let [luokittelut {:alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
-                     :kayttotarkoitukset    (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
-                     :laatimisvaiheet       (luokittelu-service/find-laatimisvaiheet db)
-                     :mahdollisuus-liittya  (luokittelu-service/find-mahdollisuus-liittya db)
-                     :uusiutuva-energia     (luokittelu-service/find-uusiutuva-energia db)
-                     :lammitysmuodot        (luokittelu-service/find-lammitysmuodot db)
-                     :ilmanvaihtotyypit     (luokittelu-service/find-ilmanvaihtotyypit db)
-                     :toimenpide-ehdotukset (toimenpide-ehdotus-service/find-all db)}
+  (let [luokittelut {:alakayttotarkoitukset              (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
+                     :kayttotarkoitukset                 (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
+                     :laatimisvaiheet                    (luokittelu-service/find-laatimisvaiheet db)
+                     :mahdollisuus-liittya               (luokittelu-service/find-mahdollisuus-liittya db)
+                     :uusiutuva-energia                  (luokittelu-service/find-uusiutuva-energia db)
+                     :lammitysmuodot                     (luokittelu-service/find-lammitysmuodot db)
+                     :ilmanvaihtotyypit                  (luokittelu-service/find-ilmanvaihtotyypit db)
+                     :toimenpide-ehdotukset              (toimenpide-ehdotus-service/find-all db)
+                     :ilmastoselvitys-laadintaperusteet  (luokittelu-service/find-ilmastoselvitys-laadintaperusteet db)}
         complete-ppp (when (:perusparannuspassi-valid complete-energiatodistus)
                        (complete-ppp-service/find-complete-perusparannuspassi
                          db whoami (:perusparannuspassi-id complete-energiatodistus)))]
