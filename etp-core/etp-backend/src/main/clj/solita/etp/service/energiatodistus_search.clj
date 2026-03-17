@@ -286,10 +286,10 @@
        energiatodistus.pt$kayttotarkoitus NOT IN ('YAT', 'KAT', 'MEP', 'MAEP'))
       OR
       (energiatodistus.versio = 2018 AND
-       energiatodistus.pt$kayttotarkoitus NOT IN ('YAT', 'KAT', 'KREP')))"
-
-     ;; TODO et2026?
-     ]
+       energiatodistus.pt$kayttotarkoitus NOT IN ('YAT', 'KAT', 'KREP'))
+      OR
+      (energiatodistus.versio = 2026 AND
+       energiatodistus.pt$kayttotarkoitus NOT IN ('YAT', 'KAT', 'KREP')))"]
     (rooli-service/system? whoami)
     ["energiatodistus.tila_id IN (2, 4)"]))
 

@@ -627,6 +627,118 @@
     (t/is (= 2 (count (search kayttaja-test-data/laskuttaja nil nil nil nil))))
     (t/is (= 0 (count (search nil nil nil nil nil))))))
 
+(t/deftest public-search-2026-non-excluded-kayttotarkoitus-visible-test
+  ;; given: a signed 2026 energiatodistus with non-excluded käyttötarkoitus 'RT'
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+                   (assoc-in [:perustiedot :kayttotarkoitus] "RT"))
+        et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    ;; when: searching as public user (nil whoami)
+    ;; then: the energiatodistus appears in results
+    (t/is (= 1 (count (search nil nil nil nil nil)))
+           "Signed 2026 ET with non-excluded käyttötarkoitus should be visible in public search")))
+
+(t/deftest public-search-2026-excluded-kayttotarkoitus-not-visible-test
+  ;; given: signed 2026 energiatodistukset with excluded käyttötarkoitus values
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        make-et (fn [kayttotarkoitus]
+                  (-> (energiatodistus-test-data/generate-add 2026 true)
+                      (assoc-in [:perustiedot :kayttotarkoitus] kayttotarkoitus)))
+        yat-id (first (energiatodistus-test-data/insert! [(make-et "YAT")] laatija-id))
+        kat-id (first (energiatodistus-test-data/insert! [(make-et "KAT")] laatija-id))
+        krep-id (first (energiatodistus-test-data/insert! [(make-et "KREP")] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id yat-id]
+                               [laatija-id kat-id]
+                               [laatija-id krep-id]])
+    ;; when: searching as public user
+    ;; then: none of the excluded käyttötarkoitus values appear
+    (t/is (= 0 (count (search nil nil nil nil nil)))
+           "Signed 2026 ETs with excluded käyttötarkoitus (YAT, KAT, KREP) should not be visible in public search")))
+
+(t/deftest public-search-2026-private-search-finds-excluded-kayttotarkoitus-test
+  ;; given: a signed 2026 energiatodistus with excluded käyttötarkoitus 'YAT'
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+                   (assoc-in [:perustiedot :kayttotarkoitus] "YAT"))
+        et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    ;; when: searching as pääkäyttäjä (private search)
+    ;; then: the excluded käyttötarkoitus is still found (exclusion only applies to public)
+    (t/is (= 1 (count (search kayttaja-test-data/paakayttaja nil nil nil nil)))
+           "Pääkäyttäjä should find 2026 ET with excluded käyttötarkoitus in private search")))
+
+(t/deftest public-search-2026-mixed-kayttotarkoitus-test
+  ;; given: multiple signed 2026 energiatodistukset with different käyttötarkoitus values
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        make-et (fn [kayttotarkoitus luokka-id]
+                  (-> (energiatodistus-test-data/generate-add 2026 true)
+                      (assoc-in [:perustiedot :kayttotarkoitus] kayttotarkoitus)
+                      (assoc-in [:lahtotiedot :sis-kuorma]
+                                (energiatodistus-test-data/sisainen-kuorma 2026 luokka-id))))
+        ;; Non-excluded: RT (Rivitalot, luokka 1), T (Toimistorakennukset, luokka 3)
+        rt-id (first (energiatodistus-test-data/insert! [(make-et "RT" 1)] laatija-id))
+        t-id (first (energiatodistus-test-data/insert! [(make-et "T" 3)] laatija-id))
+        ;; Excluded: YAT (luokka 1), KAT (luokka 1)
+        yat-id (first (energiatodistus-test-data/insert! [(make-et "YAT" 1)] laatija-id))
+        kat-id (first (energiatodistus-test-data/insert! [(make-et "KAT" 1)] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id rt-id]
+                               [laatija-id t-id]
+                               [laatija-id yat-id]
+                               [laatija-id kat-id]])
+    ;; when: searching as public user
+    ;; then: only non-excluded types are visible (RT and T)
+    (t/is (= 2 (count (search nil nil nil nil nil)))
+           "Public search should show only non-excluded 2026 käyttötarkoitus (RT, T but not YAT, KAT)")))
+
+(t/deftest public-search-regression-2018-kayttotarkoitus-filtering-test
+  ;; given: signed 2018 energiatodistukset with excluded and non-excluded käyttötarkoitus
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        make-et (fn [kayttotarkoitus luokka-id]
+                  (-> (energiatodistus-test-data/generate-add 2018 true)
+                      (assoc-in [:perustiedot :kayttotarkoitus] kayttotarkoitus)
+                      (assoc-in [:lahtotiedot :sis-kuorma]
+                                (energiatodistus-test-data/sisainen-kuorma 2018 luokka-id))))
+        ;; Non-excluded for 2018: T (Toimistorakennukset, luokka 3)
+        t-id (first (energiatodistus-test-data/insert! [(make-et "T" 3)] laatija-id))
+        ;; Excluded for 2018: YAT (luokka 1), KAT (luokka 1), KREP (luokka 1)
+        yat-id (first (energiatodistus-test-data/insert! [(make-et "YAT" 1)] laatija-id))
+        kat-id (first (energiatodistus-test-data/insert! [(make-et "KAT" 1)] laatija-id))
+        krep-id (first (energiatodistus-test-data/insert! [(make-et "KREP" 1)] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id t-id]
+                               [laatija-id yat-id]
+                               [laatija-id kat-id]
+                               [laatija-id krep-id]])
+    ;; when: searching as public user
+    ;; then: only T is visible; YAT, KAT, KREP are excluded
+    (t/is (= 1 (count (search nil nil nil nil nil)))
+           "Regression: 2018 public search should still exclude YAT, KAT, KREP")))
+
+(t/deftest public-search-regression-2013-kayttotarkoitus-filtering-test
+  ;; given: signed 2013 energiatodistukset with excluded and non-excluded käyttötarkoitus
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        make-et (fn [kayttotarkoitus luokka-id]
+                  (-> (energiatodistus-test-data/generate-add 2013 true)
+                      (assoc-in [:perustiedot :kayttotarkoitus] kayttotarkoitus)
+                      (assoc-in [:lahtotiedot :sis-kuorma]
+                                (energiatodistus-test-data/sisainen-kuorma 2013 luokka-id))))
+        ;; Non-excluded for 2013: T (Toimistorakennukset, luokka 4 in 2013)
+        t-id (first (energiatodistus-test-data/insert! [(make-et "T" 4)] laatija-id))
+        ;; Excluded for 2013: YAT (luokka 1), KAT (luokka 1), MEP (luokka 1), MAEP (luokka 1)
+        yat-id (first (energiatodistus-test-data/insert! [(make-et "YAT" 1)] laatija-id))
+        kat-id (first (energiatodistus-test-data/insert! [(make-et "KAT" 1)] laatija-id))
+        mep-id (first (energiatodistus-test-data/insert! [(make-et "MEP" 1)] laatija-id))
+        maep-id (first (energiatodistus-test-data/insert! [(make-et "MAEP" 1)] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id t-id]
+                               [laatija-id yat-id]
+                               [laatija-id kat-id]
+                               [laatija-id mep-id]
+                               [laatija-id maep-id]])
+    ;; when: searching as public user
+    ;; then: only T is visible; YAT, KAT, MEP, MAEP are excluded
+    (t/is (= 1 (count (search nil nil nil nil nil)))
+           "Regression: 2013 public search should still exclude YAT, KAT, MEP, MAEP")))
+
 (t/deftest deleted-are-not-found-test
   (let [{:keys [laatijat energiatodistukset] :as test-data-set} (test-data-set)
         laatija-ids (-> laatijat keys sort)]
