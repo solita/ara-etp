@@ -74,7 +74,7 @@
         laatimsvaihe (-> energiatodistus :perustiedot :laatimisvaihe)]
     (and (not (contains? #{"A" "A0" "A+"} e-luokka))
          (not has-valid-ppp?)
-         (not (= laatimsvaihe 1)))))
+         (not (contains? #{0 1} laatimsvaihe)))))
 
 
 (defn generate-energiatodistus-html
