@@ -207,7 +207,8 @@ describe('EtHakuUtils:', () => {
         OPERATOR_TYPES.LAATIMISVAIHE,
         OPERATOR_TYPES.KIELISYYS,
         OPERATOR_TYPES.ILMANVAIHTOTYYPPI,
-        OPERATOR_TYPES.PATEVYYSTASO
+        OPERATOR_TYPES.PATEVYYSTASO,
+        OPERATOR_TYPES.HAVAINNOINTIKAYNTITYYPPI
       ];
 
       const value = '1';
@@ -229,7 +230,8 @@ describe('EtHakuUtils:', () => {
         OPERATOR_TYPES.LAATIMISVAIHE,
         OPERATOR_TYPES.KIELISYYS,
         OPERATOR_TYPES.ILMANVAIHTOTYYPPI,
-        OPERATOR_TYPES.PATEVYYSTASO
+        OPERATOR_TYPES.PATEVYYSTASO,
+        OPERATOR_TYPES.HAVAINNOINTIKAYNTITYYPPI
       ];
 
       const value = 'a';
@@ -349,6 +351,22 @@ describe('EtHakuUtils:', () => {
       const expected = `[[["<","key1",4],["=","key2",3]],[["between","key3",1,4]]]`;
 
       expect(EtHakuUtils.searchString(criteria)).toEqual(expected);
+    });
+  });
+
+  // === AE-2622: ET2026 search tests ===
+
+  // Test 12: blockToQueryParameter — ilmastoselvitys field
+  describe('blockToQueryParameter with ilmastoselvitys field', () => {
+    it('given a block with ilmastoselvitys.laadintaperuste, when converting to query parameter, then returns Maybe.Some with correct query', () => {
+      const block = [
+        '=',
+        'energiatodistus.ilmastoselvitys.laadintaperuste',
+        '1'
+      ];
+      const result = EtHakuUtils.blockToQueryParameter(flatSchema, block);
+
+      expect(Maybe.isSome(result)).toBe(true);
     });
   });
 });

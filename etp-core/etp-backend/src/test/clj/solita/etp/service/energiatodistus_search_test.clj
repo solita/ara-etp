@@ -1025,3 +1025,302 @@
         (t/is (= 4 (count filtered-results)))
         (t/is (every? #(= nil (:perusparannuspassi-id %))
                       filtered-results))))))
+
+;; === AE-2622: ET2026-kenttien lisääminen energiatodistushakuun ===
+
+;; Test 11: private-search-schema sisältää ET2026-polut (schema-validointi)
+(t/deftest private-search-schema-contains-et2026-fields-test
+  ;; given: the private-search-schema
+  ;; when: checking for ET2026-specific field paths
+  ;; then: all expected paths are present
+  (t/is (contains? service/private-search-schema
+                   "energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus.energiankaytto")
+        "private-search-schema should contain ilmastoselvitys hiilijalanjalki rakennus field")
+  (t/is (contains? service/private-search-schema
+                   "energiatodistus.ilmastoselvitys.hiilikadenjalki.rakennus.uudelleenkaytto")
+        "private-search-schema should contain ilmastoselvitys hiilikadenjalki rakennus field")
+  (t/is (contains? service/private-search-schema
+                   "energiatodistus.perustiedot.havainnointikayntityyppi-id")
+        "private-search-schema should contain havainnointikayntityyppi-id")
+  (t/is (contains? service/private-search-schema
+                   "energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin")
+        "private-search-schema should contain energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin")
+  (t/is (contains? service/private-search-schema
+                   "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko")
+        "private-search-schema should contain uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko")
+  (t/is (contains? service/private-search-schema
+                   "energiatodistus.toteutunut-ostoenergiankulutus.uusiutuvat-polttoaineet-vuosikulutus-yhteensa")
+        "private-search-schema should contain uusiutuvat-polttoaineet-vuosikulutus-yhteensa")
+  (t/is (contains? service/private-search-schema
+                   "energiatodistus.huomiot.lammitys.kayttoikaa-jaljella-arvio-vuosina")
+        "private-search-schema should contain kayttoikaa-jaljella-arvio-vuosina"))
+
+;; Test 12: public-search-schema EI sisällä ET2026-polkuja
+(t/deftest public-search-schema-excludes-et2026-fields-test
+  ;; given: the public-search-schema
+  ;; when: checking for ET2026-specific field paths
+  ;; then: none of them are present
+  (t/is (not (contains? service/public-search-schema
+                        "energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus.energiankaytto"))
+        "public-search-schema should NOT contain ilmastoselvitys fields")
+  (t/is (not (contains? service/public-search-schema
+                        "energiatodistus.perustiedot.havainnointikayntityyppi-id"))
+        "public-search-schema should NOT contain havainnointikayntityyppi-id"))
+
+;; Test 1: ET2026 ilmastoselvitys-kenttien haku — numeerinen kenttä
+(t/deftest search-by-ilmastoselvitys-hiilijalanjalki-numeric-test
+  ;; given: ET2026 energiatodistukset with known ilmastoselvitys values
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        energiankaytto (-> energiatodistus
+                           :ilmastoselvitys
+                           :hiilijalanjalki
+                           :rakennus
+                           :energiankaytto)]
+    ;; when: searching by ilmastoselvitys.hiilijalanjalki.rakennus.energiankaytto with correct value
+    ;; then: the energiatodistus is found
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["=" "energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus.energiankaytto"
+               energiankaytto]]]))
+    ;; when: searching with wrong value
+    ;; then: the energiatodistus is not found
+    (t/is (not (search-and-assert
+                 test-data-set
+                 id
+                 [[["=" "energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus.energiankaytto"
+                    (+ energiankaytto 1M)]]])))))
+
+;; Test 2: ET2026 ilmastoselvitys-kenttien haku — merkkijonokenttä
+(t/deftest search-by-ilmastoselvitys-string-field-test
+  ;; given: ET2026 energiatodistukset with known ilmastoselvitys string value
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        laatija-val (-> energiatodistus :ilmastoselvitys :laatija)]
+    ;; when: searching by ilmastoselvitys.laatija with correct value
+    ;; then: the energiatodistus is found
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["=" "energiatodistus.ilmastoselvitys.laatija" laatija-val]]]))
+    ;; when: searching with wrong value
+    ;; then: the energiatodistus is not found
+    (t/is (not (search-and-assert
+                 test-data-set
+                 id
+                 [[["=" "energiatodistus.ilmastoselvitys.laatija"
+                    (str "wrong-" laatija-val)]]])))))
+
+;; Test 3: ET2026 ilmastoselvitys hiilikädenjälki-kenttien haku (syvä polku)
+(t/deftest search-by-ilmastoselvitys-hiilikadenjalki-test
+  ;; given: ET2026 energiatodistukset with known hiilikadenjalki value
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        uudelleenkaytto (-> energiatodistus
+                            :ilmastoselvitys
+                            :hiilikadenjalki
+                            :rakennus
+                            :uudelleenkaytto)]
+    ;; when: searching by deep path hiilikadenjalki.rakennus.uudelleenkaytto
+    ;; then: the energiatodistus is found
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["=" "energiatodistus.ilmastoselvitys.hiilikadenjalki.rakennus.uudelleenkaytto"
+               uudelleenkaytto]]]))
+    ;; when: searching with wrong value
+    ;; then: the energiatodistus is not found
+    (t/is (not (search-and-assert
+                 test-data-set
+                 id
+                 [[["=" "energiatodistus.ilmastoselvitys.hiilikadenjalki.rakennus.uudelleenkaytto"
+                    (+ uudelleenkaytto 1M)]]])))))
+
+;; Test 4: ET2026 havainnointikayntityyppi-id -kenttien haku
+(t/deftest search-by-havainnointikayntityyppi-id-test
+  ;; given: ET2026 energiatodistukset with known havainnointikayntityyppi-id
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        havainnointikayntityyppi-id (-> energiatodistus
+                                        :perustiedot
+                                        :havainnointikayntityyppi-id)]
+    ;; when: searching by havainnointikayntityyppi-id with correct value
+    ;; then: the energiatodistus is found
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["=" "energiatodistus.perustiedot.havainnointikayntityyppi-id"
+               havainnointikayntityyppi-id]]]))
+    ;; when: searching with a non-matching value
+    ;; then: the energiatodistus is not found
+    (t/is (not (search-and-assert
+                 test-data-set
+                 id
+                 [[["=" "energiatodistus.perustiedot.havainnointikayntityyppi-id"
+                    -999]]])))))
+
+;; Test 5: ET2026 lähtötietojen uusien kenttien haku — boolean-kenttä
+(t/deftest search-by-energiankulutuksen-valmius-boolean-test
+  ;; given: ET2026 energiatodistukset with known boolean field value
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        valmius-val (-> energiatodistus
+                        :lahtotiedot
+                        :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin)]
+    ;; when: searching by the boolean field with correct value
+    ;; then: the energiatodistus is found
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["=" "energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin"
+               valmius-val]]]))
+    ;; when: searching with opposite boolean value
+    ;; then: the energiatodistus is not found
+    (t/is (not (search-and-assert
+                 test-data-set
+                 id
+                 [[["=" "energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin"
+                    (not valmius-val)]]])))))
+
+;; Test 6: ET2026 lähtötietojen lammitys-sisäkkäisen uuden kentän haku
+(t/deftest search-by-lammonjako-lampotilajousto-test
+  ;; given: ET2026 energiatodistukset with known nested boolean field value
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        lampotilajousto-val (-> energiatodistus
+                                :lahtotiedot
+                                :lammitys
+                                :lammonjako-lampotilajousto)]
+    ;; when: searching by lammonjako-lampotilajousto with correct value
+    ;; then: the energiatodistus is found
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["=" "energiatodistus.lahtotiedot.lammitys.lammonjako-lampotilajousto"
+               lampotilajousto-val]]]))
+    ;; when: searching with opposite boolean value
+    ;; then: the energiatodistus is not found
+    (t/is (not (search-and-assert
+                 test-data-set
+                 id
+                 [[["=" "energiatodistus.lahtotiedot.lammitys.lammonjako-lampotilajousto"
+                    (not lampotilajousto-val)]]])))))
+
+;; Test 7: ET2026 tulokset — uusiutuvat-omavaraisenergiat-kokonaistuotanto haku
+(t/deftest search-by-uusiutuvat-omavaraisenergiat-kokonaistuotanto-test
+  ;; given: ET2026 energiatodistukset with known kokonaistuotanto value
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        aurinkosahko (-> energiatodistus
+                         :tulokset
+                         :uusiutuvat-omavaraisenergiat-kokonaistuotanto
+                         :aurinkosahko)]
+    ;; when: searching by kokonaistuotanto.aurinkosahko with correct value
+    ;; then: the energiatodistus is found
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["=" "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko"
+               aurinkosahko]]]))
+    ;; when: searching with wrong value
+    ;; then: the energiatodistus is not found
+    (t/is (not (search-and-assert
+                 test-data-set
+                 id
+                 [[["=" "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko"
+                    (+ aurinkosahko 1M)]]])))))
+
+;; Test 8: ET2026 toteutunut-ostoenergiankulutus — uudet kentät
+(t/deftest search-by-toteutunut-ostoenergiankulutus-new-fields-test
+  ;; given: ET2026 energiatodistukset with known toteutunut-ostoenergiankulutus values
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        uusiutuvat-yhteensa (-> energiatodistus
+                                :toteutunut-ostoenergiankulutus
+                                :uusiutuvat-polttoaineet-vuosikulutus-yhteensa)
+        alkuperavuosi (-> energiatodistus
+                          :toteutunut-ostoenergiankulutus
+                          :tietojen-alkuperavuosi)]
+    ;; when: searching by uusiutuvat-polttoaineet-vuosikulutus-yhteensa
+    ;; then: the energiatodistus is found
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["=" "energiatodistus.toteutunut-ostoenergiankulutus.uusiutuvat-polttoaineet-vuosikulutus-yhteensa"
+               uusiutuvat-yhteensa]]]))
+    ;; when: searching by tietojen-alkuperavuosi
+    ;; then: the energiatodistus is found
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["=" "energiatodistus.toteutunut-ostoenergiankulutus.tietojen-alkuperavuosi"
+               alkuperavuosi]]]))))
+
+;; Test 9: ET2026 huomiot — kayttoikaa-jaljella-arvio-vuosina -haku
+(t/deftest search-by-kayttoikaa-jaljella-arvio-vuosina-test
+  ;; given: ET2026 energiatodistukset with known huomiot value
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        kayttoikaa (-> energiatodistus
+                       :huomiot
+                       :lammitys
+                       :kayttoikaa-jaljella-arvio-vuosina)]
+    ;; when: searching by kayttoikaa-jaljella-arvio-vuosina with correct value
+    ;; then: the energiatodistus is found
+    (t/is (search-and-assert
+            test-data-set
+            id
+            [[["=" "energiatodistus.huomiot.lammitys.kayttoikaa-jaljella-arvio-vuosina"
+               kayttoikaa]]]))
+    ;; when: searching with wrong value
+    ;; then: the energiatodistus is not found
+    (t/is (not (search-and-assert
+                 test-data-set
+                 id
+                 [[["=" "energiatodistus.huomiot.lammitys.kayttoikaa-jaljella-arvio-vuosina"
+                    (+ kayttoikaa 100)]]])))))
+
+;; Test 10: ET2026-kenttien haku EI palauta ET2018-todistuksia (nil-arvot)
+(t/deftest search-et2026-field-excludes-et2018-test
+  ;; given: both ET2018 and ET2026 energiatodistukset
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        ;; Insert ET2018 todistus
+        et2018 (-> (energiatodistus-test-data/generate-add 2018 true)
+                   (assoc :draft-visible-to-paakayttaja true))
+        et2018-id (first (energiatodistus-test-data/insert! [et2018] laatija-id))
+        ;; Insert ET2026 todistus
+        et2026 (-> (energiatodistus-test-data/generate-add 2026 true)
+                   (assoc :draft-visible-to-paakayttaja true))
+        et2026-id (first (energiatodistus-test-data/insert! [et2026] laatija-id))
+        laadintaperuste (-> et2026 :ilmastoselvitys :laadintaperuste)]
+    ;; when: searching by ilmastoselvitys.laadintaperuste with = operator
+    ;; then: only ET2026 todistus is found
+    (let [results (service/search
+                    ts/*db*
+                    kayttaja-test-data/paakayttaja
+                    {:where [[["=" "energiatodistus.ilmastoselvitys.laadintaperuste"
+                               laadintaperuste]]]}
+                    energiatodistus-schema/Energiatodistus)]
+      (t/is (= 1 (count results))
+            "Only ET2026 todistus should match ilmastoselvitys field search")
+      (t/is (= et2026-id (:id (first results)))
+            "The found todistus should be the ET2026 one"))
+    ;; when: searching with nil? operator on same field
+    ;; then: ET2018 todistus is found (field is nil for ET2018)
+    (let [results (service/search
+                    ts/*db*
+                    kayttaja-test-data/paakayttaja
+                    {:where [[["nil?" "energiatodistus.ilmastoselvitys.laadintaperuste"]]]}
+                    energiatodistus-schema/Energiatodistus)]
+      (t/is (contains? (set (map :id results)) et2018-id)
+            "ET2018 todistus should appear when searching with nil? on ilmastoselvitys field"))))
