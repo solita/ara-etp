@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - main
-      - AE-2474/documentation-update
+      - db-docs
 
 jobs:
   db-docs:
