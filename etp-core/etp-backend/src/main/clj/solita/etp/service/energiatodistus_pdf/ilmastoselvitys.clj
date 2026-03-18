@@ -12,22 +12,21 @@
    :energiankaytto
    :purkuvaihe])
 
-(def ^:private hiilikadenjalki-fields
-  [:uudelleenkaytto
-   :kierratys
-   :ylimaarainen-uusiutuvaenergia
-   :hiilivarastovaikutus
-   :karbonatisoituminen])
-
 (defn hiilijalanjalki-rakennus-yhteensa
   "Calculate the sum of all hiilijalanjälki rakennus values. Nil values are ignored."
   [hiilijalanjalki-rakennus]
-  (reduce + 0 (remove nil? (vals (select-keys hiilijalanjalki-rakennus hiilijalanjalki-fields)))))
+  (->> (select-keys hiilijalanjalki-rakennus hiilijalanjalki-fields)
+       vals
+       (remove nil?)
+       (reduce + 0)))
 
 (defn hiilijalanjalki-rakennuspaikka-yhteensa
   "Calculate the sum of all hiilijalanjälki rakennuspaikka values. Nil values are ignored."
   [hiilijalanjalki-rakennuspaikka]
-  (reduce + 0 (remove nil? (vals (select-keys hiilijalanjalki-rakennuspaikka hiilijalanjalki-fields)))))
+  (->> (select-keys hiilijalanjalki-rakennuspaikka hiilijalanjalki-fields)
+       vals
+       (remove nil?)
+       (reduce + 0)))
 
 (defn has-ilmastoselvitys?
   "Returns true if the energiatodistus has a completed ilmastoselvitys."
