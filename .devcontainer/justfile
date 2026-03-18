@@ -1,0 +1,11 @@
+# ETP development commands
+
+# Start the frontend dev server
+frontend:
+    echo "Start this on the host machine or fix running in the container"
+    # For some reason this didn't work: 
+    # cd /workspace/etp-front && ETP_DEV_FRONT_USER=laatija@solita.fi WEBPACK_PORT=3001 WEBPACK_HOST='0.0.0.0' ETP_2026='true' npm run dev
+
+# Start the backend with a socket REPL on port 7888
+backend:
+    cd /workspace/etp-core/etp-backend && clojure -J-Djava.awt.headless=true -J-Dclojure.server.repl="{:port 7888 :accept clojure.core.server/repl :address \"0.0.0.0\"}" -M:dev -r

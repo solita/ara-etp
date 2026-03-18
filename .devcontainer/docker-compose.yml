@@ -1,0 +1,28 @@
+include:
+  - path: ../etp-core/docker/docker-compose.yml
+
+services:
+  devcontainer:
+    environment:
+      # solita.etp.config
+      DB_HOST: db
+      SMTP_HOST: smtp
+      SMTP_PORT: 25
+      LASKUTUS_SFTP_HOST: sftp
+      LASKUTUS_SFTP_PORT: 22
+      S3_HOST: minio
+      S3_PORT: 9000
+      SYSTEM_SIGNATURE_SESSION_TIMEOUT_MINUTES: 52560000
+      KMS_PORT: 8080
+      KMS_HOST: kms
+    env_file:
+      - ./backend.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    networks:
+      - default
+      - minio
