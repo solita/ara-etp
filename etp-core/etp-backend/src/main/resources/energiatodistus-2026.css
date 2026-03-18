@@ -886,7 +886,6 @@ table.common-table td:last-child {
 
 .ilmastoselvitys table {
     width: 100%;
-    margin: 0 auto;
     border-collapse: collapse;
     margin: 4px 5px 20px 5px;
     table-layout: fixed;
