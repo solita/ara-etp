@@ -12,13 +12,13 @@
 
 (def Yritys
   {:nimi             common-schema/String150
-   :katuosoite       common-schema/String50
+   :katuosoite       common-schema/String75
    :postinumero      YritysPostinumero
    :postitoimipaikka common-schema/String30})
 
 (def Perustiedot
-  {:katuosoite-fi            common-schema/String50
-   :katuosoite-sv            common-schema/String50
+  {:katuosoite-fi            common-schema/String75
+   :katuosoite-sv            common-schema/String75
    :valmistumisvuosi         common-schema/Year
    :julkinen-rakennus        schema/Bool
    :havainnointikaynti       common-schema/Date
@@ -27,13 +27,13 @@
    :keskeiset-suositukset-fi common-schema/String2500
    :keskeiset-suositukset-sv common-schema/String2500
    :laatimisvaihe            common-schema/Key
-   :kiinteistotunnus         common-schema/String50
+   :kiinteistotunnus         common-schema/String75
    :yritys                   Yritys
    :tilaaja                  common-schema/String200
    :rakennusosa              common-schema/String100
    :kieli                    common-schema/Key
-   :nimi-fi                  common-schema/String50
-   :nimi-sv                  common-schema/String50
+   :nimi-fi                  common-schema/String75
+   :nimi-sv                  common-schema/String75
 
    ;; This is alakäyttötarkoitusluokka
    ;; Käyttötarkoitusluokka can be inferred from this
@@ -287,13 +287,13 @@
       (map/dissoc-in [:toteutunut-ostoenergiankulutus :polttoaineet-vuosikulutus-yhteensa])))
 
 (def UserDefinedEnergiamuoto
-  {:nimi         common-schema/String50
+  {:nimi         common-schema/String75
    :muotokerroin common-schema/NonNegative
    :ostoenergia  common-schema/NonNegative})
 
 (def UserDefinedEnergia
-  {:nimi-fi      common-schema/String50
-   :nimi-sv      common-schema/String50
+  {:nimi-fi      common-schema/String75
+   :nimi-sv      common-schema/String75
    :vuosikulutus common-schema/NonNegative})
 
 (def EnergiatodistusSave2013
@@ -348,15 +348,15 @@
    :rakennuspaikka  Hiilikadenjalkirakennuspaikka})
 
 (def Ilmastoselvitys
-  {:laatimisajankohta        common-schema/Date
-   :laatija                  common-schema/String50
-   :yritys                   common-schema/String150
-   :yritys-osoite            common-schema/String50
-   :yritys-postinumero       common-schema/String8
-   :yritys-postitoimipaikka  common-schema/String30
-   :laadintaperuste          common-schema/Key
-   :hiilijalanjalki          Hiilijalanjalki
-   :hiilikadenjalki          Hiilikadenjalki})
+  {:laatimisajankohta       common-schema/Date
+   :laatija                 common-schema/String50
+   :yritys                  common-schema/String150
+   :yritys-osoite           common-schema/String50
+   :yritys-postinumero      common-schema/String8
+   :yritys-postitoimipaikka common-schema/String30
+   :laadintaperuste         common-schema/Key
+   :hiilijalanjalki         Hiilijalanjalki
+   :hiilikadenjalki         Hiilikadenjalki})
 
 (def EnergiatodistusSave2026
   (-> (dissoc-not-in-2026 EnergiatodistusSave2018)
@@ -394,7 +394,7 @@
               :draft-visible-to-paakayttaja
               :bypass-validation-limits
               :bypass-validation-limits-reason)
-      (assoc-in [:perustiedot :nimi] (schema/maybe common-schema/String50))
+      (assoc-in [:perustiedot :nimi] (schema/maybe common-schema/String75))
       xschema/optional-key-for-maybe))
 
 (def EnergiatodistusSave2013External
