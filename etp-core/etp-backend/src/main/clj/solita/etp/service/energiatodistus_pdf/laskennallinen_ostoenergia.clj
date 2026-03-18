@@ -1,7 +1,8 @@
 (ns solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia
   (:require
     [solita.etp.service.localization :as loc]
-    [solita.etp.service.complete-energiatodistus :as energiatodistus]))
+    [solita.etp.service.complete-energiatodistus :as energiatodistus]
+    [solita.etp.service.energiatodistus-pdf.ilmastoselvitys :as ilmastoselvitys]))
 
 (defn- table-ostoenergia [kieli items]
   (let [l (kieli loc/et-pdf-localization)]
@@ -92,4 +93,4 @@
         {:dt (l :uusiutuva-energian-osuus)
          :dd (str "TODO: Add later when ready")}
         {:dt (l :kasvihuonepaastot)
-         :dd (str "TODO: Add gwp later when ready")}])]))
+         :dd (ilmastoselvitys/gwp-value-for-etusivu energiatodistus)}])]))
