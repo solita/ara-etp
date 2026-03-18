@@ -29,16 +29,6 @@
   [hiilijalanjalki-rakennuspaikka]
   (reduce + 0 (remove nil? (vals (select-keys hiilijalanjalki-rakennuspaikka hiilijalanjalki-fields)))))
 
-(defn hiilikadenjalki-rakennus-yhteensa
-  "Calculate the sum of all hiilikädenjälki rakennus values. Nil values are ignored."
-  [hiilikadenjalki-rakennus]
-  (reduce + 0 (remove nil? (vals (select-keys hiilikadenjalki-rakennus hiilikadenjalki-fields)))))
-
-(defn hiilikadenjalki-rakennuspaikka-yhteensa
-  "Calculate the sum of all hiilikädenjälki rakennuspaikka values. Nil values are ignored."
-  [hiilikadenjalki-rakennuspaikka]
-  (reduce + 0 (remove nil? (vals (select-keys hiilikadenjalki-rakennuspaikka hiilikadenjalki-fields)))))
-
 (defn has-ilmastoselvitys?
   "Returns true if the energiatodistus has a completed ilmastoselvitys."
   [energiatodistus]
