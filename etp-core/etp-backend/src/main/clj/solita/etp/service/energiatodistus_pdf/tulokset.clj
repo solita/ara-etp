@@ -32,7 +32,8 @@
 
 (defn- ostoenergia-section
   [energiatodistus l]
-  (let [energiamuoto (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])]
+  (let [energiamuoto (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])
+        e-luku-value (get-in energiatodistus [:tulokset :e-luku])]
     [:div {:class "tulokset-section"}
      [:table {:class "tulokset-table tulokset-ostoenergia-table"}
       [:colgroup
@@ -62,11 +63,11 @@
        (ostoenergia-row (l :kaukojaahdytys-table)         energiamuoto "kaukojaahdytys")
        [:tr
         [:td {:class "tulokset-label"} (l :tulokset-yhteensa)]
-        [:td {:class "num"} "\u00a0"]
+        [:td {:class "num"} (fmt-summa (:summa energiamuoto))]
         [:td {:class "num"} "\u00a0"]
         [:td {:class "num"} "\u00a0"]
         [:td {:class "num"} (fmt-summa (:kertoimella-summa energiamuoto))]
-        [:td {:class "num"} (fmt-summa (:kertoimella-summa-nettoala energiamuoto))]]]]]))
+        [:td {:class "num"} (fmt-summa e-luku-value)]]]]]))
 
 (defn- uusiutuva-row
   [label omavarais kokonaistuotanto field-key]
