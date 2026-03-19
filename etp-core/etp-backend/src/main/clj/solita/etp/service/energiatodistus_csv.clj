@@ -183,6 +183,39 @@
    (for [child [:suositukset-fi :suositukset-sv :lisatietoja-fi
                 :lisatietoja-sv]]
      [:huomiot child])
+   ;; ET2026-specific columns
+   ;; lahtotiedot
+   [[:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
+    [:lahtotiedot :lammitys :lammonjako-lampotilajousto]]
+   ;; tulokset: uusiutuvat-omavaraisenergiat-kokonaistuotanto
+   (for [child [:aurinkosahko :aurinkolampo :tuulisahko :lampopumppu :muulampo :muusahko]]
+     [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto child])
+   ;; toteutunut-ostoenergiankulutus: new fields
+   (for [child [:tietojen-alkuperavuosi :lisatietoja-fi :lisatietoja-sv
+                :uusiutuvat-polttoaineet-vuosikulutus-yhteensa
+                :fossiiliset-polttoaineet-vuosikulutus-yhteensa
+                :uusiutuva-energia-vuosituotto-yhteensa]]
+     [:toteutunut-ostoenergiankulutus child])
+   ;; huomiot: kasvihuonepaastojen-muutos per category, per toimenpide index
+   (apply concat
+          (for [parent [:ymparys :alapohja-ylapohja :lammitys :iv-ilmastointi
+                        :valaistus-muut]]
+            (for [idx (range 3)]
+              [:huomiot parent :toimenpide idx :kasvihuonepaastojen-muutos])))
+   ;; huomiot.lammitys: kayttoikaa-jaljella-arvio-vuosina
+   [[:huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina]]
+   ;; ilmastoselvitys
+   (for [child [:laatimisajankohta :laatija :yritys :yritys-osoite
+                :yritys-postinumero :yritys-postitoimipaikka :laadintaperuste]]
+     [:ilmastoselvitys child])
+   (for [subcategory [:rakennus :rakennuspaikka]
+         child [:rakennustuotteiden-valmistus :kuljetukset-tyomaavaihe
+                :rakennustuotteiden-vaihdot :energiankaytto :purkuvaihe]]
+     [:ilmastoselvitys :hiilijalanjalki subcategory child])
+   (for [subcategory [:rakennus :rakennuspaikka]
+         child [:uudelleenkaytto :kierratys :ylimaarainen-uusiutuvaenergia
+                :hiilivarastovaikutus :karbonatisoituminen]]
+     [:ilmastoselvitys :hiilikadenjalki subcategory child])
    [[:lisamerkintoja-fi]
     [:lisamerkintoja-sv]]))
 

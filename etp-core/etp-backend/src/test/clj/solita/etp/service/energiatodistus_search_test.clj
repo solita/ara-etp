@@ -1025,3 +1025,281 @@
         (t/is (= 4 (count filtered-results)))
         (t/is (every? #(= nil (:perusparannuspassi-id %))
                       filtered-results))))))
+
+;; === ET2026 new search fields tests ===
+
+(defn et2026-test-data-set
+  "Creates ET2026 test data with known field values for search testing.
+   Returns map with :laatijat, :energiatodistukset, :laatija-id, :paakayttaja-id."
+  []
+  (let [paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
+        [laatija-id] (-> (laatija-test-data/generate-and-insert! 1) keys sort)
+        energiatodistus-add (first (energiatodistus-test-data/generate-adds 1 2026 true))
+        energiatodistus-id (first (energiatodistus-test-data/insert! [energiatodistus-add] laatija-id))]
+    {:laatija-id     laatija-id
+     :paakayttaja-id paakayttaja-id
+     :energiatodistus-id energiatodistus-id
+     :energiatodistus    energiatodistus-add}))
+
+;; 1.1 - Search by perustiedot.havainnointikayntityyppi-id
+(t/deftest search-by-havainnointikayntityyppi-id-2026-test
+  (let [{:keys [laatija-id energiatodistus-id energiatodistus]} (et2026-test-data-set)
+        havainnointikayntityyppi-id (-> energiatodistus :perustiedot :havainnointikayntityyppi-id)
+        whoami (test-whoami/laatija laatija-id)]
+    ;; Given an ET2026 with a known havainnointikayntityyppi-id
+    ;; When searching with the correct value
+    ;; Then the energiatodistus is found
+    (t/testing "Search with correct havainnointikayntityyppi-id finds the ET"
+      (let [results (search whoami
+                            [[["=" "energiatodistus.perustiedot.havainnointikayntityyppi-id"
+                               havainnointikayntityyppi-id]]]
+                            nil nil nil)]
+        (t/is (some #(= energiatodistus-id (:id %)) results))))
+
+    ;; When searching with a non-matching value
+    ;; Then the energiatodistus is not found
+    (t/testing "Search with wrong havainnointikayntityyppi-id does not find the ET"
+      (let [wrong-value (inc havainnointikayntityyppi-id)
+            results (search whoami
+                            [[["=" "energiatodistus.perustiedot.havainnointikayntityyppi-id"
+                               wrong-value]]]
+                            nil nil nil)]
+        (t/is (not (some #(= energiatodistus-id (:id %)) results)))))))
+
+;; 1.2 - Search by lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin
+(t/deftest search-by-energiankulutuksen-valmius-2026-test
+  (let [{:keys [laatija-id energiatodistus-id energiatodistus]} (et2026-test-data-set)
+        valmius-value (-> energiatodistus :lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin)
+        whoami (test-whoami/laatija laatija-id)]
+    ;; Given an ET2026 with a known boolean value
+    ;; When searching with the correct boolean
+    ;; Then the energiatodistus is found
+    (t/testing "Search with correct valmius value finds the ET"
+      (let [results (search whoami
+                            [[["=" "energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin"
+                               valmius-value]]]
+                            nil nil nil)]
+        (t/is (some #(= energiatodistus-id (:id %)) results))))
+
+    ;; When searching with the opposite boolean
+    ;; Then the energiatodistus is not found
+    (t/testing "Search with opposite valmius value does not find the ET"
+      (let [results (search whoami
+                            [[["=" "energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin"
+                               (not valmius-value)]]]
+                            nil nil nil)]
+        (t/is (not (some #(= energiatodistus-id (:id %)) results)))))))
+
+;; 1.3 - Search by lahtotiedot.lammitys.lammonjako-lampotilajousto
+(t/deftest search-by-lammonjako-lampotilajousto-2026-test
+  (let [{:keys [laatija-id energiatodistus-id energiatodistus]} (et2026-test-data-set)
+        lampotilajousto (-> energiatodistus :lahtotiedot :lammitys :lammonjako-lampotilajousto)
+        whoami (test-whoami/laatija laatija-id)]
+    ;; Given an ET2026 with a known lammonjako-lampotilajousto value
+    ;; When searching with the correct boolean
+    ;; Then the energiatodistus is found
+    (t/testing "Search with correct lampotilajousto value finds the ET"
+      (let [results (search whoami
+                            [[["=" "energiatodistus.lahtotiedot.lammitys.lammonjako-lampotilajousto"
+                               lampotilajousto]]]
+                            nil nil nil)]
+        (t/is (some #(= energiatodistus-id (:id %)) results))))))
+
+;; 1.4 - Search by tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto fields
+(t/deftest search-by-uusiutuvat-omavaraisenergiat-kokonaistuotanto-2026-test
+  (let [{:keys [laatija-id energiatodistus-id energiatodistus]} (et2026-test-data-set)
+        kokonaistuotanto (-> energiatodistus :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto)
+        whoami (test-whoami/laatija laatija-id)]
+    (doseq [field-key [:aurinkosahko :aurinkolampo :tuulisahko :lampopumppu :muulampo :muusahko]]
+      (let [value (get kokonaistuotanto field-key)
+            field-name (str "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto."
+                            (name field-key))]
+        ;; Given an ET2026 with known kokonaistuotanto values
+        ;; When searching with = operator for the exact value
+        ;; Then the energiatodistus is found
+        (t/testing (str "Search by " (name field-key) " with = finds the ET")
+          (let [results (search whoami
+                                [[["=" field-name value]]]
+                                nil nil nil)]
+            (t/is (some #(= energiatodistus-id (:id %)) results))))
+
+        ;; When searching with > for a value larger than the actual
+        ;; Then the energiatodistus is not found
+        (t/testing (str "Search by " (name field-key) " with > too large value does not find the ET")
+          (let [results (search whoami
+                                [[[">" field-name (+ value 9999)]]]
+                                nil nil nil)]
+            (t/is (not (some #(= energiatodistus-id (:id %)) results)))))))))
+
+;; 1.5 - Search by toteutunut-ostoenergiankulutus new fields
+(t/deftest search-by-toteutunut-ostoenergiankulutus-new-fields-2026-test
+  (let [{:keys [laatija-id energiatodistus-id energiatodistus]} (et2026-test-data-set)
+        toe (-> energiatodistus :toteutunut-ostoenergiankulutus)
+        whoami (test-whoami/laatija laatija-id)]
+
+    ;; Numeric fields
+    (doseq [field-key [:uusiutuvat-polttoaineet-vuosikulutus-yhteensa
+                       :fossiiliset-polttoaineet-vuosikulutus-yhteensa
+                       :uusiutuva-energia-vuosituotto-yhteensa]]
+      (let [value (get toe field-key)
+            field-name (str "energiatodistus.toteutunut-ostoenergiankulutus." (name field-key))]
+        ;; Given an ET2026 with known toteutunut-ostoenergiankulutus values
+        ;; When searching with = for the exact value
+        ;; Then the energiatodistus is found
+        (t/testing (str "Search by " (name field-key) " finds the ET")
+          (let [results (search whoami [[["=" field-name value]]] nil nil nil)]
+            (t/is (some #(= energiatodistus-id (:id %)) results))))))
+
+    ;; String field: lisatietoja-fi
+    (let [lisatietoja-fi (-> toe :lisatietoja-fi)
+          field-name "energiatodistus.toteutunut-ostoenergiankulutus.lisatietoja-fi"]
+      (t/testing "Search by lisatietoja-fi with ilike finds the ET"
+        (let [results (search whoami
+                              [[["ilike" field-name (str "%" lisatietoja-fi "%")]]]
+                              nil nil nil)]
+          (t/is (some #(= energiatodistus-id (:id %)) results)))))
+
+    ;; Year field: tietojen-alkuperavuosi
+    (let [alkuperavuosi (-> toe :tietojen-alkuperavuosi)
+          field-name "energiatodistus.toteutunut-ostoenergiankulutus.tietojen-alkuperavuosi"]
+      (t/testing "Search by tietojen-alkuperavuosi finds the ET"
+        (let [results (search whoami [[["=" field-name alkuperavuosi]]] nil nil nil)]
+          (t/is (some #(= energiatodistus-id (:id %)) results)))))))
+
+;; 1.6 - Search by huomiot.*.toimenpide.*.kasvihuonepaastojen-muutos
+(t/deftest search-by-kasvihuonepaastojen-muutos-2026-test
+  (let [{:keys [laatija-id energiatodistus-id energiatodistus]} (et2026-test-data-set)
+        ;; Get the kasvihuonepaastojen-muutos from the first toimenpide of iv-ilmastointi
+        kasvihuonepaastojen-muutos (-> energiatodistus :huomiot :iv-ilmastointi :toimenpide
+                                      first :kasvihuonepaastojen-muutos)
+        whoami (test-whoami/laatija laatija-id)]
+    ;; Given an ET2026 with a kasvihuonepaastojen-muutos value in huomiot
+    ;; When searching by this field
+    ;; Then the energiatodistus is found
+    (t/testing "Search by kasvihuonepaastojen-muutos finds the ET"
+      (let [results (search whoami
+                            [[["=" "energiatodistus.huomiot.iv-ilmastointi.toimenpide.0.kasvihuonepaastojen-muutos"
+                               kasvihuonepaastojen-muutos]]]
+                            nil nil nil)]
+        (t/is (some #(= energiatodistus-id (:id %)) results))))))
+
+;; 1.7 - Search by huomiot.lammitys.kayttoikaa-jaljella-arvio-vuosina
+(t/deftest search-by-kayttoikaa-jaljella-arvio-vuosina-2026-test
+  (let [{:keys [laatija-id energiatodistus-id energiatodistus]} (et2026-test-data-set)
+        arvio-vuosina (-> energiatodistus :huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina)
+        whoami (test-whoami/laatija laatija-id)]
+    ;; Given an ET2026 with a kayttoikaa-jaljella-arvio-vuosina value
+    ;; When searching by this field with = operator
+    ;; Then the energiatodistus is found
+    (t/testing "Search by kayttoikaa-jaljella-arvio-vuosina finds the ET"
+      (let [results (search whoami
+                            [[["=" "energiatodistus.huomiot.lammitys.kayttoikaa-jaljella-arvio-vuosina"
+                               arvio-vuosina]]]
+                            nil nil nil)]
+        (t/is (some #(= energiatodistus-id (:id %)) results))))))
+
+;; 1.8 - Search by ilmastoselvitys basic fields
+(t/deftest search-by-ilmastoselvitys-basic-fields-2026-test
+  (let [{:keys [laatija-id energiatodistus-id energiatodistus]} (et2026-test-data-set)
+        ilmastoselvitys (-> energiatodistus :ilmastoselvitys)
+        whoami (test-whoami/laatija laatija-id)]
+
+    ;; String fields
+    (doseq [field-key [:laatija :yritys :yritys-osoite :yritys-postitoimipaikka :yritys-postinumero]]
+      (let [value (get ilmastoselvitys field-key)
+            field-name (str "energiatodistus.ilmastoselvitys." (name field-key))]
+        ;; Given an ET2026 with known ilmastoselvitys string values
+        ;; When searching with ilike for the value
+        ;; Then the energiatodistus is found
+        (t/testing (str "Search by ilmastoselvitys." (name field-key) " finds the ET")
+          (let [results (search whoami
+                                [[["ilike" field-name (str "%" value "%")]]]
+                                nil nil nil)]
+            (t/is (some #(= energiatodistus-id (:id %)) results))))))
+
+    ;; Date field: laatimisajankohta
+    (let [laatimisajankohta (-> ilmastoselvitys :laatimisajankohta)
+          field-name "energiatodistus.ilmastoselvitys.laatimisajankohta"]
+      (t/testing "Search by ilmastoselvitys.laatimisajankohta finds the ET"
+        (let [results (search whoami
+                              [[["=" field-name laatimisajankohta]]]
+                              nil nil nil)]
+          (t/is (some #(= energiatodistus-id (:id %)) results)))))
+
+    ;; Classification field: laadintaperuste
+    (let [laadintaperuste (-> ilmastoselvitys :laadintaperuste)
+          field-name "energiatodistus.ilmastoselvitys.laadintaperuste"]
+      (t/testing "Search by ilmastoselvitys.laadintaperuste finds the ET"
+        (let [results (search whoami
+                              [[["=" field-name laadintaperuste]]]
+                              nil nil nil)]
+          (t/is (some #(= energiatodistus-id (:id %)) results)))))))
+
+;; 1.9 - Search by ilmastoselvitys.hiilijalanjalki and hiilikadenjalki
+(t/deftest search-by-ilmastoselvitys-hiilijalanjalki-2026-test
+  (let [{:keys [laatija-id energiatodistus-id energiatodistus]} (et2026-test-data-set)
+        whoami (test-whoami/laatija laatija-id)]
+    ;; Representative fields from each sub-category
+    (doseq [[category subcategory field-key]
+            [[:hiilijalanjalki :rakennus :rakennustuotteiden-valmistus]
+             [:hiilijalanjalki :rakennuspaikka :energiankaytto]
+             [:hiilikadenjalki :rakennus :uudelleenkaytto]
+             [:hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]]]
+      (let [value (get-in energiatodistus [:ilmastoselvitys category subcategory field-key])
+            field-name (str "energiatodistus.ilmastoselvitys."
+                            (name category) "." (name subcategory) "." (name field-key))]
+        ;; Given an ET2026 with known hiilijalanjalki/kadenjalki values
+        ;; When searching with = for the exact value
+        ;; Then the energiatodistus is found
+        (t/testing (str "Search by " field-name " finds the ET")
+          (let [results (search whoami
+                                [[["=" field-name value]]]
+                                nil nil nil)]
+            (t/is (some #(= energiatodistus-id (:id %)) results))))
+
+        ;; When searching with a non-matching value
+        ;; Then the energiatodistus is not found
+        (t/testing (str "Search by " field-name " with wrong value does not find the ET")
+          (let [results (search whoami
+                                [[["=" field-name (+ value 99999)]]]
+                                nil nil nil)]
+            (t/is (not (some #(= energiatodistus-id (:id %)) results)))))))))
+
+;; 1.10 - Authorization: laatija sees only own ET2026, paakayttaja sees signed ones
+(t/deftest search-et2026-authorization-test
+  (let [paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
+        [laatija-1-id] (-> (laatija-test-data/generate-and-insert! 1) keys sort)
+        [laatija-2-id] (-> (laatija-test-data/generate-and-insert! 1) keys sort)
+        ;; Create ET2026 for laatija-1 with known ilmastoselvitys.laatija
+        et-add-1 (-> (first (energiatodistus-test-data/generate-adds 1 2026 true))
+                     (assoc-in [:ilmastoselvitys :laatija] "Laatija Yksi"))
+        et-id-1 (first (energiatodistus-test-data/insert! [et-add-1] laatija-1-id))
+        ;; Create ET2026 for laatija-2 with different value
+        et-add-2 (-> (first (energiatodistus-test-data/generate-adds 1 2026 true))
+                     (assoc-in [:ilmastoselvitys :laatija] "Laatija Kaksi"))
+        et-id-2 (first (energiatodistus-test-data/insert! [et-add-2] laatija-2-id))
+        whoami-1 (test-whoami/laatija laatija-1-id)
+        whoami-2 (test-whoami/laatija laatija-2-id)
+        whoami-pk (test-whoami/paakayttaja paakayttaja-id)]
+
+    ;; Sign both ETs so paakayttaja can see them
+    (sign-energiatodistukset! [[laatija-1-id et-id-1] [laatija-2-id et-id-2]])
+
+    ;; Given two ET2026 certificates from different laatijat
+    ;; When laatija-1 searches by ilmastoselvitys.laatija
+    ;; Then laatija-1 sees only their own ET
+    (t/testing "Laatija sees only own ET2026 when searching by ET2026 field"
+      (let [results (search whoami-1
+                            [[["ilike" "energiatodistus.ilmastoselvitys.laatija" "%Laatija%"]]]
+                            nil nil nil)]
+        (t/is (= 1 (count results)))
+        (t/is (= et-id-1 (-> results first :id)))))
+
+    ;; When paakayttaja searches the same field
+    ;; Then paakayttaja sees both signed ETs
+    (t/testing "Paakayttaja sees all signed ET2026 when searching by ET2026 field"
+      (let [results (search whoami-pk
+                            [[["ilike" "energiatodistus.ilmastoselvitys.laatija" "%Laatija%"]]]
+                            nil nil nil)]
+        (t/is (= 2 (count results)))
+        (t/is (= #{et-id-1 et-id-2} (set (map :id results))))))))

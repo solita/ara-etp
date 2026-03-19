@@ -430,6 +430,7 @@ const perustiedot = {
   },
   rakennusosa: [...stringComparisons],
   havainnointikaynti: [havainnointikayntiEquals, havainnointikayntiBetween],
+  'havainnointikayntityyppi-id': [...numberComparisons],
   kieli: [luokitteluEquals(OPERATOR_TYPES.KIELISYYS)],
   'keskeiset-suositukset-fi': [...stringComparisons],
   'keskeiset-suositukset-sv': [...stringComparisons]
@@ -437,6 +438,7 @@ const perustiedot = {
 
 const lahtotiedot = {
   'lammitetty-nettoala': [...numberComparisons],
+  'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': [singleBoolean],
   rakennusvaippa: {
     ilmanvuotoluku: [...numberComparisons],
     ulkoseinat: {
@@ -563,7 +565,8 @@ const lahtotiedot = {
     ilmalampopumppu: {
       maara: [...numberComparisons],
       tuotto: [...numberComparisons]
-    }
+    },
+    'lammonjako-lampotilajousto': [singleBoolean]
   },
   jaahdytysjarjestelma: {
     'jaahdytyskauden-painotettu-kylmakerroin': [...numberComparisons]
@@ -673,6 +676,14 @@ const tulokset = {
     kvesi: [...numberComparisons],
     'kvesi-neliovuosikuorma': [...numberComparisonsWithoutEq]
   },
+  'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
+    aurinkosahko: [...numberComparisons],
+    aurinkolampo: [...numberComparisons],
+    tuulisahko: [...numberComparisons],
+    lampopumppu: [...numberComparisons],
+    muulampo: [...numberComparisons],
+    muusahko: [...numberComparisons]
+  },
   laskentatyokalu: [...stringComparisons]
 };
 
@@ -689,7 +700,11 @@ const toteutunutOstoenergiankulutus = {
     'pilkkeet-havu-sekapuu-neliovuosikulutus': [...numberComparisonsWithoutEq],
     'pilkkeet-koivu-neliovuosikulutus': [...numberComparisonsWithoutEq],
     'puupelletit-neliovuosikulutus': [...numberComparisonsWithoutEq]
-  }
+  },
+  'tietojen-alkuperavuosi': [...numberComparisons],
+  'uusiutuvat-polttoaineet-vuosikulutus-yhteensa': [...numberComparisons],
+  'fossiiliset-polttoaineet-vuosikulutus-yhteensa': [...numberComparisons],
+  'uusiutuva-energia-vuosituotto-yhteensa': [...numberComparisons]
 };
 
 const huomiot = {
@@ -699,23 +714,49 @@ const huomiot = {
   'lisatietoja-sv': [...stringComparisons],
   'iv-ilmastointi': {
     'teksti-fi': [...stringComparisons],
-    'teksti-sv': [...stringComparisons]
+    'teksti-sv': [...stringComparisons],
+    toimenpide: {
+      0: { 'kasvihuonepaastojen-muutos': [...numberComparisons] },
+      1: { 'kasvihuonepaastojen-muutos': [...numberComparisons] },
+      2: { 'kasvihuonepaastojen-muutos': [...numberComparisons] }
+    }
   },
   'valaistus-muut': {
     'teksti-fi': [...stringComparisons],
-    'teksti-sv': [...stringComparisons]
+    'teksti-sv': [...stringComparisons],
+    toimenpide: {
+      0: { 'kasvihuonepaastojen-muutos': [...numberComparisons] },
+      1: { 'kasvihuonepaastojen-muutos': [...numberComparisons] },
+      2: { 'kasvihuonepaastojen-muutos': [...numberComparisons] }
+    }
   },
   lammitys: {
     'teksti-fi': [...stringComparisons],
-    'teksti-sv': [...stringComparisons]
+    'teksti-sv': [...stringComparisons],
+    'kayttoikaa-jaljella-arvio-vuosina': [...numberComparisons],
+    toimenpide: {
+      0: { 'kasvihuonepaastojen-muutos': [...numberComparisons] },
+      1: { 'kasvihuonepaastojen-muutos': [...numberComparisons] },
+      2: { 'kasvihuonepaastojen-muutos': [...numberComparisons] }
+    }
   },
   ymparys: {
     'teksti-fi': [...stringComparisons],
-    'teksti-sv': [...stringComparisons]
+    'teksti-sv': [...stringComparisons],
+    toimenpide: {
+      0: { 'kasvihuonepaastojen-muutos': [...numberComparisons] },
+      1: { 'kasvihuonepaastojen-muutos': [...numberComparisons] },
+      2: { 'kasvihuonepaastojen-muutos': [...numberComparisons] }
+    }
   },
   'alapohja-ylapohja': {
     'teksti-fi': [...stringComparisons],
-    'teksti-sv': [...stringComparisons]
+    'teksti-sv': [...stringComparisons],
+    toimenpide: {
+      0: { 'kasvihuonepaastojen-muutos': [...numberComparisons] },
+      1: { 'kasvihuonepaastojen-muutos': [...numberComparisons] },
+      2: { 'kasvihuonepaastojen-muutos': [...numberComparisons] }
+    }
   }
 };
 
@@ -736,6 +777,48 @@ export const flattenSchema = R.compose(
   DeepObjects.treeFlat('.', R.is(Array))
 );
 
+const ilmastoselvitys = {
+  laatimisajankohta: [...dateComparisons],
+  laatija: [...stringComparisons],
+  yritys: [...stringComparisons],
+  'yritys-osoite': [...stringComparisons],
+  'yritys-postinumero': [...stringComparisons],
+  'yritys-postitoimipaikka': [...stringComparisons],
+  laadintaperuste: [...numberComparisons],
+  hiilijalanjalki: {
+    rakennus: {
+      'rakennustuotteiden-valmistus': [...numberComparisons],
+      'kuljetukset-tyomaavaihe': [...numberComparisons],
+      'rakennustuotteiden-vaihdot': [...numberComparisons],
+      energiankaytto: [...numberComparisons],
+      purkuvaihe: [...numberComparisons]
+    },
+    rakennuspaikka: {
+      'rakennustuotteiden-valmistus': [...numberComparisons],
+      'kuljetukset-tyomaavaihe': [...numberComparisons],
+      'rakennustuotteiden-vaihdot': [...numberComparisons],
+      energiankaytto: [...numberComparisons],
+      purkuvaihe: [...numberComparisons]
+    }
+  },
+  hiilikadenjalki: {
+    rakennus: {
+      uudelleenkaytto: [...numberComparisons],
+      kierratys: [...numberComparisons],
+      'ylimaarainen-uusiutuvaenergia': [...numberComparisons],
+      hiilivarastovaikutus: [...numberComparisons],
+      karbonatisoituminen: [...numberComparisons]
+    },
+    rakennuspaikka: {
+      uudelleenkaytto: [...numberComparisons],
+      kierratys: [...numberComparisons],
+      'ylimaarainen-uusiutuvaenergia': [...numberComparisons],
+      hiilivarastovaikutus: [...numberComparisons],
+      karbonatisoituminen: [...numberComparisons]
+    }
+  }
+};
+
 export const schema = {
   energiatodistus: {
     id: [...numberComparisons],
@@ -748,6 +831,7 @@ export const schema = {
     tulokset,
     'toteutunut-ostoenergiankulutus': toteutunutOstoenergiankulutus,
     huomiot,
+    ilmastoselvitys,
     versio: [versioEquals],
     'lisamerkintoja-fi': [stringContains],
     'lisamerkintoja-sv': [stringContains],
@@ -775,6 +859,7 @@ export const laatijaSchema = R.compose(
     ...localizedField('energiatodistus.perustiedot.keskeiset-suositukset'),
     ...localizedField('energiatodistus.lisamerkintoja'),
     'energiatodistus.lahtotiedot.rakennusvaippa.ilmanvuotoluku',
+    'energiatodistus.perustiedot.havainnointikayntityyppi-id',
     'energiatodistus.laatija-id',
     'laatija.patevyystaso',
     'laatija.toteamispaivamaara'
@@ -787,6 +872,10 @@ export const laatijaSchema = R.compose(
   R.over(
     R.lensPath(['energiatodistus', 'tulokset']),
     R.pick(['e-luku', 'e-luokka'])
+  ),
+  R.over(
+    R.lensPath(['energiatodistus', 'ilmastoselvitys']),
+    R.pick(['laatimisajankohta', 'laatija', 'yritys', 'yritys-osoite', 'yritys-postinumero', 'yritys-postitoimipaikka'])
   ),
   R.dissocPath(['energiatodistus', 'toteutunut-ostoenergiankulutus']),
   R.dissocPath(['energiatodistus', 'huomiot'])

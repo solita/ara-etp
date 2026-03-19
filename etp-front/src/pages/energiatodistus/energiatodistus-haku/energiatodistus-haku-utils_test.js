@@ -351,4 +351,76 @@ describe('EtHakuUtils:', () => {
       expect(EtHakuUtils.searchString(criteria)).toEqual(expected);
     });
   });
+
+  // === ET2026 field tests ===
+
+  describe('blockToQueryParameter with ET2026 fields', () => {
+    it('should convert ilmastoselvitys.laatija string search to ilike query', () => {
+      // Given a search block for ilmastoselvitys.laatija with sisaltaa operator
+      // When converting to query parameter
+      // Then it should produce an ilike query with % wildcards
+      const block = [
+        'sisaltaa',
+        'energiatodistus.ilmastoselvitys.laatija',
+        'Matti'
+      ];
+      const expected = Maybe.Some([
+        ['ilike', 'energiatodistus.ilmastoselvitys.laatija', '%Matti%']
+      ]);
+
+      expect(EtHakuUtils.blockToQueryParameter(flatSchema, block)).toEqual(
+        expected
+      );
+    });
+
+    it('should convert boolean ET2026 field to equality query', () => {
+      // Given a search block for energiankulutuksen-valmius boolean field
+      // When converting to query parameter
+      // Then it should produce an = query
+      const block = [
+        '=',
+        'energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin',
+        true
+      ];
+      const expected = Maybe.Some([
+        [
+          '=',
+          'energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin',
+          true
+        ]
+      ]);
+
+      expect(EtHakuUtils.blockToQueryParameter(flatSchema, block)).toEqual(
+        expected
+      );
+    });
+  });
+
+  describe('convertWhereToQuery with ET2026 fields', () => {
+    it('should convert mixed old and ET2026 fields correctly', () => {
+      // Given a where clause containing both existing and ET2026 fields
+      // When converting to query
+      // Then both types of fields should be correctly converted
+      const where = [
+        [
+          ['sisaltaa', 'energiatodistus.perustiedot.nimi-fi', 'Talo'],
+          [
+            'sisaltaa',
+            'energiatodistus.ilmastoselvitys.yritys',
+            'Yritys Oy'
+          ]
+        ]
+      ];
+      const expected = [
+        [
+          ['ilike', 'energiatodistus.perustiedot.nimi-fi', '%Talo%'],
+          ['ilike', 'energiatodistus.ilmastoselvitys.yritys', '%Yritys Oy%']
+        ]
+      ];
+
+      expect(EtHakuUtils.convertWhereToQuery(flatSchema, where)).toEqual(
+        expected
+      );
+    });
+  });
 });
