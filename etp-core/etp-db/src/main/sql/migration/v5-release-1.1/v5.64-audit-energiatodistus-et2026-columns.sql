@@ -67,5 +67,11 @@ alter table audit.energiatodistus
     add column is$hiilikadenjalki$rakennuspaikka$hiilivarastovaikutus numeric,
     add column is$hiilikadenjalki$rakennuspaikka$karbonatisoituminen numeric;
 
+-- From v5.63: perusparannuspassi tayttaa-vaatimukset and e_luokka type change
+alter table audit.energiatodistus
+    add column pt$tayttaa_aplus_vaatimukset boolean not null default false,
+    add column pt$tayttaa_a0_vaatimukset boolean not null default false,
+    alter column t$e_luokka type varchar(2);
+
 -- Regenerate the audit procedure to include all new columns
 call audit.create_audit_procedure('energiatodistus'::name);
