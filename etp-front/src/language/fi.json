@@ -643,6 +643,7 @@
       "ala": "A",
       "U": "U",
       "lammitetty-nettoala": "Lämmitetty nettoala",
+      "energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin": "Energiankulutuksen valmius reagoida ulkoisiin signaaleihin",
       "rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin": "Rakennus kykenee reagoimaan ulkoisiin signaaleihin",
       "rakennusvaippa": {
         "header": "Rakennusvaippa",
@@ -827,6 +828,7 @@
           "id": "Lämmönjako",
           "kuvaus": "Lämmönjaon kuvaus"
         },
+        "lammonjako-lampotilajousto": "Lämmönjaon lämpötilajousto",
         "lammonjakojarjestelma-mukautettavissa": "Rakennuksen sisäinen lämmönjakojärjestelmä kykenee toimimaan alhaisissa tai tapauksen mukaan tehokkaammassa lämpötilassa",
         "tuotonhyotysuhde": "Tuoton hyöty\u00ADsuhde",
         "jaonjaluovutuksenhyotysuhde": "Jaon ja luovu\u00ADtuksen hyöty\u00ADsuhde",
@@ -991,6 +993,14 @@
           "nimi": "Energian nimi",
           "vuosikulutus": "Tuotto (kWh/vuosi)"
         }
+      },
+      "uusiutuvat-omavaraisenergiat-kokonaistuotanto": {
+        "aurinkosahko": "Aurinkosähkö, kokonaistuotanto (kWh/vuosi)",
+        "aurinkolampo": "Aurinkolämpö, kokonaistuotanto (kWh/vuosi)",
+        "tuulisahko": "Tuulisähkö, kokonaistuotanto (kWh/vuosi)",
+        "lampopumppu": "Lämpöpumppu, kokonaistuotanto (kWh/vuosi)",
+        "muulampo": "Muu lämpö, kokonaistuotanto (kWh/vuosi)",
+        "muusahko": "Muu sähkö, kokonaistuotanto (kWh/vuosi)"
       },
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiankulutus",
@@ -1174,6 +1184,11 @@
       "toteutunut-vuosikulutus-yhteensä": "Yhteensä (kWh/vuosi)",
       "toteutunut-neliovuosikulutus-yhteensä": "Yhteensä (kWh/(m²vuosi))",
       "tietojen-alkuperavuosi": "Tiedot ovat vuodelta",
+      "uusiutuvat-polttoaineet-vuosikulutus-yhteensa": "Uusiutuvat polttoaineet yhteensä (kWh/vuosi)",
+      "fossiiliset-polttoaineet-vuosikulutus-yhteensa": "Fossiiliset polttoaineet yhteensä (kWh/vuosi)",
+      "uusiutuva-energia-vuosituotto-yhteensa": "Uusiutuva energia, vuosituotto yhteensä (kWh/vuosi)",
+      "lisatietoja-fi": "Lisätietoja (suomeksi)",
+      "lisatietoja-sv": "Lisätietoja (ruotsiksi)",
       "lisatietoja": "Lisätietoja"
     },
     "huomiot": {

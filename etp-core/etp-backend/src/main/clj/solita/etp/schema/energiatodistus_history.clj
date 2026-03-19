@@ -22,8 +22,12 @@
   (et-schema->et-history-schema energiatodistus-schema/Energiatodistus2018))
 (def Energiatodistus2013
   (et-schema->et-history-schema energiatodistus-schema/Energiatodistus2013))
+(def Energiatodistus2026
+  (-> (et-schema->et-history-schema energiatodistus-schema/Energiatodistus2026)
+      (dissoc :perusparannuspassi-id :perusparannuspassi-valid)))
 
 (def Energiatodistus
   (schema/conditional
+   (partial energiatodistus-schema/versio? 2026) Energiatodistus2026
    (partial energiatodistus-schema/versio? 2018) Energiatodistus2018
    (partial energiatodistus-schema/versio? 2013) Energiatodistus2013))

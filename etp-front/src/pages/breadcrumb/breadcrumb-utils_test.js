@@ -527,6 +527,31 @@ describe('BreadcrumbUtils', () => {
           ])
         ).toEqual(expected);
       });
+
+      it('should return crumb for ET2026 energiatodistus muutoshistoria', () => {
+        const expected = [
+          {
+            url: '#/energiatodistus/all',
+            label: 'navigation.energiatodistukset'
+          },
+          {
+            url: `#/energiatodistus/2026/1`,
+            label: 'navigation.et 1'
+          },
+          {
+            url: `#/energiatodistus/2026/1/muutoshistoria`,
+            label: 'navigation.muutoshistoria'
+          }
+        ];
+
+        expect(
+          BreadcrumbUtils.energiatodistusCrumb(i18n, [
+            '2026',
+            '1',
+            'muutoshistoria'
+          ])
+        ).toEqual(expected);
+      });
     });
   });
 

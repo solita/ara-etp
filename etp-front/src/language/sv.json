@@ -619,6 +619,7 @@
       "ala": "A",
       "U": "U",
       "lammitetty-nettoala": "Uppvärmd nettoarea",
+      "energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin": "Energiförbrukningens beredskap att reagera på externa signaler",
       "rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin": "Rakennus kykenee reagoimaan ulkoisiin signaaleihin (sv)",
       "rakennusvaippa": {
         "header": "Klimatskal",
@@ -798,6 +799,7 @@
           "id": "Värmedistribution",
           "kuvaus": "Beskrivning av värmedistributionen"
         },
+        "lammonjako-lampotilajousto": "Temperaturflexibilitet i värmedistributionen",
         "lammonjakojarjestelma-mukautettavissa": "Rakennuksen sisäinen lämmönjakojärjestelmä kykenee toimimaan alhaisissa tai tapauksen mukaan tehokkaammassa lämpötilassa (sv)",
         "tuotonhyotysuhde": "Verknings\u00ADgrad för produktionen",
         "jaonjaluovutuksenhyotysuhde": "Verknings-graden för distribution och avgivning",
@@ -962,6 +964,14 @@
         "muusahko-neliovuosikulutus": "Annan energi som utvunnits ur närmiljön / El (kWh/(m²år))",
         "lampopumppu": "Energi som en värmepump upptar från värmekällan (kWh/år)",
         "lampopumppu-neliovuosikulutus": "Energi som en värmepump upptar från värmekällan (kWh/(m²år))"
+      },
+      "uusiutuvat-omavaraisenergiat-kokonaistuotanto": {
+        "aurinkosahko": "Solel, totalproduktion (kWh/år)",
+        "aurinkolampo": "Solvärme, totalproduktion (kWh/år)",
+        "tuulisahko": "Vindel, totalproduktion (kWh/år)",
+        "lampopumppu": "Värmepump, totalproduktion (kWh/år)",
+        "muulampo": "Annan värme, totalproduktion (kWh/år)",
+        "muusahko": "Annan el, totalproduktion (kWh/år)"
       },
       "tekniset-jarjestelmat": {
         "header": "Energi som förbrukas av husets tekniska system",
@@ -1145,6 +1155,11 @@
       "toteutunut-vuosikulutus-yhteensä": "Totalt (kWh/år)",
       "toteutunut-neliovuosikulutus-yhteensä": "Totalt (kWh/(m²år))",
       "tietojen-alkuperavuosi": "Tiedot ovat vuodelta (sv)",
+      "uusiutuvat-polttoaineet-vuosikulutus-yhteensa": "Förnybara bränslen totalt (kWh/år)",
+      "fossiiliset-polttoaineet-vuosikulutus-yhteensa": "Fossila bränslen totalt (kWh/år)",
+      "uusiutuva-energia-vuosituotto-yhteensa": "Förnybar energi, årsproduktion totalt (kWh/år)",
+      "lisatietoja-fi": "Tilläggsuppgifter (på finska)",
+      "lisatietoja-sv": "Tilläggsuppgifter (på svenska)",
       "lisatietoja": "Lisätietoja (sv)"
     },
     "huomiot": {
