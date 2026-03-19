@@ -20,7 +20,11 @@ describe('ET2026 change history i18n labels', () => {
       const lahtotiedot = et.lahtotiedot;
 
       // then
-      expect(lahtotiedot['energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin']).toBeDefined();
+      expect(
+        lahtotiedot[
+          'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin'
+        ]
+      ).toBeDefined();
     });
 
     it('given fi.json, when checking for lammonjako-lampotilajousto key, then it exists in lammitys', () => {
@@ -38,12 +42,15 @@ describe('ET2026 change history i18n labels', () => {
       const tulokset = et.tulokset;
 
       // then
-      expect(tulokset['uusiutuvat-omavaraisenergiat-kokonaistuotanto']).toBeDefined();
+      expect(
+        tulokset['uusiutuvat-omavaraisenergiat-kokonaistuotanto']
+      ).toBeDefined();
     });
 
     it('given fi.json, when checking for kokonaistuotanto sub-keys, then aurinkosahko, aurinkolampo, tuulisahko exist', () => {
       // given
-      const kokonaistuotanto = et.tulokset['uusiutuvat-omavaraisenergiat-kokonaistuotanto'];
+      const kokonaistuotanto =
+        et.tulokset['uusiutuvat-omavaraisenergiat-kokonaistuotanto'];
 
       // then
       expect(kokonaistuotanto).toBeDefined();
@@ -70,7 +77,9 @@ describe('ET2026 change history i18n labels', () => {
       const toteutunut = et['toteutunut-ostoenergiankulutus'];
 
       // then
-      expect(toteutunut['uusiutuvat-polttoaineet-vuosikulutus-yhteensa']).toBeDefined();
+      expect(
+        toteutunut['uusiutuvat-polttoaineet-vuosikulutus-yhteensa']
+      ).toBeDefined();
     });
 
     it('given fi.json, when checking for fossiiliset-polttoaineet-vuosikulutus-yhteensa, then it exists', () => {
@@ -78,7 +87,9 @@ describe('ET2026 change history i18n labels', () => {
       const toteutunut = et['toteutunut-ostoenergiankulutus'];
 
       // then
-      expect(toteutunut['fossiiliset-polttoaineet-vuosikulutus-yhteensa']).toBeDefined();
+      expect(
+        toteutunut['fossiiliset-polttoaineet-vuosikulutus-yhteensa']
+      ).toBeDefined();
     });
 
     it('given fi.json, when checking for uusiutuva-energia-vuosituotto-yhteensa, then it exists', () => {
@@ -86,7 +97,9 @@ describe('ET2026 change history i18n labels', () => {
       const toteutunut = et['toteutunut-ostoenergiankulutus'];
 
       // then
-      expect(toteutunut['uusiutuva-energia-vuosituotto-yhteensa']).toBeDefined();
+      expect(
+        toteutunut['uusiutuva-energia-vuosituotto-yhteensa']
+      ).toBeDefined();
     });
   });
 
@@ -96,7 +109,11 @@ describe('ET2026 change history i18n labels', () => {
       const lahtotiedot = sv.energiatodistus.lahtotiedot;
 
       // then
-      expect(lahtotiedot['energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin']).toBeDefined();
+      expect(
+        lahtotiedot[
+          'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin'
+        ]
+      ).toBeDefined();
     });
 
     it('given sv.json, when checking for lammonjako-lampotilajousto, then it exists in lammitys', () => {
@@ -112,7 +129,9 @@ describe('ET2026 change history i18n labels', () => {
       const tulokset = sv.energiatodistus.tulokset;
 
       // then
-      expect(tulokset['uusiutuvat-omavaraisenergiat-kokonaistuotanto']).toBeDefined();
+      expect(
+        tulokset['uusiutuvat-omavaraisenergiat-kokonaistuotanto']
+      ).toBeDefined();
     });
   });
 });
