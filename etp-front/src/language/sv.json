@@ -966,13 +966,13 @@
         "lampopumppu-neliovuosikulutus": "Energi som en värmepump upptar från värmekällan (kWh/(m²år))"
       },
       "uusiutuvat-omavaraisenergiat-kokonaistuotanto": {
-        "label-context": "Förnybar egenenergi, totalproduktion",
-        "aurinkosahko": "Solel, totalproduktion (kWh/år)",
-        "aurinkolampo": "Solvärme, totalproduktion (kWh/år)",
-        "tuulisahko": "Vindel, totalproduktion (kWh/år)",
-        "lampopumppu": "Värmepump, totalproduktion (kWh/år)",
-        "muulampo": "Annan värme, totalproduktion (kWh/år)",
-        "muusahko": "Annan el, totalproduktion (kWh/år)"
+        "label-context": "Uusiutuvat omavaraisenergiat, kokonaistuotanto (sv)",
+        "aurinkosahko": "Aurinkosähkö, kokonaistuotanto (kWh/vuosi) (sv)",
+        "aurinkolampo": "Aurinkolämpö, kokonaistuotanto (kWh/vuosi) (sv)",
+        "tuulisahko": "Tuulisähkö, kokonaistuotanto (kWh/vuosi) (sv)",
+        "lampopumppu": "Lämpöpumppu, kokonaistuotanto (kWh/vuosi) (sv)",
+        "muulampo": "Muu lämpö, kokonaistuotanto (kWh/vuosi) (sv)",
+        "muusahko": "Muu sähkö, kokonaistuotanto (kWh/vuosi) (sv)"
       },
       "tekniset-jarjestelmat": {
         "header": "Energi som förbrukas av husets tekniska system",
