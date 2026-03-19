@@ -995,6 +995,7 @@
         }
       },
       "uusiutuvat-omavaraisenergiat-kokonaistuotanto": {
+        "label-context": "Uusiutuvat omavaraisenergiat, kokonaistuotanto",
         "aurinkosahko": "Aurinkosähkö, kokonaistuotanto (kWh/vuosi)",
         "aurinkolampo": "Aurinkolämpö, kokonaistuotanto (kWh/vuosi)",
         "tuulisahko": "Tuulisähkö, kokonaistuotanto (kWh/vuosi)",
