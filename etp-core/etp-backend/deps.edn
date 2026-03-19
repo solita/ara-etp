@@ -106,8 +106,8 @@
                                       org.xmlunit/xmlunit-core       {:mvn/version "2.10.0"}
                                       org.apache.pdfbox/pdfbox-tools {:mvn/version "2.0.32"}}
                         :jvm-opts    ["-Djava.awt.headless=true" "-DALLOW_PALVELUVAYLA_API=true" "-DSYSTEM_SIGNATURE_SESSION_TIMEOUT_MINUTES=52560000"]}
-             :test     {:main-opts ["-e" "(run-tests-and-exit!)" "-A:dev"]}
-             :test-ci  {:main-opts ["-e" "(run-tests-with-junit-reporter-and-exit!)" "-A:dev"]}
+             :test     {:main-opts ["-m" "solita.etp.test-runner"]}
+             :test-ci  {:main-opts ["-e" "(require 'solita.etp.test-runner) (solita.etp.test-runner/run-tests-with-junit-reporter-and-exit!)"]}
              :coverage {:extra-deps {cloverage/cloverage {:mvn/version "1.2.4"}}
                         :main-opts  ["-m" "cloverage.coverage -p src/main -s src/test -e solita.etp.api.* -e user"]}
              :uberjar  {:extra-deps {uberdeps/uberdeps {:mvn/version "1.4.0"}}
