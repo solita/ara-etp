@@ -13,7 +13,7 @@ select
     et.tila_id
 from perusparannuspassi ppp
     join energiatodistus et on ppp.energiatodistus_id = et.id
-where ppp.id = :id and et.laatija_id = :laatija-id;
+where ppp.id = :id;
 
 -- name: select-perusparannuspassi-vaiheet
 select *

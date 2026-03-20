@@ -236,7 +236,10 @@
    Returns the complete perusparannuspassi with augmented vaiheet, or nil if not found."
   [db whoami id]
   (when-let [ppp (perusparannuspassi-service/find-perusparannuspassi db whoami id)]
+    ;; Use 2-arity find-energiatodistus (without whoami) because PPP access
+    ;; was already verified above, and the 3-arity version's tila-based
+    ;; visibility rules would block pääkäyttäjä from seeing draft ETs.
     (when-let [energiatodistus (energiatodistus-service/find-energiatodistus
-                                 db whoami (:energiatodistus-id ppp))]
+                                 db (:energiatodistus-id ppp))]
       (let [luokittelut-data (luokittelut db)]
         (complete-perusparannuspassi ppp energiatodistus luokittelut-data)))))
