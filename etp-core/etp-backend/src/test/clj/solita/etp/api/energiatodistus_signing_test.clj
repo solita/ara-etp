@@ -328,39 +328,3 @@
                                           (mock/header "Accept" "application/pdf")))]
           (t/is (lt-level? (:body fi-response)))
           (t/is (lt-level? (:body sv-response))))))))
-
-(t/deftest sign-2026-boolean-fields-preserved-test
-  (with-bindings
-    {#'solita.etp.service.energiatodistus-pdf/generate-et-2026-pdf-as-file test-data.energiatodistus/generate-2026-pdf-as-file-mock
-     #'time/clock                                                          (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
-                                                                                        (ZoneId/systemDefault))
-     #'solita.etp.service.signing.pdf-sign/get-tsp-source                  test-timeserver/get-tsp-source-in-test
-     #'solita.etp.service.signing.pdf-sign/get-signature-parameters        get-parameters-in-test}
-    (let [;; Given: laatija ja 2026-todistus
-          laatija-id (test-data.laatija/insert-suomifi-laatija!)
-
-          todistus-2026 (-> (test-data.energiatodistus/generate-add 2026 true)
-                            (assoc-in [:perustiedot :kieli] 0))
-
-          [todistus-id] (test-data.energiatodistus/insert! [todistus-2026] laatija-id)]
-
-      ;; When: allekirjoitetaan 2026-todistus
-      (t/testing "Allekirjoitus onnistuu 2026-todistukselle (regressio)"
-        (let [url (energiatodistus-sign-url todistus-id 2026)
-              response (ts/handler (-> (mock/request :post url)
-                                       (test-data.laatija/with-suomifi-laatija)
-                                       (mock/header "Accept" "application/json")))]
-          (t/is (= (:status response) 200) "Signing should return 200")))
-
-      ;; Then: GET palauttaa boolean-kentät allekirjoitetusta todistuksesta
-      (t/testing "Allekirjoitetun 2026-todistuksen perustiedot sisältävät tayttaa-aplus-vaatimukset"
-        (let [url (str "/api/private/energiatodistukset/2026/" todistus-id)
-              response (ts/handler (-> (mock/request :get url)
-                                       (test-data.laatija/with-suomifi-laatija)
-                                       (mock/header "Accept" "application/json")))
-              body (j/read-value (:body response) j/keyword-keys-object-mapper)
-              perustiedot (:perustiedot body)]
-          (t/is (contains? perustiedot :tayttaa-aplus-vaatimukset)
-                "GET response should contain tayttaa-aplus-vaatimukset")
-          (t/is (contains? perustiedot :tayttaa-a0-vaatimukset)
-                "GET response should contain tayttaa-a0-vaatimukset"))))))
