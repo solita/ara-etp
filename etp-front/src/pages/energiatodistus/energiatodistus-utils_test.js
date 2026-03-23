@@ -842,125 +842,104 @@ describe('ET2026 energiamuotokertoimet', () => {
   });
 });
 
-// ============================================================
-// Työvaihe 3: applyEluokkaDowngrade — frontend downgrade logic
-// ============================================================
-
 describe('applyEluokkaDowngrade', () => {
-  // 1.1 A+ raw e-luokka with different vaatimusrasti combinations
-  describe('A+ raw e-luokka', () => {
-    it('both vaatimukset true → returns A+', () => {
-      // Given: rawEluokka is "A+"
-      // When: both aplus and a0 are true
-      // Then: returns "A+" unchanged
-      expect(EtUtils.applyEluokkaDowngrade('A+', true, true)).toBe('A+');
+  describe('rawEluokka is A+', () => {
+    describe('both aplus and a0 vaatimukset are true', () => {
+      it('returns A+ unchanged', () => {
+        expect(EtUtils.applyEluokkaDowngrade('A+', true, true)).toBe('A+');
+      });
     });
 
-    it('aplus=true, a0=false → returns A (A+ requires both)', () => {
-      // Given: rawEluokka is "A+"
-      // When: aplus true but a0 false
-      // Then: downgraded to "A"
-      expect(EtUtils.applyEluokkaDowngrade('A+', true, false)).toBe('A');
+    describe('aplus=true, a0=false', () => {
+      it('downgrades to A since A+ requires both', () => {
+        expect(EtUtils.applyEluokkaDowngrade('A+', true, false)).toBe('A');
+      });
     });
 
-    it('aplus=false, a0=true → returns A0', () => {
-      // Given: rawEluokka is "A+"
-      // When: aplus false but a0 true
-      // Then: downgraded to "A0"
-      expect(EtUtils.applyEluokkaDowngrade('A+', false, true)).toBe('A0');
+    describe('aplus=false, a0=true', () => {
+      it('downgrades to A0', () => {
+        expect(EtUtils.applyEluokkaDowngrade('A+', false, true)).toBe('A0');
+      });
     });
 
-    it('both vaatimukset false → returns A', () => {
-      // Given: rawEluokka is "A+"
-      // When: both false
-      // Then: downgraded to "A"
-      expect(EtUtils.applyEluokkaDowngrade('A+', false, false)).toBe('A');
+    describe('both vaatimukset are false', () => {
+      it('downgrades to A', () => {
+        expect(EtUtils.applyEluokkaDowngrade('A+', false, false)).toBe('A');
+      });
     });
   });
 
-  // 1.2 A0 raw e-luokka with different vaatimusrasti combinations
-  describe('A0 raw e-luokka', () => {
-    it('a0=true → returns A0', () => {
-      // Given: rawEluokka is "A0"
-      // When: a0 is true
-      // Then: returns "A0"
-      expect(EtUtils.applyEluokkaDowngrade('A0', false, true)).toBe('A0');
+  describe('rawEluokka is A0', () => {
+    describe('a0=true, aplus=false', () => {
+      it('returns A0', () => {
+        expect(EtUtils.applyEluokkaDowngrade('A0', false, true)).toBe('A0');
+      });
     });
 
-    it('a0=false → returns A', () => {
-      // Given: rawEluokka is "A0"
-      // When: a0 is false
-      // Then: downgraded to "A"
-      expect(EtUtils.applyEluokkaDowngrade('A0', false, false)).toBe('A');
+    describe('a0=false, aplus=false', () => {
+      it('downgrades to A', () => {
+        expect(EtUtils.applyEluokkaDowngrade('A0', false, false)).toBe('A');
+      });
     });
 
-    it('aplus=true, a0=true → returns A0 (aplus irrelevant for A0)', () => {
-      // Given: rawEluokka is "A0"
-      // When: both true
-      // Then: returns "A0" (aplus rasti is irrelevant for A0 area)
-      expect(EtUtils.applyEluokkaDowngrade('A0', true, true)).toBe('A0');
+    describe('both aplus and a0 are true', () => {
+      it('returns A0 since aplus is irrelevant for A0', () => {
+        expect(EtUtils.applyEluokkaDowngrade('A0', true, true)).toBe('A0');
+      });
     });
 
-    it('aplus=true, a0=false → returns A', () => {
-      // Given: rawEluokka is "A0"
-      // When: aplus true but a0 false
-      // Then: downgraded to "A"
-      expect(EtUtils.applyEluokkaDowngrade('A0', true, false)).toBe('A');
+    describe('aplus=true, a0=false', () => {
+      it('downgrades to A', () => {
+        expect(EtUtils.applyEluokkaDowngrade('A0', true, false)).toBe('A');
+      });
     });
   });
 
-  // 1.3 Other e-luokka values: no-op
-  describe('other e-luokka values are never downgraded', () => {
-    it('A remains A', () => {
+  describe('rawEluokka is A or below', () => {
+    it('A is never downgraded', () => {
       expect(EtUtils.applyEluokkaDowngrade('A', true, true)).toBe('A');
     });
 
-    it('B remains B', () => {
+    it('B is never downgraded', () => {
       expect(EtUtils.applyEluokkaDowngrade('B', false, false)).toBe('B');
     });
 
-    it('C remains C', () => {
+    it('C is never downgraded', () => {
       expect(EtUtils.applyEluokkaDowngrade('C', true, true)).toBe('C');
     });
 
-    it('D remains D', () => {
+    it('D is never downgraded', () => {
       expect(EtUtils.applyEluokkaDowngrade('D', false, false)).toBe('D');
     });
 
-    it('E remains E', () => {
+    it('E is never downgraded', () => {
       expect(EtUtils.applyEluokkaDowngrade('E', true, false)).toBe('E');
     });
 
-    it('F remains F', () => {
+    it('F is never downgraded', () => {
       expect(EtUtils.applyEluokkaDowngrade('F', false, true)).toBe('F');
     });
 
-    it('G remains G', () => {
+    it('G is never downgraded', () => {
       expect(EtUtils.applyEluokkaDowngrade('G', true, true)).toBe('G');
     });
   });
 
-  // 1.4 Edge cases
-  describe('edge cases', () => {
-    it('undefined rawEluokka → returns undefined without crashing', () => {
-      // Given: rawEluokka is undefined
-      // When: called with any rasti combination
-      // Then: returns undefined (does not throw)
+  describe('rawEluokka is undefined', () => {
+    it('returns undefined without crashing', () => {
       expect(
         EtUtils.applyEluokkaDowngrade(undefined, true, true)
       ).toBeUndefined();
     });
+  });
 
-    it('empty string rawEluokka → returns empty string', () => {
-      // Given: rawEluokka is ""
-      // When: called with any rasti combination
-      // Then: returns "" unchanged
+  describe('rawEluokka is empty string', () => {
+    it('returns empty string unchanged', () => {
       expect(EtUtils.applyEluokkaDowngrade('', true, true)).toBe('');
     });
   });
 });
 
-// 1.5 eluokkaFromRajaAsteikko + applyEluokkaDowngrade combined
 describe('eluokkaFromRajaAsteikko + applyEluokkaDowngrade combined', () => {
   // 2026 YAT raja-asteikko: A+ ≤ 78, A0 ≤ 98, A ≤ 98, B ≤ 106, C ≤ 130, D ≤ 181, E ≤ 265, F ≤ 310
   const rajaAsteikko2026 = [
@@ -974,35 +953,35 @@ describe('eluokkaFromRajaAsteikko + applyEluokkaDowngrade combined', () => {
     [310, 'F']
   ];
 
-  it('e-luku in A+ range, both true → A+', () => {
-    // Given: e-luku 50 is in A+ range (≤ 78)
-    const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 50);
-    // When: both vaatimukset true
-    // Then: chain produces "A+"
-    expect(EtUtils.applyEluokkaDowngrade(raw, true, true)).toBe('A+');
+  describe('e-luku 50 is in A+ range (≤ 78)', () => {
+    describe('both vaatimukset are true', () => {
+      it('produces A+', () => {
+        const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 50);
+        expect(EtUtils.applyEluokkaDowngrade(raw, true, true)).toBe('A+');
+      });
+    });
+
+    describe('both vaatimukset are false', () => {
+      it('downgrades to A', () => {
+        const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 50);
+        expect(EtUtils.applyEluokkaDowngrade(raw, false, false)).toBe('A');
+      });
+    });
   });
 
-  it('e-luku in A+ range, both false → A', () => {
-    // Given: e-luku 50 is in A+ range
-    const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 50);
-    // When: both false
-    // Then: chain produces "A" (downgraded)
-    expect(EtUtils.applyEluokkaDowngrade(raw, false, false)).toBe('A');
+  describe('e-luku 85 is in A0 range (> 78, ≤ 98)', () => {
+    describe('a0=true', () => {
+      it('produces A0', () => {
+        const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 85);
+        expect(EtUtils.applyEluokkaDowngrade(raw, false, true)).toBe('A0');
+      });
+    });
   });
 
-  it('e-luku in A0 range, a0=true → A0', () => {
-    // Given: e-luku 85 is in A0 range (> 78, ≤ 98)
-    const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 85);
-    // When: a0 true
-    // Then: chain produces "A0"
-    expect(EtUtils.applyEluokkaDowngrade(raw, false, true)).toBe('A0');
-  });
-
-  it('e-luku in B range → B regardless of rastit', () => {
-    // Given: e-luku 100 is in B range (> 98, ≤ 106)
-    const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 100);
-    // When: both true
-    // Then: chain produces "B" unchanged
-    expect(EtUtils.applyEluokkaDowngrade(raw, true, true)).toBe('B');
+  describe('e-luku 100 is in B range (> 98, ≤ 106)', () => {
+    it('produces B regardless of rastit', () => {
+      const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 100);
+      expect(EtUtils.applyEluokkaDowngrade(raw, true, true)).toBe('B');
+    });
   });
 });
