@@ -311,10 +311,6 @@
                                         (laatija-test-data/with-suomifi-laatija)))]
             (assert-status put-res 200 "Expected status 200 - value is within valid range 0-100 on PUT")))))))
 
-;; ============================================================================
-;; AE-2765: Pääkäyttäjä access tests for perusparannuspassi
-;; ============================================================================
-
 (t/deftest ppp-paakayttaja-access-test
   ;; Given: a laatija with ppp-pätevyys creates an energiatodistus and perusparannuspassi
   (laatija-test-data/insert-suomifi-laatija!
@@ -346,8 +342,6 @@
     (assert-status et-post-res 201 "Setup: ET creation should succeed")
     (assert-status ppp-post-res 201 "Setup: PPP creation should succeed")
 
-    ;; == NEW FEATURE TESTS (should FAIL before implementation) ==
-
     (t/testing "Pääkäyttäjä can GET perusparannuspassi"
       ;; When: pääkäyttäjä sends GET request for the PPP
       (let [get-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id))
@@ -375,8 +369,6 @@
                                      (kayttaja-test-data/with-virtu-user)))]
         ;; Then: response status is 200
         (assert-status html-res 200 "Pääkäyttäjä should be able to GET perusparannuspassi HTML")))
-
-    ;; == REGRESSION TESTS (should PASS — verifying existing correct behavior) ==
 
     (t/testing "Pääkäyttäjä cannot POST new perusparannuspassi"
       ;; When: pääkäyttäjä tries to create a new PPP
@@ -440,8 +432,6 @@
     ;; Verify setup succeeded
     (assert-status et-post-res 201 "Setup: ET creation should succeed")
     (assert-status ppp-post-res 201 "Setup: PPP creation should succeed")
-
-    ;; == REGRESSION TESTS (should PASS — existing behavior must be preserved) ==
 
     (t/testing "Owner laatija can still GET own perusparannuspassi"
       ;; When: the owning laatija sends GET request
