@@ -152,6 +152,13 @@
             completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
         (t/is (= "A0" (first-vaihe-e-luokka completed)))))
 
+    (t/testing "PPP with aplus=true, a0=false → e-luokka downgraded to A"
+      (let [ppp-add (make-ppp-add (new-et-id!)
+                                  {:tayttaa-aplus-vaatimukset true
+                                   :tayttaa-a0-vaatimukset false})
+            completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
+        (t/is (= "A" (first-vaihe-e-luokka completed)))))
+
     (t/testing "PPP uses passin-perustiedot, not energiatodistus perustiedot"
       (let [completed-true (insert-and-complete-ppp!
                              laatija-id whoami
