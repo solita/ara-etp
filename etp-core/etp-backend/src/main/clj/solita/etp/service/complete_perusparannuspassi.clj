@@ -174,7 +174,7 @@
 (defn- energiatodistus->lahtotilanne
   "Transform a complete energiatodistus into a vaihe-shaped lähtötilanne structure.
    Creates a basic vaihe structure and uses complete-vaihe to add calculated fields."
-  [energiatodistus ppp-tulokset luokittelut passin-perustiedot]
+  [energiatodistus ppp-tulokset luokittelut]
   (let [energiamuodot (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])
         toteutunut-ostoenergiankulutus (:toteutunut-ostoenergiankulutus energiatodistus)
         ;; Create a basic vaihe structure with PPP-style field names
@@ -198,7 +198,11 @@
                                                                           (get-in [:tulokset :uusiutuvat-omavaraisenergiat])))
                                 :uusiutuvan-energian-hyodynnetty-osuus nil}}]
     ;; Use complete-vaihe to add all calculated fields
-    (complete-vaihe energiatodistus passin-perustiedot ppp-tulokset basic-vaihe luokittelut)))
+    ;;
+    ;; Here the perustiedot of the ET will pass for PPP-perustiedot, because the relevant fields for
+    ;; calculations (like :tayttaa-aplus-vaatimukset) are the same in both, and we want to use the
+    ;; ET's values for those.
+    (complete-vaihe energiatodistus (:perustiedot energiatodistus) ppp-tulokset basic-vaihe luokittelut)))
 
 (defn- add-year-ranges
   "Add year-range to each vaihe based on consecutive vaihe start dates.
@@ -220,7 +224,7 @@
         passin-perustiedot (:passin-perustiedot perusparannuspassi)
         ;; Lähtötilanne uses ET's own :tayttaa-aplus-vaatimukset / :tayttaa-a0-vaatimukset
         ;; (from :perustiedot), not PPP's passin-perustiedot.
-        lahtotilanne (energiatodistus->lahtotilanne energiatodistus ppp-tulokset luokittelut (:perustiedot energiatodistus))]
+        lahtotilanne (energiatodistus->lahtotilanne energiatodistus ppp-tulokset luokittelut)]
     (-> perusparannuspassi
         (update :vaiheet
                 (fn [vaiheet]
