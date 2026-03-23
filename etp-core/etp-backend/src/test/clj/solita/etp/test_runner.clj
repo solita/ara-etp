@@ -3,6 +3,11 @@
 
 (def ^:private windows? (str/includes? (System/getProperty "os.name") "Windows"))
 
+(defn- is-terminal?
+  "Check if stdout is connected to a terminal (TTY)."
+  []
+  (some? (System/console)))
+
 (defn- non-brokens [vars]
   (filter #(and (-> % meta :broken-test not)
                 (or (not windows?) (-> % meta :broken-on-windows-test not)))
@@ -22,8 +27,14 @@
   ([] (run-tests {}))
   ([config & filters]
    (require 'eftest.runner)
-   (let [tests (apply find-tests filters)]
-     ((resolve 'eftest.runner/run-tests) tests config))))
+   (require 'eftest.report.progress)
+   (require 'eftest.report.pretty)
+   (let [tests (apply find-tests filters)
+         base-config (assoc config
+                           :report (if (is-terminal?)
+                                     (resolve 'eftest.report.progress/report)
+                                     (resolve 'eftest.report.pretty/report)))]
+     ((resolve 'eftest.runner/run-tests) tests base-config))))
 
 (defn run-tests-and-exit! [& filters]
   (let [{:keys [fail error]} (apply run-tests {} filters)]
