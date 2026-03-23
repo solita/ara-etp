@@ -88,7 +88,7 @@
                              :body ppp-schema/PerusparannuspassiSave}
                 :responses  {200 {:body nil}
                              404 {:body common-schema/GeneralError}}
-                :access     rooli-service/ppp-laatija?
+                :access     (some-fn rooli-service/ppp-laatija? rooli-service/paakayttaja?)
                 :handler    (fn [{{{:keys [id]} :path :keys [body]} :parameters :keys [db whoami]}]
                               (api-response/response-with-exceptions
                                 #(ppp-service/update-perusparannuspassi! db whoami id body)
