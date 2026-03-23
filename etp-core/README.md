@@ -93,6 +93,12 @@ Tests can be run (parallel) with
     cd etp-backend
     clojure -M:dev:test
 
+To run only tests whose fully qualified name contains a given string,
+pass one or more filter arguments:
+
+    clojure -M:dev:test energiatodistus
+    clojure -M:dev:test energiatodistus valvonta
+
 Test coverage report (without API layer) can be generated with
 
     cd etp-backend
