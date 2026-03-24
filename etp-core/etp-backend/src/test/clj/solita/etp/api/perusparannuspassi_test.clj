@@ -484,6 +484,5 @@
       (let [delete-res (ts/handler (-> (mock/request :delete (str "/api/private/perusparannuspassit/2026/" ppp2-id))
                                        (mock/header "Accept" "application/json")
                                        (laatija-test-data/with-suomifi-laatija2)))]
-        ;; Then: access is denied (currently 500 due to SQL returning nil, may change to 403)
         (t/is (not= 200 (:status delete-res))
               "Different laatija should not be able to DELETE another's perusparannuspassi")))))
