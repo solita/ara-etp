@@ -437,6 +437,7 @@ const perustiedot = {
 
 const lahtotiedot = {
   'lammitetty-nettoala': [...numberComparisons],
+  'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': [singleBoolean],
   rakennusvaippa: {
     ilmanvuotoluku: [...numberComparisons],
     ulkoseinat: {
@@ -563,7 +564,8 @@ const lahtotiedot = {
     ilmalampopumppu: {
       maara: [...numberComparisons],
       tuotto: [...numberComparisons]
-    }
+    },
+    'lammonjako-lampotilajousto': [singleBoolean]
   },
   jaahdytysjarjestelma: {
     'jaahdytyskauden-painotettu-kylmakerroin': [...numberComparisons]
@@ -673,10 +675,24 @@ const tulokset = {
     kvesi: [...numberComparisons],
     'kvesi-neliovuosikuorma': [...numberComparisonsWithoutEq]
   },
-  laskentatyokalu: [...stringComparisons]
+  laskentatyokalu: [...stringComparisons],
+  'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
+    aurinkosahko: [...numberComparisons],
+    aurinkolampo: [...numberComparisons],
+    tuulisahko: [...numberComparisons],
+    lampopumppu: [...numberComparisons],
+    muulampo: [...numberComparisons],
+    muusahko: [...numberComparisons]
+  }
 };
 
 const toteutunutOstoenergiankulutus = {
+  'tietojen-alkuperavuosi': [...numberComparisons],
+  'lisatietoja-fi': [...stringComparisons],
+  'lisatietoja-sv': [...stringComparisons],
+  'uusiutuvat-polttoaineet-vuosikulutus-yhteensa': [...numberComparisons],
+  'fossiiliset-polttoaineet-vuosikulutus-yhteensa': [...numberComparisons],
+  'uusiutuva-energia-vuosituotto-yhteensa': [...numberComparisons],
   'ostettu-energia': {
     'kaukojaahdytys-neliovuosikulutus': [...numberComparisonsWithoutEq],
     'kaukolampo-neliovuosikulutus': [...numberComparisonsWithoutEq],
@@ -707,7 +723,8 @@ const huomiot = {
   },
   lammitys: {
     'teksti-fi': [...stringComparisons],
-    'teksti-sv': [...stringComparisons]
+    'teksti-sv': [...stringComparisons],
+    'kayttoikaa-jaljella-arvio-vuosina': [...numberComparisons]
   },
   ymparys: {
     'teksti-fi': [...stringComparisons],
@@ -716,6 +733,48 @@ const huomiot = {
   'alapohja-ylapohja': {
     'teksti-fi': [...stringComparisons],
     'teksti-sv': [...stringComparisons]
+  }
+};
+
+const ilmastoselvitys = {
+  laatimisajankohta: [...dateComparisons],
+  laatija: [...stringComparisons],
+  yritys: [...stringComparisons],
+  'yritys-osoite': [...stringComparisons],
+  'yritys-postinumero': [...stringComparisons],
+  'yritys-postitoimipaikka': [...stringComparisons],
+  laadintaperuste: [...numberComparisons],
+  hiilijalanjalki: {
+    rakennus: {
+      'rakennustuotteiden-valmistus': [...numberComparisons],
+      'kuljetukset-tyomaavaihe': [...numberComparisons],
+      'rakennustuotteiden-vaihdot': [...numberComparisons],
+      energiankaytto: [...numberComparisons],
+      purkuvaihe: [...numberComparisons]
+    },
+    rakennuspaikka: {
+      'rakennustuotteiden-valmistus': [...numberComparisons],
+      'kuljetukset-tyomaavaihe': [...numberComparisons],
+      'rakennustuotteiden-vaihdot': [...numberComparisons],
+      energiankaytto: [...numberComparisons],
+      purkuvaihe: [...numberComparisons]
+    }
+  },
+  hiilikadenjalki: {
+    rakennus: {
+      uudelleenkaytto: [...numberComparisons],
+      kierratys: [...numberComparisons],
+      'ylimaarainen-uusiutuvaenergia': [...numberComparisons],
+      hiilivarastovaikutus: [...numberComparisons],
+      karbonatisoituminen: [...numberComparisons]
+    },
+    rakennuspaikka: {
+      uudelleenkaytto: [...numberComparisons],
+      kierratys: [...numberComparisons],
+      'ylimaarainen-uusiutuvaenergia': [...numberComparisons],
+      hiilivarastovaikutus: [...numberComparisons],
+      karbonatisoituminen: [...numberComparisons]
+    }
   }
 };
 
@@ -748,6 +807,7 @@ export const schema = {
     tulokset,
     'toteutunut-ostoenergiankulutus': toteutunutOstoenergiankulutus,
     huomiot,
+    ilmastoselvitys,
     versio: [versioEquals],
     'lisamerkintoja-fi': [stringContains],
     'lisamerkintoja-sv': [stringContains],
