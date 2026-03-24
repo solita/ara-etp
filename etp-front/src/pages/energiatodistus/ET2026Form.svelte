@@ -56,24 +56,6 @@
   export let whoami;
 
   $: labelLocale = LocaleUtils.label($locale);
-
-  $: displayETehokkuus = Maybe.map(raw => {
-    const rajaAsteikko = raw['raja-asteikko'];
-    const localELuku = raw['e-luku'];
-    if (rajaAsteikko && localELuku != null) {
-      const rawEluokka = et.eluokkaFromRajaAsteikko(rajaAsteikko, localELuku);
-      return R.assoc(
-        'e-luokka',
-        et.applyEluokkaDowngrade(
-          rawEluokka,
-          energiatodistus.perustiedot['tayttaa-aplus-vaatimukset'],
-          energiatodistus.perustiedot['tayttaa-a0-vaatimukset']
-        ),
-        raw
-      );
-    }
-    return raw;
-  }, eTehokkuus);
 </script>
 
 <style>
@@ -207,7 +189,13 @@
     postinumerot={luokittelut.postinumerot}
     kayttotarkoitusluokat={luokittelut.kayttotarkoitusluokat}
     alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
-  <ELuku eTehokkuus={displayETehokkuus} idSuffix="perustiedot" />
+  <ELuku
+    {eTehokkuus}
+    tayttaaAplusVaatimukset={energiatodistus.perustiedot[
+      'tayttaa-aplus-vaatimukset'
+    ]}
+    tayttaaA0Vaatimukset={energiatodistus.perustiedot['tayttaa-a0-vaatimukset']}
+    idSuffix="perustiedot" />
   <div class="my-4 flex flex-col">
     <div class="w-full py-4">
       <Checkbox
@@ -292,7 +280,13 @@
 
 <H2 id="tulokset" text={$_('energiatodistus.tulokset.header')} />
 
-<ELuku eTehokkuus={displayETehokkuus} idSuffix="tulokset" />
+<ELuku
+  {eTehokkuus}
+  tayttaaAplusVaatimukset={energiatodistus.perustiedot[
+    'tayttaa-aplus-vaatimukset'
+  ]}
+  tayttaaA0Vaatimukset={energiatodistus.perustiedot['tayttaa-a0-vaatimukset']}
+  idSuffix="tulokset" />
 <ELuvunErittely
   bind:eTehokkuus
   {disabled}
