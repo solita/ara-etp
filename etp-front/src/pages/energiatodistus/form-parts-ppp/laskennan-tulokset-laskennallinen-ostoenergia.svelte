@@ -28,16 +28,21 @@
    * Classify a vaihe's e-luku into an e-luokka letter using raja-asteikko
    * from the energiatodistus eTehokkuus. Returns '' if data is insufficient.
    */
-  const vaiheEluokka = (eTehokkuus, versio, nettoala, vaiheEnergiamuodot) =>
+  const vaiheEluokka = (
+    eTehokkuus,
+    versio,
+    nettoala,
+    vaiheEnergiamuodot,
+    tayttaaAplusVaatimukset,
+    tayttaaA0Vaatimukset
+  ) =>
     Maybe.fold(
       '',
       ([rajaAsteikko, eLuku]) =>
         ETUtils.applyEluokkaDowngrade(
           ETUtils.eluokkaFromRajaAsteikko(rajaAsteikko, eLuku),
-          perusparannuspassi['passin-perustiedot']?.[
-            'tayttaa-aplus-vaatimukset'
-          ],
-          perusparannuspassi['passin-perustiedot']?.['tayttaa-a0-vaatimukset']
+          tayttaaAplusVaatimukset,
+          tayttaaA0Vaatimukset
         ),
       Maybe.toMaybeList([
         R.map(R.prop('raja-asteikko'), eTehokkuus),
@@ -125,7 +130,9 @@
           eTehokkuus,
           energiatodistus.versio,
           energiatodistus.lahtotiedot['lammitetty-nettoala'],
-          energiatodistus.tulokset['kaytettavat-energiamuodot']
+          energiatodistus.tulokset['kaytettavat-energiamuodot'],
+          energiatodistus.perustiedot['tayttaa-aplus-vaatimukset'],
+          energiatodistus.perustiedot['tayttaa-a0-vaatimukset']
         )}</td>
       {#each perusparannuspassi.vaiheet as vaihe, vaiheIndex}
         <td class="et-table--td">
@@ -134,7 +141,13 @@
               eTehokkuus,
               energiatodistus.versio,
               energiatodistus.lahtotiedot['lammitetty-nettoala'],
-              etEnergiamuodotFromPppVaihe(vaihe.tulokset)
+              etEnergiamuodotFromPppVaihe(vaihe.tulokset),
+              perusparannuspassi['passin-perustiedot']?.[
+                'tayttaa-aplus-vaatimukset'
+              ],
+              perusparannuspassi['passin-perustiedot']?.[
+                'tayttaa-a0-vaatimukset'
+              ]
             )}
           {/if}
         </td>
