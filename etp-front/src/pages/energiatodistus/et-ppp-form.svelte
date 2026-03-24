@@ -253,7 +253,11 @@
 
       const missingPPP = [];
 
-      if (perusparannuspassi && perusparannuspassi.id) {
+      if (
+        perusparannuspassi &&
+        perusparannuspassi.id &&
+        perusparannuspassi.valid
+      ) {
         missingPPP.push(
           ...EtValidations.missingProperties(
             pppRequired(
