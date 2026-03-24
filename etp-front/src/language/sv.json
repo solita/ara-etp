@@ -590,8 +590,8 @@
       "kayttotarkoitusluokka": "Användningskategori",
       "alakayttotarkoitusluokka": "Klasser med avseende på underanvändningsändamål",
       "julkinen-rakennus": "Offentlig byggnad",
-      "tayttaa-a0-vaatimukset": "Byggnaden uppfyller tilläggskraven för klass A\u2070",
-      "tayttaa-aplus-vaatimukset": "Byggnaden uppfyller tilläggskraven för klass A⁺",
+      "tayttaa-a0-vaatimukset": "Byggnaden uppfyller tilläggskraven för klass A0",
+      "tayttaa-aplus-vaatimukset": "Byggnaden uppfyller tilläggskraven för klass A+",
       "keskeiset-suositukset": "De viktigaste rekommendationerna",
       "keskeiset-suositukset-heading": {
         "2013": {
@@ -1470,7 +1470,7 @@
       "header": "Passin perustiedot (sv)",
       "havainnointikaynti": "Havainnointikäynnin päivämäärä (sv)",
       "passin-esittely": "Passin esittelyn päivämäärä (sv)",
-      "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A\u2070-luokassa (sv)",
+      "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A0-luokassa (sv)",
       "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa (sv)",
       "lisatiedot": {
         "header": "Lisätietoja (sv)"
