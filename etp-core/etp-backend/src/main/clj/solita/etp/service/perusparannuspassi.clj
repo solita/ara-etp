@@ -114,17 +114,18 @@
               {:perusparannuspassi-id (:perusparannuspassi-id ppp-vaihe)
                :vaihe-nro             (:vaihe-nro ppp-vaihe)})))
 
+(defn- select-perusparannuspassi-by-role [db whoami id]
+  (if (or (rooli-service/paakayttaja? whoami)
+          (rooli-service/laskuttaja? whoami))
+    (first (perusparannuspassi-db/select-perusparannuspassi db {:id id}))
+    (first (perusparannuspassi-db/select-perusparannuspassi-as-laatija
+             db {:id id :laatija-id (:id whoami)}))))
+
 (defn find-perusparannuspassi [db whoami id]
   (jdbc/with-db-transaction
     [tx db]
-    (when-let [ppp (some-> (perusparannuspassi-db/select-perusparannuspassi tx {:id id})
-                          first
-                          db-row->ppp)]
-      (when-not (or (rooli-service/paakayttaja? whoami)
-                    (rooli-service/laskuttaja? whoami)
-                    (= (:laatija-id ppp) (:id whoami)))
-        (exception/throw-forbidden!
-          (str "User " (:id whoami) " is not allowed to access perusparannuspassi " id)))
+    (when-let [ppp (some-> (select-perusparannuspassi-by-role tx whoami id)
+                           db-row->ppp)]
       (assoc ppp :vaiheet (->> (perusparannuspassi-db/select-perusparannuspassi-vaiheet
                                  tx
                                  {:perusparannuspassi-id (:id ppp)})
@@ -277,9 +278,6 @@
     [tx db]
     (if-let [current-ppp (find-perusparannuspassi tx whoami id)]
       (do
-        ;; NB: find-perusparannuspassi returns PPP for any authorized role
-        ;; (pääkäyttäjä, laskuttaja, owning laatija), so this ownership
-        ;; assertion is essential to prevent non-owner updates.
         (assert-update-requirements! tx whoami current-ppp ppp)
 
         (let [ppp-db-row (-> ppp
@@ -328,7 +326,7 @@
 
 (defn delete-perusparannuspassi! [db whoami perusparannuspassi-id]
   (jdbc/with-db-transaction [db db]
-                            (let [ppp (first (perusparannuspassi-db/select-perusparannuspassi
+                            (let [ppp (first (perusparannuspassi-db/select-perusparannuspassi-as-laatija
                                                db {:id perusparannuspassi-id}))]
                               (when-not ppp
                                 (exception/throw-ex-info!
