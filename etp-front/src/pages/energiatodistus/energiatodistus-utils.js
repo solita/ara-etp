@@ -310,6 +310,33 @@ export const eluokkaFromRajaAsteikko = (rajaAsteikko, eLuku) => {
   return match ? match[1] : 'G';
 };
 
+/**
+ * Downgrade A+/A0 e-luokka based on tayttaa-aplus-vaatimukset and tayttaa-a0-vaatimukset.
+ * A+ requires both aplus and a0 to be true; A0 requires a0 to be true.
+ * Other classes are returned unchanged.
+ * NOTE: Backend has a parallel implementation: solita.etp.service.e-luokka/downgrade-e-luokka.
+ * @param {string} rawEluokka - The raw e-luokka from raja-asteikko lookup
+ * @param {boolean} tayttaaAplusVaatimukset - Whether A+ requirements are met
+ * @param {boolean} tayttaaA0Vaatimukset - Whether A0 requirements are met
+ * @returns {string} The (possibly downgraded) e-luokka
+ */
+export const applyEluokkaDowngrade = (
+  rawEluokka,
+  tayttaaAplusVaatimukset,
+  tayttaaA0Vaatimukset
+) => {
+  switch (rawEluokka) {
+    case 'A+':
+      if (tayttaaAplusVaatimukset && tayttaaA0Vaatimukset) return 'A+';
+      if (tayttaaA0Vaatimukset) return 'A0';
+      return 'A';
+    case 'A0':
+      return tayttaaA0Vaatimukset ? 'A0' : 'A';
+    default:
+      return rawEluokka;
+  }
+};
+
 const energiamuodotUntil2018 = [
   'sahko-vuosikulutus-yhteensa',
   'kaukolampo-vuosikulutus-yhteensa',

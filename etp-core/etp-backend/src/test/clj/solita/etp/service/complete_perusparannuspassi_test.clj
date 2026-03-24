@@ -82,3 +82,106 @@
                 ts/*db*
                 {:id -1 :rooli 0 :patevyystaso 4}
                 -1))))
+
+
+
+(defn- make-ppp-add
+  "Creates a PPP add map with the given et-id and passin-perustiedot.
+   vaihe-valid? defaults to true."
+  ([et-id passin-perustiedot]
+   (make-ppp-add et-id passin-perustiedot true))
+  ([et-id passin-perustiedot vaihe-valid?]
+   {:energiatodistus-id et-id
+    :valid true
+    :passin-perustiedot passin-perustiedot
+    :rakennuksen-perustiedot {}
+    :tulokset {:kaukolampo-hinta 6.5
+               :sahko-hinta 15.0
+               :uusiutuvat-pat-hinta 5.0
+               :fossiiliset-pat-hinta 8.0
+               :kaukojaahdytys-hinta 4.0}
+    :vaiheet [{:vaihe-nro 1
+               :valid vaihe-valid?
+               :toimenpiteet {:toimenpide-ehdotukset []}
+               :tulokset {:ostoenergian-tarve-kaukolampo 1
+                          :ostoenergian-tarve-sahko 1
+                          :ostoenergian-tarve-uusiutuvat-pat 0
+                          :ostoenergian-tarve-fossiiliset-pat 0
+                          :ostoenergian-tarve-kaukojaahdytys 0}}]}))
+
+(defn- insert-and-complete-ppp!
+  "Inserts a PPP and returns the completed PPP."
+  [laatija-id whoami ppp-add]
+  (let [ppp-id (:id (perusparannuspassi-service/insert-perusparannuspassi!
+                      (ts/db-user laatija-id)
+                      whoami
+                      ppp-add))]
+    (service/find-complete-perusparannuspassi ts/*db* whoami ppp-id)))
+
+(defn- first-vaihe-e-luokka
+  "Returns the e-luokka of the first vaihe in a completed PPP."
+  [completed]
+  (get-in (first (:vaiheet completed)) [:tulokset :e-luokka]))
+
+(t/deftest find-complete-perusparannuspassi-downgrade-test
+  (let [laatija-id (laatija-test-data/insert-suomifi-laatija!
+                     (-> (laatija-test-data/generate-adds 1)
+                         first
+                         (merge {:patevyystaso 4})))
+        whoami {:id laatija-id :rooli 0 :patevyystaso 4}
+        new-et-id! #(first (energiatodistus-test-data/generate-and-insert! 2026 true laatija-id))]
+
+    (t/testing "PPP with both tayttaa-*-vaatimukset true → e-luokka NOT downgraded"
+      (let [ppp-add (make-ppp-add (new-et-id!)
+                                  {:tayttaa-aplus-vaatimukset true
+                                   :tayttaa-a0-vaatimukset true})
+            completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
+        (t/is (= "A+" (first-vaihe-e-luokka completed)))))
+
+    (t/testing "PPP with both tayttaa-*-vaatimukset false → e-luokka downgraded to A"
+      (let [ppp-add (make-ppp-add (new-et-id!)
+                                  {:tayttaa-aplus-vaatimukset false
+                                   :tayttaa-a0-vaatimukset false})
+            completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
+        (t/is (= "A" (first-vaihe-e-luokka completed)))))
+
+    (t/testing "PPP with aplus=false, a0=true → e-luokka downgraded to A0"
+      (let [ppp-add (make-ppp-add (new-et-id!)
+                                  {:tayttaa-aplus-vaatimukset false
+                                   :tayttaa-a0-vaatimukset true})
+            completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
+        (t/is (= "A0" (first-vaihe-e-luokka completed)))))
+
+    (t/testing "PPP with aplus=true, a0=false → e-luokka downgraded to A"
+      (let [ppp-add (make-ppp-add (new-et-id!)
+                                  {:tayttaa-aplus-vaatimukset true
+                                   :tayttaa-a0-vaatimukset false})
+            completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
+        (t/is (= "A" (first-vaihe-e-luokka completed)))))
+
+    (t/testing "PPP uses passin-perustiedot, not energiatodistus perustiedot"
+      (let [completed-true (insert-and-complete-ppp!
+                             laatija-id whoami
+                             (make-ppp-add (new-et-id!)
+                                           {:tayttaa-aplus-vaatimukset true
+                                            :tayttaa-a0-vaatimukset true}))
+            completed-false (insert-and-complete-ppp!
+                              laatija-id whoami
+                              (make-ppp-add (new-et-id!)
+                                            {:tayttaa-aplus-vaatimukset false
+                                             :tayttaa-a0-vaatimukset false}))]
+        (t/is (= "A+" (first-vaihe-e-luokka completed-true)))
+        (t/is (= "A" (first-vaihe-e-luokka completed-false)))))
+
+    (t/testing "Invalid vaihe does not run downgrade logic"
+      (let [ppp-add (make-ppp-add (new-et-id!)
+                                  {:tayttaa-aplus-vaatimukset false
+                                   :tayttaa-a0-vaatimukset false}
+                                  false)
+            completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
+        (t/is (nil? (first-vaihe-e-luokka completed)))))
+
+    (t/testing "PPP with empty passin-perustiedot defaults to false → A+ downgraded to A"
+      (let [ppp-add (make-ppp-add (new-et-id!) {})
+            completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
+        (t/is (= "A" (first-vaihe-e-luokka completed)))))))

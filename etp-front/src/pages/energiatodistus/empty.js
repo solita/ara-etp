@@ -319,7 +319,9 @@ export const energiatodistus2026 = _ =>
     Deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]), R.__, {
       versio: 2026,
       perustiedot: {
-        'havainnointikayntityyppi-id': Maybe.None()
+        'havainnointikayntityyppi-id': Maybe.None(),
+        'tayttaa-aplus-vaatimukset': false,
+        'tayttaa-a0-vaatimukset': false
       },
       huomiot: {
         lammitys: Deep.mergeRight(

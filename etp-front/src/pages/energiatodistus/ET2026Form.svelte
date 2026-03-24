@@ -189,7 +189,29 @@
     postinumerot={luokittelut.postinumerot}
     kayttotarkoitusluokat={luokittelut.kayttotarkoitusluokat}
     alakayttotarkoitusluokat={luokittelut.alakayttotarkoitusluokat} />
-  <ELuku {eTehokkuus} idSuffix="perustiedot" />
+  <ELuku
+    {eTehokkuus}
+    tayttaaAplusVaatimukset={energiatodistus.perustiedot[
+      'tayttaa-aplus-vaatimukset'
+    ]}
+    tayttaaA0Vaatimukset={energiatodistus.perustiedot['tayttaa-a0-vaatimukset']}
+    idSuffix="perustiedot" />
+  <div class="my-4 flex flex-col">
+    <div class="w-full py-4">
+      <Checkbox
+        bind:model={energiatodistus}
+        lens={R.lensPath(['perustiedot', 'tayttaa-a0-vaatimukset'])}
+        label={$_('energiatodistus.perustiedot.tayttaa-a0-vaatimukset')}
+        {disabled} />
+    </div>
+    <div class="w-full py-4">
+      <Checkbox
+        bind:model={energiatodistus}
+        lens={R.lensPath(['perustiedot', 'tayttaa-aplus-vaatimukset'])}
+        label={$_('energiatodistus.perustiedot.tayttaa-aplus-vaatimukset')}
+        {disabled} />
+    </div>
+  </div>
 </div>
 <ToimenpideEhdotukset
   versio={'2026'}
@@ -258,7 +280,13 @@
 
 <H2 id="tulokset" text={$_('energiatodistus.tulokset.header')} />
 
-<ELuku {eTehokkuus} idSuffix="tulokset" />
+<ELuku
+  {eTehokkuus}
+  tayttaaAplusVaatimukset={energiatodistus.perustiedot[
+    'tayttaa-aplus-vaatimukset'
+  ]}
+  tayttaaA0Vaatimukset={energiatodistus.perustiedot['tayttaa-a0-vaatimukset']}
+  idSuffix="tulokset" />
 <ELuvunErittely
   bind:eTehokkuus
   {disabled}

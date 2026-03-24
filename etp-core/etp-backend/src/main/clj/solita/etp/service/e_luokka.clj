@@ -1,7 +1,6 @@
 (ns solita.etp.service.e-luokka
   (:require [clojure.core.match :as match]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
-            [solita.etp.etp2026 :as etp2026]
             [solita.common.logic :as logic])
   (:import (java.math RoundingMode)))
 
@@ -77,6 +76,62 @@
 (defn muut-2018 [_]
   {:raja-asteikko [[90 "A"] [130 "B"] [170 "C"] [190 "D"] [240 "E"] [280 "F"]]})
 
+;; --- 2026 raja-asteikko functions ---
+
+(defn pienet-asuinrakennukset-50-150-2026 [nettoala]
+  {:raja-asteikko (raja-asteikko-without-kertoimet
+                   [[114 0.36 "A+"] [143 0.45 "A0"] [143 0.45 "A"]
+                    [146 0.40 "B"] [169.5 0.39 "C"] [220.5 0.39 "D"]
+                    [303 0.38 "E"] [349.5 0.39 "F"]]
+                   nettoala)})
+
+(defn pienet-asuinrakennukset-150-600-2026 [nettoala]
+  {:raja-asteikko (raja-asteikko-without-kertoimet
+                   [[64 0.024 "A+"] [80 0.030 "A0"] [80 0.030 "A"]
+                    [90.1 0.027 "B"] [118.1 0.047 "C"] [168.8 0.045 "D"]
+                    [253.1 0.047 "E"] [298.1 0.047 "F"]]
+                   nettoala)})
+
+(defn pienet-asuinrakennukset-600-2026 [_]
+  {:raja-asteikko [[50 "A+"] [62 "A0"] [62 "A"] [74 "B"]
+                   [90 "C"] [142 "D"] [225 "E"] [270 "F"]]})
+
+(defn rivitalot-2026 [_]
+  {:raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [76 "B"]
+                   [103 "C"] [142 "D"] [225 "E"] [270 "F"]]})
+
+(defn asuinkerrostalot-2026 [_]
+  {:raja-asteikko [[50 "A+"] [63 "A0"] [63 "A"] [72 "B"]
+                   [92 "C"] [111 "D"] [130 "E"] [162 "F"]]})
+
+(defn toimistorakennukset-2026 [_]
+  {:raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [86 "B"]
+                   [119 "C"] [139 "D"] [166 "E"] [206 "F"]]})
+
+(defn liikerakennukset-2026 [_]
+  {:raja-asteikko [[78 "A+"] [97 "A0"] [97 "A"] [121 "B"]
+                   [167 "C"] [193 "D"] [233 "E"] [267 "F"]]})
+
+(defn majoitusliikerakennukset-2026 [_]
+  {:raja-asteikko [[91 "A+"] [114 "A0"] [114 "A"] [123 "B"]
+                   [168 "C"] [194 "D"] [234 "E"] [308 "F"]]})
+
+(defn opetusrakennukset-2026 [_]
+  {:raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [89 "B"]
+                   [114 "C"] [154 "D"] [200 "E"] [240 "F"]]})
+
+(defn liikuntahallit-2026 [_]
+  {:raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [93 "B"]
+                   [119 "C"] [133 "D"] [166 "E"] [192 "F"]]})
+
+(defn sairaalat-2026 [_]
+  {:raja-asteikko [[184 "A+"] [230 "A0"] [230 "A"] [251 "B"]
+                   [312 "C"] [377 "D"] [444 "E"] [546 "F"]]})
+
+(defn muut-2026 [_]
+  {:raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [93 "B"]
+                   [119 "C"] [133 "D"] [166 "E"] [192 "F"]]})
+
 (defn raja-asteikko-f [versio kayttotarkoitus-id alakayttotarkoitus-id nettoala]
   ((match/match [versio kayttotarkoitus-id alakayttotarkoitus-id nettoala]
                 [2013 1 _ (_ :guard #(< % 120))] pienet-asuinrakennukset-120-2013
@@ -126,6 +181,23 @@
 
                 [2018 9 _ _] muut-2018
 
+                ;; 2026 branches
+                [2026 1 "RT" _] rivitalot-2026
+                [2026 1 "AK2" _] rivitalot-2026
+
+                [2026 1 _ (_ :guard #(<= % 150))] pienet-asuinrakennukset-50-150-2026
+                [2026 1 _ (_ :guard #(<= % 600))] pienet-asuinrakennukset-150-600-2026
+                [2026 1 _ (_ :guard #(> % 600))] pienet-asuinrakennukset-600-2026
+
+                [2026 2 _ _] asuinkerrostalot-2026
+                [2026 3 _ _] toimistorakennukset-2026
+                [2026 4 _ _] liikerakennukset-2026
+                [2026 5 _ _] majoitusliikerakennukset-2026
+                [2026 6 _ _] opetusrakennukset-2026
+                [2026 7 _ _] liikuntahallit-2026
+                [2026 8 _ _] sairaalat-2026
+                [2026 9 _ _] muut-2026
+
                 :else (constantly nil))
    nettoala))
 
@@ -135,6 +207,19 @@
                 e-luokka))
             raja-asteikko)
       default-luokka))
+
+(defn downgrade-e-luokka
+  "Downgrade A+/A0 e-luokka based on tayttaa-aplus-vaatimukset and tayttaa-a0-vaatimukset.
+   Returns the (possibly downgraded) e-luokka string.
+   NOTE: Frontend has a parallel implementation: etp-front energiatodistus-utils.js / applyEluokkaDowngrade."
+  [e-luokka tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset]
+  (case e-luokka
+    "A+" (cond
+           (and tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset) "A+"
+           tayttaa-a0-vaatimukset "A0"
+           :else "A")
+    "A0" (if tayttaa-a0-vaatimukset "A0" "A")
+    e-luokka))
 
 (defn- find-by-id [id collection]
   (->> collection (filter #(= (:id %) id)) first))
@@ -146,26 +231,32 @@
      kayttotarkoitus (find-by-id (:kayttotarkoitusluokka-id alakayttotarkoitus)
                                  kayttotarkoitukset)]
 
-    (assoc (raja-asteikko-f (etp2026/implement-2026-via-2018 versio "2026 raja-asteikko are not known yet")
+    (assoc (raja-asteikko-f versio
                             (:id kayttotarkoitus)
                             alakayttotarkoitus-id
                             nettoala)
       :kayttotarkoitus kayttotarkoitus)))
 
 (defn e-luokka [kayttotarkoitukset alakayttotarkoitukset
-                versio alakayttotarkoitus-id nettoala e-luku]
+                versio alakayttotarkoitus-id nettoala e-luku
+                tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset]
   (logic/if-let*
     [{:keys [raja-asteikko] :as rajat}
      (e-luokka-rajat kayttotarkoitukset alakayttotarkoitukset
                      versio alakayttotarkoitus-id nettoala)]
 
     (assoc rajat
-      :e-luokka (e-luokka-from-raja-asteikko raja-asteikko e-luku))))
+      :e-luokka (downgrade-e-luokka
+                  (e-luokka-from-raja-asteikko raja-asteikko e-luku)
+                  tayttaa-aplus-vaatimukset
+                  tayttaa-a0-vaatimukset))))
 
-(defn find-e-luokka [db versio alakayttotarkoitus-id nettoala e-luku]
+(defn find-e-luokka [db versio alakayttotarkoitus-id nettoala e-luku
+                     tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset]
   (e-luokka (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
             (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
-            versio alakayttotarkoitus-id nettoala e-luku))
+            versio alakayttotarkoitus-id nettoala e-luku
+            tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset))
 
 (def energiamuotokerroin
   {2026 {:fossiilinen-polttoaine 1M
