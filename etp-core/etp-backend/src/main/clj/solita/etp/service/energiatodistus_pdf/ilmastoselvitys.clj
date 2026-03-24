@@ -1,9 +1,14 @@
 (ns solita.etp.service.energiatodistus-pdf.ilmastoselvitys
   (:require
     [clojure.string :as str]
+    [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc]
     [solita.common.time :as time]
     [hiccup.core :refer [h]]))
+
+(defn- fmt
+  "Format number with specified decimal places. Returns empty string for nil."
+  [value decimals] (or (formats/format-number value decimals false) ""))
 
 (def ^:private hiilijalanjalki-fields
   [:rakennustuotteiden-valmistus
@@ -39,8 +44,8 @@
    If not: returns \"-\"."
   [energiatodistus]
   (if (has-ilmastoselvitys? energiatodistus)
-    (str (hiilijalanjalki-rakennus-yhteensa
-           (get-in energiatodistus [:ilmastoselvitys :hiilijalanjalki :rakennus])))
+    (fmt (hiilijalanjalki-rakennus-yhteensa
+           (get-in energiatodistus [:ilmastoselvitys :hiilijalanjalki :rakennus])) 1)
     "-"))
 
 (defn- resolve-laadintaperuste
@@ -83,11 +88,11 @@
   "Render one data row (rakennus or rakennuspaikka) with all field values as columns."
   ([label data field-keys]
    (into [:tr [:td label]]
-         (mapv (fn [k] [:td (str (k data))]) field-keys)))
+         (mapv (fn [k] [:td (fmt (k data) 1)]) field-keys)))
   ([label data field-keys yhteensa]
    (into [:tr [:td label]]
-         (conj (mapv (fn [k] [:td (str (k data))]) field-keys)
-               [:td (str yhteensa)]))))
+         (conj (mapv (fn [k] [:td (fmt (k data) 1)]) field-keys)
+               [:td (fmt yhteensa 1)]))))
 
 (defn- th-header
   "Render a table header cell with label text. Line breaks in the label
