@@ -23,7 +23,8 @@ export const OPERATOR_TYPES = Object.freeze({
   ILMANVAIHTOTYYPPI: 'ILMANVAIHTOTYYPPI',
   PATEVYYSTASO: 'PATEVYYSTASO',
   KUNTA: 'KUNTA',
-  LAMMITYSMUOTO: 'LAMMITYSMUOTO'
+  LAMMITYSMUOTO: 'LAMMITYSMUOTO',
+  HAVAINNOINTIKAYNTITYYPPI: 'HAVAINNOINTIKAYNTITYYPPI'
 });
 
 const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
@@ -430,6 +431,9 @@ const perustiedot = {
   },
   rakennusosa: [...stringComparisons],
   havainnointikaynti: [havainnointikayntiEquals, havainnointikayntiBetween],
+  'havainnointikayntityyppi-id': [
+    luokitteluEquals(OPERATOR_TYPES.HAVAINNOINTIKAYNTITYYPPI)
+  ],
   kieli: [luokitteluEquals(OPERATOR_TYPES.KIELISYYS)],
   'keskeiset-suositukset-fi': [...stringComparisons],
   'keskeiset-suositukset-sv': [...stringComparisons]
