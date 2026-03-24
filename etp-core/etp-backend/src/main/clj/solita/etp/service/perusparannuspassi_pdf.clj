@@ -617,9 +617,6 @@
   [db whoami ppp-id kieli]
   (when-let [perusparannuspassi (complete-ppp/find-complete-perusparannuspassi db whoami ppp-id)]
     (let [energiatodistus-id (:energiatodistus-id perusparannuspassi)
-          ;; Use 2-arity find-energiatodistus (without whoami) — PPP access
-          ;; was already verified, and 3-arity tila check blocks draft ETs
-          ;; for pääkäyttäjä.
           energiatodistus (energiatodistus-service/find-energiatodistus db energiatodistus-id)
           versio (:versio energiatodistus)
           luokittelut {:kayttotarkoitukset    (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
