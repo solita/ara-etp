@@ -1295,6 +1295,7 @@
     "lisamerkintoja": "Lisämerkintojä",
     "ilmastoselvitys": {
       "header": "Ilmastoselvitys",
+      "label-context": "Ilmastoselvitys",
       "laatimisajankohta": "Laatimisajankohta",
       "laatija": "Laatija",
       "yritys": "Yritys",

@@ -1267,6 +1267,7 @@
     "lisamerkintoja": "Tilläggsuppgifter",
     "ilmastoselvitys": {
       "header": "Ilmastoselvitys (sv)",
+      "label-context": "Ilmastoselvitys (sv)",
       "laatimisajankohta": "Laatimisajankohta (sv)",
       "laatija": "Laatija (sv)",
       "yritys": "Yritys (sv)",
