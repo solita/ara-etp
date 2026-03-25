@@ -1277,22 +1277,46 @@
       "laadintaperuste": "Laadintaperuste (sv)",
       "hiilijalanjalki": {
         "header": "Hiilijalanjälki (sv)",
-        "rakennus": "Rakennus (sv)",
-        "rakennuspaikka": "Rakennuspaikka (sv)",
         "yhteensa": "Yhteensä (sv)",
-        "rakennustuotteiden-valmistus": "Rakennus\u00ADtuotteiden valmistus (sv)",
-        "kuljetukset-tyomaavaihe": "Kuljetukset ja työmaa\u00ADvaihe (sv)",
-        "rakennustuotteiden-vaihdot": "Rakennus\u00ADtuotteiden vaihdot (sv)",
-        "energiankaytto": "Energian\u00ADkäyttö (sv)",
-        "purkuvaihe": "Purkuvaihe (sv)"
+        "rakennus": {
+          "header": "Rakennus (sv)",
+          "label-context": "Ilmastoselvitys / Hiilijalanjälki / Rakennus (sv)",
+          "rakennustuotteiden-valmistus": "Rakennus\u00ADtuotteiden valmistus (sv)",
+          "kuljetukset-tyomaavaihe": "Kuljetukset ja työmaa\u00ADvaihe (sv)",
+          "rakennustuotteiden-vaihdot": "Rakennus\u00ADtuotteiden vaihdot (sv)",
+          "energiankaytto": "Energian\u00ADkäyttö (sv)",
+          "purkuvaihe": "Purkuvaihe (sv)"
+        },
+        "rakennuspaikka": {
+          "header": "Rakennuspaikka (sv)",
+          "label-context": "Ilmastoselvitys / Hiilijalanjälki / Rakennuspaikka (sv)",
+          "rakennustuotteiden-valmistus": "Rakennus\u00ADtuotteiden valmistus (sv)",
+          "kuljetukset-tyomaavaihe": "Kuljetukset ja työmaa\u00ADvaihe (sv)",
+          "rakennustuotteiden-vaihdot": "Rakennus\u00ADtuotteiden vaihdot (sv)",
+          "energiankaytto": "Energian\u00ADkäyttö (sv)",
+          "purkuvaihe": "Purkuvaihe (sv)"
+        }
       },
       "hiilikadenjalki": {
         "header": "Hiilikädenjälki (sv)",
-        "uudelleenkaytto": "Uudelleen\u00ADkäyttö (sv)",
-        "kierratys": "Kierrätys (sv)",
-        "ylimaarainen-uusiutuvaenergia": "Ylimääräinen uusiutuva energia (sv)",
-        "hiilivarastovaikutus": "Hiili\u00ADvarasto\u00ADvaikutus (sv)",
-        "karbonatisoituminen": "Karbonati\u00ADsoituminen (sv)"
+        "rakennus": {
+          "header": "Rakennus (sv)",
+          "label-context": "Ilmastoselvitys / Hiilikädenjälki / Rakennus (sv)",
+          "uudelleenkaytto": "Uudelleen\u00ADkäyttö (sv)",
+          "kierratys": "Kierrätys (sv)",
+          "ylimaarainen-uusiutuvaenergia": "Ylimääräinen uusiutuva energia (sv)",
+          "hiilivarastovaikutus": "Hiili\u00ADvarasto\u00ADvaikutus (sv)",
+          "karbonatisoituminen": "Karbonati\u00ADsoituminen (sv)"
+        },
+        "rakennuspaikka": {
+          "header": "Rakennuspaikka (sv)",
+          "label-context": "Ilmastoselvitys / Hiilikädenjälki / Rakennuspaikka (sv)",
+          "uudelleenkaytto": "Uudelleen\u00ADkäyttö (sv)",
+          "kierratys": "Kierrätys (sv)",
+          "ylimaarainen-uusiutuvaenergia": "Ylimääräinen uusiutuva energia (sv)",
+          "hiilivarastovaikutus": "Hiili\u00ADvarasto\u00ADvaikutus (sv)",
+          "karbonatisoituminen": "Karbonati\u00ADsoituminen (sv)"
+        }
       }
     },
     "perusparannuspassi": {
