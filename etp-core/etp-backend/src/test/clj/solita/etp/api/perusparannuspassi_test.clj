@@ -350,26 +350,6 @@
         ;; Then: response status is 200 with PPP data
         (assert-status get-res 200 "Pääkäyttäjä should be able to GET perusparannuspassi")))
 
-    (t/testing "Pääkäyttäjä can GET perusparannuspassi PDF"
-      ;; When: pääkäyttäjä requests the PDF version
-      (let [pdf-filename (format "perusparannuspassi-%s-fi.pdf" ppp-id)
-            pdf-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id
-                                                           "/pdf/fi/" pdf-filename))
-                                    (mock/header "Accept" "application/pdf")
-                                    (kayttaja-test-data/with-virtu-user)))]
-        ;; Then: response status is 200
-        (assert-status pdf-res 200 "Pääkäyttäjä should be able to GET perusparannuspassi PDF")))
-
-    (t/testing "Pääkäyttäjä can GET perusparannuspassi HTML"
-      ;; When: pääkäyttäjä requests the HTML version
-      (let [html-filename (format "perusparannuspassi-%s-fi.html" ppp-id)
-            html-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id
-                                                            "/html/fi/" html-filename))
-                                     (mock/header "Accept" "text/html")
-                                     (kayttaja-test-data/with-virtu-user)))]
-        ;; Then: response status is 200
-        (assert-status html-res 200 "Pääkäyttäjä should be able to GET perusparannuspassi HTML")))
-
     (t/testing "Pääkäyttäjä cannot POST new perusparannuspassi"
       ;; When: pääkäyttäjä tries to create a new PPP
       (let [new-ppp (ppp-test-data/generate-add et-id)
@@ -440,6 +420,26 @@
                                     (laatija-test-data/with-suomifi-laatija)))]
         ;; Then: response status is 200
         (assert-status get-res 200 "Owner laatija should be able to GET own perusparannuspassi")))
+
+    (t/testing "Owner laatija can GET own perusparannuspassi PDF"
+      ;; When: the owning laatija requests the PDF version
+      (let [pdf-filename (format "perusparannuspassi-%s-fi.pdf" ppp-id)
+            pdf-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id
+                                                           "/pdf/fi/" pdf-filename))
+                                    (mock/header "Accept" "application/pdf")
+                                    (laatija-test-data/with-suomifi-laatija)))]
+        ;; Then: response status is 200
+        (assert-status pdf-res 200 "Owner laatija should be able to GET own perusparannuspassi PDF")))
+
+    (t/testing "Owner laatija can GET own perusparannuspassi HTML"
+      ;; When: the owning laatija requests the HTML version
+      (let [html-filename (format "perusparannuspassi-%s-fi.html" ppp-id)
+            html-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id
+                                                            "/html/fi/" html-filename))
+                                     (mock/header "Accept" "text/html")
+                                     (laatija-test-data/with-suomifi-laatija)))]
+        ;; Then: response status is 200
+        (assert-status html-res 200 "Owner laatija should be able to GET own perusparannuspassi HTML")))
 
     (t/testing "Different laatija cannot GET another laatija's perusparannuspassi"
       ;; When: a different laatija (laatija 2) sends GET request
