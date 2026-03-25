@@ -327,7 +327,8 @@
 (defn delete-perusparannuspassi! [db whoami perusparannuspassi-id]
   (jdbc/with-db-transaction [db db]
                             (let [ppp (first (perusparannuspassi-db/select-perusparannuspassi-as-laatija
-                                               db {:id perusparannuspassi-id}))]
+                                               db {:id perusparannuspassi-id
+                                                   :laatija-id (:id whoami)}))]
                               (when-not ppp
                                 (exception/throw-ex-info!
                                   :not-found
