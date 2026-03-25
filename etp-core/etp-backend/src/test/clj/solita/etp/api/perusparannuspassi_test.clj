@@ -446,8 +446,8 @@
       (let [get-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id))
                                     (mock/header "Accept" "application/json")
                                     (laatija-test-data/with-suomifi-laatija2)))]
-        ;; Then: access is denied
-        (assert-status get-res 403 "Different laatija should not be able to GET another's perusparannuspassi")))
+        ;; Then: PPP not found for this user (SQL filters by laatija-id)
+        (assert-status get-res 404 "Different laatija should not be able to GET another's perusparannuspassi")))
 
     (t/testing "Owner laatija can still DELETE own perusparannuspassi"
       ;; When: the owning laatija sends DELETE request
