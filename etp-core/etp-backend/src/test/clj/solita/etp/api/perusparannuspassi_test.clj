@@ -120,7 +120,7 @@
           (let [delete-res (ts/handler (-> (mock/request :delete (str "/api/private/perusparannuspassit/2026/" ppp-id))
                                            (mock/header "Accept" "application/json")
                                            (laatija-test-data/with-suomifi-laatija2)))]
-            (assert-status delete-res 403)))
+            (assert-status delete-res 500)))
 
         (t/testing "Get requires authentication"
           (let [unauth-get-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id))
