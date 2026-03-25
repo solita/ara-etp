@@ -117,8 +117,8 @@
 (defn- select-perusparannuspassi-by-role [db whoami id]
   (if (or (rooli-service/paakayttaja? whoami)
           (rooli-service/laskuttaja? whoami))
-    (first (perusparannuspassi-db/select-perusparannuspassi db {:id id}))
-    (first (perusparannuspassi-db/select-perusparannuspassi-as-laatija
+    (first (perusparannuspassi-db/select-perusparannuspassi-as-viranomainen db {:id id}))
+    (first (perusparannuspassi-db/select-perusparannuspassi
              db {:id id :laatija-id (:id whoami)}))))
 
 (defn find-perusparannuspassi [db whoami id]
@@ -326,7 +326,7 @@
 
 (defn delete-perusparannuspassi! [db whoami perusparannuspassi-id]
   (jdbc/with-db-transaction [db db]
-                            (let [ppp (first (perusparannuspassi-db/select-perusparannuspassi-as-laatija
+                            (let [ppp (first (perusparannuspassi-db/select-perusparannuspassi
                                                db {:id perusparannuspassi-id
                                                    :laatija-id (:id whoami)}))]
                               (when-not ppp

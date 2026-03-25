@@ -6,17 +6,7 @@ select
 from energiatodistus
 where id = :energiatodistus-id;
 
--- name: select-perusparannuspassi-as-laatija
-select
-    ppp.*,
-    et.laatija_id,
-    et.tila_id
-from perusparannuspassi ppp
-    join energiatodistus et on ppp.energiatodistus_id = et.id
-where ppp.id = :id
-  and et.laatija_id = :laatija-id;
-
--- name: select-perusparannuspassi
+-- name: select-perusparannuspassi-as-viranomainen
 select
     ppp.*,
     et.laatija_id,
@@ -25,6 +15,15 @@ from perusparannuspassi ppp
     join energiatodistus et on ppp.energiatodistus_id = et.id
 where ppp.id = :id
   and ppp.valid = true;
+
+-- name: select-perusparannuspassi
+select
+    ppp.*,
+    et.laatija_id,
+    et.tila_id
+from perusparannuspassi ppp
+    join energiatodistus et on ppp.energiatodistus_id = et.id
+where ppp.id = :id and et.laatija_id = :laatija-id;
 
 -- name: select-perusparannuspassi-vaiheet
 select *
