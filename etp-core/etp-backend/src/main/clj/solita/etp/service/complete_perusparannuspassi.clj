@@ -237,6 +237,6 @@
   [db whoami id]
   (when-let [ppp (perusparannuspassi-service/find-perusparannuspassi db whoami id)]
     (when-let [energiatodistus (energiatodistus-service/find-energiatodistus
-                                 db whoami (:energiatodistus-id ppp))]
+                                 db (:energiatodistus-id ppp))]
       (let [luokittelut-data (luokittelut db)]
         (complete-perusparannuspassi ppp energiatodistus luokittelut-data)))))
