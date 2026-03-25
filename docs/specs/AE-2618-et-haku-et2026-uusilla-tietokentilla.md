@@ -1,5 +1,9 @@
 # AE-2618: Kirjautumispalvelun ET-haussa ET2026 uusilla tietokentillä hakeminen
 
+## Rajaus
+
+Tämä tiketti koskee **ainoastaan etp-front- ja etp-core-muutoksia** (kirjautuneen käyttäjän haku). Julkisen haun (etp-public) laajennos ET2026-tuella tehdään erillisenä tikettinä.
+
 ## Yhteenveto
 
 Pääkäyttäjänä haluan hakea myös ET2026:a hakutoiminnolla, jotta löydän ne samalla tavalla kuin aiemmat todistusversiot (ET2013 ja ET2018). Haluan mahdollisesti kohdistaa haun uusiin ET2026 tietokenttiin.
@@ -12,9 +16,9 @@ Pääkäyttäjänä haluan hakea myös ET2026:a hakutoiminnolla, jotta löydän 
 
 **Hakukenttäskeema (private):** `private-search-schema` (`energiatodistus_search.clj`, rivi 47) yhdistää skeemoja `schemas->search-schema`-funktiolla. Tällä hetkellä mukana ovat `Energiatodistus2013` ja `Energiatodistus2018`, **mutta ei `Energiatodistus2026`**.
 
-**Hakukenttäskeema (public):** `public-search-schema` (`energiatodistus_search.clj`, rivi 70) yhdistää vastaavasti `Energiatodistus2013` ja `Energiatodistus2018`, **mutta ei `Energiatodistus2026`**. Lisäksi `public_energiatodistus.clj`:n `Energiatodistus`-conditional-skeema ei sisällä ET2026:a.
+**Hakukenttäskeema (public):** `public-search-schema` (`energiatodistus_search.clj`, rivi 70) ja `public_energiatodistus.clj` eivät sisällä ET2026-tukea. **Tämä on tämän tiketin rajauksen ulkopuolella** – julkisen haun laajennos tehdään erikseen.
 
-**Roolinäkyvyys:** `whoami->sql`-funktiossa (`energiatodistus_search.clj`, rivi 268) julkiselle roolille on **jo lisätty** ET2026:n käsittely (versio = 2026, samat käyttötarkoitusrajaukset kuin 2018).
+**Roolinäkyvyys:** `whoami->sql`-funktiossa (`energiatodistus_search.clj`, rivi 268) julkiselle roolille on **jo lisätty** ET2026:n käsittely (versio = 2026, samat käyttötarkoitusrajaukset kuin 2018). Pääkäyttäjä- ja laatija-roolien näkyvyyssuodattimet eivät rajoita versioittain, joten ne palautavat jo ET2026-todistuksia.
 
 **Lasketut kentät (computed fields):** `energiatodistus_search_fields.clj` sisältää laskettuja kenttiä (painotettu kulutus, neliövuosikulutus, UA-arvot). Näistä `painotettu-kulutus-sql` **tukee jo ET2026:a** (energiamuotokerroin 2026 on mukana). Neliövuosikulutus-kentät lasketaan tällä hetkellä `Energiatodistus2018`-skeemasta – ne toimivat ET2026:lle niiltä osin kuin kentät ovat yhteisiä, mutta ET2026-spesifiset uudet kentät puuttuvat.
 
@@ -40,21 +44,9 @@ Pääkäyttäjänä haluan hakea myös ET2026:a hakutoiminnolla, jotta löydän 
 
 **Huomioita:** `Energiatodistus2026`-skeema (`energiatodistus.clj`, rivi 449) sisältää kaikki uudet kentät (havainnointikayntityyppi-id, energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin, lammonjako-lampotilajousto, uusiutuvat-omavaraisenergiat-kokonaistuotanto jne.). `schemas->search-schema`-funktio tekee deep-mergen, joten olemassa olevat kentät säilyvät ja uudet lisätään.
 
-> **📝 REVIEW:** Tarkista, mitä tapahtuu kun `Energiatodistus2026`-skeemassa on kenttä (esim. `havainnointikayntityyppi-id`), joka lisätään `deep-merge`-yhdistykseen, mutta jota ei löydy tietokannasta ET2013/ET2018-riveiltä. Oletettavasti nämä ovat NULL tietokannassa vanhemmille versioille, jolloin haku toimii oikein (NULL ei matchaa mihinkään vertailuun). Tämä kannattaa varmistaa testeillä.
+> **📝 REVIEW: RATKAISTU** – Tarkistettu migraatioista: `pt$havainnointikayntityyppi_id` (v5.55) lisätään ilman NOT NULL / DEFAULT -rajoitetta → vanhoilla ET2013/ET2018-riveillä arvo on **NULL**. Vastaavasti kokonaistuotanto-sarakkeet (v5.57) ovat nullable. NULL ei matchaa yhteenkään vertailuoperaattoriin (`=`, `>`, `<`, `between`, `ilike`), joten ET2013/ET2018-todistukset rajautuvat pois kun haetaan näillä kentillä. **Poikkeus:** boolean-kentät `energiankulutuksen_valmius_reagoida_ulkoisiin_signaaleihin` ja `lammonjako_lampotilajousto` ovat `NOT NULL DEFAULT false` (v5.60) – näissä vanhat versiot eivät rajaudu pois `= false` -haulla (dokumentoitu Riskit-osiossa).
 
-### 2. Backend: Lisää Energiatodistus2026 public hakuskeemaan
-
-**Sijainti:** `energiatodistus_search.clj` → `public-search-schema` ja `public_energiatodistus.clj`
-
-**Mitä:**
-- Lisätään `public-search-schema`-kutsuun ET2026 public-skeema
-- Lisätään `public_energiatodistus.clj`:n `Energiatodistus`-conditional-skeemaan ET2026-haara
-
-**Miksi:** Julkinen haku ei palauta ET2026-todistuksia eikä tunnista niiden kenttiä ilman tätä muutosta.
-
-> **📝 REVIEW:** `public_energiatodistus.clj`:stä puuttuu kokonaan `Energiatodistus2026`-määritys. Tarvitaan uusi `(def Energiatodistus2026 ...)` ja se pitää lisätä `Energiatodistus`-conditional-skeemaan. Mietittävä, mitkä ET2026-kentät näytetään julkisesti – todennäköisesti samat peruskentät kuin 2018:lle, plus mahdollisesti joitain uusia (esim. e-luokka A+/A0 näkyy jo). Vaatiiko tämä tuoteomistajalta päätöksen julkisista kentistä?
-
-### 3. Backend: Lisää ET2026-spesifiset lasketut kentät
+### 2. Backend: Lisää ET2026-spesifiset lasketut kentät
 
 **Sijainti:** `energiatodistus_search_fields.clj` → `computed-fields`
 
@@ -62,9 +54,9 @@ Pääkäyttäjänä haluan hakea myös ET2026:a hakutoiminnolla, jotta löydän 
 
 **Miksi:** Tiketti vaatii, että kokonaistuotanto-kentät (aurinkosahko_kokonaistuotanto, aurinkolampo_kokonaistuotanto jne.) ovat haettavissa.
 
-> **📝 REVIEW:** Nykyinen `per-nettoala-for-schema` tuottaa neliövuosikulutus-kenttiä `Energiatodistus2018`-skeeman perusteella. ET2026:n `uusiutuvat-omavaraisenergiat-kokonaistuotanto` on uusi avain, joka ei ole 2018-skeemassa. Tarvitaan uusi `per-nettoala-for-schema`-kutsu, joka käyttää `Energiatodistus2026`-skeemaa ja kohdistuu polkuun `[:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto]`.
+> **📝 REVIEW:** Nykyinen `per-nettoala-for-schema` tuottaa neliövuosikulutus-kenttiä `Energiatodistus2018`-skeeman perusteella. ET2026:n `uusiutuvat-omavaraisenergiat-kokonaistuotanto` on uusi avain, joka ei ole 2018-skeemassa. Tarvitaan uusi `per-nettoala-for-schema`-kutsu, joka käyttää `Energiatodistus2026`-skeemaa ja kohdistuu polkuun `[:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto]`. Tietokannassa sarakkeet ovat muotoa `t$uusiutuvat_omavaraisenergiat_kokonaistuotanto$aurinkosahko` jne. (nimeäminen tehty v5.59 migraatiossa).
 
-### 4. Backend: Kasvihuonepäästöt per neliö ja uusiutuvan energian osuus
+### 3. Backend: Kasvihuonepäästöt per neliö ja uusiutuvan energian osuus
 
 **Sijainti:** `energiatodistus_search_fields.clj` → `computed-fields`
 
@@ -72,16 +64,28 @@ Pääkäyttäjänä haluan hakea myös ET2026:a hakutoiminnolla, jotta löydän 
 - "energian käytöstä syntyvät kasvihuonepäästöt (per neliö)"
 - "paikan päällä tuotetun uusiutuvan energian osuus energiankäytöstä"
 
-Nämä ovat laskettuja kenttiä, joita ei välttämättä ole suoraan tietokannassa, vaan ne pitää johtaa olemassa olevista sarakkeista.
+**Kasvihuonepäästöt per neliö – laskentakaava on olemassa:**
 
-> **📝 REVIEW: KRIITTINEN** – Nämä kaksi kenttää vaativat tarkempaa selvitystä:
->
-> 1. **Kasvihuonepäästöt per neliö:** Onko tämä arvo tallennettuna tietokantaan vai lasketaanko se? Mitkä sarakkeet ovat lähtödatana? Tarvitaanko päästökertoimet tietokantaan tai konfiguraatioon?
-> 2. **Uusiutuvan energian osuus:** Miten tämä lasketaan? Onko kaava = (uusiutuvat omavaraisenergiat yhteensä) / (kokonaisenergiankulutus)? Mistä kentistä nämä muodostuvat?
->
-> Ilman näitä vastauksia ei voida suunnitella SQL-lausekkeita. **Tarvitaan tiketinhaltijan/tuoteomistajan tarkennusta.**
+`complete_energiatodistus.clj` sisältää jo `co2-paastot-et`-funktion, joka laskee kasvihuonepäästöt `kaytettavat-energiamuodot`-kentistä käyttäen kiinteitä CO2-kertoimia:
+- kaukolampo: 0.059
+- sahko: 0.05
+- uusiutuvat-pat: 0.027
+- fossiiliset-pat: 0.306
+- kaukojaahdytys: 0.014
 
-### 5. Frontend: Lisää ET2026-spesifiset hakukentät hakuskeemaan
+Kaava: `summa(energiamuoto * co2-kerroin)`. Per neliö saadaan jakamalla nettoalalla. Tämä tulee toteuttaa SQL-lausekkeena computed-kenttänä hakua varten, vastaavasti kuin `per-nettoala-sql` tekee muille kentille.
+
+> **📝 REVIEW: RATKAISTU** – `co2-paastot-et` käyttää `kaytettavat-energiamuodot`-kenttien **laskennallisia** arvoja (ei toteutuneita). Tämä on oikein – samat kentät ovat suoraan tietokannassa `energiatodistus.t$kaytettavat_energiamuodot$*`-sarakkeina. SQL-lauseke tulee olemaan: `(coalesce(energiatodistus.t$kaytettavat_energiamuodot$kaukolampo,0) * 0.059 + coalesce(energiatodistus.t$kaytettavat_energiamuodot$sahko,0) * 0.05 + coalesce(energiatodistus.t$kaytettavat_energiamuodot$uusiutuva_polttoaine,0) * 0.027 + coalesce(energiatodistus.t$kaytettavat_energiamuodot$fossiilinen_polttoaine,0) * 0.306 + coalesce(energiatodistus.t$kaytettavat_energiamuodot$kaukojaahdytys,0) * 0.014) / nullif(energiatodistus.lt$lammitetty_nettoala, 0)`. Huom: CO2-kertoimet ovat samat kaikille todistusversioille, joten tämä toimii ET2013/ET2018/ET2026:lle ilman versiokohtaista logiikkaa.
+
+**Uusiutuvan energian osuus – KESKENERÄINEN:**
+
+`complete_energiatodistus.clj`:ssä on **kommentoitu pois** funktio `uusiutuvan-osuus-paastoista` ja PDF-koodissa (`laskennallinen_ostoenergia.clj`, rivi 86) on TODO-kommentti: *"TODO get back to the uusiutuvan-energian-osuus when it's clear what to calculate"*. Etusivun PDF:ssä näytetään tällä hetkellä kovakoodattu "TODO: Add later when ready".
+
+> **📝 REVIEW: KRIITTINEN** – Uusiutuvan energian osuuden laskentakaava on **selvittämättä**. Kommentoitu koodi vihjaa kaavaan `uusiutuvat-omavaraisenergiat yhteensä / kaytettavat-energiamuodot yhteensä`, mutta tätä ei ole vahvistettu. **Tarvitaan tuoteomistajan päätös.** Vaihtoehdot:
+> 1. Jätetään tämä hakukenttä toteuttamatta, kunnes kaava on selvillä (sama TODO kuin PDF:ssä).
+> 2. Toteutetaan kommentoidun kaavan perusteella ja päivitetään myöhemmin tarvittaessa.
+
+### 4. Frontend: Lisää ET2026-spesifiset hakukentät hakuskeemaan
 
 **Sijainti:** `etp-front/src/pages/energiatodistus/energiatodistus-haku/schema.js`
 
@@ -95,9 +99,9 @@ Nämä ovat laskettuja kenttiä, joita ei välttämättä ole suoraan tietokanna
 
 **Miksi:** Ilman näitä käyttöliittymä ei tarjoa mahdollisuutta hakea uusilla kentillä.
 
-> **📝 REVIEW:** Tarkista, tarvitaanko uusi input-komponentti `havainnointikayntityyppi-input.svelte` vai voidaanko käyttää olemassa olevaa `luokittelu-input.svelte`-komponenttia. Luokitteluarvot haetaan `luokittelutAllVersions`-API-kutsulla – varmista, että havainnointikäyntityypit ovat mukana.
+> **📝 REVIEW: RATKAISTU** – Havainnointikäyntityyppi-luokittelu **on jo käytössä** ET2026-lomakkeessa (`ET2026Form.svelte`, rivi 153–168) ja **on mukana** `luokittelutAllVersions`-API:n vastauksessa (`energiatodistus-api.js`, rivi 361: `havainnointikayntityyppi: Fetch.cached(fetch, '/havainnointikayntityyppi')`). Se noudattaa samaa `{id, label-fi, label-sv}` -rakennetta kuin muut luokittelut. **Toteutusratkaisu:** Tarvitaan uusi `OPERATOR_TYPES.HAVAINNOINTIKAYNTITYYPPI` ja ohut wrapper-komponentti (`havainnointikayntityyppi-input.svelte`), joka välittää `luokittelu={'havainnointikayntityyppi'}` geneeriselle `luokittelu-input.svelte`:lle – täsmälleen samalla patternilla kuin `ilmanvaihtotyyppi-input.svelte` ja `lammitysmuoto-input.svelte` toimivat.
 
-### 6. Frontend: Varmista, ettei laatijaSchema rajoita uusia kenttiä
+### 5. Frontend: Varmista, ettei laatijaSchema rajoita uusia kenttiä
 
 **Sijainti:** `etp-front/src/pages/energiatodistus/energiatodistus-haku/schema.js` → `laatijaSchema`
 
@@ -105,49 +109,46 @@ Nämä ovat laskettuja kenttiä, joita ei välttämättä ole suoraan tietokanna
 
 > **📝 REVIEW:** Tarvitaanko tuoteomistajan päätös siitä, mitkä uudet kentät ovat laatijan käytettävissä? Nykyinen rajoitus (`laatijaSchema` rajoittaa tulokset vain `e-luku`/`e-luokka`-kenttiin) viittaa siihen, että laatijalle näytetään vähemmän hakuvaihtoehtoja. Todennäköisesti uudet kentät tarvitaan vain pääkäyttäjäskeemaan.
 
-### 7. Taaksepäin yhteensopivuus
+### 6. Taaksepäin yhteensopivuus
 
 **Mitä varmistettava:**
 - Kun haetaan kentällä, joka on vain ET2026:ssa (esim. `havainnointikayntityyppi-id`), ET2013/ET2018-todistukset eivät matchaa (koska arvo on NULL), eli ne rajautuvat pois – tämä on hyväksymiskriteerien mukaista.
 - Kun haetaan vain ET2013/ET2018-kentillä, ET2026 rajautuu pois tuloksista vain jos kyseinen kenttä puuttuu ET2026:sta. ET2026-todistukset sisältävät suurimman osan vanhoista kentistä (koska `EnergiatodistusSave2026` perustuu `EnergiatodistusSave2018`:aan), joten ne yleensä matchaavat.
 - Versio-suodatin (`energiatodistus.versio`) sallii jo 2026-arvon backend-tasolla.
 
-> **📝 REVIEW:** Tässä on tärkeä edge case: `EnergiatodistusSave2026` käyttää `dissoc-not-in-2026`-funktiota, joka poistaa `polttoaineet-vuosikulutus-yhteensa`-kentän. Jos pääkäyttäjä hakee tällä kentällä, ET2026-todistukset rajautuvat pois (NULL). Tämä on todennäköisesti ok, mutta dokumentoidaan.
+> **📝 REVIEW: RATKAISTU** – `dissoc-not-in-2026` poistaa `polttoaineet-vuosikulutus-yhteensa`-kentän ET2026-skeemasta. Tämä kenttä kuitenkin **säilyy** tietokannassa (se on edelleen `toteutunut-ostoenergiankulutus`:n sarake), mutta sitä ei täytetä ET2026-todistuksille. Kun pääkäyttäjä hakee tällä kentällä, ET2026-todistukset rajautuvat pois (NULL tietokannassa). Tämä on hyväksymiskriteerien mukaista: *"Jos haussa käytetään vain vanhoihin versioihin kuuluvia kenttiä, ET2026 ei aiheuta virheitä vaan rajautuu pois tuloksista."*
 
-### 8. E-luokka-hakuehto: A+ ja A0 tuki
+### 7. E-luokka-hakuehto: A+ ja A0 tuki
 
 **Nykytila:** E-luokka-hakukomponentti (`e-luokka-input.svelte`) listaa jo kaikki luokat mukaan lukien A+ ja A0. Backend-tasolla `e-luokka`-kenttä on yksinkertainen string-kenttä, joten A+ ja A0 toimivat sellaisenaan `in`-operaattorilla.
 
 **Mitä varmistettava:** URL-enkoodaus – A+-merkin `+`-merkki URL:ssa. Nykyisessä koodissa (`energiatodistus-haku.svelte`, rivi 65) on jo käsittely: `s => s.replace(/\+/g, '%2B')`, joka estää `+`-merkin tulkinnan välilyöntinä.
 
-> **📝 REVIEW:** Tämä vaikuttaa olevan jo kunnossa. Testeillä varmistettava, että A+-haku toimii oikein koko ketjussa (URL → backend → SQL → tulokset).
+> **📝 REVIEW: RATKAISTU** – A+/A0 e-luokkahaku on jo kunnossa. `e-luokka-input.svelte` listaa A+ ja A0, URL-enkoodaus (`%2B`) on käsitelty `energiatodistus-haku.svelte`:ssä, ja backend käsittelee `in`-operaattorilla string-arrayta. Varmistettava testeillä.
 
 ## Yhteenveto muutettavista tiedostoista
 
 ### Backend
 | Tiedosto | Muutos |
 |---|---|
-| `energiatodistus_search.clj` | Lisää `Energiatodistus2026` private- ja public-hakuskeemoihin |
-| `energiatodistus_search_fields.clj` | Lisää kokonaistuotanto-kentät, kasvihuonepäästöt per neliö, uusiutuvan energian osuus (lasketut kentät) |
-| `public_energiatodistus.clj` | Lisää `Energiatodistus2026`-skeema ja liitä conditional-skeemaan |
+| `energiatodistus_search.clj` | Lisää `Energiatodistus2026` private-hakuskeemaan (`private-search-schema`) |
+| `energiatodistus_search_fields.clj` | Lisää kokonaistuotanto-kenttien neliövuosikulutukset, kasvihuonepäästöt per neliö (lasketut kentät) |
 
 ### Frontend
 | Tiedosto | Muutos |
 |---|---|
-| `energiatodistus-haku/schema.js` | Lisää ET2026-spesifiset hakukentät (havainnointikayntityyppi, boolean-kentät, kokonaistuotanto jne.) |
-| Mahdollisesti uusi input-komponentti | `havainnointikayntityyppi-input.svelte` tai käytetään olemassa olevaa |
-| Mahdollisesti lokalisointitiedostot | Uusien kenttien käännökset |
+| `energiatodistus-haku/schema.js` | Lisää ET2026-spesifiset hakukentät ja `OPERATOR_TYPES.HAVAINNOINTIKAYNTITYYPPI` |
+| `querybuilder/query-inputs/havainnointikayntityyppi-input.svelte` | Uusi wrapper-komponentti (samalla patternilla kuin `ilmanvaihtotyyppi-input.svelte`) |
+| `querybuilder/query-input.svelte` | Lisää `HAVAINNOINTIKAYNTITYYPPI`-case `inputForType`-switchiin |
+| Lokalisointitiedostot | Uusien kenttien käännökset (fi/sv) |
 
 ## Avoimet kysymykset
 
-1. **Kasvihuonepäästöt per neliö:** Onko tämä tallennettu tietokantaan vai laskettava kenttä? Mikä on laskentakaava?
-2. **Uusiutuvan energian osuus:** Sama kysymys – mistä kentistä ja millä kaavalla?
-3. **Julkisen haun ET2026-kentät:** Mitkä ET2026-spesifiset kentät näkyvät julkisessa haussa?
-4. **Laatijan hakukentät:** Tarvitseeko laatija hakea uusilla ET2026-kentillä vai riittääkö pääkäyttäjäskeema?
-5. **Havainnointikäyntityyppi-luokittelu:** Sisältyykö tämä jo `luokittelutAllVersions`-API:n vastaukseen?
+1. **Uusiutuvan energian osuus:** Laskentakaava on keskeneräinen myös PDF-toteutuksessa (TODO-kommentti koodissa). Toteutetaanko hakukenttä tässä tiketissä vai vasta kun kaava on selvillä?
+2. **Laatijan hakukentät:** Tarvitseeko laatija hakea uusilla ET2026-kentillä vai riittääkö pääkäyttäjäskeema? Nykyisellään `laatijaSchema` rajoittaa tulokset vain `e-luku`/`e-luokka`-kenttiin.
 
 ## Riskit
 
-- **Kasvihuonepäästöt/uusiutuvan osuus -kenttien laskentakaavat puuttuvat.** Nämä voivat vaatia tuoteomistajan tarkennusta ennen toteutusta.
+- **Uusiutuvan energian osuus -kentän laskentakaava puuttuu.** Sama TODO on PDF-toteutuksessa. Tämä yksi hakukenttä saattaa jäädä toteuttamatta tässä tiketissä.
 - **Deep-merge yhdistäminen voi tuottaa yllättäviä tuloksia**, jos ET2026-skeema määrittelee saman polun eri tyypillä kuin ET2018. Tämä on epätodennäköistä nykyisellä skeemarakenteella, mutta on hyvä testata.
-- **Public-skeeman puuttuminen** voi aiheuttaa ongelmia julkiselle hakupalvelulle, jos sitä ei toteuteta samalla.
+- **Boolean-kenttien oletusarvot tietokannassa:** Migraatio `v5.60` asettaa `energiankulutuksen_valmius_reagoida_ulkoisiin_signaaleihin` ja `lammonjako_lampotilajousto` oletusarvoksi `false` (NOT NULL). Tämä tarkoittaa, että ET2013/ET2018-riveillä näiden arvo on `false`, ei NULL. Hakuehto `= true` toimii oikein (rajaa pois vanhat versiot), mutta `= false` palauttaa **myös vanhat versiot**. Tämä voi olla yllättävää – harkittava, halutaanko rajoittaa näitä hakukenttiä vain ET2026-versioon.
