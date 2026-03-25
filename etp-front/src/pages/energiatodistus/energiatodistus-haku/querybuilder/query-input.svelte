@@ -25,6 +25,7 @@
   import PatevyystasoInput from './query-inputs/patevyystaso-input';
   import IlmanvaihtotyyppiInput from './query-inputs/ilmanvaihtotyyppi-input';
   import LammitysMuotoInput from './query-inputs/lammitysmuoto-input';
+  import HavainnointikayntiInput from './query-inputs/havainnointikayntityyppi-input';
 
   import { _ } from '@Language/i18n';
 
@@ -78,6 +79,8 @@
         return KuntaInput;
       case OPERATOR_TYPES.LAMMITYSMUOTO:
         return LammitysMuotoInput;
+      case OPERATOR_TYPES.HAVAINNOINTIKAYNTITYYPPI:
+        return HavainnointikayntiInput;
       default:
         return TextInput;
     }
