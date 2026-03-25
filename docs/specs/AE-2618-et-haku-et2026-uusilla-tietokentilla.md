@@ -77,13 +77,16 @@ Kaava: `summa(energiamuoto * co2-kerroin)`. Per neliö saadaan jakamalla nettoal
 
 > **📝 REVIEW: RATKAISTU** – `co2-paastot-et` käyttää `kaytettavat-energiamuodot`-kenttien **laskennallisia** arvoja (ei toteutuneita). Tämä on oikein – samat kentät ovat suoraan tietokannassa `energiatodistus.t$kaytettavat_energiamuodot$*`-sarakkeina. SQL-lauseke tulee olemaan: `(coalesce(energiatodistus.t$kaytettavat_energiamuodot$kaukolampo,0) * 0.059 + coalesce(energiatodistus.t$kaytettavat_energiamuodot$sahko,0) * 0.05 + coalesce(energiatodistus.t$kaytettavat_energiamuodot$uusiutuva_polttoaine,0) * 0.027 + coalesce(energiatodistus.t$kaytettavat_energiamuodot$fossiilinen_polttoaine,0) * 0.306 + coalesce(energiatodistus.t$kaytettavat_energiamuodot$kaukojaahdytys,0) * 0.014) / nullif(energiatodistus.lt$lammitetty_nettoala, 0)`. Huom: CO2-kertoimet ovat samat kaikille todistusversioille, joten tämä toimii ET2013/ET2018/ET2026:lle ilman versiokohtaista logiikkaa.
 
-**Uusiutuvan energian osuus – KESKENERÄINEN:**
+**Uusiutuvan energian osuus – tynkätoteutus (stub):**
 
-`complete_energiatodistus.clj`:ssä on **kommentoitu pois** funktio `uusiutuvan-osuus-paastoista` ja PDF-koodissa (`laskennallinen_ostoenergia.clj`, rivi 86) on TODO-kommentti: *"TODO get back to the uusiutuvan-energian-osuus when it's clear what to calculate"*. Etusivun PDF:ssä näytetään tällä hetkellä kovakoodattu "TODO: Add later when ready".
+Varsinaista laskentakaavaa ei ole vielä määritelty. `complete_energiatodistus.clj`:ssä on kommentoitu pois funktio `uusiutuvan-osuus-paastoista` ja PDF-koodissa on TODO-kommentti. Laskentakaavan toteutus tehdään erillisen lipukkeen piirissä.
 
-> **📝 REVIEW: KRIITTINEN** – Uusiutuvan energian osuuden laskentakaava on **selvittämättä**. Kommentoitu koodi vihjaa kaavaan `uusiutuvat-omavaraisenergiat yhteensä / kaytettavat-energiamuodot yhteensä`, mutta tätä ei ole vahvistettu. **Tarvitaan tuoteomistajan päätös.** Vaihtoehdot:
-> 1. Jätetään tämä hakukenttä toteuttamatta, kunnes kaava on selvillä (sama TODO kuin PDF:ssä).
-> 2. Toteutetaan kommentoidun kaavan perusteella ja päivitetään myöhemmin tarvittaessa.
+**Päätös:** Tässä tiketissä toteutetaan hakukenttä tynkätoteutuksena (stub). Kenttä rekisteröidään hakuskeemaan ja frontendiin, mutta sen SQL-lauseke palauttaa toistaiseksi vakioarvon (esim. `NULL` tai `0`). Tämä mahdollistaa:
+- Hakukentän näkyvyyden käyttöliittymässä valmiiksi
+- Myöhemmän laskentakaavan lisäämisen ilman frontend-muutoksia
+- Yhtenäisen rakenteen muiden computed-kenttien kanssa
+
+> **📝 REVIEW: RATKAISTU** – Stub-toteutus. Varsinainen laskentakaava toteutetaan erillisessä tiketissä. Stub-kentän SQL-lauseke on vakio (esim. `NULL`), jotta haun rakenne on valmiina mutta kenttä ei vielä palauta merkityksellistä dataa.
 
 ### 4. Frontend: Lisää ET2026-spesifiset hakukentät hakuskeemaan
 
@@ -101,13 +104,11 @@ Kaava: `summa(energiamuoto * co2-kerroin)`. Per neliö saadaan jakamalla nettoal
 
 > **📝 REVIEW: RATKAISTU** – Havainnointikäyntityyppi-luokittelu **on jo käytössä** ET2026-lomakkeessa (`ET2026Form.svelte`, rivi 153–168) ja **on mukana** `luokittelutAllVersions`-API:n vastauksessa (`energiatodistus-api.js`, rivi 361: `havainnointikayntityyppi: Fetch.cached(fetch, '/havainnointikayntityyppi')`). Se noudattaa samaa `{id, label-fi, label-sv}` -rakennetta kuin muut luokittelut. **Toteutusratkaisu:** Tarvitaan uusi `OPERATOR_TYPES.HAVAINNOINTIKAYNTITYYPPI` ja ohut wrapper-komponentti (`havainnointikayntityyppi-input.svelte`), joka välittää `luokittelu={'havainnointikayntityyppi'}` geneeriselle `luokittelu-input.svelte`:lle – täsmälleen samalla patternilla kuin `ilmanvaihtotyyppi-input.svelte` ja `lammitysmuoto-input.svelte` toimivat.
 
-### 5. Frontend: Varmista, ettei laatijaSchema rajoita uusia kenttiä
+### 5. Frontend: laatijaSchema – ei muutoksia tässä tiketissä
 
-**Sijainti:** `etp-front/src/pages/energiatodistus/energiatodistus-haku/schema.js` → `laatijaSchema`
+**Päätös:** Laatijan hakutoiminnallisuuden laajentamisesta on oma lipukkeensa. Tässä tiketissä uudet ET2026-hakukentät lisätään **ainoastaan pääkäyttäjäskeemaan** (`paakayttajaSchema`). `laatijaSchema` säilyy ennallaan – se ei vaadi muutoksia tässä tiketissä.
 
-**Mitä:** Tarkista, ovatko uudet kentät oleellisia myös laatijan hakuskeemassa vai vain pääkäyttäjän skeemassa. Nykyisessä `laatijaSchema`-määrittelyssä tulokset rajoitetaan vain `e-luku`- ja `e-luokka`-kenttiin. Jos laatijan halutaan voivan hakea kokonaistuotanto-kentillä, `laatijaSchema`:n `tulokset`-pick-listaa pitää laajentaa.
-
-> **📝 REVIEW:** Tarvitaanko tuoteomistajan päätös siitä, mitkä uudet kentät ovat laatijan käytettävissä? Nykyinen rajoitus (`laatijaSchema` rajoittaa tulokset vain `e-luku`/`e-luokka`-kenttiin) viittaa siihen, että laatijalle näytetään vähemmän hakuvaihtoehtoja. Todennäköisesti uudet kentät tarvitaan vain pääkäyttäjäskeemaan.
+> **📝 REVIEW: RATKAISTU** – Ei muutoksia `laatijaSchema`:an. Uudet kentät lisätään `schema`-objektiin, josta `paakayttajaSchema` muodostetaan `flattenSchema(schema)`:lla. Koska `laatijaSchema` tekee omat rajoituksensa (esim. `R.pick(['e-luku', 'e-luokka'])` tuloksille), uudet kentät eivät automaattisesti näy laatijalle.
 
 ### 6. Taaksepäin yhteensopivuus
 
@@ -142,13 +143,8 @@ Kaava: `summa(energiamuoto * co2-kerroin)`. Per neliö saadaan jakamalla nettoal
 | `querybuilder/query-input.svelte` | Lisää `HAVAINNOINTIKAYNTITYYPPI`-case `inputForType`-switchiin |
 | Lokalisointitiedostot | Uusien kenttien käännökset (fi/sv) |
 
-## Avoimet kysymykset
-
-1. **Uusiutuvan energian osuus:** Laskentakaava on keskeneräinen myös PDF-toteutuksessa (TODO-kommentti koodissa). Toteutetaanko hakukenttä tässä tiketissä vai vasta kun kaava on selvillä?
-2. **Laatijan hakukentät:** Tarvitseeko laatija hakea uusilla ET2026-kentillä vai riittääkö pääkäyttäjäskeema? Nykyisellään `laatijaSchema` rajoittaa tulokset vain `e-luku`/`e-luokka`-kenttiin.
-
 ## Riskit
 
-- **Uusiutuvan energian osuus -kentän laskentakaava puuttuu.** Sama TODO on PDF-toteutuksessa. Tämä yksi hakukenttä saattaa jäädä toteuttamatta tässä tiketissä.
+- **Uusiutuvan energian osuus toteutetaan stub-kenttänä.** Hakukenttä on olemassa mutta palauttaa vakioarvon. Varsinainen laskentakaava toteutetaan erillisessä tiketissä. Riski: käyttäjä voi hämmentyä kentästä, joka ei tuota tuloksia.
 - **Deep-merge yhdistäminen voi tuottaa yllättäviä tuloksia**, jos ET2026-skeema määrittelee saman polun eri tyypillä kuin ET2018. Tämä on epätodennäköistä nykyisellä skeemarakenteella, mutta on hyvä testata.
 - **Boolean-kenttien oletusarvot tietokannassa:** Migraatio `v5.60` asettaa `energiankulutuksen_valmius_reagoida_ulkoisiin_signaaleihin` ja `lammonjako_lampotilajousto` oletusarvoksi `false` (NOT NULL). Tämä tarkoittaa, että ET2013/ET2018-riveillä näiden arvo on `false`, ei NULL. Hakuehto `= true` toimii oikein (rajaa pois vanhat versiot), mutta `= false` palauttaa **myös vanhat versiot**. Tämä voi olla yllättävää – harkittava, halutaanko rajoittaa näitä hakukenttiä vain ET2026-versioon.
