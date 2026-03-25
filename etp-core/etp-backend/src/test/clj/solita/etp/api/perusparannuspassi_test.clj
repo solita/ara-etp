@@ -342,13 +342,22 @@
     (assert-status et-post-res 201 "Setup: ET creation should succeed")
     (assert-status ppp-post-res 201 "Setup: PPP creation should succeed")
 
-    (t/testing "Pääkäyttäjä can GET perusparannuspassi"
-      ;; When: pääkäyttäjä sends GET request for the PPP
-      (let [get-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id))
-                                    (mock/header "Accept" "application/json")
-                                    (kayttaja-test-data/with-virtu-user)))]
-        ;; Then: response status is 200 with PPP data
-        (assert-status get-res 200 "Pääkäyttäjä should be able to GET perusparannuspassi")))
+    (t/testing "Pääkäyttäjä can GET perusparannuspassi when draft-visible-to-paakayttaja is true"
+      ;; Given: laatija updates the ET to be visible to pääkäyttäjä
+      (let [updated-et (assoc et :draft-visible-to-paakayttaja true)
+            updated-et-body (j/write-value-as-string updated-et)
+            put-et-res (ts/handler (-> (mock/request :put (str "/api/private/energiatodistukset/2026/" et-id))
+                                       (mock/header "Accept" "application/json")
+                                       (mock/header "Content-Type" "application/json")
+                                       (mock/body updated-et-body)
+                                       (laatija-test-data/with-suomifi-laatija)))]
+        (assert-status put-et-res 200 "Setup: ET update with draft-visible-to-paakayttaja should succeed")
+        ;; When: pääkäyttäjä sends GET request for the PPP
+        (let [get-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id))
+                                      (mock/header "Accept" "application/json")
+                                      (kayttaja-test-data/with-virtu-user)))]
+          ;; Then: response status is 200 with PPP data
+          (assert-status get-res 200 "Pääkäyttäjä should be able to GET perusparannuspassi"))))
 
     (t/testing "Pääkäyttäjä cannot POST new perusparannuspassi"
       ;; When: pääkäyttäjä tries to create a new PPP
@@ -381,6 +390,47 @@
                                        (kayttaja-test-data/with-virtu-user)))]
         ;; Then: access is denied
         (assert-status delete-res 403 "Pääkäyttäjä should not be able to DELETE perusparannuspassi")))))
+
+(t/deftest ppp-paakayttaja-access-signed-et-test
+  ;; Given: a laatija with ppp-pätevyys creates an energiatodistus, a PPP, then signs the ET
+  (let [laatija-id (laatija-test-data/insert-suomifi-laatija!
+                     (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))]
+
+    (kayttaja-test-data/insert-virtu-paakayttaja!)
+
+    (let [;; Given: laatija creates an energiatodistus (2026)
+          et (et-test-data/generate-add 2026 true)
+          et-body (j/write-value-as-string et)
+          et-post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2026")
+                                      (mock/header "Accept" "application/json")
+                                      (mock/header "Content-Type" "application/json")
+                                      (mock/body et-body)
+                                      (laatija-test-data/with-suomifi-laatija)))
+          et-id (-> et-post-res :body (j/read-value object-mapper) :id)
+
+          ;; Given: laatija creates a perusparannuspassi while ET is still in draft
+          ppp (ppp-test-data/generate-add et-id)
+          ppp-body (j/write-value-as-string ppp)
+          ppp-post-res (ts/handler (-> (mock/request :post "/api/private/perusparannuspassit/2026")
+                                       (mock/header "Accept" "application/json")
+                                       (mock/header "Content-Type" "application/json")
+                                       (mock/body ppp-body)
+                                       (laatija-test-data/with-suomifi-laatija)))
+          ppp-id (-> ppp-post-res :body (j/read-value object-mapper) :id)]
+
+      (assert-status et-post-res 201 "Setup: ET creation should succeed")
+      (assert-status ppp-post-res 201 "Setup: PPP creation should succeed")
+
+      ;; Sign the energiatodistus to set tila-id = 2
+      (et-test-data/sign! et-id laatija-id true)
+
+      (t/testing "Pääkäyttäjä can GET perusparannuspassi when ET is signed (tila-id = 2)"
+        ;; When: pääkäyttäjä sends GET request for the PPP
+        (let [get-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id))
+                                      (mock/header "Accept" "application/json")
+                                      (kayttaja-test-data/with-virtu-user)))]
+          ;; Then: response status is 200 with PPP data
+          (assert-status get-res 200 "Pääkäyttäjä should be able to GET perusparannuspassi for signed ET"))))))
 
 (t/deftest ppp-laatija-access-regression-test
   ;; Given: two laatijas with ppp-pätevyys
