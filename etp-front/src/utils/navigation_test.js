@@ -62,6 +62,26 @@ describe('Navigation', () => {
       ).toEqual(expected);
     });
 
+    it('should return energiatodistus-links with muutoshistoria for ET2026', () => {
+      const expected = [
+        { label: 'ET 1', href: '#/energiatodistus/2026/1' },
+        { label: 'Liitteet', href: '#/energiatodistus/2026/1/liitteet' },
+        { label: 'Valvonta', href: '#/valvonta/oikeellisuus/2026/1' },
+        { label: 'Viestit', href: '#/energiatodistus/2026/1/viestit' },
+        {
+          label: 'Muutoshistoria',
+          href: '#/energiatodistus/2026/1/muutoshistoria'
+        }
+      ];
+
+      expect(
+        R.map(
+          R.pick(['label', 'href']),
+          Navigation.parseEnergiatodistus(false, i18n, kayttaja, ['2026', '1'])
+        )
+      ).toEqual(expected);
+    });
+
     it('should return root links when outside single energiatodistus', () => {
       const expected = [
         {
@@ -432,6 +452,34 @@ describe('Navigation', () => {
         {
           label: 'Muutoshistoria',
           href: '#/energiatodistus/2018/1/muutoshistoria'
+        }
+      ];
+
+      expect(
+        R.map(
+          R.dissoc('badge'),
+          Navigation.parseValvontaOikeellisuus(
+            isDev,
+            i18n,
+            whoami,
+            locationParts
+          )
+        )
+      ).toEqual(expected);
+    });
+    it('should return energiatodistus with muutoshistoria for ET2026', () => {
+      const isDev = false;
+      const whoami = { id: 1, rooli: 2 };
+      const locationParts = ['2026', '1'];
+
+      const expected = [
+        { label: 'ET 1', href: '#/energiatodistus/2026/1' },
+        { label: 'Liitteet', href: '#/energiatodistus/2026/1/liitteet' },
+        { label: 'Valvonta', href: '#/valvonta/oikeellisuus/2026/1' },
+        { label: 'Viestit', href: '#/energiatodistus/2026/1/viestit' },
+        {
+          label: 'Muutoshistoria',
+          href: '#/energiatodistus/2026/1/muutoshistoria'
         }
       ];
 

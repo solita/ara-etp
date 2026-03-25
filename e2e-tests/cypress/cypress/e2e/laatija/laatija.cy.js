@@ -503,7 +503,7 @@ context('Laatija', () => {
         cy.get('[data-cy="save-button"]').click();
         cy.get('[data-cy="form-alert-text"]').should(
           'contain.text',
-          'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.label-context / energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko'
+          'Uusiutuvat omavaraisenergiat, kokonaistuotanto / Aurinkosähkö, kokonaistuotanto (kWh/vuosi)'
         );
 
         cy.get(
