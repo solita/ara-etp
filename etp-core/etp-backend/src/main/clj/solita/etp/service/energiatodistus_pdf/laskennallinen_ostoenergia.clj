@@ -1,7 +1,6 @@
 (ns solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia
   (:require
     [solita.etp.service.localization :as loc]
-    [solita.etp.service.complete-energiatodistus :as energiatodistus]
     [solita.etp.service.energiatodistus-pdf.ilmastoselvitys :as ilmastoselvitys]))
 
 (defn- table-ostoenergia [kieli items]
@@ -80,8 +79,8 @@
 (defn ostoenergia-tiedot [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
         tulokset (:tulokset energiatodistus)
-        kasvihuonepaastot (energiatodistus/co2-paastot-et (:kaytettavat-energiamuodot tulokset))
-        rounded (when kasvihuonepaastot (Math/round (double kasvihuonepaastot)))
+        kasvihuonepaastot-nettoala (:kasvihuonepaastot-nettoala tulokset)
+        rounded (when kasvihuonepaastot-nettoala (Math/round (double kasvihuonepaastot-nettoala)))
         ;uusiutuvan-osuus (energiatodistus/uusiutuvan-osuus-paastoista (:tulokset energiatodistus))
         ;TODO get back to the uusiutuvan-energian-osuus when it's clear what to calculate
         ]
