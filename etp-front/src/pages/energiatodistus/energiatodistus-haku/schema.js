@@ -436,7 +436,9 @@ const perustiedot = {
   ],
   kieli: [luokitteluEquals(OPERATOR_TYPES.KIELISYYS)],
   'keskeiset-suositukset-fi': [...stringComparisons],
-  'keskeiset-suositukset-sv': [...stringComparisons]
+  'keskeiset-suositukset-sv': [...stringComparisons],
+  'tayttaa-aplus-vaatimukset': [singleBoolean],
+  'tayttaa-a0-vaatimukset': [singleBoolean]
 };
 
 const lahtotiedot = {
