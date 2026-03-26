@@ -189,3 +189,18 @@
 
 - **Mitä testataan:** Haettaessa kentällä, jota ei ole skeemassa (esim. `energiatodistus.olematon-kentta`), API palauttaa virhevastauksen.
 - **Assertio:** HTTP-vastaus on 400 tai vastaava virhekoodi.
+
+---
+
+## Katselmoinnin status (2026-03-26)
+
+| Testi | Status | Huomio |
+|-------|--------|--------|
+| 1.1–1.5 Private-search-schema | ✅ Toteutettu ja läpäisee | |
+| 2.1–2.8 Kokonaistuotanto | ✅ Toteutettu ja läpäisee | |
+| 3.1–3.5 Kasvihuonepäästöt | ✅ Toteutettu ja läpäisee | coalesce/nullif käsittely oikein |
+| 4.1–4.2 Uusiutuvan energian osuus (stub) | ✅ Toteutettu ja läpäisee | |
+| 5.1–5.4 Boolean-kentät | ✅ Toteutettu ja läpäisee | |
+| 6.1–6.2 API-testit | ✅ Toteutettu ja läpäisee | |
+
+**Backend: Ei löydöksiä.** Kaikki toteutus vastaa suunnitelmaa.

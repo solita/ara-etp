@@ -123,3 +123,33 @@ Seuraavat asiat on varmistettu:
 - **Uusiutuvan energian osuus toteutetaan stub-kenttänä.** Hakukenttä on olemassa mutta palauttaa vakioarvon `0`. Varsinainen laskentakaava toteutetaan erillisessä tiketissä. Käyttäjä voi hämmentyä kentästä, joka ei vielä tuota todellisia arvoja.
 - **Deep-merge voi tuottaa yllättäviä tuloksia**, jos ET2026-skeema määrittelee saman polun eri tyypillä kuin ET2018. Tämä on epätodennäköistä nykyisellä skeemarakenteella, mutta on hyvä testata.
 - **Boolean-kenttien oletusarvot tietokannassa:** `energiankulutuksen_valmius_reagoida_ulkoisiin_signaaleihin` ja `lammonjako_lampotilajousto` ovat `NOT NULL DEFAULT false` (v5.60-migraatio), joten ET2013/ET2018-riveillä arvo on `false`, ei NULL. Hakuehto `= true` rajaa oikein vanhat versiot pois, mutta `= false` palauttaa myös vanhat versiot.
+
+---
+
+## Toteutuksen status (katselmoitu 2026-03-26)
+
+### Backend – Status: ✅ Valmis
+
+| Osa | Status | Huomio |
+|-----|--------|--------|
+| 1. Energiatodistus2026 private-search-schema:an | ✅ Valmis | |
+| 2. Kokonaistuotanto neliövuosikulutus computed fields | ✅ Valmis | |
+| 3. Kasvihuonepäästöt per neliö | ✅ Valmis | coalesce/nullif käsittely oikein |
+| 3. Uusiutuvan energian osuus (stub) | ✅ Valmis | Palauttaa "0" |
+
+### Frontend – Status: ⚠️ Bugikorjaus tarvitaan
+
+| Osa | Status | Huomio |
+|-----|--------|--------|
+| 4. OPERATOR_TYPES.HAVAINNOINTIKAYNTITYYPPI | ✅ Valmis | |
+| 4. Hakukentät schema.js:ään | ✅ Valmis | |
+| 4. havainnointikayntityyppi-input.svelte | ❌ Bugi | `luokittelu='havainnointikayntityypit'` pitäisi olla `'havainnointikayntityyppi'` (yksikkö). API:n luokittelut-avain on `havainnointikayntityyppi`. |
+| 4. query-input.svelte case | ✅ Valmis | |
+| 4. Lokalisointi (fi/sv) | ✅ Valmis | sv-käännökset placeholder-muodossa |
+| 5. Taaksepäin yhteensopivuus | ✅ Valmis | laatijaSchema rajaa uudet kentät pois |
+
+### Katselmoinnin löydökset
+
+1. **🔴 KRIITTINEN:** `havainnointikayntityyppi-input.svelte` välittää väärän luokittelu-avaimen `'havainnointikayntityypit'` (monikko) → pitäisi olla `'havainnointikayntityyppi'` (yksikkö). Testi peittää bugin väärällä mock-avaimella.
+2. **🟡 Huomio:** CO₂-kertoimet (0.059, 0.05 jne.) kovakoodattu sekä SQL:ään että testeihin – kaksi päivityskohdetta jos kertoimet muuttuvat.
+3. **🟡 Huomio:** 6 kokonaistuotanto-testiä voisi parametrisoida (ei estävä).
