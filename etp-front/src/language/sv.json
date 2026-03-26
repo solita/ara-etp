@@ -931,7 +931,7 @@
       },
       "uusiutuvat-omavaraisenergiat": {
         "0": {
-          "label-context": "Förnybara självförsörjningsenergier",
+          "label-context": "Omavaraisenergia, hyödynnetty (sv)",
           "nimi": "Energinamn",
           "vuosikulutus": "Produktion (kWh/år)"
         },
@@ -942,7 +942,7 @@
         },
         "table-kokonaistuotto-header": "Kokonaistuotto (sv)",
         "table-rakennuksen-hyodyntama-osuus-header": "Rakennuksen hyödyntämä osuus (sv)",
-        "label-context": "Förnybara självförsörjningsenergier",
+        "label-context": "Omavaraisenergia, hyödynnetty (sv)",
         "table-header": "Energilösning",
         "labels": {
           "aurinkosahko": "Solel",
@@ -966,13 +966,13 @@
         "lampopumppu-neliovuosikulutus": "Energi som en värmepump upptar från värmekällan (kWh/(m²år))"
       },
       "uusiutuvat-omavaraisenergiat-kokonaistuotanto": {
-        "label-context": "Uusiutuvat omavaraisenergiat, kokonaistuotanto (sv)",
-        "aurinkosahko": "Aurinkosähkö, kokonaistuotanto (kWh/vuosi) (sv)",
-        "aurinkolampo": "Aurinkolämpö, kokonaistuotanto (kWh/vuosi) (sv)",
-        "tuulisahko": "Tuulisähkö, kokonaistuotanto (kWh/vuosi) (sv)",
-        "lampopumppu": "Lämpöpumppu, kokonaistuotanto (kWh/vuosi) (sv)",
-        "muulampo": "Muu lämpö, kokonaistuotanto (kWh/vuosi) (sv)",
-        "muusahko": "Muu sähkö, kokonaistuotanto (kWh/vuosi) (sv)"
+        "label-context": "Omavaraisenergia, kokonaistuotanto (sv)",
+        "aurinkosahko": "Aurinkosähkö (kWh/vuosi) (sv)",
+        "aurinkolampo": "Aurinkolämpö (kWh/vuosi) (sv)",
+        "tuulisahko": "Tuulisähkö (kWh/vuosi) (sv)",
+        "lampopumppu": "Lämpöpumppu (kWh/vuosi) (sv)",
+        "muulampo": "Muu lämpö (kWh/vuosi) (sv)",
+        "muusahko": "Muu sähkö (kWh/vuosi) (sv)"
       },
       "kasvihuonepaastot-per-nelio": "Kasvihuonekaasupäästöt (kg CO₂e/m²/vuosi) (sv)",
       "uusiutuvan-energian-osuus": "Uusiutuvan energian osuus (sv)",
