@@ -1,6 +1,6 @@
 ---
 description: "Edit and provide feedback on implementation details written in a .md file for a specific feature or functionality."
-tools: ['vscode', 'read', 'edit', 'search', 'todo']
+tools: ['view', 'edit', 'create', 'grep', 'glob', 'sql']
 handoffs:
   - label: Start planning the tests
     agent: test-planner

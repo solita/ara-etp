@@ -1,7 +1,7 @@
 ---
 description: 'Updates specification documentation based on implemented changes.'
 tools:
-  ['read', 'edit', 'search']
+  ['view', 'edit', 'create', 'grep', 'glob']
 handoffs:
   - label: Commit changes
     agent: commiter

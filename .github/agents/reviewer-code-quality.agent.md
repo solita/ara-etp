@@ -1,6 +1,6 @@
 ---
 description: 'Reviews code quality'
-tools: ['vscode', 'read', 'edit', 'search', 'todo']
+tools: ['view', 'edit', 'create', 'grep', 'glob', 'sql']
 model: Claude Opus 4.6 (copilot)
 user-invokable: false
 ---

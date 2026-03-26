@@ -1,6 +1,6 @@
 ---
 description: 'Reviews changes before committing to the codebase.'
-tools: ['vscode', 'execute', 'read', 'edit', 'search', 'agent', 'todo', 'agent']
+tools: ['bash', 'view', 'edit', 'create', 'grep', 'glob', 'task', 'sql']
 agents:
   [
     reviewer-correctness,

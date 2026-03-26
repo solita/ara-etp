@@ -1,6 +1,6 @@
 ---
 description: 'The agent implements implementation using TDD methodology'
-tools: ['vscode', 'execute', 'read', 'edit', 'search', 'agent', 'todo']
+tools: ['bash', 'view', 'edit', 'create', 'grep', 'glob', 'task', 'sql']
 model: Claude Opus 4.6 (copilot)
 handoffs:
   - label: Review Changes

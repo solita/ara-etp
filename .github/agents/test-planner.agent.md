@@ -1,7 +1,7 @@
 ---
 description: 'Creates a testing plan from the spec-builder phase'
 tools:
-  ['vscode', 'execute', 'read', 'edit', 'search', 'agent', 'memory', 'todo']
+  ['bash', 'view', 'edit', 'create', 'grep', 'glob', 'task', 'sql']
 model: Claude Opus 4.6 (copilot)
 handoffs:
   - label: Start TDD RED Implementation
