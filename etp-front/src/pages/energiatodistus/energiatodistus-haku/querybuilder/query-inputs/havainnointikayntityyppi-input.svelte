@@ -12,4 +12,4 @@
   {index}
   {values}
   {luokittelut}
-  luokittelu={'havainnointikayntityypit'} />
+  luokittelu={'havainnointikayntityyppi'} />

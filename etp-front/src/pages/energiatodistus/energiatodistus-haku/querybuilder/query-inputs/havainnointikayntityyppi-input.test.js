@@ -12,7 +12,7 @@ describe('HavainnointikayntiInput', () => {
     setupI18n();
   });
   const mockLuokittelut = {
-    havainnointikayntityypit: [
+    havainnointikayntityyppi: [
       { id: 0, 'label-fi': 'Ei valittu', 'label-sv': 'Inte vald' },
       { id: 1, 'label-fi': 'Paikan päällä', 'label-sv': 'På plats' },
       {

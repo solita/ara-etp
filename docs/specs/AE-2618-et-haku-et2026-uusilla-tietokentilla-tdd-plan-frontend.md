@@ -83,14 +83,14 @@
 - **Mitä testataan:** Wrapper-komponentti noudattaa samaa patternia kuin `ilmanvaihtotyyppi-input.svelte` ja `lammitysmuoto-input.svelte` – se välittää `luokittelu`-propin geneeriselle komponentille.
 - **Assertio:** Renderöity DOM sisältää Select-elementin, joka hyödyntää havainnointikäyntityyppien luokittelutietoja.
 
-> **⚠️ Katselmoinnin löydös (2026-03-26):** Toteutus välittää `luokittelu='havainnointikayntityypit'` (monikko), mutta oikea avain on `'havainnointikayntityyppi'` (yksikkö) – kuten tässä suunnitelmassa alun perin määriteltiin. Korjattava.
+> **✅ Korjattu 2026-03-26.** Toteutus välitti `luokittelu='havainnointikayntityypit'` (monikko) → korjattu `'havainnointikayntityyppi'` (yksikkö).
 
 ### 3.3 Komponentti näyttää oikeat luokitteluvaihtoehdot
 
 - **Mitä testataan:** Kun `luokittelut`-prop sisältää `havainnointikayntityyppi`-listan `[{id: 1, 'label-fi': 'Paikan päällä'}, ...]`, valintalista näyttää ne.
 - **Assertio:** Select-komponentin vaihtoehdot vastaavat annettuja luokittelutietoja.
 
-> **⚠️ Katselmoinnin löydös (2026-03-26):** Testin mock-data käyttää avainta `havainnointikayntityypit` (monikko), mutta API:n `luokittelut`-objektissa avain on `havainnointikayntityyppi` (yksikkö). Testi menee läpi mutta ei testaa oikeaa tilannetta. Korjattava yhdessä komponentin kanssa.
+> **✅ Korjattu 2026-03-26.** Testin mock-data käytti avainta `havainnointikayntityypit` (monikko) → korjattu `'havainnointikayntityyppi'` (yksikkö) vastaamaan API:n `luokittelut`-objektin avainta.
 
 ---
 
@@ -176,8 +176,8 @@
 | 1.1–1.8 Hakuskeema | ✅ Toteutettu ja läpäisee | |
 | 2.1–2.2 OPERATOR_TYPES | ✅ Toteutettu ja läpäisee | |
 | 3.1 Renderöinti | ✅ Toteutettu | |
-| 3.2 Luokittelu-prop | ❌ Bugi toteutuksessa | Testi ja komponentti käyttävät `'havainnointikayntityypit'` (monikko), API-avain on `'havainnointikayntityyppi'` (yksikkö) |
-| 3.3 Luokitteluvaihtoehdot | ❌ Mock-avain väärä | Testi menee läpi mutta mock ei vastaa tuotantodataa |
+| 3.2 Luokittelu-prop | ✅ Korjattu 2026-03-26 | Komponentti ja testi korjattu käyttämään `'havainnointikayntityyppi'` (yksikkö) |
+| 3.3 Luokitteluvaihtoehdot | ✅ Korjattu 2026-03-26 | Mock-avain korjattu vastaamaan API:n tuotantodataa |
 | 4.1–4.2 Query-input | ✅ Toteutettu ja läpäisee | |
 | 5.1–5.5 Operaattorit | ✅ Toteutettu ja läpäisee | |
 | 6.1–6.2 Lokalisointi | ✅ Toteutettu ja läpäisee | |
