@@ -158,7 +158,7 @@
   - Uusiutuvan energian osuus
 - **Assertio:** Jokainen avain löytyy `fi.json`-tiedoston `energiatodistus.haku`-polusta.
 
-### 6.2 Jokaiselle uudelle hakukentälle on lokalisointiavain sv.json:ssa
+### 6.2 Jokaiselle uudelle hakukentälle on lokalisointiavain sv.json:ssa ja teksti vastaa fi-versiota suffixilla " (sv)"
 
-- **Mitä testataan:** Sama kuin 6.1, mutta ruotsinkieliselle `sv.json`-tiedostolle.
-- **Assertio:** Jokainen avain löytyy `sv.json`-tiedoston vastaavasta polusta.
+- **Mitä testataan:** Sama kuin 6.1, mutta ruotsinkieliselle `sv.json`-tiedostolle. Jokaisen avaimen ruotsinkielinen teksti on identtinen suomenkielisen tekstin kanssa, mutta päättyy merkkeihin ` (sv)`. Esim. jos `fi.json`:ssa arvo on `"Aurinkosähkö, kokonaistuotanto (kWh/vuosi)"`, niin `sv.json`:ssa se on `"Aurinkosähkö, kokonaistuotanto (kWh/vuosi) (sv)"`.
+- **Assertio:** Jokainen avain löytyy `sv.json`-tiedoston vastaavasta polusta ja sen arvo on `<fi-arvo> (sv)`.
