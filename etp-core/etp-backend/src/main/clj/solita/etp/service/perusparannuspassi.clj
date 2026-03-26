@@ -114,13 +114,18 @@
               {:perusparannuspassi-id (:perusparannuspassi-id ppp-vaihe)
                :vaihe-nro             (:vaihe-nro ppp-vaihe)})))
 
+(defn- select-perusparannuspassi-by-role [db whoami id]
+  (if (or (rooli-service/paakayttaja? whoami)
+          (rooli-service/laskuttaja? whoami))
+    (first (perusparannuspassi-db/select-perusparannuspassi-as-viranomainen db {:id id}))
+    (first (perusparannuspassi-db/select-perusparannuspassi
+             db {:id id :laatija-id (:id whoami)}))))
+
 (defn find-perusparannuspassi [db whoami id]
   (jdbc/with-db-transaction
     [tx db]
-    (when-let [ppp (-> (perusparannuspassi-db/select-perusparannuspassi tx {:id         id
-                                                                            :laatija-id (:id whoami)})
-                       first
-                       db-row->ppp)]
+    (when-let [ppp (some-> (select-perusparannuspassi-by-role tx whoami id)
+                           db-row->ppp)]
       (assoc ppp :vaiheet (->> (perusparannuspassi-db/select-perusparannuspassi-vaiheet
                                  tx
                                  {:perusparannuspassi-id (:id ppp)})
@@ -273,8 +278,6 @@
     [tx db]
     (if-let [current-ppp (find-perusparannuspassi tx whoami id)]
       (do
-        ;; This is a bit belt-and-suspenders at the moment of writing, because
-        ;; find-perusparannuspassi already only looks for owned ppps.
         (assert-update-requirements! tx whoami current-ppp ppp)
 
         (let [ppp-db-row (-> ppp
@@ -324,14 +327,13 @@
 (defn delete-perusparannuspassi! [db whoami perusparannuspassi-id]
   (jdbc/with-db-transaction [db db]
                             (let [ppp (first (perusparannuspassi-db/select-perusparannuspassi
-                                               db {:id         perusparannuspassi-id
+                                               db {:id perusparannuspassi-id
                                                    :laatija-id (:id whoami)}))]
                               (when-not ppp
                                 (exception/throw-ex-info!
                                   :not-found
                                   (str "perusparannuspassi " perusparannuspassi-id " does not exist.")))
-                              ;; Soft delete PPP and its vaiheet (set valid = false)
-                              ;; This removes the PPP from queries that filter by valid = true
+                              (assert-correct-et-owner! whoami (:laatija-id ppp))
                               (perusparannuspassi-db/delete-perusparannuspassi! db {:id perusparannuspassi-id})
                               perusparannuspassi-id)))
 
