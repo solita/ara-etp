@@ -602,7 +602,7 @@
       "laatimisvaihe": "Laatimisvaihe",
       "uudisrakennus": "Uudisrakennus",
       "havainnointikaynti": "Havainnointikäynnin päivämäärä",
-      "havainnointikayntityyppi-id": "Havainnointikäynti toteutettu",
+      "havainnointikayntityyppi-id": "Havainnointikäynnin tyyppi",
       "katuosoite": "Katuosoite",
       "katuosoite-*": "Katuosoite",
       "postinumero": "Postinumero",
