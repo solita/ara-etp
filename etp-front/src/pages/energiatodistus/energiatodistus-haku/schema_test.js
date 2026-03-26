@@ -203,8 +203,7 @@ describe('EtHakuSchema', () => {
 
     it('flattenSchema includes havainnointikayntityyppi-id field', () => {
       // Given: the real schema
-      const key =
-        'energiatodistus.perustiedot.havainnointikayntityyppi-id';
+      const key = 'energiatodistus.perustiedot.havainnointikayntityyppi-id';
 
       // When: flattenSchema is called on the real schema
       // Then: result contains the key with type HAVAINNOINTIKAYNTITYYPPI
@@ -357,8 +356,7 @@ describe('EtHakuSchema', () => {
 
     it('havainnointikayntityyppi-id uses = operator with luokittelu pattern', () => {
       // Given: the havainnointikayntityyppi-id field from the real schema
-      const key =
-        'energiatodistus.perustiedot.havainnointikayntityyppi-id';
+      const key = 'energiatodistus.perustiedot.havainnointikayntityyppi-id';
 
       // When: examining the field operations
       const operations = flatSchema[key];
@@ -406,9 +404,7 @@ describe('EtHakuSchema', () => {
         const operations = flatSchema[key];
         expect(operations).toBeDefined();
         expect(operations).toHaveLength(5);
-        const serverCommands = operations.map(
-          op => op.operation.serverCommand
-        );
+        const serverCommands = operations.map(op => op.operation.serverCommand);
         expect(serverCommands).toEqual(['=', '>', '>=', '<', '<=']);
       });
     });
@@ -423,9 +419,7 @@ describe('EtHakuSchema', () => {
       // Then: it has 5 numeric operations
       expect(operations).toBeDefined();
       expect(operations).toHaveLength(5);
-      const serverCommands = operations.map(
-        op => op.operation.serverCommand
-      );
+      const serverCommands = operations.map(op => op.operation.serverCommand);
       expect(serverCommands).toEqual(['=', '>', '>=', '<', '<=']);
     });
 
@@ -439,9 +433,7 @@ describe('EtHakuSchema', () => {
       // Then: it has 5 numeric operations
       expect(operations).toBeDefined();
       expect(operations).toHaveLength(5);
-      const serverCommands = operations.map(
-        op => op.operation.serverCommand
-      );
+      const serverCommands = operations.map(op => op.operation.serverCommand);
       expect(serverCommands).toEqual(['=', '>', '>=', '<', '<=']);
     });
   });
