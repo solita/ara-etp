@@ -1,6 +1,7 @@
 (ns solita.etp.service.energiatodistus-search-test
   (:require [clojure.test :as t]
             [clojure.java.jdbc :as jdbc]
+            [clojure.set :as set]
             [solita.common.map :as xmap]
             [solita.etp.test-system :as ts]
             [solita.etp.test :as etp-test]
@@ -1025,3 +1026,486 @@
         (t/is (= 4 (count filtered-results)))
         (t/is (every? #(= nil (:perusparannuspassi-id %))
                       filtered-results))))))
+
+;; === AE-2618: ET2026 haku uusilla tietokentillä ===
+
+(defn test-data-set-mixed
+  "Creates both ET2018 and ET2026 certificates for mixed-version tests.
+   Returns {:laatijat, :energiatodistukset-2018, :energiatodistukset-2026}"
+  []
+  (let [laatijat (laatija-test-data/generate-and-insert! 3)
+        laatija-ids (-> laatijat keys sort)
+        first-laatija-id (first laatija-ids)
+        et2018-adds (->> (energiatodistus-test-data/generate-adds 2 2018 true)
+                         (map #(assoc-in % [:perustiedot :postinumero] "33100"))
+                         (map #(assoc-in % [:perustiedot :yritys :nimi] nil)))
+        et2026-adds (->> (energiatodistus-test-data/generate-adds 2 2026 true)
+                         (map #(assoc-in % [:perustiedot :postinumero] "33100"))
+                         (map #(assoc-in % [:perustiedot :yritys :nimi] nil)))
+        et2018-ids (energiatodistus-test-data/insert! et2018-adds first-laatija-id)
+        et2026-ids (energiatodistus-test-data/insert! et2026-adds first-laatija-id)]
+    (sign-energiatodistukset! (map #(vector first-laatija-id %) (concat et2018-ids et2026-ids)))
+    {:laatijat                laatijat
+     :energiatodistukset-2018 (zipmap et2018-ids et2018-adds)
+     :energiatodistukset-2026 (zipmap et2026-ids et2026-adds)}))
+
+;; --- 1.1 ET2026-spesifisellä kentällä haku löytää ET2026-todistuksen ---
+(t/deftest search-by-havainnointikayntityyppi-id-2026-test
+  ;; Given: ET2026 certificate with known havainnointikayntityyppi-id
+  (let [{:keys [energiatodistukset] :as tds} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        havainnointikayntityyppi-id (-> energiatodistus :perustiedot :havainnointikayntityyppi-id)]
+    ;; When: searching by energiatodistus.perustiedot.havainnointikayntityyppi-id
+    ;; Then: the correct certificate is found
+    (t/is (search-and-assert
+            tds
+            id
+            [[["="
+               "energiatodistus.perustiedot.havainnointikayntityyppi-id"
+               havainnointikayntityyppi-id]]]))))
+
+;; --- 1.2 ET2026-spesifisellä kentällä haku ei löydä ET2018-todistuksia ---
+(t/deftest search-by-havainnointikayntityyppi-id-excludes-et2018-test
+  ;; Given: both ET2018 and ET2026 certificates
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
+        et2026-id (-> energiatodistukset-2026 keys sort first)
+        et2026 (get energiatodistukset-2026 et2026-id)
+        havainnointikayntityyppi-id (-> et2026 :perustiedot :havainnointikayntityyppi-id)
+        ;; When: searching by havainnointikayntityyppi-id
+        results (search kayttaja-test-data/paakayttaja
+                        [[["="
+                           "energiatodistus.perustiedot.havainnointikayntityyppi-id"
+                           havainnointikayntityyppi-id]]]
+                        nil nil nil)
+        result-ids (set (map :id results))
+        et2018-ids (set (keys energiatodistukset-2018))]
+    ;; Then: only ET2026 certificates are in results
+    (t/is (not-empty results)
+           "Should find at least one ET2026 certificate")
+    (t/is (empty? (set/intersection result-ids et2018-ids))
+           "ET2018 certificates should not appear in results")))
+
+;; --- 1.3 Regression: ET2018-kentillä haku toimii edelleen ---
+;; NOTE: This is a regression test - MAY pass in red phase.
+;; Covered by existing tests: search-by-id-test, search-by-nimi-test, etc.
+;; The key verification is that adding Energiatodistus2026 to private-search-schema
+;; does not break existing ET2018 field searches.
+
+;; --- 1.4 ET2026-todistus löytyy yhteisillä kentillä haettaessa ---
+(t/deftest search-et2026-by-shared-field-lammitetty-nettoala-test
+  ;; Given: ET2026 certificate with known lammitetty-nettoala
+  (let [{:keys [energiatodistukset] :as tds} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)]
+    ;; When: searching by energiatodistus.lahtotiedot.lammitetty-nettoala
+    ;; Then: the ET2026 certificate is found
+    (t/is (search-and-assert
+            tds
+            id
+            [[["="
+               "energiatodistus.lahtotiedot.lammitetty-nettoala"
+               nettoala]]]))))
+
+;; --- 1.5 ET2026-todistus rajautuu pois polttoaineet-vuosikulutus-yhteensa-hausta ---
+(t/deftest search-polttoaineet-vuosikulutus-yhteensa-excludes-et2026-test
+  ;; Given: ET2018 with known polttoaineet-vuosikulutus-yhteensa and ET2026 certificates
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
+        et2018-id (-> energiatodistukset-2018 keys sort first)
+        et2018 (get energiatodistukset-2018 et2018-id)
+        polttoaineet-yht (-> et2018 :toteutunut-ostoenergiankulutus :polttoaineet-vuosikulutus-yhteensa)
+        ;; When: searching by polttoaineet-vuosikulutus-yhteensa
+        results (search kayttaja-test-data/paakayttaja
+                        [[["="
+                           "energiatodistus.toteutunut-ostoenergiankulutus.polttoaineet-vuosikulutus-yhteensa"
+                           polttoaineet-yht]]]
+                        nil nil nil)
+        result-ids (set (map :id results))
+        et2026-ids (set (keys energiatodistukset-2026))]
+    ;; Then: only ET2018 is in results (ET2026 doesn't have this field)
+    (t/is (contains? result-ids et2018-id)
+           "ET2018 certificate should be found")
+    (t/is (empty? (set/intersection result-ids et2026-ids))
+           "ET2026 certificates should not appear in polttoaineet-vuosikulutus-yhteensa search")))
+
+;; --- 2.1-2.6 Kokonaistuotanto neliövuosikulutus ---
+(t/deftest search-by-kokonaistuotanto-aurinkosahko-neliovuosikulutus-test
+  ;; Given: ET2026 certificate with known kokonaistuotanto aurinkosahko
+  (let [{:keys [energiatodistukset] :as tds} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        aurinkosahko (-> energiatodistus :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko)]
+    ;; When: searching by aurinkosahko-neliovuosikulutus (= aurinkosahko / nettoala)
+    ;; Then: the certificate is found
+    (t/is (search-and-assert
+            tds
+            id
+            [[["="
+               "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko-neliovuosikulutus"
+               (/ aurinkosahko nettoala)]]]))))
+
+(t/deftest search-by-kokonaistuotanto-aurinkolampo-neliovuosikulutus-test
+  ;; Given: ET2026 certificate with known kokonaistuotanto aurinkolampo
+  (let [{:keys [energiatodistukset] :as tds} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        aurinkolampo (-> energiatodistus :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo)]
+    ;; When: searching by aurinkolampo-neliovuosikulutus (= aurinkolampo / nettoala)
+    ;; Then: the certificate is found
+    (t/is (search-and-assert
+            tds
+            id
+            [[["="
+               "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkolampo-neliovuosikulutus"
+               (/ aurinkolampo nettoala)]]]))))
+
+(t/deftest search-by-kokonaistuotanto-tuulisahko-neliovuosikulutus-test
+  ;; Given: ET2026 certificate with known kokonaistuotanto tuulisahko
+  (let [{:keys [energiatodistukset] :as tds} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        tuulisahko (-> energiatodistus :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko)]
+    ;; When: searching by tuulisahko-neliovuosikulutus (= tuulisahko / nettoala)
+    ;; Then: the certificate is found
+    (t/is (search-and-assert
+            tds
+            id
+            [[["="
+               "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.tuulisahko-neliovuosikulutus"
+               (/ tuulisahko nettoala)]]]))))
+
+(t/deftest search-by-kokonaistuotanto-lampopumppu-neliovuosikulutus-test
+  ;; Given: ET2026 certificate with known kokonaistuotanto lampopumppu
+  (let [{:keys [energiatodistukset] :as tds} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        lampopumppu (-> energiatodistus :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu)]
+    ;; When: searching by lampopumppu-neliovuosikulutus (= lampopumppu / nettoala)
+    ;; Then: the certificate is found
+    (t/is (search-and-assert
+            tds
+            id
+            [[["="
+               "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.lampopumppu-neliovuosikulutus"
+               (/ lampopumppu nettoala)]]]))))
+
+(t/deftest search-by-kokonaistuotanto-muulampo-neliovuosikulutus-test
+  ;; Given: ET2026 certificate with known kokonaistuotanto muulampo
+  (let [{:keys [energiatodistukset] :as tds} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        muulampo (-> energiatodistus :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo)]
+    ;; When: searching by muulampo-neliovuosikulutus (= muulampo / nettoala)
+    ;; Then: the certificate is found
+    (t/is (search-and-assert
+            tds
+            id
+            [[["="
+               "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.muulampo-neliovuosikulutus"
+               (/ muulampo nettoala)]]]))))
+
+(t/deftest search-by-kokonaistuotanto-muusahko-neliovuosikulutus-test
+  ;; Given: ET2026 certificate with known kokonaistuotanto muusahko
+  (let [{:keys [energiatodistukset] :as tds} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        muusahko (-> energiatodistus :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko)]
+    ;; When: searching by muusahko-neliovuosikulutus (= muusahko / nettoala)
+    ;; Then: the certificate is found
+    (t/is (search-and-assert
+            tds
+            id
+            [[["="
+               "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.muusahko-neliovuosikulutus"
+               (/ muusahko nettoala)]]]))))
+
+;; --- 2.7 Kokonaistuotanto raakakentällä haku ---
+(t/deftest search-by-kokonaistuotanto-aurinkosahko-raw-test
+  ;; Given: ET2026 certificate with known kokonaistuotanto aurinkosahko value
+  (let [{:keys [energiatodistukset] :as tds} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        aurinkosahko (-> energiatodistus :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko)]
+    ;; When: searching by the raw field (not per-neliö)
+    ;; Then: the certificate is found
+    (t/is (search-and-assert
+            tds
+            id
+            [[["="
+               "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko"
+               aurinkosahko]]]))))
+
+;; --- 2.8 Kokonaistuotanto-kentällä haku ei löydä ET2018-todistuksia ---
+(t/deftest search-by-kokonaistuotanto-excludes-et2018-test
+  ;; Given: both ET2018 and ET2026 certificates
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
+        et2026-id (-> energiatodistukset-2026 keys sort first)
+        et2026 (get energiatodistukset-2026 et2026-id)
+        aurinkosahko (-> et2026 :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko)
+        ;; When: searching by kokonaistuotanto field
+        results (search kayttaja-test-data/paakayttaja
+                        [[["="
+                           "energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.aurinkosahko"
+                           aurinkosahko]]]
+                        nil nil nil)
+        result-ids (set (map :id results))
+        et2018-ids (set (keys energiatodistukset-2018))]
+    ;; Then: only ET2026 certificates appear
+    (t/is (not-empty results)
+           "Should find at least one ET2026 certificate")
+    (t/is (empty? (set/intersection result-ids et2018-ids))
+           "ET2018 certificates should not appear in kokonaistuotanto search")))
+
+;; --- 3.1 Kasvihuonepäästöt per neliö – ET2026 ---
+(t/deftest search-by-kasvihuonepaastot-per-nelio-2026-test
+  ;; CO2-kertoimet: kaukolampo=0.059, sahko=0.05, uusiutuva-polttoaine=0.027,
+  ;;               fossiilinen-polttoaine=0.306, kaukojaahdytys=0.014
+  ;; Given: ET2026 certificate with known kaytettavat-energiamuodot and nettoala
+  (let [{:keys [energiatodistukset] :as tds} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        energiamuodot (-> energiatodistus :tulokset :kaytettavat-energiamuodot)
+        ;; When: calculating kasvihuonepaastot-per-nelio
+        kasvihuonepaastot (/ (+ (* (:kaukolampo energiamuodot) 0.059M)
+                               (* (:sahko energiamuodot) 0.05M)
+                               (* (:uusiutuva-polttoaine energiamuodot) 0.027M)
+                               (* (:fossiilinen-polttoaine energiamuodot) 0.306M)
+                               (* (:kaukojaahdytys energiamuodot) 0.014M))
+                            nettoala)]
+    ;; Then: searching by the calculated value finds the certificate
+    (t/is (search-and-assert
+            tds
+            id
+            [[["="
+               "energiatodistus.tulokset.kasvihuonepaastot-per-nelio"
+               kasvihuonepaastot]]]))))
+
+;; --- 3.2 Kasvihuonepäästöt per neliö – ET2018 ---
+(t/deftest search-by-kasvihuonepaastot-per-nelio-2018-test
+  ;; Given: ET2018 certificate with known kaytettavat-energiamuodot and nettoala
+  (let [{:keys [energiatodistukset] :as tds} (test-data-set)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        energiamuodot (-> energiatodistus :tulokset :kaytettavat-energiamuodot)
+        ;; When: calculating kasvihuonepaastot-per-nelio (same CO2 coefficients)
+        kasvihuonepaastot (/ (+ (* (:kaukolampo energiamuodot) 0.059M)
+                               (* (:sahko energiamuodot) 0.05M)
+                               (* (:uusiutuva-polttoaine energiamuodot) 0.027M)
+                               (* (:fossiilinen-polttoaine energiamuodot) 0.306M)
+                               (* (:kaukojaahdytys energiamuodot) 0.014M))
+                            nettoala)]
+    ;; Then: searching by the calculated value finds the certificate
+    (t/is (search-and-assert
+            tds
+            id
+            [[["="
+               "energiatodistus.tulokset.kasvihuonepaastot-per-nelio"
+               kasvihuonepaastot]]]))))
+
+;; --- 3.3 Kasvihuonepäästöt per neliö – nolla nettoala ---
+(t/deftest search-by-kasvihuonepaastot-per-nelio-zero-nettoala-test
+  ;; Given: certificate with nettoala set to 0 after insertion (validation prevents 0 on insert)
+  ;; Note: follows same pattern as existing search-by-id-zero-nettoala-test (line 177)
+  (let [{:keys [energiatodistukset laatijat]} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        laatija-id (-> laatijat keys sort first)]
+    (jdbc/execute!
+      ts/*db*
+      ["UPDATE energiatodistus SET lt$lammitetty_nettoala = 0 where id = ?" id])
+    ;; When: searching by kasvihuonepaastot-per-nelio with any value
+    ;; Then: no error occurs and no certificate is found (nullif returns NULL)
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["="
+                             "energiatodistus.tulokset.kasvihuonepaastot-per-nelio"
+                             0]]]
+                          nil nil nil)]
+      (t/is (not (contains? (set (map :id results)) id))
+             "Certificate with zero nettoala should not match kasvihuonepaastot search"))))
+
+;; --- 3.4 Kasvihuonepäästöt per neliö – NULL energiamuotoarvot ---
+(t/deftest search-by-kasvihuonepaastot-per-nelio-null-values-test
+  ;; Given: certificate where some kaytettavat-energiamuodot values are NULL
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+                   (assoc-in [:lahtotiedot :lammitetty-nettoala] 100M)
+                   (assoc-in [:tulokset :kaytettavat-energiamuodot :sahko] 50M)
+                   (assoc-in [:tulokset :kaytettavat-energiamuodot :kaukolampo] nil)
+                   (assoc-in [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine] nil)
+                   (assoc-in [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine] nil)
+                   (assoc-in [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys] nil))
+        et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    ;; When: searching with coalesced calculation (NULL -> 0)
+    ;; Then: only sahko contributes: (50 * 0.05) / 100 = 0.025
+    (let [expected-value (/ (* 50M 0.05M) 100M)
+          results (search kayttaja-test-data/paakayttaja
+                          [[["="
+                             "energiatodistus.tulokset.kasvihuonepaastot-per-nelio"
+                             expected-value]]]
+                          nil nil nil)]
+      (t/is (contains? (set (map :id results)) et-id)
+             "Certificate with NULL energiamuoto values should be found with coalesced calculation"))))
+
+;; --- 3.5 Kasvihuonepäästöt per neliö – vertailuoperaattorit ---
+(t/deftest search-by-kasvihuonepaastot-per-nelio-comparison-operators-test
+  ;; Given: ET2026 certificate with known kasvihuonepaastot-per-nelio value
+  (let [{:keys [energiatodistukset]} (test-data-set-2026)
+        id (-> energiatodistukset keys sort first)
+        energiatodistus (get energiatodistukset id)
+        nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+        energiamuodot (-> energiatodistus :tulokset :kaytettavat-energiamuodot)
+        kasvihuonepaastot (/ (+ (* (:kaukolampo energiamuodot) 0.059M)
+                               (* (:sahko energiamuodot) 0.05M)
+                               (* (:uusiutuva-polttoaine energiamuodot) 0.027M)
+                               (* (:fossiilinen-polttoaine energiamuodot) 0.306M)
+                               (* (:kaukojaahdytys energiamuodot) 0.014M))
+                            nettoala)]
+    ;; When/Then: < with smaller value does not find the certificate
+    (t/is (not (contains?
+                 (->> (search kayttaja-test-data/paakayttaja
+                              [[["<"
+                                 "energiatodistus.tulokset.kasvihuonepaastot-per-nelio"
+                                 (- kasvihuonepaastot 1M)]]]
+                              nil nil nil)
+                      (map :id) set)
+                 id))
+           "< with smaller value should not find the certificate")
+    ;; When/Then: > with larger value does not find the certificate
+    (t/is (not (contains?
+                 (->> (search kayttaja-test-data/paakayttaja
+                              [[[">"
+                                 "energiatodistus.tulokset.kasvihuonepaastot-per-nelio"
+                                 (+ kasvihuonepaastot 1M)]]]
+                              nil nil nil)
+                      (map :id) set)
+                 id))
+           "> with larger value should not find the certificate")
+    ;; When/Then: > with smaller value finds the certificate
+    (t/is (contains?
+            (->> (search kayttaja-test-data/paakayttaja
+                         [[[">"
+                            "energiatodistus.tulokset.kasvihuonepaastot-per-nelio"
+                            (- kasvihuonepaastot 1M)]]]
+                         nil nil nil)
+                 (map :id) set)
+            id)
+           "> with smaller value should find the certificate")))
+
+;; --- 4.1 Uusiutuvan energian osuus stub palauttaa 0 ---
+(t/deftest search-by-uusiutuvan-energian-osuus-stub-zero-test
+  ;; Given: signed certificates exist
+  (let [{:keys [energiatodistukset]} (test-data-set-2026)
+        signed-ids (->> energiatodistukset keys sort (take 2) set)]
+    ;; When: searching by uusiutuvan-energian-osuus = 0
+    ;; Then: all signed certificates are found (stub returns 0 for all)
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["="
+                             "energiatodistus.tulokset.uusiutuvan-energian-osuus"
+                             0]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      (t/is (every? #(contains? result-ids %) signed-ids)
+             "All signed certificates should match uusiutuvan-energian-osuus = 0"))))
+
+;; --- 4.2 Uusiutuvan energian osuus stub – ei-nolla ei matchaa ---
+(t/deftest search-by-uusiutuvan-energian-osuus-stub-nonzero-test
+  ;; Given: signed certificates exist
+  (test-data-set-2026)
+  ;; When: searching by uusiutuvan-energian-osuus = 1
+  ;; Then: no certificates are found (stub returns 0, not 1)
+  (let [results (search kayttaja-test-data/paakayttaja
+                        [[["="
+                           "energiatodistus.tulokset.uusiutuvan-energian-osuus"
+                           1]]]
+                        nil nil nil)]
+    (t/is (empty? results)
+           "No certificates should match uusiutuvan-energian-osuus = 1")))
+
+;; --- 5.1 Boolean: energiankulutuksen-valmius = true ---
+(t/deftest search-by-energiankulutuksen-valmius-true-test
+  ;; Given: ET2026 with energiankulutuksen-valmius = true, another with false
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        et-true (-> (energiatodistus-test-data/generate-add 2026 true)
+                    (assoc-in [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin] true))
+        et-false (-> (energiatodistus-test-data/generate-add 2026 true)
+                     (assoc-in [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin] false))
+        [id-true] (energiatodistus-test-data/insert! [et-true] laatija-id)
+        [id-false] (energiatodistus-test-data/insert! [et-false] laatija-id)]
+    (sign-energiatodistukset! [[laatija-id id-true] [laatija-id id-false]])
+    ;; When: searching = true
+    ;; Then: only true-valued certificate found
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["="
+                             "energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin"
+                             true]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      (t/is (contains? result-ids id-true)
+             "Certificate with true should be found")
+      (t/is (not (contains? result-ids id-false))
+             "Certificate with false should not be found"))))
+
+;; --- 5.2 Boolean: energiankulutuksen-valmius = false includes ET2018 ---
+(t/deftest search-by-energiankulutuksen-valmius-false-includes-et2018-test
+  ;; Given: ET2018 and ET2026 certificates (ET2018 defaults to false for this field)
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
+        et2018-ids (set (keys energiatodistukset-2018))
+        ;; When: searching = false
+        results (search kayttaja-test-data/paakayttaja
+                        [[["="
+                           "energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin"
+                           false]]]
+                        nil nil nil)
+        result-ids (set (map :id results))]
+    ;; Then: ET2018 certificates appear (default false) plus ET2026 with false
+    (t/is (every? #(contains? result-ids %) et2018-ids)
+           "ET2018 certificates should appear with default false value")))
+
+;; --- 5.3 Boolean: lammonjako-lampotilajousto = true ---
+(t/deftest search-by-lammonjako-lampotilajousto-true-test
+  ;; Given: ET2026 with lammonjako-lampotilajousto = true, another with false
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        et-true (-> (energiatodistus-test-data/generate-add 2026 true)
+                    (assoc-in [:lahtotiedot :lammitys :lammonjako-lampotilajousto] true))
+        et-false (-> (energiatodistus-test-data/generate-add 2026 true)
+                     (assoc-in [:lahtotiedot :lammitys :lammonjako-lampotilajousto] false))
+        [id-true] (energiatodistus-test-data/insert! [et-true] laatija-id)
+        [id-false] (energiatodistus-test-data/insert! [et-false] laatija-id)]
+    (sign-energiatodistukset! [[laatija-id id-true] [laatija-id id-false]])
+    ;; When: searching = true
+    ;; Then: only true-valued certificate found
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["="
+                             "energiatodistus.lahtotiedot.lammitys.lammonjako-lampotilajousto"
+                             true]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      (t/is (contains? result-ids id-true)
+             "Certificate with lammonjako-lampotilajousto true should be found")
+      (t/is (not (contains? result-ids id-false))
+             "Certificate with lammonjako-lampotilajousto false should not be found"))))
+
+;; --- 5.4 Boolean: lammonjako-lampotilajousto = false includes ET2018 ---
+(t/deftest search-by-lammonjako-lampotilajousto-false-includes-et2018-test
+  ;; Given: ET2018 and ET2026 certificates
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
+        et2018-ids (set (keys energiatodistukset-2018))
+        ;; When: searching = false
+        results (search kayttaja-test-data/paakayttaja
+                        [[["="
+                           "energiatodistus.lahtotiedot.lammitys.lammonjako-lampotilajousto"
+                           false]]]
+                        nil nil nil)
+        result-ids (set (map :id results))]
+    ;; Then: ET2018 certificates appear (default false)
+    (t/is (every? #(contains? result-ids %) et2018-ids)
+           "ET2018 certificates should appear with default false for lammonjako-lampotilajousto")))

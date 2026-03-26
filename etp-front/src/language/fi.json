@@ -602,7 +602,7 @@
       "laatimisvaihe": "Laatimisvaihe",
       "uudisrakennus": "Uudisrakennus",
       "havainnointikaynti": "Havainnointikäynnin päivämäärä",
-      "havainnointikayntityyppi-id": "Havainnointikäynti toteutettu",
+      "havainnointikayntityyppi-id": "Havainnointikäynnin tyyppi",
       "katuosoite": "Katuosoite",
       "katuosoite-*": "Katuosoite",
       "postinumero": "Postinumero",
@@ -964,7 +964,7 @@
           "2018": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
           "2013": "Uusiutuva omavaraisenergia, hyödyksikäytetty osuus"
         },
-        "label-context": "Uusiutuvat omavaraisenergiat",
+        "label-context": "Omavaraisenergia, hyödynnetty",
         "table-header": "Energiaratkaisu",
         "table-kokonaistuotto-header": "Kokonaistuotto",
         "table-rakennuksen-hyodyntama-osuus-header": "Rakennuksen hyödyntämä osuus",
@@ -989,20 +989,22 @@
         "lampopumppu": "Lämpöpumpun lämmönlähteestä ottama energia (kWh/vuosi)",
         "lampopumppu-neliovuosikulutus": "Lämpöpumpun lämmönlähteestä ottama energia (kWh/(m²vuosi))",
         "0": {
-          "label-context": "Uusiutuvat omavaraisenergiat",
+          "label-context": "Omavaraisenergia, hyödynnetty",
           "nimi": "Energian nimi",
           "vuosikulutus": "Tuotto (kWh/vuosi)"
         }
       },
       "uusiutuvat-omavaraisenergiat-kokonaistuotanto": {
-        "label-context": "Uusiutuvat omavaraisenergiat, kokonaistuotanto",
-        "aurinkosahko": "Aurinkosähkö, kokonaistuotanto (kWh/vuosi)",
-        "aurinkolampo": "Aurinkolämpö, kokonaistuotanto (kWh/vuosi)",
-        "tuulisahko": "Tuulisähkö, kokonaistuotanto (kWh/vuosi)",
-        "lampopumppu": "Lämpöpumppu, kokonaistuotanto (kWh/vuosi)",
-        "muulampo": "Muu lämpö, kokonaistuotanto (kWh/vuosi)",
-        "muusahko": "Muu sähkö, kokonaistuotanto (kWh/vuosi)"
+        "label-context": "Omavaraisenergia, kokonaistuotanto",
+        "aurinkosahko": "Aurinkosähkö (kWh/vuosi)",
+        "aurinkolampo": "Aurinkolämpö (kWh/vuosi)",
+        "tuulisahko": "Tuulisähkö (kWh/vuosi)",
+        "lampopumppu": "Lämpöpumppu (kWh/vuosi)",
+        "muulampo": "Muu lämpö (kWh/vuosi)",
+        "muusahko": "Muu sähkö (kWh/vuosi)"
       },
+      "kasvihuonepaastot-per-nelio": "Kasvihuonekaasupäästöt (kg CO₂e/m²/vuosi)",
+      "uusiutuvan-energian-osuus": "Uusiutuvan energian osuus",
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiankulutus",
         "label-context": "Tekniset järjestelmät",

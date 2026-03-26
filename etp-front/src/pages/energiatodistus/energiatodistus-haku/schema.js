@@ -23,7 +23,8 @@ export const OPERATOR_TYPES = Object.freeze({
   ILMANVAIHTOTYYPPI: 'ILMANVAIHTOTYYPPI',
   PATEVYYSTASO: 'PATEVYYSTASO',
   KUNTA: 'KUNTA',
-  LAMMITYSMUOTO: 'LAMMITYSMUOTO'
+  LAMMITYSMUOTO: 'LAMMITYSMUOTO',
+  HAVAINNOINTIKAYNTITYYPPI: 'HAVAINNOINTIKAYNTITYYPPI'
 });
 
 const defaultFormat = R.curry((command, key, value) => [[command, key, value]]);
@@ -432,11 +433,15 @@ const perustiedot = {
   havainnointikaynti: [havainnointikayntiEquals, havainnointikayntiBetween],
   kieli: [luokitteluEquals(OPERATOR_TYPES.KIELISYYS)],
   'keskeiset-suositukset-fi': [...stringComparisons],
-  'keskeiset-suositukset-sv': [...stringComparisons]
+  'keskeiset-suositukset-sv': [...stringComparisons],
+  'havainnointikayntityyppi-id': [
+    luokitteluEquals(OPERATOR_TYPES.HAVAINNOINTIKAYNTITYYPPI)
+  ]
 };
 
 const lahtotiedot = {
   'lammitetty-nettoala': [...numberComparisons],
+  'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': [singleBoolean],
   rakennusvaippa: {
     ilmanvuotoluku: [...numberComparisons],
     ulkoseinat: {
@@ -559,6 +564,7 @@ const lahtotiedot = {
       'lampohavio-lammittamaton-tila': [...numberComparisons],
       'lampopumppu-tuotto-osuus': [...numberComparisons]
     },
+    'lammonjako-lampotilajousto': [singleBoolean],
     takka: { maara: [...numberComparisons], tuotto: [...numberComparisons] },
     ilmalampopumppu: {
       maara: [...numberComparisons],
@@ -673,6 +679,16 @@ const tulokset = {
     kvesi: [...numberComparisons],
     'kvesi-neliovuosikuorma': [...numberComparisonsWithoutEq]
   },
+  'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
+    aurinkosahko: [...numberComparisons],
+    aurinkolampo: [...numberComparisons],
+    tuulisahko: [...numberComparisons],
+    lampopumppu: [...numberComparisons],
+    muulampo: [...numberComparisons],
+    muusahko: [...numberComparisons]
+  },
+  'kasvihuonepaastot-per-nelio': [...numberComparisons],
+  'uusiutuvan-energian-osuus': [...numberComparisons],
   laskentatyokalu: [...stringComparisons]
 };
 
@@ -772,6 +788,7 @@ export const laatijaSchema = R.compose(
     'energiatodistus.korvattu-energiatodistus-id',
     'energiatodistus.perustiedot.kiinteistotunnus',
     'energiatodistus.julkinen-rakennus',
+    'energiatodistus.perustiedot.havainnointikayntityyppi-id',
     ...localizedField('energiatodistus.perustiedot.keskeiset-suositukset'),
     ...localizedField('energiatodistus.lisamerkintoja'),
     'energiatodistus.lahtotiedot.rakennusvaippa.ilmanvuotoluku',
