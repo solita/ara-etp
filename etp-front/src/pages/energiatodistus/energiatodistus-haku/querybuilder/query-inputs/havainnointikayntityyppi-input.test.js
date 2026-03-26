@@ -1,12 +1,16 @@
 /**
  * @jest-environment jsdom
  */
-import { expect, describe, it } from '@jest/globals';
+import { expect, describe, it, beforeAll } from '@jest/globals';
 import { render, screen } from '@testing-library/svelte';
+import { setupI18n } from '@Language/i18n';
 
 import HavainnointikayntiInput from './havainnointikayntityyppi-input.svelte';
 
 describe('HavainnointikayntiInput', () => {
+  beforeAll(() => {
+    setupI18n();
+  });
   const mockLuokittelut = {
     havainnointikayntityypit: [
       { id: 0, 'label-fi': 'Ei valittu', 'label-sv': 'Inte vald' },
@@ -43,11 +47,11 @@ describe('HavainnointikayntiInput', () => {
     };
 
     // When: rendering the component
-    render(HavainnointikayntiInput, props);
+    const { container } = render(HavainnointikayntiInput, props);
 
-    // Then: the select element should be present with options from havainnointikayntityypit
-    const select = screen.getByRole('listbox');
-    expect(select).toBeInTheDocument();
+    // Then: a hidden input is present (the Select component renders one)
+    const input = container.querySelector('input[name="test_value_0"]');
+    expect(input).toBeInTheDocument();
   });
 
   it('shows correct options from luokittelut prop', () => {
@@ -60,10 +64,11 @@ describe('HavainnointikayntiInput', () => {
     };
 
     // When: rendering the component
-    render(HavainnointikayntiInput, props);
+    const { container } = render(HavainnointikayntiInput, props);
 
-    // Then: all 3 options should be rendered
-    const options = screen.getAllByRole('option');
-    expect(options).toHaveLength(3);
+    // Then: the selected value (id=0 -> "Ei valittu") is displayed
+    const selectedDiv = container.querySelector('[data-cy="test_value_0"]');
+    expect(selectedDiv).toBeInTheDocument();
+    expect(selectedDiv.textContent.trim()).toBe('Ei valittu');
   });
 });

@@ -1003,6 +1003,8 @@
         "muulampo": "Muu lämpö, kokonaistuotanto (kWh/vuosi)",
         "muusahko": "Muu sähkö, kokonaistuotanto (kWh/vuosi)"
       },
+      "kasvihuonepaastot-per-nelio": "Kasvihuonekaasupäästöt (kg CO₂e/m²/vuosi)",
+      "uusiutuvan-energian-osuus": "Uusiutuvan energian osuus",
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiankulutus",
         "label-context": "Tekniset järjestelmät",

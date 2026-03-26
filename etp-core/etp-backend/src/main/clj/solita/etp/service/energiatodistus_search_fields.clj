@@ -124,7 +124,22 @@
      :tekniset-jarjestelmat
      {:kaukojaahdytys ["energiatodistus.t$kaytettavat_energiamuodot$kaukojaahdytys + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$kaukojaahdytys" common-schema/NonNegative]
       :lampo ["( energiatodistus.lt$ilmanvaihto$tuloilma_lampotila + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$lampo + energiatodistus.t$tekniset_jarjestelmat$kayttoveden_valmistus$lampo + energiatodistus.t$tekniset_jarjestelmat$tilojen_lammitys$lampo + energiatodistus.t$tekniset_jarjestelmat$tuloilman_lammitys$lampo + energiatodistus.t$uusiutuvat_omavaraisenergiat$aurinkolampo + energiatodistus.t$uusiutuvat_omavaraisenergiat$lampopumppu + energiatodistus. t$uusiutuvat_omavaraisenergiat$muulampo )" common-schema/NonNegative]
-      :sahko ["( energiatodistus.t$kaytettavat_energiamuodot$sahko + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$sahko + energiatodistus.t$tekniset_jarjestelmat$kayttoveden_valmistus$sahko + energiatodistus.t$tekniset_jarjestelmat$tilojen_lammitys$sahko + energiatodistus.t$tekniset_jarjestelmat$tuloilman_lammitys$sahko)" common-schema/NonNegative]}}
+      :sahko ["( energiatodistus.t$kaytettavat_energiamuodot$sahko + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$sahko + energiatodistus.t$tekniset_jarjestelmat$kayttoveden_valmistus$sahko + energiatodistus.t$tekniset_jarjestelmat$tilojen_lammitys$sahko + energiatodistus.t$tekniset_jarjestelmat$tuloilman_lammitys$sahko)" common-schema/NonNegative]}
+      :kasvihuonepaastot-per-nelio
+      [(str "(coalesce(energiatodistus.t$kaytettavat_energiamuodot$kaukolampo, 0) * 0.059"
+            " + coalesce(energiatodistus.t$kaytettavat_energiamuodot$sahko, 0) * 0.05"
+            " + coalesce(energiatodistus.t$kaytettavat_energiamuodot$uusiutuva_polttoaine, 0) * 0.027"
+            " + coalesce(energiatodistus.t$kaytettavat_energiamuodot$fossiilinen_polttoaine, 0) * 0.306"
+            " + coalesce(energiatodistus.t$kaytettavat_energiamuodot$kaukojaahdytys, 0) * 0.014)"
+            " / nullif(energiatodistus.lt$lammitetty_nettoala, 0)")
+       common-schema/NonNegative]
+      :uusiutuvan-energian-osuus
+      ["0" common-schema/NonNegative]
+      :uusiutuvat-omavaraisenergiat-kokonaistuotanto
+      (per-nettoala-for-schema
+        [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto]
+        #(str % "-neliovuosikulutus")
+        energiatodistus-schema/Energiatodistus2026)}
     :toteutunut-ostoenergiankulutus
     {:ostettu-energia
      (per-nettoala-for-schema

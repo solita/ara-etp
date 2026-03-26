@@ -208,7 +208,7 @@ describe('EtHakuSchema', () => {
 
       // When: flattenSchema is called on the real schema
       // Then: result contains the key with type HAVAINNOINTIKAYNTITYYPPI
-      expect(flatSchema).toHaveProperty(key);
+      expect(flatSchema).toHaveProperty([key]);
       expect(flatSchema[key][0].type).toBe(
         Schema.OPERATOR_TYPES.HAVAINNOINTIKAYNTITYYPPI
       );
@@ -221,7 +221,7 @@ describe('EtHakuSchema', () => {
 
       // When: flattenSchema is called on the real schema
       // Then: result contains the key with type BOOLEAN
-      expect(flatSchema).toHaveProperty(key);
+      expect(flatSchema).toHaveProperty([key]);
       expect(flatSchema[key][0].type).toBe(Schema.OPERATOR_TYPES.BOOLEAN);
     });
 
@@ -232,7 +232,7 @@ describe('EtHakuSchema', () => {
 
       // When: flattenSchema is called on the real schema
       // Then: result contains the key with type BOOLEAN
-      expect(flatSchema).toHaveProperty(key);
+      expect(flatSchema).toHaveProperty([key]);
       expect(flatSchema[key][0].type).toBe(Schema.OPERATOR_TYPES.BOOLEAN);
     });
 
@@ -251,7 +251,7 @@ describe('EtHakuSchema', () => {
       // Then: each kokonaistuotanto field exists with 5 numeric comparison operations
       kokonaistuotantoFields.forEach(field => {
         const key = `energiatodistus.tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.${field}`;
-        expect(flatSchema).toHaveProperty(key);
+        expect(flatSchema).toHaveProperty([key]);
         expect(flatSchema[key]).toHaveLength(5);
         expect(flatSchema[key][0].type).toBe(Schema.OPERATOR_TYPES.NUMBER);
       });
@@ -263,7 +263,7 @@ describe('EtHakuSchema', () => {
 
       // When: flattenSchema is called on the real schema
       // Then: result contains the key with numeric comparisons
-      expect(flatSchema).toHaveProperty(key);
+      expect(flatSchema).toHaveProperty([key]);
       expect(flatSchema[key]).toHaveLength(5);
       expect(flatSchema[key][0].type).toBe(Schema.OPERATOR_TYPES.NUMBER);
     });
@@ -274,7 +274,7 @@ describe('EtHakuSchema', () => {
 
       // When: flattenSchema is called on the real schema
       // Then: result contains the key with numeric comparisons
-      expect(flatSchema).toHaveProperty(key);
+      expect(flatSchema).toHaveProperty([key]);
       expect(flatSchema[key]).toHaveLength(5);
       expect(flatSchema[key][0].type).toBe(Schema.OPERATOR_TYPES.NUMBER);
     });
@@ -300,7 +300,7 @@ describe('EtHakuSchema', () => {
       // When: checking paakayttajaSchema
       // Then: all new keys exist
       newKeys.forEach(key => {
-        expect(Schema.paakayttajaSchema).toHaveProperty(key);
+        expect(Schema.paakayttajaSchema).toHaveProperty([key]);
       });
     });
   });
@@ -327,7 +327,7 @@ describe('EtHakuSchema', () => {
       // When: checking laatijaSchema
       // Then: none of the new keys exist
       newKeys.forEach(key => {
-        expect(Schema.laatijaSchema).not.toHaveProperty(key);
+        expect(Schema.laatijaSchema).not.toHaveProperty([key]);
       });
     });
   });
