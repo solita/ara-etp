@@ -87,6 +87,13 @@
           merge
           {"Content-Type" "text/html; charset=utf-8"}))
 
+(defn xlsx-response [body filename not-found]
+  (file-response body
+                 filename
+                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                 false
+                 not-found))
+
 (defn conflict [body]
   {:status 409
    :body body})

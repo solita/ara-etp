@@ -26,6 +26,7 @@
             [solita.etp.service.energiatodistus-csv :as energiatodistus-csv-service]
             [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
             [solita.etp.service.energiatodistus-search :as energiatodistus-search-service]
+            [solita.etp.service.energiatodistus-xlsx :as energiatodistus-xlsx-service]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.json :as json]
             [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]
@@ -141,6 +142,21 @@
       search-count-route
       (csv-route energiatodistus-csv-service/energiatodistukset-private-csv false)
 
+      ["/xlsx/energiatodistukset.xlsx"
+       {:get {:summary    "Hae energiatodistusten tiedot XLSX-tiedostona"
+              :parameters {:query energiatodistus-schema/EnergiatodistusSearch}
+              :responses  {200 {:body nil}}
+              :access     (some-fn rooli-service/laatija? rooli-service/paakayttaja?)
+              :handler    (fn [{{:keys [query]} :parameters :keys [db whoami]}]
+                            (api-response/with-exceptions
+                              #(api-response/xlsx-response
+                                 (energiatodistus-xlsx-service/find-energiatodistukset-xlsx
+                                   db
+                                   whoami
+                                   (update query :where json/read-value))
+                                "energiatodistukset.xlsx"
+                                "Not found.")
+                              search-exceptions))}}]
       ["/korvattavat"
        {:get {:summary    "Hae energiatodistukseen liittyvät energiatodistukset,
                            jotka mahdollisesti pitäisi korvata"
