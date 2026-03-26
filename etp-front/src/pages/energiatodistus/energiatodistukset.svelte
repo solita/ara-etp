@@ -474,22 +474,13 @@
           href={`/api/private/energiatodistukset/csv/energiatodistukset.csv${queryStringForExport}`} />
       </div>
       <!-- Old implementation -->
-    {:else}
-      {#if Kayttajat.isPaakayttajaOrLaskuttaja(whoami)}
-        <div class="flew-row mb-4 mr-4 flex">
-          <span class="material-icons">attachment</span>
-          &nbsp;
-          <Link
-            text={i18n('energiatodistus.lataa-csv')}
-            href={`/api/private/energiatodistukset/csv/energiatodistukset.csv${queryStringForExport}`} />
-        </div>
-      {/if}
+    {:else if Kayttajat.isPaakayttajaOrLaskuttaja(whoami)}
       <div class="flew-row mb-4 mr-4 flex">
         <span class="material-icons">attachment</span>
         &nbsp;
         <Link
-          text={i18n('energiatodistus.lataa-xlsx')}
-          href={`/api/private/energiatodistukset/xlsx/energiatodistukset.xlsx${queryStringForExport}`} />
+          text={i18n('energiatodistus.lataa-csv')}
+          href={`/api/private/energiatodistukset/csv/energiatodistukset.csv${queryStringForExport}`} />
       </div>
     {/if}
   {/each}
