@@ -243,7 +243,7 @@
         'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin'
       ])}
       label={$_(
-        'energiatodistus.lahtotiedot.rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin'
+        'energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin'
       )}
       dataCy="energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin"
       {disabled} />
