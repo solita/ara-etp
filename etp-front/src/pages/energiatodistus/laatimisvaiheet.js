@@ -54,5 +54,5 @@ export const isOlemassaOlevaRakennus = R.ifElse(
 export const isHavainnointikayntiRequired = R.anyPass([
   isInVaihe(vaihe.olemassaolevarakennus),
   isInVaihe(vaihe.rakennuslupaPerusparannus),
-  isInVaihe(vaihe.kayttoonottoPerusparannus),
+  isInVaihe(vaihe.kayttoonottoPerusparannus)
 ]);
