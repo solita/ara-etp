@@ -1,7 +1,12 @@
 (ns solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia
   (:require
+    [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc]
     [solita.etp.service.energiatodistus-pdf.ilmastoselvitys :as ilmastoselvitys]))
+
+(defn- fmt
+  "Format number with specified decimal places. Returns empty string for nil."
+  [value decimals] (or (formats/format-number value decimals false) ""))
 
 (defn- table-ostoenergia [kieli items]
   (let [l (kieli loc/et-pdf-localization)]
@@ -78,9 +83,7 @@
 
 (defn ostoenergia-tiedot [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
-        tulokset (:tulokset energiatodistus)
-        kasvihuonepaastot-nettoala (:kasvihuonepaastot-nettoala tulokset)
-        rounded (when kasvihuonepaastot-nettoala (Math/round (double kasvihuonepaastot-nettoala)))
+        ;tulokset (:tulokset energiatodistus)
         ;uusiutuvan-osuus (energiatodistus/uusiutuvan-osuus-paastoista (:tulokset energiatodistus))
         ;TODO get back to the uusiutuvan-energian-osuus when it's clear what to calculate
         ]
@@ -88,7 +91,7 @@
     [:div {:class "etusivu-ostoenergia"}
      (description-list
        [{:dt (l :energiakaytosta-syntyvat-kasvihuonepaastot)
-         :dd (str rounded " " (l :kgCO2ekv-m2/vuosi))}
+         :dd (str (-> energiatodistus :tulokset :kasvihuonepaastot-nettoala (fmt 2)) " " (l :kgCO2ekv-m2/vuosi))}
         {:dt (l :uusiutuva-energian-osuus)
          :dd (str "TODO: Add later when ready")}
         {:dt (l :kasvihuonepaastot)
