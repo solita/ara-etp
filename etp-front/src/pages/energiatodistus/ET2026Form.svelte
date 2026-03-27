@@ -139,7 +139,7 @@
         format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet)}
         items={R.pluck('id', luokittelut.laatimisvaiheet)} />
     </div>
-    {#if Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
+    {#if Laatimisvaiheet.isHavainnointikayntiRequired(energiatodistus)}
       <div class="w-full py-4 lg:w-1/2">
         <Input
           {disabled}
