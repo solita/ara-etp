@@ -118,7 +118,7 @@
              {:type :forbidden}))))
 
 (t/deftest co2-paastot-et-test
-  (t/testing "Laskee CO2-päästöt oikein kaikilla energiamuodoilla"
+  (t/testing "calculates CO2 emissions correctly with all energy types"
     ;; 100*0.059 + 200*0.05 + 50*0.027 + 30*0.306 + 40*0.014 = 26.99
     (t/is (== 26.99
               (service/co2-paastot-et {:kaukolampo 100.0
@@ -127,13 +127,13 @@
                                        :fossiilinen-polttoaine 30.0
                                        :kaukojaahdytys 40.0}))))
 
-  (t/testing "Puuttuvat energiamuodot käsitellään nollina"
+  (t/testing "missing energy types are treated as zero"
     ;; 1000*0.059 + 2000*0.05 = 59.0 + 100.0 = 159.0
     (t/is (== 159.0
               (service/co2-paastot-et {:kaukolampo 1000.0
                                        :sahko 2000.0}))))
 
-  (t/testing "Palauttaa 0.0 nil-syötteellä"
+  (t/testing "returns 0.0 for nil input"
     (t/is (== 0.0 (service/co2-paastot-et nil)))))
 
 (t/deftest kasvihuonepaastot-in-complete-energiatodistus-test
@@ -156,15 +156,15 @@
             kasvihuonepaastot-nettoala (-> completed :tulokset :kasvihuonepaastot-nettoala)]
         (t/testing (str "versio " (:versio completed) " id " id)
           (t/is (some? kasvihuonepaastot)
-                "kasvihuonepaastot pitää olla laskettu")
+                "kasvihuonepaastot should be calculated")
           (t/is (== expected-co2 kasvihuonepaastot)
-                "kasvihuonepaastot vastaa co2-paastot-et tulosta")
+                "kasvihuonepaastot should match co2-paastot-et result")
           (when (and nettoala (pos? nettoala))
             (t/is (some? kasvihuonepaastot-nettoala)
-                  "kasvihuonepaastot-nettoala pitää olla laskettu kun nettoala > 0")
+                  "kasvihuonepaastot-nettoala should be calculated when nettoala > 0")
             (t/is (== (/ (double expected-co2) (double nettoala))
                       (double kasvihuonepaastot-nettoala))
-                  "kasvihuonepaastot-nettoala = kasvihuonepaastot / nettoala")))))))
+                  "kasvihuonepaastot-nettoala should equal kasvihuonepaastot / nettoala")))))))
 
 (t/deftest kasvihuonepaastot-with-null-nettoala-test
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
@@ -180,6 +180,6 @@
           kasvihuonepaastot (-> completed :tulokset :kasvihuonepaastot)
           kasvihuonepaastot-nettoala (-> completed :tulokset :kasvihuonepaastot-nettoala)]
       (t/is (some? kasvihuonepaastot)
-            "kasvihuonepaastot lasketaan myös ilman nettoalaa")
+            "kasvihuonepaastot should be calculated even without nettoala")
       (t/is (nil? kasvihuonepaastot-nettoala)
-            "kasvihuonepaastot-nettoala on nil kun nettoala puuttuu"))))
+            "kasvihuonepaastot-nettoala should be nil when nettoala is missing"))))
