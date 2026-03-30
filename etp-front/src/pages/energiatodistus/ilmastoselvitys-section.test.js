@@ -25,6 +25,9 @@ const mockLuokittelut = {
       'label-fi': 'Perusparannus A+-luokkaan',
       'label-sv': 'Perusparannus A+-luokkaan(sv)'
     }
+  ],
+  postinumerot: [
+    { id: 100, 'label-fi': 'Helsinki', 'label-sv': 'Helsingfors', valid: true, 'type-id': 1 }
   ]
 };
 
