@@ -139,10 +139,12 @@
               [:p (l :toimenpiteet-ei-koske-uudisrakennusta)])
             (when a-luokka
               [:p (l :toimenpiteet-ei-koske-a-luokkaa)])
-            [:p {:id "koontisivu-keskeiset-toimenpiteet"}
-             (-> energiatodistus :perustiedot (get-in [(kieli {:fi :keskeiset-suositukset-fi})]) h)]
             (when (and (not ei-olemassaoleva) (not a-luokka))
-              [:p (l :toimenpiteet-yksityiskohtaisemmin)])]))]
+              (list
+                [:p {:id "koontisivu-keskeiset-toimenpiteet"}
+                 (-> energiatodistus :perustiedot (get-in [(kieli {:fi :keskeiset-suositukset-fi
+                                                                   :sv :keskeiset-suositukset-sv})]) h)]
+                [:p (l :toimenpiteet-yksityiskohtaisemmin)]))]))]
 
       [:div {:class "page-section"
              :id    "koontisivu-havaintokaynti-tyokalu"}
