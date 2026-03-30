@@ -165,7 +165,10 @@
                                      (find-by-id (alakayttotarkoitukset versio))
                                      :kayttotarkoitusluokka-id)
           paakayttotarkoitus (-> (get kayttotarkoitukset versio)
-                                 (find-by-id paakayttotarkoitus-id))]
+                                 (find-by-id paakayttotarkoitus-id))
+          yritys-postinumero (find-by-id postinumerot (-> energiatodistus
+                                                          (get-in [:ilmastoselvitys :yritys-postinumero])
+                                                          formats/string->int))]
       (-> energiatodistus
           (assoc-in [:perustiedot :postitoimipaikka-fi] (:label-fi postinumero))
           (assoc-in [:perustiedot :postitoimipaikka-sv] (:label-sv postinumero))
@@ -180,6 +183,7 @@
           (assoc-in [:perustiedot :paakayttotarkoitus-id] paakayttotarkoitus-id)
           (assoc-in [:perustiedot :paakayttotarkoitus-fi] (:label-fi paakayttotarkoitus))
           (assoc-in [:perustiedot :paakayttotarkoitus-sv] (:label-sv paakayttotarkoitus))
+          (assoc-in [:ilmastoselvitys :yritys-postitoimipaikka] (:label-fi yritys-postinumero))
           (update-in [:tulokset :kaytettavat-energiamuodot] (partial merge (energiamuotokertoimet versio)))
           (update-in [:tulokset :kuukausierittely] kuukausierittely-hyodynnetty)
           (assoc-kuukausierittely-summat)
