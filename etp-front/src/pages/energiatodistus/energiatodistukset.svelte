@@ -464,24 +464,12 @@
         <Spinner />
       </div>
     </Overlay>
-    <!-- New ET2026 implementation -->
-    {#if isEtp2026Enabled(config)}
-      <div class="flew-row mb-4 mr-4 flex">
-        <span class="material-icons">attachment</span>
-        &nbsp;
-        <Link
-          text={i18n('energiatodistus.lataa-csv')}
-          href={`/api/private/energiatodistukset/csv/energiatodistukset.csv${queryStringForExport}`} />
-      </div>
-      <!-- Old implementation -->
-    {:else if Kayttajat.isPaakayttajaOrLaskuttaja(whoami)}
-      <div class="flew-row mb-4 mr-4 flex">
-        <span class="material-icons">attachment</span>
-        &nbsp;
-        <Link
-          text={i18n('energiatodistus.lataa-csv')}
-          href={`/api/private/energiatodistukset/csv/energiatodistukset.csv${queryStringForExport}`} />
-      </div>
-    {/if}
+    <div class="flew-row mb-4 mr-4 flex">
+      <span class="material-icons">attachment</span>
+      &nbsp;
+      <Link
+        text={i18n('energiatodistus.lataa-csv')}
+        href={`/api/private/energiatodistukset/csv/energiatodistukset.csv${queryStringForExport}`} />
+    </div>
   {/each}
 </div>
