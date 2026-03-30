@@ -27,7 +27,13 @@ const mockLuokittelut = {
     }
   ],
   postinumerot: [
-    { id: 100, 'label-fi': 'Helsinki', 'label-sv': 'Helsingfors', valid: true, 'type-id': 1 }
+    {
+      id: 100,
+      'label-fi': 'Helsinki',
+      'label-sv': 'Helsingfors',
+      valid: true,
+      'type-id': 1
+    }
   ]
 };
 
