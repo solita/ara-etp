@@ -464,7 +464,7 @@
         <Spinner />
       </div>
     </Overlay>
-    <div class="flew-row mb-4 mr-4 flex">
+    <div class="flex-row mb-4 mr-4 flex">
       <span class="material-icons">attachment</span>
       &nbsp;
       <Link
