@@ -1429,7 +1429,6 @@
         "load-error": "Sökningen av energicertifikatets bilagor misslyckades."
       }
     },
-    "lataa-xlsx": "Ladda ner energicertifikat som XLSX-fil",
     "viestit": {
       "title": "Meddelanden"
     },
