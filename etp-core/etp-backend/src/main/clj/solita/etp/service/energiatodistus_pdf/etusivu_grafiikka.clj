@@ -89,7 +89,7 @@
 (def tip-width 10)
 (def tip-width-increment 3)
 (def indicator-line-length 370)
-(def e-luokka-indicator-margin 190)
+(def e-luokka-indicator-margin 210)
 (def svg-width (+ indicator-line-length e-luokka-indicator-margin))
 
 (defn e-luokka-indicator
