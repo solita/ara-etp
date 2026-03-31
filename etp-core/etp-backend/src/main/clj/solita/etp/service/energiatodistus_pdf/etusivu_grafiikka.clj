@@ -65,6 +65,9 @@
                  (str "&lt; " value))]))
           raja-asteikko)))
 
+(defn- raja-asteikko-upper-bound [raja-asteikko letter]
+  (some (fn [[value l]] (when (= l letter) value)) raja-asteikko))
+
 (defn set-arrow-thresholds [rajat]
   (let [ranges   (build-ranges (:raja-asteikko rajat))
         last-val (-> rajat :raja-asteikko last first)]
@@ -72,8 +75,9 @@
       (fn [{:keys [letter] :as arrow}]
         (assoc arrow :numbers
                      (case letter
-                     "A+" "&lt; A0-20%"
-                     "A0" "&lt; 40"
+                     "A+" (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A+"))
+                     "A0" (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A0"))
+                     "A"  (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A"))
                      "G"  (str "&gt; " last-val)
                      (get ranges letter))))
       arrows)))
