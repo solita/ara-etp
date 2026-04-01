@@ -5,6 +5,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as et from './energiatodistus-utils';
   import * as Laatimisvaiheet from './laatimisvaiheet';
+  import { overrideLabels } from './laatimisvaihe-labels';
   import * as LocaleUtils from '@Language/locale-utils';
 
   import H2 from '@Component/H/H2';
@@ -133,8 +134,8 @@
         bind:model={energiatodistus}
         lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
         parse={Maybe.Some}
-        format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet)}
-        items={R.pluck('id', luokittelut.laatimisvaiheet)} />
+        format={et.selectFormat(labelLocale, overrideLabels(2018, luokittelut.laatimisvaiheet))}
+        items={R.pluck('id', overrideLabels(2018, luokittelut.laatimisvaiheet))} />
     </div>
     {#if Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
       <div class="w-full py-4 lg:w-1/2">
