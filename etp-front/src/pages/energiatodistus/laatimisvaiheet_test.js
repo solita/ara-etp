@@ -176,9 +176,7 @@ describe('Laatimisvaiheet: ', () => {
     // when checking isUudisrakennus
     // then false is returned
     [2, 3, 4].forEach(id => {
-      expect(Laatimisvaiheet.isUudisrakennus(et2026inVaihe(id))).toEqual(
-        false
-      );
+      expect(Laatimisvaiheet.isUudisrakennus(et2026inVaihe(id))).toEqual(false);
     });
   });
 });

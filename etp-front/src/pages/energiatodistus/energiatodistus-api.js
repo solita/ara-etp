@@ -376,10 +376,7 @@ const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({
 }));
 
 const laatimisvaiheluokittelut = R.memoizeWith(R.identity, version => ({
-  laatimisvaiheet: Fetch.cached(
-    fetch,
-    '/laatimisvaiheet/' + version
-  )
+  laatimisvaiheet: Fetch.cached(fetch, '/laatimisvaiheet/' + version)
 }));
 
 export const luokittelutForVersion = version =>
