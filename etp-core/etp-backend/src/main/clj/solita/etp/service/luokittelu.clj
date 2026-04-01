@@ -14,6 +14,14 @@
 
 (def find-kielisyys #(select-luokittelu % "kielisyys"))
 (def find-laatimisvaiheet #(select-luokittelu % "laatimisvaihe"))
+
+(defn find-laatimisvaiheet-for-versio
+  "Returns laatimisvaihe entries where versio <= the given versio."
+  [db versio]
+  (jdbc/query db
+              ["SELECT id, label_fi, label_sv, valid FROM laatimisvaihe WHERE versio <= ? ORDER BY ordinal ASC" versio]
+              db/default-opts))
+
 (def find-ilmanvaihtotyypit #(select-luokittelu % "ilmanvaihtotyyppi"))
 (def find-lammitysmuodot #(select-luokittelu % "lammitysmuoto"))
 (def find-lammonjaot #(select-luokittelu % "lammonjako"))

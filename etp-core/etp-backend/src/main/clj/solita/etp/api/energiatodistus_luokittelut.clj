@@ -27,6 +27,14 @@
 (def routes
   [(classification-route "/kielisyys" "kielisyydet" kielisyys/find-kielisyys)
    (classification-route "/laatimisvaiheet" "laatimisvaiheet" laatimisvaihe/find-laatimisvaiheet)
+
+   ["/laatimisvaiheet/:versio"
+    {:get {:summary    "Hae energiatodistuksen laatimisvaiheet versiolle"
+           :parameters {:path {:versio common-schema/Key}}
+           :responses  {200 {:body [common-schema/Luokittelu]}}
+           :handler    (fn [{{{:keys [versio]} :path} :parameters :keys [db]}]
+                         (r/response (laatimisvaihe/find-laatimisvaiheet-for-versio db versio)))}}]
+
    (classification-route "/lammitysmuoto" "lämmitysmuodot" luokittelu-service/find-lammitysmuodot)
    (classification-route "/lammonjako" "lämmönjaot" luokittelu-service/find-lammonjaot)
    (classification-route "/ilmanvaihtotyyppi" "ilmanvaihtotyypit" luokittelu-service/find-ilmanvaihtotyypit)

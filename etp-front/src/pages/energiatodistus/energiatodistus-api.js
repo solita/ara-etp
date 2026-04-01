@@ -348,7 +348,6 @@ export const luokittelut = {
   ilmanvaihtotyypit: Fetch.cached(fetch, '/ilmanvaihtotyyppi'),
   postinumerot: geoApi.postinumerot,
   kielisyys: Fetch.cached(fetch, '/kielisyys'),
-  laatimisvaiheet: Fetch.cached(fetch, '/laatimisvaiheet'),
   patevyydet: Fetch.cached(fetch, '/patevyydet'),
   mahdollisuusLiittya: Fetch.cached(
     fetch,
@@ -376,14 +375,23 @@ const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({
   )
 }));
 
+const laatimisvaiheluokittelut = R.memoizeWith(R.identity, version => ({
+  laatimisvaiheet: Fetch.cached(
+    fetch,
+    '/laatimisvaiheet/' + version
+  )
+}));
+
 export const luokittelutForVersion = version =>
   Future.parallelObject(9, {
     ...luokittelut,
-    ...kayttotarkoitusluokittelut(version)
+    ...kayttotarkoitusluokittelut(version),
+    ...laatimisvaiheluokittelut(version)
   });
 
 export const luokittelutAllVersions = Future.parallelObject(13, {
   ...luokittelut,
+  laatimisvaiheet: Fetch.cached(fetch, '/laatimisvaiheet'),
   2018: Future.parallelObject(2, kayttotarkoitusluokittelut(2018)),
   2013: Future.parallelObject(2, kayttotarkoitusluokittelut(2013)),
   2026: Future.parallelObject(2, kayttotarkoitusluokittelut(2026))

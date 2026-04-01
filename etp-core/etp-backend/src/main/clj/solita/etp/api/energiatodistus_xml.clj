@@ -313,6 +313,7 @@
 (def error-response {:foreign-key-violation response/bad-request
                      :invalid-replace response/bad-request
                      :invalid-sisainen-kuorma response/bad-request
+                     :invalid-laatimisvaihe response/bad-request
                      :invalid-value response/bad-request
                      :xml-not-well-formed response/bad-request
                      :xml-xsd-validation-failed response/bad-request
