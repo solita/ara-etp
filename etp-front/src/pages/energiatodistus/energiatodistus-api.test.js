@@ -20,23 +20,23 @@ describe('Classification fetch for ilmastoselvitys', () => {
     expect(hasKey).toBe(true);
   });
 
-  // Test 2.2: luokittelut has all expected classification keys
-  it('given the luokittelut object, when checking all expected keys, then all classification keys are present', () => {
+  // Test 2.2: luokittelut has all expected classification keys (except version-dependent ones)
+  it('given the luokittelut object, when checking all expected keys, then all version-independent classification keys are present', () => {
     // given
     const luokittelutObject = api.luokittelut;
 
     // when
     const keys = Object.keys(luokittelutObject);
 
-    // then — should include the new ilmastoselvitysLaadintaperusteet alongside existing keys
+    // then — version-independent keys remain
     expect(keys).toContain('lammonjako');
     expect(keys).toContain('lammitysmuoto');
     expect(keys).toContain('ilmanvaihtotyypit');
     expect(keys).toContain('postinumerot');
     expect(keys).toContain('kielisyys');
-    expect(keys).toContain('laatimisvaiheet');
     expect(keys).toContain('patevyydet');
     expect(keys).toContain('ilmastoselvitysLaadintaperusteet');
+    expect(keys).toContain('havainnointikayntityyppi');
   });
 
   // Test 2.3: luokittelut ilmastoselvitysLaadintaperusteet is a Future (cached fetch)
@@ -50,5 +50,55 @@ describe('Classification fetch for ilmastoselvitys', () => {
     // then
     expect(value).toBeDefined();
     expect(value).not.toBeNull();
+  });
+});
+
+// --- NEW: laatimisvaiheet moved to version-dependent classification ---
+
+describe('Classification fetch for laatimisvaiheet version-dependency', () => {
+  // Test: laatimisvaiheet is NOT in the version-independent luokittelut object
+  it('given the luokittelut object, when checking keys, then laatimisvaiheet is NOT present (moved to version-dependent)', () => {
+    // given
+    const luokittelutObject = api.luokittelut;
+
+    // when
+    const keys = Object.keys(luokittelutObject);
+
+    // then — laatimisvaiheet should have been moved out
+    expect(keys).not.toContain('laatimisvaiheet');
+  });
+
+  // Test: all other version-independent keys remain (regression)
+  it('given the luokittelut object, when checking version-independent keys, then all non-laatimisvaiheet keys remain (regression)', () => {
+    // given
+    const luokittelutObject = api.luokittelut;
+
+    // when
+    const keys = Object.keys(luokittelutObject);
+
+    // then — these keys must still be present
+    expect(keys).toContain('lammonjako');
+    expect(keys).toContain('lammitysmuoto');
+    expect(keys).toContain('ilmanvaihtotyypit');
+    expect(keys).toContain('postinumerot');
+    expect(keys).toContain('kielisyys');
+    expect(keys).toContain('patevyydet');
+    expect(keys).toContain('mahdollisuusLiittya');
+    expect(keys).toContain('uusiutuvaEnergia');
+    expect(keys).toContain('jaahdytys');
+    expect(keys).toContain('toimenpide-ehdotus');
+    expect(keys).toContain('toimenpide-ehdotus-group');
+    expect(keys).toContain('havainnointikayntityyppi');
+    expect(keys).toContain('ilmastoselvitysLaadintaperusteet');
+  });
+
+  // Test: luokittelutAllVersions still contains laatimisvaiheet for search/haku
+  it('given the luokittelutAllVersions object, when resolved, then it should contain laatimisvaiheet', () => {
+    // given
+    const allVersions = api.luokittelutAllVersions;
+
+    // then — the overall object should be defined (it's a Future, so we can only test it exists)
+    expect(allVersions).toBeDefined();
+    expect(allVersions).not.toBeNull();
   });
 });
