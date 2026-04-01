@@ -7,10 +7,12 @@
   import * as LocaleUtils from '@Language/locale-utils';
   import * as formats from '@Utility/formats';
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
+  import * as Postinumero from '@Component/address/postinumero-fi';
 
   import H2 from '@Component/H/H2';
   import Select from '@Component/Select/Select';
   import Input from '@Pages/energiatodistus/Input';
+  import Autocomplete from '@Component/Autocomplete/Autocomplete.svelte';
 
   export let energiatodistus;
   export let schema;
@@ -19,6 +21,14 @@
   export let inputLanguage;
 
   $: labelLocale = LocaleUtils.label($locale);
+
+  $: postinumeroNames = R.map(
+    Postinumero.fullLabel($locale),
+    R.filter(
+      R.allPass([R.propEq(true, 'valid'), Postinumero.isNormal]),
+      luokittelut.postinumerot
+    )
+  );
 
   const sumFields = (energiatodistusData, section, subsection, fields) =>
     fields.reduce(
@@ -102,6 +112,9 @@
         bind:model={energiatodistus}
         path={['ilmastoselvitys', 'yritys']} />
     </div>
+  </div>
+
+  <div class="flex flex-col gap-x-8 lg:flex-row">
     <div class="w-full py-4 lg:w-1/2">
       <Input
         {disabled}
@@ -110,24 +123,20 @@
         bind:model={energiatodistus}
         path={['ilmastoselvitys', 'yritys-osoite']} />
     </div>
-  </div>
-
-  <div class="flex flex-col gap-x-8 lg:flex-row">
-    <div class="w-full py-4 lg:w-1/4">
-      <Input
-        {disabled}
-        {schema}
-        center={false}
-        bind:model={energiatodistus}
-        path={['ilmastoselvitys', 'yritys-postinumero']} />
-    </div>
-    <div class="w-full py-4 lg:w-1/4">
-      <Input
-        {disabled}
-        {schema}
-        center={false}
-        bind:model={energiatodistus}
-        path={['ilmastoselvitys', 'yritys-postitoimipaikka']} />
+    <div class="w-full py-4 lg:w-1/2">
+      <Autocomplete items={postinumeroNames} size={10}>
+        <Input
+          {disabled}
+          {schema}
+          center={false}
+          search={true}
+          bind:model={energiatodistus}
+          format={Maybe.fold(
+            '',
+            Postinumero.formatPostinumero(luokittelut.postinumerot, $locale)
+          )}
+          path={['ilmastoselvitys', 'yritys-postinumero']} />
+      </Autocomplete>
     </div>
   </div>
 
