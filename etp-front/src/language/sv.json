@@ -506,7 +506,8 @@
         "nettoala": "Nettoarea",
         "nimi": "Byggnadens namn",
         "osoite": "Adress",
-        "laatija": "Upprätttare"
+        "laatija": "Upprätttare",
+        "ppp": "PPP"
       },
       "validation": {
         "invalid-tila": "Energicertifikatet som ersätts ska vara undertecknat eller ha förkastats.",

@@ -2,6 +2,7 @@
   (:require [clojure.test :as t]
             [solita.etp.db :as db]
             [solita.etp.test-system :as ts]
+            [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
@@ -207,3 +208,48 @@
   (->> (laatija-test-data/generate-and-insert! 10)
        (mapv #(future (update-energiatodistus-n 10 2018 %)))
        (mapv deref)))
+
+;; ---- AE-2620: Audit for pääkäyttäjä korvaavuus change ----
+
+(t/deftest audit-paakayttaja-korvaavuus-change-test
+  ;; Given: a signed energiatodistus A and a signed energiatodistus B
+  ;; When: pääkäyttäjä sets A's korvattu-energiatodistus-id to B
+  ;; Then: audit.energiatodistus for A records the change with modifiedby_id = pääkäyttäjä
+  (let [paakayttaja-adds (->> (kayttaja-test-data/generate-adds 1)
+                              (map #(assoc % :rooli 2)))
+        paakayttaja-ids (kayttaja-test-data/insert! paakayttaja-adds)
+        paakayttaja-id (first paakayttaja-ids)
+        paakayttaja-whoami {:id paakayttaja-id :rooli 2}
+        [laatija-id _laatija] (first (laatija-test-data/generate-and-insert! 1))
+        et-add (energiatodistus-test-data/generate-add 2018 true)
+        [korvaava-id korvattava-id] (energiatodistus-test-data/insert!
+                                      [et-add et-add]
+                                      laatija-id)
+        db (ts/db-user paakayttaja-id)]
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+    (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+
+    ;; Count audit rows before
+    (let [audit-count-before (count (jdbc/query db
+                                                ["select * from audit.energiatodistus where id = ?" korvaava-id]
+                                                db/default-opts))]
+
+      ;; When: pääkäyttäjä sets korvaavuus
+      (energiatodistus-service/update-energiatodistus!
+        db
+        paakayttaja-whoami
+        korvaava-id
+        (-> (energiatodistus-service/find-energiatodistus db korvaava-id)
+            (assoc :korvattu-energiatodistus-id korvattava-id)))
+
+      ;; Then: new audit row exists with pääkäyttäjä as modifier
+      (let [audit-rows (jdbc/query db
+                                    ["select * from audit.energiatodistus where id = ? order by event_id desc" korvaava-id]
+                                    db/default-opts)
+            latest-audit (first audit-rows)]
+        (t/is (> (count audit-rows) audit-count-before)
+              "A new audit row should be created for the korvaavuus change")
+        (t/is (= paakayttaja-id (:modifiedby-id latest-audit))
+              "The audit row should record pääkäyttäjä as the modifier")
+        (t/is (= korvattava-id (:korvattu-energiatodistus-id latest-audit))
+              "The audit row should record the new korvattu-energiatodistus-id")))))

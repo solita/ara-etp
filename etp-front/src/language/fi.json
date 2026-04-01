@@ -528,7 +528,8 @@
         "nettoala": "Nettoala",
         "nimi": "Rakennuksen nimi",
         "osoite": "Osoite",
-        "laatija": "Laatija"
+        "laatija": "Laatija",
+        "ppp": "PPP"
       },
       "ehdotus": {
         "info-p1": "Järjestelmä on löytänyt energiatodistuksia, jotka voivat liittyä samaan rakennukseen ja käyttötarkoitukseen.",

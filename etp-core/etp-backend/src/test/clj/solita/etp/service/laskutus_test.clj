@@ -463,6 +463,103 @@
         (t/is (contains? (->> laskutus-after (map :energiatodistus-id) set) replacement-et-id)
               "Replacement energiatodistus SHOULD be invoiced when replaced certificate is destroyed (tuhottu)")))))
 
+;; ---- AE-2620: Retroactive korvaavuus billing tests ----
+
+(t/deftest retroactive-korvaavuus-within-7-days-not-billed-test
+  ;; Given: ET A (signed last month, not invoiced) and ET B (signed by same laatija <7 days before A)
+  ;;        A does NOT initially have korvattu-energiatodistus-id set
+  ;; When: pääkäyttäjä retroactively sets A's korvattu-energiatodistus-id to B
+  ;; Then: A is excluded from billing (replaces a <7 day old ET by same laatija)
+  (let [laatijat (laatija-test-data/generate-and-insert! 1)
+        laatija-id (first (keys laatijat))
+        et-adds (energiatodistus-test-data/generate-adds 2 2018 true)
+        [korvattava-id korvaava-id] (energiatodistus-test-data/insert! et-adds laatija-id)]
+
+    ;; Sign both
+    (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-id} korvattava-id)
+    (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-id}
+                                                          korvattava-id {:skip-pdf-signed-assert? true})
+    (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-id} korvaava-id)
+    (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-id}
+                                                          korvaava-id {:skip-pdf-signed-assert? true})
+
+    ;; Set allekirjoitusaika: korvattava signed first, korvaava signed 2 days later (within 7 days)
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' WHERE id = ?" korvattava-id])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' + interval '2 days' WHERE id = ?" korvaava-id])
+
+    ;; Before retroactive korvaavuus: korvaava IS billable
+    (let [laskutus-before (laskutus-service/find-kuukauden-laskutus ts/*db*)]
+      (t/is (contains? (->> laskutus-before (map :energiatodistus-id) set) korvaava-id)
+            "Before setting korvaavuus, ET should be billable"))
+
+    ;; When: retroactively set korvaavuus
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET korvattu_energiatodistus_id = ? WHERE id = ?" korvattava-id korvaava-id])
+
+    ;; Then: korvaava is NOT billable (replaces <7 day old ET by same laatija)
+    (let [laskutus-after (laskutus-service/find-kuukauden-laskutus ts/*db*)]
+      (t/is (not (contains? (->> laskutus-after (map :energiatodistus-id) set) korvaava-id))
+            "After retroactive korvaavuus within 7 days by same laatija, ET should NOT be billable"))))
+
+(t/deftest retroactive-korvaavuus-older-than-7-days-still-billed-test
+  ;; Given: ET A (signed last month) and ET B (signed by same laatija >7 days before A)
+  ;; When: pääkäyttäjä retroactively sets A's korvattu-energiatodistus-id to B
+  ;; Then: A remains billable (replaced ET was >7 days old)
+  (let [laatijat (laatija-test-data/generate-and-insert! 1)
+        laatija-id (first (keys laatijat))
+        et-adds (energiatodistus-test-data/generate-adds 2 2018 true)
+        [korvattava-id korvaava-id] (energiatodistus-test-data/insert! et-adds laatija-id)]
+
+    ;; Sign both
+    (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-id} korvattava-id)
+    (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-id}
+                                                          korvattava-id {:skip-pdf-signed-assert? true})
+    (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-id} korvaava-id)
+    (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-id}
+                                                          korvaava-id {:skip-pdf-signed-assert? true})
+
+    ;; Set allekirjoitusaika: korvattava signed 10 days before korvaava (>7 days gap)
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' - interval '10 days' WHERE id = ?" korvattava-id])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' WHERE id = ?" korvaava-id])
+
+    ;; When: retroactively set korvaavuus
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET korvattu_energiatodistus_id = ? WHERE id = ?" korvattava-id korvaava-id])
+
+    ;; Then: korvaava IS still billable
+    (let [laskutus (laskutus-service/find-kuukauden-laskutus ts/*db*)]
+      (t/is (contains? (->> laskutus (map :energiatodistus-id) set) korvaava-id)
+            "After retroactive korvaavuus older than 7 days, ET should still be billable"))))
+
+(t/deftest retroactive-korvaavuus-different-laatija-still-billed-test
+  ;; Given: ET A by laatija-1, ET B by laatija-2 (signed <7 days apart)
+  ;; When: pääkäyttäjä sets A's korvattu-energiatodistus-id to B
+  ;; Then: A is still billable (different laatija, billing exemption doesn't apply)
+  (let [laatijat (laatija-test-data/generate-and-insert! 2)
+        [laatija-1-id laatija-2-id] (-> laatijat keys sort)
+        et-add-1 (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        et-add-2 (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvaava-id] (energiatodistus-test-data/insert! [et-add-1] laatija-1-id)
+        [korvattava-id] (energiatodistus-test-data/insert! [et-add-2] laatija-2-id)]
+
+    ;; Sign both
+    (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-1-id} korvaava-id)
+    (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-1-id}
+                                                          korvaava-id {:skip-pdf-signed-assert? true})
+    (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-2-id} korvattava-id)
+    (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-2-id}
+                                                          korvattava-id {:skip-pdf-signed-assert? true})
+
+    ;; Set allekirjoitusaika: both within 2 days (<7 days)
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' WHERE id = ?" korvattava-id])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' + interval '2 days' WHERE id = ?" korvaava-id])
+
+    ;; When: retroactively set korvaavuus
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET korvattu_energiatodistus_id = ? WHERE id = ?" korvattava-id korvaava-id])
+
+    ;; Then: korvaava IS still billable (different laatija)
+    (let [laskutus (laskutus-service/find-kuukauden-laskutus ts/*db*)]
+      (t/is (contains? (->> laskutus (map :energiatodistus-id) set) korvaava-id)
+            "After retroactive korvaavuus by different laatija within 7 days, ET should still be billable"))))
+
 ;; Uncomment to test performance and robustness locally
 #_(t/deftest ^:eftest/synchronized performance-test
   (smtp-test/empty-email-directory!)

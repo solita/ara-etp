@@ -8,6 +8,7 @@
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
+            [solita.etp.test-data.perusparannuspassi :as perusparannuspassi-test-data]
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
             [solita.etp.service.energiatodistus :as service]
             [solita.etp.whoami :as test-whoami]))
@@ -511,3 +512,256 @@
   (t/is (= false (#'service/pdf-signed? (-> "energiatodistukset/not-signed.pdf"
                                             io/resource
                                             io/input-stream)))))
+
+;; ---- AE-2620: Pääkäyttäjä korvaavuus on signed energiatodistus ----
+
+(t/deftest paakayttaja-sets-korvaavuus-on-signed-et-test
+  ;; Given: two signed energiatodistukset
+  ;; When: pääkäyttäjä sets korvattu-energiatodistus-id on the korvaava
+  ;; Then: korvaava stays signed, korvattava transitions to replaced
+  (let [{:keys [laatijat paakayttajat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        paakayttaja-id (-> paakayttajat keys sort first)
+        paakayttaja-whoami {:id paakayttaja-id :rooli 2}
+        et-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvaava-id korvattava-id] (energiatodistus-test-data/insert!
+                                      [et-add et-add]
+                                      laatija-id)]
+    ;; Given: both are signed
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+    (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+    (t/is (= (energiatodistus-tila korvaava-id) :signed))
+    (t/is (= (energiatodistus-tila korvattava-id) :signed))
+
+    ;; When: pääkäyttäjä sets korvaavuus
+    (service/update-energiatodistus!
+      (ts/db-user paakayttaja-id)
+      paakayttaja-whoami
+      korvaava-id
+      (-> (service/find-energiatodistus (ts/db-user paakayttaja-id) korvaava-id)
+          (assoc :korvattu-energiatodistus-id korvattava-id)))
+
+    ;; Then: korvaava is signed, korvattava is replaced
+    (t/is (= (energiatodistus-tila korvaava-id) :signed))
+    (t/is (= (energiatodistus-tila korvattava-id) :replaced))))
+
+(t/deftest paakayttaja-sets-korvaavuus-on-discarded-et-test
+  ;; Given: a signed energiatodistus and a discarded energiatodistus
+  ;; When: pääkäyttäjä sets korvaavuus targeting the discarded ET
+  ;; Then: korvaava stays signed, discarded ET transitions to replaced
+  (let [{:keys [laatijat paakayttajat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        paakayttaja-id (-> paakayttajat keys sort first)
+        paakayttaja-whoami {:id paakayttaja-id :rooli 2}
+        et-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvaava-id korvattava-id] (energiatodistus-test-data/insert!
+                                      [et-add et-add]
+                                      laatija-id)]
+    ;; Given: korvaava is signed, korvattava is discarded
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+    (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+    (service/set-energiatodistus-discarded! (ts/db-user laatija-id) korvattava-id true)
+    (t/is (= (energiatodistus-tila korvattava-id) :discarded))
+
+    ;; When: pääkäyttäjä sets korvaavuus
+    (service/update-energiatodistus!
+      (ts/db-user paakayttaja-id)
+      paakayttaja-whoami
+      korvaava-id
+      (-> (service/find-energiatodistus (ts/db-user paakayttaja-id) korvaava-id)
+          (assoc :korvattu-energiatodistus-id korvattava-id)))
+
+    ;; Then: korvaava stays signed, korvattava becomes replaced
+    (t/is (= (energiatodistus-tila korvaava-id) :signed))
+    (t/is (= (energiatodistus-tila korvattava-id) :replaced))))
+
+(t/deftest paakayttaja-removes-korvaavuus-from-signed-et-test
+  ;; Given: a signed korvaava ET that replaces korvattava (korvattava is 'replaced')
+  ;; When: pääkäyttäjä removes korvaavuus (sets korvattu-energiatodistus-id to nil)
+  ;; Then: korvaava stays signed, korvattava reverts to signed
+  (let [{:keys [laatijat paakayttajat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        paakayttaja-id (-> paakayttajat keys sort first)
+        paakayttaja-whoami {:id paakayttaja-id :rooli 2}
+        et-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvattava-id] (energiatodistus-test-data/insert! [et-add] laatija-id)
+        korvaava-add (assoc et-add :korvattu-energiatodistus-id korvattava-id)
+        _ (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+        [korvaava-id] (energiatodistus-test-data/insert! [korvaava-add] laatija-id)]
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+    (t/is (= (energiatodistus-tila korvaava-id) :signed))
+    (t/is (= (energiatodistus-tila korvattava-id) :replaced))
+
+    ;; When: pääkäyttäjä removes korvaavuus
+    (service/update-energiatodistus!
+      (ts/db-user paakayttaja-id)
+      paakayttaja-whoami
+      korvaava-id
+      (-> (service/find-energiatodistus (ts/db-user paakayttaja-id) korvaava-id)
+          (assoc :korvattu-energiatodistus-id nil)))
+
+    ;; Then: both are signed again
+    (t/is (= (energiatodistus-tila korvaava-id) :signed))
+    (t/is (= (energiatodistus-tila korvattava-id) :signed))))
+
+(t/deftest paakayttaja-korvaavuus-target-in-draft-fails-test
+  ;; Given: a signed korvaava ET and a draft korvattava ET
+  ;; When: pääkäyttäjä tries to set korvaavuus to the draft ET
+  ;; Then: fails with :invalid-replace
+  (let [{:keys [laatijat paakayttajat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        paakayttaja-id (-> paakayttajat keys sort first)
+        paakayttaja-whoami {:id paakayttaja-id :rooli 2}
+        et-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvaava-id draft-id] (energiatodistus-test-data/insert!
+                                 [et-add et-add]
+                                 laatija-id)]
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+    (t/is (= (energiatodistus-tila draft-id) :draft))
+
+    ;; When/Then: setting korvaavuus to draft ET fails
+    (t/is (= (:type (etp-test/catch-ex-data
+                       #(service/update-energiatodistus!
+                          (ts/db-user paakayttaja-id)
+                          paakayttaja-whoami
+                          korvaava-id
+                          (-> (service/find-energiatodistus (ts/db-user paakayttaja-id) korvaava-id)
+                              (assoc :korvattu-energiatodistus-id draft-id)))))
+             :invalid-replace))))
+
+(t/deftest paakayttaja-korvaavuus-target-nonexistent-fails-test
+  ;; Given: a signed energiatodistus
+  ;; When: pääkäyttäjä sets korvattu-energiatodistus-id to nonexistent id
+  ;; Then: fails with :invalid-replace
+  (let [{:keys [laatijat paakayttajat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        paakayttaja-id (-> paakayttajat keys sort first)
+        paakayttaja-whoami {:id paakayttaja-id :rooli 2}
+        et-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvaava-id] (energiatodistus-test-data/insert! [et-add] laatija-id)]
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+
+    ;; When/Then: nonexistent target fails
+    (t/is (= (etp-test/catch-ex-data
+               #(service/update-energiatodistus!
+                  (ts/db-user paakayttaja-id)
+                  paakayttaja-whoami
+                  korvaava-id
+                  (-> (service/find-energiatodistus (ts/db-user paakayttaja-id) korvaava-id)
+                      (assoc :korvattu-energiatodistus-id 99999))))
+             {:type :invalid-replace
+              :message "Replaceable energiatodistus 99999 does not exist"}))))
+
+(t/deftest laatija-cannot-set-korvaavuus-on-signed-et-test
+  ;; Given: two signed energiatodistukset owned by the same laatija
+  ;; When: laatija tries to set korvaavuus on the signed korvaava ET
+  ;; Then: korvattu-energiatodistus-id is filtered out (not in allowed fields for [:signed :laatija _])
+  ;;       and the korvattava ET remains in signed state
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        laatija-whoami {:id laatija-id :rooli 0}
+        et-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvaava-id korvattava-id] (energiatodistus-test-data/insert!
+                                      [et-add et-add]
+                                      laatija-id)]
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+    (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+
+    ;; When: laatija tries update with korvattu-energiatodistus-id
+    (service/update-energiatodistus!
+      (ts/db-user laatija-id)
+      laatija-whoami
+      korvaava-id
+      (-> (service/find-energiatodistus (ts/db-user laatija-id) korvaava-id)
+          (assoc :korvattu-energiatodistus-id korvattava-id)))
+
+    ;; Then: korvattava is still signed (korvaavuus was silently filtered out)
+    (t/is (= (energiatodistus-tila korvattava-id) :signed))))
+
+(t/deftest paakayttaja-sets-korvaavuus-on-laskutettu-et-test
+  ;; Given: a signed and already-invoiced energiatodistus, and another signed ET
+  ;; When: pääkäyttäjä sets korvaavuus
+  ;; Then: update succeeds, korvattava transitions to replaced
+  (let [{:keys [laatijat paakayttajat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        paakayttaja-id (-> paakayttajat keys sort first)
+        paakayttaja-whoami {:id paakayttaja-id :rooli 2}
+        et-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvaava-id korvattava-id] (energiatodistus-test-data/insert!
+                                      [et-add et-add]
+                                      laatija-id)]
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+    (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+
+    ;; Given: mark korvaava as laskutettu
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET laskutusaika = now() WHERE id = ?" korvaava-id])
+
+    ;; When: pääkäyttäjä sets korvaavuus on already-invoiced ET
+    (service/update-energiatodistus!
+      (ts/db-user paakayttaja-id)
+      paakayttaja-whoami
+      korvaava-id
+      (-> (service/find-energiatodistus (ts/db-user paakayttaja-id) korvaava-id)
+          (assoc :korvattu-energiatodistus-id korvattava-id)))
+
+    ;; Then: korvaava stays signed, korvattava is replaced
+    (t/is (= (energiatodistus-tila korvaava-id) :signed))
+    (t/is (= (energiatodistus-tila korvattava-id) :replaced))))
+
+;; ---- AE-2620: PPP data in korvattavat results ----
+
+(t/deftest find-korvattavat-includes-ppp-id-test
+  ;; Given: a signed ET with an associated perusparannuspassi
+  ;; When: find-korvattavat is called with matching query
+  ;; Then: the result includes perusparannuspassi-id
+  (let [laatija-adds (map #(assoc % :patevyystaso 4) (laatija-test-data/generate-adds 1))
+        laatija-ids (laatija-test-data/insert! laatija-adds)
+        laatija-id (first laatija-ids)
+        laatija-whoami {:id laatija-id :rooli 0 :patevyystaso 4}
+        et-add (-> (first (energiatodistus-test-data/generate-adds 1 2026 true))
+                   (assoc-in [:perustiedot :postinumero] "33100")
+                   (assoc-in [:perustiedot :katuosoite-fi] "Testikatu 1")
+                   (assoc-in [:perustiedot :rakennustunnus] "103515074X"))
+        [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)]
+
+    ;; Given: create a perusparannuspassi BEFORE signing (PPP can only be added to draft)
+    (let [ppp-add (perusparannuspassi-test-data/generate-add et-id)
+          [ppp-id] (perusparannuspassi-test-data/insert! [ppp-add] laatija-whoami)]
+
+      ;; Sign the ET after PPP is added
+      (energiatodistus-test-data/sign! et-id laatija-id true)
+
+      ;; When: find-korvattavat with matching rakennustunnus
+      (let [results (service/find-korvattavat ts/*db*
+                                               {:rakennustunnus "103515074X"
+                                                :postinumero    "33100"})
+            found-et (first (filter #(= (:id %) et-id) results))]
+
+        ;; Then: PPP id is present
+        (t/is (some? found-et) "ET should be found in korvattavat results")
+        (t/is (= ppp-id (:perusparannuspassi-id found-et))
+              "Korvattavat result should include perusparannuspassi-id")))))
+
+(t/deftest find-korvattavat-ppp-nil-when-no-ppp-test
+  ;; Given: a signed ET without a perusparannuspassi
+  ;; When: find-korvattavat is called with matching query
+  ;; Then: perusparannuspassi-id is nil
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        et-add (-> (first (energiatodistus-test-data/generate-adds 1 2026 true))
+                   (assoc-in [:perustiedot :postinumero] "33100")
+                   (assoc-in [:perustiedot :katuosoite-fi] "Testikatu 2")
+                   (assoc-in [:perustiedot :rakennustunnus] "103515075Y"))
+        [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)]
+    (energiatodistus-test-data/sign! et-id laatija-id true)
+
+    ;; When: find-korvattavat
+    (let [results (service/find-korvattavat ts/*db*
+                                             {:rakennustunnus "103515075Y"
+                                              :postinumero    "33100"})
+          found-et (first (filter #(= (:id %) et-id) results))]
+
+      ;; Then: perusparannuspassi-id is nil
+      (t/is (some? found-et) "ET should be found in korvattavat results")
+      (t/is (nil? (:perusparannuspassi-id found-et))
+            "Korvattavat result should have nil perusparannuspassi-id when no PPP exists"))))
