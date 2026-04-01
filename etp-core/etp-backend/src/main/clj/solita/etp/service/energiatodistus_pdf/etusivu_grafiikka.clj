@@ -93,7 +93,7 @@
 (def svg-width (+ indicator-line-length e-luokka-indicator-margin))
 
 (defn e-luokka-indicator
-  [{:keys [e-luokka e-luku arrows]}]
+  [{:keys [e-luokka e-luku arrows pdf-localization]}]
   (let [row-height (+ arrow-height arrow-spacing)
         arrow-index (first (keep-indexed (fn [i a] (when (= (:luokka a) e-luokka) i)) arrows))
         arrow-y (when arrow-index (* arrow-index row-height))
@@ -136,7 +136,7 @@
          :font-family "roboto, sans-serif"
          :font-weight "bold"
          :fill "#ffffff"}
-        e-luku " kWh" [:tspan {:baseline-shift "sub" :font-size 8} "E"] "/m&#178;/vuosi"]])))
+        e-luku " kWh" [:tspan {:baseline-shift "sub" :font-size 8} "E"] "/m&#178;/" (pdf-localization :vuosi)]])))
 
 (defn indicator-line
   [{:keys [arrow-index label]}]
@@ -201,7 +201,7 @@
       (concat
         arrow-elements
         [(indicator-line {:arrow-index 1 :label (l :paastoton-rakennus)})
-         (e-luokka-indicator {:e-luokka e-luokka :e-luku e-luku :arrows arrows})])]))
+         (e-luokka-indicator {:e-luokka e-luokka :e-luku e-luku :arrows arrows :pdf-localization l})])]))
 
 (defn et-etusivu-grafiikka [{:keys [kieli energiatodistus kayttotarkoitukset alakayttotarkoitukset]}]
   (let [l (kieli loc/et-pdf-localization)
