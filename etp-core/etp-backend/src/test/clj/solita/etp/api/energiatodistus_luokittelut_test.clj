@@ -70,52 +70,77 @@
     (t/is (= 200 (:status response)))
     (t/is (= 6 (count (:raja-asteikko body))))))
 
-;; --- NEW: Laatimisvaiheet version-parameterized endpoint tests ---
+;; --- Laatimisvaiheet version-parameterized endpoint tests ---
 
-(defn- get-laatimisvaiheet
-  ([versio]
-   (ts/handler (-> (mock/request :get (str "/api/public/energiatodistukset/laatimisvaiheet/" versio))
-                   (mock/header "Accept" "application/json"))))
-  ([]
-   (ts/handler (-> (mock/request :get "/api/public/energiatodistukset/laatimisvaiheet")
-                   (mock/header "Accept" "application/json")))))
+(defn- get-laatimisvaiheet [versio]
+  (ts/handler (-> (mock/request :get (str "/api/public/energiatodistukset/laatimisvaiheet/" versio))
+                  (mock/header "Accept" "application/json"))))
 
-(t/deftest laatimisvaiheet-unparameterized-returns-all
-  ;; given the laatimisvaiheet endpoint without version parameter,
-  ;; when requesting all laatimisvaiheet,
-  ;; then all 5 entries are returned (regression)
-  (let [response (get-laatimisvaiheet)
-        body (response-body response)
-        ids (set (map :id body))]
-    (t/is (= 200 (:status response)))
-    (t/is (= #{0 1 2 3 4} ids))))
+(defn- get-laatimisvaiheet-unparameterized []
+  (ts/handler (-> (mock/request :get "/api/public/energiatodistukset/laatimisvaiheet")
+                  (mock/header "Accept" "application/json"))))
 
-(t/deftest laatimisvaiheet-2026-returns-all
-  ;; given the laatimisvaiheet endpoint with version 2026,
+(t/deftest laatimisvaiheet-unparameterized-returns-404
+  ;; given the unparameterized /laatimisvaiheet endpoint has been removed,
+  ;; when requesting GET /api/public/energiatodistukset/laatimisvaiheet,
+  ;; then a 404 status is returned
+  (let [response (get-laatimisvaiheet-unparameterized)]
+    (t/is (= 404 (:status response)))))
+
+(t/deftest laatimisvaiheet-2026-returns-2026-entries
+  ;; given the laatimisvaiheet endpoint with version 2026 (exact match),
   ;; when requesting laatimisvaiheet for version 2026,
-  ;; then all 5 entries with IDs 0-4 are returned
+  ;; then all 5 entries for versio=2026 with IDs 0-4 are returned
   (let [response (get-laatimisvaiheet 2026)
         body (response-body response)
         ids (set (map :id body))]
     (t/is (= 200 (:status response)))
-    (t/is (= #{0 1 2 3 4} ids))))
+    (t/is (= #{0 1 2 3 4} ids))
+    (t/is (= 5 (count body)))))
 
-(t/deftest laatimisvaiheet-2018-returns-only-original
-  ;; given the laatimisvaiheet endpoint with version 2018,
+(t/deftest laatimisvaiheet-2018-returns-2018-entries
+  ;; given the laatimisvaiheet endpoint with version 2018 (exact match),
   ;; when requesting laatimisvaiheet for version 2018,
-  ;; then only the original 3 entries with IDs 0-2 are returned
+  ;; then exactly 3 entries for versio=2018 with IDs 0-2 are returned
   (let [response (get-laatimisvaiheet 2018)
         body (response-body response)
         ids (set (map :id body))]
     (t/is (= 200 (:status response)))
     (t/is (= #{0 1 2} ids))
+    (t/is (= 3 (count body)))
     (t/is (not (contains? ids 3)))
     (t/is (not (contains? ids 4)))))
+
+(t/deftest laatimisvaiheet-2018-endpoint-returns-short-labels
+  ;; given a GET request to /laatimisvaiheet/2018,
+  ;; when the response is received,
+  ;; then id=0 has short-form label "Rakennuslupa" from the DB
+  (let [response (get-laatimisvaiheet 2018)
+        body (response-body response)
+        by-id (into {} (map (juxt :id identity) body))]
+    (t/is (= 200 (:status response)))
+    (t/is (= "Rakennuslupa" (:label-fi (get by-id 0))))
+    (t/is (= "Käyttöönotto" (:label-fi (get by-id 1))))
+    (t/is (= "Olemassa oleva rakennus" (:label-fi (get by-id 2))))))
+
+(t/deftest laatimisvaiheet-2026-endpoint-returns-long-labels
+  ;; given a GET request to /laatimisvaiheet/2026,
+  ;; when the response is received,
+  ;; then id=0 has long-form label "Rakennuslupavaihe, uudisrakennus" from the DB
+  (let [response (get-laatimisvaiheet 2026)
+        body (response-body response)
+        by-id (into {} (map (juxt :id identity) body))]
+    (t/is (= 200 (:status response)))
+    (t/is (= "Rakennuslupavaihe, uudisrakennus" (:label-fi (get by-id 0))))
+    (t/is (= "Käyttöönottovaihe, uudisrakennus" (:label-fi (get by-id 1))))
+    (t/is (= "Olemassa oleva rakennus" (:label-fi (get by-id 2))))
+    (t/is (= "Rakennuslupavaihe, laajamittainen perusparannus" (:label-fi (get by-id 3))))
+    (t/is (= "Käyttöönottovaihe, laajamittainen perusparannus" (:label-fi (get by-id 4))))))
 
 (t/deftest laatimisvaiheet-entry-has-expected-fields
   ;; given the laatimisvaiheet endpoint,
   ;; when requesting entries for any version,
-  ;; then each entry has id, label_fi, label_sv, valid, ordinal fields
+  ;; then each entry has id, label_fi, label_sv, valid fields
   (let [response (get-laatimisvaiheet 2026)
         body (response-body response)]
     (t/is (= 200 (:status response)))

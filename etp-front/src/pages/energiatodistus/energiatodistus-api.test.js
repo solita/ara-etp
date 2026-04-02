@@ -93,7 +93,9 @@ describe('Classification fetch for laatimisvaiheet version-dependency', () => {
   });
 
   // Test: luokittelutAllVersions still contains laatimisvaiheet for search/haku
-  it('given the luokittelutAllVersions object, when resolved, then it should contain laatimisvaiheet', () => {
+  // After the change, luokittelutAllVersions should fetch laatimisvaiheet from
+  // the versioned endpoint /laatimisvaiheet/2026 (not the removed unparameterized /laatimisvaiheet)
+  it('given the luokittelutAllVersions object, when resolved, then it should contain laatimisvaiheet fetched from versioned endpoint', () => {
     // given
     const allVersions = api.luokittelutAllVersions;
 

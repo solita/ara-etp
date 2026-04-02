@@ -196,35 +196,68 @@
                               (assoc-in [:lahtotiedot :sis-kuorma]
                                         (energiatodistus-test-data/sisainen-kuorma 2026 1)))))))))
 
-;; --- NEW: Laatimisvaihe version-filtering tests (luokittelu service) ---
+;; --- Laatimisvaihe version-filtering tests (luokittelu service) ---
 
-(t/deftest find-laatimisvaiheet-returns-all-entries
-  ;; given the test database with all 5 laatimisvaihe rows,
-  ;; when calling find-laatimisvaiheet (unparameterized),
-  ;; then all 5 entries with IDs 0-4 are returned
-  (let [results (luokittelu-service/find-laatimisvaiheet ts/*db*)
+(t/deftest find-laatimisvaiheet-2026-returns-2026-entries
+  ;; given the test database with per-version laatimisvaihe rows,
+  ;; when calling find-laatimisvaiheet with version 2026 (exact match),
+  ;; then all 5 entries with IDs 0-4 for versio=2026 are returned
+  (let [results (luokittelu-service/find-laatimisvaiheet ts/*db* 2026)
         ids (set (map :id results))]
-    (t/is (= #{0 1 2 3 4} ids))))
+    (t/is (= #{0 1 2 3 4} ids))
+    (t/is (= 5 (count results)))))
 
-(t/deftest find-laatimisvaiheet-for-versio-2026-returns-all
-  ;; given the test database with laatimisvaihe version column,
-  ;; when calling find-laatimisvaiheet-for-versio with version 2026,
-  ;; then all 5 entries with IDs 0-4 are returned
-  (let [results (luokittelu-service/find-laatimisvaiheet-for-versio ts/*db* 2026)
-        ids (set (map :id results))]
-    (t/is (= #{0 1 2 3 4} ids))))
-
-(t/deftest find-laatimisvaiheet-for-versio-2018-returns-only-original
-  ;; given the test database with laatimisvaihe version column,
-  ;; when calling find-laatimisvaiheet-for-versio with version 2018,
-  ;; then only the original 3 entries with IDs 0-2 are returned
-  (let [results (luokittelu-service/find-laatimisvaiheet-for-versio ts/*db* 2018)
+(t/deftest find-laatimisvaiheet-2018-returns-2018-entries
+  ;; given the test database with per-version laatimisvaihe rows,
+  ;; when calling find-laatimisvaiheet with version 2018 (exact match),
+  ;; then only the 3 entries with IDs 0-2 for versio=2018 are returned
+  (let [results (luokittelu-service/find-laatimisvaiheet ts/*db* 2018)
         ids (set (map :id results))]
     (t/is (= #{0 1 2} ids))
+    (t/is (= 3 (count results)))
     (t/is (not (contains? ids 3)))
     (t/is (not (contains? ids 4)))))
 
-;; --- NEW: Laatimisvaihe validation tests ---
+;; --- Version-specific label verification ---
+
+(t/deftest find-laatimisvaiheet-2018-returns-short-labels
+  ;; given the test database with per-version laatimisvaihe rows,
+  ;; when calling find-laatimisvaiheet with version 2018,
+  ;; then id=0 has short-form label "Rakennuslupa" and id=1 has "Käyttöönotto"
+  (let [results (luokittelu-service/find-laatimisvaiheet ts/*db* 2018)
+        by-id (into {} (map (juxt :id identity) results))]
+    (t/is (= "Rakennuslupa" (:label-fi (get by-id 0))))
+    (t/is (= "Bygglov" (:label-sv (get by-id 0))))
+    (t/is (= "Käyttöönotto" (:label-fi (get by-id 1))))
+    (t/is (= "Införandet" (:label-sv (get by-id 1))))
+    (t/is (= "Olemassa oleva rakennus" (:label-fi (get by-id 2))))
+    (t/is (= "Befintlig byggnad" (:label-sv (get by-id 2))))))
+
+(t/deftest find-laatimisvaiheet-2026-returns-long-labels
+  ;; given the test database with per-version laatimisvaihe rows,
+  ;; when calling find-laatimisvaiheet with version 2026,
+  ;; then id=0 has long-form label "Rakennuslupavaihe, uudisrakennus"
+  (let [results (luokittelu-service/find-laatimisvaiheet ts/*db* 2026)
+        by-id (into {} (map (juxt :id identity) results))]
+    (t/is (= "Rakennuslupavaihe, uudisrakennus" (:label-fi (get by-id 0))))
+    (t/is (= "Käyttöönottovaihe, uudisrakennus" (:label-fi (get by-id 1))))
+    (t/is (= "Olemassa oleva rakennus" (:label-fi (get by-id 2))))
+    (t/is (= "Rakennuslupavaihe, laajamittainen perusparannus" (:label-fi (get by-id 3))))
+    (t/is (= "Käyttöönottovaihe, laajamittainen perusparannus" (:label-fi (get by-id 4))))))
+
+(t/deftest find-laatimisvaiheet-labels-differ-between-versions
+  ;; given the test database with per-version laatimisvaihe rows,
+  ;; when querying id=0 for version 2018 vs 2026,
+  ;; then the labels are different (short vs long form)
+  (let [results-2018 (luokittelu-service/find-laatimisvaiheet ts/*db* 2018)
+        results-2026 (luokittelu-service/find-laatimisvaiheet ts/*db* 2026)
+        label-2018 (:label-fi (first (filter #(= 0 (:id %)) results-2018)))
+        label-2026 (:label-fi (first (filter #(= 0 (:id %)) results-2026)))]
+    (t/is (not= label-2018 label-2026))
+    (t/is (= "Rakennuslupa" label-2018))
+    (t/is (= "Rakennuslupavaihe, uudisrakennus" label-2026))))
+
+;; --- Laatimisvaihe validation tests ---
 
 (t/deftest validation-laatimisvaihe-2018-rejects-id-3
   ;; given a valid 2018 energiatodistus with laatimisvaihe set to 3,
