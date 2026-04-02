@@ -761,7 +761,7 @@
   (log/info "Generating 2026 PDF for id" (:id complete-energiatodistus))
   (let [luokittelut {:alakayttotarkoitukset              (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
                      :kayttotarkoitukset                 (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
-                     :laatimisvaiheet                    (luokittelu-service/find-laatimisvaiheet db 2026)
+                     :laatimisvaiheet                    (luokittelu-service/find-laatimisvaiheet db)
                      :mahdollisuus-liittya               (luokittelu-service/find-mahdollisuus-liittya db)
                      :uusiutuva-energia                  (luokittelu-service/find-uusiutuva-energia db)
                      :lammitysmuodot                     (luokittelu-service/find-lammitysmuodot db)

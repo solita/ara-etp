@@ -21,8 +21,7 @@
                       {:type :foreign-key-violation :response 400}
                       {:type :invalid-value :response 400}
                       {:type :invalid-sisainen-kuorma :response 400}
-                      {:type :invalid-laskutusosoite :response 400}
-                      {:type :invalid-laatimisvaihe :response 400}]))}})
+                      {:type :invalid-laskutusosoite :response 400}]))}})
 
   ([version save-schema] (post version save-schema identity rooli-service/laatija?)))
 
@@ -56,8 +55,7 @@
                               {:type :invalid-value :response 400}
                               {:type :missing-value :response 400}
                               {:type :invalid-sisainen-kuorma :response 400}
-                              {:type :invalid-laskutusosoite :response 400}
-                              {:type :invalid-laatimisvaihe :response 400}]))}
+                              {:type :invalid-laskutusosoite :response 400}]))}
 
     :delete {:summary    "Poista luonnostilainen energiatodistus"
              :parameters {:path {:id common-schema/Key}}

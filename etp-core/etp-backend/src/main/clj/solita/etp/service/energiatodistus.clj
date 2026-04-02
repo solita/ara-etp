@@ -24,8 +24,6 @@
             [solita.etp.service.json :as json]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
             [solita.etp.service.kielisyys :as kielisyys]
-            [solita.etp.service.laatimisvaihe :as laatimisvaihe-service]
-            [solita.etp.service.luokittelu :as luokittelu-service]
             [solita.etp.service.laatija :as laatija-service]
             [solita.etp.service.rooli :as rooli-service]
             [solita.postgresql.composite :as pg-composite]
@@ -335,22 +333,8 @@
     (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
     energiatodistus))
 
-(defn- validate-laatimisvaihe!
-  "Validates that the laatimisvaihe ID is valid for the given energiatodistus version."
-  [db versio energiatodistus]
-  (when-let [laatimisvaihe-id (-> energiatodistus :perustiedot :laatimisvaihe)]
-    (let [valid-ids (->> (laatimisvaihe-service/find-laatimisvaiheet db versio)
-                         (map :id)
-                         set)]
-      (when-not (contains? valid-ids laatimisvaihe-id)
-        (exception/throw-ex-info!
-          {:type    :invalid-laatimisvaihe
-           :message (str "Laatimisvaihe " laatimisvaihe-id
-                        " is not valid for version " versio)})))))
-
 (defn- validate-draft! [db id versio energiatodistus]
   (assert-korvaavuus-draft! db id energiatodistus)
-  (validate-laatimisvaihe! db versio energiatodistus)
   (validate-sisainen-kuorma! db versio energiatodistus))
 
 (defn- assoc-in-default [m keys default-value]

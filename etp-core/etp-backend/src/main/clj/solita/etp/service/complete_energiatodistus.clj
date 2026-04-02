@@ -103,16 +103,6 @@
     (partial map/map-keys #(-> % name (str "-kerroin") keyword))
     e-luokka-service/energiamuotokerroin))
 
-(defn co2-paastot-et
-  [tulokset]
-  (if tulokset
-   (+ (* (or (:kaukolampo tulokset) 0) (:kaukolampo co2-kertoimet))
-          (* (or (:sahko tulokset) 0) (:sahko co2-kertoimet))
-          (* (or (:uusiutuva-polttoaine tulokset) 0) (:uusiutuvat-pat co2-kertoimet))
-          (* (or (:fossiilinen-polttoaine tulokset) 0) (:fossiiliset-pat co2-kertoimet))
-          (* (or (:kaukojaahdytys tulokset) 0) (:kaukojaahdytys co2-kertoimet)))
-    0.0))
-
 (defn complete-energiatodistus
   [energiatodistus {:keys [postinumerot kielisyydet laatimisvaiheet
                            kayttotarkoitukset alakayttotarkoitukset
@@ -127,10 +117,9 @@
           kielisyys (find-by-id kielisyydet (-> energiatodistus
                                                 :perustiedot
                                                 :kieli))
-          laatimisvaihe (-> (get laatimisvaiheet versio)
-                            (find-by-id (-> energiatodistus
-                                            :perustiedot
-                                            :laatimisvaihe)))
+          laatimisvaihe (find-by-id laatimisvaiheet (-> energiatodistus
+                                                        :perustiedot
+                                                        :laatimisvaihe))
           ilmanvaihtotyyppi-id (-> energiatodistus
                                    :lahtotiedot
                                    :ilmanvaihto
@@ -531,16 +520,12 @@
                         0
                         [:lahtotiedot :lammitys :lampohavio-lammittamaton-tila]
                         [:lahtotiedot :lammitys :tilat-ja-iv :lampohavio-lammittamaton-tila]
-                        [:lahtotiedot :lammitys :lammin-kayttovesi :lampohavio-lammittamaton-tila])
-          (#(assoc-in % [:tulokset :kasvihuonepaastot]
-                      (co2-paastot-et (get-in % [:tulokset :kaytettavat-energiamuodot]))))
-          (assoc-div-nettoala [:tulokset :kasvihuonepaastot])))))
+                        [:lahtotiedot :lammitys :lammin-kayttovesi :lampohavio-lammittamaton-tila])))))
 
 (defn luokittelut [db]
   {:postinumerot             (geo/find-all-postinumerot db)
    :kielisyydet              (kielisyys/find-kielisyys db)
-   :laatimisvaiheet          (into {} (map #(vector % (laatimisvaihe/find-laatimisvaiheet db %)))
-                                   [2018 2026])
+   :laatimisvaiheet          (laatimisvaihe/find-laatimisvaiheet db)
    :kayttotarkoitukset       (into {} (map #(vector % (kayttotarkoitus-service/find-kayttotarkoitukset db %)))
                                    [2013 2018 2026])
    :alakayttotarkoitukset    (into {} (map #(vector % (kayttotarkoitus-service/find-alakayttotarkoitukset db %)))

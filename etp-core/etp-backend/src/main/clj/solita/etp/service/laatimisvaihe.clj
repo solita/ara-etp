@@ -7,9 +7,7 @@
 (def ^:private vaihe-keys
   [:rakennuslupa,
    :kayttoonotto,
-   :olemassaolevarakennus,
-   :rakennuslupa-perusparannus,
-   :kayttoonotto-perusparannus])
+   :olemassaolevarakennus])
 
 (defn vaihe-key [vaihe-id] (nth vaihe-keys vaihe-id))
 

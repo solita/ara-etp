@@ -107,8 +107,6 @@
      [:tulokset :kaytettavat-energiamuodot :muu idx child])
    [[:tulokset :kaytettavat-energiamuodot :summa]
     [:tulokset :kaytettavat-energiamuodot :kertoimella-summa]]
-   [[:tulokset :kasvihuonepaastot]
-    [:tulokset :kasvihuonepaastot-nettoala]]
    (for [child [:aurinkosahko :aurinkosahko-nettoala :aurinkolampo
                 :aurinkolampo-nettoala :tuulisahko :tuulisahko-nettoala
                 :lampopumppu :lampopumppu-nettoala :muusahko :muusahko-nettoala

@@ -65,9 +65,6 @@
                  (str "&lt; " value))]))
           raja-asteikko)))
 
-(defn- raja-asteikko-upper-bound [raja-asteikko letter]
-  (some (fn [[value l]] (when (= l letter) value)) raja-asteikko))
-
 (defn set-arrow-thresholds [rajat]
   (let [ranges   (build-ranges (:raja-asteikko rajat))
         last-val (-> rajat :raja-asteikko last first)]
@@ -75,9 +72,8 @@
       (fn [{:keys [letter] :as arrow}]
         (assoc arrow :numbers
                      (case letter
-                     "A+" (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A+"))
-                     "A0" (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A0"))
-                     "A"  (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A"))
+                     "A+" "&lt; A0-20%"
+                     "A0" "&lt; 40"
                      "G"  (str "&gt; " last-val)
                      (get ranges letter))))
       arrows)))
@@ -89,15 +85,15 @@
 (def tip-width 10)
 (def tip-width-increment 3)
 (def indicator-line-length 370)
-(def e-luokka-indicator-margin 210)
+(def e-luokka-indicator-margin 190)
 (def svg-width (+ indicator-line-length e-luokka-indicator-margin))
 
 (defn e-luokka-indicator
-  [{:keys [e-luokka e-luku arrows pdf-localization]}]
+  [{:keys [e-luokka e-luku arrows]}]
   (let [row-height (+ arrow-height arrow-spacing)
         arrow-index (first (keep-indexed (fn [i a] (when (= (:luokka a) e-luokka) i)) arrows))
         arrow-y (when arrow-index (* arrow-index row-height))
-        indicator-width 180
+        indicator-width 160
         indicator-tip-width 20
         x-end (+ indicator-line-length e-luokka-indicator-margin)
         x-start (- x-end indicator-width)
@@ -105,7 +101,7 @@
         h arrow-height
         cy (when arrow-y (+ arrow-y (/ h 2)))
         luokka-x (+ x-tip 20)
-        luku-x (+ x-tip 60)]
+        luku-x (+ x-tip 40)]
     (when arrow-index
       [:g
        [:polygon
@@ -125,8 +121,7 @@
          :font-family "roboto, sans-serif"
          :font-weight "bold"
          :fill "#ffffff"}
-        e-luokka
-        [:tspan {:baseline-shift "sub" :font-size 8} "2026"]]
+        e-luokka]
        [:text
         {:x luku-x
          :y cy
@@ -136,7 +131,7 @@
          :font-family "roboto, sans-serif"
          :font-weight "bold"
          :fill "#ffffff"}
-        e-luku " kWh" [:tspan {:baseline-shift "sub" :font-size 8} "E"] "/m&#178;/" (pdf-localization :vuosi)]])))
+        e-luku " kWhE/m2/vuosi"]])))
 
 (defn indicator-line
   [{:keys [arrow-index label]}]
@@ -201,7 +196,7 @@
       (concat
         arrow-elements
         [(indicator-line {:arrow-index 1 :label (l :paastoton-rakennus)})
-         (e-luokka-indicator {:e-luokka e-luokka :e-luku e-luku :arrows arrows :pdf-localization l})])]))
+         (e-luokka-indicator {:e-luokka e-luokka :e-luku e-luku :arrows arrows})])]))
 
 (defn et-etusivu-grafiikka [{:keys [kieli energiatodistus kayttotarkoitukset alakayttotarkoitukset]}]
   (let [l (kieli loc/et-pdf-localization)

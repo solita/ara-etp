@@ -26,6 +26,7 @@
             [solita.etp.service.energiatodistus-csv :as energiatodistus-csv-service]
             [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
             [solita.etp.service.energiatodistus-search :as energiatodistus-search-service]
+            [solita.etp.service.energiatodistus-xlsx :as energiatodistus-xlsx-service]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.json :as json]
             [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]
@@ -140,6 +141,22 @@
       (search-route valvonta-schema/Energiatodistus+Valvonta)
       search-count-route
       (csv-route energiatodistus-csv-service/energiatodistukset-private-csv false)
+
+      ["/xlsx/energiatodistukset.xlsx"
+       {:get {:summary    "Hae energiatodistusten tiedot XLSX-tiedostona"
+              :parameters {:query energiatodistus-schema/EnergiatodistusSearch}
+              :responses  {200 {:body nil}}
+              :access     (some-fn rooli-service/laatija? rooli-service/paakayttaja?)
+              :handler    (fn [{{:keys [query]} :parameters :keys [db whoami]}]
+                            (api-response/with-exceptions
+                              #(api-response/xlsx-response
+                                 (energiatodistus-xlsx-service/find-energiatodistukset-xlsx
+                                   db
+                                   whoami
+                                   (update query :where json/read-value))
+                                "energiatodistukset.xlsx"
+                                "Not found.")
+                              search-exceptions))}}]
       ["/korvattavat"
        {:get {:summary    "Hae energiatodistukseen liittyvät energiatodistukset,
                            jotka mahdollisesti pitäisi korvata"
@@ -280,8 +297,7 @@
                        {:type :foreign-key-violation :response 400}
                        {:type :invalid-value :response 400}
                        {:type :invalid-sisainen-kuorma :response 400}
-                       {:type :invalid-laskutusosoite :response 400}
-                       {:type :invalid-laatimisvaihe :response 400}]))}}]
+                       {:type :invalid-laskutusosoite :response 400}]))}}]
     ["/legacy"
      ["/2013" (xml-api/post 2013)]
      ["/2018" (xml-api/post 2018)]]]])

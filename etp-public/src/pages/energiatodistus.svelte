@@ -126,7 +126,7 @@
       if (results.length > 0) return results[0];
       else throw '...';
     }),
-    EtApi.laatimisvaiheet(fetch, versio),
+    EtApi.laatimisvaiheet(fetch),
     EtApi.alakayttotarkoitusluokat(fetch, versio),
     GeoApi.postinumerot(fetch),
     EtApi.lammonjako(fetch),

@@ -305,7 +305,6 @@
         :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku)"
         :paastoton-rakennus                         "Päästötön rakennus"
-        :vuosi                                      "vuosi"
         :a+luokka-otsikko                           "A+-luokka"
         :a+luokka-teksti                            "Rakennus täyttää A0-luokan vaatimukset, on sitä 20 % energiatehokkaampi ja tuottaa\n
                                                      uusiutuvaa energiaa yli oman tarpeensa."
@@ -516,7 +515,6 @@
         :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP) (sv)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku) (sv)"
         :paastoton-rakennus                         "Päästötön rakennus (sv)"
-        :vuosi                                      "år"
         :a+luokka-otsikko                           "A+-luokka"
         :a+luokka-teksti                            "Rakennus täyttää A0-luokan vaatimukset, on sitä 20 % energiatehokkaampi ja tuottaa\n
                                                      uusiutuvaa energiaa yli oman tarpeensa. (sv)"
