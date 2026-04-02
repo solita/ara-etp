@@ -79,15 +79,12 @@
 
 (defn ostoenergia-tiedot [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
-        tulokset (:tulokset energiatodistus)
-        kasvihuonepaastot (energiatodistus/co2-paastot-et (:kaytettavat-energiamuodot tulokset))
-        rounded (when kasvihuonepaastot (Math/round (double kasvihuonepaastot)))
         uusiutuvan-osuus (energiatodistus/uusiutuvan-energian-osuus (:versio energiatodistus) energiatodistus)]
 
     [:div {:class "etusivu-ostoenergia"}
      (description-list
        [{:dt (l :energiakaytosta-syntyvat-kasvihuonepaastot)
-         :dd (str rounded " " (l :kgCO2ekv-m2/vuosi))}
+         :dd (str (-> energiatodistus :tulokset :kasvihuonepaastot-nettoala (fmt 2)) " " (l :kgCO2ekv-m2/vuosi))}
         {:dt (l :uusiutuva-energian-osuus)
          :dd (or uusiutuvan-osuus "-")}
         {:dt (l :kasvihuonepaastot)
