@@ -19,7 +19,6 @@
   import * as EtApi from '@/api/energiatodistus-api';
   import * as GeoUtils from '@/utilities/geo';
   import * as GeoApi from '@/api/geo-api';
-  import { overrideLaatimisvaiheLabel } from '@/utilities/laatimisvaihe-labels';
 
   import VirallinenMalli2013 from '@Asset/energiatodistusmalli_2013.pdf';
   import VirallinenMalli2018 from '@Asset/energiatodistusmalli_2018.pdf';
@@ -127,7 +126,7 @@
       if (results.length > 0) return results[0];
       else throw '...';
     }),
-    EtApi.laatimisvaiheet(fetch),
+    EtApi.laatimisvaiheet(fetch, versio),
     EtApi.alakayttotarkoitusluokat(fetch, versio),
     GeoApi.postinumerot(fetch),
     EtApi.lammonjako(fetch),
@@ -144,11 +143,8 @@
       lammitysmuoto,
       ilmanvaihtotyypit
     ]) => {
-      const laatimisvaihe = overrideLaatimisvaiheLabel(
-        energiatodistus.versio,
-        laatimisvaiheet.find(
+      const laatimisvaihe = laatimisvaiheet.find(
           lv => lv.id === energiatodistus.perustiedot.laatimisvaihe
-        )
       );
       const alakayttotarkoitusluokka = alakayttotarkoitusluokat.find(
         aktl => aktl.id === energiatodistus.perustiedot.kayttotarkoitus

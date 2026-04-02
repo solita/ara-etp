@@ -5,7 +5,6 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as et from './energiatodistus-utils';
   import * as Laatimisvaiheet from './laatimisvaiheet';
-  import { overrideLabels } from './laatimisvaihe-labels';
   import * as LocaleUtils from '@Language/locale-utils';
 
   import H2 from '@Component/H/H2';
@@ -136,11 +135,11 @@
         parse={Maybe.Some}
         format={et.selectFormat(
           labelLocale,
-          overrideLabels(2018, luokittelut.laatimisvaiheet)
+          luokittelut.laatimisvaiheet
         )}
         items={R.pluck(
           'id',
-          overrideLabels(2018, luokittelut.laatimisvaiheet)
+          luokittelut.laatimisvaiheet
         )} />
     </div>
     {#if Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
