@@ -3,7 +3,6 @@
             [solita.common.logic :as logic]))
 
 (def find-laatimisvaiheet luokittelu-service/find-laatimisvaiheet)
-(def find-laatimisvaiheet-for-versio luokittelu-service/find-laatimisvaiheet-for-versio)
 
 (def ^:private vaihe-keys
   [:rakennuslupa,

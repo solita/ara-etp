@@ -339,7 +339,7 @@
   "Validates that the laatimisvaihe ID is valid for the given energiatodistus version."
   [db versio energiatodistus]
   (when-let [laatimisvaihe-id (-> energiatodistus :perustiedot :laatimisvaihe)]
-    (let [valid-ids (->> (laatimisvaihe-service/find-laatimisvaiheet-for-versio db versio)
+    (let [valid-ids (->> (laatimisvaihe-service/find-laatimisvaiheet db versio)
                          (map :id)
                          set)]
       (when-not (contains? valid-ids laatimisvaihe-id)

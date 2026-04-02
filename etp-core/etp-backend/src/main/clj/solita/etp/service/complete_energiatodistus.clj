@@ -117,9 +117,10 @@
           kielisyys (find-by-id kielisyydet (-> energiatodistus
                                                 :perustiedot
                                                 :kieli))
-          laatimisvaihe (find-by-id laatimisvaiheet (-> energiatodistus
-                                                        :perustiedot
-                                                        :laatimisvaihe))
+          laatimisvaihe (-> (get laatimisvaiheet versio)
+                            (find-by-id (-> energiatodistus
+                                            :perustiedot
+                                            :laatimisvaihe)))
           ilmanvaihtotyyppi-id (-> energiatodistus
                                    :lahtotiedot
                                    :ilmanvaihto
@@ -525,7 +526,8 @@
 (defn luokittelut [db]
   {:postinumerot             (geo/find-all-postinumerot db)
    :kielisyydet              (kielisyys/find-kielisyys db)
-   :laatimisvaiheet          (laatimisvaihe/find-laatimisvaiheet db)
+   :laatimisvaiheet          (into {} (map #(vector % (laatimisvaihe/find-laatimisvaiheet db %)))
+                                   [2018 2026])
    :kayttotarkoitukset       (into {} (map #(vector % (kayttotarkoitus-service/find-kayttotarkoitukset db %)))
                                    [2013 2018 2026])
    :alakayttotarkoitukset    (into {} (map #(vector % (kayttotarkoitus-service/find-alakayttotarkoitukset db %)))

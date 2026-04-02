@@ -388,7 +388,7 @@ export const luokittelutForVersion = version =>
 
 export const luokittelutAllVersions = Future.parallelObject(13, {
   ...luokittelut,
-  laatimisvaiheet: Fetch.cached(fetch, '/laatimisvaiheet'),
+  laatimisvaiheet: Fetch.cached(fetch, '/laatimisvaiheet/2026'),
   2018: Future.parallelObject(2, kayttotarkoitusluokittelut(2018)),
   2013: Future.parallelObject(2, kayttotarkoitusluokittelut(2013)),
   2026: Future.parallelObject(2, kayttotarkoitusluokittelut(2026))

@@ -83,8 +83,8 @@ export const alakayttotarkoitusluokat = (fetch, versio) =>
     `${energiatodistuksetUrl}/alakayttotarkoitusluokat/${versio}`
   );
 
-export const laatimisvaiheet = fetch =>
-  fetchJson(fetch, `${energiatodistuksetUrl}/laatimisvaiheet`);
+export const laatimisvaiheet = (fetch, versio) =>
+  fetchJson(fetch, `${energiatodistuksetUrl}/laatimisvaiheet/${versio}`);
 
 export const lammonjako = fetch =>
   fetchJson(fetch, `${energiatodistuksetUrl}/lammonjako`);
