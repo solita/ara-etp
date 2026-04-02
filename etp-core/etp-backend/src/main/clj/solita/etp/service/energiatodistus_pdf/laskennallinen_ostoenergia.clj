@@ -1,8 +1,13 @@
 (ns solita.etp.service.energiatodistus-pdf.laskennallinen-ostoenergia
   (:require
+    [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc]
     [solita.etp.service.complete-energiatodistus :as energiatodistus]
     [solita.etp.service.energiatodistus-pdf.ilmastoselvitys :as ilmastoselvitys]))
+
+(defn- fmt
+  "Format number with specified decimal places. Returns empty string for nil."
+  [value decimals] (or (formats/format-number value decimals false) ""))
 
 (defn- table-ostoenergia [kieli items]
   (let [l (kieli loc/et-pdf-localization)]
