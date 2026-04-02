@@ -2,6 +2,7 @@
   (:require
     [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc]
+    [solita.etp.service.complete-energiatodistus :as energiatodistus]
     [solita.etp.service.energiatodistus-pdf.ilmastoselvitys :as ilmastoselvitys]))
 
 (defn- fmt
@@ -83,16 +84,13 @@
 
 (defn ostoenergia-tiedot [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
-        ;tulokset (:tulokset energiatodistus)
-        ;uusiutuvan-osuus (energiatodistus/uusiutuvan-osuus-paastoista (:tulokset energiatodistus))
-        ;TODO get back to the uusiutuvan-energian-osuus when it's clear what to calculate
-        ]
+        uusiutuvan-osuus (energiatodistus/uusiutuvan-energian-osuus (:versio energiatodistus) energiatodistus)]
 
     [:div {:class "etusivu-ostoenergia"}
      (description-list
        [{:dt (l :energiakaytosta-syntyvat-kasvihuonepaastot)
          :dd (str (-> energiatodistus :tulokset :kasvihuonepaastot-nettoala (fmt 2)) " " (l :kgCO2ekv-m2/vuosi))}
         {:dt (l :uusiutuva-energian-osuus)
-         :dd (str "TODO: Add later when ready")}
+         :dd (or uusiutuvan-osuus "-")}
         {:dt (l :kasvihuonepaastot)
          :dd (ilmastoselvitys/gwp-value-for-etusivu energiatodistus)}])]))

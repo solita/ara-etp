@@ -73,9 +73,9 @@
   (let [e-luokka (-> energiatodistus :tulokset :e-luokka)
         has-valid-ppp? (-> energiatodistus :perusparannuspassi-valid)
         laatimsvaihe (-> energiatodistus :perustiedot :laatimisvaihe)]
-    (and (not (contains? #{"A" "A0" "A+"} e-luokka))
-         (not has-valid-ppp?)
-         (not (contains? #{0 1} laatimsvaihe)))))
+    (and (= 2 laatimsvaihe)
+         (not (contains? #{"A" "A0" "A+"} e-luokka))
+         (not has-valid-ppp?))))
 
 
 (defn generate-energiatodistus-html
