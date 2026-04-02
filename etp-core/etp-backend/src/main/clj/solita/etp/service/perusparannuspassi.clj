@@ -94,7 +94,8 @@
       (str "User " id " is not the laatija of energiatodistus"))))
 
 (defn assert-patevyystaso! [whoami]
-  (when-not (rooli-service/ppp-laatija? whoami)
+  (when-not (or (rooli-service/ppp-laatija? whoami)
+                (rooli-service/paakayttaja? whoami))
     (exception/throw-forbidden!
       (str "User " (:id whoami) " does not have the correct patevyystaso to add or modify perusparannuspassi"))))
 

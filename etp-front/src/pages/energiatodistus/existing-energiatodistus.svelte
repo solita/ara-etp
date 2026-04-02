@@ -69,7 +69,9 @@
             params.version,
             params.id
           )(energiatodistus),
-          newPerusparannuspassiId: R.cond([
+          newPerusparannuspassiId:
+            R.propEq(et.tila.draft, 'tila-id', energiatodistus)
+              ? R.cond([
             [
               /* PPP has an ID so it has been submitted at least once */
               R.always(perusparannuspassi?.id),
@@ -99,6 +101,7 @@
             ],
             [R.T, () => Future.resolve(Maybe.None())]
           ])()
+              : Future.resolve(Maybe.None())
         })
       )
     );
