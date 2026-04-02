@@ -103,6 +103,16 @@
     (partial map/map-keys #(-> % name (str "-kerroin") keyword))
     e-luokka-service/energiamuotokerroin))
 
+(defn co2-paastot-et
+  [tulokset]
+  (if tulokset
+   (+ (* (or (:kaukolampo tulokset) 0) (:kaukolampo co2-kertoimet))
+          (* (or (:sahko tulokset) 0) (:sahko co2-kertoimet))
+          (* (or (:uusiutuva-polttoaine tulokset) 0) (:uusiutuvat-pat co2-kertoimet))
+          (* (or (:fossiilinen-polttoaine tulokset) 0) (:fossiiliset-pat co2-kertoimet))
+          (* (or (:kaukojaahdytys tulokset) 0) (:kaukojaahdytys co2-kertoimet)))
+    0.0))
+
 (defn complete-energiatodistus
   [energiatodistus {:keys [postinumerot kielisyydet laatimisvaiheet
                            kayttotarkoitukset alakayttotarkoitukset
@@ -521,7 +531,10 @@
                         0
                         [:lahtotiedot :lammitys :lampohavio-lammittamaton-tila]
                         [:lahtotiedot :lammitys :tilat-ja-iv :lampohavio-lammittamaton-tila]
-                        [:lahtotiedot :lammitys :lammin-kayttovesi :lampohavio-lammittamaton-tila])))))
+                        [:lahtotiedot :lammitys :lammin-kayttovesi :lampohavio-lammittamaton-tila])
+          (#(assoc-in % [:tulokset :kasvihuonepaastot]
+                      (co2-paastot-et (get-in % [:tulokset :kaytettavat-energiamuodot]))))
+          (assoc-div-nettoala [:tulokset :kasvihuonepaastot])))))
 
 (defn luokittelut [db]
   {:postinumerot             (geo/find-all-postinumerot db)
