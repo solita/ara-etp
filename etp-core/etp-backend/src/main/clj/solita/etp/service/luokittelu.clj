@@ -13,13 +13,12 @@
 (def find-yritystypes #(select-luokittelu % "yritystype"))
 
 (def find-kielisyys #(select-luokittelu % "kielisyys"))
-(def find-laatimisvaiheet #(select-luokittelu % "laatimisvaihe"))
 
-(defn find-laatimisvaiheet-for-versio
-  "Returns laatimisvaihe entries where versio <= the given versio."
+(defn find-laatimisvaiheet
+  "Returns laatimisvaihe entries for the exact given versio."
   [db versio]
   (jdbc/query db
-              ["SELECT id, label_fi, label_sv, valid FROM laatimisvaihe WHERE versio <= ? ORDER BY ordinal ASC" versio]
+              ["SELECT id, label_fi, label_sv, valid FROM laatimisvaihe WHERE versio = ? ORDER BY ordinal ASC" versio]
               db/default-opts))
 
 (def find-ilmanvaihtotyypit #(select-luokittelu % "ilmanvaihtotyyppi"))
