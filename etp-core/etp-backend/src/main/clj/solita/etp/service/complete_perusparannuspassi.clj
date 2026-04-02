@@ -2,14 +2,8 @@
   (:require [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
             [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]
-            [solita.etp.service.energiatodistus :as energiatodistus-service]))
-
-(def ^:private co2-kertoimet
-  {:kaukolampo         0.059
-   :sahko              0.05
-   :uusiutuvat-pat     0.027
-   :fossiiliset-pat    0.306
-   :kaukojaahdytys     0.014})
+            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.co2-kertoimet :as co2]))
 
 (def ^:private ppp-key->energiamuotokerroin-key
   {:ostoenergian-tarve-kaukolampo       :kaukolampo
@@ -68,11 +62,11 @@
    Returns emissions in tons CO2 per year."
   [tulokset]
   (when tulokset
-    (/ (+ (* (or (:ostoenergian-tarve-kaukolampo tulokset) 0) (:kaukolampo co2-kertoimet))
-          (* (or (:ostoenergian-tarve-sahko tulokset) 0) (:sahko co2-kertoimet))
-          (* (or (:ostoenergian-tarve-uusiutuvat-pat tulokset) 0) (:uusiutuvat-pat co2-kertoimet))
-          (* (or (:ostoenergian-tarve-fossiiliset-pat tulokset) 0) (:fossiiliset-pat co2-kertoimet))
-          (* (or (:ostoenergian-tarve-kaukojaahdytys tulokset) 0) (:kaukojaahdytys co2-kertoimet)))
+    (/ (+ (* (or (:ostoenergian-tarve-kaukolampo tulokset) 0) (:kaukolampo co2/co2-kertoimet))
+          (* (or (:ostoenergian-tarve-sahko tulokset) 0) (:sahko co2/co2-kertoimet))
+          (* (or (:ostoenergian-tarve-uusiutuvat-pat tulokset) 0) (:uusiutuvat-pat co2/co2-kertoimet))
+          (* (or (:ostoenergian-tarve-fossiiliset-pat tulokset) 0) (:fossiiliset-pat co2/co2-kertoimet))
+          (* (or (:ostoenergian-tarve-kaukojaahdytys tulokset) 0) (:kaukojaahdytys co2/co2-kertoimet)))
        1000.0))) ; Convert kg to tons
 
 (defn- total-ostoenergia-ppp

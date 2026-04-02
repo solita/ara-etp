@@ -49,3 +49,33 @@
         (t/is (every? (fn [et] (or (= (->> et :lahtotiedot :lammitys :lammitysmuoto-1 :id) 1)
                                    (= (->> et :lahtotiedot :lammitys :lammitysmuoto-2 :id) 1)))
                       response-body))))))
+
+(t/deftest search-energiatodistus-by-havainnointikayntityyppi-api-test
+  ;; Given: signed ET2026 certificates with known havainnointikayntityyppi-id
+  (let [[laatija-id] (laatija-test-data/insert! (laatija-test-data/generate-adds 1))]
+    (test-kayttajat/insert-virtu-paakayttaja!)
+    (let [et-adds (->> (energiatodistus-test-data/generate-adds 2 2026 true)
+                       (map #(assoc-in % [:perustiedot :havainnointikayntityyppi-id] 1)))
+          ids (energiatodistus-test-data/insert! et-adds laatija-id)]
+      (energiatodistus-search-test/sign-energiatodistukset! (map #(vector laatija-id %) ids))
+      ;; When: GET /api/private/energiatodistukset with where clause for havainnointikayntityyppi-id = 1
+      ;; URL-encoded: [[[\"=\",\"energiatodistus.perustiedot.havainnointikayntityyppi-id\",1]]]
+      (let [response (ts/handler (-> (mock/request :get "/api/private/energiatodistukset?where=%5B%5B%5B%22%3D%22%2C%22energiatodistus.perustiedot.havainnointikayntityyppi-id%22%2C1%5D%5D%5D")
+                                     (test-kayttajat/with-virtu-user)
+                                     (mock/header "Accept" "application/json")))
+            response-body (j/read-value (:body response) j/keyword-keys-object-mapper)]
+        ;; Then: HTTP 200 with correct results
+        (t/is (= (:status response) 200))
+        (t/is (= (count response-body) 2))))))
+
+(t/deftest search-energiatodistus-unknown-field-api-test
+  ;; Given: pääkäyttäjä
+  (laatija-test-data/insert! (laatija-test-data/generate-adds 1))
+  (test-kayttajat/insert-virtu-paakayttaja!)
+  ;; When: searching with a field that doesn't exist in the schema
+  ;; URL-encoded: [[["=","energiatodistus.olematon-kentta","test"]]]
+  (let [response (ts/handler (-> (mock/request :get "/api/private/energiatodistukset?where=%5B%5B%5B%22%3D%22%2C%22energiatodistus.olematon-kentta%22%2C%22test%22%5D%5D%5D")
+                                 (test-kayttajat/with-virtu-user)
+                                 (mock/header "Accept" "application/json")))]
+    ;; Then: HTTP 400 error
+    (t/is (= (:status response) 400))))
