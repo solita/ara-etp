@@ -133,14 +133,8 @@
         bind:model={energiatodistus}
         lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
         parse={Maybe.Some}
-        format={et.selectFormat(
-          labelLocale,
-          luokittelut.laatimisvaiheet
-        )}
-        items={R.pluck(
-          'id',
-          luokittelut.laatimisvaiheet
-        )} />
+        format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet)}
+        items={R.pluck('id', luokittelut.laatimisvaiheet)} />
     </div>
     {#if Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
       <div class="w-full py-4 lg:w-1/2">
