@@ -144,7 +144,7 @@
       ilmanvaihtotyypit
     ]) => {
       const laatimisvaihe = laatimisvaiheet.find(
-          lv => lv.id === energiatodistus.perustiedot.laatimisvaihe
+        lv => lv.id === energiatodistus.perustiedot.laatimisvaihe
       );
       const alakayttotarkoitusluokka = alakayttotarkoitusluokat.find(
         aktl => aktl.id === energiatodistus.perustiedot.kayttotarkoitus
