@@ -159,10 +159,7 @@
           </th>
           {#each jalanjalkiFields as field}
             <th class="et-table--th et-table--th-right-aligned">
-              {$_(
-                'energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus.' +
-                  field
-              )}
+              {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.' + field)}
             </th>
           {/each}
           <th class="et-table--th et-table--th-right-aligned">
@@ -173,9 +170,7 @@
       <tbody class="et-table--tbody">
         <tr class="et-table--tr">
           <td class="et-table--td">
-            {$_(
-              'energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus.header'
-            )}
+            {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus')}
           </td>
           {#each jalanjalkiFields as field}
             <td class="et-table--td">
@@ -200,7 +195,7 @@
         <tr class="et-table--tr">
           <td class="et-table--td">
             {$_(
-              'energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennuspaikka.header'
+              'energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennuspaikka'
             )}
           </td>
           {#each jalanjalkiFields as field}
@@ -239,10 +234,7 @@
           </th>
           {#each kadenjalkiFields as field}
             <th class="et-table--th et-table--th-right-aligned">
-              {$_(
-                'energiatodistus.ilmastoselvitys.hiilikadenjalki.rakennus.' +
-                  field
-              )}
+              {$_('energiatodistus.ilmastoselvitys.hiilikadenjalki.' + field)}
             </th>
           {/each}
         </tr>
@@ -250,9 +242,7 @@
       <tbody class="et-table--tbody">
         <tr class="et-table--tr">
           <td class="et-table--td">
-            {$_(
-              'energiatodistus.ilmastoselvitys.hiilikadenjalki.rakennus.header'
-            )}
+            {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennus')}
           </td>
           {#each kadenjalkiFields as field}
             <td class="et-table--td">
@@ -274,7 +264,7 @@
         <tr class="et-table--tr">
           <td class="et-table--td">
             {$_(
-              'energiatodistus.ilmastoselvitys.hiilikadenjalki.rakennuspaikka.header'
+              'energiatodistus.ilmastoselvitys.hiilijalanjalki.rakennuspaikka'
             )}
           </td>
           {#each kadenjalkiFields as field}
