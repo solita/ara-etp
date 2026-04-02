@@ -69,39 +69,42 @@
             params.version,
             params.id
           )(energiatodistus),
-          newPerusparannuspassiId:
-            R.propEq(et.tila.draft, 'tila-id', energiatodistus)
-              ? R.cond([
-            [
-              /* PPP has an ID so it has been submitted at least once */
-              R.always(perusparannuspassi?.id),
+          newPerusparannuspassiId: R.propEq(
+            et.tila.draft,
+            'tila-id',
+            energiatodistus
+          )
+            ? R.cond([
+                [
+                  /* PPP has an ID so it has been submitted at least once */
+                  R.always(perusparannuspassi?.id),
 
-              /* Always keep PPP state in sync with the local
-               * (could well have no effect for a PPP that has valid: false) */
-              () =>
-                R.map(
-                  R.always(Maybe.None()),
-                  pppApi.putPerusparannuspassi(
-                    fetch,
-                    perusparannuspassi.id,
-                    perusparannuspassi
-                  )
-                )
-            ],
-            [
-              /* PPP has no ID but is marked as valid, so we are likely making a first save
-               * for a newly added PPP */
-              R.always(perusparannuspassi?.valid),
-              () => {
-                return R.map(
-                  ppp => Maybe.Some(ppp.id),
-                  pppApi.postPerusparannuspassi(fetch, perusparannuspassi)
-                );
-              }
-            ],
-            [R.T, () => Future.resolve(Maybe.None())]
-          ])()
-              : Future.resolve(Maybe.None())
+                  /* Always keep PPP state in sync with the local
+                   * (could well have no effect for a PPP that has valid: false) */
+                  () =>
+                    R.map(
+                      R.always(Maybe.None()),
+                      pppApi.putPerusparannuspassi(
+                        fetch,
+                        perusparannuspassi.id,
+                        perusparannuspassi
+                      )
+                    )
+                ],
+                [
+                  /* PPP has no ID but is marked as valid, so we are likely making a first save
+                   * for a newly added PPP */
+                  R.always(perusparannuspassi?.valid),
+                  () => {
+                    return R.map(
+                      ppp => Maybe.Some(ppp.id),
+                      pppApi.postPerusparannuspassi(fetch, perusparannuspassi)
+                    );
+                  }
+                ],
+                [R.T, () => Future.resolve(Maybe.None())]
+              ])()
+            : Future.resolve(Maybe.None())
         })
       )
     );

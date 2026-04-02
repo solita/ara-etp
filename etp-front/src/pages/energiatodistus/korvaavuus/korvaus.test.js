@@ -189,8 +189,12 @@ describe('korvaus.js', () => {
   describe('isValidLocation', () => {
     it('given matching postinumero and kayttotarkoitus, when checking isValidLocation, then returns true', () => {
       // given
-      const a = { perustiedot: { postinumero: '33100', kayttotarkoitus: 'YAT' } };
-      const b = { perustiedot: { postinumero: '33100', kayttotarkoitus: 'YAT' } };
+      const a = {
+        perustiedot: { postinumero: '33100', kayttotarkoitus: 'YAT' }
+      };
+      const b = {
+        perustiedot: { postinumero: '33100', kayttotarkoitus: 'YAT' }
+      };
 
       // when
       const result = Korvaus.isValidLocation(a, b);
@@ -201,8 +205,12 @@ describe('korvaus.js', () => {
 
     it('given different postinumero, when checking isValidLocation, then returns false', () => {
       // given
-      const a = { perustiedot: { postinumero: '33100', kayttotarkoitus: 'YAT' } };
-      const b = { perustiedot: { postinumero: '00100', kayttotarkoitus: 'YAT' } };
+      const a = {
+        perustiedot: { postinumero: '33100', kayttotarkoitus: 'YAT' }
+      };
+      const b = {
+        perustiedot: { postinumero: '00100', kayttotarkoitus: 'YAT' }
+      };
 
       // when
       const result = Korvaus.isValidLocation(a, b);
@@ -213,7 +221,9 @@ describe('korvaus.js', () => {
 
     it('given different kayttotarkoitus, when checking isValidLocation, then returns false', () => {
       // given
-      const a = { perustiedot: { postinumero: '33100', kayttotarkoitus: 'YAT' } };
+      const a = {
+        perustiedot: { postinumero: '33100', kayttotarkoitus: 'YAT' }
+      };
       const b = { perustiedot: { postinumero: '33100', kayttotarkoitus: 'T' } };
 
       // when
