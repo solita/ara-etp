@@ -1,8 +1,6 @@
 import { expect, describe, it } from '@jest/globals';
 import * as R from 'ramda';
 import * as Schema from './schema';
-import fi from '@Language/fi.json';
-import sv from '@Language/sv.json';
 
 const dummySchemaObject = R.curry((type, key) => ({
   type,
