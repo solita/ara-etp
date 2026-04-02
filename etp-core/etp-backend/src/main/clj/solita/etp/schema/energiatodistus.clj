@@ -483,6 +483,7 @@
   (assoc
     (merge common-schema/Id Status Laatija)
     :versio schema/Int
+    :perusparannuspassi-id (schema/maybe common-schema/Key)
     :perustiedot
     (xschema/optional-properties
       (select-keys Perustiedot

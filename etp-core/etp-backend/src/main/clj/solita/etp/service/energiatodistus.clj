@@ -420,6 +420,8 @@
 
 (defn- mark-energiatodistus-korvattu! [db id]
   (when id
+    (when-not (find-energiatodistus db id)
+      (throw-invalid-replace! id " does not exist"))
     (when-not (== (energiatodistus-db/update-energiatodistus-korvattu! db {:id id}) 1)
       (throw-invalid-replace! id " is not in signed or discarded state"))))
 
