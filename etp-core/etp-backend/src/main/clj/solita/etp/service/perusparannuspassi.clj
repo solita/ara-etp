@@ -31,13 +31,6 @@
    :toteutunut-ostoenergia-fossiiliset-pat
    :toteutunut-ostoenergia-kaukojaahdytys])
 
-(def paastokertoimet
-  {:kaukolampo      0.059
-   :sahko           0.05
-   :uusiutuvat-pat  0.027
-   :fossiiliset-pat 0.306
-   :kaukojaahdytys  0.014})
-
 (def price-keys
   {:kaukolampo      :kaukolampo-hinta
    :sahko           :sahko-hinta

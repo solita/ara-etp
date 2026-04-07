@@ -89,6 +89,7 @@ export const parseValueByType = R.curry((type, value) => {
     case OPERATOR_TYPES.LAATIMISVAIHE:
     case OPERATOR_TYPES.KIELISYYS:
     case OPERATOR_TYPES.ILMANVAIHTOTYYPPI:
+    case OPERATOR_TYPES.HAVAINNOINTIKAYNTITYYPPI:
     case OPERATOR_TYPES.PATEVYYSTASO:
     case OPERATOR_TYPES.LAMMITYSMUOTO:
       return parsers.parseNumber(value);

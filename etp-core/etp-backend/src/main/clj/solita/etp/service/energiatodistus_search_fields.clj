@@ -2,6 +2,7 @@
   (:require [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.e-luokka :as e-luokka]
             [solita.etp.service.polttoaine :as polttoaine]
+            [solita.etp.service.co2-kertoimet :as co2]
             [solita.etp.db :as db]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.schema.laatija :as laatija-schema]
@@ -124,7 +125,27 @@
      :tekniset-jarjestelmat
      {:kaukojaahdytys ["energiatodistus.t$kaytettavat_energiamuodot$kaukojaahdytys + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$kaukojaahdytys" common-schema/NonNegative]
       :lampo ["( energiatodistus.lt$ilmanvaihto$tuloilma_lampotila + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$lampo + energiatodistus.t$tekniset_jarjestelmat$kayttoveden_valmistus$lampo + energiatodistus.t$tekniset_jarjestelmat$tilojen_lammitys$lampo + energiatodistus.t$tekniset_jarjestelmat$tuloilman_lammitys$lampo + energiatodistus.t$uusiutuvat_omavaraisenergiat$aurinkolampo + energiatodistus.t$uusiutuvat_omavaraisenergiat$lampopumppu + energiatodistus. t$uusiutuvat_omavaraisenergiat$muulampo )" common-schema/NonNegative]
-      :sahko ["( energiatodistus.t$kaytettavat_energiamuodot$sahko + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$sahko + energiatodistus.t$tekniset_jarjestelmat$kayttoveden_valmistus$sahko + energiatodistus.t$tekniset_jarjestelmat$tilojen_lammitys$sahko + energiatodistus.t$tekniset_jarjestelmat$tuloilman_lammitys$sahko)" common-schema/NonNegative]}}
+      :sahko ["( energiatodistus.t$kaytettavat_energiamuodot$sahko + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$sahko + energiatodistus.t$tekniset_jarjestelmat$kayttoveden_valmistus$sahko + energiatodistus.t$tekniset_jarjestelmat$tilojen_lammitys$sahko + energiatodistus.t$tekniset_jarjestelmat$tuloilman_lammitys$sahko)" common-schema/NonNegative]}
+      :kasvihuonepaastot-per-nelio
+      [(let [co2-db-sarakkeet {:kaukolampo      "kaukolampo"
+                               :sahko           "sahko"
+                               :uusiutuvat-pat  "uusiutuva_polttoaine"
+                               :fossiiliset-pat "fossiilinen_polttoaine"
+                               :kaukojaahdytys  "kaukojaahdytys"}
+             terms (map (fn [[k kerroin]]
+                          (str "coalesce(energiatodistus.t$kaytettavat_energiamuodot$"
+                               (get co2-db-sarakkeet k) ", 0) * " kerroin))
+                        co2/co2-kertoimet)]
+         (str "(" (str/join " + " terms) ")"
+              " / nullif(energiatodistus.lt$lammitetty_nettoala, 0)"))
+       common-schema/NonNegative]
+      :uusiutuvan-energian-osuus
+      ["0" common-schema/NonNegative]
+      :uusiutuvat-omavaraisenergiat-kokonaistuotanto
+      (per-nettoala-for-schema
+        [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto]
+        #(str % "-neliovuosikulutus")
+        energiatodistus-schema/Energiatodistus2026)}
     :toteutunut-ostoenergiankulutus
     {:ostettu-energia
      (per-nettoala-for-schema
