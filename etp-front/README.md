@@ -26,7 +26,7 @@ nvm use
 Install the NPM dependencies.
 
 ```bash
-npm install
+npm ci
 ```
 
 Naturally, the [backend](../etp-core) services need to be running locally.

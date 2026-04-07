@@ -7,7 +7,7 @@
 Install the dependencies...
 
 ```bash
-npm install
+npm ci
 ```
 
 The project includes the `sharp` native module, which requires build scripts to be executed.
