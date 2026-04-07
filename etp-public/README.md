@@ -10,6 +10,14 @@ Install the dependencies...
 npm install
 ```
 
+The project includes the `sharp` native module, which requires build scripts to be executed.
+Due to the `.npmrc` configuration that disables scripts during installation, you need to
+manually rebuild `sharp` after installation:
+
+```bash
+npm rebuild sharp --foreground-scripts --ignore-scripts=false
+```
+
 You also need to start [backend](../etp-core) services
 
 
