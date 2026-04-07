@@ -54,6 +54,10 @@
   export let whoami;
 
   $: labelLocale = LocaleUtils.label($locale);
+  $: filteredLaatimisvaiheet = Laatimisvaiheet.filterByVersion(
+    2018,
+    luokittelut.laatimisvaiheet
+  );
 </script>
 
 <style>
@@ -133,8 +137,8 @@
         bind:model={energiatodistus}
         lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
         parse={Maybe.Some}
-        format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet)}
-        items={R.pluck('id', luokittelut.laatimisvaiheet)} />
+        format={et.selectFormat(labelLocale, filteredLaatimisvaiheet)}
+        items={R.pluck('id', filteredLaatimisvaiheet)} />
     </div>
     {#if Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
       <div class="w-full py-4 lg:w-1/2">
