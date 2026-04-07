@@ -251,9 +251,7 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
               (let [signatures (.getSignatureDictionaries pdf)]
                 (t/is (not (nil? signatures)))))))))))
 
-;;
 ;; Laatimisvaihe validation during signing
-;;
 
 (defn- generate-and-insert-with-laatimisvaihe!
   "Generates a ready-for-signing energiatodistus for the given version,
@@ -261,7 +259,7 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
    (bypassing service-level validation to simulate API bypass scenarios)."
   [versio laatimisvaihe-id laatija-id]
   (let [et-entry (energiatodistus-test-data/generate-and-insert!
-                   versio true laatija-id)
+                   1 versio true laatija-id)
         et-id (first (keys et-entry))]
     (jdbc/execute! ts/*db*
                    ["UPDATE energiatodistus SET pt$laatimisvaihe = ? WHERE id = ?"
