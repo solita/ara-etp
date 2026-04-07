@@ -1,5 +1,6 @@
 (ns solita.etp.service.energiatodistus-signing-test
   (:require
+    [clojure.java.jdbc :as jdbc]
     [solita.common.certificates-test :as certificates-test]
     [solita.common.time :as time]
     [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
@@ -8,6 +9,7 @@
     [solita.etp.service.energiatodistus :as energiatodistus-service]
     [solita.etp.service.file :as file-service]
     [solita.etp.service.signing.pdf-sign :as pdf-sign-service]
+    [solita.etp.test :as etp-test]
     [clojure.test :as t]
     [solita.etp.test-data.laatija :as laatija-test-data]
     [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
@@ -248,3 +250,62 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
                         pdf (PDDocument/load pdf-is)]
               (let [signatures (.getSignatureDictionaries pdf)]
                 (t/is (not (nil? signatures)))))))))))
+
+;;
+;; Laatimisvaihe validation during signing
+;;
+
+(defn- generate-and-insert-with-laatimisvaihe!
+  "Generates a ready-for-signing energiatodistus for the given version,
+   then sets the laatimisvaihe to the specified value via direct DB update
+   (bypassing service-level validation to simulate API bypass scenarios)."
+  [versio laatimisvaihe-id laatija-id]
+  (let [et-entry (energiatodistus-test-data/generate-and-insert!
+                   versio true laatija-id)
+        et-id (first (keys et-entry))]
+    (jdbc/execute! ts/*db*
+                   ["UPDATE energiatodistus SET pt$laatimisvaihe = ? WHERE id = ?"
+                    laatimisvaihe-id et-id])
+    et-id))
+
+(t/deftest signing-rejects-invalid-laatimisvaihe-2018-id-3
+  (t/testing "given a 2018 energiatodistus with laatimisvaihe 3, when signing, then throws :invalid-laatimisvaihe"
+    (let [laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          whoami {:id laatija-id}
+          et-id (generate-and-insert-with-laatimisvaihe! 2018 3 laatija-id)
+          result (etp-test/catch-ex-data
+                   #(energiatodistus-service/start-energiatodistus-signing! db whoami et-id))]
+      (t/is (= (:type result) :invalid-laatimisvaihe)))))
+
+(t/deftest signing-rejects-invalid-laatimisvaihe-2018-id-4
+  (t/testing "given a 2018 energiatodistus with laatimisvaihe 4, when signing, then throws :invalid-laatimisvaihe"
+    (let [laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          whoami {:id laatija-id}
+          et-id (generate-and-insert-with-laatimisvaihe! 2018 4 laatija-id)
+          result (etp-test/catch-ex-data
+                   #(energiatodistus-service/start-energiatodistus-signing! db whoami et-id))]
+      (t/is (= (:type result) :invalid-laatimisvaihe)))))
+
+(t/deftest signing-allows-valid-laatimisvaihe-2026-id-3
+  (t/testing "given a 2026 energiatodistus with laatimisvaihe 3, when signing, then succeeds"
+    (let [laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          whoami {:id laatija-id}
+          et-id (generate-and-insert-with-laatimisvaihe! 2026 3 laatija-id)]
+      (t/is (= (energiatodistus-service/start-energiatodistus-signing! db whoami et-id)
+               :ok)))))
+
+(t/deftest signing-allows-valid-laatimisvaihe-2026-id-4
+  (t/testing "given a 2026 energiatodistus with laatimisvaihe 4, when signing, then succeeds"
+    (let [laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          whoami {:id laatija-id}
+          et-id (generate-and-insert-with-laatimisvaihe! 2026 4 laatija-id)]
+      (t/is (= (energiatodistus-service/start-energiatodistus-signing! db whoami et-id)
+               :ok)))))
