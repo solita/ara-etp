@@ -7,7 +7,15 @@
 Install the dependencies...
 
 ```bash
-npm install
+npm ci
+```
+
+The project includes the `sharp` native module, which requires build scripts to be executed.
+Due to the `.npmrc` configuration that disables scripts during installation, you need to
+rebuild script-dependent packages after installation:
+
+```bash
+npm run rebuild-scripted-deps
 ```
 
 You also need to start [backend](../etp-core) services
