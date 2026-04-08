@@ -66,11 +66,6 @@ const allowedIdsByVersion = {
  * Filter laatimisvaiheet by energiatodistus version.
  * 2018: only ids 0, 1, 2
  * 2026: all ids 0, 1, 2, 3, 4
- * Other versions (e.g. 2013): empty (laatimisvaihe not used)
- *
- * @param {number} version - energiatodistus version (2013, 2018, 2026)
- * @param {Object[]} laatimisvaiheet - full list of laatimisvaihe objects with id property
- * @returns {Object[]} filtered laatimisvaiheet
  */
 export const filterByVersion = R.curry((version, laatimisvaiheet) => {
   const allowed = allowedIdsByVersion[version];

@@ -9,6 +9,7 @@ import * as schema from './schema';
 import * as geoApi from '@Utility/api/geo-api';
 import * as dfns from 'date-fns';
 import * as Query from '@Utility/query';
+import * as Laatimisvaiheet from './laatimisvaiheet';
 
 /*
 This deserializer is for all energiatodistus versions.
@@ -377,8 +378,16 @@ const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({
 }));
 
 export const luokittelutForVersion = version =>
-  Future.parallelObject(9, {
+  Future.parallelObject(10, {
     ...luokittelut,
+    laatimisvaiheet2018: R.map(
+      Laatimisvaiheet.filterByVersion(2018),
+      luokittelut.laatimisvaiheet
+    ),
+    laatimisvaiheet2026: R.map(
+      Laatimisvaiheet.filterByVersion(2026),
+      luokittelut.laatimisvaiheet
+    ),
     ...kayttotarkoitusluokittelut(version)
   });
 
