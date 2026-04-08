@@ -417,7 +417,13 @@ table.common-table td:last-child {
     color: #23323e;
     font-weight: bold;
     white-space: nowrap;
-    width: 1px;
+    width: 65%;
+    padding-right: 10px;
+}
+
+.etusivu-ostoenergia dl dd {
+    padding-left: 5px;
+    white-space: nowrap;
 }
 
 .etusivu-eluku {

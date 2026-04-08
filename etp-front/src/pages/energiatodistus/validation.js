@@ -35,11 +35,17 @@ export const isLammonjakoKuvausRequired = R.compose(
 const if2013Else = (on2013, onFalse) =>
   R.ifElse(R.propEq(2013, 'versio'), on2013, onFalse);
 
+const if2026Else = (on2026, onFalse) =>
+  R.ifElse(R.propEq(2026, 'versio'), on2026, onFalse);
+
 const requiredCondition = {
-  'perustiedot.havainnointikaynti': laatimisvaiheet.isOlemassaOlevaRakennus,
-  'perustiedot.rakennustunnus': if2013Else(
-    R.T,
-    R.complement(laatimisvaiheet.isRakennuslupa)
+  'perustiedot.havainnointikaynti': if2026Else(
+    laatimisvaiheet.isHavainnointikayntiRequired,
+    laatimisvaiheet.isOlemassaOlevaRakennus
+  ),
+  'perustiedot.rakennustunnus': if2026Else(
+    R.complement(laatimisvaiheet.isRakennuslupa),
+    if2013Else(R.T, R.complement(laatimisvaiheet.isRakennuslupa))
   ),
   'perustiedot.keskeiset-suositukset-fi':
     laatimisvaiheet.isOlemassaOlevaRakennus,

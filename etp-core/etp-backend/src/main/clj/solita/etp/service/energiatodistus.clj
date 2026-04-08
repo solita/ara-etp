@@ -24,6 +24,7 @@
             [solita.etp.service.json :as json]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
             [solita.etp.service.kielisyys :as kielisyys]
+            [solita.etp.service.laatimisvaihe :as laatimisvaihe-service]
             [solita.etp.service.laatija :as laatija-service]
             [solita.etp.service.rooli :as rooli-service]
             [solita.postgresql.composite :as pg-composite]
@@ -545,6 +546,7 @@
                               (if (= result 1)
                                 (do
                                   (validate-required! db energiatodistus)
+                                  (laatimisvaihe-service/validate-laatimisvaihe-for-versio! energiatodistus)
                                   (laatija-service/validate-laatija-patevyys! db (:id whoami))
                                   :ok)
                                 (when-let [{:keys [tila-id]} energiatodistus]

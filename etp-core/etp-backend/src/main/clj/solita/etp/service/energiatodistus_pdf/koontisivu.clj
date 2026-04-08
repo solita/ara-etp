@@ -123,14 +123,28 @@
              :id    "koontisivu-keskeiset-toimenpiteet-section"}
        [:h2 (l :keskeiset-toimenpiteet-otsikko)]
        [:p [:strong (l :ei-koske-teksti)]]
-       (if (-> energiatodistus :perusparannuspassi-valid)
-         [:p (str (l :perusparannuspassi-laadinta)
-                  " "
-                  (-> energiatodistus :perusparannuspassi-id h))]
-         [:div
-          [:p {:id "koontisivu-keskeiset-toimenpiteet"}
-           (-> energiatodistus :perustiedot (get-in [(kieli {:fi :keskeiset-suositukset-fi})]) h)]
-          [:p (l :toimenpiteet-yksityiskohtaisemmin)]])]
+       (let [ei-olemassaoleva (not= (get-in energiatodistus [:perustiedot :laatimisvaihe]) 2)
+             a-luokka (#{"A" "A0" "A+"} (get-in energiatodistus [:tulokset :e-luokka]))]
+         (if (-> energiatodistus :perusparannuspassi-valid)
+           [:div
+            (when ei-olemassaoleva
+              [:p (l :toimenpiteet-ei-koske-uudisrakennusta)])
+            (when a-luokka
+              [:p (l :toimenpiteet-ei-koske-a-luokkaa)])
+            [:p (str (l :perusparannuspassi-laadinta)
+                     " "
+                     (-> energiatodistus :perusparannuspassi-id h))]]
+           [:div
+            (when ei-olemassaoleva
+              [:p (l :toimenpiteet-ei-koske-uudisrakennusta)])
+            (when a-luokka
+              [:p (l :toimenpiteet-ei-koske-a-luokkaa)])
+            (when (and (not ei-olemassaoleva) (not a-luokka))
+              (list
+                [:p {:id "koontisivu-keskeiset-toimenpiteet"}
+                 (-> energiatodistus :perustiedot (get-in [(kieli {:fi :keskeiset-suositukset-fi
+                                                                   :sv :keskeiset-suositukset-sv})]) h)]
+                [:p (l :toimenpiteet-yksityiskohtaisemmin)]))]))]
 
       [:div {:class "page-section"
              :id    "koontisivu-havaintokaynti-tyokalu"}

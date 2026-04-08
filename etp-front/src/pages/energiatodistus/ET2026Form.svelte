@@ -136,10 +136,10 @@
         bind:model={energiatodistus}
         lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
         parse={Maybe.Some}
-        format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet)}
-        items={R.pluck('id', luokittelut.laatimisvaiheet)} />
+        format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet2026)}
+        items={R.pluck('id', luokittelut.laatimisvaiheet2026)} />
     </div>
-    {#if Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)}
+    {#if Laatimisvaiheet.isHavainnointikayntiRequired(energiatodistus)}
       <div class="w-full py-4 lg:w-1/2">
         <Input
           {disabled}

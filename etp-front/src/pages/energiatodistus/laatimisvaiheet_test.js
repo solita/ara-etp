@@ -54,3 +54,29 @@ describe('Laatimisvaiheet: ', () => {
     );
   });
 });
+
+const allLaatimisvaiheet = [
+  { id: 0, 'label-fi': 'A' },
+  { id: 1, 'label-fi': 'B' },
+  { id: 2, 'label-fi': 'C' },
+  { id: 3, 'label-fi': 'D' },
+  { id: 4, 'label-fi': 'E' }
+];
+
+describe('filterByVersion: ', () => {
+  it('returns only ids 0, 1, 2 for version 2018', () => {
+    const result = Laatimisvaiheet.filterByVersion(2018, allLaatimisvaiheet);
+    expect(result.map(v => v.id)).toEqual([0, 1, 2]);
+  });
+
+  it('returns all ids for version 2026', () => {
+    const result = Laatimisvaiheet.filterByVersion(2026, allLaatimisvaiheet);
+    expect(result.map(v => v.id)).toEqual([0, 1, 2, 3, 4]);
+  });
+
+  it('returns empty array for version 2013', () => {
+    expect(Laatimisvaiheet.filterByVersion(2013, allLaatimisvaiheet)).toEqual(
+      []
+    );
+  });
+});

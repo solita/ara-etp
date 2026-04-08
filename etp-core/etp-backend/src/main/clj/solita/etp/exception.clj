@@ -130,5 +130,10 @@
       ::exception/default default-handler
       :unique-violation unique-exception-handler
       :forbidden forbidden-handler
+      :invalid-laatimisvaihe (fn [e request]
+                               (log/info "Invalid laatimisvaihe in service:" (service-name request)
+                                         (ex-message e))
+                               {:status 422
+                                :body   (ex-data e)})
       ::coercion/request-coercion request-coercion-handler
       ::coercion/response-coercion (create-coercion-handler))))

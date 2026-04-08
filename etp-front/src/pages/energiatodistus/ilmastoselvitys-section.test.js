@@ -283,6 +283,8 @@ describe('ET2026Form integration', () => {
         postinumerot: [],
         kielisyys: [],
         laatimisvaiheet: [],
+        laatimisvaiheet2018: [],
+        laatimisvaiheet2026: [],
         patevyydet: [],
         kayttotarkoitusluokat: [],
         alakayttotarkoitusluokat: [],

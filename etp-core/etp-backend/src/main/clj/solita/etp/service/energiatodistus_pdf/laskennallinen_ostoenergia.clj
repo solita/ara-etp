@@ -2,6 +2,7 @@
   (:require
     [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc]
+    [solita.etp.service.e-luokka :as e-luokka-service]
     [solita.etp.service.energiatodistus-pdf.ilmastoselvitys :as ilmastoselvitys]))
 
 (defn- fmt
@@ -81,18 +82,50 @@
             painotettu-fossiilinen
             painotettu-kaukojaahdytys]}])))
 
+;; These coefficients are defined independently in the spec:
+;; "tuotettu sähkö kertoimella 0,9 ja tuotettu aurinkolämpö kertoimella 0,38"
+;; They happen to coincide with energiamuotokerroin 2026 values but are separate concepts.
+(def ^:private uusiutuva-kerroin
+  {:aurinkosahko 0.90
+   :tuulisahko   0.90
+   :aurinkolampo 0.38})
+
+(defn- painotettu-uusiutuva-summa
+  "Sum of (value × coefficient) for aurinkosähkö, tuulisähkö, aurinkolämpö."
+  [energy-map]
+  (reduce-kv (fn [acc k coeff]
+               (+ acc (* coeff (double (or (get energy-map k) 0)))))
+             0.0
+             uusiutuva-kerroin))
+
+(defn uusiutuvan-energian-osuus
+  "Calculate the percentage of on-site renewable energy production relative to energy consumption.
+   Returns a formatted string like '24 %' or nil if the calculation cannot be performed.
+
+   Formula: (Σ(E_tuotto × k) / A_netto) / (E_luku + Σ(E_hyödynnetty × k) / A_netto) × 100"
+  [versio energiatodistus]
+  (when (= versio 2026)
+    (let [nettoala  (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
+          e-luku    (e-luokka-service/e-luku versio energiatodistus)]
+      (when (and nettoala (pos? nettoala) (some? e-luku))
+        (let [tuotto      (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto])
+              hyodynnetty (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat])
+              numerator   (/ (painotettu-uusiutuva-summa tuotto) (double nettoala))
+              denominator (+ (double e-luku)
+                             (/ (painotettu-uusiutuva-summa hyodynnetty) (double nettoala)))]
+          (when (pos? denominator)
+            (str (Math/round (* (/ numerator denominator) 100.0)) " %")))))))
+
+
 (defn ostoenergia-tiedot [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
-        ;tulokset (:tulokset energiatodistus)
-        ;uusiutuvan-osuus (energiatodistus/uusiutuvan-osuus-paastoista (:tulokset energiatodistus))
-        ;TODO get back to the uusiutuvan-energian-osuus when it's clear what to calculate
-        ]
+        uusiutuvan-osuus (uusiutuvan-energian-osuus (:versio energiatodistus) energiatodistus)]
 
     [:div {:class "etusivu-ostoenergia"}
      (description-list
        [{:dt (l :energiakaytosta-syntyvat-kasvihuonepaastot)
          :dd (str (-> energiatodistus :tulokset :kasvihuonepaastot-nettoala (fmt 2)) " " (l :kgCO2ekv-m2/vuosi))}
         {:dt (l :uusiutuva-energian-osuus)
-         :dd (str "TODO: Add later when ready")}
+         :dd (or uusiutuvan-osuus "-")}
         {:dt (l :kasvihuonepaastot)
          :dd (ilmastoselvitys/gwp-value-for-etusivu energiatodistus)}])]))
