@@ -2,7 +2,7 @@
   (:require
     [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc]
-    [solita.etp.service.complete-energiatodistus :as energiatodistus]
+    [solita.etp.service.complete-energiatodistus :as complete-energiatodistus]
     [solita.etp.service.energiatodistus-pdf.ilmastoselvitys :as ilmastoselvitys]))
 
 (defn- fmt
@@ -84,7 +84,7 @@
 
 (defn ostoenergia-tiedot [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
-        uusiutuvan-osuus (energiatodistus/uusiutuvan-energian-osuus (:versio energiatodistus) energiatodistus)]
+        uusiutuvan-osuus (complete-energiatodistus/uusiutuvan-energian-osuus (:versio energiatodistus) energiatodistus)]
 
     [:div {:class "etusivu-ostoenergia"}
      (description-list
