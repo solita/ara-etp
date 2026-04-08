@@ -12,10 +12,10 @@ npm ci
 
 The project includes the `sharp` native module, which requires build scripts to be executed.
 Due to the `.npmrc` configuration that disables scripts during installation, you need to
-manually rebuild `sharp` after installation:
+rebuild script-dependent packages after installation:
 
 ```bash
-npm rebuild sharp --foreground-scripts --ignore-scripts=false
+npm run rebuild-scripted-deps
 ```
 
 You also need to start [backend](../etp-core) services
