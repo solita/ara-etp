@@ -8,15 +8,9 @@
             [solita.etp.service.kielisyys :as kielisyys]
             [solita.etp.service.luokittelu :as luokittelu]
             [solita.etp.service.polttoaine :as polttoaine]
+            [solita.etp.service.co2-kertoimet :as co2]
             [solita.common.map :as map]
             [solita.common.formats :as formats]))
-
-(def ^:private co2-kertoimet
-  {:kaukolampo         0.059
-   :sahko              0.05
-   :uusiutuvat-pat     0.027
-   :fossiiliset-pat    0.306
-   :kaukojaahdytys     0.014})
 
 (defn safe-div [x y]
   (when (and x y (> y 0))
@@ -106,11 +100,11 @@
 (defn co2-paastot-et
   [tulokset]
   (if tulokset
-   (+ (* (or (:kaukolampo tulokset) 0) (:kaukolampo co2-kertoimet))
-          (* (or (:sahko tulokset) 0) (:sahko co2-kertoimet))
-          (* (or (:uusiutuva-polttoaine tulokset) 0) (:uusiutuvat-pat co2-kertoimet))
-          (* (or (:fossiilinen-polttoaine tulokset) 0) (:fossiiliset-pat co2-kertoimet))
-          (* (or (:kaukojaahdytys tulokset) 0) (:kaukojaahdytys co2-kertoimet)))
+   (+ (* (or (:kaukolampo tulokset) 0) (:kaukolampo co2/co2-kertoimet))
+          (* (or (:sahko tulokset) 0) (:sahko co2/co2-kertoimet))
+          (* (or (:uusiutuva-polttoaine tulokset) 0) (:uusiutuvat-pat co2/co2-kertoimet))
+          (* (or (:fossiilinen-polttoaine tulokset) 0) (:fossiiliset-pat co2/co2-kertoimet))
+          (* (or (:kaukojaahdytys tulokset) 0) (:kaukojaahdytys co2/co2-kertoimet)))
     0.0))
 
 (defn complete-energiatodistus

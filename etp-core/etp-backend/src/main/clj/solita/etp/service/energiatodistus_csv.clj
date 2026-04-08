@@ -20,9 +20,12 @@
      [k])
    [[:perustiedot :yritys :nimi]]
    (for [child [:tilaaja :kieli :kieli-fi :kieli-sv :laatimisvaihe
-                :laatimisvaihe-fi :laatimisvaihe-sv :havainnointikaynti
-                :uudisrakennus]]
-     [:perustiedot child])
+                 :laatimisvaihe-fi :laatimisvaihe-sv :havainnointikaynti
+                 :uudisrakennus
+                 :havainnointikayntityyppi-id :havainnointikayntityyppi-fi
+                 :havainnointikayntityyppi-sv
+                 :tayttaa-aplus-vaatimukset :tayttaa-a0-vaatimukset]]
+      [:perustiedot child])
    [[:tulokset :laskentatyokalu]]
    (for [child [:nimi-fi :nimi-sv :valmistumisvuosi :rakennusosa :katuosoite-fi
                 :katuosoite-sv :postinumero :postitoimipaikka-fi
@@ -81,7 +84,9 @@
      [:lahtotiedot :lammitys parent child])
    [[:lahtotiedot :jaahdytysjarjestelma :jaahdytyskauden-painotettu-kylmakerroin]
     [:lahtotiedot :lkvn-kaytto :ominaiskulutus]
-    [:lahtotiedot :lkvn-kaytto :lammitysenergian-nettotarve]]
+    [:lahtotiedot :lkvn-kaytto :lammitysenergian-nettotarve]
+    [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
+    [:lahtotiedot :lammitys :lammonjako-lampotilajousto]]
    (for [parent [:henkilot :kuluttajalaitteet :valaistus]
          child [:kayttoaste :lampokuorma]]
      [:lahtotiedot :sis-kuorma parent child])
@@ -117,6 +122,9 @@
    (for [idx (range 6)
          child [:nimi-fi :nimi-sv :vuosikulutus :vuosikulutus-nettoala]]
      [:tulokset :uusiutuvat-omavaraisenergiat idx child])
+   (for [child [:aurinkosahko :aurinkolampo :tuulisahko :lampopumppu
+                :muulampo :muusahko]]
+     [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto child])
    (for [parent [:tilojen-lammitys :tuloilman-lammitys :kayttoveden-valmistus]
          child [:sahko :lampo]]
      [:tulokset :tekniset-jarjestelmat parent child])
@@ -170,7 +178,15 @@
                 :polttoaineet-vuosikulutus-yhteensa-nettoala
                 :kaukojaahdytys-vuosikulutus-yhteensa
                 :kaukojaahdytys-vuosikulutus-yhteensa-nettoala
-                :summa :summa-nettoala]]
+                :summa :summa-nettoala
+                :tietojen-alkuperavuosi
+                :lisatietoja-fi :lisatietoja-sv
+                :uusiutuvat-polttoaineet-vuosikulutus-yhteensa
+                :uusiutuvat-polttoaineet-vuosikulutus-yhteensa-nettoala
+                :fossiiliset-polttoaineet-vuosikulutus-yhteensa
+                :fossiiliset-polttoaineet-vuosikulutus-yhteensa-nettoala
+                :uusiutuva-energia-vuosituotto-yhteensa
+                :uusiutuva-energia-vuosituotto-yhteensa-nettoala]]
      [:toteutunut-ostoenergiankulutus child])
    (apply concat
           (for [parent [:ymparys :alapohja-ylapohja :lammitys :iv-ilmastointi
@@ -180,13 +196,26 @@
               [:huomiot parent :teksti-sv]]
              (for [idx (range 3)
                    child [:nimi-fi :nimi-sv :lampo :sahko :jaahdytys
-                          :eluvun-muutos]]
+                          :eluvun-muutos :kasvihuonepaastojen-muutos]]
                [:huomiot parent :toimenpide idx child]))))
+   [[:huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina]]
    (for [child [:suositukset-fi :suositukset-sv :lisatietoja-fi
                 :lisatietoja-sv]]
      [:huomiot child])
    [[:lisamerkintoja-fi]
-    [:lisamerkintoja-sv]]))
+    [:lisamerkintoja-sv]]
+   ;; ET2026: Ilmastoselvitys
+   (for [child [:laatimisajankohta :laatija :yritys :yritys-osoite
+                :yritys-postinumero :yritys-postitoimipaikka :laadintaperuste]]
+     [:ilmastoselvitys child])
+   (for [parent [:rakennus :rakennuspaikka]
+         child [:rakennustuotteiden-valmistus :kuljetukset-tyomaavaihe
+                :rakennustuotteiden-vaihdot :energiankaytto :purkuvaihe]]
+     [:ilmastoselvitys :hiilijalanjalki parent child])
+   (for [parent [:rakennus :rakennuspaikka]
+         child [:uudelleenkaytto :kierratys :ylimaarainen-uusiutuvaenergia
+                :hiilivarastovaikutus :karbonatisoituminen]]
+     [:ilmastoselvitys :hiilikadenjalki parent child])))
 
 (def public-columns
   (let [extra-columns #{[:perustiedot :alakayttotarkoitus-fi]

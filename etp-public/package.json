@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "license": "EUPL v1.2",
   "scripts": {
+    "rebuild-scripted-deps": "npm rebuild sharp --foreground-scripts --ignore-scripts=false",
     "build": "cross-env NODE_ENV=production webpack",
     "dev": "webpack serve",
     "test": "npx --node-options=\"--experimental-vm-modules\" jest",
