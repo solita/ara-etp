@@ -22,6 +22,7 @@
 (def String8 (StringBase 8))
 (def String12 (StringBase 12))
 (def String30 (StringBase 30))
+(def String40 (StringBase 40))
 (def String50 (StringBase 50))
 (def String60 (StringBase 60))
 (def String75 (StringBase 75))
@@ -33,6 +34,7 @@
 (def String1500 (StringBase 1500))
 (def String2500 (StringBase 2500))
 (def String3000 (StringBase 3000))
+(def String4000 (StringBase 4000))
 (def String4600 (StringBase 4600))
 (def String6300 (StringBase 6300))
 

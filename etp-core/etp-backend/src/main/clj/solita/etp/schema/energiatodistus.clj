@@ -362,7 +362,14 @@
   (-> (dissoc-not-in-2026 EnergiatodistusSave2018)
       (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key
                                                          :tayttaa-aplus-vaatimukset   schema/Bool
-                                                         :tayttaa-a0-vaatimukset      schema/Bool}
+                                                         :tayttaa-a0-vaatimukset      schema/Bool
+                                                         :nimi-fi                     common-schema/String50
+                                                         :nimi-sv                     common-schema/String50
+                                                         :katuosoite-fi               common-schema/String50
+                                                         :katuosoite-sv               common-schema/String50
+                                                         :kiinteistotunnus            common-schema/String50
+                                                         :yritys                      {:nimi       common-schema/String40
+                                                                                       :katuosoite common-schema/String40}}
                         :lahtotiedot                    {:energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin schema/Bool
                                                          :lammitys
                                                          {:lammonjako-lampotilajousto schema/Bool}}
@@ -385,9 +392,10 @@
                                                                               :kayttoikaa-jaljella-arvio-vuosina common-schema/IntNonNegative)
                                                          :ymparys           Huomio2026
                                                          :alapohja-ylapohja Huomio2026}
-                        :lisamerkintoja-fi              common-schema/String4600
-                        :lisamerkintoja-sv              common-schema/String4600
-                        :ilmastoselvitys                Ilmastoselvitys})
+                        :ilmastoselvitys                Ilmastoselvitys
+                        :lisamerkintoja-fi              common-schema/String4000
+                        :lisamerkintoja-sv              common-schema/String4000
+                        :laskuriviviite                 common-schema/String50})
       xschema/optional-properties))
 
 (defn ->EnergiatodistusSaveExternal [schema]
