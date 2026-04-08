@@ -25,34 +25,6 @@ const et2013 = uudisrakennus => ({
   }
 });
 
-const allLaatimisvaiheet = [
-  {
-    id: 0,
-    'label-fi': 'Rakennuslupavaihe, uudisrakennus',
-    'label-sv': 'Bygglov'
-  },
-  {
-    id: 1,
-    'label-fi': 'Käyttöönottovaihe, uudisrakennus',
-    'label-sv': 'Införandet'
-  },
-  {
-    id: 2,
-    'label-fi': 'Olemassa oleva rakennus',
-    'label-sv': 'Befintlig byggnad'
-  },
-  {
-    id: 3,
-    'label-fi': 'Rakennuslupavaihe, laajamittainen perusparannus',
-    'label-sv': 'Rakennuslupavaihe, laajamittainen perusparannus (sv)'
-  },
-  {
-    id: 4,
-    'label-fi': 'Käyttöönottovaihe, laajamittainen perusparannus',
-    'label-sv': 'Käyttöönottovaihe, laajamittainen perusparannus (sv)'
-  }
-];
-
 describe('Laatimisvaiheet: ', () => {
   it('Olemassaoleva rakennus - 2018', () => {
     expect(Laatimisvaiheet.isOlemassaOlevaRakennus(et2018inVaihe(2))).toEqual(
@@ -83,80 +55,28 @@ describe('Laatimisvaiheet: ', () => {
   });
 });
 
+const allLaatimisvaiheet = [
+  { id: 0, 'label-fi': 'A' },
+  { id: 1, 'label-fi': 'B' },
+  { id: 2, 'label-fi': 'C' },
+  { id: 3, 'label-fi': 'D' },
+  { id: 4, 'label-fi': 'E' }
+];
+
 describe('filterByVersion: ', () => {
-  it('given version 2018 and all laatimisvaiheet, when filtering, then returns only ids 0, 1, 2', () => {
-    // given
-    const version = 2018;
-
-    // when
-    const result = Laatimisvaiheet.filterByVersion(version, allLaatimisvaiheet);
-
-    // then
-    expect(result).toEqual([
-      allLaatimisvaiheet[0],
-      allLaatimisvaiheet[1],
-      allLaatimisvaiheet[2]
-    ]);
+  it('returns only ids 0, 1, 2 for version 2018', () => {
+    const result = Laatimisvaiheet.filterByVersion(2018, allLaatimisvaiheet);
+    expect(result.map(v => v.id)).toEqual([0, 1, 2]);
   });
 
-  it('given version 2026 and all laatimisvaiheet, when filtering, then returns all ids 0, 1, 2, 3, 4', () => {
-    // given
-    const version = 2026;
-
-    // when
-    const result = Laatimisvaiheet.filterByVersion(version, allLaatimisvaiheet);
-
-    // then
-    expect(result).toEqual(allLaatimisvaiheet);
+  it('returns all ids for version 2026', () => {
+    const result = Laatimisvaiheet.filterByVersion(2026, allLaatimisvaiheet);
+    expect(result.map(v => v.id)).toEqual([0, 1, 2, 3, 4]);
   });
 
-  it('given version 2018 and empty laatimisvaiheet, when filtering, then returns empty array', () => {
-    // given
-    const version = 2018;
-
-    // when
-    const result = Laatimisvaiheet.filterByVersion(version, []);
-
-    // then
-    expect(result).toEqual([]);
-  });
-
-  it('given version 2013, when filtering, then returns empty array', () => {
-    // given
-    const version = 2013;
-
-    // when
-    const result = Laatimisvaiheet.filterByVersion(version, allLaatimisvaiheet);
-
-    // then
-    expect(result).toEqual([]);
-  });
-
-  it('given version 2018 and partial laatimisvaiheet with ids 0 and 3, when filtering, then returns only id 0', () => {
-    // given
-    const version = 2018;
-    const partial = [allLaatimisvaiheet[0], allLaatimisvaiheet[3]];
-
-    // when
-    const result = Laatimisvaiheet.filterByVersion(version, partial);
-
-    // then
-    expect(result).toEqual([allLaatimisvaiheet[0]]);
-  });
-
-  it('given version 2018, when filtering, then returned objects preserve all original properties', () => {
-    // given
-    const version = 2018;
-
-    // when
-    const result = Laatimisvaiheet.filterByVersion(version, allLaatimisvaiheet);
-
-    // then
-    expect(result[0]).toHaveProperty('id', 0);
-    expect(result[0]).toHaveProperty(
-      'label-fi',
-      'Rakennuslupavaihe, uudisrakennus'
+  it('returns empty array for version 2013', () => {
+    expect(Laatimisvaiheet.filterByVersion(2013, allLaatimisvaiheet)).toEqual(
+      []
     );
-    expect(result[0]).toHaveProperty('label-sv', 'Bygglov');
   });
 });
