@@ -462,4 +462,59 @@ describe('EtHakuSchema', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('ET2026-only boolean fields version constraint', () => {
+    // These two boolean fields exist in all versions as NOT NULL DEFAULT false (migration v5.60),
+    // so a bare `= false` query would incorrectly return ET2013/ET2018 certificates.
+    // The format function must inject `['=', 'energiatodistus.versio', 2026]` alongside the
+    // boolean condition so that searches are scoped to ET2026 only.
+
+    // Both ET2026-only boolean fields, tested with both true and false values
+    const et2026BooleanFields = [
+      'energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin',
+      'energiatodistus.lahtotiedot.lammitys.lammonjako-lampotilajousto'
+    ];
+
+    it.each(et2026BooleanFields)(
+      '%s: format includes versio=2026 constraint for both true and false',
+      key => {
+        const op = Schema.paakayttajaSchema[key][0];
+
+        for (const value of [true, false]) {
+          const result = op.operation.format(
+            op.operation.serverCommand,
+            op.key,
+            value
+          );
+          expect(result).toContainEqual(['=', 'energiatodistus.versio', 2026]);
+        }
+      }
+    );
+
+    // Compared to the above - julkinen-rakennus exists in all certificate versions (pt$julkinen_rakennus is
+    // always present and carries real data), so it must NOT receive a versio constraint.
+    it('julkinen-rakennus: format does not add versio constraint – field exists in all certificate versions', () => {
+      // Given: boolean field present across all certificate versions
+      const key = 'energiatodistus.perustiedot.julkinen-rakennus';
+      const op = Schema.paakayttajaSchema[key][0];
+      // When: format is called with true and false
+      const resultTrue = op.operation.format(
+        op.operation.serverCommand,
+        op.key,
+        true
+      );
+      const resultFalse = op.operation.format(
+        op.operation.serverCommand,
+        op.key,
+        false
+      );
+      // Then: neither result contains a versio constraint
+      const hasVersioConstraint = result =>
+        result.some(
+          entry => Array.isArray(entry) && entry[1] === 'energiatodistus.versio'
+        );
+      expect(hasVersioConstraint(resultTrue)).toBe(false);
+      expect(hasVersioConstraint(resultFalse)).toBe(false);
+    });
+  });
 });

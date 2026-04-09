@@ -183,18 +183,21 @@ const singleBoolean = key => ({
   type: OPERATOR_TYPES.BOOLEAN
 });
 
-const uudisrakennusEquals = key => ({
+const versionScopedBoolean = versio => key => ({
   operation: {
     ...eq,
-    format: R.curry((command, key, uudisrakennus) => [
-      ['=', 'energiatodistus.versio', 2013],
-      [command, key, uudisrakennus]
+    format: R.curry((command, key, value) => [
+      ['=', 'energiatodistus.versio', versio],
+      [command, key, value]
     ])
   },
   key,
   defaultValues: () => [true],
   type: OPERATOR_TYPES.BOOLEAN
 });
+
+const et2026OnlyBoolean = versionScopedBoolean(2026);
+const uudisrakennusEquals = versionScopedBoolean(2013);
 
 const laatijaEquals = key => ({
   operation: eq,
@@ -441,7 +444,9 @@ const perustiedot = {
 
 const lahtotiedot = {
   'lammitetty-nettoala': [...numberComparisons],
-  'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': [singleBoolean],
+  'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': [
+    et2026OnlyBoolean
+  ],
   rakennusvaippa: {
     ilmanvuotoluku: [...numberComparisons],
     ulkoseinat: {
@@ -564,7 +569,7 @@ const lahtotiedot = {
       'lampohavio-lammittamaton-tila': [...numberComparisons],
       'lampopumppu-tuotto-osuus': [...numberComparisons]
     },
-    'lammonjako-lampotilajousto': [singleBoolean],
+    'lammonjako-lampotilajousto': [et2026OnlyBoolean],
     takka: { maara: [...numberComparisons], tuotto: [...numberComparisons] },
     ilmalampopumppu: {
       maara: [...numberComparisons],
