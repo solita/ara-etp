@@ -21,9 +21,8 @@
             [solita.etp.schema.viesti :as viesti-schema]
             [solita.etp.security :as security]
             [solita.etp.service.concurrent :as concurrent]
-             [solita.etp.service.energiatodistus :as energiatodistus-service]
-             [solita.etp.service.energiatodistus-destruction :as energiatodistus-destruction-service]
-             [solita.etp.service.energiatodistus-schema-constraints :as schema-constraints-service]
+            [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.energiatodistus-destruction :as energiatodistus-destruction-service]
             [solita.etp.service.energiatodistus-csv :as energiatodistus-csv-service]
             [solita.etp.service.energiatodistus-pdf :as energiatodistus-pdf-service]
             [solita.etp.service.energiatodistus-search :as energiatodistus-search-service]
@@ -301,9 +300,4 @@
                                  db
                                  aws-s3-client
                                  whoami)
-                               "Expired energiatodistukset destruction failed")))}}]
-    ["/schema-constraints/:versio"
-     {:get {:summary    "Palauttaa energiatodistuksen Prismatic Schema -rajoitteet (string max-length, numeric min/max) testikäyttöön."
-            :parameters {:path {:versio common-schema/Key}}
-            :handler    (fn [{{{:keys [versio]} :path} :parameters}]
-                          (r/response (schema-constraints-service/schema-constraints versio)))}}]]])
+                               "Expired energiatodistukset destruction failed")))}}]]])
