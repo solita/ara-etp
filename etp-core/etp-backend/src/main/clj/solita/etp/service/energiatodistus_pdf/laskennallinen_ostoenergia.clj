@@ -2,7 +2,6 @@
   (:require
     [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc]
-    [solita.etp.service.e-luokka :as e-luokka-service]
     [solita.etp.service.energiatodistus-pdf.ilmastoselvitys :as ilmastoselvitys]))
 
 (defn- fmt
@@ -106,7 +105,7 @@
   [versio energiatodistus]
   (when (= versio 2026)
     (let [nettoala  (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
-          e-luku    (e-luokka-service/e-luku versio energiatodistus)]
+          e-luku    (get-in energiatodistus [:tulokset :e-luku])]
       (when (and nettoala (pos? nettoala) (some? e-luku))
         (let [tuotto      (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto])
               hyodynnetty (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat])
