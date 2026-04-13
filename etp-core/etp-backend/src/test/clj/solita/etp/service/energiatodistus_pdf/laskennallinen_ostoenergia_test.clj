@@ -35,7 +35,6 @@
           "ostoenergia-tiedot should contain a dash when calculation returns nil")))
 
 ;; Helper to build a minimal energiatodistus data map for the calculation.
-;; e-luku is provided directly as it is now read from [:tulokset :e-luku].
 (defn- make-et
   "Build a minimal energiatodistus map for uusiutuvan-energian-osuus testing.
    nettoala:        lammitetty-nettoala value
