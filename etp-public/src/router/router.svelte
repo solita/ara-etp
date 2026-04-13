@@ -40,7 +40,7 @@
 
   router('*', ({ pathname, querystring }, next) => {
     activePath.set(pathname);
-    params = parse(querystring);
+    params = parse(querystring, { decoder: str => str });
     next();
   });
   router('/ethaku', () => {
