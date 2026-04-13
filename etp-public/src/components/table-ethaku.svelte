@@ -24,6 +24,8 @@
       aktluokat = kayttotarkoitusluokat['2013'].alakayttotarkoitusluokat;
     else if (parseInt(versio) === 2018)
       aktluokat = kayttotarkoitusluokat['2018'].alakayttotarkoitusluokat;
+    else if (parseInt(versio) === 2026)
+      aktluokat = kayttotarkoitusluokat['2026'].alakayttotarkoitusluokat;
     else return '';
 
     let foundKayttotarkoitusluokka = aktluokat.find(

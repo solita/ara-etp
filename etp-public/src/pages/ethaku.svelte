@@ -19,6 +19,7 @@
   import TableEThaku from '@Component/table-ethaku';
   import Pagination from '@Component/pagination';
   import { postinumerot } from '@/stores';
+  import InfoTooltip, { AnchorPosition } from '@Component/info-tooltip';
 
   import * as EtHakuUtils from '@/utilities/ethaku';
   import * as EtApi from '@/api/energiatodistus-api';
@@ -55,8 +56,10 @@
     EtApi.kayttotarkoitusluokat(fetch, 2013),
     EtApi.kayttotarkoitusluokat(fetch, 2018),
     EtApi.alakayttotarkoitusluokat(fetch, 2013),
-    EtApi.alakayttotarkoitusluokat(fetch, 2018)
-  ]).then(([kt2013, kt2018, akt2013, akt2018]) => ({
+    EtApi.alakayttotarkoitusluokat(fetch, 2018),
+    EtApi.kayttotarkoitusluokat(fetch, 2026),
+    EtApi.alakayttotarkoitusluokat(fetch, 2026)
+  ]).then(([kt2013, kt2018, akt2013, akt2018, kt2026, akt2026]) => ({
     '0': {
       kayttotarkoitusluokat: [],
       alakayttotarkoitusluokat: []
@@ -68,6 +71,10 @@
     '2018': {
       kayttotarkoitusluokat: kt2018,
       alakayttotarkoitusluokat: akt2018
+    },
+    '2026': {
+      kayttotarkoitusluokat: kt2026,
+      alakayttotarkoitusluokat: akt2026
     }
   }));
 
@@ -732,22 +739,35 @@
         </div>
         <div
           class="tarkennettu-row w-full mx-auto center flex flex-col md:flex-row items-center">
-          <span
-            class="tarkennettu-label w-full md:w-1/2 text-ashblue tracking-widest">
-            {$_('ETHAKU_E_LUKU')}
-          </span>
+          {#if searchmodel['versio'] === '2018' || searchmodel['versio'] === '2013'}
+            <span
+              class="tarkennettu-label w-full md:w-1/2 text-ashblue tracking-widest">
+              {$_('ETHAKU_E_LUKU')}
+            </span>
+          {:else}
+            <span
+              class="tarkennettu-label w-full md:w-1/2 text-ashblue tracking-widest">
+              {$_('ETHAKU_E_LUKU2026')}
+            </span>
+          {/if}
           <div class="w-full md:w-1/2">
             <InputELuokka
               name={'tulokset.e-luokka_in'}
-              group={searchmodel['tulokset.e-luokka_in']} />
+              group={searchmodel['tulokset.e-luokka_in']}
+              versio={searchmodel['versio']} />
           </div>
         </div>
         <div
           class="tarkennettu-row w-full mx-auto center flex flex-col md:flex-row items-center">
-          <span
-            class="tarkennettu-label w-full md:w-1/2 text-ashblue tracking-widest">
-            {$_('ETHAKU_LAMMITETTY_NETTOALA')}
-          </span>
+          <div class="w-full lg:w-1/2">
+            <InfoTooltip
+              tooltip={$_('HYOTYPINTA-ALA_TOOLTIP')}
+              title={$_('HYOTYPINTA-ALA')}>
+              <span class="tarkennettu-label text-ashblue tracking-widest">
+                {$_('HYOTYPINTA-ALA')}
+              </span>
+            </InfoTooltip>
+          </div>
           <div class="w-full md:w-1/2 flex justify-between items-center">
             <div class="w-2/5">
               <InputNumber
