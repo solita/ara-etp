@@ -792,7 +792,6 @@ export const laatijaSchema = R.compose(
   R.omit([
     'energiatodistus.korvattu-energiatodistus-id',
     'energiatodistus.perustiedot.kiinteistotunnus',
-    'energiatodistus.julkinen-rakennus',
     ...localizedField('energiatodistus.perustiedot.keskeiset-suositukset'),
     ...localizedField('energiatodistus.lisamerkintoja'),
     'energiatodistus.lahtotiedot.rakennusvaippa.ilmanvuotoluku',

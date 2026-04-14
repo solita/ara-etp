@@ -466,118 +466,42 @@ describe('EtHakuSchema', () => {
     });
   });
 
-  describe('laatijaSchema regression – existing fields', () => {
-    // Regression tests: these fields already exist in laatijaSchema.
-    // These tests MAY pass in the red phase.
-
-    it('laatijaSchema includes energiatodistus.versio', () => {
-      // Given: the laatija schema
-      const keys = Object.keys(Schema.laatijaSchema);
-      // When: we check for the versio field
-      // Then: it should be present
-      expect(keys).toContain('energiatodistus.versio');
-    });
-
-    it('laatijaSchema includes energiatodistus.tulokset.e-luokka', () => {
-      // Given: the laatija schema
-      const keys = Object.keys(Schema.laatijaSchema);
-      // When: we check for the e-luokka field
-      // Then: it should be present
-      expect(keys).toContain('energiatodistus.tulokset.e-luokka');
-    });
-  });
-
   describe('laatijaSchema – new ET2026 search fields', () => {
-    // New feature tests: these fields are NOT yet in laatijaSchema.
-    // These tests MUST fail in the red phase.
+    // Compares operator structure between schemas without function references
+    const toStructure = ops =>
+      ops.map(op => ({
+        key: op.key,
+        type: op.type,
+        serverCommand: op.operation.serverCommand,
+        browserCommand: op.operation.browserCommand
+      }));
 
-    it('laatijaSchema includes energiatodistus.perustiedot.havainnointikayntityyppi-id', () => {
-      // Given: the laatija schema
-      const keys = Object.keys(Schema.laatijaSchema);
-      // When: we check for the havainnointikayntityyppi-id field
-      // Then: it should be present
-      expect(keys).toContain(
-        'energiatodistus.perustiedot.havainnointikayntityyppi-id'
-      );
-    });
+    const newET2026Fields = [
+      'energiatodistus.perustiedot.havainnointikayntityyppi-id',
+      'energiatodistus.tulokset.kasvihuonepaastot-per-nelio',
+      'energiatodistus.tulokset.uusiutuvan-energian-osuus'
+    ];
 
-    it('laatijaSchema havainnointikayntityyppi-id uses correct operator type', () => {
-      // Given: the laatija and paakayttaja schemas
-      const fieldKey =
-        'energiatodistus.perustiedot.havainnointikayntityyppi-id';
-      // When: we extract structural properties (excluding function references)
-      const laatijaField = Schema.laatijaSchema[fieldKey];
-      const paakayttajaField = Schema.paakayttajaSchema[fieldKey];
-      // Then: both fields should exist and their structure should be identical
-      expect(laatijaField).toBeDefined();
-      expect(paakayttajaField).toBeDefined();
-      const toStructure = ops =>
-        ops.map(op => ({
-          key: op.key,
-          type: op.type,
-          serverCommand: op.operation.serverCommand,
-          browserCommand: op.operation.browserCommand
-        }));
-      expect(toStructure(laatijaField)).toEqual(toStructure(paakayttajaField));
-    });
+    it.each(newET2026Fields)(
+      'laatijaSchema includes %s',
+      fieldKey => {
+        const keys = Object.keys(Schema.laatijaSchema);
+        expect(keys).toContain(fieldKey);
+      }
+    );
 
-    it('laatijaSchema includes energiatodistus.tulokset.kasvihuonepaastot-per-nelio', () => {
-      // Given: the laatija schema
-      const keys = Object.keys(Schema.laatijaSchema);
-      // When: we check for the kasvihuonepaastot-per-nelio field
-      // Then: it should be present
-      expect(keys).toContain(
-        'energiatodistus.tulokset.kasvihuonepaastot-per-nelio'
-      );
-    });
-
-    it('laatijaSchema kasvihuonepaastot-per-nelio matches paakayttajaSchema', () => {
-      // Given: the laatija and paakayttaja schemas
-      const fieldKey = 'energiatodistus.tulokset.kasvihuonepaastot-per-nelio';
-      // When: we extract structural properties (excluding function references)
-      const laatijaField = Schema.laatijaSchema[fieldKey];
-      const paakayttajaField = Schema.paakayttajaSchema[fieldKey];
-      // Then: both fields should exist and their structure should be identical
-      expect(laatijaField).toBeDefined();
-      expect(paakayttajaField).toBeDefined();
-      const toStructure = ops =>
-        ops.map(op => ({
-          key: op.key,
-          type: op.type,
-          serverCommand: op.operation.serverCommand,
-          browserCommand: op.operation.browserCommand
-        }));
-      expect(toStructure(laatijaField)).toEqual(toStructure(paakayttajaField));
-    });
-
-    it('laatijaSchema includes energiatodistus.tulokset.uusiutuvan-energian-osuus', () => {
-      // Given: the laatija schema
-      const keys = Object.keys(Schema.laatijaSchema);
-      // When: we check for the uusiutuvan-energian-osuus field
-      // Then: it should be present
-      expect(keys).toContain(
-        'energiatodistus.tulokset.uusiutuvan-energian-osuus'
-      );
-    });
-
-    it('laatijaSchema uusiutuvan-energian-osuus matches paakayttajaSchema', () => {
-      // Given: the laatija and paakayttaja schemas
-      const fieldKey = 'energiatodistus.tulokset.uusiutuvan-energian-osuus';
-      // When: we extract structural properties (excluding function references)
-      const laatijaField = Schema.laatijaSchema[fieldKey];
-      const paakayttajaField = Schema.paakayttajaSchema[fieldKey];
-      // Then: both fields should exist and their structure should be identical
-      expect(laatijaField).toBeDefined();
-      expect(paakayttajaField).toBeDefined();
-      const toStructure = ops =>
-        ops.map(op => ({
-          key: op.key,
-          type: op.type,
-          serverCommand: op.operation.serverCommand,
-          browserCommand: op.operation.browserCommand
-        }));
-      expect(toStructure(laatijaField)).toEqual(toStructure(paakayttajaField));
-    });
+    it.each(newET2026Fields)(
+      'laatijaSchema %s matches paakayttajaSchema',
+      fieldKey => {
+        const laatijaField = Schema.laatijaSchema[fieldKey];
+        const paakayttajaField = Schema.paakayttajaSchema[fieldKey];
+        expect(laatijaField).toBeDefined();
+        expect(paakayttajaField).toBeDefined();
+        expect(toStructure(laatijaField)).toEqual(
+          toStructure(paakayttajaField)
+        );
+      }
+    );
   });
 
   describe('ET2026-only boolean fields version constraint', () => {
