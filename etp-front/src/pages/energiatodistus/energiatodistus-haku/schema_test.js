@@ -505,11 +505,20 @@ describe('EtHakuSchema', () => {
       // Given: the laatija and paakayttaja schemas
       const fieldKey =
         'energiatodistus.perustiedot.havainnointikayntityyppi-id';
-      // When: we compare the field definitions
+      // When: we extract structural properties (excluding function references)
       const laatijaField = Schema.laatijaSchema[fieldKey];
       const paakayttajaField = Schema.paakayttajaSchema[fieldKey];
-      // Then: they should be identical
-      expect(laatijaField).toEqual(paakayttajaField);
+      // Then: both fields should exist and their structure should be identical
+      expect(laatijaField).toBeDefined();
+      expect(paakayttajaField).toBeDefined();
+      const toStructure = ops =>
+        ops.map(op => ({
+          key: op.key,
+          type: op.type,
+          serverCommand: op.operation.serverCommand,
+          browserCommand: op.operation.browserCommand
+        }));
+      expect(toStructure(laatijaField)).toEqual(toStructure(paakayttajaField));
     });
 
     it('laatijaSchema includes energiatodistus.tulokset.kasvihuonepaastot-per-nelio', () => {
@@ -525,11 +534,20 @@ describe('EtHakuSchema', () => {
     it('laatijaSchema kasvihuonepaastot-per-nelio matches paakayttajaSchema', () => {
       // Given: the laatija and paakayttaja schemas
       const fieldKey = 'energiatodistus.tulokset.kasvihuonepaastot-per-nelio';
-      // When: we compare the field definitions
+      // When: we extract structural properties (excluding function references)
       const laatijaField = Schema.laatijaSchema[fieldKey];
       const paakayttajaField = Schema.paakayttajaSchema[fieldKey];
-      // Then: they should be identical
-      expect(laatijaField).toEqual(paakayttajaField);
+      // Then: both fields should exist and their structure should be identical
+      expect(laatijaField).toBeDefined();
+      expect(paakayttajaField).toBeDefined();
+      const toStructure = ops =>
+        ops.map(op => ({
+          key: op.key,
+          type: op.type,
+          serverCommand: op.operation.serverCommand,
+          browserCommand: op.operation.browserCommand
+        }));
+      expect(toStructure(laatijaField)).toEqual(toStructure(paakayttajaField));
     });
 
     it('laatijaSchema includes energiatodistus.tulokset.uusiutuvan-energian-osuus', () => {
@@ -545,11 +563,20 @@ describe('EtHakuSchema', () => {
     it('laatijaSchema uusiutuvan-energian-osuus matches paakayttajaSchema', () => {
       // Given: the laatija and paakayttaja schemas
       const fieldKey = 'energiatodistus.tulokset.uusiutuvan-energian-osuus';
-      // When: we compare the field definitions
+      // When: we extract structural properties (excluding function references)
       const laatijaField = Schema.laatijaSchema[fieldKey];
       const paakayttajaField = Schema.paakayttajaSchema[fieldKey];
-      // Then: they should be identical
-      expect(laatijaField).toEqual(paakayttajaField);
+      // Then: both fields should exist and their structure should be identical
+      expect(laatijaField).toBeDefined();
+      expect(paakayttajaField).toBeDefined();
+      const toStructure = ops =>
+        ops.map(op => ({
+          key: op.key,
+          type: op.type,
+          serverCommand: op.operation.serverCommand,
+          browserCommand: op.operation.browserCommand
+        }));
+      expect(toStructure(laatijaField)).toEqual(toStructure(paakayttajaField));
     });
   });
 
