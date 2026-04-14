@@ -27,6 +27,7 @@ The agent should not attempt to fix the test without user input.
 
 # Ways of working
 
+- Read the relevant README files to understand how to run the tests
 - Run the tests before making any code changes to confirm that they fail as expected and to understand the extent of work remaining.
 - Address failing tests one at a time, implementing just enough code to make each test pass before moving on to the next.
 - Continuously run the tests after each change to ensure that new code does not break existing functionality
