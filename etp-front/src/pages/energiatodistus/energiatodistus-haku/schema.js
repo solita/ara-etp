@@ -793,7 +793,6 @@ export const laatijaSchema = R.compose(
     'energiatodistus.korvattu-energiatodistus-id',
     'energiatodistus.perustiedot.kiinteistotunnus',
     'energiatodistus.julkinen-rakennus',
-    'energiatodistus.perustiedot.havainnointikayntityyppi-id',
     ...localizedField('energiatodistus.perustiedot.keskeiset-suositukset'),
     ...localizedField('energiatodistus.lisamerkintoja'),
     'energiatodistus.lahtotiedot.rakennusvaippa.ilmanvuotoluku',
@@ -808,7 +807,7 @@ export const laatijaSchema = R.compose(
   ),
   R.over(
     R.lensPath(['energiatodistus', 'tulokset']),
-    R.pick(['e-luku', 'e-luokka'])
+    R.pick(['e-luku', 'e-luokka', 'kasvihuonepaastot-per-nelio', 'uusiutuvan-energian-osuus'])
   ),
   R.dissocPath(['energiatodistus', 'toteutunut-ostoenergiankulutus']),
   R.dissocPath(['energiatodistus', 'huomiot'])
