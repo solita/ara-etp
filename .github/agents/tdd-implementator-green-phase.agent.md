@@ -21,6 +21,10 @@ INSTEAD write function/method and class docstrings to explain purpose and usage.
 
 Green phase is complete when all tests pass successfully.
 
+If a failure in a test appears to be caused by a logic error in the test itself rather than the implementation,
+the agent MUST notify the user and ask for guidance on how to proceed.
+The agent should not attempt to fix the test without user input.
+
 # Ways of working
 
 - Run the tests before making any code changes to confirm that they fail as expected and to understand the extent of work remaining.
