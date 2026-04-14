@@ -16,7 +16,19 @@
   $: hasPermission =
     !Kayttajat.isLaatija(whoami) ||
     Maybe.fold(false, R.equals(whoami.id), energiatodistus['laatija-id']);
+
+  $: hasPpp = Maybe.isSome(energiatodistus['perusparannuspassi-id']);
 </script>
+
+<style type="text/postcss">
+  table :global(.etp-table--th),
+  table :global(.etp-table--td) {
+    @apply px-1.5;
+  }
+  table :global(.etp-table--th) {
+    @apply whitespace-nowrap;
+  }
+</style>
 
 <div class="overflow-x-auto">
   <table class="etp-table">
@@ -25,6 +37,11 @@
         <th class="etp-table--th">
           {$_('energiatodistus.korvaavuus.table.tunnus')}
         </th>
+        {#if hasPpp}
+          <th class="etp-table--th">
+            {$_('energiatodistus.korvaavuus.table.ppp')}
+          </th>
+        {/if}
         <th class="etp-table--th">
           {$_('energiatodistus.korvaavuus.table.ktl')}
         </th>
@@ -57,6 +74,11 @@
         <td class="etp-table--td">
           {energiatodistus.id}
         </td>
+        {#if hasPpp}
+          <td class="etp-table--td">
+            {Maybe.orSome('', energiatodistus['perusparannuspassi-id'])}
+          </td>
+        {/if}
         <td class="etp-table--td">
           {Maybe.orSome('', energiatodistus.perustiedot.kayttotarkoitus)}
         </td>

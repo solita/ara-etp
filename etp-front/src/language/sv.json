@@ -507,7 +507,7 @@
         "nimi": "Byggnadens namn",
         "osoite": "Adress",
         "laatija": "Upprätttare",
-        "ppp": "PPP"
+        "ppp": "PPP tunnus"
       },
       "validation": {
         "invalid-tila": "Energicertifikatet som ersätts ska vara undertecknat eller ha förkastats.",

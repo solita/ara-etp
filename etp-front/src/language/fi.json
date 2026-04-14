@@ -529,7 +529,7 @@
         "nimi": "Rakennuksen nimi",
         "osoite": "Osoite",
         "laatija": "Laatija",
-        "ppp": "PPP"
+        "ppp": "PPP tunnus"
       },
       "ehdotus": {
         "info-p1": "Järjestelmä on löytänyt energiatodistuksia, jotka voivat liittyä samaan rakennukseen ja käyttötarkoitukseen.",
