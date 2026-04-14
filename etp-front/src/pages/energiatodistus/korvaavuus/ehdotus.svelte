@@ -31,7 +31,9 @@
   let loading = false;
   let korvattavat = [];
 
-  $: anyHasPpp = korvattavat.some(k => Maybe.isSome(k['perusparannuspassi-id']));
+  $: anyHasPpp = korvattavat.some(k =>
+    Maybe.isSome(k['perusparannuspassi-id'])
+  );
 
   const loadKorvattavat = energiatodistus => {
     loading = true;
