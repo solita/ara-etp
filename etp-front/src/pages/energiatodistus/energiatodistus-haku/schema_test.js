@@ -206,6 +206,7 @@ describe('EtHakuSchema', () => {
         'energiatodistus.laskuriviviite',
         'energiatodistus.perustiedot.alakayttotarkoitusluokka',
         'energiatodistus.perustiedot.havainnointikaynti',
+        'energiatodistus.perustiedot.havainnointikayntityyppi-id',
         'energiatodistus.perustiedot.julkinen-rakennus',
         'energiatodistus.perustiedot.katuosoite-*',
         'energiatodistus.perustiedot.kayttotarkoitus',
@@ -223,6 +224,8 @@ describe('EtHakuSchema', () => {
         'energiatodistus.tila-id',
         'energiatodistus.tulokset.e-luku',
         'energiatodistus.tulokset.e-luokka',
+        'energiatodistus.tulokset.kasvihuonepaastot-per-nelio',
+        'energiatodistus.tulokset.uusiutuvan-energian-osuus',
         'energiatodistus.versio',
         'energiatodistus.voimassaolo-paattymisaika',
         'kunta.id',
@@ -460,6 +463,93 @@ describe('EtHakuSchema', () => {
         'postinumero.label'
       ];
       expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('laatijaSchema regression – existing fields', () => {
+    // Regression tests: these fields already exist in laatijaSchema.
+    // These tests MAY pass in the red phase.
+
+    it('laatijaSchema includes energiatodistus.versio', () => {
+      // Given: the laatija schema
+      const keys = Object.keys(Schema.laatijaSchema);
+      // When: we check for the versio field
+      // Then: it should be present
+      expect(keys).toContain('energiatodistus.versio');
+    });
+
+    it('laatijaSchema includes energiatodistus.tulokset.e-luokka', () => {
+      // Given: the laatija schema
+      const keys = Object.keys(Schema.laatijaSchema);
+      // When: we check for the e-luokka field
+      // Then: it should be present
+      expect(keys).toContain('energiatodistus.tulokset.e-luokka');
+    });
+  });
+
+  describe('laatijaSchema – new ET2026 search fields', () => {
+    // New feature tests: these fields are NOT yet in laatijaSchema.
+    // These tests MUST fail in the red phase.
+
+    it('laatijaSchema includes energiatodistus.perustiedot.havainnointikayntityyppi-id', () => {
+      // Given: the laatija schema
+      const keys = Object.keys(Schema.laatijaSchema);
+      // When: we check for the havainnointikayntityyppi-id field
+      // Then: it should be present
+      expect(keys).toContain(
+        'energiatodistus.perustiedot.havainnointikayntityyppi-id'
+      );
+    });
+
+    it('laatijaSchema havainnointikayntityyppi-id uses correct operator type', () => {
+      // Given: the laatija and paakayttaja schemas
+      const fieldKey =
+        'energiatodistus.perustiedot.havainnointikayntityyppi-id';
+      // When: we compare the field definitions
+      const laatijaField = Schema.laatijaSchema[fieldKey];
+      const paakayttajaField = Schema.paakayttajaSchema[fieldKey];
+      // Then: they should be identical
+      expect(laatijaField).toEqual(paakayttajaField);
+    });
+
+    it('laatijaSchema includes energiatodistus.tulokset.kasvihuonepaastot-per-nelio', () => {
+      // Given: the laatija schema
+      const keys = Object.keys(Schema.laatijaSchema);
+      // When: we check for the kasvihuonepaastot-per-nelio field
+      // Then: it should be present
+      expect(keys).toContain(
+        'energiatodistus.tulokset.kasvihuonepaastot-per-nelio'
+      );
+    });
+
+    it('laatijaSchema kasvihuonepaastot-per-nelio matches paakayttajaSchema', () => {
+      // Given: the laatija and paakayttaja schemas
+      const fieldKey = 'energiatodistus.tulokset.kasvihuonepaastot-per-nelio';
+      // When: we compare the field definitions
+      const laatijaField = Schema.laatijaSchema[fieldKey];
+      const paakayttajaField = Schema.paakayttajaSchema[fieldKey];
+      // Then: they should be identical
+      expect(laatijaField).toEqual(paakayttajaField);
+    });
+
+    it('laatijaSchema includes energiatodistus.tulokset.uusiutuvan-energian-osuus', () => {
+      // Given: the laatija schema
+      const keys = Object.keys(Schema.laatijaSchema);
+      // When: we check for the uusiutuvan-energian-osuus field
+      // Then: it should be present
+      expect(keys).toContain(
+        'energiatodistus.tulokset.uusiutuvan-energian-osuus'
+      );
+    });
+
+    it('laatijaSchema uusiutuvan-energian-osuus matches paakayttajaSchema', () => {
+      // Given: the laatija and paakayttaja schemas
+      const fieldKey = 'energiatodistus.tulokset.uusiutuvan-energian-osuus';
+      // When: we compare the field definitions
+      const laatijaField = Schema.laatijaSchema[fieldKey];
+      const paakayttajaField = Schema.paakayttajaSchema[fieldKey];
+      // Then: they should be identical
+      expect(laatijaField).toEqual(paakayttajaField);
     });
   });
 
