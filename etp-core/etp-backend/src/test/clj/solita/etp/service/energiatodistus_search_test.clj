@@ -18,6 +18,7 @@
             [solita.etp.service.laatija :as laatija-service]
             [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.co2-kertoimet :as co2]
+            [solita.etp.service.uusiutuva-energia :as uusiutuva-energia]
             [solita.common.logic :as logic]
             [solita.etp.whoami :as test-whoami])
   (:import (java.time Instant LocalDate)))
@@ -1373,30 +1374,15 @@
 
 ;; --- Uusiutuvan energian osuus helper ---
 
-(def ^:private uusiutuva-kerroin
-  "Coefficients: aurinkosähkö and tuulisähkö use sähkö coeff (0.90),
-   aurinkolämpö uses kaukolämpö coeff (0.38)."
-  {:aurinkosahko 0.90M
-   :tuulisahko   0.90M
-   :aurinkolampo 0.38M})
-
 (defn- uusiutuvan-energian-osuus
-  "Calculate the expected uusiutuvan energian osuus percentage from test data.
-   Returns a long (rounded integer). Uses double arithmetic like the PDF implementation."
+  "Build an energiatodistus-like map from test inputs and delegate to the shared calculation."
   [kokonaistuotanto hyodynnetty nettoala e-luku]
-  (let [coalesce (fn [v] (double (or v 0)))
-        nettoala-d (double nettoala)
-        e-luku-d (double e-luku)
-        osoittaja (/ (+ (* (coalesce (:aurinkosahko kokonaistuotanto)) (double (:aurinkosahko uusiutuva-kerroin)))
-                        (* (coalesce (:tuulisahko kokonaistuotanto)) (double (:tuulisahko uusiutuva-kerroin)))
-                        (* (coalesce (:aurinkolampo kokonaistuotanto)) (double (:aurinkolampo uusiutuva-kerroin))))
-                     nettoala-d)
-        nimittaja (+ e-luku-d
-                     (/ (+ (* (coalesce (:aurinkosahko hyodynnetty)) (double (:aurinkosahko uusiutuva-kerroin)))
-                           (* (coalesce (:tuulisahko hyodynnetty)) (double (:tuulisahko uusiutuva-kerroin)))
-                           (* (coalesce (:aurinkolampo hyodynnetty)) (double (:aurinkolampo uusiutuva-kerroin))))
-                        nettoala-d))]
-    (Math/round (* (/ osoittaja nimittaja) 100.0))))
+  (uusiutuva-energia/uusiutuvan-energian-osuus
+    2026
+    {:lahtotiedot {:lammitetty-nettoala nettoala}
+     :tulokset    {:e-luku                                      e-luku
+                   :uusiutuvat-omavaraisenergiat-kokonaistuotanto kokonaistuotanto
+                   :uusiutuvat-omavaraisenergiat                  hyodynnetty}}))
 
 ;; --- Test 1: Peruslaskenta tunnetuilla arvoilla (ET2026) ---
 
