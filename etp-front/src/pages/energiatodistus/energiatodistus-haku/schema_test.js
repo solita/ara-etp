@@ -482,13 +482,10 @@ describe('EtHakuSchema', () => {
       'energiatodistus.tulokset.uusiutuvan-energian-osuus'
     ];
 
-    it.each(newET2026Fields)(
-      'laatijaSchema includes %s',
-      fieldKey => {
-        const keys = Object.keys(Schema.laatijaSchema);
-        expect(keys).toContain(fieldKey);
-      }
-    );
+    it.each(newET2026Fields)('laatijaSchema includes %s', fieldKey => {
+      const keys = Object.keys(Schema.laatijaSchema);
+      expect(keys).toContain(fieldKey);
+    });
 
     it.each(newET2026Fields)(
       'laatijaSchema %s matches paakayttajaSchema',

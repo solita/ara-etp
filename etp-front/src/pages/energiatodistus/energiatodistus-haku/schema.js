@@ -806,7 +806,12 @@ export const laatijaSchema = R.compose(
   ),
   R.over(
     R.lensPath(['energiatodistus', 'tulokset']),
-    R.pick(['e-luku', 'e-luokka', 'kasvihuonepaastot-per-nelio', 'uusiutuvan-energian-osuus'])
+    R.pick([
+      'e-luku',
+      'e-luokka',
+      'kasvihuonepaastot-per-nelio',
+      'uusiutuvan-energian-osuus'
+    ])
   ),
   R.dissocPath(['energiatodistus', 'toteutunut-ostoenergiankulutus']),
   R.dissocPath(['energiatodistus', 'huomiot'])
