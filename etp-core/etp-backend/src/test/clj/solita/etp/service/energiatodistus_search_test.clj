@@ -1371,33 +1371,254 @@
             id)
            "> with smaller value should find the certificate")))
 
-(t/deftest search-by-uusiutuvan-energian-osuus-stub-zero-test
-  ;; Given: signed certificates exist
-  (let [{:keys [energiatodistukset]} (test-data-set-2026)
-        signed-ids (->> energiatodistukset keys sort (take 2) set)]
-    ;; When: searching by uusiutuvan-energian-osuus = 0
-    ;; Then: all signed certificates are found (stub returns 0 for all)
-    (let [results (search kayttaja-test-data/paakayttaja
-                          [[["="
-                             "energiatodistus.tulokset.uusiutuvan-energian-osuus"
-                             0]]]
+;; --- Uusiutuvan energian osuus helper ---
+
+(def ^:private uusiutuva-kerroin
+  "Coefficients: aurinkosähkö and tuulisähkö use sähkö coeff (0.90),
+   aurinkolämpö uses kaukolämpö coeff (0.38)."
+  {:aurinkosahko 0.90M
+   :tuulisahko   0.90M
+   :aurinkolampo 0.38M})
+
+(defn- uusiutuvan-energian-osuus
+  "Calculate the expected uusiutuvan energian osuus percentage from test data.
+   Returns a long (rounded integer). Uses double arithmetic like the PDF implementation."
+  [kokonaistuotanto hyodynnetty nettoala e-luku]
+  (let [coalesce (fn [v] (double (or v 0)))
+        nettoala-d (double nettoala)
+        e-luku-d (double e-luku)
+        osoittaja (/ (+ (* (coalesce (:aurinkosahko kokonaistuotanto)) (double (:aurinkosahko uusiutuva-kerroin)))
+                        (* (coalesce (:tuulisahko kokonaistuotanto)) (double (:tuulisahko uusiutuva-kerroin)))
+                        (* (coalesce (:aurinkolampo kokonaistuotanto)) (double (:aurinkolampo uusiutuva-kerroin))))
+                     nettoala-d)
+        nimittaja (+ e-luku-d
+                     (/ (+ (* (coalesce (:aurinkosahko hyodynnetty)) (double (:aurinkosahko uusiutuva-kerroin)))
+                           (* (coalesce (:tuulisahko hyodynnetty)) (double (:tuulisahko uusiutuva-kerroin)))
+                           (* (coalesce (:aurinkolampo hyodynnetty)) (double (:aurinkolampo uusiutuva-kerroin))))
+                        nettoala-d))]
+    (Math/round (* (/ osoittaja nimittaja) 100.0))))
+
+;; --- Test 1: Peruslaskenta tunnetuilla arvoilla (ET2026) ---
+
+(t/deftest search-by-uusiutuvan-energian-osuus-2026-test
+  ;; Given: an ET2026 certificate with known renewable energy values
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        nettoala 100M
+        e-luku 150M
+        kokonaistuotanto {:aurinkosahko 500M :tuulisahko 300M :aurinkolampo 200M}
+        hyodynnetty {:aurinkosahko 400M :tuulisahko 250M :aurinkolampo 150M}
+        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+                   (assoc-in [:lahtotiedot :lammitetty-nettoala] nettoala)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko] (:aurinkosahko kokonaistuotanto))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko] (:tuulisahko kokonaistuotanto))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo] (:aurinkolampo kokonaistuotanto))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkosahko] (:aurinkosahko hyodynnetty))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :tuulisahko] (:tuulisahko hyodynnetty))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkolampo] (:aurinkolampo hyodynnetty)))
+        et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    ;; Override e-luku to a known value
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET t$e_luku = ? WHERE id = ?" e-luku et-id])
+    ;; When: we calculate the expected value and search by it
+    (let [expected (uusiutuvan-energian-osuus kokonaistuotanto hyodynnetty nettoala e-luku)
+          results (search kayttaja-test-data/paakayttaja
+                          [[["=" "energiatodistus.tulokset.uusiutuvan-energian-osuus" expected]]]
                           nil nil nil)
           result-ids (set (map :id results))]
-      (t/is (every? #(contains? result-ids %) signed-ids)
-             "All signed certificates should match uusiutuvan-energian-osuus = 0"))))
+      ;; Then: the certificate is found
+      (t/is (contains? result-ids et-id)
+             "ET2026 certificate should be found by calculated uusiutuvan-energian-osuus"))))
 
-(t/deftest search-by-uusiutuvan-energian-osuus-stub-nonzero-test
-  ;; Given: signed certificates exist
-  (test-data-set-2026)
-  ;; When: searching by uusiutuvan-energian-osuus = 1
-  ;; Then: no certificates are found (stub returns 0, not 1)
-  (let [results (search kayttaja-test-data/paakayttaja
-                        [[["="
-                           "energiatodistus.tulokset.uusiutuvan-energian-osuus"
-                           1]]]
-                        nil nil nil)]
-    (t/is (empty? results)
-           "No certificates should match uusiutuvan-energian-osuus = 1")))
+;; --- Test 2: Nolla nettoala (ET2026) ---
+
+(t/deftest search-by-uusiutuvan-energian-osuus-zero-nettoala-test
+  ;; Given: an ET2026 certificate with nettoala set to 0 (via SQL since validation prevents 0)
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        et-add (energiatodistus-test-data/generate-add 2026 true)
+        et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET lt$lammitetty_nettoala = 0 WHERE id = ?" et-id])
+    ;; When: searching by uusiutuvan-energian-osuus = 0
+    ;; Then: the certificate is NOT found (NULL due to division by zero protection)
+    (let [results-zero (search kayttaja-test-data/paakayttaja
+                               [[["=" "energiatodistus.tulokset.uusiutuvan-energian-osuus" 0]]]
+                               nil nil nil)
+          results-any (search kayttaja-test-data/paakayttaja
+                             [[["=" "energiatodistus.tulokset.uusiutuvan-energian-osuus" 50]]]
+                             nil nil nil)]
+      (t/is (not (contains? (set (map :id results-zero)) et-id))
+             "Certificate with zero nettoala should not match = 0")
+      (t/is (not (contains? (set (map :id results-any)) et-id))
+             "Certificate with zero nettoala should not match any value"))))
+
+;; --- Test 3: NULL e-luku (ET2026) ---
+
+(t/deftest search-by-uusiutuvan-energian-osuus-null-e-luku-test
+  ;; Given: an ET2026 certificate with e-luku set to NULL
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko] 100M))
+        et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET t$e_luku = NULL WHERE id = ?" et-id])
+    ;; When: searching by uusiutuvan-energian-osuus = 0
+    ;; Then: the certificate is NOT found (NULL e-luku makes the expression NULL)
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["=" "energiatodistus.tulokset.uusiutuvan-energian-osuus" 0]]]
+                          nil nil nil)]
+      (t/is (not (contains? (set (map :id results)) et-id))
+             "Certificate with NULL e-luku should not match any search value"))))
+
+;; --- Test 4: Puuttuvat (NULL) tuotanto- ja hyödyntämisarvot (ET2026) ---
+
+(t/deftest search-by-uusiutuvan-energian-osuus-null-tuotantoarvot-test
+  ;; Given: an ET2026 certificate where some production/utilization values are nil
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        nettoala 100M
+        e-luku 150M
+        kokonaistuotanto {:aurinkosahko 500M :tuulisahko nil :aurinkolampo nil}
+        hyodynnetty {:aurinkosahko 400M :tuulisahko nil :aurinkolampo nil}
+        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+                   (assoc-in [:lahtotiedot :lammitetty-nettoala] nettoala)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko] (:aurinkosahko kokonaistuotanto))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko] (:tuulisahko kokonaistuotanto))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo] (:aurinkolampo kokonaistuotanto))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkosahko] (:aurinkosahko hyodynnetty))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :tuulisahko] (:tuulisahko hyodynnetty))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkolampo] (:aurinkolampo hyodynnetty)))
+        et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET t$e_luku = ? WHERE id = ?" e-luku et-id])
+    ;; When: calculating expected value with nil values treated as 0 (coalesce behavior)
+    (let [expected (uusiutuvan-energian-osuus kokonaistuotanto hyodynnetty nettoala e-luku)
+          results (search kayttaja-test-data/paakayttaja
+                          [[["=" "energiatodistus.tulokset.uusiutuvan-energian-osuus" expected]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      ;; Then: the certificate is found (NULL values coalesced to 0)
+      (t/is (contains? result-ids et-id)
+             "Certificate with partial NULL production values should be found with coalesced calculation"))))
+
+;; --- Test 5: Kaikki tuotantoarvot nolla (ET2026) ---
+
+(t/deftest search-by-uusiutuvan-energian-osuus-zero-tuotanto-test
+  ;; Given: an ET2026 certificate where all kokonaistuotanto values are 0 (or nil)
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        nettoala 100M
+        e-luku 150M
+        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+                   (assoc-in [:lahtotiedot :lammitetty-nettoala] nettoala)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko] 0M)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko] 0M)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo] 0M)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkosahko] 0M)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :tuulisahko] 0M)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkolampo] 0M))
+        et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET t$e_luku = ? WHERE id = ?" e-luku et-id])
+    ;; When: searching by = 0
+    ;; Then: the certificate is found (numerator 0 → result 0)
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["=" "energiatodistus.tulokset.uusiutuvan-energian-osuus" 0]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      (t/is (contains? result-ids et-id)
+             "Certificate with all zero production values should match uusiutuvan-energian-osuus = 0"))))
+
+;; --- Test 6: Nimittäjä nolla (e-luku 0, hyödynnetyt 0) ---
+
+(t/deftest search-by-uusiutuvan-energian-osuus-zero-nimittaja-test
+  ;; Given: an ET2026 certificate where e-luku = 0 and all hyödynnetty values are 0,
+  ;;        but kokonaistuotanto has non-zero values
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        nettoala 100M
+        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+                   (assoc-in [:lahtotiedot :lammitetty-nettoala] nettoala)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko] 500M)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko] 300M)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo] 200M)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkosahko] 0M)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :tuulisahko] 0M)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkolampo] 0M))
+        et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    ;; Set e-luku to 0 via SQL
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET t$e_luku = 0 WHERE id = ?" et-id])
+    ;; When: searching by = 0
+    ;; Then: the certificate is NOT found (denominator 0 → NULL, no division by zero)
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["=" "energiatodistus.tulokset.uusiutuvan-energian-osuus" 0]]]
+                          nil nil nil)]
+      (t/is (not (contains? (set (map :id results)) et-id))
+             "Certificate with zero denominator should not match any search value"))))
+
+;; --- Test 7: Vertailuoperaattorit (>, <) ---
+
+(t/deftest search-by-uusiutuvan-energian-osuus-comparison-operators-test
+  ;; Given: an ET2026 certificate with known renewable energy values
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        nettoala 100M
+        e-luku 150M
+        kokonaistuotanto {:aurinkosahko 500M :tuulisahko 300M :aurinkolampo 200M}
+        hyodynnetty {:aurinkosahko 400M :tuulisahko 250M :aurinkolampo 150M}
+        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+                   (assoc-in [:lahtotiedot :lammitetty-nettoala] nettoala)
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko] (:aurinkosahko kokonaistuotanto))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko] (:tuulisahko kokonaistuotanto))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo] (:aurinkolampo kokonaistuotanto))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkosahko] (:aurinkosahko hyodynnetty))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :tuulisahko] (:tuulisahko hyodynnetty))
+                   (assoc-in [:tulokset :uusiutuvat-omavaraisenergiat :aurinkolampo] (:aurinkolampo hyodynnetty)))
+        et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET t$e_luku = ? WHERE id = ?" e-luku et-id])
+    (let [expected (uusiutuvan-energian-osuus kokonaistuotanto hyodynnetty nettoala e-luku)]
+      ;; When: < (expected - 1) → certificate NOT found
+      (t/is (not (contains?
+                   (->> (search kayttaja-test-data/paakayttaja
+                                [[["<" "energiatodistus.tulokset.uusiutuvan-energian-osuus" (- expected 1)]]]
+                                nil nil nil)
+                        (map :id) set)
+                   et-id))
+             "< (expected - 1) should not find the certificate")
+      ;; When: > (expected + 1) → certificate NOT found
+      (t/is (not (contains?
+                   (->> (search kayttaja-test-data/paakayttaja
+                                [[[">" "energiatodistus.tulokset.uusiutuvan-energian-osuus" (+ expected 1)]]]
+                                nil nil nil)
+                        (map :id) set)
+                   et-id))
+             "> (expected + 1) should not find the certificate")
+      ;; When: > (expected - 1) → certificate IS found
+      (t/is (contains?
+              (->> (search kayttaja-test-data/paakayttaja
+                           [[[">" "energiatodistus.tulokset.uusiutuvan-energian-osuus" (- expected 1)]]]
+                           nil nil nil)
+                   (map :id) set)
+              et-id)
+             "> (expected - 1) should find the certificate"))))
+
+;; --- Test 8: Vanha todistusversio (ET2018) palauttaa NULL ---
+
+(t/deftest search-by-uusiutuvan-energian-osuus-et2018-returns-null-test
+  ;; Given: an ET2018 certificate (old version)
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        et-add (energiatodistus-test-data/generate-add 2018 true)
+        et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    ;; When: searching by uusiutuvan-energian-osuus = 0
+    ;; Then: the ET2018 certificate is NOT found (CASE WHEN versio = 2026 returns NULL for other versions)
+    (let [results-zero (search kayttaja-test-data/paakayttaja
+                               [[["=" "energiatodistus.tulokset.uusiutuvan-energian-osuus" 0]]]
+                               nil nil nil)
+          results-any (search kayttaja-test-data/paakayttaja
+                             [[["=" "energiatodistus.tulokset.uusiutuvan-energian-osuus" 50]]]
+                             nil nil nil)]
+      (t/is (not (contains? (set (map :id results-zero)) et-id))
+             "ET2018 should not match uusiutuvan-energian-osuus = 0")
+      (t/is (not (contains? (set (map :id results-any)) et-id))
+             "ET2018 should not match uusiutuvan-energian-osuus with any value"))))
 
 (t/deftest search-by-energiankulutuksen-valmius-true-test
   ;; Given: ET2026 with energiankulutuksen-valmius = true, another with false
