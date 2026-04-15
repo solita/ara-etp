@@ -31,6 +31,10 @@
   let loading = false;
   let korvattavat = [];
 
+  $: anyHasPpp = korvattavat.some(k =>
+    Maybe.isSome(k['perusparannuspassi-id'])
+  );
+
   const loadKorvattavat = energiatodistus => {
     loading = true;
     if (
@@ -85,6 +89,13 @@
   h3 span {
     @apply text-lg font-normal lowercase;
   }
+  table :global(.etp-table--th),
+  table :global(.etp-table--td) {
+    @apply px-1.5;
+  }
+  table :global(.etp-table--th) {
+    @apply whitespace-nowrap;
+  }
 </style>
 
 {#if loading}
@@ -118,6 +129,11 @@
                 <th class="etp-table--th">
                   {i18n(i18nRoot + '.table.tunnus')}
                 </th>
+                {#if anyHasPpp}
+                  <th class="etp-table--th">
+                    {i18n(i18nRoot + '.table.ppp')}
+                  </th>
+                {/if}
                 <th class="etp-table--th">
                   {i18n(i18nRoot + '.table.ktl')}
                 </th>
@@ -153,6 +169,11 @@
                     data-cy={`energiatodistus-${korvattava.id}-id-cell`}>
                     {korvattava.id}
                   </td>
+                  {#if anyHasPpp}
+                    <td class="etp-table--td">
+                      {Maybe.orSome('', korvattava['perusparannuspassi-id'])}
+                    </td>
+                  {/if}
                   <td class="etp-table--td">
                     {Maybe.orSome('', korvattava.perustiedot.kayttotarkoitus)}
                   </td>

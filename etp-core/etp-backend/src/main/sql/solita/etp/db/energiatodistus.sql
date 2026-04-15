@@ -90,10 +90,12 @@ from validation_sisainen_kuorma where versio = :versio;
 -- name: select-korvattavat
 select energiatodistus.*,
   fullname(kayttaja.*) "laatija-fullname",
-  korvaava_energiatodistus.id as korvaava_energiatodistus_id
+  korvaava_energiatodistus.id as korvaava_energiatodistus_id,
+  ppp.id as perusparannuspassi_id
 from energiatodistus
   inner join kayttaja on kayttaja.id = energiatodistus.laatija_id
   left join energiatodistus korvaava_energiatodistus on korvaava_energiatodistus.korvattu_energiatodistus_id = energiatodistus.id
+  left join perusparannuspassi ppp on ppp.energiatodistus_id = energiatodistus.id
 where energiatodistus.tila_id in (select allekirjoitettu from et_tilat) and (
   energiatodistus.pt$rakennustunnus = :rakennustunnus or
   (energiatodistus.pt$postinumero = :postinumero and
