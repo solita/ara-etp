@@ -393,10 +393,10 @@ export const v2026 = R.compose(
     lisamerkintoja: String(2, 4000),
     ilmastoselvitys: {
       laatimisajankohta: DateValue(),
-      laatija: String(2, 500),
-      yritys: String(2, 500),
+      laatija: String(2, 50),
+      yritys: String(2, 150),
       'yritys-osoite': String(2, 50),
-      'yritys-postinumero': String(2, 5),
+      'yritys-postinumero': String(2, 8),
       'yritys-postitoimipaikka': String(2, 30),
       hiilijalanjalki: {
         rakennus: {

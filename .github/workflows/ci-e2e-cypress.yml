@@ -13,9 +13,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        etp2026:
-          - false
-          - true
+        include:
+          - suite: default
+            etp2026: false
+            spec: 'cypress/e2e/**/*.cy.js'
+          - suite: etp2026
+            etp2026: true
+            spec: 'cypress/e2e/**/!(energiatodistus-2026-validation).cy.js'
+          - suite: etp2026-validation
+            etp2026: true
+            spec: 'cypress/e2e/laatija/energiatodistus-2026-validation.cy.js'
+    name: test (${{ matrix.suite }})
     steps:
       - uses: actions/checkout@v4
       # Buildx supports GH Actions cache. Build images using it, and load the images to host for docker compose to use
@@ -71,18 +79,19 @@ jobs:
         with:
           working-directory: e2e-tests/cypress
           wait-on: 'https://localhost:3009'
+          spec: ${{ matrix.spec }}
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
           CYPRESS_ETP_2026: "${{ matrix.etp2026 }}"
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-screenshots-etp2026-${{ matrix.etp2026 }}
+          name: cypress-screenshots-${{ matrix.suite }}
           path: e2e-tests/cypress/cypress/screenshots
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-videos-etp2026-${{ matrix.etp2026 }}
+          name: cypress-videos-${{ matrix.suite }}
           path: e2e-tests/cypress/cypress/videos
       - name: Collect docker logs on failure
         if: failure()
@@ -96,7 +105,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: logs-etp2026-${{ matrix.etp2026 }}.tgz
+          name: logs-${{ matrix.suite }}.tgz
           path: ./logs.tgz
 
 
