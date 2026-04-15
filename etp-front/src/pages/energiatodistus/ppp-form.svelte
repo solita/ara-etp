@@ -30,6 +30,7 @@
   export let schema;
   export let pppValidation;
   export let dirty;
+  export let disabled = false;
 
   export let perusparannuspassi;
 
@@ -80,22 +81,24 @@
       id="perusparannuspassi"
       dataCy="perusparannuspassi"
       text={$_('energiatodistus.perusparannuspassi.header')} />
-    {#if !perusparannuspassi.valid}
-      <TextButton
-        dataCy="add-ppp-button"
-        icon="add_circle_outline"
-        text={$_('energiatodistus.perusparannuspassi.add-button')}
-        type="button"
-        largeIcon={true}
-        on:click={onAddPPP} />
-    {:else}
-      <TextButton
-        dataCy="delete-ppp-button"
-        icon="delete_forever"
-        text={$_('energiatodistus.perusparannuspassi.delete-button')}
-        type="button"
-        largeIcon={true}
-        on:click={onDeletePPP} />
+    {#if !disabled}
+      {#if !perusparannuspassi.valid}
+        <TextButton
+          dataCy="add-ppp-button"
+          icon="add_circle_outline"
+          text={$_('energiatodistus.perusparannuspassi.add-button')}
+          type="button"
+          largeIcon={true}
+          on:click={onAddPPP} />
+      {:else}
+        <TextButton
+          dataCy="delete-ppp-button"
+          icon="delete_forever"
+          text={$_('energiatodistus.perusparannuspassi.delete-button')}
+          type="button"
+          largeIcon={true}
+          on:click={onDeletePPP} />
+      {/if}
     {/if}
   </div>
   <div class="flex items-center bg-tertiary p-4">
@@ -124,39 +127,44 @@
     <div class="flex flex-col gap-6">
       <H3 text={$_('perusparannuspassi.passin-perustiedot.header')} />
 
-      <Perustiedot bind:perusparannuspassi schema={saveSchema} />
+      <Perustiedot bind:perusparannuspassi schema={saveSchema} {disabled} />
 
       <H3 text={$_('perusparannuspassi.rakennuksen-perustiedot.header')} />
 
       <RakenteidenUArvot
         bind:perusparannuspassi
         {energiatodistus}
-        schema={saveSchema} />
+        schema={saveSchema}
+        {disabled} />
 
       <Energiajarjestelmat
         bind:perusparannuspassi
         {energiatodistus}
         {inputLanguage}
         {luokittelut}
-        {schema} />
+        {schema}
+        {disabled} />
 
       <H3 text={$_('perusparannuspassi.laskennan-tulokset.header')} />
-      <Vaiheistus bind:perusparannuspassi schema={vaiheSchema} />
+      <Vaiheistus bind:perusparannuspassi schema={vaiheSchema} {disabled} />
 
       <LaskennallinenOstoenergia
         bind:perusparannuspassi
         {energiatodistus}
         {eTehokkuus}
-        {schema} />
-      <UusiutuvaEnergia bind:perusparannuspassi {energiatodistus} {schema} />
+        {schema}
+        {disabled} />
+      <UusiutuvaEnergia bind:perusparannuspassi {energiatodistus} {schema} {disabled} />
       <ToteutunutOstoenergia
         bind:perusparannuspassi
         {energiatodistus}
-        {schema} />
+        {schema}
+        {disabled} />
       <EnergianHinta
         bind:perusparannuspassi
         {energiatodistus}
-        schema={saveSchema} />
+        schema={saveSchema}
+        {disabled} />
 
       <LaskennallinenEnergiaKustannukset
         bind:perusparannuspassi
@@ -174,9 +182,10 @@
         bind:perusparannuspassi
         pppSchema={schema}
         {luokittelut}
-        {inputLanguage} />
+        {inputLanguage}
+        {disabled} />
 
-      <Lisatietoja bind:perusparannuspassi {schema} {inputLanguage} />
+      <Lisatietoja bind:perusparannuspassi {schema} {inputLanguage} {disabled} />
     </div>
   {/if}
 </div>
