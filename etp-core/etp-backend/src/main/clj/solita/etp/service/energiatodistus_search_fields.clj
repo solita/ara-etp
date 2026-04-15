@@ -150,13 +150,13 @@
                               (map (fn [[k kerroin]]
                                      (str (coalesce-col prefix k) " * " kerroin))
                                    kertoimet)))
-             osoittaja (str "(" (weighted-sum "uusiutuvat_omavaraisenergiat_kokonaistuotanto") ")"
-                            " / nullif(energiatodistus.lt$lammitetty_nettoala, 0)")
-             nimittaja (str "energiatodistus.t$e_luku + "
-                            "(" (weighted-sum "uusiutuvat_omavaraisenergiat") ")"
-                            " / nullif(energiatodistus.lt$lammitetty_nettoala, 0)")]
+             numerator (str "(" (weighted-sum "uusiutuvat_omavaraisenergiat_kokonaistuotanto") ")"
+                           " / nullif(energiatodistus.lt$lammitetty_nettoala, 0)")
+             denominator (str "energiatodistus.t$e_luku + "
+                              "(" (weighted-sum "uusiutuvat_omavaraisenergiat") ")"
+                              " / nullif(energiatodistus.lt$lammitetty_nettoala, 0)")]
          (str "case when energiatodistus.versio = 2026 then "
-              "round(" osoittaja " / nullif(" nimittaja ", 0) * 100) end"))
+              "round(" numerator " / nullif(" denominator ", 0) * 100) end"))
        common-schema/NonNegative]
       :uusiutuvat-omavaraisenergiat-kokonaistuotanto
       (per-nettoala-for-schema
