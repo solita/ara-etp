@@ -109,3 +109,22 @@ Nykyiset stub-testit (`search-by-uusiutuvan-energian-osuus-stub-zero-test` ja `s
 
 - SQL-lausekkeen tulee tuottaa yhdenmukaisia tuloksia Clojure-funktion kanssa (ottaen huomioon, että SQL palauttaa numeerisen arvon ja Clojure merkkijonon). Tätä vastaavuutta on hyvä varmistaa testeillä.
 - Tietokannan sarakerakenne `uusiutuvat_omavaraisenergiat_kokonaistuotanto` on ET2026-spesifi. Vanhemmissa todistusversioissa nämä sarakkeet sisältävät NULL-arvoja, mikä tulee huomioida COALESCE-käsittelyssä.
+
+## Toteutuksen tila
+
+> Katselmoitu 2026-04-15. Kaikki speksin mukaiset muutokset toteutettu ja testattu.
+
+- [x] **SQL-lauseke**: Stub `"0"` korvattu oikealla laskennalla — `CASE WHEN versio = 2026`, `coalesce`, `nullif`, `round`
+- [x] **Shared namespace**: Laskentalogiikka ja kertoimet eriytetty `uusiutuva_energia.clj`:ään (PDF + search käyttävät samaa)
+- [x] **Clojure-funktio**: `laskennallinen_ostoenergia.clj` delegoi nyt shared namespacelle, palauttaa edelleen `"24 %"` -muotoisen merkkijonon
+- [x] **Integraatiotestit**: 8 testiä (peruslaskenta, nolla nettoala, NULL e-luku, NULL tuotantoarvot, nolla tuotanto, nolla nimittäjä, vertailuoperaattorit, ET2018→NULL)
+- [x] **SQL↔Clojure vastaavuus**: Testit laskevat odotetun arvon Clojure-funktiolla ja hakevat SQL:llä — varmistaa yhdenmukaisuuden
+
+### Poikkeamat speksistä
+
+- Speksi totesi "Clojure-funktio: ei muuteta" — funktio refaktoroitiin kuitenkin delegoimaan shared namespacelle. Ulkoinen käyttäytyminen (palautusarvo, nil-käsittely) ei muuttunut. Tämä on hyväksytty poikkeama, joka mahdollistaa kertoimien jakamisen.
+
+### Huomioita katselmuksesta
+
+- PostgreSQL `round()` käyttää banker's roundingia, Java `Math.round` round-half-up. Käytännössä ero voi ilmetä vain tarkalleen `.5`-tapauksissa, joissa ero on ±1 prosenttiyksikkö. Ei vaikutusta normaalikäytössä.
+- SQL ei tarkista negatiivista nettoalaa (`nullif` suojaa vain nollalta), mutta tietokantavalidointi estää negatiiviset arvot → ei käytännön riskiä.

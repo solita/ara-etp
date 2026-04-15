@@ -72,6 +72,20 @@ Muutokset kohdistuvat `laatijaSchema`-funktioon (rivit ~791–815):
 
 > **Tarkistettava:** Ovatko hakukenttien lokalisoidut nimet (label) jo olemassa uusille laatijan hakukentille? Pääkäyttäjän haussa ne ovat käytössä, joten todennäköisesti kyllä — mutta tämä tulee varmistaa.
 
+## Toteutuksen tila
+
+> Katselmoitu 2026-04-15. Kaikki speksin mukaiset muutokset toteutettu ja testattu.
+
+- [x] **R.omit**: `havainnointikayntityyppi-id` poistettu omit-listasta
+- [x] **R.omit**: `julkinen-rakennus` poistettu omit-listasta (oli no-op: omit kohdistui väärään polkuun `energiatodistus.julkinen-rakennus`, kenttä on `energiatodistus.perustiedot.julkinen-rakennus`)
+- [x] **R.pick tulokset**: `kasvihuonepaastot-per-nelio` ja `uusiutuvan-energian-osuus` lisätty
+- [x] **Testit**: Kenttäinventaario päivitetty, uudet ET2026-kenttätestit lisätty (`it.each`), skeemavastaavuustestit laatija↔pääkäyttäjä
+- [x] **Ei-muutokset vahvistettu**: versio, e-luokka, backend, hakutulosten näyttö
+
+### Poikkeamat speksistä
+
+- `energiatodistus.julkinen-rakennus` poistettiin `R.omit`-listasta, vaikka speksi ei tätä mainitse. Kyseessä oli kuitenkin kuollut rivi (väärä polku), joten poisto on siivousluonteinen eikä muuta toiminnallisuutta.
+
 ## Ei-muutokset (vahvistettu koodikatselmuksella)
 
 - **Versio-kenttä (2026):** Jo laatijan skeemassa, ei muutoksia

@@ -9,7 +9,8 @@
    :aurinkolampo 0.38})
 
 (defn painotettu-uusiutuva-summa
-  "Sum of (value × coefficient) for aurinkosähkö, tuulisähkö, aurinkolämpö."
+  "Sum of (value × coefficient) for aurinkosähkö, tuulisähkö, aurinkolämpö.
+   Missing or nil values are treated as 0."
   [energy-map]
   (reduce-kv (fn [acc k coeff]
                (+ acc (* coeff (double (or (get energy-map k) 0)))))
