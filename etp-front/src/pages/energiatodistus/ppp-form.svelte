@@ -154,7 +154,11 @@
         {eTehokkuus}
         {schema}
         {disabled} />
-      <UusiutuvaEnergia bind:perusparannuspassi {energiatodistus} {schema} {disabled} />
+      <UusiutuvaEnergia
+        bind:perusparannuspassi
+        {energiatodistus}
+        {schema}
+        {disabled} />
       <ToteutunutOstoenergia
         bind:perusparannuspassi
         {energiatodistus}
@@ -185,7 +189,11 @@
         {inputLanguage}
         {disabled} />
 
-      <Lisatietoja bind:perusparannuspassi {schema} {inputLanguage} {disabled} />
+      <Lisatietoja
+        bind:perusparannuspassi
+        {schema}
+        {inputLanguage}
+        {disabled} />
     </div>
   {/if}
 </div>
