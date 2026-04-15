@@ -3,6 +3,7 @@
             [solita.etp.service.e-luokka :as e-luokka]
             [solita.etp.service.polttoaine :as polttoaine]
             [solita.etp.service.co2-kertoimet :as co2]
+            [solita.etp.service.uusiutuva-energia :as uusiutuva-energia]
             [solita.etp.db :as db]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.schema.laatija :as laatija-schema]
@@ -140,7 +141,23 @@
               " / nullif(energiatodistus.lt$lammitetty_nettoala, 0)"))
        common-schema/NonNegative]
       :uusiutuvan-energian-osuus
-      ["0" common-schema/NonNegative]
+      [(let [kertoimet uusiutuva-energia/uusiutuva-kerroin
+             coalesce-col (fn [prefix k]
+                            (str "coalesce(energiatodistus.t$" prefix "$"
+                                 (db/snake-case (name k)) ", 0)"))
+             weighted-sum (fn [prefix]
+                            (str/join " + "
+                              (map (fn [[k kerroin]]
+                                     (str (coalesce-col prefix k) " * " kerroin))
+                                   kertoimet)))
+             osoittaja (str "(" (weighted-sum "uusiutuvat_omavaraisenergiat_kokonaistuotanto") ")"
+                            " / nullif(energiatodistus.lt$lammitetty_nettoala, 0)")
+             nimittaja (str "energiatodistus.t$e_luku + "
+                            "(" (weighted-sum "uusiutuvat_omavaraisenergiat") ")"
+                            " / nullif(energiatodistus.lt$lammitetty_nettoala, 0)")]
+         (str "case when energiatodistus.versio = 2026 then "
+              "round(" osoittaja " / nullif(" nimittaja ", 0) * 100) end"))
+       common-schema/NonNegative]
       :uusiutuvat-omavaraisenergiat-kokonaistuotanto
       (per-nettoala-for-schema
         [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto]
