@@ -283,154 +283,95 @@
       private-columns)
      et2026-bank-columns)))
 
-(def ^:private et2026-anonymized-columns
-  "ET2026 columns appended at the end of anonymized CSV"
+(def ^:private et2026-laaja-aineisto-tagged-columns
+  "ET2026 columns for tilastokeskus and anonymized (laaja) datasets.
+   Each entry is a pair [visibility column-path] where visibility is:
+   - :both              — included in both tilastokeskus and anonymized
+   - :tilastokeskus     — only in tilastokeskus (contains personal data)"
   (into
    [;; Perustiedot
-    [:perustiedot :havainnointikayntityyppi-id]
-    [:perustiedot :havainnointikayntityyppi-fi]
-    [:perustiedot :tayttaa-aplus-vaatimukset]
-    [:perustiedot :tayttaa-a0-vaatimukset]
+    [:both [:perustiedot :havainnointikayntityyppi-id]]
+    [:both [:perustiedot :havainnointikayntityyppi-fi]]
+    [:both [:perustiedot :tayttaa-aplus-vaatimukset]]
+    [:both [:perustiedot :tayttaa-a0-vaatimukset]]
 
     ;; Lahtotiedot
-    [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
-    [:lahtotiedot :lammitys :lammonjako-lampotilajousto]
+    [:both [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]]
+    [:both [:lahtotiedot :lammitys :lammonjako-lampotilajousto]]
 
     ;; Tulokset: Kasvihuonepaastot
-    [:tulokset :kasvihuonepaastot]
-    [:tulokset :kasvihuonepaastot-nettoala]
+    [:both [:tulokset :kasvihuonepaastot]]
+    [:both [:tulokset :kasvihuonepaastot-nettoala]]
 
     ;; Tulokset: Uusiutuvat omavaraisenergiat kokonaistuotanto
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko]
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo]
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko]
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu]
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo]
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko]
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko]]
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo]]
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko]]
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu]]
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo]]
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko]]
 
     ;; Toteutunut ostoenergiankulutus
-    [:toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi]
-    [:toteutunut-ostoenergiankulutus :lisatietoja-fi]
-    [:toteutunut-ostoenergiankulutus :lisatietoja-sv]
-    [:toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa]
-    [:toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa-nettoala]
-    [:toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa]
-    [:toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa-nettoala]
-    [:toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa]
-    [:toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa-nettoala]]
+    [:both [:toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi]]
+    [:both [:toteutunut-ostoenergiankulutus :lisatietoja-fi]]
+    [:both [:toteutunut-ostoenergiankulutus :lisatietoja-sv]]
+    [:both [:toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa]]
+    [:both [:toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa-nettoala]]
+    [:both [:toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa]]
+    [:both [:toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa-nettoala]]
+    [:both [:toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa]]
+    [:both [:toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa-nettoala]]]
 
-   ;; Huomiot: Kasvihuonepaastojen muutos toimenpiteista
-   ;; + lammityksen kayttoikaarvio + ilmastoselvitys
+   ;; Huomiot + ilmastoselvitys
    (concat
-    (for [idx (range 3)] [:huomiot :ymparys :toimenpide idx :kasvihuonepaastojen-muutos])
-    (for [idx (range 3)] [:huomiot :alapohja-ylapohja :toimenpide idx :kasvihuonepaastojen-muutos])
-    (for [idx (range 3)] [:huomiot :lammitys :toimenpide idx :kasvihuonepaastojen-muutos])
-    (for [idx (range 3)] [:huomiot :iv-ilmastointi :toimenpide idx :kasvihuonepaastojen-muutos])
-    (for [idx (range 3)] [:huomiot :valaistus-muut :toimenpide idx :kasvihuonepaastojen-muutos])
+    (for [idx (range 3)] [:both [:huomiot :ymparys :toimenpide idx :kasvihuonepaastojen-muutos]])
+    (for [idx (range 3)] [:both [:huomiot :alapohja-ylapohja :toimenpide idx :kasvihuonepaastojen-muutos]])
+    (for [idx (range 3)] [:both [:huomiot :lammitys :toimenpide idx :kasvihuonepaastojen-muutos]])
+    (for [idx (range 3)] [:both [:huomiot :iv-ilmastointi :toimenpide idx :kasvihuonepaastojen-muutos]])
+    (for [idx (range 3)] [:both [:huomiot :valaistus-muut :toimenpide idx :kasvihuonepaastojen-muutos]])
 
-    [;; Huomiot: Lammityksen kayttoikaarvio
-     [:huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina]
+    [[:both [:huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina]]
 
-     ;; Ilmastoselvitys (anonymisoitu — ei henkilotietoja)
-     [:ilmastoselvitys :laatimisajankohta]
-     [:ilmastoselvitys :laadintaperuste]
-     [:ilmastoselvitys :hiilijalanjalki :rakennus :rakennustuotteiden-valmistus]
-     [:ilmastoselvitys :hiilijalanjalki :rakennus :kuljetukset-tyomaavaihe]
-     [:ilmastoselvitys :hiilijalanjalki :rakennus :rakennustuotteiden-vaihdot]
-     [:ilmastoselvitys :hiilijalanjalki :rakennus :energiankaytto]
-     [:ilmastoselvitys :hiilijalanjalki :rakennus :purkuvaihe]
-     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-valmistus]
-     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :kuljetukset-tyomaavaihe]
-     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-vaihdot]
-     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :energiankaytto]
-     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :purkuvaihe]
-     [:ilmastoselvitys :hiilikadenjalki :rakennus :uudelleenkaytto]
-     [:ilmastoselvitys :hiilikadenjalki :rakennus :kierratys]
-     [:ilmastoselvitys :hiilikadenjalki :rakennus :ylimaarainen-uusiutuvaenergia]
-     [:ilmastoselvitys :hiilikadenjalki :rakennus :hiilivarastovaikutus]
-     [:ilmastoselvitys :hiilikadenjalki :rakennus :karbonatisoituminen]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :uudelleenkaytto]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]])))
+     ;; Ilmastoselvitys
+     [:both          [:ilmastoselvitys :laatimisajankohta]]
+     [:tilastokeskus [:ilmastoselvitys :laatija]]
+     [:tilastokeskus [:ilmastoselvitys :yritys]]
+     [:tilastokeskus [:ilmastoselvitys :yritys-osoite]]
+     [:tilastokeskus [:ilmastoselvitys :yritys-postinumero]]
+     [:tilastokeskus [:ilmastoselvitys :yritys-postitoimipaikka]]
+     [:both          [:ilmastoselvitys :laadintaperuste]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennus :rakennustuotteiden-valmistus]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennus :kuljetukset-tyomaavaihe]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennus :rakennustuotteiden-vaihdot]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennus :energiankaytto]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennus :purkuvaihe]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-valmistus]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :kuljetukset-tyomaavaihe]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-vaihdot]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :energiankaytto]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :purkuvaihe]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennus :uudelleenkaytto]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennus :kierratys]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennus :ylimaarainen-uusiutuvaenergia]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennus :hiilivarastovaikutus]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennus :karbonatisoituminen]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :uudelleenkaytto]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]]])))
+
+(defn- filter-tagged-columns [allowed-tags tagged-columns]
+  (let [allowed (set allowed-tags)]
+    (->> tagged-columns
+         (filter (fn [[tag _]] (contains? allowed tag)))
+         (mapv second))))
+
+(def ^:private et2026-anonymized-columns
+  (filter-tagged-columns [:both] et2026-laaja-aineisto-tagged-columns))
 
 (def ^:private et2026-tilastokeskus-columns
-  "ET2026 columns appended at the end of tilastokeskus CSV"
-  (into
-   [;; Perustiedot
-    [:perustiedot :havainnointikayntityyppi-id]
-    [:perustiedot :havainnointikayntityyppi-fi]
-    [:perustiedot :tayttaa-aplus-vaatimukset]
-    [:perustiedot :tayttaa-a0-vaatimukset]
-
-    ;; Lahtotiedot
-    [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
-    [:lahtotiedot :lammitys :lammonjako-lampotilajousto]
-
-    ;; Tulokset: Kasvihuonepaastot
-    [:tulokset :kasvihuonepaastot]
-    [:tulokset :kasvihuonepaastot-nettoala]
-
-    ;; Tulokset: Uusiutuvat omavaraisenergiat kokonaistuotanto
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko]
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo]
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko]
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu]
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo]
-    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko]
-
-    ;; Toteutunut ostoenergiankulutus
-    [:toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi]
-    [:toteutunut-ostoenergiankulutus :lisatietoja-fi]
-    [:toteutunut-ostoenergiankulutus :lisatietoja-sv]
-    [:toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa]
-    [:toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa-nettoala]
-    [:toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa]
-    [:toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa-nettoala]
-    [:toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa]
-    [:toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa-nettoala]]
-
-   ;; Huomiot: Kasvihuonepaastojen muutos toimenpiteista
-   ;; + lammityksen kayttoikaarvio + ilmastoselvitys
-   (concat
-    (for [idx (range 3)] [:huomiot :ymparys :toimenpide idx :kasvihuonepaastojen-muutos])
-    (for [idx (range 3)] [:huomiot :alapohja-ylapohja :toimenpide idx :kasvihuonepaastojen-muutos])
-    (for [idx (range 3)] [:huomiot :lammitys :toimenpide idx :kasvihuonepaastojen-muutos])
-    (for [idx (range 3)] [:huomiot :iv-ilmastointi :toimenpide idx :kasvihuonepaastojen-muutos])
-    (for [idx (range 3)] [:huomiot :valaistus-muut :toimenpide idx :kasvihuonepaastojen-muutos])
-
-    [;; Huomiot: Lammityksen kayttoikaarvio
-     [:huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina]
-
-     ;; Ilmastoselvitys (kaikki kentat)
-     [:ilmastoselvitys :laatimisajankohta]
-     [:ilmastoselvitys :laatija]
-     [:ilmastoselvitys :yritys]
-     [:ilmastoselvitys :yritys-osoite]
-     [:ilmastoselvitys :yritys-postinumero]
-     [:ilmastoselvitys :yritys-postitoimipaikka]
-     [:ilmastoselvitys :laadintaperuste]
-     [:ilmastoselvitys :hiilijalanjalki :rakennus :rakennustuotteiden-valmistus]
-     [:ilmastoselvitys :hiilijalanjalki :rakennus :kuljetukset-tyomaavaihe]
-     [:ilmastoselvitys :hiilijalanjalki :rakennus :rakennustuotteiden-vaihdot]
-     [:ilmastoselvitys :hiilijalanjalki :rakennus :energiankaytto]
-     [:ilmastoselvitys :hiilijalanjalki :rakennus :purkuvaihe]
-     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-valmistus]
-     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :kuljetukset-tyomaavaihe]
-     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-vaihdot]
-     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :energiankaytto]
-     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :purkuvaihe]
-     [:ilmastoselvitys :hiilikadenjalki :rakennus :uudelleenkaytto]
-     [:ilmastoselvitys :hiilikadenjalki :rakennus :kierratys]
-     [:ilmastoselvitys :hiilikadenjalki :rakennus :ylimaarainen-uusiutuvaenergia]
-     [:ilmastoselvitys :hiilikadenjalki :rakennus :hiilivarastovaikutus]
-     [:ilmastoselvitys :hiilikadenjalki :rakennus :karbonatisoituminen]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :uudelleenkaytto]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]])))
+  (filter-tagged-columns [:both :tilastokeskus] et2026-laaja-aineisto-tagged-columns))
 
 (def anonymized-columns
   (concat
