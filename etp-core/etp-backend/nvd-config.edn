@@ -12,6 +12,5 @@
  ;; This file will be automatically created, with whatever filename is specified here, if it didn't exist already.
  :suppression-file "nvd_suppressions.xml"
 
- :analyzer {;; Disable OSS Index analyzer - it now requires authentication
-            ;; and is not needed since we use the NVD database directly
-            :ossindex-enabled false}}
+ :analyzer {;; Make OSS Index errors non-fatal (the analyzer is disabled via JVM property in nvd.sh)
+            :ossindex-warn-only-on-remote-errors true}}
