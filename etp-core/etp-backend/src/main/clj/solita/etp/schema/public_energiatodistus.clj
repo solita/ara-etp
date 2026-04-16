@@ -25,12 +25,16 @@
       (assoc :ilmanvaihto LahtotiedotIlmanvaihto)
       (assoc :lammitys LahtotiedotLammitys)))
 
-(def Tulokset
+(def Tulokset2013
   (-> energiatodistus-schema/Tulokset
       (select-keys [:kaytettavat-energiamuodot])
       (assoc-in [:kaytettavat-energiamuodot :muu]
                 [(xschema/optional-properties
                   energiatodistus-schema/UserDefinedEnergiamuoto)])))
+
+(def Tulokset2018
+  (select-keys energiatodistus-schema/Tulokset
+               [:kaytettavat-energiamuodot]))
 
 (defn energiatodistus-versio [versio]
   (-> (energiatodistus-schema/energiatodistus-versio
@@ -38,7 +42,7 @@
        (xschema/optional-properties
         {:perustiedot Perustiedot
          :lahtotiedot Lahtotiedot
-         :tulokset    Tulokset}))
+         :tulokset    (if (= versio 2018) Tulokset2018 Tulokset2013)}))
       (dissoc :laatija-fullname
               :laatija-id
               :laskutusaika)))
