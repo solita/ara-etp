@@ -67,26 +67,72 @@
     ;; Tests that all paths in generated energiatodistus are
     ;; found in columns listed in the service. Basically for finding typos
     ;; in configuration.
-    (t/is (every? #(contains? (set service/private-columns) %)
-                  (->> (energiatodistus-test-data/generate-adds 100 2018 true)
-                       (map #(complete-energiatodistus-service/complete-energiatodistus
-                               %
-                               luokittelut))
-                       (map #(dissoc % :kommentti :laskutusosoite-id))
-                       (map #(xmap/dissoc-in % [:tulokset :kuukausierittely]))
-                       (map #(xmap/dissoc-in % [:tulokset
-                                                :kuukausierittely-summat]))
-                       (map #(xmap/dissoc-in % [:perustiedot :yritys :katuosoite]))
-                       (map #(xmap/dissoc-in % [:perustiedot :yritys :postinumero]))
-                       (map #(xmap/dissoc-in % [:perustiedot :yritys :postitoimipaikka]))
-                       (map #(xmap/dissoc-in % [:tulokset :e-luokka-rajat]))
-                       (map #(xmap/dissoc-in % [:lahtotiedot :lammitys :lampohavio-lammittamaton-tila]))
-                       (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-fi]))
-                       (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-sv]))
-                       (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-id]))
-                       (map xmap/paths)
-                       (apply concat)
-                       (filter #(every? keyword? %)))))))
+    (t/testing "All 2018 energiatodistus paths are found in private-columns"
+      (t/is (every? #(contains? (set service/private-columns) %)
+                    (->> (energiatodistus-test-data/generate-adds 100 2018 true)
+                         (map #(complete-energiatodistus-service/complete-energiatodistus
+                                 %
+                                 luokittelut))
+                         (map #(dissoc % :kommentti :laskutusosoite-id))
+                         (map #(xmap/dissoc-in % [:tulokset :kuukausierittely]))
+                         (map #(xmap/dissoc-in % [:tulokset
+                                                  :kuukausierittely-summat]))
+                         (map #(xmap/dissoc-in % [:perustiedot :yritys :katuosoite]))
+                         (map #(xmap/dissoc-in % [:perustiedot :yritys :postinumero]))
+                         (map #(xmap/dissoc-in % [:perustiedot :yritys :postitoimipaikka]))
+                         (map #(xmap/dissoc-in % [:tulokset :e-luokka-rajat]))
+                         (map #(xmap/dissoc-in % [:lahtotiedot :lammitys :lampohavio-lammittamaton-tila]))
+                         (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-fi]))
+                         (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-sv]))
+                         (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-id]))
+                         (map xmap/paths)
+                         (apply concat)
+                         (filter #(every? keyword? %))))))
+
+    (t/testing "All 2026 energiatodistus paths are found in private-columns"
+      (t/is (every? #(contains? (set service/private-columns) %)
+                    (->> (energiatodistus-test-data/generate-adds 100 2026 true)
+                         (map #(complete-energiatodistus-service/complete-energiatodistus
+                                 %
+                                 luokittelut))
+                         (map #(dissoc % :kommentti :laskutusosoite-id))
+                         (map #(xmap/dissoc-in % [:tulokset :kuukausierittely]))
+                         (map #(xmap/dissoc-in % [:tulokset
+                                                  :kuukausierittely-summat]))
+                         (map #(xmap/dissoc-in % [:perustiedot :yritys :katuosoite]))
+                         (map #(xmap/dissoc-in % [:perustiedot :yritys :postinumero]))
+                         (map #(xmap/dissoc-in % [:perustiedot :yritys :postitoimipaikka]))
+                         (map #(xmap/dissoc-in % [:tulokset :e-luokka-rajat]))
+                         (map #(xmap/dissoc-in % [:lahtotiedot :lammitys :lampohavio-lammittamaton-tila]))
+                         (map xmap/paths)
+                         (apply concat)
+                         (filter #(every? keyword? %))))))))
+
+(t/deftest et2026-columns-at-end-test
+  (t/testing "ET2026 bank columns are at the end of bank-columns"
+    (let [bank-cols (vec service/bank-columns)
+          et2026-bank (vec @#'service/et2026-bank-columns)
+          n (count et2026-bank)]
+      (t/is (= et2026-bank (subvec bank-cols (- (count bank-cols) n))))))
+
+  (t/testing "ET2026 anonymized columns are at the end of anonymized-columns"
+    (let [anon-cols (vec service/anonymized-columns)
+          et2026-anon (vec @#'service/et2026-anonymized-columns)
+          n (count et2026-anon)]
+      (t/is (= et2026-anon (subvec anon-cols (- (count anon-cols) n))))))
+
+  (t/testing "ET2026 tilastokeskus columns are at the end of tilastokeskus-columns"
+    (let [tk-cols (vec service/tilastokeskus-columns)
+          et2026-tk (vec @#'service/et2026-tilastokeskus-columns)
+          n (count et2026-tk)]
+      (t/is (= et2026-tk (subvec tk-cols (- (count tk-cols) n))))))
+
+  (t/testing "All ET2026 column paths are vectors of keywords and integers"
+    (doseq [cols [@#'service/et2026-bank-columns
+                  @#'service/et2026-anonymized-columns
+                  @#'service/et2026-tilastokeskus-columns]]
+      (t/is (every? vector? cols))
+      (t/is (every? #(every? (fn [x] (or (keyword? x) (integer? x))) %) cols)))))
 
 (t/deftest column-ks->str-test
   (t/is (= "" (service/column-ks->str [])))

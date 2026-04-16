@@ -92,6 +92,11 @@
           third-line (.readLine reader)]
       [second-line third-line])))
 
+(defn- get-csv-header-line [key]
+  (with-open [aineisto (file/find-file ts/*aws-s3-client* key)]
+    (let [reader (BufferedReader. (InputStreamReader. aineisto))]
+      (.readLine reader))))
+
 (defn- is-included-in-exactly-one? [string strings]
   (->> (map #(str/includes? %1 string) strings)
        (filter true?)
@@ -186,3 +191,26 @@
         ;; The lines are not empty.
         (t/is (false? (nil? first)))
         (t/is (false? (nil? second)))))))
+
+(t/deftest et2026-aineisto-headers-test
+  (t/testing "Aineistot CSV headers end with ET2026-specific columns"
+    (let [whoami {:id (:aineisto kayttaja-service/system-kayttaja) :rooli -1}]
+      (csv-to-s3/update-aineistot-in-s3! ts/*db* whoami ts/*aws-s3-client*)
+
+      (t/testing "Aineisto 1 (bank) headers end with ET2026 columns"
+        (let [header (get-csv-header-line (csv-to-s3/aineisto-key 1))]
+          (t/is (str/ends-with? header "\"Tulokset / Kasvihuonepaastot-nettoala\""))
+          (t/is (str/includes? header "\"Tulokset / Kasvihuonepaastot\""))))
+
+      (t/testing "Aineisto 2 (tilastokeskus) headers end with ET2026 columns"
+        (let [header (get-csv-header-line (csv-to-s3/aineisto-key 2))]
+          (t/is (str/ends-with? header "\"Ilmastoselvitys / Hiilikadenjalki / Rakennuspaikka / Karbonatisoituminen\""))
+          (t/is (str/includes? header "\"Tulokset / Kasvihuonepaastot\""))
+          (t/is (str/includes? header "\"Ilmastoselvitys / Laatija\""))))
+
+      (t/testing "Aineisto 3 (anonymized) headers end with ET2026 columns"
+        (let [header (get-csv-header-line (csv-to-s3/aineisto-key 3))]
+          (t/is (str/ends-with? header "\"Ilmastoselvitys / Hiilikadenjalki / Rakennuspaikka / Karbonatisoituminen\""))
+          (t/is (str/includes? header "\"Tulokset / Kasvihuonepaastot\""))
+          ;; Anonymized should NOT include personal data columns
+          (t/is (not (str/includes? header "\"Ilmastoselvitys / Laatija\""))))))))

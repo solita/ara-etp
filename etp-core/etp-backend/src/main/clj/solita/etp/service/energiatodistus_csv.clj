@@ -238,6 +238,29 @@
             (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2018 column))
         (not (contains? hidden-columns column))))
      private-columns)))
+
+(def ^:private et2026-bank-columns
+  "ET2026 columns appended at the end of bank CSV"
+  [[:perustiedot :havainnointikayntityyppi-fi]
+   [:perustiedot :tayttaa-aplus-vaatimukset]
+   [:perustiedot :tayttaa-a0-vaatimukset]
+
+   ;; Lahtotiedot
+   [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
+   [:lahtotiedot :lammitys :lammonjako-lampotilajousto]
+
+   ;; Tulokset: Kasvihuonepaastot
+   [:tulokset :kasvihuonepaastot]
+   [:tulokset :kasvihuonepaastot-nettoala]
+
+   ;; Tulokset: Uusiutuvat omavaraisenergiat kokonaistuotanto
+   [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko]
+   [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo]
+   [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko]
+   [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu]
+    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo]
+   [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko]])
+
 (def bank-columns
   (let [extra-columns #{[:perustiedot :kieli-fi]
                         [:perustiedot :laatimisvaihe-fi]
@@ -261,14 +284,108 @@
                          [:korvaava-energiatodistus-id]
                          [:laatija-id]
                          [:laatija-fullname]
-                         [:perustiedot :yritys :nimi]}]
-    (filter
-     (fn [column]
-       (and
-        (or (contains? extra-columns column)
-            (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2018 column))
-        (not (contains? hidden-columns column))))
-     private-columns)))
+                         [:perustiedot :yritys :nimi]}
+        et2026-set (set et2026-bank-columns)]
+    (concat
+     (filter
+      (fn [column]
+        (and
+         (or (contains? extra-columns column)
+             (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2018 column))
+         (not (contains? hidden-columns column))
+         (not (contains? et2026-set column))))
+      private-columns)
+     et2026-bank-columns)))
+
+(def ^:private et2026-laaja-aineisto-tagged-columns
+  "ET2026 columns for tilastokeskus and anonymized (laaja) datasets.
+   Each entry is a pair [visibility column-path] where visibility is:
+   - :both              — included in both tilastokeskus and anonymized
+   - :tilastokeskus     — only in tilastokeskus (contains personal data)"
+  (into
+   [;; Perustiedot
+    [:both [:perustiedot :havainnointikayntityyppi-id]]
+    [:both [:perustiedot :havainnointikayntityyppi-fi]]
+    [:both [:perustiedot :tayttaa-aplus-vaatimukset]]
+    [:both [:perustiedot :tayttaa-a0-vaatimukset]]
+
+    ;; Lahtotiedot
+    [:both [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]]
+    [:both [:lahtotiedot :lammitys :lammonjako-lampotilajousto]]
+
+    ;; Tulokset: Kasvihuonepaastot
+    [:both [:tulokset :kasvihuonepaastot]]
+    [:both [:tulokset :kasvihuonepaastot-nettoala]]
+
+    ;; Tulokset: Uusiutuvat omavaraisenergiat kokonaistuotanto
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko]]
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo]]
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko]]
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu]]
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo]]
+    [:both [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko]]
+
+    ;; Toteutunut ostoenergiankulutus
+    [:both [:toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi]]
+    [:both [:toteutunut-ostoenergiankulutus :lisatietoja-fi]]
+    [:both [:toteutunut-ostoenergiankulutus :lisatietoja-sv]]
+    [:both [:toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa]]
+    [:both [:toteutunut-ostoenergiankulutus :uusiutuvat-polttoaineet-vuosikulutus-yhteensa-nettoala]]
+    [:both [:toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa]]
+    [:both [:toteutunut-ostoenergiankulutus :fossiiliset-polttoaineet-vuosikulutus-yhteensa-nettoala]]
+    [:both [:toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa]]
+    [:both [:toteutunut-ostoenergiankulutus :uusiutuva-energia-vuosituotto-yhteensa-nettoala]]]
+
+   ;; Huomiot + ilmastoselvitys
+   (concat
+    (for [idx (range 3)] [:both [:huomiot :ymparys :toimenpide idx :kasvihuonepaastojen-muutos]])
+    (for [idx (range 3)] [:both [:huomiot :alapohja-ylapohja :toimenpide idx :kasvihuonepaastojen-muutos]])
+    (for [idx (range 3)] [:both [:huomiot :lammitys :toimenpide idx :kasvihuonepaastojen-muutos]])
+    (for [idx (range 3)] [:both [:huomiot :iv-ilmastointi :toimenpide idx :kasvihuonepaastojen-muutos]])
+    (for [idx (range 3)] [:both [:huomiot :valaistus-muut :toimenpide idx :kasvihuonepaastojen-muutos]])
+
+    [[:both [:huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina]]
+
+     ;; Ilmastoselvitys
+     [:both          [:ilmastoselvitys :laatimisajankohta]]
+     [:tilastokeskus [:ilmastoselvitys :laatija]]
+     [:tilastokeskus [:ilmastoselvitys :yritys]]
+     [:tilastokeskus [:ilmastoselvitys :yritys-osoite]]
+     [:tilastokeskus [:ilmastoselvitys :yritys-postinumero]]
+     [:tilastokeskus [:ilmastoselvitys :yritys-postitoimipaikka]]
+     [:both          [:ilmastoselvitys :laadintaperuste]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennus :rakennustuotteiden-valmistus]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennus :kuljetukset-tyomaavaihe]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennus :rakennustuotteiden-vaihdot]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennus :energiankaytto]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennus :purkuvaihe]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-valmistus]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :kuljetukset-tyomaavaihe]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-vaihdot]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :energiankaytto]]
+     [:both [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :purkuvaihe]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennus :uudelleenkaytto]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennus :kierratys]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennus :ylimaarainen-uusiutuvaenergia]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennus :hiilivarastovaikutus]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennus :karbonatisoituminen]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :uudelleenkaytto]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]]
+     [:both [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]]])))
+
+(defn- filter-tagged-columns [allowed-tags tagged-columns]
+  (let [allowed (set allowed-tags)]
+    (->> tagged-columns
+         (filter (fn [[tag _]] (contains? allowed tag)))
+         (mapv second))))
+
+(def ^:private et2026-anonymized-columns
+  (filter-tagged-columns [:both] et2026-laaja-aineisto-tagged-columns))
+
+(def ^:private et2026-tilastokeskus-columns
+  (filter-tagged-columns [:both :tilastokeskus] et2026-laaja-aineisto-tagged-columns))
 
 (def anonymized-columns
   (concat
@@ -435,7 +552,10 @@
    (for [child [:suositukset-fi :suositukset-sv]]
      [:huomiot child])
    [[:lisamerkintoja-fi]
-    [:lisamerkintoja-sv]]))
+    [:lisamerkintoja-sv]]
+
+   ;; ET2026: Uudet sarakkeet (lisatty loppuun)
+   et2026-anonymized-columns))
 
 (def tilastokeskus-columns
   (concat
@@ -606,7 +726,10 @@
                 :lisatietoja-sv]]
      [:huomiot child])
    [[:lisamerkintoja-fi]
-    [:lisamerkintoja-sv]]))
+    [:lisamerkintoja-sv]]
+
+   ;; ET2026: Uudet sarakkeet (lisatty loppuun)
+   et2026-tilastokeskus-columns))
 
 (defn column-ks->str [ks]
   (->> ks
