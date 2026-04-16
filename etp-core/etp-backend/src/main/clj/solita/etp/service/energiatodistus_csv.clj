@@ -235,6 +235,7 @@
      (fn [column]
        (and
         (or (contains? extra-columns column)
+            (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2013 column)
             (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2018 column))
         (not (contains? hidden-columns column))))
      private-columns)))

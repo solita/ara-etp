@@ -118,7 +118,13 @@
 
         ;; Verify that no hidden columns are present in the CSV headers
         (t/is (empty? (set/intersection hidden-header-strings header-set))
-              "CSV should not contain any hidden columns")))))
+              "CSV should not contain any hidden columns")
+
+        ;; Verify that CSV contains only expected public columns (no unexpected extras)
+        (let [expected-header-strings (columns->header-strings public-columns)
+              unexpected-columns (set/difference header-set expected-header-strings hidden-header-strings)]
+          (t/is (empty? unexpected-columns)
+                (str "CSV should not contain unexpected columns: " unexpected-columns)))))))
 
 (t/deftest test-update-public-csv-in-s3!-with-multiple-data
   (let [;; Generate three different rakennustunnus
