@@ -107,7 +107,13 @@ Test coverage report (without API layer) can be generated with
 Check dependencies for vulnerabilities
 
     cd etp-backend
+    export NVD_API_TOKEN=your-api-key
     ./nvd.sh
+
+The NVD vulnerability check requires an API key. Get a free one from
+https://nvd.nist.gov/developers/request-an-api-key and set it as the
+`NVD_API_TOKEN` environment variable before running the script. You can add
+the export to your `~/.zshrc` (or `~/.bashrc`) to persist it across sessions.
 
 Check outdated dependencies
 
