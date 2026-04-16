@@ -238,15 +238,14 @@
             (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2018 column))
         (not (contains? hidden-columns column))))
      private-columns)))
+
 (def ^:private et2026-bank-columns
   "ET2026 columns appended at the end of bank CSV"
   [[:perustiedot :havainnointikayntityyppi-fi]
    [:perustiedot :tayttaa-aplus-vaatimukset]
    [:perustiedot :tayttaa-a0-vaatimukset]
    [:tulokset :kasvihuonepaastot]
-   [:tulokset :kasvihuonepaastot-nettoala]
-   [:ilmastoselvitys :hiilijalanjalki-yhteensa]
-   [:ilmastoselvitys :hiilijalanjalki-yhteensa-per-nettoala]])
+   [:tulokset :kasvihuonepaastot-nettoala]])
 
 (def bank-columns
   (let [extra-columns #{[:perustiedot :kieli-fi]
@@ -354,9 +353,7 @@
      [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]
      [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]
      [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]
-     [:ilmastoselvitys :hiilijalanjalki-yhteensa]
-     [:ilmastoselvitys :hiilijalanjalki-yhteensa-per-nettoala]])))
+     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]])))
 
 (def ^:private et2026-tilastokeskus-columns
   "ET2026 columns appended at the end of tilastokeskus CSV"
@@ -433,9 +430,7 @@
      [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]
      [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]
      [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]
-     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]
-     [:ilmastoselvitys :hiilijalanjalki-yhteensa]
-     [:ilmastoselvitys :hiilijalanjalki-yhteensa-per-nettoala]])))
+     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]])))
 
 (def anonymized-columns
   (concat
