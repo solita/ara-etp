@@ -527,7 +527,24 @@
                         [:lahtotiedot :lammitys :lammin-kayttovesi :lampohavio-lammittamaton-tila])
           (#(assoc-in % [:tulokset :kasvihuonepaastot]
                       (co2-paastot-et (get-in % [:tulokset :kaytettavat-energiamuodot]))))
-          (assoc-div-nettoala [:tulokset :kasvihuonepaastot])))))
+          (assoc-div-nettoala [:tulokset :kasvihuonepaastot])
+          ;; ET2026: Computed hiilijalanjälki summary — sum of all lifecycle phases
+          ;; (rakennus + rakennuspaikka) for compact CSV datasets
+          (#(let [hj (get-in % [:ilmastoselvitys :hiilijalanjalki])
+                  sum (when hj
+                        (let [phases [:rakennustuotteiden-valmistus :kuljetukset-tyomaavaihe
+                                      :rakennustuotteiden-vaihdot :energiankaytto :purkuvaihe]]
+                          (reduce + 0
+                                  (for [parent [:rakennus :rakennuspaikka]
+                                        phase phases
+                                        :let [v (get-in hj [parent phase])]
+                                        :when v]
+                                    v))))]
+              (cond-> %
+                sum (assoc-in [:ilmastoselvitys :hiilijalanjalki-yhteensa] sum)
+                (and sum (get-in % [:lahtotiedot :lammitetty-nettoala]))
+                (assoc-in [:ilmastoselvitys :hiilijalanjalki-yhteensa-per-nettoala]
+                          (safe-div sum (get-in % [:lahtotiedot :lammitetty-nettoala]))))))))))
 
 (defn luokittelut [db]
   {:postinumerot             (geo/find-all-postinumerot db)

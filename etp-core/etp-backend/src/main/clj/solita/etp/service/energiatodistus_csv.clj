@@ -238,6 +238,16 @@
             (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2018 column))
         (not (contains? hidden-columns column))))
      private-columns)))
+(def ^:private et2026-bank-columns
+  "ET2026 columns appended at the end of bank CSV"
+  [[:perustiedot :havainnointikayntityyppi-fi]
+   [:perustiedot :tayttaa-aplus-vaatimukset]
+   [:perustiedot :tayttaa-a0-vaatimukset]
+   [:tulokset :kasvihuonepaastot]
+   [:tulokset :kasvihuonepaastot-nettoala]
+   [:ilmastoselvitys :hiilijalanjalki-yhteensa]
+   [:ilmastoselvitys :hiilijalanjalki-yhteensa-per-nettoala]])
+
 (def bank-columns
   (let [extra-columns #{[:perustiedot :kieli-fi]
                         [:perustiedot :laatimisvaihe-fi]
@@ -261,14 +271,131 @@
                          [:korvaava-energiatodistus-id]
                          [:laatija-id]
                          [:laatija-fullname]
-                         [:perustiedot :yritys :nimi]}]
-    (filter
-     (fn [column]
-       (and
-        (or (contains? extra-columns column)
-            (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2018 column))
-        (not (contains? hidden-columns column))))
-     private-columns)))
+                         [:perustiedot :yritys :nimi]}
+        et2026-set (set et2026-bank-columns)]
+    (concat
+     (filter
+      (fn [column]
+        (and
+         (or (contains? extra-columns column)
+             (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2018 column))
+         (not (contains? hidden-columns column))
+         (not (contains? et2026-set column))))
+      private-columns)
+     et2026-bank-columns)))
+
+(def ^:private et2026-anonymized-columns
+  "ET2026 columns appended at the end of anonymized CSV"
+  (concat
+   ;; Perustiedot
+   (for [child [:havainnointikayntityyppi-id :havainnointikayntityyppi-fi
+                :tayttaa-aplus-vaatimukset :tayttaa-a0-vaatimukset]]
+     [:perustiedot child])
+
+   ;; Lahtotiedot
+   [[:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
+    [:lahtotiedot :lammitys :lammonjako-lampotilajousto]]
+
+   ;; Tulokset: Kasvihuonepaastot
+   [[:tulokset :kasvihuonepaastot]
+    [:tulokset :kasvihuonepaastot-nettoala]]
+
+   ;; Tulokset: Uusiutuvat omavaraisenergiat kokonaistuotanto
+   (for [child [:aurinkosahko :aurinkolampo :tuulisahko :lampopumppu
+                :muulampo :muusahko]]
+     [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto child])
+
+   ;; Toteutunut ostoenergiankulutus
+   (for [child [:tietojen-alkuperavuosi
+                :lisatietoja-fi :lisatietoja-sv
+                :uusiutuvat-polttoaineet-vuosikulutus-yhteensa
+                :uusiutuvat-polttoaineet-vuosikulutus-yhteensa-nettoala
+                :fossiiliset-polttoaineet-vuosikulutus-yhteensa
+                :fossiiliset-polttoaineet-vuosikulutus-yhteensa-nettoala
+                :uusiutuva-energia-vuosituotto-yhteensa
+                :uusiutuva-energia-vuosituotto-yhteensa-nettoala]]
+     [:toteutunut-ostoenergiankulutus child])
+
+   ;; Huomiot: Kasvihuonepaastojen muutos toimenpiteista
+   (apply concat
+          (for [parent [:ymparys :alapohja-ylapohja :lammitys :iv-ilmastointi
+                        :valaistus-muut]]
+            (for [idx (range 3)]
+              [:huomiot parent :toimenpide idx :kasvihuonepaastojen-muutos])))
+
+   ;; Huomiot: Lammityksen kayttoikaarvio
+   [[:huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina]]
+
+   ;; Ilmastoselvitys (anonymisoitu — ei henkilotietoja)
+   (for [child [:laatimisajankohta :laadintaperuste]]
+     [:ilmastoselvitys child])
+   (for [parent [:rakennus :rakennuspaikka]
+         child [:rakennustuotteiden-valmistus :kuljetukset-tyomaavaihe
+                :rakennustuotteiden-vaihdot :energiankaytto :purkuvaihe]]
+     [:ilmastoselvitys :hiilijalanjalki parent child])
+   (for [parent [:rakennus :rakennuspaikka]
+         child [:uudelleenkaytto :kierratys :ylimaarainen-uusiutuvaenergia
+                :hiilivarastovaikutus :karbonatisoituminen]]
+     [:ilmastoselvitys :hiilikadenjalki parent child])
+   [[:ilmastoselvitys :hiilijalanjalki-yhteensa]
+    [:ilmastoselvitys :hiilijalanjalki-yhteensa-per-nettoala]]))
+
+(def ^:private et2026-tilastokeskus-columns
+  "ET2026 columns appended at the end of tilastokeskus CSV"
+  (concat
+   ;; Perustiedot
+   (for [child [:havainnointikayntityyppi-id :havainnointikayntityyppi-fi
+                :tayttaa-aplus-vaatimukset :tayttaa-a0-vaatimukset]]
+     [:perustiedot child])
+
+   ;; Lahtotiedot
+   [[:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
+    [:lahtotiedot :lammitys :lammonjako-lampotilajousto]]
+
+   ;; Tulokset: Kasvihuonepaastot
+   [[:tulokset :kasvihuonepaastot]
+    [:tulokset :kasvihuonepaastot-nettoala]]
+
+   ;; Tulokset: Uusiutuvat omavaraisenergiat kokonaistuotanto
+   (for [child [:aurinkosahko :aurinkolampo :tuulisahko :lampopumppu
+                :muulampo :muusahko]]
+     [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto child])
+
+   ;; Toteutunut ostoenergiankulutus
+   (for [child [:tietojen-alkuperavuosi
+                :lisatietoja-fi :lisatietoja-sv
+                :uusiutuvat-polttoaineet-vuosikulutus-yhteensa
+                :uusiutuvat-polttoaineet-vuosikulutus-yhteensa-nettoala
+                :fossiiliset-polttoaineet-vuosikulutus-yhteensa
+                :fossiiliset-polttoaineet-vuosikulutus-yhteensa-nettoala
+                :uusiutuva-energia-vuosituotto-yhteensa
+                :uusiutuva-energia-vuosituotto-yhteensa-nettoala]]
+     [:toteutunut-ostoenergiankulutus child])
+
+   ;; Huomiot: Kasvihuonepaastojen muutos toimenpiteista
+   (apply concat
+          (for [parent [:ymparys :alapohja-ylapohja :lammitys :iv-ilmastointi
+                        :valaistus-muut]]
+            (for [idx (range 3)]
+              [:huomiot parent :toimenpide idx :kasvihuonepaastojen-muutos])))
+
+   ;; Huomiot: Lammityksen kayttoikaarvio
+   [[:huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina]]
+
+   ;; Ilmastoselvitys (kaikki kentat)
+   (for [child [:laatimisajankohta :laatija :yritys :yritys-osoite
+                :yritys-postinumero :yritys-postitoimipaikka :laadintaperuste]]
+     [:ilmastoselvitys child])
+   (for [parent [:rakennus :rakennuspaikka]
+         child [:rakennustuotteiden-valmistus :kuljetukset-tyomaavaihe
+                :rakennustuotteiden-vaihdot :energiankaytto :purkuvaihe]]
+     [:ilmastoselvitys :hiilijalanjalki parent child])
+   (for [parent [:rakennus :rakennuspaikka]
+         child [:uudelleenkaytto :kierratys :ylimaarainen-uusiutuvaenergia
+                :hiilivarastovaikutus :karbonatisoituminen]]
+     [:ilmastoselvitys :hiilikadenjalki parent child])
+   [[:ilmastoselvitys :hiilijalanjalki-yhteensa]
+    [:ilmastoselvitys :hiilijalanjalki-yhteensa-per-nettoala]]))
 
 (def anonymized-columns
   (concat
@@ -435,7 +562,10 @@
    (for [child [:suositukset-fi :suositukset-sv]]
      [:huomiot child])
    [[:lisamerkintoja-fi]
-    [:lisamerkintoja-sv]]))
+    [:lisamerkintoja-sv]]
+
+   ;; ET2026: Uudet sarakkeet (lisatty loppuun)
+   et2026-anonymized-columns))
 
 (def tilastokeskus-columns
   (concat
@@ -606,7 +736,10 @@
                 :lisatietoja-sv]]
      [:huomiot child])
    [[:lisamerkintoja-fi]
-    [:lisamerkintoja-sv]]))
+    [:lisamerkintoja-sv]]
+
+   ;; ET2026: Uudet sarakkeet (lisatty loppuun)
+   et2026-tilastokeskus-columns))
 
 (defn column-ks->str [ks]
   (->> ks
