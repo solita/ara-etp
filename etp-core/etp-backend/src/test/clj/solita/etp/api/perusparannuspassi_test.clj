@@ -590,8 +590,8 @@
         (let [delete-res (ts/handler (-> (mock/request :delete (str "/api/private/perusparannuspassit/2026/" ppp-id))
                                          (mock/header "Accept" "application/json")
                                          (laatija-test-data/with-suomifi-laatija)))]
-          ;; Then: response is 403 Forbidden
-          (assert-status delete-res 403 "Owner laatija should not be able to DELETE PPP on signed ET")))
+          ;; Then: response is 404 Not Found
+          (assert-status delete-res 404 "Owner laatija should not be able to DELETE PPP on signed ET")))
 
       ;; Test 1.4 — Pääkäyttäjä cannot PUT PPP after ET is signed
       (t/testing "Pääkäyttäjä cannot PUT perusparannuspassi after ET is signed"
