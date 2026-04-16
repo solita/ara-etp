@@ -244,8 +244,22 @@
   [[:perustiedot :havainnointikayntityyppi-fi]
    [:perustiedot :tayttaa-aplus-vaatimukset]
    [:perustiedot :tayttaa-a0-vaatimukset]
+
+   ;; Lahtotiedot
+   [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
+   [:lahtotiedot :lammitys :lammonjako-lampotilajousto]
+
+   ;; Tulokset: Kasvihuonepaastot
    [:tulokset :kasvihuonepaastot]
-   [:tulokset :kasvihuonepaastot-nettoala]])
+   [:tulokset :kasvihuonepaastot-nettoala]
+
+   ;; Tulokset: Uusiutuvat omavaraisenergiat kokonaistuotanto
+   [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko]
+   [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo]
+   [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko]
+   [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu]
+    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo]
+   [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko]])
 
 (def bank-columns
   (let [extra-columns #{[:perustiedot :kieli-fi]
