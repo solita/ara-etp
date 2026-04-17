@@ -5,8 +5,9 @@
   export let group = [];
   export let name;
   export let versio = '0';
+  export let isEtp2026 = false;
 
-  $: show2026 = versio === '0' || versio === '2026';
+  $: show2026 = isEtp2026 && (versio === '0' || versio === '2026');
 </script>
 
 <style>

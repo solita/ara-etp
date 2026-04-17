@@ -26,6 +26,12 @@
   import * as parsers from '@/utilities/parsers';
   import { announceAssertively } from '@/utilities/announce';
 
+  const configPromise = fetch('config.json').then(response => response.json());
+  let isEtp2026 = false;
+  configPromise.then(config => {
+    isEtp2026 = config?.isEtp2026 ?? false;
+  });
+
   export let where = '';
   export let keyword = '';
   export let page = 0;
@@ -52,31 +58,46 @@
 
   announceAssertively($_('NAVBAR_ENERGIATODISTUSHAKU'));
 
-  let kayttotarkoitusluokat = Promise.all([
-    EtApi.kayttotarkoitusluokat(fetch, 2013),
-    EtApi.kayttotarkoitusluokat(fetch, 2018),
-    EtApi.alakayttotarkoitusluokat(fetch, 2013),
-    EtApi.alakayttotarkoitusluokat(fetch, 2018),
-    EtApi.kayttotarkoitusluokat(fetch, 2026),
-    EtApi.alakayttotarkoitusluokat(fetch, 2026)
-  ]).then(([kt2013, kt2018, akt2013, akt2018, kt2026, akt2026]) => ({
-    '0': {
-      kayttotarkoitusluokat: [],
-      alakayttotarkoitusluokat: []
-    },
-    '2013': {
-      kayttotarkoitusluokat: kt2013,
-      alakayttotarkoitusluokat: akt2013
-    },
-    '2018': {
-      kayttotarkoitusluokat: kt2018,
-      alakayttotarkoitusluokat: akt2018
-    },
-    '2026': {
-      kayttotarkoitusluokat: kt2026,
-      alakayttotarkoitusluokat: akt2026
-    }
-  }));
+  let kayttotarkoitusluokat = configPromise.then(config => {
+    const isEtp2026Enabled = config?.isEtp2026 ?? false;
+    const fetches = [
+      EtApi.kayttotarkoitusluokat(fetch, 2013),
+      EtApi.kayttotarkoitusluokat(fetch, 2018),
+      EtApi.alakayttotarkoitusluokat(fetch, 2013),
+      EtApi.alakayttotarkoitusluokat(fetch, 2018),
+      ...(isEtp2026Enabled
+        ? [
+            EtApi.kayttotarkoitusluokat(fetch, 2026),
+            EtApi.alakayttotarkoitusluokat(fetch, 2026)
+          ]
+        : [])
+    ];
+    return Promise.all(fetches).then(results => {
+      const [kt2013, kt2018, akt2013, akt2018, kt2026, akt2026] = results;
+      return {
+        '0': {
+          kayttotarkoitusluokat: [],
+          alakayttotarkoitusluokat: []
+        },
+        '2013': {
+          kayttotarkoitusluokat: kt2013,
+          alakayttotarkoitusluokat: akt2013
+        },
+        '2018': {
+          kayttotarkoitusluokat: kt2018,
+          alakayttotarkoitusluokat: akt2018
+        },
+        ...(isEtp2026Enabled
+          ? {
+              '2026': {
+                kayttotarkoitusluokat: kt2026,
+                alakayttotarkoitusluokat: akt2026
+              }
+            }
+          : {})
+      };
+    });
+  });
 
   const parseValues = model => {
     const parseModel = EtHakuUtils.parseModel();
@@ -187,7 +208,8 @@
             parseValues({
               ...EtHakuUtils.defaultSearchModel(),
               ...deserializedWhere
-            })
+            }),
+            { isEtp2026 }
           )
         ),
         keyword,
@@ -204,7 +226,8 @@
             parseValues({
               ...EtHakuUtils.defaultSearchModel(),
               ...deserializedWhere
-            })
+            }),
+            { isEtp2026 }
           )
         ),
         keyword
@@ -215,7 +238,9 @@
   }
 
   const commitSearch = model => {
-    const where = EtHakuUtils.where(tarkennettuShown, parseValues(model));
+    const where = EtHakuUtils.where(tarkennettuShown, parseValues(model), {
+      isEtp2026
+    });
     const whereQuery = EtHakuUtils.whereQuery(where);
     const whereString = JSON.stringify(whereQuery);
 
@@ -420,7 +445,7 @@
           </span>
 
           <div class="w-full md:w-1/2 pb-8">
-            <InputVersio name={'versio'} model={searchmodel} />
+            <InputVersio name={'versio'} model={searchmodel} {isEtp2026} />
           </div>
         </div>
 
@@ -739,7 +764,7 @@
         </div>
         <div
           class="tarkennettu-row w-full mx-auto center flex flex-col md:flex-row items-center">
-          {#if searchmodel['versio'] === '2018' || searchmodel['versio'] === '2013'}
+          {#if !isEtp2026 || searchmodel['versio'] === '2018' || searchmodel['versio'] === '2013'}
             <span
               class="tarkennettu-label w-full md:w-1/2 text-ashblue tracking-widest">
               {$_('ETHAKU_E_LUKU')}
@@ -754,20 +779,28 @@
             <InputELuokka
               name={'tulokset.e-luokka_in'}
               group={searchmodel['tulokset.e-luokka_in']}
-              versio={searchmodel['versio']} />
+              versio={searchmodel['versio']}
+              {isEtp2026} />
           </div>
         </div>
         <div
           class="tarkennettu-row w-full mx-auto center flex flex-col md:flex-row items-center">
-          <div class="w-full lg:w-1/2">
-            <InfoTooltip
-              tooltip={$_('HYOTYPINTA-ALA_TOOLTIP')}
-              title={$_('HYOTYPINTA-ALA')}>
-              <span class="tarkennettu-label text-ashblue tracking-widest">
-                {$_('HYOTYPINTA-ALA')}
-              </span>
-            </InfoTooltip>
-          </div>
+          {#if isEtp2026}
+            <div class="w-full lg:w-1/2">
+              <InfoTooltip
+                tooltip={$_('HYOTYPINTA-ALA_TOOLTIP')}
+                title={$_('HYOTYPINTA-ALA')}>
+                <span class="tarkennettu-label text-ashblue tracking-widest">
+                  {$_('HYOTYPINTA-ALA')}
+                </span>
+              </InfoTooltip>
+            </div>
+          {:else}
+            <span
+              class="tarkennettu-label w-full md:w-1/2 text-ashblue tracking-widest">
+              {$_('ETHAKU_LAMMITETTY_NETTOALA')}
+            </span>
+          {/if}
           <div class="w-full md:w-1/2 flex justify-between items-center">
             <div class="w-2/5">
               <InputNumber
@@ -852,7 +885,8 @@
             let:currentPageItemCount
             {page}
             {postinumerot}
-            {kayttotarkoitusluokat}>
+            {kayttotarkoitusluokat}
+            {isEtp2026}>
             <div slot="pagination" let:currentPageItemCount>
               <Pagination
                 {page}
@@ -862,7 +896,8 @@
                 queryStringFn={page => {
                   const where = EtHakuUtils.where(
                     tarkennettuShown,
-                    parseValues(searchmodel)
+                    parseValues(searchmodel),
+                    { isEtp2026 }
                   );
                   const whereQuery = EtHakuUtils.whereQuery(where);
                   const whereString = JSON.stringify(whereQuery);
