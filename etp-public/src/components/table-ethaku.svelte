@@ -7,6 +7,7 @@
   export let eTodistukset;
   export let postinumerot;
   export let kayttotarkoitusluokat;
+  export let isEtp2026 = false;
 
   $: currentPageItemCount = eTodistukset.length;
 
@@ -24,6 +25,8 @@
       aktluokat = kayttotarkoitusluokat['2013'].alakayttotarkoitusluokat;
     else if (parseInt(versio) === 2018)
       aktluokat = kayttotarkoitusluokat['2018'].alakayttotarkoitusluokat;
+    else if (isEtp2026 && parseInt(versio) === 2026)
+      aktluokat = kayttotarkoitusluokat['2026'].alakayttotarkoitusluokat;
     else return '';
 
     let foundKayttotarkoitusluokka = aktluokat.find(
@@ -99,8 +102,8 @@
                     class="block"
                     href={`/energiatodistus?id=${todistus.id}&versio=${todistus.versio}${ref}`}
                     ><span class="m-title">{$_('ETHAKU_TH_OSOITE')}</span>
-                    {`${selectShownKatuosoite($locale, todistus.perustiedot)}, 
-                  ${todistus.perustiedot.postinumero} 
+                    {`${selectShownKatuosoite($locale, todistus.perustiedot)},
+                  ${todistus.perustiedot.postinumero}
                   ${
                     $locale == 'sv'
                       ? findPostitoimipaikka(todistus.perustiedot.postinumero)[

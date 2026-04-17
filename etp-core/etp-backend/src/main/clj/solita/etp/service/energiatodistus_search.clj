@@ -72,6 +72,7 @@
   (schemas->search-schema
     {:energiatodistus public-energiatodistus-schema/Energiatodistus2013}
     {:energiatodistus public-energiatodistus-schema/Energiatodistus2018}
+    {:energiatodistus public-energiatodistus-schema/Energiatodistus2026}
     {:energiatodistus
      {:perustiedot
       {:nimi        schema/Str

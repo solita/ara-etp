@@ -34,11 +34,12 @@ export const energiatodistukset = (fetch, opts) => {
       namespaceSearchParams(filteredOpts.where)
     );
 
-  const qs = encodeURI(
-    zip(filteredOpts)
-      .map(item => item.join('='))
-      .join('&')
-  );
+  const qs = zip(filteredOpts)
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+    )
+    .join('&');
 
   const url = `${energiatodistuksetUrl}${qs.length ? `?${qs}` : ''}`;
 
@@ -61,11 +62,12 @@ export const energiatodistuksetCount = (fetch, opts) => {
       namespaceSearchParams(filteredOpts.where)
     );
 
-  const qs = encodeURI(
-    zip(filteredOpts)
-      .map(item => item.join('='))
-      .join('&')
-  );
+  const qs = zip(filteredOpts)
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+    )
+    .join('&');
 
   const url = `${energiatodistuksetCountUrl}${qs.length ? `?${qs}` : ''}`;
 

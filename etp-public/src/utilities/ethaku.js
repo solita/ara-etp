@@ -167,8 +167,14 @@ const gteDate = (key, model) => [
 const valueIn = (key, model) =>
   model[`${key}_in`].length ? [['in', key, model[`${key}_in`]]] : [];
 
-export const where = (tarkennettu, model) => [
+export const where = (tarkennettu, model, { isEtp2026 = true } = {}) => [
   eq('id', model),
+  ...(!isEtp2026 &&
+  (!tarkennettu ||
+    parseInt(model.versio) === 0 ||
+    isNaN(parseInt(model.versio)))
+    ? [['<=', 'versio', 2018]]
+    : []),
   ...(tarkennettu
     ? [
         eq('versio', model),
