@@ -44,6 +44,10 @@
             validation.numeric
           ),
     R.assocPath(
+      ['ilmastoselvitys', 'yritys-postinumero'],
+      Postinumero.Type(luokittelut.postinumerot)
+    ),
+    R.assocPath(
       ['perustiedot', 'postinumero'],
       Postinumero.Type(luokittelut.postinumerot)
     ),
