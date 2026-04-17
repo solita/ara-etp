@@ -536,3 +536,115 @@
                                        (laatija-test-data/with-suomifi-laatija2)))]
         (t/is (not= 200 (:status delete-res))
               "Different laatija should not be able to DELETE another's perusparannuspassi")))))
+
+(t/deftest ppp-locked-after-signing-test
+  ;; Given: a laatija with ppp-pätevyys creates an energiatodistus (2026) and a PPP, then signs the ET
+  (let [laatija-id (laatija-test-data/insert-suomifi-laatija!
+                     (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))]
+
+    (kayttaja-test-data/insert-virtu-paakayttaja!)
+
+    (let [;; Given: laatija creates an energiatodistus (2026)
+          et (et-test-data/generate-add 2026 true)
+          et-body (j/write-value-as-string et)
+          et-post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2026")
+                                      (mock/header "Accept" "application/json")
+                                      (mock/header "Content-Type" "application/json")
+                                      (mock/body et-body)
+                                      (laatija-test-data/with-suomifi-laatija)))
+          et-id (-> et-post-res :body (j/read-value object-mapper) :id)
+
+          ;; Given: laatija creates a perusparannuspassi while ET is still in draft
+          ppp (ppp-test-data/generate-add et-id)
+          ppp-body (j/write-value-as-string ppp)
+          ppp-post-res (ts/handler (-> (mock/request :post "/api/private/perusparannuspassit/2026")
+                                       (mock/header "Accept" "application/json")
+                                       (mock/header "Content-Type" "application/json")
+                                       (mock/body ppp-body)
+                                       (laatija-test-data/with-suomifi-laatija)))
+          ppp-id (-> ppp-post-res :body (j/read-value object-mapper) :id)]
+
+      ;; Verify setup
+      (assert-status et-post-res 201 "Setup: ET creation should succeed")
+      (assert-status ppp-post-res 201 "Setup: PPP creation should succeed")
+
+      ;; Given: energiatodistus is signed (tila-id = 2)
+      (et-test-data/sign! et-id laatija-id true)
+
+      ;; Test 1.1 — Laatija cannot PUT (update) PPP after ET is signed
+      (t/testing "Laatija cannot PUT perusparannuspassi after ET is signed"
+        ;; When: owner laatija sends PUT request to update PPP
+        (let [modified-ppp (assoc-in ppp [:passin-perustiedot :tayttaa-a0-vaatimukset] true)
+              put-body (j/write-value-as-string modified-ppp)
+              put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2026/" ppp-id))
+                                      (mock/header "Accept" "application/json")
+                                      (mock/header "Content-Type" "application/json")
+                                      (mock/body put-body)
+                                      (laatija-test-data/with-suomifi-laatija)))]
+          ;; Then: response is 403 Forbidden
+          (assert-status put-res 403 "Owner laatija should not be able to PUT PPP on signed ET")))
+
+      ;; Test 1.3 — Laatija cannot DELETE PPP after ET is signed
+      (t/testing "Laatija cannot DELETE perusparannuspassi after ET is signed"
+        ;; When: owner laatija sends DELETE request for the PPP
+        (let [delete-res (ts/handler (-> (mock/request :delete (str "/api/private/perusparannuspassit/2026/" ppp-id))
+                                         (mock/header "Accept" "application/json")
+                                         (laatija-test-data/with-suomifi-laatija)))]
+          ;; Then: response is 404 Not Found
+          (assert-status delete-res 404 "Owner laatija should not be able to DELETE PPP on signed ET")))
+
+      ;; Test 1.4 — Pääkäyttäjä cannot PUT PPP after ET is signed
+      (t/testing "Pääkäyttäjä cannot PUT perusparannuspassi after ET is signed"
+        ;; When: pääkäyttäjä sends PUT request to update PPP
+        (let [modified-ppp (assoc-in ppp [:passin-perustiedot :tayttaa-a0-vaatimukset] true)
+              put-body (j/write-value-as-string modified-ppp)
+              put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2026/" ppp-id))
+                                      (mock/header "Accept" "application/json")
+                                      (mock/header "Content-Type" "application/json")
+                                      (mock/body put-body)
+                                      (kayttaja-test-data/with-virtu-user)))]
+          ;; Then: response is 403 Forbidden
+          (assert-status put-res 403 "Pääkäyttäjä should not be able to PUT PPP on signed ET")))
+
+      ;; Test 1.5 — Laatija can still GET PPP after ET is signed
+      (t/testing "Laatija can still GET perusparannuspassi after ET is signed"
+        ;; When: owner laatija sends GET request for the PPP
+        (let [get-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2026/" ppp-id))
+                                      (mock/header "Accept" "application/json")
+                                      (laatija-test-data/with-suomifi-laatija)))]
+          ;; Then: response is 200 OK
+          (assert-status get-res 200 "Owner laatija should still be able to GET PPP on signed ET"))))))
+
+(t/deftest ppp-post-locked-after-signing-test
+  ;; Test 1.2 — Laatija cannot POST (create) a new PPP after ET is signed
+  ;; Given: a laatija with ppp-pätevyys creates an ET (2026) without PPP, then signs it
+  (let [laatija-id (laatija-test-data/insert-suomifi-laatija!
+                     (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))]
+
+    (let [;; Given: laatija creates an energiatodistus (2026) without PPP
+          et (et-test-data/generate-add 2026 true)
+          et-body (j/write-value-as-string et)
+          et-post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2026")
+                                      (mock/header "Accept" "application/json")
+                                      (mock/header "Content-Type" "application/json")
+                                      (mock/body et-body)
+                                      (laatija-test-data/with-suomifi-laatija)))
+          et-id (-> et-post-res :body (j/read-value object-mapper) :id)]
+
+      ;; Verify setup
+      (assert-status et-post-res 201 "Setup: ET creation should succeed")
+
+      ;; Given: energiatodistus is signed (tila-id = 2)
+      (et-test-data/sign! et-id laatija-id true)
+
+      (t/testing "Laatija cannot POST perusparannuspassi after ET is signed"
+        ;; When: owner laatija sends POST request to create a new PPP for the signed ET
+        (let [ppp (ppp-test-data/generate-add et-id)
+              ppp-body (j/write-value-as-string ppp)
+              post-res (ts/handler (-> (mock/request :post "/api/private/perusparannuspassit/2026")
+                                       (mock/header "Accept" "application/json")
+                                       (mock/header "Content-Type" "application/json")
+                                       (mock/body ppp-body)
+                                       (laatija-test-data/with-suomifi-laatija)))]
+          ;; Then: response is 403 Forbidden
+          (assert-status post-res 403 "Owner laatija should not be able to POST PPP on signed ET"))))))

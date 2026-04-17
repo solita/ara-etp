@@ -221,6 +221,17 @@ export const calculateDerivedValues = (energiatodistus, perusparannuspassi) => {
  *
  * Returns: string
  */
+/**
+ * Returns true when a vaihe has no vaiheen-alku-pvm set,
+ * meaning its fields should be disabled regardless of the parent disabled prop.
+ */
+export const isVaiheInactive = vaihe =>
+  R.compose(
+    R.not,
+    Maybe.isSome,
+    EitherMaybe.toMaybe
+  )(vaihe['tulokset']['vaiheen-alku-pvm']);
+
 export const formatVaiheHeading = (title, unit, startingYear, noStartingYear) =>
   R.compose(
     EitherMaybe.orSome(title + ' (' + noStartingYear + ')'),

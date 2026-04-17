@@ -357,6 +357,7 @@
             {eTehokkuus}
             {inputLanguage}
             {luokittelut}
+            {disabled}
             bind:dirty
             schema={schemas.perusparannuspassi}
             {pppValidation}
