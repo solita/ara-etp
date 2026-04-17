@@ -184,4 +184,46 @@
         <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty-client@.*$</packageUrl>
         <cve>CVE-2024-6763</cve>
     </suppress>
+
+    <!-- log4j-api is only present as a transitive dependency; logging goes through SLF4J/Logback.
+         The Socket Appender TLS hostname verification issue is not relevant since we don't use Log4j's Socket Appender. -->
+    <suppress>
+        <notes><![CDATA[
+   file name: log4j-api-2.24.3.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.logging\.log4j/log4j\-api@.*$</packageUrl>
+        <cve>CVE-2025-68161</cve>
+    </suppress>
+
+    <!-- PDFBox path traversal in ExtractEmbeddedFiles example code.
+         We use PDFBox for PDF generation, watermarking and signing — not for extracting embedded files. -->
+    <suppress>
+        <notes><![CDATA[
+   file name: pdfbox-2.0.32.jar, xmpbox-2.0.24.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
+        <cve>CVE-2026-23907</cve>
+    </suppress>
+
+    <!-- commons-io CPU DoS in XmlStreamReader affects versions < 2.14.0.
+         Our direct dependency is commons-io 2.20.0 (not vulnerable).
+         This is flagged from the embedded pom.xml inside velocity-engine-core-2.3.jar. -->
+    <suppress>
+        <notes><![CDATA[
+   file name: velocity-engine-core-2.3.jar/META-INF/maven/commons-io/commons-io/pom.xml
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/commons-io/commons-io@.*$</packageUrl>
+        <cve>CVE-2024-47554</cve>
+    </suppress>
+
+    <!-- CVE-2025-7962: SMTP injection in Jakarta Mail / Angus Mail.
+         angus-activation is the Activation Framework (MIME types), not the mail library — false CPE match.
+         The actual SMTP library (com.sun.mail/javax.mail 1.6.2) should be upgraded to angus-mail in a separate ticket. -->
+    <suppress>
+        <notes><![CDATA[
+   file name: angus-activation-2.0.2.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.eclipse\.angus/angus\-activation@.*$</packageUrl>
+        <cve>CVE-2025-7962</cve>
+    </suppress>
 </suppressions>
