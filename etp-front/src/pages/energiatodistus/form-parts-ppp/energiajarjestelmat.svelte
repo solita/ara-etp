@@ -118,6 +118,7 @@
           </td>
           <td>
             <Select
+              {disabled}
               allowNone={false}
               bind:model={perusparannuspassi}
               lens={energiajarjestelmatConfig[energiajarjestelma].lens}
@@ -136,6 +137,7 @@
   </div>
   <div class="mb-4 w-full py-4">
     <Textarea
+      {disabled}
       {schema}
       i18nRoot="perusparannuspassi"
       bind:model={perusparannuspassi}

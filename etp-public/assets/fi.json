@@ -29,6 +29,7 @@
   "ETHAKU_ALAKAYTTOTARKOITUSLUOKKA": "Alakäyttötarkoitusluokka",
   "ETHAKU_E_KOKONAISLUKU": "E-Luku (Kokonaisluku)",
   "ETHAKU_E_LUKU": "E-luokka (A-G)",
+  "ETHAKU_E_LUKU2026": "E-luokka (A+-G)",
   "ETHAKU_LAMMITETTY_NETTOALA": "Lämmitetty nettoala (m²)",
   "ETHAKU_HAKUEHDOT_NAYTA": "Lisää hakuehtoja",
   "ETHAKU_HAKUEHDOT_PIILOITA": "Vähemmän hakuehtoja",
@@ -316,5 +317,7 @@
   "TILASTOT_YLI": "Yli",
   "TILASTOT_TULOSTA": "Tulosta",
   "COMMON_ON": "Päällä",
-  "COMMON_OFF": "Pois"
+  "COMMON_OFF": "Pois",
+  "HYOTYPINTA-ALA": "Hyötypinta-ala (m²)",
+  "HYOTYPINTA-ALA_TOOLTIP": "Aikaisemmissa versioissa (2013 ja 2018) nimellä 'Lämmitetty nettoala'."
 }

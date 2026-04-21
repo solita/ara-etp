@@ -100,7 +100,7 @@
        :delete {:summary    "Poista energiatodistukselta perusparannuspassi"
                 :parameters {:path {:id common-schema/Key}}
                 :responses  {200 {:body nil}
-                             404 {:body common-schema/GeneralError}}
+                             404 {:body schema/Str}}
                 :access     rooli-service/ppp-laatija?
                 :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db whoami]}]
                               (api-response/ok|not-found

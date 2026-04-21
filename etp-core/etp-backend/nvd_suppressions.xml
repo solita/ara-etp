@@ -218,7 +218,7 @@
 
     <!-- CVE-2025-7962: SMTP injection in Jakarta Mail / Angus Mail.
          angus-activation is the Activation Framework (MIME types), not the mail library — false CPE match.
-         The actual SMTP library (com.sun.mail/javax.mail 1.6.2) should be upgraded to angus-mail in a separate ticket. -->
+         The actual SMTP library has been upgraded to com.sun.mail/jakarta.mail 1.6.8 (patched). -->
     <suppress>
         <notes><![CDATA[
    file name: angus-activation-2.0.2.jar

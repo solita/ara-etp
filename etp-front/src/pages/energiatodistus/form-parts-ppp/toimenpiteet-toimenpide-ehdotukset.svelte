@@ -20,6 +20,7 @@
   export let vaihe;
   export let inputLanguage;
   export let luokittelut;
+  export let disabled = false;
 
   const toimenpideEhdotukset = R.prop('toimenpide-ehdotus', luokittelut);
   const toimenpideEhdotusGroup = R.prop(
@@ -53,6 +54,7 @@
     {#each R.range(0, 6) as toimenpideN}
       <div>
         <Select
+          {disabled}
           variant={SelectVariants.LIGHT}
           items={R.compose(
             R.pluck('id'),
@@ -80,6 +82,7 @@
   </div>
   <div class="w-full">
     <Textarea
+      {disabled}
       schema={pppSchema}
       showOrdinal={false}
       inputLanguage={Maybe.Some(inputLanguage)}

@@ -16,6 +16,7 @@
   export let pppSchema;
   export let luokittelut;
   export let inputLanguage;
+  export let disabled = false;
 </script>
 
 <H3 text={i18n(`perusparannuspassi.toimenpiteet.header`)} />
@@ -24,6 +25,7 @@
   {#each perusparannuspassi.vaiheet as vaihe}
     {#if R.compose(Maybe.isSome, EM.toMaybe, R.view(R.lensPath( ['tulokset', 'vaiheen-alku-pvm'] )))(vaihe)}
       <Osio
+        {disabled}
         {energiatodistus}
         {eTehokkuus}
         bind:perusparannuspassi
