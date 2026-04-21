@@ -487,48 +487,48 @@
           {/if}
         </dl>
         {#if versio !== '2026'}
-        <div class="w-full my-8 print:my-0 graph-container">
-          <div class="w-full flex flex-col bg-white">
-            <div class="w-full flex border-b border-black">
-              <div class="w-0 md:w-1/2 md:border-r border-black p-2" />
-              <div
-                class="w-full md:w-1/2 px-2 py-4 flex justify-end md:justify-start md:pl-10">
-                <span class="text-green text-lg">{$_('ET_LUOKKA')}</span>
+          <div class="w-full my-8 print:my-0 graph-container">
+            <div class="w-full flex flex-col bg-white">
+              <div class="w-full flex border-b border-black">
+                <div class="w-0 md:w-1/2 md:border-r border-black p-2" />
+                <div
+                  class="w-full md:w-1/2 px-2 py-4 flex justify-end md:justify-start md:pl-10">
+                  <span class="text-green text-lg">{$_('ET_LUOKKA')}</span>
+                </div>
               </div>
+              {#each classes as cls}
+                <div
+                  class="w-full flex border-black {energiatodistus?.versio ===
+                    2013 && cls === 'C'
+                    ? 'border-dotted border-b-4 pb-2'
+                    : 'border-b'}">
+                  <div
+                    class="flex items-center justify-start w-1/2 border-r border-black px-2 py-4 print:py-1">
+                    <span
+                      class="inline-block font-bold py-1 px-4 text-2xl graph-color-{cls.toLowerCase()} pr-1 md:pr-auto print:text-sm"
+                      >{cls}</span>
+                    <div class="arrow-right" />
+                  </div>
+                  <div
+                    class="flex items-center justify-end md:justify-start w-1/2 px-2 py-4 print:py-1 md:pl-10">
+                    {#if energiatodistus?.tulokset['e-luokka'] == cls}
+                      <div class="arrow-left" />
+                      <div
+                        class="inline-block py-1 pl-4 pr-10 text-2xl bg-black text-white print:text-sm">
+                        <span class="font-bold">{cls}</span><span
+                          class="text-sm print:text-xs"
+                          >{energiatodistus?.versio || versio}</span>
+                      </div>
+                    {/if}
+                  </div>
+                </div>
+                {#if energiatodistus?.versio === 2013 && cls === 'C'}
+                  <LineText />
+                {/if}
+              {/each}
             </div>
-            {#each classes as cls}
-              <div
-                class="w-full flex border-black {energiatodistus?.versio ===
-                  2013 && cls === 'C'
-                  ? 'border-dotted border-b-4 pb-2'
-                  : 'border-b'}">
-                <div
-                  class="flex items-center justify-start w-1/2 border-r border-black px-2 py-4 print:py-1">
-                  <span
-                    class="inline-block font-bold py-1 px-4 text-2xl graph-color-{cls.toLowerCase()} pr-1 md:pr-auto print:text-sm"
-                    >{cls}</span>
-                  <div class="arrow-right" />
-                </div>
-                <div
-                  class="flex items-center justify-end md:justify-start w-1/2 px-2 py-4 print:py-1 md:pl-10">
-                  {#if energiatodistus?.tulokset['e-luokka'] == cls}
-                    <div class="arrow-left" />
-                    <div
-                      class="inline-block py-1 pl-4 pr-10 text-2xl bg-black text-white print:text-sm">
-                      <span class="font-bold">{cls}</span><span
-                        class="text-sm print:text-xs"
-                        >{energiatodistus?.versio || versio}</span>
-                    </div>
-                  {/if}
-                </div>
-              </div>
-              {#if energiatodistus?.versio === 2013 && cls === 'C'}
-                <LineText />
-              {/if}
-            {/each}
           </div>
-        </div>
-       {/if}
+        {/if}
 
         <dl class="w-full grid grid-cols-2">
           <div
