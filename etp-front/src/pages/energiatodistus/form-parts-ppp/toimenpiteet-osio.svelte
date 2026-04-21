@@ -23,6 +23,7 @@
 
   export let luokittelut;
 
+  export let disabled = false;
   export let open = false;
   const toggleOpen = () => (open = R.not(open));
 </script>
@@ -59,6 +60,7 @@
         {energiatodistus}
         {eTehokkuus} />
       <ToimenpideEhdotukset
+        {disabled}
         bind:perusparannuspassi
         {pppSchema}
         {vaihe}

@@ -9,6 +9,7 @@
 
   export let perusparannuspassi;
   export let schema;
+  export let disabled = false;
 </script>
 
 <div class="flex min-w-full flex-col gap-y-5 overflow-x-auto">
@@ -25,6 +26,7 @@
   <div class="flex flex-col gap-x-8 lg:flex-row">
     <div class="min-w-0 flex-1">
       <Input
+        {disabled}
         bind:model={perusparannuspassi}
         i18nRoot="perusparannuspassi"
         required={true}
@@ -34,6 +36,7 @@
 
     <div class="min-w-0 flex-1">
       <Input
+        {disabled}
         bind:model={perusparannuspassi}
         i18nRoot="perusparannuspassi"
         path={['passin-perustiedot', 'passin-esittely']}
@@ -41,6 +44,7 @@
     </div>
   </div>
   <Checkbox
+    {disabled}
     bind:model={perusparannuspassi}
     lens={R.lensPath(['passin-perustiedot', 'tayttaa-a0-vaatimukset'])}
     label={$_(
@@ -48,6 +52,7 @@
     )} />
 
   <Checkbox
+    {disabled}
     bind:model={perusparannuspassi}
     lens={R.lensPath(['passin-perustiedot', 'tayttaa-aplus-vaatimukset'])}
     label={$_(

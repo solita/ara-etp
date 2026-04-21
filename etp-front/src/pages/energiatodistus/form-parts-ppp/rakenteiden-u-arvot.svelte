@@ -10,6 +10,7 @@
   export let schema;
   export let perusparannuspassi;
   export let energiatodistus;
+  export let disabled = false;
 
   const rakenneKeyMap = {
     ulkoseinat: 'ulkoseinat',
@@ -72,6 +73,7 @@
           </td>
           <td>
             <Input
+              {disabled}
               {schema}
               bind:model={perusparannuspassi}
               compact={true}

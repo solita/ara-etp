@@ -1,7 +1,4 @@
 <script>
-  import * as R from 'ramda';
-
-  import * as Maybe from '@Utility/maybe-utils';
   import * as EitherMaybe from '@Utility/either-maybe.js';
 
   import H4 from '@Component/H/H4';
@@ -12,6 +9,7 @@
   export let energiatodistus;
   export let perusparannuspassi;
   export let schema;
+  export let disabled = false;
 </script>
 
 <H4
@@ -66,11 +64,7 @@
               bind:model={perusparannuspassi}
               compact={true}
               i18nRoot="perusparannuspassi"
-              disabled={R.compose(
-                R.not,
-                Maybe.isSome,
-                EitherMaybe.toMaybe
-              )(vaihe['tulokset']['vaiheen-alku-pvm'])}
+              disabled={disabled || PPPUtils.isVaiheInactive(vaihe)}
               path={[
                 'vaiheet',
                 vaihe['vaihe-nro'] - 1,
