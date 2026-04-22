@@ -32,17 +32,19 @@
                 [(xschema/optional-properties
                   energiatodistus-schema/UserDefinedEnergiamuoto)])))
 
-(def Tulokset2018
+(def Tulokset
   (select-keys energiatodistus-schema/Tulokset
                [:kaytettavat-energiamuodot]))
 
 (defn energiatodistus-versio [versio]
   (-> (energiatodistus-schema/energiatodistus-versio
-       versio
-       (xschema/optional-properties
-        {:perustiedot Perustiedot
-         :lahtotiedot Lahtotiedot
-         :tulokset    (if (= versio 2018) Tulokset2018 Tulokset2013)}))
+        versio
+        (xschema/optional-properties
+          {:perustiedot Perustiedot
+           :lahtotiedot Lahtotiedot
+           :tulokset    (case versio
+                          2013 Tulokset2013
+                          Tulokset)}))
       (dissoc :laatija-fullname
               :laatija-id
               :laskutusaika)))

@@ -54,7 +54,6 @@
   (-> example-2013
       (assoc-in [:perustiedot :laatimisvaihe] 1)
       (assoc :versio 2018)
-      (assoc-in [:tulokset :kaytettavat-energiamuodot :muu] nil)
       (update-in [:tulokset :kaytettavat-energiamuodot] dissoc :muu)))
 
 (t/deftest Energiatodistus-test
