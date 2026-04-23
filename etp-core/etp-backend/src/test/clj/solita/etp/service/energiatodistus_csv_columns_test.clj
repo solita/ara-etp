@@ -3,15 +3,15 @@
             [solita.etp.service.energiatodistus-csv :as csv]))
 
 (t/deftest bank-columns-count
-  (t/is (= 55 (count csv/bank-columns))
+  (t/is (= 69 (count csv/bank-columns))
         (str "bank-columns count changed unexpectedly: " (count csv/bank-columns))))
 
 (t/deftest anonymized-columns-count
-  (t/is (= 415 (count csv/anonymized-columns))
+  (t/is (= 477 (count csv/anonymized-columns))
         (str "anonymized-columns count changed unexpectedly: " (count csv/anonymized-columns))))
 
 (t/deftest tilastokeskus-columns-count
-  (t/is (= 429 (count csv/tilastokeskus-columns))
+  (t/is (= 496 (count csv/tilastokeskus-columns))
         (str "tilastokeskus-columns count changed unexpectedly: " (count csv/tilastokeskus-columns))))
 
 (t/deftest bank-columns-snapshot
@@ -69,19 +69,33 @@
             [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine]
             [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-kerroin]
             [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys]
-            [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-kerroin]]
+            [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-kerroin]
+            [:perustiedot :havainnointikayntityyppi-fi]
+            [:perustiedot :tayttaa-aplus-vaatimukset]
+            [:perustiedot :tayttaa-a0-vaatimukset]
+            [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
+            [:lahtotiedot :lammitys :lammonjako-lampotilajousto]
+            [:tulokset :kasvihuonepaastot]
+            [:tulokset :kasvihuonepaastot-nettoala]
+            [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko]
+            [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo]
+            [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko]
+            [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu]
+            [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo]
+            [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko]
+            [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]]
            (vec csv/bank-columns))))
 
 (t/deftest anonymized-columns-headers
   (let [headers (mapv csv/column-ks->str csv/anonymized-columns)]
     (t/is (= "Versio" (first headers)))
-    (t/is (= "Lisamerkintoja-sv" (last headers)))
+    (t/is (= "Ilmastoselvitys / Hiilikadenjalki / Rakennuspaikka / Karbonatisoituminen" (last headers)))
     (t/is (every? string? headers))))
 
 (t/deftest tilastokeskus-columns-headers
   (let [headers (mapv csv/column-ks->str csv/tilastokeskus-columns)]
     (t/is (= "Id" (first headers)))
-    (t/is (= "Lisamerkintoja-sv" (last headers)))
+    (t/is (= "Ilmastoselvitys / Hiilikadenjalki / Rakennuspaikka / Karbonatisoituminen" (last headers)))
     (t/is (every? string? headers))))
 
 (t/deftest bank-columns-no-duplicates
