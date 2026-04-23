@@ -609,11 +609,21 @@
    [[:lisamerkintoja-fi]
     [:lisamerkintoja-sv]]))
 
+(def ^:private header-renames
+  "CSV header renames applied to the final header string.
+   Keys and values are plain strings, matched case-sensitively.
+   Input is already capitalized by str/capitalize so only capitalized forms are needed."
+  {"Nettoala" "Hyötypinta-ala"})
+
+(defn- apply-header-renames [header]
+  (reduce-kv str/replace header header-renames))
+
 (defn column-ks->str [ks]
   (->> ks
        (map #(if (keyword? %) (name %) %))
        (map str/capitalize)
-       (str/join #" / ")))
+       (str/join #" / ")
+       apply-header-renames))
 
 (defn energiatodistus->csv-line [columns energiatodistus]
   (->> columns
