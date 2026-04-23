@@ -608,15 +608,21 @@
    [[:lisamerkintoja-fi]
     [:lisamerkintoja-sv]]))
 
+(def ^:private header-renames
+  "CSV header renames applied after generating the header from column path.
+   Keys are case-insensitive patterns, values are their replacements."
+  {"Nettoala" "Hyötypinta-ala"
+   "nettoala" "hyötypinta-ala"})
+
+(defn- apply-header-renames [header]
+  (reduce-kv str/replace header header-renames))
+
 (defn column-ks->str [ks]
   (-> (->> ks
            (map #(if (keyword? %) (name %) %))
            (map str/capitalize)
            (str/join #" / "))
-      (str/replace #"(?i)nettoala"
-                   #(if (Character/isUpperCase ^char (first %))
-                      "Hyötypinta-ala"
-                      "hyötypinta-ala"))))
+      apply-header-renames))
 
 (defn energiatodistus->csv-line [columns energiatodistus]
   (->> columns
