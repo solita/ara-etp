@@ -67,7 +67,7 @@
              org.clojure/data.xml                                {:mvn/version "0.2.0-alpha9"}
              camel-snake-kebab/camel-snake-kebab                 {:mvn/version "0.4.3"}
              com.jcraft/jsch                                     {:mvn/version "0.1.55"}
-             com.sun.mail/javax.mail                             {:mvn/version "1.6.2"}
+             com.sun.mail/jakarta.mail                           {:mvn/version "1.6.8"}
 
              org.apache.wss4j/wss4j-ws-security-dom              {:mvn/version "3.0.4"}
              org.apache.wss4j/wss4j-ws-security-common           {:mvn/version "3.0.5"

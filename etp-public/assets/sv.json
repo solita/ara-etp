@@ -29,6 +29,7 @@
   "ETHAKU_ALAKAYTTOTARKOITUSLUOKKA": "Klasser med avseende på underanvändningsändamål",
   "ETHAKU_E_KOKONAISLUKU": "E-tal (Heltal)",
   "ETHAKU_E_LUKU": "Kategori E (A-G)",
+  "ETHAKU_E_LUKU2026": "Kategori E (A+-G)",
   "ETHAKU_LAMMITETTY_NETTOALA": "Uppvärmd nettoarea (m²)",
   "ETHAKU_HAKUEHDOT_NAYTA": "Fler sökkriterier",
   "ETHAKU_HAKUEHDOT_PIILOITA": "Färre sökkriterier",
@@ -316,5 +317,7 @@
   "LISATIETOA_ENERGIATODISTUKSIA": "Energicertifikat",
   "ETHAKU_INVALID_RAKENNUKSEN_NIMI": "Längden får vara högst 100 tecken",
   "COMMON_ON": "På",
-  "COMMON_OFF": "Av"
+  "COMMON_OFF": "Av",
+  "HYOTYPINTA-ALA": "Hyötypinta-ala (m²) (sv)",
+  "HYOTYPINTA-ALA_TOOLTIP": "Aikaisemmissa versioissa (2013 ja 2018) nimellä 'Lämmitetty nettoala'. (sv)"
 }

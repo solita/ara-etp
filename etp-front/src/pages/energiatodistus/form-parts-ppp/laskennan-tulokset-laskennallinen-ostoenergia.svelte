@@ -14,6 +14,7 @@
   export let eTehokkuus = Maybe.None();
   export let perusparannuspassi;
   export let schema;
+  export let disabled = false;
 
   const etEnergiamuodotFromPppVaihe = vaihe =>
     R.compose(
@@ -108,11 +109,7 @@
               bind:model={perusparannuspassi}
               compact={true}
               i18nRoot="perusparannuspassi"
-              disabled={R.compose(
-                R.not,
-                Maybe.isSome,
-                EitherMaybe.toMaybe
-              )(vaihe['tulokset']['vaiheen-alku-pvm'])}
+              disabled={disabled || PPPUtils.isVaiheInactive(vaihe)}
               path={[
                 'vaiheet',
                 vaihe['vaihe-nro'] - 1,

@@ -11,7 +11,6 @@
   export let perusparannuspassi;
   export let energiatodistus;
   export let schema;
-  export let disabled = false;
 
   $: costs = R.map(
     metric => ({

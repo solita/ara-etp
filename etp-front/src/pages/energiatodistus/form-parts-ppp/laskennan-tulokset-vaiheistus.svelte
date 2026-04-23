@@ -5,6 +5,7 @@
 
   export let perusparannuspassi;
   export let schema;
+  export let disabled = false;
 </script>
 
 <H4 text={$_('perusparannuspassi.laskennan-tulokset.vaiheistus.header')} />
@@ -36,6 +37,7 @@
           <td class="et-table--td">Vaihe {vaihe['vaihe-nro']}</td>
           <td class="et-table--td">
             <Input
+              {disabled}
               {schema}
               center={true}
               bind:model={perusparannuspassi}

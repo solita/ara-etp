@@ -10,6 +10,7 @@
   export let perusparannuspassi;
   export let schema;
   export let inputLanguage;
+  export let disabled = false;
 </script>
 
 <div class="mb-4 w-full py-4">
@@ -18,6 +19,7 @@
       text={i18n(`perusparannuspassi.passin-perustiedot.lisatiedot.header`)} />
   </div>
   <Textarea
+    {disabled}
     {schema}
     i18nRoot="perusparannuspassi"
     bind:model={perusparannuspassi}

@@ -327,8 +327,7 @@
                                   :not-found
                                   (str "perusparannuspassi " perusparannuspassi-id " does not exist.")))
                               (assert-correct-et-owner! whoami (:laatija-id ppp))
-                              (perusparannuspassi-db/delete-perusparannuspassi! db {:id perusparannuspassi-id})
-                              perusparannuspassi-id)))
+                              (perusparannuspassi-db/delete-perusparannuspassi! db {:id perusparannuspassi-id}))))
 
 (defn find-ppp-numeric-validations [db versio]
   (->> (perusparannuspassi-db/select-ppp-numeric-validations db {:versio versio})
