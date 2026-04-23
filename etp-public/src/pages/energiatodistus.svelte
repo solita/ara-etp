@@ -486,55 +486,57 @@
             {/if}
           {/if}
         </dl>
-        <div class="w-full my-8 print:my-0 graph-container">
-          <div class="w-full flex flex-col bg-white">
-            <div class="w-full flex border-b border-black">
-              <div class="w-0 md:w-1/2 md:border-r border-black p-2" />
-              <div
-                class="w-full md:w-1/2 px-2 py-4 flex justify-end md:justify-start md:pl-10">
-                <span class="text-green text-lg">{$_('ET_LUOKKA')}</span>
+        {#if versio !== '2026'}
+          <div class="w-full my-8 print:my-0 graph-container">
+            <div class="w-full flex flex-col bg-white">
+              <div class="w-full flex border-b border-black">
+                <div class="w-0 md:w-1/2 md:border-r border-black p-2" />
+                <div
+                  class="w-full md:w-1/2 px-2 py-4 flex justify-end md:justify-start md:pl-10">
+                  <span class="text-green text-lg">{$_('ET_LUOKKA')}</span>
+                </div>
               </div>
+              {#each classes as cls}
+                <div
+                  class="w-full flex border-black {energiatodistus?.versio ===
+                    2013 && cls === 'C'
+                    ? 'border-dotted border-b-4 pb-2'
+                    : 'border-b'}">
+                  <div
+                    class="flex items-center justify-start w-1/2 border-r border-black px-2 py-4 print:py-1">
+                    <span
+                      class="inline-block font-bold py-1 px-4 text-2xl graph-color-{cls.toLowerCase()} pr-1 md:pr-auto print:text-sm"
+                      >{cls}</span>
+                    <div class="arrow-right" />
+                  </div>
+                  <div
+                    class="flex items-center justify-end md:justify-start w-1/2 px-2 py-4 print:py-1 md:pl-10">
+                    {#if energiatodistus?.tulokset['e-luokka'] == cls}
+                      <div class="arrow-left" />
+                      <div
+                        class="inline-block py-1 pl-4 pr-10 text-2xl bg-black text-white print:text-sm">
+                        <span class="font-bold">{cls}</span><span
+                          class="text-sm print:text-xs"
+                          >{energiatodistus?.versio || versio}</span>
+                      </div>
+                    {/if}
+                  </div>
+                </div>
+                {#if energiatodistus?.versio === 2013 && cls === 'C'}
+                  <LineText />
+                {/if}
+              {/each}
             </div>
-            {#each classes as cls}
-              <div
-                class="w-full flex border-black {energiatodistus?.versio ===
-                  2013 && cls === 'C'
-                  ? 'border-dotted border-b-4 pb-2'
-                  : 'border-b'}">
-                <div
-                  class="flex items-center justify-start w-1/2 border-r border-black px-2 py-4 print:py-1">
-                  <span
-                    class="inline-block font-bold py-1 px-4 text-2xl graph-color-{cls.toLowerCase()} pr-1 md:pr-auto print:text-sm"
-                    >{cls}</span>
-                  <div class="arrow-right" />
-                </div>
-                <div
-                  class="flex items-center justify-end md:justify-start w-1/2 px-2 py-4 print:py-1 md:pl-10">
-                  {#if energiatodistus?.tulokset['e-luokka'] == cls}
-                    <div class="arrow-left" />
-                    <div
-                      class="inline-block py-1 pl-4 pr-10 text-2xl bg-black text-white print:text-sm">
-                      <span class="font-bold">{cls}</span><span
-                        class="text-sm print:text-xs"
-                        >{energiatodistus?.versio || versio}</span>
-                    </div>
-                  {/if}
-                </div>
-              </div>
-              {#if energiatodistus?.versio === 2013 && cls === 'C'}
-                <LineText />
-              {/if}
-            {/each}
           </div>
-        </div>
+        {/if}
 
         <dl class="w-full grid grid-cols-2">
           <div
             class="col-span-2 mb-6 print:mb-2 flex flex-col md:flex-row print:flex-row space-x-2 w-full">
-            <dt class="w-full md:w-2/3 text-ashblue print:w-2/3">
+            <dt class="w-full md:w-1/2 text-ashblue print:w-1/2">
               {$_('ET_ELUKU')}:
             </dt>
-            <dd class="w-full md:w-1/3 print:w-1/3">
+            <dd class="w-full md:w-1/2 print:w-1/2">
               <KWhE
                 value={formats.formatNumber0(
                   energiatodistus?.tulokset['e-luku']
@@ -544,17 +546,17 @@
           {#if versio == '2018'}
             <div
               class="col-span-2 mb-6 print:mb-2 flex flex-col md:flex-row print:flex-row space-x-2 w-full items-start justify-start">
-              <dt class="w-full md:w-2/3 print:w-2/3 text-ashblue">
+              <dt class="w-full md:w-1/2 print:w-1/2 text-ashblue">
                 {$_('ET_VAATIMUSTASO')}:
               </dt>
               {#if eLuokka?.['raja-uusi-2018']}
-                <dd class="w-full md:w-1/3 print:w-1/3">
+                <dd class="w-full md:w-1/2 print:w-1/2">
                   <KWhE value={`≤ ${eLuokka?.['raja-uusi-2018']}`} />/({$_(
                     'ET_M2VUOSI'
                   )})
                 </dd>
               {:else}
-                <dd class="w-full md:w-1/3 print:w-1/3">
+                <dd class="w-full md:w-1/2 print:w-1/2">
                   {$_('ET_EI_RAJA_ARVOA')}
                 </dd>
               {/if}
@@ -1045,14 +1047,6 @@
             </p>
           </div>
         {/if}
-
-        <div class="w-full mx-auto my-6">
-          <Button {...buttonStyles.green} on:click={() => window.print()}>
-            <span class="material-icons align-middle" aria-hidden="true"
-              >print</span>
-            <span class="whitespace-nowrap"> {$_('TULOSTA_KOOSTE')} </span>
-          </Button>
-        </div>
       {:catch error}
         <div class="px-3 pb-8 md:p-8 xl:p-16 w-full">{$_('ET_NOT_FOUND')}</div>
       {/await}
