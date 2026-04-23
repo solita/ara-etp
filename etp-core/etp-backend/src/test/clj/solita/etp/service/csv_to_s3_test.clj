@@ -69,18 +69,17 @@
                       [:tulokset :kaytettavat-energiamuodot :muu 2 :muotokerroin]})
 
 (def ^:private header-renames
-  {"Nettoala" "Hyötypinta-ala"
-   "nettoala" "hyötypinta-ala"})
+  {"Nettoala" "Hyötypinta-ala"})
 
 (defn- apply-header-renames [header]
   (reduce-kv str/replace header header-renames))
 
 (defn column-ks->str [ks]
-  (-> (->> ks
-           (map #(if (keyword? %) (name %) %))
-           (map str/capitalize)
-           (str/join " / "))
-      apply-header-renames))
+  (->> ks
+       (map #(if (keyword? %) (name %) %))
+       (map str/capitalize)
+       (str/join " / ")
+       apply-header-renames))
 
 (defn columns->header-strings [columns]
   (->> columns
