@@ -92,6 +92,23 @@
 (defn join-strings [& strs]
   (->> strs (remove str/blank?) (str/join ", ")))
 
+(def ^:private hiilijalanjalki-fields
+  [:rakennustuotteiden-valmistus
+   :kuljetukset-tyomaavaihe
+   :rakennustuotteiden-vaihdot
+   :energiankaytto
+   :purkuvaihe])
+
+(defn hiilijalanjalki-yhteensa
+  "Calculate the sum of all hiilijalanjälki values. Nil values are ignored.
+   Returns nil when input is nil."
+  [hiilijalanjalki]
+  (when hiilijalanjalki
+    (->> (select-keys hiilijalanjalki hiilijalanjalki-fields)
+         vals
+         (remove nil?)
+         (reduce + 0))))
+
 (def ^:private energiamuotokertoimet
   (map/map-values
     (partial map/map-keys #(-> % name (str "-kerroin") keyword))
@@ -527,7 +544,13 @@
                         [:lahtotiedot :lammitys :lammin-kayttovesi :lampohavio-lammittamaton-tila])
           (#(assoc-in % [:tulokset :kasvihuonepaastot]
                       (co2-paastot-et (get-in % [:tulokset :kaytettavat-energiamuodot]))))
-          (assoc-div-nettoala [:tulokset :kasvihuonepaastot])))))
+          (assoc-div-nettoala [:tulokset :kasvihuonepaastot])
+          (assoc-in [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]
+                    (hiilijalanjalki-yhteensa
+                      (get-in energiatodistus [:ilmastoselvitys :hiilijalanjalki :rakennus])))
+          (assoc-in [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :yhteensa]
+                    (hiilijalanjalki-yhteensa
+                      (get-in energiatodistus [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka])))))))
 
 (defn luokittelut [db]
   {:postinumerot             (geo/find-all-postinumerot db)

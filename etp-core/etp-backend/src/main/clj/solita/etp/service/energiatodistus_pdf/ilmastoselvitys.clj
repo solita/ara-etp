@@ -10,29 +10,6 @@
   "Format number with specified decimal places. Returns empty string for nil."
   [value decimals] (or (formats/format-number value decimals false) ""))
 
-(def ^:private hiilijalanjalki-fields
-  [:rakennustuotteiden-valmistus
-   :kuljetukset-tyomaavaihe
-   :rakennustuotteiden-vaihdot
-   :energiankaytto
-   :purkuvaihe])
-
-(defn hiilijalanjalki-rakennus-yhteensa
-  "Calculate the sum of all hiilijalanjälki rakennus values. Nil values are ignored."
-  [hiilijalanjalki-rakennus]
-  (->> (select-keys hiilijalanjalki-rakennus hiilijalanjalki-fields)
-       vals
-       (remove nil?)
-       (reduce + 0)))
-
-(defn hiilijalanjalki-rakennuspaikka-yhteensa
-  "Calculate the sum of all hiilijalanjälki rakennuspaikka values. Nil values are ignored."
-  [hiilijalanjalki-rakennuspaikka]
-  (->> (select-keys hiilijalanjalki-rakennuspaikka hiilijalanjalki-fields)
-       vals
-       (remove nil?)
-       (reduce + 0)))
-
 (defn has-ilmastoselvitys?
   "Returns true if the energiatodistus has a completed ilmastoselvitys."
   [energiatodistus]
@@ -40,12 +17,12 @@
 
 (defn gwp-value-for-etusivu
   "Returns the GWP value string for the front page.
+   Reads pre-computed yhteensa from complete-energiatodistus.
    If ilmastoselvitys exists: sum of rakennus hiilijalanjälki values.
    If not: returns \"-\"."
   [energiatodistus]
   (if (has-ilmastoselvitys? energiatodistus)
-    (fmt (hiilijalanjalki-rakennus-yhteensa
-           (get-in energiatodistus [:ilmastoselvitys :hiilijalanjalki :rakennus])) 1)
+    (fmt (get-in energiatodistus [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]) 1)
     "-"))
 
 (defn- resolve-laadintaperuste
@@ -128,9 +105,9 @@
                   (th-header (l :is-yhteensa))))]
      [:tbody
       (gwp-data-row (row-label-with-unit (l :is-rakennus)) rakennus field-keys
-                    (hiilijalanjalki-rakennus-yhteensa rakennus))
+                    (:yhteensa rakennus))
       (gwp-data-row (row-label-with-unit (l :is-rakennuspaikka)) rakennuspaikka field-keys
-                    (hiilijalanjalki-rakennuspaikka-yhteensa rakennuspaikka))]]))
+                    (:yhteensa rakennuspaikka))]]))
 
 (defn- hiilikadenjalki-table
   "Render the hiilikädenjälki table with rakennus and rakennuspaikka as rows
