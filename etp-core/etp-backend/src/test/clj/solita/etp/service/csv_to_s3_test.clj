@@ -69,10 +69,14 @@
                       [:tulokset :kaytettavat-energiamuodot :muu 2 :muotokerroin]})
 
 (defn column-ks->str [ks]
-  (->> ks
-       (map #(if (keyword? %) (name %) %))
-       (map str/capitalize)
-       (str/join " / ")))
+  (-> (->> ks
+           (map #(if (keyword? %) (name %) %))
+           (map str/capitalize)
+           (str/join " / "))
+      (str/replace #"(?i)nettoala"
+                   #(if (Character/isUpperCase ^char (first %))
+                      "Hyötypinta-ala"
+                      "hyötypinta-ala"))))
 
 (defn columns->header-strings [columns]
   (->> columns

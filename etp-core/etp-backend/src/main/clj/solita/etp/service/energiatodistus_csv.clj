@@ -609,10 +609,14 @@
     [:lisamerkintoja-sv]]))
 
 (defn column-ks->str [ks]
-  (->> ks
-       (map #(if (keyword? %) (name %) %))
-       (map str/capitalize)
-       (str/join #" / ")))
+  (-> (->> ks
+           (map #(if (keyword? %) (name %) %))
+           (map str/capitalize)
+           (str/join #" / "))
+      (str/replace #"(?i)nettoala"
+                   #(if (Character/isUpperCase ^char (first %))
+                      "Hyötypinta-ala"
+                      "hyötypinta-ala"))))
 
 (defn energiatodistus->csv-line [columns energiatodistus]
   (->> columns
