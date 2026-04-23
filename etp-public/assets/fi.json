@@ -142,7 +142,7 @@
   "ET_VOIMASSAOLOPAIVA": "Viimeinen voimassaolopäivä",
   "ET_YHTEENVETO": "Yhteenveto rakennuksen energiatehokkuudesta",
   "ET_LASKETTU_KOKONAISENERGIA": "Laskettu kokonaisenergiankulutus ja ostoenergiankulutus",
-  "ET_NETTOALA": "Hyötypinta-ala",
+  "ET_NETTOALA": "Lämmitetty nettoala",
   "ET_LAMMITYS_KUVAUS": "Lämmitysjärjestelmän kuvaus",
   "ET_LAMMITYS_2": "Toissijainen lämmitysjärjestelmä",
   "ET_LAMMITYS_LAMMONJAKO": "Lämmönjako",
