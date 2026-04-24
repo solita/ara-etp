@@ -20,7 +20,11 @@
 
   export let data = [];
   export let printing;
-  export let labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+  export let version = '2018';
+  $: labels =
+    version === '2026'
+      ? ['A0', 'A+', 'A', 'B', 'C', 'D', 'E', 'F', 'G']
+      : ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
   let labelsVisual = [];
   let ariaLabelText = $_('TILASTOT_CHART_ALT') + ' ';
   let ariaLabelStats = '';
@@ -38,15 +42,19 @@
     });
   }
 
-  const colors = [
-    '#1d8c38',
-    '#72a42f',
-    '#c3cc16',
-    '#ffe900',
-    '#e5ac00',
-    '#c95a00',
-    '#bc000b'
-  ];
+  const colorMap = {
+    'A+': '#009641',
+    A0: '#52ae32',
+    A: '#c8d302',
+    B: '#ffed00',
+    C: '#fbb900',
+    D: '#ec6608',
+    E: '#e50104',
+    F: '#e40202',
+    G: '#e40202'
+  };
+
+  $: colors = labels.map(label => colorMap[label]);
 
   const options = {
     responsive: true,

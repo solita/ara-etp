@@ -13,10 +13,18 @@
   export let tooltipAnchorPosition = AnchorPosition.bottomLeft;
 
   $: title = `${
-    version === '2018' ? $_('TILASTOT_ET_2018') : $_('TILASTOT_ET_2013')
+    version === '2026'
+      ? $_('TILASTOT_ET_2026')
+      : version === '2018'
+        ? $_('TILASTOT_ET_2018')
+        : $_('TILASTOT_ET_2013')
   } (${count || '< 4'} ${$_('TILASTOT_KPL')})`;
   $: noDataLabel =
-    version === '2018' ? $_('TILASTOT_NO_2018') : $_('TILASTOT_NO_2013');
+    version === '2026'
+      ? $_('TILASTOT_NO_2026')
+      : version === '2018'
+        ? $_('TILASTOT_NO_2018')
+        : $_('TILASTOT_NO_2013');
 </script>
 
 <style>
@@ -38,7 +46,7 @@
           <h2>{$_('TILASTOT_ET_LUOKKA')}</h2>
         </InfoTooltip>
       </div>
-      <StatChart data={chartData} {printing} />
+      <StatChart data={chartData} {printing} {version} />
     </div>
     <div class="pbi-avoid">
       <StatELuku
