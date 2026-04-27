@@ -293,39 +293,53 @@ table.common-table td:last-child {
 }
 
 .etusivu-yleistiedot dl {
-    display: table;
-    width: 100%;
-    background-color: white;
-    border-collapse: collapse;
     margin: 0px 5px 5px 0px;
-}
-
-.etusivu-yleistiedot dl div {
-    display: table-row;
 }
 
 .etusivu-yleistiedot dl dt,
 .etusivu-yleistiedot dl dd {
-    display: table-cell;
     padding: 2px;
 }
 
 .etusivu-yleistiedot dl dt {
     color: #23323e;
-    font-weight: bold;
     white-space: nowrap;
     width: 45%;
     padding-right: 30px;
 }
 
-.etusivu-yleistiedot dl dd {
-    background-color: white;
-}
-
-.etusivu-yleistiedot dl div:last-child dd {
+.etusivu-yleistiedota dl div:last-child dd {
     font-weight: bold;
     color: #23323e;
     white-space: nowrap;
+}
+
+div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-row > div {
+    display: table-cell;
+    width: 45%;
+    vertical-align: top;
+}
+
+div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-row > div:last-child {
+    width: 55%;
+}
+
+div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-row > div > dd {
+    display: inline-block;
+    width: auto;
+    padding-left: 4px !important;
+    padding-right: 0 !important;
+    padding-top: 2px !important;
+    margin-left: 0;
+}
+
+div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-row > div > dt {
+    display: inline-block;
+    width: auto;
+    white-space: nowrap;
+    padding-left: 2px !important;
+    padding-right: 0 !important;
+    padding-top: 2px !important;
 }
 
 .etusivu-grafiikka-eluku-section {
