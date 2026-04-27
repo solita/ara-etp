@@ -1589,3 +1589,334 @@
     ;; Then: ET2018 certificates appear (default false)
     (t/is (every? #(contains? result-ids %) et2018-ids)
            "ET2018 certificates should appear with default false for lammonjako-lampotilajousto")))
+
+;; ============================================================
+;; AE-2590: PPP search where-clause tests
+;; ============================================================
+
+(t/deftest search-by-ppp-valid-true-finds-only-et2026-with-ppp-test
+  ;; Given: a signed ET2026 with a valid PPP and a signed ET2018 without PPP
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        et2026-id (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)))
+        et2018-id (first (keys (energiatodistus-test-data/generate-and-insert! 1 2018 true laatija-id)))
+        _ (ppp-test-data/generate-and-insert! [et2026-id] laatija-whoami)]
+    (sign-energiatodistukset! [[laatija-id et2026-id] [laatija-id et2018-id]])
+    ;; When: searching with perusparannuspassi.valid = true
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["=" "perusparannuspassi.valid" true]]]
+                          nil nil nil)]
+      ;; Then: only the ET2026 with PPP is returned
+      (t/is (= 1 (count results))
+             "Should find exactly 1 ET with valid PPP")
+      (t/is (= 2026 (:versio (first results)))
+             "Result should be ET2026")
+      (t/is (some? (:perusparannuspassi-id (first results)))
+             "Result should have perusparannuspassi-id"))))
+
+(t/deftest search-by-ppp-valid-is-distinct-from-returns-ets-without-ppp-test
+  ;; Given: ET2026 with PPP, ET2026 without PPP, and ET2018
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        et2026-with-ppp-id (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)))
+        et2026-without-ppp-id (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)))
+        et2018-id (first (keys (energiatodistus-test-data/generate-and-insert! 1 2018 true laatija-id)))
+        _ (ppp-test-data/generate-and-insert! [et2026-with-ppp-id] laatija-whoami)]
+    (sign-energiatodistukset! [[laatija-id et2026-with-ppp-id]
+                               [laatija-id et2026-without-ppp-id]
+                               [laatija-id et2018-id]])
+    ;; When: searching with is-distinct-from perusparannuspassi.valid true
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["is-distinct-from" "perusparannuspassi.valid" true]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      ;; Then: ET2026 without PPP and ET2018 are returned, but not the ET2026 with PPP
+      (t/is (= 2 (count results))
+             "Should find 2 ETs without valid PPP")
+      (t/is (contains? result-ids et2026-without-ppp-id)
+             "ET2026 without PPP should be in results")
+      (t/is (contains? result-ids et2018-id)
+             "ET2018 should be in results")
+      (t/is (not (contains? result-ids et2026-with-ppp-id))
+             "ET2026 with PPP should NOT be in results"))))
+
+(t/deftest search-by-ppp-id-exact-match-test
+  ;; Given: two signed ET2026 certificates, each with their own PPP
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        et-ids (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
+        et-id-1 (first (sort et-ids))
+        et-id-2 (second (sort et-ids))
+        ppp-ids (ppp-test-data/generate-and-insert! (sort et-ids) laatija-whoami)
+        ppp-id-1 (first ppp-ids)
+        ppp-id-2 (second ppp-ids)]
+    (sign-energiatodistukset! [[laatija-id et-id-1] [laatija-id et-id-2]])
+    ;; When: searching by exact PPP id
+    (t/testing "Search with first PPP ID returns first ET"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[["=" "perusparannuspassi.id" ppp-id-1]]]
+                            nil nil nil)]
+        (t/is (= 1 (count results)))
+        (t/is (= et-id-1 (:id (first results))))))
+    (t/testing "Search with second PPP ID returns second ET"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[["=" "perusparannuspassi.id" ppp-id-2]]]
+                            nil nil nil)]
+        (t/is (= 1 (count results)))
+        (t/is (= et-id-2 (:id (first results))))))
+    (t/testing "Search with non-existent PPP ID returns empty"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[["=" "perusparannuspassi.id" 999999]]]
+                            nil nil nil)]
+        (t/is (empty? results))))))
+
+(t/deftest search-by-ppp-id-comparison-operators-test
+  ;; Given: three signed ET2026 certificates with PPPs (sequential IDs)
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        et-ids (sort (keys (energiatodistus-test-data/generate-and-insert! 3 2026 true laatija-id)))
+        ppp-ids (ppp-test-data/generate-and-insert! et-ids laatija-whoami)
+        first-ppp-id (first ppp-ids)]
+    (sign-energiatodistukset! (map #(vector laatija-id %) et-ids))
+    (t/testing "> first PPP ID returns ETs with later PPP IDs"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[[">" "perusparannuspassi.id" first-ppp-id]]]
+                            nil nil nil)]
+        (t/is (= 2 (count results)))))
+    (t/testing "<= first PPP ID returns only the first ET"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[["<=" "perusparannuspassi.id" first-ppp-id]]]
+                            nil nil nil)]
+        (t/is (= 1 (count results)))
+        (t/is (= (first et-ids) (:id (first results))))))))
+
+(t/deftest search-by-ppp-valid-deleted-ppp-excluded-test
+  ;; Given: a signed ET2026 with PPP that has been soft-deleted (valid = false)
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        et-id (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)))
+        ppp-id (first (ppp-test-data/generate-and-insert! [et-id] laatija-whoami))]
+    ;; Soft-delete the PPP before signing (PPP can only be modified on draft ET)
+    (-> (ppp-test-data/generate-add et-id)
+        (assoc :valid false)
+        (ppp-test-data/update! ppp-id laatija-whoami))
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    (t/testing "valid = true does NOT find the ET with deleted PPP"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[["=" "perusparannuspassi.valid" true]]]
+                            nil nil nil)]
+        (t/is (= 0 (count results)))))
+    (t/testing "is-distinct-from true DOES find the ET with deleted PPP"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[["is-distinct-from" "perusparannuspassi.valid" true]]]
+                            nil nil nil)]
+        (t/is (= 1 (count results)))
+        (t/is (= et-id (:id (first results))))))))
+
+(t/deftest search-by-ppp-paakayttaja-finds-all-test
+  ;; Given: two laatijat each with signed ET2026 with PPP
+  (let [laatija-ids (->> (laatija-test-data/generate-adds 2)
+                         (map #(assoc-in % [:patevyystaso] 4))
+                         (laatija-test-data/insert!))
+        laatija-id-1 (first laatija-ids)
+        laatija-id-2 (second laatija-ids)
+        whoami-1 {:id laatija-id-1 :patevyystaso 4 :rooli 0}
+        whoami-2 {:id laatija-id-2 :patevyystaso 4 :rooli 0}
+        et-id-1 (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id-1)))
+        et-id-2 (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id-2)))
+        _ (ppp-test-data/generate-and-insert! [et-id-1] whoami-1)
+        _ (ppp-test-data/generate-and-insert! [et-id-2] whoami-2)]
+    (sign-energiatodistukset! [[laatija-id-1 et-id-1] [laatija-id-2 et-id-2]])
+    ;; When: pääkäyttäjä searches by PPP valid
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["=" "perusparannuspassi.valid" true]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      ;; Then: both ETs are found
+      (t/is (= 2 (count results))
+             "Pääkäyttäjä should find all PPP-bearing ETs")
+      (t/is (contains? result-ids et-id-1))
+      (t/is (contains? result-ids et-id-2)))))
+
+(t/deftest search-by-ppp-laatija-sees-only-own-test
+  ;; Given: two laatijat each with signed ET2026 with PPP
+  (let [laatija-ids (->> (laatija-test-data/generate-adds 2)
+                         (map #(assoc-in % [:patevyystaso] 4))
+                         (laatija-test-data/insert!))
+        laatija-id-1 (first laatija-ids)
+        laatija-id-2 (second laatija-ids)
+        whoami-1 {:id laatija-id-1 :patevyystaso 4 :rooli 0}
+        whoami-2 {:id laatija-id-2 :patevyystaso 4 :rooli 0}
+        et-id-1 (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id-1)))
+        et-id-2 (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id-2)))
+        _ (ppp-test-data/generate-and-insert! [et-id-1] whoami-1)
+        _ (ppp-test-data/generate-and-insert! [et-id-2] whoami-2)]
+    (sign-energiatodistukset! [[laatija-id-1 et-id-1] [laatija-id-2 et-id-2]])
+    ;; When: laatija A searches by PPP valid
+    (t/testing "Laatija A finds only own ET"
+      (let [results (search whoami-1
+                            [[["=" "perusparannuspassi.valid" true]]]
+                            nil nil nil)]
+        (t/is (= 1 (count results)))
+        (t/is (= et-id-1 (:id (first results))))))
+    (t/testing "Laatija B finds only own ET"
+      (let [results (search whoami-2
+                            [[["=" "perusparannuspassi.valid" true]]]
+                            nil nil nil)]
+        (t/is (= 1 (count results)))
+        (t/is (= et-id-2 (:id (first results))))))))
+
+(t/deftest search-by-ppp-public-cannot-use-ppp-fields-test
+  ;; Given: signed ET2026 with PPP
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        et-id (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)))
+        _ (ppp-test-data/generate-and-insert! [et-id] laatija-whoami)]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    ;; When: public user tries to search with PPP fields
+    ;; Then: exception is thrown (field not in public schema)
+    (t/testing "Public search with perusparannuspassi.valid throws"
+      (t/is (thrown? Exception
+                     (service/search ts/*db* nil
+                                     {:where [[["=" "perusparannuspassi.valid" true]]]}
+                                     energiatodistus-public-schema/Energiatodistus))))
+    (t/testing "Public search with perusparannuspassi.id throws"
+      (t/is (thrown? Exception
+                     (service/search ts/*db* nil
+                                     {:where [[["=" "perusparannuspassi.id" 1]]]}
+                                     energiatodistus-public-schema/Energiatodistus))))))
+
+(t/deftest search-by-ppp-combined-with-postinumero-test
+  ;; Given: two signed ET2026 with PPP, different postinumero
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        et-add-1 (-> (energiatodistus-test-data/generate-add 2026 true)
+                     (assoc-in [:perustiedot :postinumero] "33100"))
+        et-add-2 (-> (energiatodistus-test-data/generate-add 2026 true)
+                     (assoc-in [:perustiedot :postinumero] "00100"))
+        et-id-1 (first (energiatodistus-test-data/insert! [et-add-1] laatija-id))
+        et-id-2 (first (energiatodistus-test-data/insert! [et-add-2] laatija-id))
+        _ (ppp-test-data/generate-and-insert! [et-id-1 et-id-2] laatija-whoami)]
+    (sign-energiatodistukset! [[laatija-id et-id-1] [laatija-id et-id-2]])
+    (t/testing "PPP valid AND postinumero 33100 returns only first ET"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[["=" "perusparannuspassi.valid" true]
+                              ["=" "energiatodistus.perustiedot.postinumero" 33100]]]
+                            nil nil nil)]
+        (t/is (= 1 (count results)))
+        (t/is (= et-id-1 (:id (first results))))))
+    (t/testing "PPP valid AND versio 2026 returns both"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[["=" "perusparannuspassi.valid" true]
+                              ["=" "energiatodistus.versio" 2026]]]
+                            nil nil nil)]
+        (t/is (= 2 (count results)))))))
+
+(t/deftest search-by-ppp-contradictory-versio-returns-empty-test
+  ;; Given: signed ET2018 and signed ET2026 with PPP
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        et2026-id (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)))
+        et2018-id (first (keys (energiatodistus-test-data/generate-and-insert! 1 2018 true laatija-id)))
+        _ (ppp-test-data/generate-and-insert! [et2026-id] laatija-whoami)]
+    (sign-energiatodistukset! [[laatija-id et2026-id] [laatija-id et2018-id]])
+    ;; When: searching with PPP valid=true AND versio=2018 (contradictory)
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["=" "perusparannuspassi.valid" true]
+                            ["=" "energiatodistus.versio" 2018]]]
+                          nil nil nil)]
+      ;; Then: no results
+      (t/is (= 0 (count results))
+             "Contradictory PPP+versio query should return empty results"))))
+
+(t/deftest search-by-laatimisvaihe-perusparannus-vaiheet-test
+  ;; Given: ET2026 certificates with laatimisvaihe 2, 3, and 4
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        et-add-vaihe-2 (-> (energiatodistus-test-data/generate-add 2026 true)
+                           (assoc-in [:perustiedot :laatimisvaihe] 2))
+        et-add-vaihe-3 (-> (energiatodistus-test-data/generate-add 2026 true)
+                           (assoc-in [:perustiedot :laatimisvaihe] 3))
+        et-add-vaihe-4 (-> (energiatodistus-test-data/generate-add 2026 true)
+                           (assoc-in [:perustiedot :laatimisvaihe] 4))
+        et-id-2 (first (energiatodistus-test-data/insert! [et-add-vaihe-2] laatija-id))
+        et-id-3 (first (energiatodistus-test-data/insert! [et-add-vaihe-3] laatija-id))
+        et-id-4 (first (energiatodistus-test-data/insert! [et-add-vaihe-4] laatija-id))]
+    (sign-energiatodistukset! [[laatija-id et-id-2] [laatija-id et-id-3] [laatija-id et-id-4]])
+    (t/testing "Laatimisvaihe 3 returns only rakennuslupa-perusparannus ET"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[["=" "energiatodistus.perustiedot.laatimisvaihe" 3]]]
+                            nil nil nil)]
+        (t/is (= 1 (count results)))
+        (t/is (= et-id-3 (:id (first results))))))
+    (t/testing "Laatimisvaihe 4 returns only kayttoonotto-perusparannus ET"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[["=" "energiatodistus.perustiedot.laatimisvaihe" 4]]]
+                            nil nil nil)]
+        (t/is (= 1 (count results)))
+        (t/is (= et-id-4 (:id (first results))))))
+    (t/testing "Laatimisvaihe 2 returns only olemassa oleva rakennus ET"
+      (let [results (search kayttaja-test-data/paakayttaja
+                            [[["=" "energiatodistus.perustiedot.laatimisvaihe" 2]]]
+                            nil nil nil)]
+        (t/is (= 1 (count results)))
+        (t/is (= et-id-2 (:id (first results))))))))
+
+(t/deftest search-by-ppp-result-contains-ppp-id-test
+  ;; Given: signed ET2026 with PPP
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        et-id (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)))
+        ppp-id (first (ppp-test-data/generate-and-insert! [et-id] laatija-whoami))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    ;; When: searching and finding the ET
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["=" "energiatodistus.id" et-id]]]
+                          nil nil nil)]
+      ;; Then: perusparannuspassi-id is present with correct value
+      (t/is (= 1 (count results)))
+      (t/is (= ppp-id (:perusparannuspassi-id (first results)))
+             "Search result should contain the correct perusparannuspassi-id"))))
+
+(t/deftest search-result-without-ppp-has-nil-ppp-id-test
+  ;; Given: signed ET2018 without PPP
+  (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
+        et-id (first (keys (energiatodistus-test-data/generate-and-insert! 1 2018 true laatija-id)))]
+    (sign-energiatodistukset! [[laatija-id et-id]])
+    ;; When: searching for the ET
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["=" "energiatodistus.id" et-id]]]
+                          nil nil nil)]
+      ;; Then: perusparannuspassi-id is nil
+      (t/is (= 1 (count results)))
+      (t/is (nil? (:perusparannuspassi-id (first results)))
+             "ET without PPP should have nil perusparannuspassi-id"))))

@@ -520,4 +520,118 @@ describe('EtHakuSchema', () => {
       expect(hasVersioConstraint(resultFalse)).toBe(false);
     });
   });
+
+  // ============================================================
+  // AE-2590: PPP search schema tests
+  // ============================================================
+
+  describe('perusparannuspassi.valid (pppOlemassa) format behavior', () => {
+    it('format with true produces = perusparannuspassi.valid true', () => {
+      // Given: the pppOlemassa operation from the schema
+      const key = 'perusparannuspassi.valid';
+      const op = Schema.paakayttajaSchema[key][0];
+      // When: format is called with value true
+      const result = op.operation.format(
+        op.operation.serverCommand,
+        op.key,
+        true
+      );
+      // Then: produces [["=", "perusparannuspassi.valid", true]]
+      expect(result).toEqual([['=', 'perusparannuspassi.valid', true]]);
+    });
+
+    it('format with false produces is-distinct-from perusparannuspassi.valid true', () => {
+      // Given: the pppOlemassa operation from the schema
+      const key = 'perusparannuspassi.valid';
+      const op = Schema.paakayttajaSchema[key][0];
+      // When: format is called with value false
+      const result = op.operation.format(
+        op.operation.serverCommand,
+        op.key,
+        false
+      );
+      // Then: produces [["is-distinct-from", "perusparannuspassi.valid", true]]
+      expect(result).toEqual([
+        ['is-distinct-from', 'perusparannuspassi.valid', true]
+      ]);
+    });
+
+    it('pppOlemassa does NOT inject versio constraint', () => {
+      // Given: the pppOlemassa operation
+      const key = 'perusparannuspassi.valid';
+      const op = Schema.paakayttajaSchema[key][0];
+      // When: format is called for both true and false
+      const resultTrue = op.operation.format(
+        op.operation.serverCommand,
+        op.key,
+        true
+      );
+      const resultFalse = op.operation.format(
+        op.operation.serverCommand,
+        op.key,
+        false
+      );
+      // Then: neither result contains a versio constraint
+      const hasVersioConstraint = result =>
+        result.some(
+          entry => Array.isArray(entry) && entry[1] === 'energiatodistus.versio'
+        );
+      expect(hasVersioConstraint(resultTrue)).toBe(false);
+      expect(hasVersioConstraint(resultFalse)).toBe(false);
+    });
+  });
+
+  describe('perusparannuspassi.valid operation type', () => {
+    it('is BOOLEAN type in paakayttajaSchema', () => {
+      // Given: perusparannuspassi.valid in paakayttajaSchema
+      const key = 'perusparannuspassi.valid';
+      const ops = Schema.paakayttajaSchema[key];
+      // Then: it has BOOLEAN type
+      expect(ops[0].type).toBe('BOOLEAN');
+    });
+
+    it('is BOOLEAN type in laatijaSchema', () => {
+      // Given: perusparannuspassi.valid in laatijaSchema
+      const key = 'perusparannuspassi.valid';
+      const ops = Schema.laatijaSchema[key];
+      // Then: it has BOOLEAN type
+      expect(ops[0].type).toBe('BOOLEAN');
+    });
+  });
+
+  describe('perusparannuspassi.id operation type', () => {
+    it('is NUMBER type with comparison operators in paakayttajaSchema', () => {
+      // Given: perusparannuspassi.id in paakayttajaSchema
+      const key = 'perusparannuspassi.id';
+      const ops = Schema.paakayttajaSchema[key];
+      // Then: contains number comparison operations
+      expect(ops.length).toBeGreaterThan(0);
+      expect(ops[0].type).toBe('NUMBER');
+    });
+
+    it('has multiple comparison operations (=, >, <, etc.)', () => {
+      // Given: perusparannuspassi.id in paakayttajaSchema
+      const key = 'perusparannuspassi.id';
+      const ops = Schema.paakayttajaSchema[key];
+      // Then: multiple operations available
+      const browserCommands = ops.map(
+        op => op.operation.browserCommand
+      );
+      expect(browserCommands).toContain('=');
+      expect(browserCommands).toContain('>');
+      expect(browserCommands).toContain('<');
+    });
+  });
+
+  describe('flatSchema includes PPP fields', () => {
+    it('flatSchema contains perusparannuspassi.id', () => {
+      expect(Object.keys(Schema.flatSchema)).toContain('perusparannuspassi.id');
+    });
+
+    it('flatSchema contains perusparannuspassi.valid', () => {
+      expect(Object.keys(Schema.flatSchema)).toContain(
+        'perusparannuspassi.valid'
+      );
+    });
+  });
 });

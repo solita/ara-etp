@@ -351,4 +351,79 @@ describe('EtHakuUtils:', () => {
       expect(EtHakuUtils.searchString(criteria)).toEqual(expected);
     });
   });
+
+  // ============================================================
+  // AE-2590: PPP search utils tests
+  // ============================================================
+
+  describe('blockToQueryParameter with PPP fields', () => {
+    it('should format perusparannuspassi.valid true as = true', () => {
+      // Given: a block with pppOlemassa operation and value true
+      const block = ['=', 'perusparannuspassi.valid', true];
+      // When: converting block to query parameter
+      const result = EtHakuUtils.blockToQueryParameter(flatSchema, block);
+      // Then: produces [["=", "perusparannuspassi.valid", true]]
+      expect(Maybe.isSome(result)).toBe(true);
+      expect(Maybe.get(result)).toEqual([
+        ['=', 'perusparannuspassi.valid', true]
+      ]);
+    });
+
+    it('should format perusparannuspassi.valid false as is-distinct-from', () => {
+      // Given: a block with pppOlemassa operation and value false
+      const block = ['=', 'perusparannuspassi.valid', false];
+      // When: converting block to query parameter
+      const result = EtHakuUtils.blockToQueryParameter(flatSchema, block);
+      // Then: produces [["is-distinct-from", "perusparannuspassi.valid", true]]
+      expect(Maybe.isSome(result)).toBe(true);
+      expect(Maybe.get(result)).toEqual([
+        ['is-distinct-from', 'perusparannuspassi.valid', true]
+      ]);
+    });
+
+    it('should format perusparannuspassi.id = as number comparison', () => {
+      // Given: a block with number equals for PPP id
+      const block = ['=', 'perusparannuspassi.id', 42];
+      // When: converting block to query parameter
+      const result = EtHakuUtils.blockToQueryParameter(flatSchema, block);
+      // Then: produces [["=", "perusparannuspassi.id", 42]]
+      expect(Maybe.isSome(result)).toBe(true);
+      expect(Maybe.get(result)).toEqual([
+        ['=', 'perusparannuspassi.id', 42]
+      ]);
+    });
+
+    it('should format perusparannuspassi.id > as number comparison', () => {
+      // Given: a block with greater-than for PPP id
+      const block = ['>', 'perusparannuspassi.id', 10];
+      // When: converting block to query parameter
+      const result = EtHakuUtils.blockToQueryParameter(flatSchema, block);
+      // Then: produces [[">", "perusparannuspassi.id", 10]]
+      expect(Maybe.isSome(result)).toBe(true);
+      expect(Maybe.get(result)).toEqual([
+        ['>', 'perusparannuspassi.id', 10]
+      ]);
+    });
+  });
+
+  describe('convertWhereToQuery with PPP fields', () => {
+    it('should convert PPP where clause to query', () => {
+      // Given: a where clause with PPP valid and id conditions
+      const where = [
+        [
+          ['=', 'perusparannuspassi.valid', true],
+          ['=', 'perusparannuspassi.id', 5]
+        ]
+      ];
+      // When: converting where to query
+      const result = EtHakuUtils.convertWhereToQuery(flatSchema, where);
+      // Then: produces the formatted queries
+      expect(result).toEqual([
+        [
+          ['=', 'perusparannuspassi.valid', true],
+          ['=', 'perusparannuspassi.id', 5]
+        ]
+      ]);
+    });
+  });
 });
