@@ -12,5 +12,9 @@
  ;; This file will be automatically created, with whatever filename is specified here, if it didn't exist already.
  :suppression-file "nvd_suppressions.xml"
 
- :analyzer {;; Make OSS Index errors non-fatal (the analyzer is disabled via JVM property in nvd.sh)
-            :ossindex-warn-only-on-remote-errors true}}
+ #_:analyzer ;; Analyzer options, which are mostly advanced/internal
+ #_{:ossindex-warn-only-on-remote-errors
+    ;; Occasionally necessary for not making HTTP 500 errors from OSS Index (one of the multiple analyzers internally used)
+    ;; a reason for execution to fail.
+    ;; Please only enable this carefully since it can mean false negatives.
+    true}}
