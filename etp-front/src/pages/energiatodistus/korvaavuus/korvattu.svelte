@@ -52,9 +52,7 @@
   const setKorvattavaEnergiatodistus = id => {
     if (!R.equals(R.view(lens, energiatodistus), id)) {
       energiatodistus = R.set(lens, id, energiatodistus);
-      if (Maybe.isNone(id)) {
-        energiatodistus = R.set(yksinkertaistettuLens, false, energiatodistus);
-      }
+      energiatodistus = R.set(yksinkertaistettuLens, false, energiatodistus);
     }
   };
 
