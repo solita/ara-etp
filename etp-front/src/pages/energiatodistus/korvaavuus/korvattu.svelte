@@ -35,10 +35,12 @@
       !ET.isTilaInTilat([ET.tila.draft, ET.tila.deleted])(energiatodistus));
 
   const lens = R.lensProp('korvattu-energiatodistus-id');
+  const yksinkertaistettuLens = R.lensProp('yksinkertaistettu-paivitysmenettely');
 
   let cancel = () => {};
   let searching = false;
   let updated = true;
+  let query;
   $: query = R.view(lens, energiatodistus);
   let korvattavaEnergiatodistus = Maybe.None();
   let checked = Maybe.isSome(R.view(lens, energiatodistus));
@@ -48,6 +50,9 @@
   const setKorvattavaEnergiatodistus = id => {
     if (!R.equals(R.view(lens, energiatodistus), id)) {
       energiatodistus = R.set(lens, id, energiatodistus);
+      if (Maybe.isNone(id)) {
+        energiatodistus = R.set(yksinkertaistettuLens, false, energiatodistus);
+      }
     }
   };
 
@@ -89,15 +94,22 @@
     )(id);
   };
 
-  $: R.forEach(
-    fetchKorvattavaEnergiatodistus(0),
-    R.view(lens, energiatodistus)
-  );
+  let lastFetchedId = null;
+  $: {
+    const _fetchId = R.view(lens, energiatodistus);
+    if (!R.equals(_fetchId, lastFetchedId)) {
+      lastFetchedId = _fetchId;
+      R.forEach(
+        fetchKorvattavaEnergiatodistus(0),
+        _fetchId
+      );
+    }
+  }
 
   $: if (enabled) {
-    if (checked) {
+    if (checked && korvattavaEnergiatodistus.isSome()) {
       setKorvattavaEnergiatodistus(korvattavaEnergiatodistus.map(R.prop('id')));
-    } else {
+    } else if (!checked) {
       setKorvattavaEnergiatodistus(Maybe.None());
     }
   }
@@ -148,11 +160,32 @@
 
 {#if checked || enabled}
   {#if enabled}
-    <Checkbox
-      label={i18n('energiatodistus.korvaavuus.checkbox')}
-      dataCy="korvaavuus-checkbox"
-      bind:model={checked}
-      disabled={!enabled} />
+    <div class="flex flex-wrap items-center gap-x-8">
+      <Checkbox
+        label={i18n('energiatodistus.korvaavuus.checkbox')}
+        dataCy="korvaavuus-checkbox"
+        bind:model={checked}
+        disabled={!enabled} />
+      {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
+        {#if Korvaus.canUseSimplifiedProcedure(energiatodistus, et)}
+          <div transition:slide={{ duration: 200 }}>
+            <Checkbox
+              label={i18n('energiatodistus.korvaavuus.yksinkertaistettu-paivitysmenettely')}
+              dataCy="yksinkertaistettu-paivitysmenettely-checkbox"
+              bind:model={energiatodistus}
+              lens={yksinkertaistettuLens} />
+          </div>
+        {/if}
+      {/each}
+    </div>
+    {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
+      {#if Korvaus.canUseSimplifiedProcedure(energiatodistus, et)}
+        <p class="mt-2 flex text-sm" transition:slide={{ duration: 200 }}>
+          <span class="mr-1 font-icon">info</span>
+          {i18n('energiatodistus.korvaavuus.yksinkertaistettu-info')}
+        </p>
+      {/if}
+    {/each}
   {/if}
 
   {#if !enabled}
