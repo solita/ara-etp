@@ -653,7 +653,21 @@
     [:tulokset :kaytettavat-energiamuodot :muu 1 :muotokerroin]
     [:tulokset :kaytettavat-energiamuodot :muu 2 :nimi]
     [:tulokset :kaytettavat-energiamuodot :muu 2 :ostoenergia]
-    [:tulokset :kaytettavat-energiamuodot :muu 2 :muotokerroin]))
+    [:tulokset :kaytettavat-energiamuodot :muu 2 :muotokerroin]
+    [:perustiedot :havainnointikayntityyppi-fi]
+    [:perustiedot :tayttaa-aplus-vaatimukset]
+    [:perustiedot :tayttaa-a0-vaatimukset]
+    [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
+    [:lahtotiedot :lammitys :lammonjako-lampotilajousto]
+    [:tulokset :kasvihuonepaastot]
+    [:tulokset :kasvihuonepaastot-nettoala]
+    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko]
+    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkolampo]
+    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :tuulisahko]
+    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu]
+    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo]
+    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko]
+    [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]))
 
 (def ^:private expected-anonymized-columns
   '([:versio]
