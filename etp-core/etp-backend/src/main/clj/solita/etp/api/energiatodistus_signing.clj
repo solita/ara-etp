@@ -55,4 +55,5 @@
                              {:type :missing-value :response 400}
                              {:type :patevyys-expired :response 400}
                              {:type :laatimiskielto :response 400}
-                             {:type :not-signed :response 400}]))}}]])
+                             {:type :not-signed :response 400}
+                             {:type :invalid-replace :response 400}]))}}]])

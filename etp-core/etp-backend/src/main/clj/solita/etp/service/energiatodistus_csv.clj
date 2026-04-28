@@ -16,6 +16,7 @@
             :laskutusaika :draft-visible-to-paakayttaja :bypass-validation-limits
             :bypass-validation-limits-reason :korvattu-energiatodistus-id
             :korvaava-energiatodistus-id ;; TODO is this valid?
+            :yksinkertaistettu-paivitysmenettely
             :laskutettava-yritys-id :laskuriviviite]]
      [k])
    [[:perustiedot :yritys :nimi]]

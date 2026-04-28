@@ -383,6 +383,7 @@
                                          :laatija_id (number? value)
                                          :korvattu_energiatodistus_id (or (nil? value) (number? value))
                                          :bypass_validation_limits (false? value)
+                                         :yksinkertaistettu_paivitysmenettely (false? value)
                                          :pt$julkinen_rakennus (false? value)
                                          :pt$uudisrakennus (false? value)
                                          :laskutettava_yritys_defined (false? value)
