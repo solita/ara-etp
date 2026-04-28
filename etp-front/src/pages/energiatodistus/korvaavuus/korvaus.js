@@ -32,3 +32,15 @@ export const isValidLocation = R.allPass([
   equals(R.path(['perustiedot', 'postinumero'])),
   equals(R.path(['perustiedot', 'kayttotarkoitus']))
 ]);
+
+export const isReplacedCertificateValid = korvattava =>
+  R.compose(
+    Maybe.exists(date => new Date(date) > new Date()),
+    R.prop('voimassaolo-paattymisaika')
+  )(korvattava);
+
+export const canUseSimplifiedProcedure = (energiatodistus, korvattava) =>
+  ET.isDraft(energiatodistus) &&
+  R.compose(Maybe.isSome, R.prop('korvattu-energiatodistus-id'))(energiatodistus) &&
+  korvattava != null &&
+  isReplacedCertificateValid(korvattava);

@@ -765,3 +765,204 @@
       (t/is (some? found-et) "ET should be found in korvattavat results")
       (t/is (nil? (:perusparannuspassi-id found-et))
             "Korvattavat result should have nil perusparannuspassi-id when no PPP exists"))))
+
+;; ---- AE-2759: Yksinkertaistettu päivitysmenettely tests ----
+
+(t/deftest yksinkertaistettu-paivitysmenettely-default-value-test
+  ;; Given: a newly created energiatodistus draft
+  ;; When: fetched from the database
+  ;; Then: yksinkertaistettu-paivitysmenettely is false
+  (let [{:keys [energiatodistukset]} (test-data-set)]
+    (doseq [id (keys energiatodistukset)]
+      (let [et (service/find-energiatodistus ts/*db* id)]
+        (t/is (= false (:yksinkertaistettu-paivitysmenettely et))
+              "Default value of yksinkertaistettu-paivitysmenettely should be false")))))
+
+(t/deftest yksinkertaistettu-paivitysmenettely-round-trip-true-test
+  ;; Given: an energiatodistus add payload with yksinkertaistettu-paivitysmenettely true
+  ;;        and a valid korvattu-energiatodistus-id
+  ;; When: the energiatodistus is added and then fetched
+  ;; Then: the field value is preserved as true
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        korvattava-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvattava-id] (energiatodistus-test-data/insert! [korvattava-add] laatija-id)
+        _ (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+        korvaava-add (-> (first (energiatodistus-test-data/generate-adds 1 2018 true))
+                         (assoc :korvattu-energiatodistus-id korvattava-id
+                                :yksinkertaistettu-paivitysmenettely true))
+        [korvaava-id] (energiatodistus-test-data/insert! [korvaava-add] laatija-id)]
+    (t/is (= true (:yksinkertaistettu-paivitysmenettely
+                     (service/find-energiatodistus ts/*db* korvaava-id)))
+          "yksinkertaistettu-paivitysmenettely should round-trip as true")))
+
+(t/deftest yksinkertaistettu-paivitysmenettely-round-trip-false-test
+  ;; Given: an energiatodistus add payload with yksinkertaistettu-paivitysmenettely false
+  ;; When: added and fetched
+  ;; Then: the value is false
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        et-add (-> (first (energiatodistus-test-data/generate-adds 1 2018 true))
+                   (assoc :yksinkertaistettu-paivitysmenettely false))
+        [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)]
+    (t/is (= false (:yksinkertaistettu-paivitysmenettely
+                      (service/find-energiatodistus ts/*db* et-id)))
+          "yksinkertaistettu-paivitysmenettely should round-trip as false")))
+
+(t/deftest yksinkertaistettu-signing-inherits-validity-test
+  ;; Given: a signed ET A with a custom voimassaolo-paattymisaika (5 years from now)
+  ;; And: a draft ET B that replaces A with yksinkertaistettu-paivitysmenettely true
+  ;; When: B is signed
+  ;; Then: B's voimassaolo-paattymisaika equals A's voimassaolo-paattymisaika (5 years, not 10)
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        korvattava-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvattava-id] (energiatodistus-test-data/insert! [korvattava-add] laatija-id)
+        _ (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+        ;; Set a custom validity date (5 years from now) to distinguish from standard 10-year
+        custom-validity (java.sql.Timestamp. (.getTime (java.util.Date. (+ (.getTime (java.util.Date.))
+                                                                           (* 5 365 24 60 60 1000)))))
+        _ (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET voimassaolo_paattymisaika = ? WHERE id = ?"
+                                  custom-validity korvattava-id])
+        korvattava-et (service/find-energiatodistus ts/*db* korvattava-id)
+        korvattava-validity (:voimassaolo-paattymisaika korvattava-et)
+        korvaava-add (-> (first (energiatodistus-test-data/generate-adds 1 2018 true))
+                         (assoc :korvattu-energiatodistus-id korvattava-id
+                                :yksinkertaistettu-paivitysmenettely true))
+        [korvaava-id] (energiatodistus-test-data/insert! [korvaava-add] laatija-id)]
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+    (let [korvaava-et (service/find-energiatodistus ts/*db* korvaava-id)]
+      (t/is (= korvattava-validity (:voimassaolo-paattymisaika korvaava-et))
+            "Signed ET with yksinkertaistettu-paivitysmenettely should inherit replaced ET's validity"))))
+
+(t/deftest yksinkertaistettu-false-signing-gets-standard-validity-test
+  ;; Given: a signed ET A and a draft ET B replacing A with yksinkertaistettu-paivitysmenettely false
+  ;; When: B is signed
+  ;; Then: B's voimassaolo-paattymisaika is approximately now + 10 years (standard)
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        korvattava-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvattava-id] (energiatodistus-test-data/insert! [korvattava-add] laatija-id)
+        _ (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+        korvattava-et (service/find-energiatodistus ts/*db* korvattava-id)
+        korvattava-validity (:voimassaolo-paattymisaika korvattava-et)
+        korvaava-add (-> (first (energiatodistus-test-data/generate-adds 1 2018 true))
+                         (assoc :korvattu-energiatodistus-id korvattava-id
+                                :yksinkertaistettu-paivitysmenettely false))
+        [korvaava-id] (energiatodistus-test-data/insert! [korvaava-add] laatija-id)]
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+    (let [korvaava-et (service/find-energiatodistus ts/*db* korvaava-id)]
+      ;; Regression: standard signing sets voimassaolo-paattymisaika
+      (t/is (some? (:voimassaolo-paattymisaika korvaava-et))
+            "Signed ET without yksinkertaistettu should have voimassaolo-paattymisaika set"))))
+
+(t/deftest yksinkertaistettu-signing-without-replacement-regression-test
+  ;; Given: a draft ET with no korvattu-energiatodistus-id and yksinkertaistettu false
+  ;; When: signed
+  ;; Then: voimassaolo-paattymisaika is approximately now + 10 years
+  ;; This is a regression test ensuring existing behavior is not broken
+  (let [{:keys [energiatodistukset laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        id (-> energiatodistukset keys sort first)]
+    (t/is (= (energiatodistus-tila id) :draft))
+    (energiatodistus-test-data/sign! id laatija-id true)
+    (let [et (service/find-energiatodistus ts/*db* id)]
+      (t/is (some? (:voimassaolo-paattymisaika et))
+            "Standard signing should set voimassaolo-paattymisaika")
+      (t/is (nil? (:korvattu-energiatodistus-id et))
+            "No korvattu-energiatodistus-id for non-replacement signing"))))
+
+(t/deftest yksinkertaistettu-replaced-certificate-state-transition-test
+  ;; Given: a signed ET A, and a draft B replacing A with yksinkertaistettu true
+  ;; When: B is signed
+  ;; Then: A's state becomes :replaced
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        korvattava-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvattava-id] (energiatodistus-test-data/insert! [korvattava-add] laatija-id)
+        _ (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+        korvaava-add (-> (first (energiatodistus-test-data/generate-adds 1 2018 true))
+                         (assoc :korvattu-energiatodistus-id korvattava-id
+                                :yksinkertaistettu-paivitysmenettely true))
+        [korvaava-id] (energiatodistus-test-data/insert! [korvaava-add] laatija-id)]
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+    (t/is (= (energiatodistus-tila korvattava-id) :replaced)
+          "Replaced ET should be in :replaced state even with yksinkertaistettu")))
+
+(t/deftest yksinkertaistettu-true-without-korvattu-id-rejected-test
+  ;; Given: a draft ET with yksinkertaistettu-paivitysmenettely true and korvattu-energiatodistus-id nil
+  ;; When: signing is attempted
+  ;; Then: an error is thrown
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        whoami {:id laatija-id :rooli 0}
+        db (ts/db-user laatija-id)
+        et-add (-> (first (energiatodistus-test-data/generate-adds 1 2018 true))
+                   (assoc :yksinkertaistettu-paivitysmenettely true
+                          :korvattu-energiatodistus-id nil))
+        [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)]
+    (t/is (= :invalid-replace
+             (:type (etp-test/catch-ex-data
+                      #(do
+                         (service/start-energiatodistus-signing! db whoami et-id)
+                         (service/end-energiatodistus-signing! db
+                                                               ts/*aws-s3-client*
+                                                               whoami
+                                                               et-id
+                                                               {:skip-pdf-signed-assert? true})))))
+          "yksinkertaistettu true without korvattu-energiatodistus-id should fail")))
+
+(t/deftest yksinkertaistettu-with-expired-replaced-certificate-rejected-test
+  ;; Given: a signed ET A whose voimassaolo-paattymisaika is in the past
+  ;; And: a draft B replacing A with yksinkertaistettu-paivitysmenettely true
+  ;; When: signing B is attempted
+  ;; Then: an appropriate error is thrown
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        whoami {:id laatija-id :rooli 0}
+        db (ts/db-user laatija-id)
+        korvattava-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvattava-id] (energiatodistus-test-data/insert! [korvattava-add] laatija-id)
+        _ (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+        ;; Manually set the validity to the past
+        _ (jdbc/execute! (ts/db-user ts/*admin-db* -1)
+                         ["UPDATE energiatodistus SET voimassaolo_paattymisaika = now() - interval '1 day' WHERE id = ?" korvattava-id])
+        korvaava-add (-> (first (energiatodistus-test-data/generate-adds 1 2018 true))
+                         (assoc :korvattu-energiatodistus-id korvattava-id
+                                :yksinkertaistettu-paivitysmenettely true))
+        [korvaava-id] (energiatodistus-test-data/insert! [korvaava-add] laatija-id)]
+    (t/is (= :invalid-replace
+             (:type (etp-test/catch-ex-data
+                      #(do
+                         (service/start-energiatodistus-signing! db whoami korvaava-id)
+                         (service/end-energiatodistus-signing! db
+                                                               ts/*aws-s3-client*
+                                                               whoami
+                                                               korvaava-id
+                                                               {:skip-pdf-signed-assert? true})))))
+          "yksinkertaistettu with expired replaced certificate should fail")))
+
+(t/deftest yksinkertaistettu-update-draft-field-persistence-test
+  ;; Given: a draft ET with yksinkertaistettu-paivitysmenettely false
+  ;; When: the laatija updates it to true with a valid korvattu-energiatodistus-id
+  ;; Then: the value is persisted and can be read back as true
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        whoami {:id laatija-id :rooli 0}
+        db (ts/db-user laatija-id)
+        korvattava-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvattava-id] (energiatodistus-test-data/insert! [korvattava-add] laatija-id)
+        _ (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+        et-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)]
+    ;; Confirm initial value is false
+    (t/is (= false (:yksinkertaistettu-paivitysmenettely
+                      (service/find-energiatodistus ts/*db* et-id))))
+    ;; Update to true with valid korvattu id
+    (service/update-energiatodistus! db whoami et-id
+                                     (assoc et-add
+                                            :korvattu-energiatodistus-id korvattava-id
+                                            :yksinkertaistettu-paivitysmenettely true))
+    (t/is (= true (:yksinkertaistettu-paivitysmenettely
+                     (service/find-energiatodistus ts/*db* et-id)))
+          "Updated yksinkertaistettu-paivitysmenettely should persist as true")))

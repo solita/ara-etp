@@ -575,3 +575,46 @@
          (service/find-history ts/*db*
                               whoami
                               energiatodistus-id-2))))))
+
+;; ---- AE-2759: yksinkertaistettu-paivitysmenettely is not a state-field ----
+
+(t/deftest yksinkertaistettu-paivitysmenettely-not-in-state-fields-test
+  ;; Given: the state-fields set from energiatodistus-history
+  ;; When: checking if yksinkertaistettu-paivitysmenettely is in state-fields
+  ;; Then: it should NOT be in state-fields (it is a form field)
+  (t/is (not (contains? service/state-fields :yksinkertaistettu-paivitysmenettely))
+        "yksinkertaistettu-paivitysmenettely should not be in state-fields"))
+
+(t/deftest yksinkertaistettu-paivitysmenettely-appears-in-form-history-test
+  ;; Given: an energiatodistus whose yksinkertaistettu-paivitysmenettely is changed from false to true
+  ;; When: history is queried
+  ;; Then: the change appears in form history
+  (let [laatijat (laatija-test-data/generate-and-insert! 1)
+        laatija-id (-> laatijat keys sort first)
+        korvattava-add (energiatodistus-test-data/generate-add 2018 true)
+        [korvattava-id] (energiatodistus-test-data/insert! [korvattava-add] laatija-id)
+        _ (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+        et-add (energiatodistus-test-data/generate-add 2018 true)
+        [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)]
+
+    ;; Update yksinkertaistettu-paivitysmenettely from false to true
+    (update-energiatodistus! et-id
+                             (assoc et-add
+                                    :korvattu-energiatodistus-id korvattava-id
+                                    :yksinkertaistettu-paivitysmenettely true)
+                             laatija-id)
+
+    (let [history (service/find-history ts/*db*
+                                        {:id laatija-id :rooli 0}
+                                        et-id)
+          form-history (:form-history history)
+          yksinkertaistettu-change (some #(when (= :yksinkertaistettu-paivitysmenettely (:k %)) %)
+                                         form-history)]
+      (t/is (some? yksinkertaistettu-change)
+            "History should contain a change for yksinkertaistettu-paivitysmenettely")
+      (t/is (= false (:init-v yksinkertaistettu-change))
+            "Initial value should be false")
+      (t/is (= true (:new-v yksinkertaistettu-change))
+            "New value should be true")
+      (t/is (= :bool (:type yksinkertaistettu-change))
+            "Type should be :bool"))))
