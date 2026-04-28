@@ -11,56 +11,56 @@
 
 (def private-columns
   (concat
-   (for [k [:id :perusparannuspassi-id :versio :tila-id :laatija-id :laatija-fullname
+    (for [k [:id :perusparannuspassi-id :versio :tila-id :laatija-id :laatija-fullname
             :allekirjoitusaika :voimassaolo-paattymisaika
             :laskutusaika :draft-visible-to-paakayttaja :bypass-validation-limits
             :bypass-validation-limits-reason :korvattu-energiatodistus-id
             :korvaava-energiatodistus-id ;; TODO is this valid?
             :laskutettava-yritys-id :laskuriviviite]]
      [k])
-   [[:perustiedot :yritys :nimi]]
-   (for [child [:tilaaja :kieli :kieli-fi :kieli-sv :laatimisvaihe
+    [[:perustiedot :yritys :nimi]]
+    (for [child [:tilaaja :kieli :kieli-fi :kieli-sv :laatimisvaihe
                  :laatimisvaihe-fi :laatimisvaihe-sv :havainnointikaynti
                  :uudisrakennus
                  :havainnointikayntityyppi-id :havainnointikayntityyppi-fi
                  :havainnointikayntityyppi-sv
                  :tayttaa-aplus-vaatimukset :tayttaa-a0-vaatimukset]]
       [:perustiedot child])
-   [[:tulokset :laskentatyokalu]]
-   (for [child [:nimi-fi :nimi-sv :valmistumisvuosi :rakennusosa :katuosoite-fi
+    [[:tulokset :laskentatyokalu]]
+    (for [child [:nimi-fi :nimi-sv :valmistumisvuosi :rakennusosa :katuosoite-fi
                 :katuosoite-sv :postinumero :postitoimipaikka-fi
                 :postitoimipaikka-sv :rakennustunnus :kiinteistotunnus
                 :paakayttotarkoitus-id :paakayttotarkoitus-fi :paakayttotarkoitus-sv
                 :kayttotarkoitus :alakayttotarkoitus-fi :alakayttotarkoitus-sv
                 :julkinen-rakennus]]
      [:perustiedot child])
-   [[:tulokset :e-luku]
+    [[:tulokset :e-luku]
     [:tulokset :e-luokka]
     [:tulokset :e-luokka-rajat :raja-uusi-2018]
     [:tulokset :e-luokka-rajat :kayttotarkoitus :label-fi]]
-   (for [child [:keskeiset-suositukset-fi :keskeiset-suositukset-sv]]
+    (for [child [:keskeiset-suositukset-fi :keskeiset-suositukset-sv]]
      [:perustiedot child])
-   [[:lahtotiedot :lammitetty-nettoala]]
-   (for [child [:ilmanvuotoluku :lampokapasiteetti :ilmatilavuus]]
+    [[:lahtotiedot :lammitetty-nettoala]]
+    (for [child [:ilmanvuotoluku :lampokapasiteetti :ilmatilavuus]]
      [:lahtotiedot :rakennusvaippa child])
-   (for [parent [:ulkoseinat :ylapohja :alapohja :ikkunat :ulkoovet]
+    (for [parent [:ulkoseinat :ylapohja :alapohja :ikkunat :ulkoovet]
          child [:ala :U :UA :osuus-lampohaviosta]]
      [:lahtotiedot :rakennusvaippa parent child])
-   [[:lahtotiedot :rakennusvaippa :kylmasillat-UA]
+    [[:lahtotiedot :rakennusvaippa :kylmasillat-UA]
     [:lahtotiedot :rakennusvaippa :kylmasillat-osuus-lampohaviosta]
     [:lahtotiedot :rakennusvaippa :UA-summa]]
-   (for [parent [:pohjoinen :koillinen :ita :kaakko :etela :lounas :lansi
+    (for [parent [:pohjoinen :koillinen :ita :kaakko :etela :lounas :lansi
                  :luode :valokupu :katto]
          child [:ala :U :g-ks]]
      [:lahtotiedot :ikkunat parent child])
-   (for [child [:tyyppi-id :label-fi :label-sv :kuvaus-fi :kuvaus-sv]]
+    (for [child [:tyyppi-id :label-fi :label-sv :kuvaus-fi :kuvaus-sv]]
      [:lahtotiedot :ilmanvaihto child])
-   (for [child [:tulo :poisto :tulo-poisto :sfp :lampotilasuhde :jaatymisenesto]]
+    (for [child [:tulo :poisto :tulo-poisto :sfp :lampotilasuhde :jaatymisenesto]]
      [:lahtotiedot :ilmanvaihto :paaiv child])
-   (for [parent [:erillispoistot :ivjarjestelma]
+    (for [parent [:erillispoistot :ivjarjestelma]
          child [:tulo :poisto :tulo-poisto :sfp]]
      [:lahtotiedot :ilmanvaihto parent child])
-   [[:lahtotiedot :ilmanvaihto :lto-vuosihyotysuhde]
+    [[:lahtotiedot :ilmanvaihto :lto-vuosihyotysuhde]
     [:lahtotiedot :ilmanvaihto :tuloilma-lampotila]
     [:lahtotiedot :lammitys :lammitysmuoto-1 :id]
     [:lahtotiedot :lammitys :lammitysmuoto-2 :id]
@@ -75,22 +75,22 @@
     [:lahtotiedot :lammitys :lammonjako-label-sv]
     [:lahtotiedot :lammitys :lammonjako :kuvaus-fi]
     [:lahtotiedot :lammitys :lammonjako :kuvaus-sv]]
-   (for [parent [:tilat-ja-iv :lammin-kayttovesi]
+    (for [parent [:tilat-ja-iv :lammin-kayttovesi]
          child [:tuoton-hyotysuhde :jaon-hyotysuhde :lampokerroin :apulaitteet
                 :lampopumppu-tuotto-osuus :lampohavio-lammittamaton-tila]]
      [:lahtotiedot :lammitys parent child])
-   (for [parent [:takka :ilmalampopumppu]
+    (for [parent [:takka :ilmalampopumppu]
          child [:maara :tuotto]]
      [:lahtotiedot :lammitys parent child])
-   [[:lahtotiedot :jaahdytysjarjestelma :jaahdytyskauden-painotettu-kylmakerroin]
+    [[:lahtotiedot :jaahdytysjarjestelma :jaahdytyskauden-painotettu-kylmakerroin]
     [:lahtotiedot :lkvn-kaytto :ominaiskulutus]
     [:lahtotiedot :lkvn-kaytto :lammitysenergian-nettotarve]
     [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
     [:lahtotiedot :lammitys :lammonjako-lampotilajousto]]
-   (for [parent [:henkilot :kuluttajalaitteet :valaistus]
+    (for [parent [:henkilot :kuluttajalaitteet :valaistus]
          child [:kayttoaste :lampokuorma]]
      [:lahtotiedot :sis-kuorma parent child])
-   (for [child [:kaukolampo :kaukolampo-nettoala :kaukolampo-kerroin
+    (for [child [:kaukolampo :kaukolampo-nettoala :kaukolampo-kerroin
                 :kaukolampo-kertoimella :kaukolampo-nettoala-kertoimella :sahko
                 :sahko-nettoala :sahko-kerroin :sahko-kertoimella
                 :sahko-nettoala-kertoimella :uusiutuva-polttoaine
@@ -106,36 +106,36 @@
                 :kaukojaahdytys-nettoala-kertoimella
                 :valaistus-kuluttaja-sahko :valaistus-kuluttaja-sahko-nettoala]]
      [:tulokset :kaytettavat-energiamuodot child])
-   (for [idx (range 3)
+    (for [idx (range 3)
          child [:nimi :ostoenergia :muotokerroin :ostoenergia-nettoala
                 :ostoenergia-kertoimella :ostoenergia-nettoala-kertoimella]]
      [:tulokset :kaytettavat-energiamuodot :muu idx child])
-   [[:tulokset :kaytettavat-energiamuodot :summa]
+    [[:tulokset :kaytettavat-energiamuodot :summa]
     [:tulokset :kaytettavat-energiamuodot :kertoimella-summa]]
-   [[:tulokset :kasvihuonepaastot]
+    [[:tulokset :kasvihuonepaastot]
     [:tulokset :kasvihuonepaastot-nettoala]]
-   (for [child [:aurinkosahko :aurinkosahko-nettoala :aurinkolampo
+    (for [child [:aurinkosahko :aurinkosahko-nettoala :aurinkolampo
                 :aurinkolampo-nettoala :tuulisahko :tuulisahko-nettoala
                 :lampopumppu :lampopumppu-nettoala :muusahko :muusahko-nettoala
                 :muulampo :muulampo-nettoala]]
      [:tulokset :uusiutuvat-omavaraisenergiat child])
-   (for [idx (range 6)
+    (for [idx (range 6)
          child [:nimi-fi :nimi-sv :vuosikulutus :vuosikulutus-nettoala]]
      [:tulokset :uusiutuvat-omavaraisenergiat idx child])
-   (for [child [:aurinkosahko :aurinkolampo :tuulisahko :lampopumppu
+    (for [child [:aurinkosahko :aurinkolampo :tuulisahko :lampopumppu
                 :muulampo :muusahko]]
      [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto child])
-   (for [parent [:tilojen-lammitys :tuloilman-lammitys :kayttoveden-valmistus]
+    (for [parent [:tilojen-lammitys :tuloilman-lammitys :kayttoveden-valmistus]
          child [:sahko :lampo]]
      [:tulokset :tekniset-jarjestelmat parent child])
-   [[:tulokset :tekniset-jarjestelmat :iv-sahko]]
-   (for [child [:sahko :lampo :kaukojaahdytys]]
+    [[:tulokset :tekniset-jarjestelmat :iv-sahko]]
+    (for [child [:sahko :lampo :kaukojaahdytys]]
      [:tulokset :tekniset-jarjestelmat :jaahdytys child])
-   [[:tulokset :tekniset-jarjestelmat :kuluttajalaitteet-ja-valaistus-sahko]
+    [[:tulokset :tekniset-jarjestelmat :kuluttajalaitteet-ja-valaistus-sahko]
     [:tulokset :tekniset-jarjestelmat :sahko-summa]
     [:tulokset :tekniset-jarjestelmat :lampo-summa]
     [:tulokset :tekniset-jarjestelmat :kaukojaahdytys-summa]]
-   (for [child [:tilojen-lammitys-vuosikulutus
+    (for [child [:tilojen-lammitys-vuosikulutus
                 :tilojen-lammitys-vuosikulutus-nettoala
                 :ilmanvaihdon-lammitys-vuosikulutus
                 :ilmanvaihdon-lammitys-vuosikulutus-nettoala
@@ -143,11 +143,11 @@
                 :kayttoveden-valmistus-vuosikulutus-nettoala
                 :jaahdytys-vuosikulutus :jaahdytys-vuosikulutus-nettoala]]
      [:tulokset :nettotarve child])
-   (for [child [:aurinko :aurinko-nettoala :ihmiset :ihmiset-nettoala
+    (for [child [:aurinko :aurinko-nettoala :ihmiset :ihmiset-nettoala
                 :kuluttajalaitteet :kuluttajalaitteet-nettoala
                 :valaistus :valaistus-nettoala :kvesi :kvesi-nettoala]]
      [:tulokset :lampokuormat child])
-   (for [child [:kaukolampo-vuosikulutus :kaukolampo-vuosikulutus-nettoala
+    (for [child [:kaukolampo-vuosikulutus :kaukolampo-vuosikulutus-nettoala
                 :kokonaissahko-vuosikulutus :kokonaissahko-vuosikulutus-nettoala
                 :kiinteistosahko-vuosikulutus
                 :kiinteistosahko-vuosikulutus-nettoala
@@ -155,10 +155,10 @@
                 :kaukojaahdytys-vuosikulutus
                 :kaukojaahdytys-vuosikulutus-nettoala]]
      [:toteutunut-ostoenergiankulutus :ostettu-energia child])
-   (for [idx (range 5)
+    (for [idx (range 5)
          child [:nimi-fi :nimi-sv :vuosikulutus :vuosikulutus-nettoala]]
      [:toteutunut-ostoenergiankulutus :ostettu-energia :muu idx child])
-   (for [child [:kevyt-polttooljy :kevyt-polttooljy-kerroin
+    (for [child [:kevyt-polttooljy :kevyt-polttooljy-kerroin
                 :kevyt-polttooljy-kwh :kevyt-polttooljy-kwh-nettoala
                 :pilkkeet-havu-sekapuu :pilkkeet-havu-sekapuu-kerroin
                 :pilkkeet-havu-sekapuu-kwh :pilkkeet-havu-sekapuu-kwh-nettoala
@@ -166,11 +166,11 @@
                 :pilkkeet-koivu-kwh-nettoala :puupelletit :puupelletit-kerroin
                 :puupelletit-kwh :puupelletit-kwh-nettoala]]
      [:toteutunut-ostoenergiankulutus :ostetut-polttoaineet child])
-   (for [idx (range 3)
+    (for [idx (range 3)
          child [:nimi :maara-vuodessa :yksikko :muunnoskerroin :kwh
                 :kwh-nettoala]]
      [:toteutunut-ostoenergiankulutus :ostetut-polttoaineet :muu idx child])
-   (for [child [:sahko-vuosikulutus-yhteensa
+    (for [child [:sahko-vuosikulutus-yhteensa
                 :sahko-vuosikulutus-yhteensa-nettoala
                 :kaukolampo-vuosikulutus-yhteensa
                 :kaukolampo-vuosikulutus-yhteensa-nettoala
@@ -188,7 +188,7 @@
                 :uusiutuva-energia-vuosituotto-yhteensa
                 :uusiutuva-energia-vuosituotto-yhteensa-nettoala]]
      [:toteutunut-ostoenergiankulutus child])
-   (apply concat
+    (apply concat
           (for [parent [:ymparys :alapohja-ylapohja :lammitys :iv-ilmastointi
                         :valaistus-muut]]
             (concat
@@ -198,21 +198,21 @@
                    child [:nimi-fi :nimi-sv :lampo :sahko :jaahdytys
                           :eluvun-muutos :kasvihuonepaastojen-muutos]]
                [:huomiot parent :toimenpide idx child]))))
-   [[:huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina]]
-   (for [child [:suositukset-fi :suositukset-sv :lisatietoja-fi
+    [[:huomiot :lammitys :kayttoikaa-jaljella-arvio-vuosina]]
+    (for [child [:suositukset-fi :suositukset-sv :lisatietoja-fi
                 :lisatietoja-sv]]
      [:huomiot child])
-   [[:lisamerkintoja-fi]
+    [[:lisamerkintoja-fi]
     [:lisamerkintoja-sv]]
-   ;; ET2026: Ilmastoselvitys
-   (for [child [:laatimisajankohta :laatija :yritys :yritys-osoite
+    ;; ET2026: Ilmastoselvitys
+    (for [child [:laatimisajankohta :laatija :yritys :yritys-osoite
                 :yritys-postinumero :yritys-postitoimipaikka :laadintaperuste]]
      [:ilmastoselvitys child])
-   (for [parent [:rakennus :rakennuspaikka]
+    (for [parent [:rakennus :rakennuspaikka]
          child [:rakennustuotteiden-valmistus :kuljetukset-tyomaavaihe
-                :rakennustuotteiden-vaihdot :energiankaytto :purkuvaihe]]
+                :rakennustuotteiden-vaihdot :energiankaytto :purkuvaihe :yhteensa]]
      [:ilmastoselvitys :hiilijalanjalki parent child])
-   (for [parent [:rakennus :rakennuspaikka]
+    (for [parent [:rakennus :rakennuspaikka]
          child [:uudelleenkaytto :kierratys :ylimaarainen-uusiutuvaenergia
                 :hiilivarastovaikutus :karbonatisoituminen]]
      [:ilmastoselvitys :hiilikadenjalki parent child])))
@@ -532,12 +532,13 @@
     [:ilmastoselvitys :hiilijalanjalki :rakennus :rakennustuotteiden-vaihdot]
     [:ilmastoselvitys :hiilijalanjalki :rakennus :energiankaytto]
     [:ilmastoselvitys :hiilijalanjalki :rakennus :purkuvaihe]
+    [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-valmistus]
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :kuljetukset-tyomaavaihe]
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-vaihdot]
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :energiankaytto]
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :purkuvaihe]
-    [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]
+    [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :yhteensa]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :uudelleenkaytto]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :kierratys]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :ylimaarainen-uusiutuvaenergia]
@@ -770,12 +771,13 @@
     [:ilmastoselvitys :hiilijalanjalki :rakennus :rakennustuotteiden-vaihdot]
     [:ilmastoselvitys :hiilijalanjalki :rakennus :energiankaytto]
     [:ilmastoselvitys :hiilijalanjalki :rakennus :purkuvaihe]
+    [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-valmistus]
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :kuljetukset-tyomaavaihe]
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :rakennustuotteiden-vaihdot]
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :energiankaytto]
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :purkuvaihe]
-    [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]
+    [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :yhteensa]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :uudelleenkaytto]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :kierratys]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :ylimaarainen-uusiutuvaenergia]
