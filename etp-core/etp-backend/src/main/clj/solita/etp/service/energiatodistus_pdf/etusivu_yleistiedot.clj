@@ -57,4 +57,9 @@
         [:dd (str (-> energiatodistus (get-in [:allekirjoitusaika]) time/format-date))]]
        [:div
         [:dt (str (l :todistuksen-voimassaolopaiva) ": ")]
-        [:dd (str (-> energiatodistus (get-in [:voimassaolo-paattymisaika]) time/format-date))]]]]]))
+        [:dd (str (some-> energiatodistus
+                          (get-in [:voimassaolo-paattymisaika])
+                          (.atZone time/timezone)
+                          .toLocalDate
+                          (.minusDays 1)
+                          time/format-date))]]]]]))
