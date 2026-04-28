@@ -239,7 +239,9 @@ describe('korvaus.js', () => {
   describe('isReplacedCertificateValid', () => {
     it('given korvattava whose voimassaolo-paattymisaika is in the future, when checking validity, then returns true', () => {
       // given
-      const futureDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+      const futureDate = new Date(
+        Date.now() + 365 * 24 * 60 * 60 * 1000
+      ).toISOString();
       const korvattava = {
         'voimassaolo-paattymisaika': Maybe.Some(futureDate)
       };
@@ -253,7 +255,9 @@ describe('korvaus.js', () => {
 
     it('given korvattava whose voimassaolo-paattymisaika is in the past, when checking validity, then returns false', () => {
       // given
-      const pastDate = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString();
+      const pastDate = new Date(
+        Date.now() - 365 * 24 * 60 * 60 * 1000
+      ).toISOString();
       const korvattava = {
         'voimassaolo-paattymisaika': Maybe.Some(pastDate)
       };
@@ -282,7 +286,9 @@ describe('korvaus.js', () => {
   describe('canUseSimplifiedProcedure', () => {
     it('given draft ET with valid replacement target, when checking canUseSimplifiedProcedure, then returns true', () => {
       // given
-      const futureDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+      const futureDate = new Date(
+        Date.now() + 365 * 24 * 60 * 60 * 1000
+      ).toISOString();
       const energiatodistus = {
         'tila-id': ET.tila.draft,
         'korvattu-energiatodistus-id': Maybe.Some(10)
@@ -294,7 +300,10 @@ describe('korvaus.js', () => {
       };
 
       // when
-      const result = Korvaus.canUseSimplifiedProcedure(energiatodistus, korvattava);
+      const result = Korvaus.canUseSimplifiedProcedure(
+        energiatodistus,
+        korvattava
+      );
 
       // then
       expect(result).toBe(true);
@@ -309,7 +318,10 @@ describe('korvaus.js', () => {
       const korvattava = null;
 
       // when
-      const result = Korvaus.canUseSimplifiedProcedure(energiatodistus, korvattava);
+      const result = Korvaus.canUseSimplifiedProcedure(
+        energiatodistus,
+        korvattava
+      );
 
       // then
       expect(result).toBe(false);
@@ -317,7 +329,9 @@ describe('korvaus.js', () => {
 
     it('given signed ET with valid replacement target, when checking canUseSimplifiedProcedure, then returns false', () => {
       // given
-      const futureDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+      const futureDate = new Date(
+        Date.now() + 365 * 24 * 60 * 60 * 1000
+      ).toISOString();
       const energiatodistus = {
         'tila-id': ET.tila.signed,
         'korvattu-energiatodistus-id': Maybe.Some(10)
@@ -329,7 +343,10 @@ describe('korvaus.js', () => {
       };
 
       // when
-      const result = Korvaus.canUseSimplifiedProcedure(energiatodistus, korvattava);
+      const result = Korvaus.canUseSimplifiedProcedure(
+        energiatodistus,
+        korvattava
+      );
 
       // then
       expect(result).toBe(false);
@@ -337,7 +354,9 @@ describe('korvaus.js', () => {
 
     it('given draft ET with expired replacement target, when checking canUseSimplifiedProcedure, then returns false', () => {
       // given
-      const pastDate = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString();
+      const pastDate = new Date(
+        Date.now() - 365 * 24 * 60 * 60 * 1000
+      ).toISOString();
       const energiatodistus = {
         'tila-id': ET.tila.draft,
         'korvattu-energiatodistus-id': Maybe.Some(10)
@@ -349,7 +368,10 @@ describe('korvaus.js', () => {
       };
 
       // when
-      const result = Korvaus.canUseSimplifiedProcedure(energiatodistus, korvattava);
+      const result = Korvaus.canUseSimplifiedProcedure(
+        energiatodistus,
+        korvattava
+      );
 
       // then
       expect(result).toBe(false);

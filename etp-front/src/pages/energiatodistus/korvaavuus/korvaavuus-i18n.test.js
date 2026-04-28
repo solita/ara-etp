@@ -38,7 +38,9 @@ describe('Korvaavuus i18n labels', () => {
 
       // then
       expect(korvaavuus['yksinkertaistettu-paivitysmenettely']).toBeDefined();
-      expect(korvaavuus['yksinkertaistettu-paivitysmenettely'].length).toBeGreaterThan(0);
+      expect(
+        korvaavuus['yksinkertaistettu-paivitysmenettely'].length
+      ).toBeGreaterThan(0);
     });
 
     it('given sv.json, when checking for yksinkertaistettu label, then key exists', () => {
@@ -47,7 +49,9 @@ describe('Korvaavuus i18n labels', () => {
 
       // then
       expect(korvaavuus['yksinkertaistettu-paivitysmenettely']).toBeDefined();
-      expect(korvaavuus['yksinkertaistettu-paivitysmenettely'].length).toBeGreaterThan(0);
+      expect(
+        korvaavuus['yksinkertaistettu-paivitysmenettely'].length
+      ).toBeGreaterThan(0);
     });
 
     it('given fi.json, when checking for yksinkertaistettu info text, then key exists', () => {

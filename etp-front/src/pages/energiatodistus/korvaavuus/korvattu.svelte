@@ -35,7 +35,9 @@
       !ET.isTilaInTilat([ET.tila.draft, ET.tila.deleted])(energiatodistus));
 
   const lens = R.lensProp('korvattu-energiatodistus-id');
-  const yksinkertaistettuLens = R.lensProp('yksinkertaistettu-paivitysmenettely');
+  const yksinkertaistettuLens = R.lensProp(
+    'yksinkertaistettu-paivitysmenettely'
+  );
 
   let cancel = () => {};
   let searching = false;
@@ -99,10 +101,7 @@
     const _fetchId = R.view(lens, energiatodistus);
     if (!R.equals(_fetchId, lastFetchedId)) {
       lastFetchedId = _fetchId;
-      R.forEach(
-        fetchKorvattavaEnergiatodistus(0),
-        _fetchId
-      );
+      R.forEach(fetchKorvattavaEnergiatodistus(0), _fetchId);
     }
   }
 
@@ -170,7 +169,9 @@
         {#if Korvaus.canUseSimplifiedProcedure(energiatodistus, et)}
           <div transition:slide={{ duration: 200 }}>
             <Checkbox
-              label={i18n('energiatodistus.korvaavuus.yksinkertaistettu-paivitysmenettely')}
+              label={i18n(
+                'energiatodistus.korvaavuus.yksinkertaistettu-paivitysmenettely'
+              )}
               dataCy="yksinkertaistettu-paivitysmenettely-checkbox"
               bind:model={energiatodistus}
               lens={yksinkertaistettuLens} />
