@@ -530,7 +530,7 @@
           </div>
         {/if}
 
-        <dl class="w-full grid grid-cols-2">
+        <dl class="w-full grid grid-cols-2 mt-6 print:mt-2">
           <div
             class="col-span-2 mb-6 print:mb-2 flex flex-col md:flex-row print:flex-row space-x-2 w-full">
             <dt class="w-full md:w-1/2 text-ashblue print:w-1/2">

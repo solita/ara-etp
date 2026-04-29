@@ -181,8 +181,11 @@
     where
   );
 
-  $: tarkennettuShown =
-    Object.keys(deserializedWhere).filter(item => item !== 'id').length > 0;
+  $: if (
+    Object.keys(deserializedWhere).filter(item => item !== 'id').length > 0
+  ) {
+    tarkennettuShown = true;
+  }
 
   $: searchmodel = {
     ...EtHakuUtils.defaultSearchModel(),
