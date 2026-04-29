@@ -455,6 +455,8 @@
 
    .lisatietoja-field {
      min-height: 180mm;
+     white-space: pre-line;
+     overflow-wrap: break-word;
    }
 
    .lisatietoja-sivu-otsikko {
