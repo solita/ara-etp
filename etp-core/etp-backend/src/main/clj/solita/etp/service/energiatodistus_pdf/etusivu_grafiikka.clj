@@ -86,8 +86,8 @@
 (def arrow-spacing 5)
 (def min-body-width 110)
 (def width-increment 20)
-(def tip-width 10)
-(def tip-width-increment 3)
+(def tip-width 13)
+(def tip-width-increment 2)
 (def indicator-line-length 370)
 (def e-luokka-indicator-margin 210)
 (def svg-width (+ indicator-line-length e-luokka-indicator-margin))
@@ -98,7 +98,7 @@
         arrow-index (first (keep-indexed (fn [i a] (when (= (:luokka a) e-luokka) i)) arrows))
         arrow-y (when arrow-index (* arrow-index row-height))
         indicator-width 180
-        indicator-tip-width 20
+        indicator-tip-width 17
         x-end (+ indicator-line-length e-luokka-indicator-margin)
         x-start (- x-end indicator-width)
         x-tip (- x-start indicator-tip-width)

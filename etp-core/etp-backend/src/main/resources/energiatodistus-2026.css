@@ -454,7 +454,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .etusivu-grafiikka-otsikko {
     font-weight: bold;
-    padding: 5px 5px 5px 0px;
+    padding: 0px 5px 5px 0px;
 }
 
 .koontisivu #koontisivu-yleiset-tiedot {
