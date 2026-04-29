@@ -20,7 +20,7 @@
   (->> versio-counts :e-luokka vals (reduce +) (<= min-sample-size)))
 
 (defn find-e-luokka-counts
-  "Returns e-luokka counts grouped by versio. No allekirjoitusaika filter."
+  "Returns e-luokka counts grouped by versio."
   [db query]
   (reduce (fn [acc {:keys [versio e-luokka count]}]
             (cond-> acc
@@ -30,8 +30,7 @@
           (statistics-db/select-e-luokka-counts db query)))
 
 (defn find-lammitys-ilmanvaihto-counts
-  "Returns lammitysmuoto and ilmanvaihto counts grouped by versio.
-   Only includes certificates signed on or after 2021-01-01."
+  "Returns lammitysmuoto and ilmanvaihto counts grouped by versio."
   [db query]
   (reduce (fn [acc {:keys [versio lammitysmuoto-id ilmanvaihtotyyppi-id count]}]
             (cond-> acc
