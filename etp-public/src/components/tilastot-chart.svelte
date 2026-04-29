@@ -56,12 +56,21 @@
 
   $: colors = labels.map(label => colorMap[label]);
 
-  const options = {
+  $: options = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     scales: {
-      y: {
+      x: {
         ticks: {
+          maxRotation: 45,
+          minRotation: 45
+        }
+      },
+      y: {
+        min: 0,
+        max: 1,
+        ticks: {
+          stepSize: 0.2,
           callback: value => {
             return value * 100 + '%';
           }
@@ -116,6 +125,13 @@
 <style>
   .chart-parent {
     width: 99%;
+    height: 300px;
+  }
+
+  @media (min-width: 768px) {
+    .chart-parent {
+      height: 250px;
+    }
   }
 
   .printing {

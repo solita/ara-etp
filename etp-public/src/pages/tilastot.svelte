@@ -271,7 +271,7 @@
       display: block;
     }
 
-    .results > .flex {
+    .results > .grid {
       display: block;
     }
   }
@@ -533,7 +533,7 @@
               {#if total2013 + total2018 + total2026 > 0}
                 <!-- GRAPHS -->
                 <div
-                  class="my-4 flex flex-col lg:flex-row space-y-4 lg:space-x-16 lg:space-y-0 justify-evenly">
+                  class="my-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <TilastotEtVersion
                     {printing}
                     tooltipAnchorPosition={AnchorPosition.bottomRight}
