@@ -100,7 +100,7 @@
     (when (not-empty seloste)
       [:div {:style "margin-top: 24px;"}
        [:h2 (l :toimenpideseloste)]
-       [:p (h seloste)]])))
+       [:p {:style "white-space: pre-line; overflow-wrap: break-word;"} (h seloste)]])))
 
 (defn- render-energiankulutuksen-muutos [vaihe l]
   (let [tulokset (:tulokset vaihe)]

@@ -10,11 +10,12 @@
      [:h1 (l :te-rakennusvaippa-otsikko)]
      (str (l :rakennusvaippa-teksti))
      [:h3 (l :huomiot-ymparys-otsikko)]
-     (-> energiatodistus
-         (get-in [:huomiot :ymparys (case kieli
-                                      :fi :teksti-fi
-                                      :sv :teksti-sv)])
-         h)]))
+     [:div {:class "toimenpide-huomiot-teksti"}
+      (-> energiatodistus
+          (get-in [:huomiot :ymparys (case kieli
+                                       :fi :teksti-fi
+                                       :sv :teksti-sv)])
+          h)]]))
 
 (defn toimenpide-ehdotukset-list-ulko [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)
@@ -46,11 +47,12 @@
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
      [:h3 (l :huomiot-pohjat-otsikko)]
-     (-> energiatodistus
-         (get-in [:huomiot :alapohja-ylapohja (case kieli
-                                                :fi :teksti-fi
-                                                :sv :teksti-sv)])
-         h)]))
+     [:div {:class "toimenpide-huomiot-teksti"}
+      (-> energiatodistus
+          (get-in [:huomiot :alapohja-ylapohja (case kieli
+                                                 :fi :teksti-fi
+                                                 :sv :teksti-sv)])
+          h)]]))
 
 (defn toimenpide-ehdotukset-list-pohjat [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)
