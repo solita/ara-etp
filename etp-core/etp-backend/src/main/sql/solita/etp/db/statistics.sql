@@ -1,8 +1,6 @@
--- name: select-counts
+-- name: select-e-luokka-counts
 SELECT e.versio,
        e.t$e_luokka e_luokka,
-       e.lt$lammitys$lammitysmuoto_1$id lammitysmuoto_id,
-       e.lt$ilmanvaihto$tyyppi_id ilmanvaihtotyyppi_id,
        count(1)
 FROM energiatodistus e
 LEFT JOIN postinumero p ON e.pt$postinumero = p.id
@@ -23,7 +21,34 @@ AND (:valmistumisvuosi-min::numeric IS NULL OR e.pt$valmistumisvuosi >= :valmist
 AND (:valmistumisvuosi-max::numeric IS NULL OR e.pt$valmistumisvuosi <= :valmistumisvuosi-max)
 AND (:lammitetty-nettoala-min::numeric IS NULL OR e.lt$lammitetty_nettoala >= :lammitetty-nettoala-min)
 AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max)
-GROUP BY GROUPING SETS ((e.versio, e.t$e_luokka), (e.versio, e.lt$lammitys$lammitysmuoto_1$id), (e.versio, e.lt$ilmanvaihto$tyyppi_id));
+GROUP BY e.versio, e.t$e_luokka;
+
+-- name: select-lammitys-ilmanvaihto-counts
+SELECT e.versio,
+       e.lt$lammitys$lammitysmuoto_1$id lammitysmuoto_id,
+       e.lt$ilmanvaihto$tyyppi_id ilmanvaihtotyyppi_id,
+       count(1)
+FROM energiatodistus e
+LEFT JOIN postinumero p ON e.pt$postinumero = p.id
+LEFT JOIN kunta k ON p.kunta_id = k.id
+LEFT JOIN toimintaalue t ON k.toimintaalue_id = t.id
+WHERE e.tila_id = 2
+AND e.voimassaolo_paattymisaika > now()
+AND e.allekirjoitusaika >= '2021-01-01'::timestamp
+AND (:keyword::text IS NULL
+     OR e.pt$postinumero::text = ltrim(:keyword, '0')
+     OR k.label_fi ILIKE :keyword
+     OR k.label_sv ILIKE :keyword
+     OR t.label_fi ILIKE :keyword
+     OR t.label_sv ILIKE :keyword)
+AND (:kayttotarkoitus-id::int IS NULL OR (e.pt$kayttotarkoitus, e.versio) IN
+       (select alakayttotarkoitusluokka_id, versio from stat_ktluokka_alaktluokka
+        where stat_kayttotarkoitusluokka_id = :kayttotarkoitus-id))
+AND (:valmistumisvuosi-min::numeric IS NULL OR e.pt$valmistumisvuosi >= :valmistumisvuosi-min)
+AND (:valmistumisvuosi-max::numeric IS NULL OR e.pt$valmistumisvuosi <= :valmistumisvuosi-max)
+AND (:lammitetty-nettoala-min::numeric IS NULL OR e.lt$lammitetty_nettoala >= :lammitetty-nettoala-min)
+AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max)
+GROUP BY GROUPING SETS ((e.versio, e.lt$lammitys$lammitysmuoto_1$id), (e.versio, e.lt$ilmanvaihto$tyyppi_id));
 
 -- name: select-e-luku-statistics
 SELECT round(avg(e.t$e_luku), 2) avg,

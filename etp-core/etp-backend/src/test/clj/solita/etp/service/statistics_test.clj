@@ -159,10 +159,10 @@
                                                                query-exact
                                                                2018)))))
 
-(def empty-results {:counts {2013 nil 2018 nil}
-                    :e-luku-statistics {2013 nil 2018 nil}
+(def empty-results {:counts {2013 nil 2018 nil 2026 nil}
+                    :e-luku-statistics {2013 nil 2018 nil 2026 nil}
                     :common-averages nil
-                    :uusiutuvat-omavaraisenergiat-counts {2018 nil}})
+                    :uusiutuvat-omavaraisenergiat-counts {2018 nil 2026 nil}})
 
 (t/deftest find-statistics-test
   (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
@@ -171,13 +171,15 @@
                              :ilmanvaihto {4 3 2 3}}
                        2018 {:e-luokka {"A" 3 "B" 3}
                              :lammitysmuoto {4 3 2 3}
-                             :ilmanvaihto {4 3 2 3}}}
+                             :ilmanvaihto {4 3 2 3}}
+                       2026 nil}
               :e-luku-statistics {2013 {:avg 350.00M
                                         :percentile-15 175.0
                                         :percentile-85 525.0}
                                   2018 {:avg 950.00M
                                         :percentile-15 775.0
-                                        :percentile-85 1125.0}}
+                                        :percentile-85 1125.0}
+                                  2026 nil}
               :common-averages {:alapohja-u 0.75M
                                 :ulkoovet-u 1.00M
                                 :ylapohja-u 1.00M
@@ -195,7 +197,8 @@
                                                           :tuulisahko 6
                                                           :lampopumppu 6
                                                           :muusahko 6
-                                                          :muulampo 6}}}
+                                                          :muulampo 6}
+                                                    2026 nil}}
              (service/find-statistics ts/*db* query-all)))
     (t/is (= empty-results (service/find-statistics ts/*db* query-exact)))))
 
@@ -207,3 +210,113 @@
   (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET voimassaolo_paattymisaika = now()"])
     (t/is (= empty-results (service/find-statistics ts/*db* query-all)))))
+
+
+(t/deftest find-e-luokka-counts-returns-only-e-luokka-test
+  ;; Given: signed certificates exist for versio 2013 and 2018
+  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+    ;; When: we call find-e-luokka-counts
+    (let [result (service/find-e-luokka-counts ts/*db* query-all)]
+      ;; Then: result contains e-luokka counts per versio
+      (t/is (= {"A" 3 "B" 3} (get-in result [2013 :e-luokka])))
+      (t/is (= {"A" 3 "B" 3} (get-in result [2018 :e-luokka])))
+      ;; Then: result does NOT contain lammitysmuoto or ilmanvaihto
+      (t/is (nil? (get-in result [2013 :lammitysmuoto])))
+      (t/is (nil? (get-in result [2013 :ilmanvaihto])))
+      (t/is (nil? (get-in result [2018 :lammitysmuoto])))
+      (t/is (nil? (get-in result [2018 :ilmanvaihto]))))))
+
+(t/deftest find-e-luokka-counts-not-affected-by-allekirjoitusaika-test
+  ;; Given: signed certificates exist, some with allekirjoitusaika before 2021
+  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2020-06-15'::timestamp WHERE versio = 2018"])
+    ;; When: we call find-e-luokka-counts
+    (let [result (service/find-e-luokka-counts ts/*db* query-all)]
+      ;; Then: ALL certificates are counted regardless of allekirjoitusaika
+      (t/is (= {"A" 3 "B" 3} (get-in result [2013 :e-luokka])))
+      (t/is (= {"A" 3 "B" 3} (get-in result [2018 :e-luokka]))))))
+
+;; --- find-lammitys-ilmanvaihto-counts tests ---
+
+(t/deftest find-lammitys-ilmanvaihto-counts-returns-only-lammitys-and-ilmanvaihto-test
+  ;; Given: signed certificates exist (allekirjoitusaika = now(), i.e. 2026, which is >= 2021)
+  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+    ;; When: we call find-lammitys-ilmanvaihto-counts
+    (let [result (service/find-lammitys-ilmanvaihto-counts ts/*db* query-all)]
+      ;; Then: result contains lammitysmuoto and ilmanvaihto counts per versio
+      (t/is (= {2 3 4 3} (get-in result [2013 :lammitysmuoto])))
+      (t/is (= {2 3 4 3} (get-in result [2013 :ilmanvaihto])))
+      (t/is (= {2 3 4 3} (get-in result [2018 :lammitysmuoto])))
+      (t/is (= {2 3 4 3} (get-in result [2018 :ilmanvaihto])))
+      ;; Then: result does NOT contain e-luokka
+      (t/is (nil? (get-in result [2013 :e-luokka])))
+      (t/is (nil? (get-in result [2018 :e-luokka]))))))
+
+(t/deftest find-lammitys-ilmanvaihto-counts-excludes-pre-2021-test
+  ;; Given: signed certificates exist, ALL with allekirjoitusaika before 2021
+  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2020-06-15'::timestamp"])
+    ;; When: we call find-lammitys-ilmanvaihto-counts
+    (let [result (service/find-lammitys-ilmanvaihto-counts ts/*db* query-all)]
+      ;; Then: no lammitysmuoto or ilmanvaihto counts are returned
+      (t/is (= {} result)))))
+
+(t/deftest find-lammitys-ilmanvaihto-counts-includes-post-2021-only-test
+  ;; Given: signed certificates exist, half with allekirjoitusaika before 2021
+  ;; and half after (the default now() = 2026)
+  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+    ;; Set versio 2013 certificates to pre-2021 allekirjoitusaika
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2020-06-15'::timestamp WHERE versio = 2013"])
+    ;; When: we call find-lammitys-ilmanvaihto-counts
+    (let [result (service/find-lammitys-ilmanvaihto-counts ts/*db* query-all)]
+      ;; Then: only versio 2018 lammitysmuoto/ilmanvaihto are returned
+      ;; (versio 2013 certificates were signed pre-2021, so excluded)
+      (t/is (nil? (get-in result [2013 :lammitysmuoto])))
+      (t/is (nil? (get-in result [2013 :ilmanvaihto])))
+      (t/is (= {2 3 4 3} (get-in result [2018 :lammitysmuoto])))
+      (t/is (= {2 3 4 3} (get-in result [2018 :ilmanvaihto]))))))
+
+(t/deftest find-lammitys-ilmanvaihto-counts-boundary-2021-01-01-test
+  ;; Given: signed certificates exist, all with allekirjoitusaika exactly on 2021-01-01
+  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2021-01-01 00:00:00'::timestamp"])
+    ;; When: we call find-lammitys-ilmanvaihto-counts
+    (let [result (service/find-lammitys-ilmanvaihto-counts ts/*db* query-all)]
+      ;; Then: all certificates are included (boundary is inclusive >=)
+      (t/is (= {2 3 4 3} (get-in result [2013 :lammitysmuoto])))
+      (t/is (= {2 3 4 3} (get-in result [2013 :ilmanvaihto])))
+      (t/is (= {2 3 4 3} (get-in result [2018 :lammitysmuoto])))
+      (t/is (= {2 3 4 3} (get-in result [2018 :ilmanvaihto]))))))
+
+(t/deftest find-lammitys-ilmanvaihto-counts-boundary-2020-12-31-test
+  ;; Given: signed certificates exist, all with allekirjoitusaika just before 2021
+  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2020-12-31 23:59:59'::timestamp"])
+    ;; When: we call find-lammitys-ilmanvaihto-counts
+    (let [result (service/find-lammitys-ilmanvaihto-counts ts/*db* query-all)]
+      ;; Then: no certificates are included (boundary is exclusive for < 2021)
+      (t/is (= {} result)))))
+
+;; --- find-statistics with mixed allekirjoitusaika test ---
+
+(t/deftest find-statistics-mixed-allekirjoitusaika-test
+  ;; Given: signed certificates exist, versio 2013 signed pre-2021, versio 2018 signed post-2021
+  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2020-06-15'::timestamp WHERE versio = 2013"])
+    ;; When: we call find-statistics
+    (let [result (service/find-statistics ts/*db* query-all)]
+      ;; Then: e-luokka counts include ALL certificates (both 2013 and 2018)
+      (t/is (= {"A" 3 "B" 3} (get-in result [:counts 2013 :e-luokka])))
+      (t/is (= {"A" 3 "B" 3} (get-in result [:counts 2018 :e-luokka])))
+      ;; Then: lammitysmuoto/ilmanvaihto counts exclude pre-2021 certificates
+      ;; versio 2013 certificates were signed pre-2021, so no lammitysmuoto/ilmanvaihto
+      (t/is (nil? (get-in result [:counts 2013 :lammitysmuoto])))
+      (t/is (nil? (get-in result [:counts 2013 :ilmanvaihto])))
+      ;; versio 2018 certificates were signed post-2021 (now() = 2026), so included
+      (t/is (= {4 3 2 3} (get-in result [:counts 2018 :lammitysmuoto])))
+      (t/is (= {4 3 2 3} (get-in result [:counts 2018 :ilmanvaihto])))
+      ;; Then: e-luku-statistics, common-averages, and uusiutuvat-omavaraisenergiat are unaffected
+      (t/is (some? (get-in result [:e-luku-statistics 2013])))
+      (t/is (some? (get-in result [:e-luku-statistics 2018])))
+      (t/is (some? (:common-averages result)))
+      (t/is (some? (get-in result [:uusiutuvat-omavaraisenergiat-counts 2018]))))))

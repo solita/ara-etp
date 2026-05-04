@@ -57,10 +57,15 @@
   let lammitysmuodot;
   let ilmanvaihtotyypit;
 
-  let chartData2018, chartData2013;
+  let chartData2018, chartData2013, chartData2026;
 
   let total2013 = 0;
   let total2018 = 0;
+  let total2026 = 0;
+  let totalLammitysIlmanvaihto = 0;
+  let lammitysmuotoCombined;
+  let ilmanvaihtoCombined;
+  let uusiutuvatCombined;
 
   const commitSearch = evt => {
     searchCommitted = true;
@@ -119,12 +124,18 @@
 
         total2018 = 0;
         total2013 = 0;
+        total2026 = 0;
+
         for (let key in results?.['counts']?.['2018']?.['e-luokka']) {
           total2018 += results?.['counts']?.['2018']?.['e-luokka'][key];
         }
 
         for (let key in results?.['counts']?.['2013']?.['e-luokka']) {
           total2013 += results?.['counts']?.['2013']?.['e-luokka'][key];
+        }
+
+        for (let key in results?.['counts']?.['2026']?.['e-luokka']) {
+          total2026 += results?.['counts']?.['2026']?.['e-luokka'][key];
         }
 
         chartData2018 = [
@@ -145,6 +156,32 @@
           (results?.['counts']?.['2013']?.['e-luokka']?.F || 0) / total2013,
           (results?.['counts']?.['2013']?.['e-luokka']?.G || 0) / total2013
         ];
+        chartData2026 = [
+          (results?.['counts']?.['2026']?.['e-luokka']?.A0 || 0) / total2026,
+          (results?.['counts']?.['2026']?.['e-luokka']?.['A+'] || 0) /
+            total2026,
+          (results?.['counts']?.['2026']?.['e-luokka']?.A || 0) / total2026,
+          (results?.['counts']?.['2026']?.['e-luokka']?.B || 0) / total2026,
+          (results?.['counts']?.['2026']?.['e-luokka']?.C || 0) / total2026,
+          (results?.['counts']?.['2026']?.['e-luokka']?.D || 0) / total2026,
+          (results?.['counts']?.['2026']?.['e-luokka']?.E || 0) / total2026,
+          (results?.['counts']?.['2026']?.['e-luokka']?.F || 0) / total2026,
+          (results?.['counts']?.['2026']?.['e-luokka']?.G || 0) / total2026
+        ];
+
+        lammitysmuotoCombined = mergeCounts(
+          results?.['counts']?.['2018']?.['lammitysmuoto'],
+          results?.['counts']?.['2026']?.['lammitysmuoto']
+        );
+        ilmanvaihtoCombined = mergeCounts(
+          results?.['counts']?.['2018']?.['ilmanvaihto'],
+          results?.['counts']?.['2026']?.['ilmanvaihto']
+        );
+        uusiutuvatCombined = mergeCounts(
+          results?.['uusiutuvat-omavaraisenergiat-counts']?.['2018'],
+          results?.['uusiutuvat-omavaraisenergiat-counts']?.['2026']
+        );
+        totalLammitysIlmanvaihto = total2018 + total2026;
 
         resultsElem?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -169,6 +206,17 @@
 
   const parseAndFormatPercent = (total, str) =>
     Formats.formatPercent(Parsers.parsePercent(total, str));
+
+  const mergeCounts = (...objects) => {
+    const result = {};
+    for (const obj of objects) {
+      if (!obj) continue;
+      for (const [key, value] of Object.entries(obj)) {
+        result[key] = (result[key] || 0) + value;
+      }
+    }
+    return Object.keys(result).length ? result : undefined;
+  };
 
   const formatPercent = str =>
     Formats.formatPercent((parseFloat(str) * 100).toFixed(0));
@@ -223,7 +271,7 @@
       display: block;
     }
 
-    .results > .flex {
+    .results > .grid {
       display: block;
     }
   }
@@ -432,7 +480,7 @@
               <span class="uppercase font-bold w-full mb-2">
                 {$_('TILASTOT_TULOKSIA')}
                 {' '}
-                {total2013 + total2018 || '< 4'}
+                {total2013 + total2018 + total2026 || '< 4'}
               </span>
               <!-- SEARCH PARAMS SHOWN WHEN PRINTING -->
               <div class="only-print">
@@ -482,10 +530,17 @@
                   </div>
                 </div>
               </div>
-              {#if total2013 + total2018 > 0}
+              {#if total2013 + total2018 + total2026 > 0}
                 <!-- GRAPHS -->
                 <div
-                  class="my-4 flex flex-col lg:flex-row space-y-4 lg:space-x-16 lg:space-y-0 justify-evenly">
+                  class="my-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <TilastotEtVersion
+                    {printing}
+                    tooltipAnchorPosition={AnchorPosition.bottomRight}
+                    version="2026"
+                    count={total2026}
+                    eLukuData={results?.['e-luku-statistics']?.['2026']}
+                    chartData={chartData2026} />
                   <TilastotEtVersion
                     {printing}
                     version="2018"
@@ -503,8 +558,8 @@
                 <!-- MOLEMMILLE TUNNUSLUVUT-->
                 <div class="pbb-always">
                   <h1 class="w-full mt-6 mb-2 space-x-2">
-                    {$_('TILASTOT_TUNNUSLUVUT_MOLEMMILLE')}
-                    {` (${total2013 + total2018} ${$_('TILASTOT_KPL')})`}
+                    {$_('TILASTOT_LASKETUT_TUNNUSLUVUT')}
+                    {` (${total2013 + total2018 + total2026} ${$_('TILASTOT_KPL')})`}
                   </h1>
                   <div
                     class="flex flex-col lg:flex-row space-y-4 lg:space-x-16 lg:space-y-0 justify-evenly">
@@ -682,28 +737,24 @@
                     </div>
                   </div>
                 </div>
-                <!-- 2018 TUNNUSLUVUT-->
-                {#if total2018 > 0}
+                <!-- 2018 ja 2026 TUNNUSLUVUT-->
+                {#if total2018 + total2026 > 0}
                   <div>
-                    <h1 class="w-full mt-6 mb-2 pbb-always">
-                      {$_('TILASTOT_TUNNUSLUVUT_2018')}
-                      {` (${total2018} ${$_('TILASTOT_KPL')})`}
-                    </h1>
                     <div
                       class="flex flex-col lg:flex-row space-y-4 lg:space-x-16 lg:space-y-0 justify-evenly">
                       <TilastotEntriesList
                         title={$_('TILASTOT_LAMMITYSJARJESTELMA')}
                         tooltip={$_('TILASTOT_LAMMITYSJARJESTELMA_TOOLTIP')}
                         labels={lammitysmuodot}
-                        items={results?.['counts']?.['2018']?.['lammitysmuoto']}
-                        total={total2018} />
+                        items={lammitysmuotoCombined}
+                        total={totalLammitysIlmanvaihto} />
                       <TilastotEntriesList
                         title={$_('TILASTOT_ILMANVAIHTOJARJESTELMA')}
                         tooltip={$_('TILASTOT_ILMANVAIHTOJARJESTELMA_TOOLTIP')}
                         tooltipAnchor={AnchorPosition.bottomRight}
                         labels={ilmanvaihtotyypit}
-                        items={results?.['counts']?.['2018']?.['ilmanvaihto']}
-                        total={total2018} />
+                        items={ilmanvaihtoCombined}
+                        total={totalLammitysIlmanvaihto} />
                     </div>
                     <div
                       class="flex flex-col lg:flex-row space-y-4 lg:space-x-16 lg:space-y-0 justify-evenly">
@@ -720,10 +771,8 @@
                             <dt>{$_('TILASTOT_AURINKOSAHKO')}</dt>
                             <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
-                                total2018,
-                                results?.[
-                                  'uusiutuvat-omavaraisenergiat-counts'
-                                ]?.['2018']?.['aurinkosahko']
+                                totalLammitysIlmanvaihto,
+                                uusiutuvatCombined?.['aurinkosahko']
                               )}
                             </dd>
                           </div>
@@ -731,10 +780,8 @@
                             <dt>{$_('TILASTOT_AURINKOLAMPO')}</dt>
                             <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
-                                total2018,
-                                results?.[
-                                  'uusiutuvat-omavaraisenergiat-counts'
-                                ]?.['2018']?.['aurinkolampo']
+                                totalLammitysIlmanvaihto,
+                                uusiutuvatCombined?.['aurinkolampo']
                               )}
                             </dd>
                           </div>
@@ -742,10 +789,8 @@
                             <dt>{$_('TILASTOT_TUULISAHKO')}</dt>
                             <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
-                                total2018,
-                                results?.[
-                                  'uusiutuvat-omavaraisenergiat-counts'
-                                ]?.['2018']?.['tuulisahko']
+                                totalLammitysIlmanvaihto,
+                                uusiutuvatCombined?.['tuulisahko']
                               )}
                             </dd>
                           </div>
@@ -753,10 +798,8 @@
                             <dt>{$_('TILASTOT_LAMPOPUMPPU')}</dt>
                             <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
-                                total2018,
-                                results?.[
-                                  'uusiutuvat-omavaraisenergiat-counts'
-                                ]?.['2018']?.['lampopumppu']
+                                totalLammitysIlmanvaihto,
+                                uusiutuvatCombined?.['lampopumppu']
                               )}
                             </dd>
                           </div>
@@ -764,10 +807,8 @@
                             <dt>{$_('TILASTOT_MUU_SAHKO')}</dt>
                             <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
-                                total2018,
-                                results?.[
-                                  'uusiutuvat-omavaraisenergiat-counts'
-                                ]?.['2018']?.['muusahko']
+                                totalLammitysIlmanvaihto,
+                                uusiutuvatCombined?.['muusahko']
                               )}
                             </dd>
                           </div>
@@ -775,10 +816,8 @@
                             <dt>{$_('TILASTOT_MUU_LAMPO')}</dt>
                             <dd class="whitespace-nowrap">
                               {parseAndFormatPercent(
-                                total2018,
-                                results?.[
-                                  'uusiutuvat-omavaraisenergiat-counts'
-                                ]?.['2018']?.['muulampo']
+                                totalLammitysIlmanvaihto,
+                                uusiutuvatCombined?.['muulampo']
                               )}
                             </dd>
                           </div>
@@ -792,23 +831,6 @@
                   </div>
                 {/if}
               {/if}
-              <!-- PRINT -->
-              <div class="w-full mx-auto my-8">
-                <Button
-                  {...buttonStyles.green}
-                  on:click={() => {
-                    printing = true;
-                    tick().then(() => {
-                      window.print();
-                    });
-                  }}>
-                  <span class="material-icons align-middle" aria-hidden="true"
-                    >print</span>
-                  <span class="whitespace-nowrap">
-                    {$_('TILASTOT_TULOSTA')}
-                  </span>
-                </Button>
-              </div>
             </div>
           {:catch}
             <span>{$_('SERVER_ERROR')}</span>
