@@ -548,7 +548,9 @@
       },
       "messages": {
         "load-error": "Korvaavuustietojen haku epäonnistui"
-      }
+      },
+      "yksinkertaistettu-paivitysmenettely": "Yksinkertaistettu päivitysmenettely",
+      "yksinkertaistettu-info": "Yksinkertaistetussa päivitysmenettelyssä uuden todistuksen voimassaolo päättyy samana päivänä kuin korvattavan todistuksen voimassaolo."
     },
     "tila": {
       "draft": "Luonnos",

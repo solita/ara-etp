@@ -596,13 +596,33 @@
         (exception/throw-ex-info!
           :not-signed (str "Energiatodistus " id " pdf for language " language " is not signed"))))))
 
+(defn- resolve-voimassaolo-paattymisaika [db energiatodistus]
+  (when (:yksinkertaistettu-paivitysmenettely energiatodistus)
+    (when-let [korvattu-id (:korvattu-energiatodistus-id energiatodistus)]
+      (when-let [validity (:voimassaolo-paattymisaika (find-energiatodistus db korvattu-id))]
+        (java.sql.Timestamp/from validity)))))
+
+(defn- validate-yksinkertaistettu! [db energiatodistus]
+  (when (:yksinkertaistettu-paivitysmenettely energiatodistus)
+    (when-not (:korvattu-energiatodistus-id energiatodistus)
+      (throw-invalid-replace! nil " yksinkertaistettu-paivitysmenettely requires korvattu-energiatodistus-id"))
+    (let [korvattu (find-energiatodistus db (:korvattu-energiatodistus-id energiatodistus))]
+      (when-not (and (:voimassaolo-paattymisaika korvattu)
+                     (.isAfter (:voimassaolo-paattymisaika korvattu) (java.time.Instant/now)))
+        (throw-invalid-replace! (:korvattu-energiatodistus-id energiatodistus)
+                                " has expired - cannot use yksinkertaistettu paivitysmenettely")))))
+
 (defn end-energiatodistus-signing! [db aws-s3-client whoami id & [{:keys [skip-pdf-signed-assert? allekirjoitusaika]}]]
   (jdbc/with-db-transaction [db db]
-                            (let [result (energiatodistus-db/update-energiatodistus-allekirjoitettu!
+                            (let [energiatodistus (find-energiatodistus db id)
+                                  _ (validate-yksinkertaistettu! db energiatodistus)
+                                  voimassaolo (resolve-voimassaolo-paattymisaika db energiatodistus)
+                                  result (energiatodistus-db/update-energiatodistus-allekirjoitettu!
                                            db
-                                           {:id                id
-                                            :laatija-id        (:id whoami)
-                                            :allekirjoitusaika allekirjoitusaika})]
+                                           {:id                          id
+                                            :laatija-id                  (:id whoami)
+                                            :allekirjoitusaika           allekirjoitusaika
+                                            :voimassaolo-paattymisaika   voimassaolo})]
                               (if (= result 1)
                                 (let [energiatodistus (find-energiatodistus db id)]
                                   (when-not skip-pdf-signed-assert?

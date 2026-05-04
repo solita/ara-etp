@@ -265,11 +265,12 @@
   (xschema/optional-properties
     (merge
       Laskutus
-      {:korvattu-energiatodistus-id     common-schema/Key
-       :kommentti                       common-schema/String6300
-       :draft-visible-to-paakayttaja    schema/Bool
-       :bypass-validation-limits        schema/Bool
-       :bypass-validation-limits-reason schema/Str
+      {:korvattu-energiatodistus-id          common-schema/Key
+       :yksinkertaistettu-paivitysmenettely schema/Bool
+       :kommentti                           common-schema/String6300
+       :draft-visible-to-paakayttaja        schema/Bool
+       :bypass-validation-limits            schema/Bool
+       :bypass-validation-limits-reason     schema/Str
        :perustiedot                     Perustiedot
        :lahtotiedot                     Lahtotiedot
        :tulokset                        Tulokset

@@ -24,6 +24,7 @@
   [et]
   (-> et
       (assoc :korvattu-energiatodistus-id nil
+             :yksinkertaistettu-paivitysmenettely false
              :laskutettava-yritys-id nil
              :laskutusosoite-id nil
              :laskuriviviite nil

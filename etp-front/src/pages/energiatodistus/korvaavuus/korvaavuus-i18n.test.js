@@ -28,4 +28,48 @@ describe('Korvaavuus i18n labels', () => {
       expect(table.ppp.length).toBeGreaterThan(0);
     });
   });
+
+  // ---- AE-2759: Yksinkertaistettu päivitysmenettely i18n ----
+
+  describe('Yksinkertaistettu päivitysmenettely labels', () => {
+    it('given fi.json, when checking for yksinkertaistettu label, then key exists', () => {
+      // given
+      const korvaavuus = fi.energiatodistus.korvaavuus;
+
+      // then
+      expect(korvaavuus['yksinkertaistettu-paivitysmenettely']).toBeDefined();
+      expect(
+        korvaavuus['yksinkertaistettu-paivitysmenettely'].length
+      ).toBeGreaterThan(0);
+    });
+
+    it('given sv.json, when checking for yksinkertaistettu label, then key exists', () => {
+      // given
+      const korvaavuus = sv.energiatodistus.korvaavuus;
+
+      // then
+      expect(korvaavuus['yksinkertaistettu-paivitysmenettely']).toBeDefined();
+      expect(
+        korvaavuus['yksinkertaistettu-paivitysmenettely'].length
+      ).toBeGreaterThan(0);
+    });
+
+    it('given fi.json, when checking for yksinkertaistettu info text, then key exists', () => {
+      // given
+      const korvaavuus = fi.energiatodistus.korvaavuus;
+
+      // then
+      expect(korvaavuus['yksinkertaistettu-info']).toBeDefined();
+      expect(korvaavuus['yksinkertaistettu-info'].length).toBeGreaterThan(0);
+    });
+
+    it('given sv.json, when checking for yksinkertaistettu info text, then key exists', () => {
+      // given
+      const korvaavuus = sv.energiatodistus.korvaavuus;
+
+      // then
+      expect(korvaavuus['yksinkertaistettu-info']).toBeDefined();
+      expect(korvaavuus['yksinkertaistettu-info'].length).toBeGreaterThan(0);
+    });
+  });
 });

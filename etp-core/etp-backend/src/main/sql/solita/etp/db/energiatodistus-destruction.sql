@@ -151,6 +151,7 @@ set
     laskutusaika                                                    = null,
     -- Keep the korvaus link.
     -- korvattu_energiatodistus_id integer unique references energiatodistus (id),
+    yksinkertaistettu_paivitysmenettely                             = false,
     kommentti                                                       = null,
     valvonta                                                        = false,
 

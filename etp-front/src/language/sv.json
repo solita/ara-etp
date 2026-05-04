@@ -526,7 +526,9 @@
       },
       "messages": {
         "load-error": "Sökningen av ersättningsdata misslyckades."
-      }
+      },
+      "yksinkertaistettu-paivitysmenettely": "Förenklat uppdateringsförfarande",
+      "yksinkertaistettu-info": "Vid förenklat uppdateringsförfarande upphör det nya certifikatets giltighet samma dag som det ersatta certifikatets giltighet."
     },
     "tila": {
       "draft": "Utkast",

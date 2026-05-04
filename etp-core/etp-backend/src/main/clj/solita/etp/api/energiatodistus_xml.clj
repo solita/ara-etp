@@ -267,10 +267,11 @@
 (defn xml->energiatodistus [xml]
   (let [xml (xml/with-kebab-case-tags xml)
         f #(xml/get-in-xml xml [:energiatodistus %])]
-    (-> {:korvattu-energiatodistus-id     nil
-         :laskutettava-yritys-id          nil
-         :laskutusosoite-id               nil
-         :laskuriviviite                  nil
+    (-> {:korvattu-energiatodistus-id          nil
+         :yksinkertaistettu-paivitysmenettely false
+         :laskutettava-yritys-id               nil
+         :laskutusosoite-id                    nil
+         :laskuriviviite                       nil
          :perustiedot                     (perustiedot (f :perustiedot))
          :lahtotiedot                     (lahtotiedot (f :lahtotiedot))
          :tulokset                        (tulokset (f :tulokset))
