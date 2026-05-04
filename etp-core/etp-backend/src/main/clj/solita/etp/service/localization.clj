@@ -303,7 +303,7 @@
 
         :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvihuonekaasupäästöt"
         :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä"
-        :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP)"
+        :kasvihuonepaastot                          "Rakennuksen elinkaaren aikaiset kasvihuonekaasupäästöt (GWP)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku)"
         :paastoton-rakennus                         "Päästötön rakennus"
         :vuosi                                      "vuosi"
@@ -515,7 +515,7 @@
 
         :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvihuonekaasupäästöt (sv)"
         :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä (sv)"
-        :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP) (sv)"
+        :kasvihuonepaastot                          "Rakennuksen elinkaaren aikaiset kasvihuonekaasupäästöt (GWP) (sv)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku) (sv)"
         :paastoton-rakennus                         "Päästötön rakennus (sv)"
         :vuosi                                      "år"
