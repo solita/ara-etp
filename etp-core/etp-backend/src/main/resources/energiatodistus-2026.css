@@ -304,7 +304,7 @@ table.common-table td:last-child {
 .etusivu-yleistiedot dl dt {
     color: #23323e;
     white-space: nowrap;
-    width: 45%;
+    width: 35%;
     padding-right: 30px;
 }
 
@@ -316,7 +316,7 @@ table.common-table td:last-child {
 
 div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-row > div {
     display: table-cell;
-    width: 45%;
+    width: 35%;
     vertical-align: top;
 }
 
