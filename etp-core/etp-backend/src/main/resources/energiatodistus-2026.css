@@ -124,7 +124,7 @@ body {
 }
 
 .toimenpide-ehdotukset table td {
-    border: 1px solid #bdc6cc;
+    border: 0.4px solid #bdc6cc;
     border-right: none;
     text-align: center;
 }
@@ -268,7 +268,7 @@ table.common-table thead > tr > th {
 }
 
 table.common-table tbody th {
-    border: 0.7px solid #ced4dd;
+    border: 0.4px solid #ced4dd;
     border-left: none;
     text-align: left;
     font-weight: normal;
@@ -276,7 +276,7 @@ table.common-table tbody th {
 }
 
 table.common-table td {
-    border: 0.7px solid #ced4dd;
+    border: 0.4px solid #ced4dd;
     text-align: center;
 }
 
@@ -360,7 +360,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .etusivu-ostoenergia th,
 .etusivu-ostoenergia td {
-    border: 1px solid #bdc6cc;
+    border: 0.4px solid #bdc6cc;
     padding: 1px 1px;
     font-weight: normal;
     text-align: center;
@@ -626,7 +626,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .lahtotiedot-table td {
     color: #23323e;
-    border: 1px solid #ced4dd;
+    border: 0.4px solid #ced4dd;
 }
 
 .lahtotiedot-table th:first-child,
@@ -802,7 +802,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .tulokset-table td {
     color: #23323e;
-    border: 1px solid #ced4dd;
+    border: 0.4px solid #ced4dd;
 }
 
 .tulokset-table th:first-child,
@@ -922,7 +922,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .ilmastoselvitys th,
 .ilmastoselvitys td {
-    border: 1px solid #bdc6cc;
+    border: 0.4px solid #bdc6cc;
     padding: 2px 3px;
     font-weight: normal;
     text-align: center;
