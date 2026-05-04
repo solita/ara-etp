@@ -444,6 +444,10 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     padding: 15px 0px 0px 0px;
 }
 
+.etusivu-eluku .value {
+    color: #2a3b49;
+}
+
 .etusivu-eluku .label {
     font-weight: bold;
     color: #23323e;
