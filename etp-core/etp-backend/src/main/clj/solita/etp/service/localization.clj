@@ -290,6 +290,7 @@
         :energiatodistus-laadittu                   "Energiatodistus on laadittu"
         :todistuksen-laatimispaiva                  "Todistuksen laatimispäivä"
         :todistuksen-voimassaolopaiva               "Todistuksen voimassaolopäivä"
+        :todistustunnus-label                       "Todistustunnus"
 
         :kaukolampo                                 "Kauko-\nlämpö"
         :sahko                                      "Sähkö"
@@ -501,6 +502,7 @@
         :energiatodistus-laadittu                   "Energiatodistus on laadittu (sv)"
         :todistuksen-laatimispaiva                  "Todistuksen laatimispäivä (sv)"
         :todistuksen-voimassaolopaiva               "Todistuksen voimassaolopäivä (sv)"
+        :todistustunnus-label                       "Certifikatnumret"
 
         :kaukolampo                                 "Kauko-\nlämpö (sv)"
         :sahko                                      "Sähkö (sv)"

@@ -35,30 +35,30 @@
    [:h1 {:class "page-title"} title]
    [:p {:class "page-subtitle"} subtitle]])
 
-(defn- page-footer [et-tunnus page-num total-pages]
+(defn- page-footer [et-tunnus page-num total-pages l]
   [:div {:class "page-footer"}
-   (str "Todistustunnus " et-tunnus " | " page-num " / " total-pages)])
+   (str (l :todistustunnus-label) ": " et-tunnus " | " page-num "/" total-pages)])
 
 (defn- wrap-page-border [page-border? content]
        (if page-border?
          [:div {:class "page-border-container"} content]
          content))
 
-(defn- render-page [page-data page-num total-pages et-tunnus]
+(defn- render-page [page-data page-num total-pages et-tunnus l]
   (let [{:keys [content page-border?]} page-data]
     [:div {:class "page"}
      (wrap-page-border
        page-border?
        content)
-     (page-footer et-tunnus page-num total-pages)]))
+     (page-footer et-tunnus page-num total-pages l)]))
 
 (defn generate-document-html
   "Generate complete HTML document for Energiatodistus 2026 PDF."
-  [pages et-tunnus]
+  [pages et-tunnus l]
   (let [total-pages (count pages)
         pages-html (map-indexed
                      (fn [idx page-data]
-                       (render-page page-data (inc idx) total-pages et-tunnus))
+                       (render-page page-data (inc idx) total-pages et-tunnus l))
                      pages)]
   (hiccup/html
    [:html
@@ -121,7 +121,7 @@
                   [{:page-border? false
                     :content (ilmastoselvitys/ilmastoselvitys-page-content params)}]
                   []))]
-    (generate-document-html pages (:id energiatodistus))))
+    (generate-document-html pages (:id energiatodistus) l)))
 
 (defn generate-energiatodistus-ohtp-pdf
   "Use OpenHTMLToPDF to generate a energiatodistus PDF, return as a byte array"
