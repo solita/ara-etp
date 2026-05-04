@@ -367,6 +367,10 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     color: #23323e;
 }
 
+.etusivu-ostoenergia thead th {
+    vertical-align: bottom;
+}
+
 .etusivu-ostoenergia th:first-child,
 .etusivu-ostoenergia td:first-child {
     border-left: none;
