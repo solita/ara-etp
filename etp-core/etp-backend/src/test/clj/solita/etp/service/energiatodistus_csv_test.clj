@@ -68,7 +68,8 @@
     ;; found in columns listed in the service. Basically for finding typos
     ;; in configuration.
     (t/is (every? #(contains? (set service/private-columns) %)
-                  (->> (energiatodistus-test-data/generate-adds 100 2018 true)
+                  (->> (concat (energiatodistus-test-data/generate-adds 50 2018 true)
+                                 (energiatodistus-test-data/generate-adds 50 2026 true))
                        (map #(complete-energiatodistus-service/complete-energiatodistus
                                %
                                luokittelut))
@@ -137,3 +138,14 @@
                                        (filter #(str/starts-with? % (str (:et-id ppp-removed-case))))
                                        first)]
           (t/is (str/starts-with? et-without-ppp-line (str (:et-id ppp-removed-case) ";;"))))))))
+
+(t/deftest other-columns-are-subsets-of-private-columns-test
+  (let [private (set service/private-columns)]
+    (doseq [[label columns] [["public-columns" service/public-columns]
+                              ["bank-columns" service/bank-columns]
+                              ["anonymized-columns" service/anonymized-columns]
+                              ["tilastokeskus-columns" service/tilastokeskus-columns]]]
+      (let [not-in-private (remove #(contains? private %) columns)]
+        (t/is (empty? not-in-private)
+              (str label " contains paths not found in private-columns: "
+                   (pr-str (vec not-in-private))))))))
