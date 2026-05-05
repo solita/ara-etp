@@ -349,6 +349,8 @@
                               e-luokka id]))
     (when set-laatimisajankohta?
       (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET is$laatimisajankohta = now() WHERE versio = 2026"]))
+    (when-not set-laatimisajankohta?
+      (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET is$laatimisajankohta = NULL WHERE versio = 2026"]))
     (when expire?
       (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET voimassaolo_paattymisaika = now() WHERE versio = 2026"]))
     {:ids ids :adds adds :laatija-id laatija-id}))
