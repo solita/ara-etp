@@ -842,16 +842,25 @@
                         <dl>
                           <div class="w-full flex justify-between">
                             <dt>{$_('TILASTOT_GWP_RAKENNUS')}</dt>
-                            <dd>{format(results?.['gwp-averages']?.['rakennus-avg'])}</dd>
+                            <dd>
+                              {format(
+                                results?.['gwp-averages']?.['rakennus-avg']
+                              )}
+                            </dd>
                           </div>
                           <div class="w-full flex justify-between">
                             <dt>{$_('TILASTOT_GWP_RAKENNUSPAIKKA')}</dt>
-                            <dd>{format(results?.['gwp-averages']?.['rakennuspaikka-avg'])}</dd>
+                            <dd>
+                              {format(
+                                results?.['gwp-averages']?.[
+                                  'rakennuspaikka-avg'
+                                ]
+                              )}
+                            </dd>
                           </div>
                         </dl>
                       </div>
-                      <div class="w-full flex flex-col">
-                      </div>
+                      <div class="w-full flex flex-col"></div>
                     </div>
                   </div>
                 {/if}
