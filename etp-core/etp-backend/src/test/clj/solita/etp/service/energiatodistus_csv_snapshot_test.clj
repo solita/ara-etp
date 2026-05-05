@@ -17,6 +17,7 @@
     [:bypass-validation-limits-reason]
     [:korvattu-energiatodistus-id]
     [:korvaava-energiatodistus-id]
+    [:yksinkertaistettu-paivitysmenettely]
     [:laskutettava-yritys-id]
     [:laskuriviviite]
     [:perustiedot :yritys :nimi]
