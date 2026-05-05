@@ -269,6 +269,7 @@
   "TILASTOT_CHART_ALT": "Stapeldiagram över energieffektivitetsklassernas procentandelar.",
   "TILASTOT_E_LUKU_2018_TOOLTIP": "Medelvärdet anger jämförelsetalet för den genomsnittliga beräknade energieffektiviteten (E-talet) för de byggnader som sökningen gäller. Ju lägre E-tal, desto mindre energi förbrukar byggnaden.\n\"Bästa 15 %\" och \"Sämsta 15 %\" visar gränsvärdena för E-talen för byggnaderna i sökningen. Gränsvärdena anger E-talets bästa eller sämsta 15 procent.",
   "TILASTOT_KESKIARVO": "Medelvärde",
+  "TILASTOT_MEDIAANI": "Median",
   "TILASTOT_PARAS_15": "Bästa 15 %",
   "TILASTOT_HEIKOIN_15": "Sämsta 15 %",
   "TILASTOT_E_LUKU_UNIT": "kWh/m²/år",
@@ -321,6 +322,9 @@
   "ETHAKU_INVALID_RAKENNUKSEN_NIMI": "Längden får vara högst 100 tecken",
   "COMMON_ON": "På",
   "COMMON_OFF": "Av",
+  "TILASTOT_ILMASTOSELVITYS": "Klimatutredning",
+  "TILASTOT_GWP_RAKENNUS": "Byggandens växthusgasutsläpp under livscykeln",
+  "TILASTOT_GWP_RAKENNUSPAIKKA": "Byggplatsens växthusgasutsläpp under livscykeln",
   "HYOTYPINTA-ALA": "Hyötypinta-ala (m²) (sv)",
   "HYOTYPINTA-ALA_TOOLTIP": "Aikaisemmissa versioissa (2013 ja 2018) nimellä 'Lämmitetty nettoala'. (sv)"
 }

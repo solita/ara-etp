@@ -256,6 +256,7 @@
   "TILASTOT_E_LUKU": "E-Luku",
   "TILASTOT_E_LUKU_2018_TOOLTIP": "Keskiarvo kertoo haun mukaisten rakennusten keskimääräisen laskennallisen energiatehokkuuden vertailuluvun (E-luku). Mitä pienempi E-luku, sitä vähemmän rakennus kuluttaa energiaa.\n”Paras 15%” ja ”heikoin 15 %” näyttää haun mukaisten rakennusten E-lukujen raja-arvot, joilla päästään E-luvultaan parhaimpaan tai heikoimpaan 15 %:iin.",
   "TILASTOT_KESKIARVO": "Keskiarvo",
+  "TILASTOT_MEDIAANI": "Mediaani",
   "TILASTOT_PARAS_15": "Paras 15%",
   "TILASTOT_HEIKOIN_15": "Heikoin 15%",
   "TILASTOT_E_LUKU_UNIT": " kWh/m²/vuosi",
@@ -321,6 +322,9 @@
   "TILASTOT_TULOSTA": "Tulosta",
   "COMMON_ON": "Päällä",
   "COMMON_OFF": "Pois",
+  "TILASTOT_ILMASTOSELVITYS": "Ilmastoselvitys",
+  "TILASTOT_GWP_RAKENNUS": "Rakennuksen elinkaarenaikaiset kasvihuonepäästöt",
+  "TILASTOT_GWP_RAKENNUSPAIKKA": "Rakennuspaikan elinkaarenaikaiset kasvihuonepäästöt",
   "HYOTYPINTA-ALA": "Hyötypinta-ala (m²)",
   "HYOTYPINTA-ALA_TOOLTIP": "Aikaisemmissa versioissa (2013 ja 2018) nimellä 'Lämmitetty nettoala'."
 }
