@@ -936,7 +936,7 @@
                   </td>
                 </tr>
               {/if}
-              {#each path(['tulokset', 'kaytettavat-energiamuodot', 'muu'], energiatodistus) as energiamuoto}
+              {#each path(['tulokset', 'kaytettavat-energiamuodot', 'muu'], energiatodistus) || [] as energiamuoto}
                 <tr>
                   <td class="py-4 print:py-1 pl-2 text-left">
                     {energiamuoto.nimi}
