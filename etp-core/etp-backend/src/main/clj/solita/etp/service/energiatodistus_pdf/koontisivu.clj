@@ -1,5 +1,6 @@
 (ns solita.etp.service.energiatodistus-pdf.koontisivu
   (:require
+    [clojure.string :as str]
     [hiccup.core :refer [h]]
     [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc])
@@ -54,10 +55,12 @@
        [:dl {:class "table-description-list"}
         [:div
          [:dt (l :lammitysjarjestelma)]
-         [:dd (-> energiatodistus
-                  (get-in [:lahtotiedot :lammitys (kieli {:fi :lammitysmuoto-label-fi
-                                                          :sv :lammitysmuoto-label-sv})])
-                  h)]]
+         [:dd (->> (-> energiatodistus
+                       (get-in [:lahtotiedot :lammitys (kieli {:fi :lammitysmuoto-label-fi
+                                                               :sv :lammitysmuoto-label-sv})])
+                       (str/split #", "))
+                   (map (fn [lammitysjarjestelma-label]
+                          [:div lammitysjarjestelma-label])))]]
         [:div
          [:dt (l :lammonjako)]
          [:dd (-> energiatodistus
