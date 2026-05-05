@@ -22,6 +22,10 @@
       <dt>{$_('TILASTOT_KESKIARVO')}</dt>
       <dd>{data?.avg.toFixed(0) || 0}{$_('TILASTOT_E_LUKU_UNIT')}</dd>
     </div>
+    <div class="w-full flex justify-between">
+      <dt>{$_('TILASTOT_MEDIAANI')}</dt>
+      <dd>{data?.median?.toFixed(0) || 0}{$_('TILASTOT_E_LUKU_UNIT')}</dd>
+    </div>
     {#if data?.['percentile-15']}
       <div class="w-full flex justify-between">
         <dt>{$_('TILASTOT_PARAS_15')}</dt>
