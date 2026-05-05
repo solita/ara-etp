@@ -24,6 +24,7 @@
                                              {common-schema/Key common-schema/NonNegative}})}
      :e-luku-statistics {Versio (schema/maybe
                                   {:avg           common-schema/NonNegative
+                                   :median        common-schema/NonNegative
                                    :percentile-15 common-schema/NonNegative
                                    :percentile-85 common-schema/NonNegative})}
      :common-averages   (schema/maybe
@@ -46,4 +47,7 @@
                                                :tuulisahko   common-schema/NonNegative
                                                :lampopumppu  common-schema/NonNegative
                                                :muusahko     common-schema/NonNegative
-                                               :muulampo     common-schema/NonNegative})}}))
+                                               :muulampo     common-schema/NonNegative})}
+     :gwp-averages       (schema/maybe
+                           {:rakennus-avg      common-schema/NonNegative
+                            :rakennuspaikka-avg common-schema/NonNegative})}))

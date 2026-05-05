@@ -65,6 +65,15 @@
 (defn future-when [f pred]
   (future (when pred (f))))
 
+(defn find-gwp-averages
+  "Returns average GWP values for rakennus and rakennuspaikka from versio 2026
+   energiatodistus records with ilmastoselvitys data. Returns nil if insufficient
+   sample size (< 4 records)."
+  [db query]
+  (let [result (first (statistics-db/select-gwp-averages db query))]
+    (when (and result (>= (:sample-count result) min-sample-size))
+      (select-keys result [:rakennus-avg :rakennuspaikka-avg]))))
+
 (defn find-statistics [db query]
   (let [query (merge default-query query)
         e-luokka-counts (future-when #(find-e-luokka-counts db query) true)
@@ -91,7 +100,11 @@
         uusiutuvat-omavaraisenergiat-counts-2026
         (future-when
          #(find-uusiutuvat-omavaraisenergiat-counts db query 2026)
-         return-2026?)]
+         return-2026?)
+        gwp-averages
+        (future-when
+         #(find-gwp-averages db query)
+         true)]
     (let [result {:counts {2013 (when return-2013?
                                 (merge (get @e-luokka-counts 2013)
                                        (get @lammitys-iv-counts 2013)))
@@ -107,7 +120,8 @@
                   :common-averages @common-averages
                   :uusiutuvat-omavaraisenergiat-counts
                   {2018 @uusiutuvat-omavaraisenergiat-counts-2018
-                   2026 @uusiutuvat-omavaraisenergiat-counts-2026}}]
+                   2026 @uusiutuvat-omavaraisenergiat-counts-2026}
+                  :gwp-averages @gwp-averages}]
       result)))
 
 (defn find-count [db]
