@@ -48,6 +48,6 @@
                                                :lampopumppu  common-schema/NonNegative
                                                :muusahko     common-schema/NonNegative
                                                :muulampo     common-schema/NonNegative})}
-     :gwp-averages       (schema/maybe
-                           {:rakennus-avg      common-schema/NonNegative
-                            :rakennuspaikka-avg common-schema/NonNegative})}))
+     :elinkaaren-aikaiset-paastot (schema/maybe
+                                    {:rakennus-avg       common-schema/NonNegative
+                                     :rakennuspaikka-avg common-schema/NonNegative})}))

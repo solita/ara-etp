@@ -65,8 +65,8 @@
 (defn future-when [f pred]
   (future (when pred (f))))
 
-(defn find-gwp-averages
-  "Returns average GWP values for rakennus and rakennuspaikka from versio 2026
+(defn find-carbon-footprint
+  "Returns average kasvihuonepaasto values for rakennus and rakennuspaikka from versio 2026
    energiatodistus records with ilmastoselvitys data. Returns nil if insufficient
    sample size (< 4 records)."
   [db query]
@@ -101,11 +101,12 @@
         (future-when
          #(find-uusiutuvat-omavaraisenergiat-counts db query 2026)
          return-2026?)
-        gwp-averages
+        elinkaaren-aikaiset-paastot
         (future-when
-         #(find-gwp-averages db query)
+         #(find-carbon-footprint db query)
          true)]
-    (let [result {:counts {2013 (when return-2013?
+
+    (let [result {:counts                      {2013 (when return-2013?
                                 (merge (get @e-luokka-counts 2013)
                                        (get @lammitys-iv-counts 2013)))
                            2018 (when return-2018?
@@ -121,7 +122,7 @@
                   :uusiutuvat-omavaraisenergiat-counts
                   {2018 @uusiutuvat-omavaraisenergiat-counts-2018
                    2026 @uusiutuvat-omavaraisenergiat-counts-2026}
-                  :gwp-averages @gwp-averages}]
+                  :elinkaaren-aikaiset-paastot @elinkaaren-aikaiset-paastot}]
       result)))
 
 (defn find-count [db]

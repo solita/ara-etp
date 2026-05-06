@@ -831,7 +831,7 @@
                   </div>
                 {/if}
                 <!-- ILMASTOSELVITYS GWP -->
-                {#if results?.['gwp-averages']}
+                {#if results?.['elinkaaren-aikaiset-paastot']}
                   <div class="pbb-always">
                     <h1 class="w-full mt-6 mb-2">
                       {$_('TILASTOT_ILMASTOSELVITYS')}
@@ -841,18 +841,18 @@
                       <div class="w-full flex flex-col">
                         <dl>
                           <div class="w-full flex justify-between">
-                            <dt>{$_('TILASTOT_GWP_RAKENNUS')}</dt>
+                            <dt>{$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUS')}</dt>
                             <dd>
                               {format(
-                                results?.['gwp-averages']?.['rakennus-avg']
+                                results?.['elinkaaren-aikaiset-paastot']?.['rakennus-avg']
                               )}
                             </dd>
                           </div>
                           <div class="w-full flex justify-between">
-                            <dt>{$_('TILASTOT_GWP_RAKENNUSPAIKKA')}</dt>
+                            <dt>{$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA')}</dt>
                             <dd>
                               {format(
-                                results?.['gwp-averages']?.[
+                                results?.['elinkaaren-aikaiset-paastot']?.[
                                   'rakennuspaikka-avg'
                                 ]
                               )}

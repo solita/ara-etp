@@ -323,8 +323,8 @@
   "COMMON_ON": "Päällä",
   "COMMON_OFF": "Pois",
   "TILASTOT_ILMASTOSELVITYS": "Ilmastoselvitys",
-  "TILASTOT_GWP_RAKENNUS": "Rakennuksen elinkaarenaikaiset kasvihuonepäästöt",
-  "TILASTOT_GWP_RAKENNUSPAIKKA": "Rakennuspaikan elinkaarenaikaiset kasvihuonepäästöt",
+  "TILASTOT_KASVIHUONEPAASTOT_RAKENNUS": "Rakennuksen elinkaarenaikaiset kasvihuonepäästöt",
+  "TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA": "Rakennuspaikan elinkaarenaikaiset kasvihuonepäästöt",
   "HYOTYPINTA-ALA": "Hyötypinta-ala (m²)",
   "HYOTYPINTA-ALA_TOOLTIP": "Aikaisemmissa versioissa (2013 ja 2018) nimellä 'Lämmitetty nettoala'."
 }
