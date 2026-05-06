@@ -541,7 +541,7 @@
                 <div
                   class="my-4 grid grid-cols-1 md:grid-cols-2 {isEtp2026
                     ? 'lg:grid-cols-3'
-                    : ''} gap-4">
+                    : ''} gap-12">
                   {#if isEtp2026}
                     <TilastotEtVersion
                       {printing}
@@ -567,7 +567,7 @@
                 </div>
                 <!-- MOLEMMILLE TUNNUSLUVUT-->
                 <div class="pbb-always">
-                  <h1 class="w-full mt-6 mb-2 space-x-2">
+                  <h1 class="w-full mt-12 mb-2 space-x-2">
                     {$_('TILASTOT_LASKETUT_TUNNUSLUVUT')}
                     {` (${total2013 + total2018 + (isEtp2026 ? total2026 : 0)} ${$_('TILASTOT_KPL')})`}
                   </h1>
@@ -749,7 +749,7 @@
                 </div>
                 <!-- 2018 ja 2026 TUNNUSLUVUT-->
                 {#if total2018 + total2026 > 0}
-                  <div>
+                  <div class="mt-8">
                     <div
                       class="flex flex-col lg:flex-row space-y-4 lg:space-x-16 lg:space-y-0 justify-evenly">
                       <TilastotEntriesList
