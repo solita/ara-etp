@@ -31,6 +31,12 @@
 
   announceAssertively($_('TILASTOT'));
 
+  const configPromise = fetch('config.json').then(response => response.json());
+  let isEtp2026 = false;
+  configPromise.then(config => {
+    isEtp2026 = config?.isEtp2026 ?? false;
+  });
+
   const format = new Intl.NumberFormat('fi-FI', {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2
@@ -480,7 +486,7 @@
               <span class="uppercase font-bold w-full mb-2">
                 {$_('TILASTOT_TULOKSIA')}
                 {' '}
-                {total2013 + total2018 + total2026 || '< 4'}
+                {total2013 + total2018 + (isEtp2026 ? total2026 : 0) || '< 4'}
               </span>
               <!-- SEARCH PARAMS SHOWN WHEN PRINTING -->
               <div class="only-print">
@@ -530,17 +536,19 @@
                   </div>
                 </div>
               </div>
-              {#if total2013 + total2018 + total2026 > 0}
+              {#if total2013 + total2018 + (isEtp2026 ? total2026 : 0) > 0}
                 <!-- GRAPHS -->
                 <div
-                  class="my-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <TilastotEtVersion
-                    {printing}
-                    tooltipAnchorPosition={AnchorPosition.bottomRight}
-                    version="2026"
-                    count={total2026}
-                    eLukuData={results?.['e-luku-statistics']?.['2026']}
-                    chartData={chartData2026} />
+                  class="my-4 grid grid-cols-1 md:grid-cols-2 {isEtp2026 ? 'lg:grid-cols-3' : ''} gap-4">
+                  {#if isEtp2026}
+                    <TilastotEtVersion
+                      {printing}
+                      tooltipAnchorPosition={AnchorPosition.bottomRight}
+                      version="2026"
+                      count={total2026}
+                      eLukuData={results?.['e-luku-statistics']?.['2026']}
+                      chartData={chartData2026} />
+                  {/if}
                   <TilastotEtVersion
                     {printing}
                     version="2018"
@@ -559,7 +567,7 @@
                 <div class="pbb-always">
                   <h1 class="w-full mt-6 mb-2 space-x-2">
                     {$_('TILASTOT_LASKETUT_TUNNUSLUVUT')}
-                    {` (${total2013 + total2018 + total2026} ${$_('TILASTOT_KPL')})`}
+                    {` (${total2013 + total2018 + (isEtp2026 ? total2026 : 0)} ${$_('TILASTOT_KPL')})`}
                   </h1>
                   <div
                     class="flex flex-col lg:flex-row space-y-4 lg:space-x-16 lg:space-y-0 justify-evenly">
@@ -762,7 +770,7 @@
                         <div class="my-4">
                           <InfoTooltip
                             title={$_('TILASTOT_UUSIUTUVIEN')}
-                            tooltip={$_('TILASTOT_UUSIUTUVIEN_TOOLTIP')}>
+                            tooltip={isEtp2026 ? $_('TILASTOT_UUSIUTUVIEN_TOOLTIP') : $_('TILASTOT_UUSIUTUVIEN_TOOLTIP_NO_2026')}>
                             <h2>{$_('TILASTOT_UUSIUTUVIEN')}</h2>
                           </InfoTooltip>
                         </div>
