@@ -492,8 +492,20 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     margin-top: 3mm;
 }
 
+.koontisivu dl.koontisivu-lammitys-compact {
+    line-height: 1.5;
+}
+
+.koontisivu dl.table-description-list.koontisivu-lammitys-compact dt {
+    width: 23%;
+}
+
 .koontisivu #koontisivu-lammonjakojarjestelma {
     width: 164mm;
+}
+
+.koontisivu #koontisivu-toteutunut-ostoenergia-lisatietoja {
+    height: 1.5em;
 }
 
 .koontisivu #toteutunut-energia-info {

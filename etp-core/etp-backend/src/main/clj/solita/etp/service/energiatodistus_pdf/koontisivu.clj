@@ -52,9 +52,10 @@
                    {false :ei true :kylla}
                    l)]]]]
        [:h2 (l :lammitysjarjestelma-kuvaus)]
-       [:dl {:class "table-description-list"}
+
+       [:dl {:class "table-description-list koontisivu-lammitys-compact"}
         [:div
-         [:dt (l :lammitysjarjestelma)]
+         [:dt (str (l :lammitysjarjestelma) ":")]
          [:dd (->> (-> energiatodistus
                        (get-in [:lahtotiedot :lammitys (kieli {:fi :lammitysmuoto-label-fi
                                                                :sv :lammitysmuoto-label-sv})])
@@ -62,11 +63,12 @@
                    (map (fn [lammitysjarjestelma-label]
                           [:div lammitysjarjestelma-label])))]]
         [:div
-         [:dt (l :lammonjako)]
+         [:dt (str (l :lammonjako) ":")]
          [:dd (-> energiatodistus
                   (get-in [:lahtotiedot :lammitys (kieli {:fi :lammonjako-label-fi
                                                           :sv :lammonjako-label-sv})])
                   h)]]]
+
        [:dl {:id    "koontisivu-lammonjakojarjestelma"
              :class "table-description-list"}
         [:div
@@ -76,22 +78,25 @@
                   {false :ei true :kylla}
                   l)]]]
        [:h2 (l :ilmanvaihtojärjestelmän-kuvaus)]
-       [:dl {:class "table-description-list"}
+
+       [:dl {:class "table-description-list koontisivu-lammitys-compact"}
         [:div
-         [:dt (l :ilmanvaihtojärjestelmä)]
+         [:dt (str (l :ilmanvaihtojärjestelmä) ":")]
          [:dd (-> energiatodistus
                   (get-in [:lahtotiedot :ilmanvaihto (kieli {:fi :label-fi
                                                              :sv :label-sv})])
                   h)]]]
+
        [:h2 (l :toteutunut-ostoenergy-ja-uusiutuva)]
        [:dl
         [:dt (l :tiedot-ovat-vuodelta)]
         [:dd (-> energiatodistus :toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi (fmt 0))]]
-       [:p (-> energiatodistus
-               :toteutunut-ostoenergiankulutus
-               (get-in [(kieli {:fi :lisatietoja-fi
-                               :sv :lisatietoja-sv})])
-               h)]
+       [:div {:id "koontisivu-toteutunut-ostoenergia-lisatietoja"}
+        (-> energiatodistus
+            :toteutunut-ostoenergiankulutus
+            (get-in [(kieli {:fi :lisatietoja-fi
+                             :sv :lisatietoja-sv})])
+            h)]
        [:table {:class "common-table"}
         [:thead
          [:tr
