@@ -844,12 +844,16 @@
                             <dt>{$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUS')}</dt>
                             <dd>
                               {format(
-                                results?.['elinkaaren-aikaiset-paastot']?.['rakennus-avg']
+                                results?.['elinkaaren-aikaiset-paastot']?.[
+                                  'rakennus-avg'
+                                ]
                               )}
                             </dd>
                           </div>
                           <div class="w-full flex justify-between">
-                            <dt>{$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA')}</dt>
+                            <dt>
+                              {$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA')}
+                            </dt>
                             <dd>
                               {format(
                                 results?.['elinkaaren-aikaiset-paastot']?.[
