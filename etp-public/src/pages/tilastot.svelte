@@ -539,7 +539,9 @@
               {#if total2013 + total2018 + (isEtp2026 ? total2026 : 0) > 0}
                 <!-- GRAPHS -->
                 <div
-                  class="my-4 grid grid-cols-1 md:grid-cols-2 {isEtp2026 ? 'lg:grid-cols-3' : ''} gap-4">
+                  class="my-4 grid grid-cols-1 md:grid-cols-2 {isEtp2026
+                    ? 'lg:grid-cols-3'
+                    : ''} gap-4">
                   {#if isEtp2026}
                     <TilastotEtVersion
                       {printing}
@@ -770,7 +772,9 @@
                         <div class="my-4">
                           <InfoTooltip
                             title={$_('TILASTOT_UUSIUTUVIEN')}
-                            tooltip={isEtp2026 ? $_('TILASTOT_UUSIUTUVIEN_TOOLTIP') : $_('TILASTOT_UUSIUTUVIEN_TOOLTIP_NO_2026')}>
+                            tooltip={isEtp2026
+                              ? $_('TILASTOT_UUSIUTUVIEN_TOOLTIP')
+                              : $_('TILASTOT_UUSIUTUVIEN_TOOLTIP_NO_2026')}>
                             <h2>{$_('TILASTOT_UUSIUTUVIEN')}</h2>
                           </InfoTooltip>
                         </div>
