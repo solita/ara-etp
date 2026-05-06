@@ -334,7 +334,8 @@
             ...searchmodel,
             versio: evt.target.value,
             'perustiedot.kayttotarkoitus_in': [],
-            'perustiedot.kayttotarkoitus': ''
+            'perustiedot.kayttotarkoitus': '',
+            'tulokset.e-luokka_in': []
           };
           break;
         case 'perustiedot.kayttotarkoitus_in':
