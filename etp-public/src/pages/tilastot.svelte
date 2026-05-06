@@ -541,7 +541,7 @@
                 <div
                   class="my-4 grid grid-cols-1 md:grid-cols-2 {isEtp2026
                     ? 'lg:grid-cols-3'
-                    : ''} gap-x-16 gap-y-4">  
+                    : ''} gap-x-16 gap-y-4">
                   {#if isEtp2026}
                     <TilastotEtVersion
                       {printing}
