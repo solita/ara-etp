@@ -254,8 +254,9 @@
   "TILASTOT_ET_LUOKKA_2026_TOOLTIP": "Vuoden 2026 lainsäädännön mukaan rakennuksille tehtyjen energiatodistusten laskennalliset energiatehokkuusluokat. Todistuksia on tehty vuodesta 2026 alkaen.",
   "TILASTOT_CHART_ALT": "Pylväsdiagrammi energiatehokkuuslluokkien prosenttiosuuksista.",
   "TILASTOT_E_LUKU": "E-Luku",
-  "TILASTOT_E_LUKU_2018_TOOLTIP": "Keskiarvo kertoo haun mukaisten rakennusten keskimääräisen laskennallisen energiatehokkuuden vertailuluvun (E-luku). Mitä pienempi E-luku, sitä vähemmän rakennus kuluttaa energiaa.\n”Paras 15%” ja ”heikoin 15 %” näyttää haun mukaisten rakennusten E-lukujen raja-arvot, joilla päästään E-luvultaan parhaimpaan tai heikoimpaan 15 %:iin.",
+  "TILASTOT_E_LUKU_TOOLTIP": "Keskiarvo kertoo haun mukaisten rakennusten keskimääräisen laskennallisen energiatehokkuuden vertailuluvun (E-luku).\n Mediaani kertoo haun mukaisten rakennusten E-lukujen keskimmäisen arvon. \nMitä pienempi E-luku, sitä vähemmän rakennus kuluttaa energiaa.\n”Paras 15%” ja ”heikoin 15 %” näyttää haun mukaisten rakennusten E-lukujen raja-arvot, joilla päästään E-luvultaan parhaimpaan tai heikoimpaan 15 %:iin.",
   "TILASTOT_KESKIARVO": "Keskiarvo",
+  "TILASTOT_MEDIAANI": "Mediaani",
   "TILASTOT_PARAS_15": "Paras 15%",
   "TILASTOT_HEIKOIN_15": "Heikoin 15%",
   "TILASTOT_E_LUKU_UNIT": " kWh/m²/vuosi",
@@ -322,6 +323,10 @@
   "TILASTOT_TULOSTA": "Tulosta",
   "COMMON_ON": "Päällä",
   "COMMON_OFF": "Pois",
+  "TILASTOT_ILMASTOSELVITYS": "Ilmastoselvitys",
+  "TILASTOT_KASVIHUONEPAASTOT_RAKENNUS": "Rakennuksen elinkaarenaikaiset kasvihuonepäästöt",
+  "TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA": "Rakennuspaikan elinkaarenaikaiset kasvihuonepäästöt",
   "HYOTYPINTA-ALA": "Hyötypinta-ala (m²)",
-  "HYOTYPINTA-ALA_TOOLTIP": "Aikaisemmissa versioissa (2013 ja 2018) nimellä 'Lämmitetty nettoala'."
+  "HYOTYPINTA-ALA_TOOLTIP": "Aikaisemmissa versioissa (2013 ja 2018) nimellä 'Lämmitetty nettoala'.",
+  "TILASTOT_ILMASTOSELVITYS_TOOLTIP": "Ilmastoselvitys koskee uusia rakennuksia ja rakennuksia, jotka perusparannetaan A+-luokkaan."
 }

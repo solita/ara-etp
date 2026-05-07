@@ -836,9 +836,49 @@
                         </dl>
                         <div class="w-full" />
                       </div>
-                      <div class="w-full flex flex-col">
-                        <!-- This empty div is here to keep the lonely last section the same size as the previous paired sections in large desktop windows -->
-                      </div>
+                      {#if isEtp2026 && results?.['elinkaaren-aikaiset-paastot']}
+                        <div class="w-full flex flex-col">
+                          <div class="my-4">
+                            <InfoTooltip
+                              title={$_('TILASTOT_ILMASTOSELVITYS')}
+                              tooltip={$_('TILASTOT_ILMASTOSELVITYS_TOOLTIP')}>
+                              <h2>{$_('TILASTOT_ILMASTOSELVITYS')}</h2>
+                            </InfoTooltip>
+                          </div>
+                          <dl>
+                            <div class="w-full flex justify-between">
+                              <dt>
+                                {$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUS')}
+                              </dt>
+                              <dd>
+                                {format(
+                                  results?.['elinkaaren-aikaiset-paastot']?.[
+                                    'rakennus-avg'
+                                  ]
+                                )}{' kgCO₂ ekv/m²'}
+                              </dd>
+                            </div>
+                            <div class="w-full flex justify-between">
+                              <dt>
+                                {$_(
+                                  'TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA'
+                                )}
+                              </dt>
+                              <dd>
+                                {format(
+                                  results?.['elinkaaren-aikaiset-paastot']?.[
+                                    'rakennuspaikka-avg'
+                                  ]
+                                )}{' kgCO₂ ekv/m²'}
+                              </dd>
+                            </div>
+                          </dl>
+                        </div>
+                      {:else}
+                        <div class="w-full flex flex-col">
+                          <!-- This empty div is here to keep the lonely last section the same size as the previous paired sections in large desktop windows -->
+                        </div>
+                      {/if}
                     </div>
                   </div>
                 {/if}
