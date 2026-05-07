@@ -52,22 +52,21 @@
        content)
      (page-footer et-tunnus page-num total-pages l)]))
 
-(defn generate-document-html
-  "Generate complete HTML document for Energiatodistus 2026 PDF."
+(defn generate-document-hiccup
+  "Generate hiccup data for complete HTML document for Energiatodistus 2026 PDF."
   [pages et-tunnus l]
   (let [total-pages (count pages)
         pages-html (map-indexed
                      (fn [idx page-data]
                        (render-page page-data (inc idx) total-pages et-tunnus l))
                      pages)]
-  (hiccup/html
-   [:html
-    [:head
-     [:meta {:charset "UTF-8"}]
-     [:title "Energiatodistus"]
-     [:style (styles)]]
-    [:body
-     pages-html]])))
+    [:html
+     [:head
+      [:meta {:charset "UTF-8"}]
+      [:title "Energiatodistus"]
+      [:style (styles)]]
+     [:body
+      pages-html]]))
 
 (defn- show-toimenpide-pages? [energiatodistus]
   (let [e-luokka (-> energiatodistus :tulokset :e-luokka)
@@ -77,9 +76,8 @@
          (not (contains? #{"A" "A0" "A+"} e-luokka))
          (not has-valid-ppp?))))
 
-
-(defn generate-energiatodistus-html
-  "Generate a string of HTML, representing the ET2026 part of a PDF document
+(defn generate-energiatodistus-hiccup
+  "Generate hiccup data of HTML, representing the ET2026 part of a PDF document
   containing both ET2026 and possibly a PPP."
   [{:keys [energiatodistus kieli] :as params}]
   (let [l (kieli loc/et-pdf-localization)
@@ -121,7 +119,13 @@
                   [{:page-border? false
                     :content (ilmastoselvitys/ilmastoselvitys-page-content params)}]
                   []))]
-    (generate-document-html pages (:id energiatodistus) l)))
+    (generate-document-hiccup pages (:id energiatodistus) l)))
+
+(defn generate-energiatodistus-html
+  "Generate string of HTML, representing the ET2026 part of a PDF document
+  containing both ET2026 and possibly a PPP."
+  [params]
+  (hiccup/html (generate-energiatodistus-hiccup params)))
 
 (defn generate-energiatodistus-ohtp-pdf
   "Use OpenHTMLToPDF to generate a energiatodistus PDF, return as a byte array"

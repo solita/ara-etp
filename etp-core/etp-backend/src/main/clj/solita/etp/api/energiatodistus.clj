@@ -37,6 +37,9 @@
 (defn valid-pdf-filename? [filename id kieli]
   (= filename (format "energiatodistus-%s-%s.pdf" id kieli)))
 
+(defn valid-html-filename? [filename id kieli]
+  (= filename (format "energiatodistus-%s-%s.html" id kieli)))
+
 (def search-exceptions [{:type :unknown-field :response 400}
                         {:type :unknown-predicate :response 400}
                         {:type :invalid-arguments :response 400}
@@ -60,6 +63,27 @@
                                                                                  id
                                                                                  kieli)
                            filename
+                           (str "Energiatodistus " id " does not exists."))
+                          (r/not-found "File not found")))}}])
+
+(defn html-route [versio]
+  ["/html/:kieli/:filename"
+   {:get {:summary    "Lataa energiatodistus HTML-tiedostona"
+          :access     (some-fn rooli-service/laatija? rooli-service/paakayttaja?)
+          :parameters {:path {:id common-schema/Key
+                              :kieli schema/Str
+                              :filename schema/Str}}
+          :responses  {200 {:body nil}
+                       404 {:body schema/Str}}
+          :handler    (fn [{{{:keys [id kieli filename]} :path} :parameters :keys [db aws-s3-client whoami]}]
+                        (if (valid-html-filename? filename id kieli)
+                          (api-response/html-response
+                           (energiatodistus-pdf-service/find-energiatodistus-html db
+                                                                                  aws-s3-client
+                                                                                  whoami
+                                                                                  id
+                                                                                  kieli
+                                                                                  versio)
                            (str "Energiatodistus " id " does not exists."))
                           (r/not-found "File not found")))}}])
 
@@ -204,6 +228,7 @@
                              energiatodistus-schema/EnergiatodistusSave2026
                              rooli-service/ppp-laatija?)
         (pdf-route 2026)
+        (html-route 2026)
         crud-api/discarded
         liite-api/routes
         signing-api/routes]]]
