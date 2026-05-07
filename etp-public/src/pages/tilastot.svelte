@@ -836,47 +836,41 @@
                         </dl>
                         <div class="w-full" />
                       </div>
-                      <div class="w-full flex flex-col">
-                        <!-- This empty div is here to keep the lonely last section the same size as the previous paired sections in large desktop windows -->
-                      </div>
-                    </div>
-                  </div>
-                {/if}
-                <!-- ILMASTOSELVITYS -->
-                {#if isEtp2026 && results?.['elinkaaren-aikaiset-paastot']}
-                  <div class="pbb-always">
-                    <h1 class="w-full mt-6 mb-2">
-                      {$_('TILASTOT_ILMASTOSELVITYS')}
-                    </h1>
-                    <div
-                      class="flex flex-col lg:flex-row space-y-4 lg:space-x-16 lg:space-y-0 justify-evenly">
-                      <div class="w-full flex flex-col">
-                        <dl>
-                          <div class="w-full flex justify-between">
-                            <dt>{$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUS')}</dt>
-                            <dd>
-                              {format(
-                                results?.['elinkaaren-aikaiset-paastot']?.[
-                                  'rakennus-avg'
-                                ]
-                              )}
-                            </dd>
+                      {#if isEtp2026 && results?.['elinkaaren-aikaiset-paastot']}
+                        <div class="w-full flex flex-col">
+                          <div class="my-4">
+                            <h2>{$_('TILASTOT_ILMASTOSELVITYS')}</h2>
                           </div>
-                          <div class="w-full flex justify-between">
-                            <dt>
-                              {$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA')}
-                            </dt>
-                            <dd>
-                              {format(
-                                results?.['elinkaaren-aikaiset-paastot']?.[
-                                  'rakennuspaikka-avg'
-                                ]
-                              )}
-                            </dd>
-                          </div>
-                        </dl>
-                      </div>
-                      <div class="w-full flex flex-col"></div>
+                          <dl>
+                            <div class="w-full flex justify-between">
+                              <dt>{$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUS')}</dt>
+                              <dd>
+                                {format(
+                                  results?.['elinkaaren-aikaiset-paastot']?.[
+                                    'rakennus-avg'
+                                  ]
+                                )}
+                              </dd>
+                            </div>
+                            <div class="w-full flex justify-between">
+                              <dt>
+                                {$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA')}
+                              </dt>
+                              <dd>
+                                {format(
+                                  results?.['elinkaaren-aikaiset-paastot']?.[
+                                    'rakennuspaikka-avg'
+                                  ]
+                                )}
+                              </dd>
+                            </div>
+                          </dl>
+                        </div>
+                      {:else}
+                        <div class="w-full flex flex-col">
+                          <!-- This empty div is here to keep the lonely last section the same size as the previous paired sections in large desktop windows -->
+                        </div>
+                      {/if}
                     </div>
                   </div>
                 {/if}
