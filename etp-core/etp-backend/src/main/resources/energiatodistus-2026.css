@@ -526,8 +526,12 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     height: 91mm;
 }
 
+.koontisivu #koontisivu-keskeiset-toimenpiteet-section p {
+    margin: 0px 0px 3px 0px;
+}
+
 .koontisivu #koontisivu-keskeiset-toimenpiteet {
-    height: 52mm;
+    height: 62mm;
 }
 
 .koontisivu #koontisivu-havaintokaynti-tyokalu {
