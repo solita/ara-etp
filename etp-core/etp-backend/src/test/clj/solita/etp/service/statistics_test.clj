@@ -301,7 +301,7 @@
       ;; Then: no certificates are included (boundary is exclusive for < 2021)
       (t/is (= {} result)))))
 
-;; --- GWP averages tests ---
+;; --- Elinkaarenaikaiset kasvihuonepaastot averages tests ---
 
 (def hiilijalanjalki-fields
   [:rakennustuotteiden-valmistus
@@ -327,7 +327,7 @@
                          (:rakennuspaikka hj))))
          adds (cycle hj-values))))
 
-(defn gwp-test-data-set
+(defn carbonfootprint-test-data-set
   "Create a test data set with versio-2026 energiatodistus records.
    Options:
    - :n - number of records (default 4)
@@ -405,7 +405,7 @@
 ;; Test 1: find-carbon-footprint returns correct averages with sufficient 2026 data
 (t/deftest find-carbon-footprint-correct-averages-test
   ;; Given: 4 signed versio-2026 records with known hiilijalanjälki values
-  (gwp-test-data-set {:n 4 :hj-values known-hj-values})
+  (carbonfootprint-test-data-set {:n 4 :hj-values known-hj-values})
   ;; When: find-carbon-footprint is called with query-all
   (let [result (service/find-carbon-footprint ts/*db* query-all)]
     ;; Then: returns correct averages
@@ -425,7 +425,7 @@
 ;; Test 3: find-carbon-footprint returns nil when sample size < 4
 (t/deftest find-carbon-footprint-insufficient-sample-size-test
   ;; Given: 3 signed versio-2026 records (below minimum sample size of 4)
-  (gwp-test-data-set {:n 3 :hj-values known-hj-values})
+  (carbonfootprint-test-data-set {:n 3 :hj-values known-hj-values})
   ;; When: find-carbon-footprint is called with query-all
   (let [result (service/find-carbon-footprint ts/*db* query-all)]
     ;; Then: returns nil
@@ -434,7 +434,7 @@
 ;; Test 4: find-carbon-footprint returns nil for records without laatimisajankohta
 (t/deftest find-carbon-footprint-no-laatimisajankohta-test
   ;; Given: 4 versio-2026 records but without laatimisajankohta set
-  (gwp-test-data-set {:n 4 :hj-values known-hj-values :set-laatimisajankohta? false})
+  (carbonfootprint-test-data-set {:n 4 :hj-values known-hj-values :set-laatimisajankohta? false})
   ;; When: find-carbon-footprint is called with query-all
   (let [result (service/find-carbon-footprint ts/*db* query-all)]
     ;; Then: returns nil (records without laatimisajankohta should be excluded)
@@ -483,7 +483,7 @@
                                          :rakennustuotteiden-vaihdot   6.0M
                                          :energiankaytto               7.0M
                                          :purkuvaihe                   8.0M}}]]
-    (gwp-test-data-set {:n 4 :hj-values hj-with-nils})
+    (carbonfootprint-test-data-set {:n 4 :hj-values hj-with-nils})
     ;; When: find-carbon-footprint is called
     (let [result (service/find-carbon-footprint ts/*db* query-all)]
       ;; Then: nil fields treated as 0 in sum
@@ -559,7 +559,7 @@
 ;; Test 7: find-carbon-footprint excludes unsigned records
 (t/deftest find-carbon-footprint-excludes-unsigned-test
   ;; Given: 4 versio-2026 records with ilmastoselvitys but NOT signed
-  (gwp-test-data-set {:n 4 :hj-values known-hj-values :sign? false})
+  (carbonfootprint-test-data-set {:n 4 :hj-values known-hj-values :sign? false})
   ;; When: find-carbon-footprint is called
   (let [result (service/find-carbon-footprint ts/*db* query-all)]
     ;; Then: returns nil (unsigned records excluded)
@@ -568,7 +568,7 @@
 ;; Test 8: find-carbon-footprint excludes expired records
 (t/deftest find-carbon-footprint-excludes-expired-test
   ;; Given: 4 signed versio-2026 records with ilmastoselvitys but all expired
-  (gwp-test-data-set {:n 4 :hj-values known-hj-values :expire? true})
+  (carbonfootprint-test-data-set {:n 4 :hj-values known-hj-values :expire? true})
   ;; When: find-carbon-footprint is called
   (let [result (service/find-carbon-footprint ts/*db* query-all)]
     ;; Then: returns nil
@@ -578,7 +578,7 @@
 (t/deftest find-carbon-footprint-only-versio-2026-test
   ;; Given: mixed dataset with 2013/2018 and 2026 records
   (test-data-set 12 true) ;; creates 6x2013 + 6x2018
-  (gwp-test-data-set {:n 4 :hj-values known-hj-values})
+  (carbonfootprint-test-data-set {:n 4 :hj-values known-hj-values})
   ;; When: find-carbon-footprint is called
   (let [result (service/find-carbon-footprint ts/*db* query-all)]
     ;; Then: only versio-2026 records contribute
@@ -589,7 +589,7 @@
 ;; Test 10: find-statistics includes elinkaaren-aikaiset-paastot in response
 (t/deftest find-statistics-includes-elinkaaren-aikaiset-paastot-test
            ;; Given: 4 signed versio-2026 records with ilmastoselvitys data
-           (gwp-test-data-set {:n 4 :hj-values known-hj-values})
+           (carbonfootprint-test-data-set {:n 4 :hj-values known-hj-values})
            ;; When: find-statistics is called
            (let [result (service/find-statistics ts/*db* query-all)]
                 ;; Then: result contains :elinkaaren-aikaiset-paastot key with correct values
@@ -612,7 +612,7 @@
 ;; Test 12: find-statistics with not-signed 2026 records returns nil elinkaaren-aikaiset-paastot
 (t/deftest find-statistics-unsigned-2026-nil-elinkaaren-aikaiset-paastot-test
            ;; Given: 4 versio-2026 records with ilmastoselvitys but not signed
-           (gwp-test-data-set {:n 4 :hj-values known-hj-values :sign? false})
+           (carbonfootprint-test-data-set {:n 4 :hj-values known-hj-values :sign? false})
            ;; When: find-statistics is called
            (let [result (service/find-statistics ts/*db* query-all)]
                 ;; Then: elinkaaren-aikaiset-paastot is nil
