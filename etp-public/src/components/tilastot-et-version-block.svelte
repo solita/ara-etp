@@ -49,11 +49,7 @@
       <StatChart data={chartData} {printing} {version} />
     </div>
     <div class="pbi-avoid">
-      <StatELuku
-        data={eLukuData}
-        tooltip={version === '2018'
-          ? $_('TILASTOT_E_LUKU_2018_TOOLTIP')
-          : ''} />
+      <StatELuku data={eLukuData} tooltip={$_('TILASTOT_E_LUKU_TOOLTIP')} />
     </div>
   {:else}
     <StatNoData label={noDataLabel} />
