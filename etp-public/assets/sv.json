@@ -267,7 +267,7 @@
   "TILASTOT_ET_LUOKKA_2013_TOOLTIP": "De kalkylmässiga energieffektivitetsklasserna för energicertifikat för byggnader enligt lagstiftningen från 2013. Intygen har gjorts före 2018. Obs! I registret finns intyg som gjorts sedan våren 2015.",
   "TILASTOT_ET_LUOKKA_2026_TOOLTIP": "De kalkylmässiga energieffektivitetsklasserna för energicertifikat för byggnader enligt lagstiftningen från 2026. Intyg har gjorts sedan 2026.",
   "TILASTOT_CHART_ALT": "Stapeldiagram över energieffektivitetsklassernas procentandelar.",
-  "TILASTOT_E_LUKU_2018_TOOLTIP": "Medelvärdet anger jämförelsetalet för den genomsnittliga beräknade energieffektiviteten (E-talet) för de byggnader som sökningen gäller. Ju lägre E-tal, desto mindre energi förbrukar byggnaden.\n\"Bästa 15 %\" och \"Sämsta 15 %\" visar gränsvärdena för E-talen för byggnaderna i sökningen. Gränsvärdena anger E-talets bästa eller sämsta 15 procent.",
+  "TILASTOT_E_LUKU_TOOLTIP": "Medelvärdet anger jämförelsetalet för den genomsnittliga beräknade energieffektiviteten (E-talet) för de byggnader som sökningen gäller.\n Medianen anger det mittersta värdet av E-talen för byggnader som matchar sökningen.\n Ju lägre E-tal, desto mindre energi förbrukar byggnaden.\n\"Bästa 15 %\" och \"Sämsta 15 %\" visar gränsvärdena för E-talen för byggnaderna i sökningen. Gränsvärdena anger E-talets bästa eller sämsta 15 procent.",
   "TILASTOT_KESKIARVO": "Medelvärde",
   "TILASTOT_MEDIAANI": "Median",
   "TILASTOT_PARAS_15": "Bästa 15 %",
@@ -327,5 +327,6 @@
   "TILASTOT_KASVIHUONEPAASTOT_RAKENNUS": "Rakennuksen elinkaarenaikaiset kasvihuonepäästöt (sv)",
   "TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA": "Rakennuspaikan elinkaarenaikaiset kasvihuonepäästöt (sv)",
   "HYOTYPINTA-ALA": "Hyötypinta-ala (m²) (sv)",
-  "HYOTYPINTA-ALA_TOOLTIP": "Aikaisemmissa versioissa (2013 ja 2018) nimellä 'Lämmitetty nettoala'. (sv)"
+  "HYOTYPINTA-ALA_TOOLTIP": "Aikaisemmissa versioissa (2013 ja 2018) nimellä 'Lämmitetty nettoala'. (sv)",
+  "TILASTOT_ILMASTOSELVITYS_TOOLTIP": "Ilmastoselvitys koskee uusia rakennuksia ja rakennuksia, jotka perusparannetaan A+-luokkaan. (sv)"
 }
