@@ -323,9 +323,9 @@
   "ETHAKU_INVALID_RAKENNUKSEN_NIMI": "Längden får vara högst 100 tecken",
   "COMMON_ON": "På",
   "COMMON_OFF": "Av",
-  "TILASTOT_ILMASTOSELVITYS": "Klimatutredning",
-  "TILASTOT_GWP_RAKENNUS": "Byggandens växthusgasutsläpp under livscykeln",
-  "TILASTOT_GWP_RAKENNUSPAIKKA": "Byggplatsens växthusgasutsläpp under livscykeln",
+  "TILASTOT_ILMASTOSELVITYS": "Ilmastoselvitys (sv)",
+  "TILASTOT_KASVIHUONEPAASTOT_RAKENNUS": "Rakennuksen elinkaarenaikaiset kasvihuonepäästöt (sv)",
+  "TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA": "Rakennuspaikan elinkaarenaikaiset kasvihuonepäästöt (sv)",
   "HYOTYPINTA-ALA": "Hyötypinta-ala (m²) (sv)",
   "HYOTYPINTA-ALA_TOOLTIP": "Aikaisemmissa versioissa (2013 ja 2018) nimellä 'Lämmitetty nettoala'. (sv)"
 }
