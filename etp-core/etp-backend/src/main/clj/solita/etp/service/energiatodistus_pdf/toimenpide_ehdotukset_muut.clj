@@ -10,11 +10,12 @@
      [:h1 (l :te-muut-otsikko)]
      (str (l :te-muut-teksti))
      [:h3 (l :te-muut-valaistus-otsikko)]
-     (-> energiatodistus
-         (get-in [:huomiot :valaistus-muut (case kieli
-                                             :fi :teksti-fi
-                                             :sv :teksti-sv)])
-         h)]))
+     [:div {:class "toimenpide-huomiot-teksti"}
+      (-> energiatodistus
+          (get-in [:huomiot :valaistus-muut (case kieli
+                                              :fi :teksti-fi
+                                              :sv :teksti-sv)])
+          h)]]))
 
 (defn toimenpide-ehdotukset-list-muut [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)
@@ -46,11 +47,12 @@
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
      [:h3 (l :te-suositukset-otsikko)]
-     (-> energiatodistus
-         (get-in [:huomiot (case kieli
-                             :fi :suositukset-fi
-                             :sv :suositukset-sv)])
-         h)]))
+     [:div {:class "toimenpide-huomiot-teksti"}
+      (-> energiatodistus
+          (get-in [:huomiot (case kieli
+                              :fi :suositukset-fi
+                              :sv :suositukset-sv)])
+          h)]]))
 
 (defn generate-all-toimepide-ehdotukset-muut [params]
   (into [:div]

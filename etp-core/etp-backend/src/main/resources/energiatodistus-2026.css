@@ -709,6 +709,14 @@ table.common-table td:last-child {
     padding: 5px;
 }
 
+/* Preserve line breaks from textarea fields */
+.lisamerkintoja-teksti,
+.toimenpide-huomiot-teksti,
+#koontisivu-keskeiset-toimenpiteet {
+    white-space: pre-line;
+    overflow-wrap: break-word;
+}
+
 /* =====================================================
    Tulokset (E-luvun laskennan tulokset) page styles
    ===================================================== */

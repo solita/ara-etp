@@ -15,11 +15,12 @@
     [:div {:class "lisamerkintoja"}
      [:h1 (l :lisamerkintoja-otsikko)]
      [:div {:class "lisamerkintoja-separator"}]
-     (-> energiatodistus
-         (get (case kieli
-                :fi :lisamerkintoja-fi
-                :sv :lisamerkintoja-sv))
-         h)]))
+     [:div {:class "lisamerkintoja-teksti"}
+      (-> energiatodistus
+          (get (case kieli
+                 :fi :lisamerkintoja-fi
+                 :sv :lisamerkintoja-sv))
+          h)]]))
 
 (defn lisatietoja [{:keys [kieli]}]
   (let [l (kieli loc/et-pdf-localization)]
