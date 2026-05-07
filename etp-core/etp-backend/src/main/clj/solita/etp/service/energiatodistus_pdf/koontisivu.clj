@@ -88,7 +88,7 @@
                   h)]]]
 
        [:h2 (l :toteutunut-ostoenergy-ja-uusiutuva)]
-       [:dl
+       [:dl {:id "koontisivu-tiedot-ovat-vuodelta-dl"}
         [:dt (l :tiedot-ovat-vuodelta)]
         [:dd (-> energiatodistus :toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi (fmt 0))]]
        [:div {:id "koontisivu-toteutunut-ostoenergia-lisatietoja"}

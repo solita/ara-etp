@@ -467,7 +467,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 }
 
 .koontisivu #koontisivu-yleiset-tiedot {
-    height: 142.5mm;
+    height: 141.5mm;
 }
 
 .koontisivu #koontisivu-suuruudet {
@@ -504,8 +504,13 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     width: 164mm;
 }
 
+.koontisivu #koontisivu-tiedot-ovat-vuodelta-dl {
+    margin-bottom: 1mm;
+}
+
 .koontisivu #koontisivu-toteutunut-ostoenergia-lisatietoja {
     height: 1.5em;
+    vertical-align: top;
 }
 
 .koontisivu #toteutunut-energia-info {
@@ -518,7 +523,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     margin: 0;
 }
 .koontisivu #koontisivu-keskeiset-toimenpiteet-section {
-    height: 90mm;
+    height: 91mm;
 }
 
 .koontisivu #koontisivu-keskeiset-toimenpiteet {
