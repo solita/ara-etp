@@ -842,8 +842,8 @@
                     </div>
                   </div>
                 {/if}
-                <!-- ILMASTOSELVITYS GWP -->
-                {#if results?.['elinkaaren-aikaiset-paastot']}
+                <!-- ILMASTOSELVITYS -->
+                {#if isEtp2026 && results?.['elinkaaren-aikaiset-paastot']}
                   <div class="pbb-always">
                     <h1 class="w-full mt-6 mb-2">
                       {$_('TILASTOT_ILMASTOSELVITYS')}
