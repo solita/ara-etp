@@ -843,7 +843,9 @@
                           </div>
                           <dl>
                             <div class="w-full flex justify-between">
-                              <dt>{$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUS')}</dt>
+                              <dt>
+                                {$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUS')}
+                              </dt>
                               <dd>
                                 {format(
                                   results?.['elinkaaren-aikaiset-paastot']?.[
@@ -854,7 +856,9 @@
                             </div>
                             <div class="w-full flex justify-between">
                               <dt>
-                                {$_('TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA')}
+                                {$_(
+                                  'TILASTOT_KASVIHUONEPAASTOT_RAKENNUSPAIKKA'
+                                )}
                               </dt>
                               <dd>
                                 {format(
