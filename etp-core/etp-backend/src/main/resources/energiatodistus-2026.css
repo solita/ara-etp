@@ -714,7 +714,6 @@ table.common-table td:last-child {
 .toimenpide-huomiot-teksti,
 #koontisivu-keskeiset-toimenpiteet {
     white-space: pre-line;
-    overflow-wrap: break-word;
 }
 
 /* =====================================================
