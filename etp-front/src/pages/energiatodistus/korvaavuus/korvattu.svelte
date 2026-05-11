@@ -177,7 +177,7 @@
         lens={yksinkertaistettuLens}
         disabled={!simplifiedProcedureAvailable} />
     </div>
-    <p class="mt-2 flex text-sm ml-1">
+    <p class="ml-1 mt-2 flex text-sm">
       <span class="mr-1 font-icon">info</span>
       {i18n('energiatodistus.korvaavuus.yksinkertaistettu-info')}
     </p>
