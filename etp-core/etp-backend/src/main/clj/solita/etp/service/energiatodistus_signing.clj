@@ -37,7 +37,7 @@
 
 (defn- allekirjoitusaika->voimassaolo-paattymisaika
   "Clojure equivalent of the voimassaolo_paattymisaika SQL expression in
-   solita/etp/db/energiatodistus.sql (sign-energiatodistus!)"
+   solita/etp/db/energiatodistus.sql (update-energiatodistus-allekirjoitettu!)"
   [^Instant allekirjoitusaika]
   (-> allekirjoitusaika
       (.atZone timezone)

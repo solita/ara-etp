@@ -308,12 +308,6 @@ table.common-table td:last-child {
     padding-right: 30px;
 }
 
-.etusivu-yleistiedota dl div:last-child dd {
-    font-weight: bold;
-    color: #23323e;
-    white-space: nowrap;
-}
-
 div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-row > div {
     display: table-cell;
     width: 35%;

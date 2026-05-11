@@ -31,7 +31,7 @@
              (-> energiatodistus
                  (get-in [:perustiedot (case kieli
                                          :fi :postitoimipaikka-fi
-                                         :sv :poositoimipaikka-sv)])
+                                         :sv :postitoimipaikka-sv)])
                  h)]]]
       [:div
        [:dt (str (l :pysyva-rakennustunnus) ":")]
