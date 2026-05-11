@@ -5,12 +5,15 @@
     [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc])
   (:import
-    (java.time Instant ZoneId)
+    (java.time Instant LocalDate ZoneId)
     (java.time.format DateTimeFormatter)))
 
 (def ^:private datetime-formatter
   (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
              (ZoneId/of "Europe/Helsinki")))
+
+(def ^:private date-formatter
+  (DateTimeFormatter/ofPattern "dd.MM.yyyy"))
 
 (defn- fmt
   "Format number with specified decimal places. Returns empty string for nil."
@@ -22,6 +25,14 @@
   [^Instant time]
   (if time
     (.format datetime-formatter time)
+    ""))
+
+(defn- format-havainnointikaynti-date
+  "Format a LocalDate into dd.MM.yyyy format.
+  Returns empty string for nil."
+  [^LocalDate date]
+  (if date
+    (.format date-formatter date)
     ""))
 
 (defn koontisivu [{:keys [energiatodistus kieli]}]
@@ -156,17 +167,24 @@
 
       [:div {:class "page-section"
              :id    "koontisivu-havaintokaynti-tyokalu"}
-       [:dl
+       [:dl {:class "table-description-list"
+             :id    "koontisivu-havaintokaynti-tyokalu-dl"}
         [:div
          [:dt (l :havainnointikaynti-ajankohta)]
-         [:dd (str (-> energiatodistus :perustiedot :havainnointikaynti h)
-                   " "
-                   (-> energiatodistus
-                       :perustiedot
-                       (get-in [(kieli {:fi :havainnointikayntityyppi-fi
-                                        :sv :havainnointikayntityyppi-sv})])
-                       (or (l :havainnointikayntityyppi-ei-asetettu))
-                       h))]]
+         [:dd
+          [:span
+           {:id "koontisivu-havaintokaynti-ajankohta"}
+           (-> energiatodistus :perustiedot :havainnointikaynti format-havainnointikaynti-date)]
+          " "
+          [:span
+           {:id "koontisivu-tyokalu"}
+           (-> energiatodistus
+               :perustiedot
+               (get-in [(kieli {:fi :havainnointikayntityyppi-fi
+                                :sv :havainnointikayntityyppi-sv})])
+               str/lower-case
+               (or (l :havainnointikayntityyppi-ei-asetettu))
+               h)]]]
         [:div
          [:dt (l :laskentatyokalu-nimi-versio)]
          [:dd (-> energiatodistus :tulokset :laskentatyokalu h)]]]]

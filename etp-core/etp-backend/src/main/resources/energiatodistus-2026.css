@@ -521,6 +521,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .koontisivu #toteutunut-energia-info p {
     margin: 0;
+    color: #2a3b49;
 }
 .koontisivu #koontisivu-keskeiset-toimenpiteet-section {
     height: 91mm;
@@ -536,6 +537,18 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .koontisivu #koontisivu-havaintokaynti-tyokalu {
     height: 16mm;
+}
+
+.koontisivu #koontisivu-havaintokaynti-tyokalu-dl div {
+    height: 7mm;
+}
+
+.koontisivu #koontisivu-havaintokaynti-tyokalu-dl dt {
+    width: 70mm;
+}
+
+.koontisivu #koontisivu-tyokalu {
+    color: #2a3b49;
 }
 
 .koontisivu #koontisivu-laatijan-tiedot {
