@@ -111,6 +111,11 @@
     }
   }
 
+  $: simplifiedProcedureAvailable = Maybe.exists(
+    et => Korvaus.canUseSimplifiedProcedure(energiatodistus, et),
+    korvattavaEnergiatodistus
+  );
+
   $: error =
     checked && query.isSome() && updated
       ? Maybe.isNone(R.chain(parseId, query))
@@ -157,34 +162,25 @@
 
 {#if checked || enabled}
   {#if enabled}
-    <div class="flex flex-wrap items-center gap-x-8">
+    <div class="flex flex-col flex-wrap gap-2">
       <Checkbox
         label={i18n('energiatodistus.korvaavuus.checkbox')}
         dataCy="korvaavuus-checkbox"
         bind:model={checked}
         disabled={!enabled} />
-      {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
-        {#if Korvaus.canUseSimplifiedProcedure(energiatodistus, et)}
-          <div transition:slide={{ duration: 200 }}>
-            <Checkbox
-              label={i18n(
-                'energiatodistus.korvaavuus.yksinkertaistettu-paivitysmenettely'
-              )}
-              dataCy="yksinkertaistettu-paivitysmenettely-checkbox"
-              bind:model={energiatodistus}
-              lens={yksinkertaistettuLens} />
-          </div>
-        {/if}
-      {/each}
+      <Checkbox
+        label={i18n(
+          'energiatodistus.korvaavuus.yksinkertaistettu-paivitysmenettely'
+        )}
+        dataCy="yksinkertaistettu-paivitysmenettely-checkbox"
+        bind:model={energiatodistus}
+        lens={yksinkertaistettuLens}
+        disabled={!simplifiedProcedureAvailable} />
     </div>
-    {#each Maybe.toArray(korvattavaEnergiatodistus) as et}
-      {#if Korvaus.canUseSimplifiedProcedure(energiatodistus, et)}
-        <p class="mt-2 flex text-sm" transition:slide={{ duration: 200 }}>
-          <span class="mr-1 font-icon">info</span>
-          {i18n('energiatodistus.korvaavuus.yksinkertaistettu-info')}
-        </p>
-      {/if}
-    {/each}
+    <p class="ml-1 mt-2 flex text-sm">
+      <span class="mr-1 font-icon">info</span>
+      {i18n('energiatodistus.korvaavuus.yksinkertaistettu-info')}
+    </p>
   {/if}
 
   {#if !enabled}
