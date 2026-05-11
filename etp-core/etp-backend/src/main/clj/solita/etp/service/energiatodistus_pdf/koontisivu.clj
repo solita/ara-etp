@@ -1,6 +1,7 @@
 (ns solita.etp.service.energiatodistus-pdf.koontisivu
   (:require
     [clojure.string :as str]
+    [clojure.tools.logging :as log]
     [hiccup.core :refer [h]]
     [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc])
@@ -9,7 +10,7 @@
     (java.time.format DateTimeFormatter)))
 
 (def ^:private datetime-formatter
-  (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
+  (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy, HH:mm")
              (ZoneId/of "Europe/Helsinki")))
 
 (def ^:private date-formatter
@@ -18,6 +19,17 @@
 (defn- fmt
   "Format number with specified decimal places. Returns empty string for nil."
   [value decimals] (or (formats/format-number value decimals false) ""))
+
+(defn- fullname->firstname-last
+  "Converts 'Sukunimi, Etunimi' to 'Etunimi Sukunimi'.
+  Logs a warning (with the id) and returns the original if the format is unexpected."
+  [fullname id]
+  (let [parts (str/split fullname #", " 2)]
+    (if (and (= (count parts) 2)
+             (not (str/includes? (second parts) ",")))
+      (str (second parts) " " (first parts))
+      (do (log/warn "Unexpected format of laatija name for id:" id)
+          fullname))))
 
 (defn format-allekirjoitusaika
   "Format an instant into the desired format in Europe/Helsinki time.
@@ -198,5 +210,8 @@
         [:div
          [:dt (str (l :sahkoinen-allekirjoitus) ":")]
          [:dd
-          (str (-> energiatodistus :laatija-fullname h) " - "
+          (str (-> energiatodistus :laatija-fullname
+                   (fullname->firstname-last (-> energiatodistus :laatija-id))
+                   h)
+               ", "
                (-> energiatodistus :allekirjoitusaika format-allekirjoitusaika))]]]]]}))
