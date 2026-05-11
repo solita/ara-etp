@@ -555,6 +555,14 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     height: 16mm;
 }
 
+.koontisivu #koontisivu-laatijan-tiedot-dl div {
+    height: 7mm;
+}
+
+.koontisivu #koontisivu-laatijan-tiedot-dl dt {
+    width: 70mm;
+}
+
 /* =====================================================
    Column width utility classes for colgroups
    ===================================================== */

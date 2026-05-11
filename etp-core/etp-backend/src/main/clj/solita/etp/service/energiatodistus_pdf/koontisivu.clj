@@ -190,12 +190,13 @@
          [:dd (-> energiatodistus :tulokset :laskentatyokalu h)]]]]
       [:div {:class "page-section"
              :id    "koontisivu-laatijan-tiedot"}
-       [:dl
+       [:dl {:class "table-description-list"
+             :id    "koontisivu-laatijan-tiedot-dl"}
         [:div
-         [:dt (l :yritys)]
+         [:dt (str (l :yritys) ":")]
          [:dd (-> energiatodistus :perustiedot :yritys :nimi h)]]
         [:div
-         [:dt (l :sahkoinen-allekirjoitus)]
+         [:dt (str (l :sahkoinen-allekirjoitus) ":")]
          [:dd
           (str (-> energiatodistus :laatija-fullname h) " - "
                (-> energiatodistus :allekirjoitusaika format-allekirjoitusaika))]]]]]}))
