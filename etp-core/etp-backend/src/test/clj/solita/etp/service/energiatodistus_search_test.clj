@@ -1657,7 +1657,9 @@
         energiatodistus-ids-without-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
         ;; Create 2 ET2026 with PPP
         energiatodistus-ids-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
-        _ (ppp-test-data/generate-and-insert! energiatodistus-ids-with-ppp laatija-whoami)]
+        _ (ppp-test-data/generate-and-insert! energiatodistus-ids-with-ppp laatija-whoami)
+        ;; Sign all ETs so they are visible to paakayttaja (tila-id = 2)
+        _ (sign-energiatodistukset! (map #(vec [laatija-id %]) (concat energiatodistus-ids-without-ppp energiatodistus-ids-with-ppp)))]
     ;; When: searching for perusparannuspassi.valid = true
     (let [results (search kayttaja-test-data/paakayttaja
                           [[["=" "perusparannuspassi.valid" true]]]
@@ -1680,7 +1682,9 @@
         energiatodistus-ids-without-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
         ;; Create 2 ET2026 with PPP
         energiatodistus-ids-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
-        _ (ppp-test-data/generate-and-insert! energiatodistus-ids-with-ppp laatija-whoami)]
+        _ (ppp-test-data/generate-and-insert! energiatodistus-ids-with-ppp laatija-whoami)
+        ;; Sign all ETs so they are visible to paakayttaja (tila-id = 2)
+        _ (sign-energiatodistukset! (map #(vec [laatija-id %]) (concat energiatodistus-ids-without-ppp energiatodistus-ids-with-ppp)))]
     ;; When: searching for perusparannuspassi.valid IS DISTINCT FROM true (= no valid PPP)
     (let [results (search kayttaja-test-data/paakayttaja
                           [[["is-distinct-from" "perusparannuspassi.valid" true]]]
@@ -1702,7 +1706,9 @@
         laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
         energiatodistus-ids (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
         ppp-ids (ppp-test-data/generate-and-insert! energiatodistus-ids laatija-whoami)
-        target-ppp-id (first ppp-ids)]
+        target-ppp-id (first ppp-ids)
+        ;; Sign all ETs so they are visible to paakayttaja (tila-id = 2)
+        _ (sign-energiatodistukset! (map #(vec [laatija-id %]) energiatodistus-ids))]
     ;; When: searching for perusparannuspassi.id = specific id
     (let [results (search kayttaja-test-data/paakayttaja
                           [[["=" "perusparannuspassi.id" target-ppp-id]]]
