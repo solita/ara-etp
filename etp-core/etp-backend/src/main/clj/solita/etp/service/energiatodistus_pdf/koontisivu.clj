@@ -190,11 +190,11 @@
           " "
           [:span
            {:id "koontisivu-tyokalu"}
-           (-> energiatodistus
-               :perustiedot
-               (get-in [(kieli {:fi :havainnointikayntityyppi-fi
-                                :sv :havainnointikayntityyppi-sv})])
-               str/lower-case
+           (-> (some-> energiatodistus
+                       :perustiedot
+                       (get-in [(kieli {:fi :havainnointikayntityyppi-fi
+                                        :sv :havainnointikayntityyppi-sv})])
+                       str/lower-case)
                (or (l :havainnointikayntityyppi-ei-asetettu))
                h)]]]
         [:div
