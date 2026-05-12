@@ -639,3 +639,295 @@
       (t/is (some? (get-in result [:e-luku-statistics 2018])))
       (t/is (some? (:common-averages result)))
       (t/is (some? (get-in result [:uusiutuvat-omavaraisenergiat-counts 2018]))))))
+
+
+;; Helper: create test data with explicit laatimisvaihe/uudisrakennus values
+;; across all three versio values (2013, 2018, 2026).
+;; Creates 12 records total:
+;;   2013: 4 records — 2 with uudisrakennus=true, 2 with uudisrakennus=false
+;;   2018: 4 records — 2 with laatimisvaihe=0 (uudis), 1 with laatimisvaihe=1 (uudis), 1 with laatimisvaihe=2 (oleva)
+;;   2026: 4 records — 1 with laatimisvaihe=0 (uudis), 1 with laatimisvaihe=2 (oleva), 1 with laatimisvaihe=3 (oleva), 1 with laatimisvaihe=4 (oleva)
+(defn laatimisvaihe-test-data-set []
+  (let [laatijat (laatija-test-data/generate-and-insert! 1)
+        laatija-id (-> laatijat keys sort first)
+        ;; Generate adds for each versio
+        adds-2013 (energiatodistus-test-data/generate-adds 4 2013 true)
+        adds-2018 (energiatodistus-test-data/generate-adds 4 2018 true)
+        adds-2026 (energiatodistus-test-data/generate-adds 4 2026 true)
+        ;; Set common fields for all
+        set-common (fn [add]
+                     (-> add
+                         (assoc-in [:perustiedot :postinumero] "00100")
+                         (assoc-in [:perustiedot :kayttotarkoitus] "YAT")
+                         (assoc-in [:perustiedot :valmistumisvuosi] 2020)
+                         (assoc-in [:lahtotiedot :lammitetty-nettoala] 100)))
+        adds-2013 (map set-common adds-2013)
+        adds-2018 (map set-common adds-2018)
+        adds-2026 (map set-common adds-2026)
+        all-adds (concat adds-2013 adds-2018 adds-2026)
+        ids (energiatodistus-test-data/insert! all-adds laatija-id)
+        ids-2013 (take 4 ids)
+        ids-2018 (take 4 (drop 4 ids))
+        ids-2026 (take 4 (drop 8 ids))]
+    ;; Sign all and set e_luku/e_luokka
+    (doseq [[id e-luokka] (map vector ids (cycle ["A" "B"]))]
+      (energiatodistus-test-data/sign! id laatija-id true)
+      (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET t$e_luku = 100 * id, t$e_luokka = ? WHERE id = ?"
+                              e-luokka id]))
+    ;; Set laatimisvaihe/uudisrakennus values:
+    ;; 2013: first 2 uudisrakennus=true, last 2 uudisrakennus=false
+    (doseq [id (take 2 ids-2013)]
+      (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$uudisrakennus = true WHERE id = ?" id]))
+    (doseq [id (drop 2 ids-2013)]
+      (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$uudisrakennus = false WHERE id = ?" id]))
+    ;; 2018: ids 0,1 -> laatimisvaihe 0 (uudis), id 2 -> laatimisvaihe 1 (uudis), id 3 -> laatimisvaihe 2 (oleva)
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 0 WHERE id = ?" (nth ids-2018 0)])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 0 WHERE id = ?" (nth ids-2018 1)])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 1 WHERE id = ?" (nth ids-2018 2)])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 2 WHERE id = ?" (nth ids-2018 3)])
+    ;; 2026: id 0 -> laatimisvaihe 0 (uudis), id 1 -> laatimisvaihe 2 (oleva), id 2 -> laatimisvaihe 3 (oleva), id 3 -> laatimisvaihe 4 (oleva)
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 0 WHERE id = ?" (nth ids-2026 0)])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 2 WHERE id = ?" (nth ids-2026 1)])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 3 WHERE id = ?" (nth ids-2026 2)])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 4 WHERE id = ?" (nth ids-2026 3)])
+    {:ids-2013 ids-2013
+     :ids-2018 ids-2018
+     :ids-2026 ids-2026
+     :laatija-id laatija-id}))
+
+(t/deftest find-counts-laatimisvaihe-uudisrakennus-test
+  ;; Given: mixed test data across 2013/2018/2026 with known laatimisvaihe values
+  (laatimisvaihe-test-data-set)
+  ;; When: find-counts is called with laatimisvaihe=1 (uudisrakennus)
+  (let [result (service/find-counts ts/*db* (assoc query-all :laatimisvaihe 1))]
+    ;; Then: only uudisrakennus records are counted per version
+    ;; 2013: 2 records with uudisrakennus=true (1 A, 1 B)
+    (t/is (= 2 (reduce + (vals (get-in result [2013 :e-luokka])))))
+    ;; 2018: 3 records with laatimisvaihe IN (0, 1) — ids 0,1 (laatimisvaihe=0) + id 2 (laatimisvaihe=1)
+    (t/is (= 3 (reduce + (vals (get-in result [2018 :e-luokka])))))
+    ;; 2026: 1 record with laatimisvaihe=0
+    (t/is (= 1 (reduce + (vals (get-in result [2026 :e-luokka])))))))
+
+(t/deftest find-counts-laatimisvaihe-olemassa-oleva-test
+  ;; Given: mixed test data across 2013/2018/2026 with known laatimisvaihe values
+  (laatimisvaihe-test-data-set)
+  ;; When: find-counts is called with laatimisvaihe=2 (olemassa oleva rakennus)
+  (let [result (service/find-counts ts/*db* (assoc query-all :laatimisvaihe 2))]
+    ;; Then: only olemassa oleva rakennus records are counted per version
+    ;; 2013: 2 records with uudisrakennus=false
+    (t/is (= 2 (reduce + (vals (get-in result [2013 :e-luokka])))))
+    ;; 2018: 1 record with laatimisvaihe=2
+    (t/is (= 1 (reduce + (vals (get-in result [2018 :e-luokka])))))
+    ;; 2026: 3 records with laatimisvaihe IN (2, 3, 4)
+    (t/is (= 3 (reduce + (vals (get-in result [2026 :e-luokka])))))))
+
+(t/deftest find-counts-laatimisvaihe-nil-returns-all-test
+  ;; Given: mixed test data
+  (laatimisvaihe-test-data-set)
+  ;; When: find-counts is called with laatimisvaihe=nil (kaikki)
+  (let [result (service/find-counts ts/*db* (assoc query-all :laatimisvaihe nil))]
+    ;; Then: all records are counted — same as no filter
+    (t/is (= 4 (reduce + (vals (get-in result [2013 :e-luokka])))))
+    (t/is (= 4 (reduce + (vals (get-in result [2018 :e-luokka])))))
+    (t/is (= 4 (reduce + (vals (get-in result [2026 :e-luokka])))))))
+
+(t/deftest find-e-luku-statistics-laatimisvaihe-uudisrakennus-2013-test
+  ;; Given: versio 2013 records with 2 uudisrakennus=true and 2 uudisrakennus=false
+  (let [{:keys [ids-2013]} (laatimisvaihe-test-data-set)
+        uudis-ids (take 2 ids-2013)]
+    ;; When: find-e-luku-statistics called with laatimisvaihe=1 for versio 2013
+    (let [result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 1) 2013)]
+      ;; Then: statistics computed only from uudisrakennus=true records
+      ;; e_luku = 100 * id for each, so avg should reflect only the uudis ids
+      (t/is (some? result))
+      (let [expected-avg (/ (reduce + (map #(* 100 %) uudis-ids)) 2)]
+        (t/is (= (bigdec expected-avg) (:avg result)))))))
+
+(t/deftest find-e-luku-statistics-laatimisvaihe-olemassa-oleva-2018-test
+  ;; Given: versio 2018 records — 1 with laatimisvaihe=2 (olemassa oleva)
+  (let [{:keys [ids-2018]} (laatimisvaihe-test-data-set)
+        oleva-id (nth ids-2018 3)]
+    ;; When: find-e-luku-statistics called with laatimisvaihe=2 for versio 2018
+    (let [result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 2) 2018)]
+      ;; Then: statistics computed only from laatimisvaihe=2 record
+      (t/is (some? result))
+      (t/is (= (bigdec (* 100 oleva-id)) (:avg result))))))
+
+(t/deftest find-e-luku-statistics-laatimisvaihe-uudisrakennus-2026-test
+  ;; Given: versio 2026 records — 1 with laatimisvaihe=0 (uudisrakennus)
+  (let [{:keys [ids-2026]} (laatimisvaihe-test-data-set)
+        uudis-id (nth ids-2026 0)]
+    ;; When: find-e-luku-statistics called with laatimisvaihe=1 for versio 2026
+    (let [result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 1) 2026)]
+      ;; Then: statistics computed only from laatimisvaihe IN (0,1) records
+      (t/is (some? result))
+      (t/is (= (bigdec (* 100 uudis-id)) (:avg result))))))
+
+(t/deftest find-e-luku-statistics-laatimisvaihe-olemassa-oleva-2026-includes-perusparannus-test
+  ;; Given: versio 2026 records — laatimisvaihe 2, 3, 4 are all "olemassa oleva"
+  (let [{:keys [ids-2026]} (laatimisvaihe-test-data-set)
+        oleva-ids (rest ids-2026)] ;; ids at positions 1,2,3 have laatimisvaihe 2,3,4
+    ;; When: find-e-luku-statistics called with laatimisvaihe=2 for versio 2026
+    (let [result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 2) 2026)]
+      ;; Then: statistics computed from laatimisvaihe IN (2, 3, 4) — all 3 records
+      (t/is (some? result))
+      (let [expected-avg (/ (reduce + (map #(* 100 %) oleva-ids)) 3)]
+        (t/is (= (bigdec expected-avg) (:avg result)))))))
+
+(t/deftest find-statistics-laatimisvaihe-uudisrakennus-full-test
+  ;; Given: mixed test data with known laatimisvaihe values
+  (laatimisvaihe-test-data-set)
+  ;; When: find-statistics called with laatimisvaihe=1 (uudisrakennus)
+  (let [result (service/find-statistics ts/*db* (assoc query-all :laatimisvaihe 1))]
+    ;; Then: counts reflect only uudisrakennus records
+    ;; 2013: 2 records — below min sample size (4), so nil
+    (t/is (nil? (get-in result [:counts 2013])))
+    ;; 2018: 3 records (laatimisvaihe 0, 0, 1) — below min sample size, so nil
+    (t/is (nil? (get-in result [:counts 2018])))
+    ;; 2026: 1 record (laatimisvaihe 0) — below min sample size, so nil
+    (t/is (nil? (get-in result [:counts 2026])))))
+
+(t/deftest find-statistics-laatimisvaihe-olemassa-oleva-full-test
+  ;; Given: mixed test data with known laatimisvaihe values
+  (laatimisvaihe-test-data-set)
+  ;; When: find-statistics called with laatimisvaihe=2 (olemassa oleva rakennus)
+  (let [result (service/find-statistics ts/*db* (assoc query-all :laatimisvaihe 2))]
+    ;; Then: counts reflect only olemassa oleva records
+    ;; 2013: 2 records — below min sample size, so nil
+    (t/is (nil? (get-in result [:counts 2013])))
+    ;; 2018: 1 record — below min sample size, so nil
+    (t/is (nil? (get-in result [:counts 2018])))
+    ;; 2026: 3 records — below min sample size, so nil
+    (t/is (nil? (get-in result [:counts 2026])))))
+
+(t/deftest find-statistics-laatimisvaihe-zero-treated-as-nil-test
+  ;; Given: mixed test data
+  (laatimisvaihe-test-data-set)
+  ;; When: find-statistics called with laatimisvaihe=0 (should be treated as "kaikki")
+  (let [result-zero (service/find-statistics ts/*db* (assoc query-all :laatimisvaihe 0))
+        result-nil  (service/find-statistics ts/*db* (assoc query-all :laatimisvaihe nil))]
+    ;; Then: results are identical — laatimisvaihe=0 is converted to nil in service layer
+    (t/is (= result-zero result-nil))))
+
+(t/deftest find-statistics-laatimisvaihe-combined-with-versio-test
+  ;; Given: mixed test data
+  (laatimisvaihe-test-data-set)
+  ;; When: find-statistics called with both laatimisvaihe=1 and versio=2018
+  (let [result (service/find-statistics ts/*db* (assoc query-all :laatimisvaihe 1 :versio 2018))]
+    ;; Then: only versio 2018 uudisrakennus records contribute
+    ;; 2018 has 3 uudisrakennus records (laatimisvaihe 0, 0, 1) — below min sample size so nil
+    (t/is (nil? (get-in result [:counts 2018])))
+    ;; Other versions should be nil (versio filter excludes them)
+    (t/is (nil? (get-in result [:counts 2013])))
+    (t/is (nil? (get-in result [:counts 2026])))))
+
+(t/deftest find-carbon-footprint-laatimisvaihe-uudisrakennus-test
+  ;; Given: versio 2026 records with ilmastoselvitys and known laatimisvaihe values
+  (let [hj-values [{:rakennus       {:rakennustuotteiden-valmistus 10.0M
+                                      :kuljetukset-tyomaavaihe      10.0M
+                                      :rakennustuotteiden-vaihdot   10.0M
+                                      :energiankaytto               10.0M
+                                      :purkuvaihe                   10.0M}
+                     :rakennuspaikka {:rakennustuotteiden-valmistus 1.0M
+                                      :kuljetukset-tyomaavaihe      1.0M
+                                      :rakennustuotteiden-vaihdot   1.0M
+                                      :energiankaytto               1.0M
+                                      :purkuvaihe                   1.0M}}]
+        ;; Create 5 records: 4 uudis (laatimisvaihe=0) + 1 oleva (laatimisvaihe=2)
+        {:keys [ids]} (carbonfootprint-test-data-set {:n 5 :hj-values hj-values})]
+    ;; Set laatimisvaihe: first 4 -> uudis(0), last 1 -> oleva(2)
+    (doseq [id (take 4 ids)]
+      (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 0 WHERE id = ?" id]))
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 2 WHERE id = ?" (last ids)])
+    ;; When: find-carbon-footprint called with laatimisvaihe=1 (uudisrakennus)
+    (let [result (service/find-carbon-footprint ts/*db* (assoc query-all :laatimisvaihe 1))]
+      ;; Then: only the 4 uudis records are included
+      ;; Each rakennus sum = 50, avg = 50; each rakennuspaikka sum = 5, avg = 5
+      (t/is (some? result))
+      (t/is (= 50.0M (:rakennus-avg result)))
+      (t/is (= 5.0M (:rakennuspaikka-avg result))))))
+
+(t/deftest find-carbon-footprint-laatimisvaihe-olemassa-oleva-includes-perusparannus-test
+  ;; Given: versio 2026 records with laatimisvaihe 2, 3, 4 (all olemassa oleva)
+  (let [hj-uudis {:rakennus       {:rakennustuotteiden-valmistus 100.0M
+                                    :kuljetukset-tyomaavaihe      100.0M
+                                    :rakennustuotteiden-vaihdot   100.0M
+                                    :energiankaytto               100.0M
+                                    :purkuvaihe                   100.0M}
+                   :rakennuspaikka {:rakennustuotteiden-valmistus 10.0M
+                                    :kuljetukset-tyomaavaihe      10.0M
+                                    :rakennustuotteiden-vaihdot   10.0M
+                                    :energiankaytto               10.0M
+                                    :purkuvaihe                   10.0M}}
+        hj-oleva {:rakennus       {:rakennustuotteiden-valmistus 10.0M
+                                    :kuljetukset-tyomaavaihe      10.0M
+                                    :rakennustuotteiden-vaihdot   10.0M
+                                    :energiankaytto               10.0M
+                                    :purkuvaihe                   10.0M}
+                   :rakennuspaikka {:rakennustuotteiden-valmistus 1.0M
+                                    :kuljetukset-tyomaavaihe      1.0M
+                                    :rakennustuotteiden-vaihdot   1.0M
+                                    :energiankaytto               1.0M
+                                    :purkuvaihe                   1.0M}}
+        ;; 5 records: 1 uudis(0) + 4 oleva(2,3,4,2)
+        {:keys [ids]} (carbonfootprint-test-data-set {:n 5 :hj-values [hj-uudis hj-oleva hj-oleva hj-oleva hj-oleva]})]
+    ;; Set laatimisvaihe
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 0 WHERE id = ?" (nth ids 0)])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 2 WHERE id = ?" (nth ids 1)])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 3 WHERE id = ?" (nth ids 2)])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 4 WHERE id = ?" (nth ids 3)])
+    (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 2 WHERE id = ?" (nth ids 4)])
+    ;; When: find-carbon-footprint called with laatimisvaihe=2 (olemassa oleva)
+    (let [result (service/find-carbon-footprint ts/*db* (assoc query-all :laatimisvaihe 2))]
+      ;; Then: 4 oleva records are included (laatimisvaihe 2, 3, 4, 2)
+      ;; Each rakennus sum = 50, avg = 50; each rakennuspaikka sum = 5, avg = 5
+      (t/is (some? result))
+      (t/is (= 50.0M (:rakennus-avg result)))
+      (t/is (= 5.0M (:rakennuspaikka-avg result))))))
+
+(t/deftest find-carbon-footprint-laatimisvaihe-insufficient-sample-test
+  ;; Given: 5 versio 2026 records, but only 3 have laatimisvaihe=0 (uudisrakennus)
+  (let [hj-values [{:rakennus       {:rakennustuotteiden-valmistus 10.0M
+                                      :kuljetukset-tyomaavaihe      10.0M
+                                      :rakennustuotteiden-vaihdot   10.0M
+                                      :energiankaytto               10.0M
+                                      :purkuvaihe                   10.0M}
+                     :rakennuspaikka {:rakennustuotteiden-valmistus 1.0M
+                                      :kuljetukset-tyomaavaihe      1.0M
+                                      :rakennustuotteiden-vaihdot   1.0M
+                                      :energiankaytto               1.0M
+                                      :purkuvaihe                   1.0M}}]
+        {:keys [ids]} (carbonfootprint-test-data-set {:n 5 :hj-values hj-values})]
+    ;; 3 uudis + 2 oleva
+    (doseq [id (take 3 ids)]
+      (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 0 WHERE id = ?" id]))
+    (doseq [id (drop 3 ids)]
+      (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET pt$laatimisvaihe = 2 WHERE id = ?" id]))
+    ;; When: find-carbon-footprint called with laatimisvaihe=1 (uudisrakennus)
+    (let [result (service/find-carbon-footprint ts/*db* (assoc query-all :laatimisvaihe 1))]
+      ;; Then: only 3 records match, below min-sample-size of 4 -> nil
+      (t/is (nil? result)))))
+
+
+(t/deftest find-counts-laatimisvaihe-nil-regression-test
+  ;; Given: existing test data (no explicit laatimisvaihe set)
+  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+    ;; When: find-counts called with laatimisvaihe=nil (default, no filter)
+    (let [result (service/find-counts ts/*db* (assoc query-all :laatimisvaihe nil))]
+      ;; Then: results identical to existing test — all records included
+      (t/is (= {2013 {:e-luokka {"A" 3 "B" 3}
+                      :lammitysmuoto {2 3 4 3}
+                      :ilmanvaihto {2 3 4 3}}
+                2018 {:e-luokka {"A" 3 "B" 3}
+                      :lammitysmuoto {2 3 4 3}
+                      :ilmanvaihto {2 3 4 3}}}
+               result)))))
+
+(t/deftest find-statistics-laatimisvaihe-nil-regression-test
+  ;; Given: existing test data (no explicit laatimisvaihe set)
+  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+    ;; When: find-statistics called with laatimisvaihe=nil
+    (let [result-with-nil (service/find-statistics ts/*db* (assoc query-all :laatimisvaihe nil))
+          result-without  (service/find-statistics ts/*db* query-all)]
+      ;; Then: results identical to calling without the parameter
+      (t/is (= result-with-nil result-without)))))

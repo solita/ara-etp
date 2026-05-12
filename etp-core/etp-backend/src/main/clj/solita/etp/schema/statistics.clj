@@ -7,6 +7,8 @@
   (st/optional-keys
    {:keyword schema/Str
     :kayttotarkoitus-id common-schema/Key
+    :versio schema/Int
+    :laatimisvaihe schema/Int
     :valmistumisvuosi-min common-schema/Year
     :valmistumisvuosi-max common-schema/Year
     :lammitetty-nettoala-min common-schema/NonNegative
