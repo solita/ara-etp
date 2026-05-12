@@ -1589,3 +1589,128 @@
     ;; Then: ET2018 certificates appear (default false)
     (t/is (every? #(contains? result-ids %) et2018-ids)
            "ET2018 certificates should appear with default false for lammonjako-lampotilajousto")))
+
+;; AE-2590: Search by yksinkertaistettu-paivitysmenettely
+(t/deftest search-by-yksinkertaistettu-paivitysmenettely-true-test
+  ;; Given: ET2026 certificates where one has yksinkertaistettu-paivitysmenettely = true
+  (let [{:keys [energiatodistukset]} (test-data-set-2026)
+        [id-true id-false] (sort (keys energiatodistukset))]
+    ;; Set one certificate's yksinkertaistettu-paivitysmenettely to true via direct SQL
+    (jdbc/execute! ts/*db*
+      ["UPDATE energiatodistus SET yksinkertaistettu_paivitysmenettely = true WHERE id = ?" id-true])
+    ;; When: searching for yksinkertaistettu-paivitysmenettely = true
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["="
+                             "energiatodistus.yksinkertaistettu-paivitysmenettely"
+                             true]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      ;; Then: only the certificate with true is returned
+      (t/is (contains? result-ids id-true)
+             "Certificate with yksinkertaistettu-paivitysmenettely true should be found")
+      (t/is (not (contains? result-ids id-false))
+             "Certificate with yksinkertaistettu-paivitysmenettely false should not be found"))))
+
+(t/deftest search-by-yksinkertaistettu-paivitysmenettely-false-test
+  ;; Given: ET2026 certificates where one has yksinkertaistettu-paivitysmenettely = true
+  (let [{:keys [energiatodistukset]} (test-data-set-2026)
+        [id-true id-false] (sort (keys energiatodistukset))]
+    (jdbc/execute! ts/*db*
+      ["UPDATE energiatodistus SET yksinkertaistettu_paivitysmenettely = true WHERE id = ?" id-true])
+    ;; When: searching for yksinkertaistettu-paivitysmenettely = false
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["="
+                             "energiatodistus.yksinkertaistettu-paivitysmenettely"
+                             false]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      ;; Then: only the certificate with false is returned
+      (t/is (contains? result-ids id-false)
+             "Certificate with yksinkertaistettu-paivitysmenettely false should be found")
+      (t/is (not (contains? result-ids id-true))
+             "Certificate with yksinkertaistettu-paivitysmenettely true should not be found"))))
+
+(t/deftest search-by-yksinkertaistettu-paivitysmenettely-false-includes-et2018-test
+  ;; Given: ET2018 and ET2026 certificates (ET2018 have default false)
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
+        et2018-ids (set (keys energiatodistukset-2018))
+        ;; When: searching = false
+        results (search kayttaja-test-data/paakayttaja
+                        [[["="
+                           "energiatodistus.yksinkertaistettu-paivitysmenettely"
+                           false]]]
+                        nil nil nil)
+        result-ids (set (map :id results))]
+    ;; Then: ET2018 certificates appear (default false)
+    (t/is (every? #(contains? result-ids %) et2018-ids)
+           "ET2018 certificates should appear with default false for yksinkertaistettu-paivitysmenettely")))
+
+;; AE-2590: Search by perusparannuspassi.valid filter (regression tests for existing behavior)
+(t/deftest search-by-ppp-valid-true-filter-test
+  ;; Given: ET2026 certificates, some with PPP and some without
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        ;; Create 2 ET2026 without PPP
+        energiatodistus-ids-without-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
+        ;; Create 2 ET2026 with PPP
+        energiatodistus-ids-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
+        _ (ppp-test-data/generate-and-insert! energiatodistus-ids-with-ppp laatija-whoami)]
+    ;; When: searching for perusparannuspassi.valid = true
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["=" "perusparannuspassi.valid" true]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      ;; Then: only certificates with valid PPP are returned
+      (t/is (every? #(contains? result-ids %) energiatodistus-ids-with-ppp)
+             "Certificates with PPP should be found")
+      (t/is (not-any? #(contains? result-ids %) energiatodistus-ids-without-ppp)
+             "Certificates without PPP should not be found"))))
+
+(t/deftest search-by-ppp-valid-is-distinct-from-filter-test
+  ;; Given: ET2026 certificates, some with PPP and some without
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        ;; Create 2 ET2026 without PPP
+        energiatodistus-ids-without-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
+        ;; Create 2 ET2026 with PPP
+        energiatodistus-ids-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
+        _ (ppp-test-data/generate-and-insert! energiatodistus-ids-with-ppp laatija-whoami)]
+    ;; When: searching for perusparannuspassi.valid IS DISTINCT FROM true (= no valid PPP)
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["is-distinct-from" "perusparannuspassi.valid" true]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      ;; Then: certificates WITHOUT PPP are returned
+      (t/is (every? #(contains? result-ids %) energiatodistus-ids-without-ppp)
+             "Certificates without PPP should be found")
+      ;; And: certificates WITH valid PPP are NOT returned
+      (t/is (not-any? #(contains? result-ids %) energiatodistus-ids-with-ppp)
+             "Certificates with valid PPP should not be found"))))
+
+(t/deftest search-by-ppp-id-filter-test
+  ;; Given: ET2026 certificates with known PPP ids
+  (let [laatija-id (->> (laatija-test-data/generate-adds 1)
+                        (map #(assoc-in % [:patevyystaso] 4))
+                        (laatija-test-data/insert!)
+                        first)
+        laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
+        energiatodistus-ids (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
+        ppp-ids (ppp-test-data/generate-and-insert! energiatodistus-ids laatija-whoami)
+        target-ppp-id (first ppp-ids)]
+    ;; When: searching for perusparannuspassi.id = specific id
+    (let [results (search kayttaja-test-data/paakayttaja
+                          [[["=" "perusparannuspassi.id" target-ppp-id]]]
+                          nil nil nil)
+          result-ids (set (map :id results))]
+      ;; Then: exactly one certificate is returned
+      (t/is (= 1 (count results))
+             "Exactly one certificate should match the specific PPP id")
+      ;; And: the result's perusparannuspassi-id matches
+      (t/is (= target-ppp-id (:perusparannuspassi-id (first results)))
+             "The returned certificate should have the matching PPP id"))))
