@@ -573,8 +573,8 @@ describe('EtHakuSchema', () => {
         expect(filteredSchema).not.toHaveProperty(field);
       });
       // And: other fields are still present
-      expect(filteredSchema).toHaveProperty('energiatodistus.id');
-      expect(filteredSchema).toHaveProperty('energiatodistus.versio');
+      expect(filteredSchema).toHaveProperty(['energiatodistus.id']);
+      expect(filteredSchema).toHaveProperty(['energiatodistus.versio']);
     });
   });
 
