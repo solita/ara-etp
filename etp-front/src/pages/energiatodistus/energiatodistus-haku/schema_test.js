@@ -532,7 +532,9 @@ describe('EtHakuSchema', () => {
         false
       );
       // Then: uses is-distinct-from to include NULL (no PPP record) and false (deleted PPP)
-      expect(result).toEqual([['is-distinct-from', 'perusparannuspassi.valid', true]]);
+      expect(result).toEqual([
+        ['is-distinct-from', 'perusparannuspassi.valid', true]
+      ]);
     });
   });
 

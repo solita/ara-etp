@@ -35,7 +35,11 @@
   let overlay = true;
   let schema = R.when(
     R.always(R.not(isEtp2026Enabled(config))),
-    R.omit(['perusparannuspassi.id', 'perusparannuspassi.valid', 'energiatodistus.yksinkertaistettu-paivitysmenettely'])
+    R.omit([
+      'perusparannuspassi.id',
+      'perusparannuspassi.valid',
+      'energiatodistus.yksinkertaistettu-paivitysmenettely'
+    ])
   )(
     Kayttajat.isPaakayttajaOrLaskuttaja(whoami)
       ? EtHakuSchema.paakayttajaSchema
