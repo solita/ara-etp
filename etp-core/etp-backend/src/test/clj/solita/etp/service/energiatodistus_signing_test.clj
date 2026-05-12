@@ -15,6 +15,7 @@
     [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
     [solita.etp.test-system :as ts])
   (:import (java.io InputStream)
+           (java.time Instant ZoneId)
            (org.apache.pdfbox.pdmodel PDDocument)))
 
 (t/use-fixtures :each ts/fixture)
@@ -307,3 +308,231 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
           et-id (generate-and-insert-with-laatimisvaihe! 2026 4 laatija-id)]
       (t/is (= (energiatodistus-service/start-energiatodistus-signing! db whoami et-id)
                :ok)))))
+
+;; ============================================================================
+;; AE-2782: Validity period PDF generation bug — new tests
+;; ============================================================================
+
+(defn- create-signed-energiatodistus!
+  "Creates and signs an energiatodistus, returns its id."
+  [versio laatija-id]
+  (let [et-add (energiatodistus-test-data/generate-add versio true)
+        [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)]
+    (energiatodistus-test-data/sign! et-id laatija-id true)
+    et-id))
+
+(defn- create-simplified-update-draft!
+  "Creates a draft energiatodistus that replaces the given korvattava-id
+   with yksinkertaistettu-paivitysmenettely = true."
+  [versio laatija-id korvattava-id]
+  (let [et-add (-> (energiatodistus-test-data/generate-add versio true)
+                   (assoc :korvattu-energiatodistus-id korvattava-id
+                          :yksinkertaistettu-paivitysmenettely true))
+        [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)]
+    et-id))
+
+(defn- set-custom-validity!
+  "Sets a custom voimassaolo-paattymisaika on an energiatodistus via direct DB update."
+  [et-id custom-validity]
+  (jdbc/execute! ts/*db*
+                 ["UPDATE energiatodistus SET voimassaolo_paattymisaika = ? WHERE id = ?"
+                  (java.sql.Timestamp/from custom-validity) et-id]))
+
+(defn- five-years-from-now []
+  (-> (Instant/now)
+      (.atZone (ZoneId/of "Europe/Helsinki"))
+      (.plusYears 5)
+      .toInstant))
+
+(t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} pdf-digest-uses-inherited-validity-for-simplified-update-test
+  (t/testing "given a simplified update energiatodistus,
+              when find-energiatodistus-digest is called,
+              then the voimassaolo-paattymisaika injected into the PDF equals the replaced ET's validity"
+    (let [;; Given: a signed ET A with a custom 5-year validity
+          laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          whoami {:id laatija-id}
+          korvattava-id (create-signed-energiatodistus! 2018 laatija-id)
+          custom-validity (five-years-from-now)
+          _ (set-custom-validity! korvattava-id custom-validity)
+          korvattava-validity (:voimassaolo-paattymisaika
+                                (energiatodistus-service/find-energiatodistus ts/*db* korvattava-id))
+          ;; And: a draft ET B replacing A with yksinkertaistettu=true
+          korvaava-id (create-simplified-update-draft! 2018 laatija-id korvattava-id)
+          ;; Capture the voimassaolo-paattymisaika passed to PDF generation
+          captured-voimassaolo (atom nil)
+          original-mock energiatodistus-test-data/generate-pdf-as-file-mock
+          capturing-mock (fn [energiatodistus & args]
+                           (reset! captured-voimassaolo (:voimassaolo-paattymisaika energiatodistus))
+                           (apply original-mock energiatodistus args))
+          now (time/now)]
+      ;; When: start signing and generate the digest
+      (energiatodistus-service/start-energiatodistus-signing! db whoami korvaava-id)
+      (with-bindings {#'pdf-service/generate-et-2013-2018-pdf-as-file capturing-mock}
+        (service/find-energiatodistus-digest db whoami ts/*aws-s3-client*
+                                             korvaava-id "fi" "allekirjoitus-id" now))
+      ;; Then: the validity injected into the PDF should be the inherited one
+      (t/is (some? @captured-voimassaolo)
+            "voimassaolo-paattymisaika should have been captured from PDF generation")
+      (t/is (= korvattava-validity @captured-voimassaolo)
+            "PDF should use inherited validity from replaced ET, not fresh 10-year"))))
+
+(t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} pdf-digest-uses-fresh-validity-for-normal-procedure-test
+  (t/testing "given a normal procedure energiatodistus (yksinkertaistettu=false),
+              when find-energiatodistus-digest is called,
+              then the voimassaolo-paattymisaika injected is approximately now + 1 day + 10 years"
+    (let [;; Given: a normal draft ET
+          laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          whoami {:id laatija-id}
+          et-add (energiatodistus-test-data/generate-add 2018 true)
+          [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)
+          captured-voimassaolo (atom nil)
+          original-mock energiatodistus-test-data/generate-pdf-as-file-mock
+          capturing-mock (fn [energiatodistus & args]
+                           (reset! captured-voimassaolo (:voimassaolo-paattymisaika energiatodistus))
+                           (apply original-mock energiatodistus args))
+          now (time/now)
+          expected-min (-> now
+                           (.atZone (ZoneId/of "Europe/Helsinki"))
+                           .toLocalDate
+                           (.plusDays 1)
+                           (.atStartOfDay (ZoneId/of "Europe/Helsinki"))
+                           (.plusYears 10)
+                           .toInstant)]
+      ;; When: start signing and generate the digest
+      (energiatodistus-service/start-energiatodistus-signing! db whoami et-id)
+      (with-bindings {#'pdf-service/generate-et-2013-2018-pdf-as-file capturing-mock}
+        (service/find-energiatodistus-digest db whoami ts/*aws-s3-client*
+                                             et-id "fi" "allekirjoitus-id" now))
+      ;; Then: validity should be approximately now + 10 years
+      (t/is (some? @captured-voimassaolo)
+            "voimassaolo-paattymisaika should have been captured")
+      (t/is (= expected-min @captured-voimassaolo)
+            "PDF should use fresh 10-year validity for normal procedure"))))
+
+(t/deftest ^{:broken-on-windows-test "Couldn't delete .. signable.pdf"} full-signing-pdf-matches-db-simplified-update-test
+  (t/testing "given a simplified update energiatodistus with custom 5-year replaced validity,
+              when the full signing flow completes,
+              then the voimassaolo-paattymisaika in the PDF matches the one stored in the database"
+    (let [;; Given: a signed ET A with custom 5-year validity
+          laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          whoami {:id laatija-id}
+          korvattava-id (create-signed-energiatodistus! 2018 laatija-id)
+          custom-validity (five-years-from-now)
+          _ (set-custom-validity! korvattava-id custom-validity)
+          korvattava-validity (:voimassaolo-paattymisaika
+                                (energiatodistus-service/find-energiatodistus ts/*db* korvattava-id))
+          ;; And: a draft ET B replacing A with yksinkertaistettu=true
+          korvaava-id (create-simplified-update-draft! 2018 laatija-id korvattava-id)
+          ;; Capture the voimassaolo-paattymisaika passed to PDF generation
+          captured-pdf-voimassaolo (atom nil)
+          original-mock energiatodistus-test-data/generate-pdf-as-file-mock
+          capturing-mock (fn [energiatodistus & args]
+                           (reset! captured-pdf-voimassaolo (:voimassaolo-paattymisaika energiatodistus))
+                           (apply original-mock energiatodistus args))
+          now (time/now)]
+      ;; When: perform the full signing flow step by step
+      (energiatodistus-service/start-energiatodistus-signing! db whoami korvaava-id)
+      ;; Digest step — capture what voimassaolo is injected into the PDF
+      (with-bindings {#'pdf-service/generate-et-2013-2018-pdf-as-file capturing-mock}
+        (service/find-energiatodistus-digest db whoami ts/*aws-s3-client*
+                                             korvaava-id "fi" "allekirjoitus-id" now))
+      ;; End signing — finalize the DB record
+      (energiatodistus-service/end-energiatodistus-signing! db ts/*aws-s3-client* whoami korvaava-id
+                                                             {:skip-pdf-signed-assert? true
+                                                              :allekirjoitusaika       now})
+      ;; Then: the value injected into the PDF must equal the value stored in the DB
+      (let [korvaava-et (energiatodistus-service/find-energiatodistus ts/*db* korvaava-id)
+            db-voimassaolo (:voimassaolo-paattymisaika korvaava-et)]
+        (t/is (some? @captured-pdf-voimassaolo)
+              "voimassaolo-paattymisaika should have been captured from PDF generation")
+        (t/is (some? db-voimassaolo)
+              "voimassaolo-paattymisaika should be stored in database after signing")
+        (t/is (= @captured-pdf-voimassaolo db-voimassaolo)
+              "PDF voimassaolo-paattymisaika must equal database voimassaolo-paattymisaika (core invariant)")))))
+
+(t/deftest early-validation-expired-replaced-at-digest-time-test
+  (t/testing "given a simplified update where the replaced ET has expired,
+              when find-energiatodistus-digest is called,
+              then an error is thrown at digest time (not only at finalization)"
+    (let [;; Given: a signed ET A with expired validity
+          laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          whoami {:id laatija-id}
+          korvattava-id (create-signed-energiatodistus! 2018 laatija-id)
+          ;; Set validity to past
+          _ (jdbc/execute! (ts/db-user ts/*admin-db* -1)
+                           ["UPDATE energiatodistus SET voimassaolo_paattymisaika = now() - interval '1 day' WHERE id = ?"
+                            korvattava-id])
+          ;; And: a draft B replacing A with yksinkertaistettu=true
+          korvaava-id (create-simplified-update-draft! 2018 laatija-id korvattava-id)
+          now (time/now)]
+      ;; When: start signing and attempt digest generation
+      (energiatodistus-service/start-energiatodistus-signing! db whoami korvaava-id)
+      ;; Then: an error should be thrown at digest time
+      (let [result (etp-test/catch-ex-data
+                     #(with-bindings {#'pdf-service/generate-et-2013-2018-pdf-as-file
+                                      energiatodistus-test-data/generate-pdf-as-file-mock}
+                        (service/find-energiatodistus-digest db whoami ts/*aws-s3-client*
+                                                             korvaava-id "fi" "allekirjoitus-id" now)))]
+        (t/is (= :invalid-replace (:type result))
+              "Expired replaced ET should cause error at digest time, not only at finalization")))))
+
+(t/deftest early-validation-nil-korvattu-id-at-digest-time-test
+  (t/testing "given yksinkertaistettu-paivitysmenettely=true but korvattu-energiatodistus-id=nil,
+              when find-energiatodistus-digest is called,
+              then an error is thrown at digest time"
+    (let [;; Given: a draft ET with yksinkertaistettu=true but no korvattu-id
+          laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          whoami {:id laatija-id}
+          et-add (-> (energiatodistus-test-data/generate-add 2018 true)
+                     (assoc :yksinkertaistettu-paivitysmenettely true
+                            :korvattu-energiatodistus-id nil))
+          [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)
+          now (time/now)]
+      ;; When: start signing and attempt digest generation
+      (energiatodistus-service/start-energiatodistus-signing! db whoami et-id)
+      ;; Then: error at digest time
+      (let [result (etp-test/catch-ex-data
+                     #(with-bindings {#'pdf-service/generate-et-2013-2018-pdf-as-file
+                                      energiatodistus-test-data/generate-pdf-as-file-mock}
+                        (service/find-energiatodistus-digest db whoami ts/*aws-s3-client*
+                                                             et-id "fi" "allekirjoitus-id" now)))]
+        (t/is (= :invalid-replace (:type result))
+              "Missing korvattu-energiatodistus-id with yksinkertaistettu=true should fail at digest time")))))
+
+(t/deftest early-validation-never-signed-replaced-at-digest-time-test
+  (t/testing "given a simplified update where the replaced ET was never signed (no voimassaolo-paattymisaika),
+              when find-energiatodistus-digest is called,
+              then an error is thrown at digest time"
+    (let [;; Given: an unsigned (draft) ET A — manually set up to bypass normal constraints
+          laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          db (ts/db-user laatija-id)
+          whoami {:id laatija-id}
+          ;; Create and sign A, then clear its voimassaolo to simulate "never signed" scenario
+          korvattava-id (create-signed-energiatodistus! 2018 laatija-id)
+          _ (jdbc/execute! (ts/db-user ts/*admin-db* -1)
+                           ["UPDATE energiatodistus SET voimassaolo_paattymisaika = NULL WHERE id = ?"
+                            korvattava-id])
+          ;; And: a draft B replacing A with yksinkertaistettu=true
+          korvaava-id (create-simplified-update-draft! 2018 laatija-id korvattava-id)
+          now (time/now)]
+      ;; When: start signing and attempt digest generation
+      (energiatodistus-service/start-energiatodistus-signing! db whoami korvaava-id)
+      ;; Then: error at digest time
+      (let [result (etp-test/catch-ex-data
+                     #(with-bindings {#'pdf-service/generate-et-2013-2018-pdf-as-file
+                                      energiatodistus-test-data/generate-pdf-as-file-mock}
+                        (service/find-energiatodistus-digest db whoami ts/*aws-s3-client*
+                                                             korvaava-id "fi" "allekirjoitus-id" now)))]
+        (t/is (= :invalid-replace (:type result))
+              "Replaced ET without voimassaolo-paattymisaika should fail at digest time")))))
