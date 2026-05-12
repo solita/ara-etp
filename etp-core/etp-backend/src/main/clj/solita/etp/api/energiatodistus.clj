@@ -226,7 +226,8 @@
                              energiatodistus-schema/EnergiatodistusSave2026
                              rooli-service/ppp-laatija?)
         (pdf-route 2026)
-        (html-route-2026)
+        (when-not (= config/environment-alias "prod")
+          (html-route-2026))
         crud-api/discarded
         liite-api/routes
         signing-api/routes]]]

@@ -3,6 +3,7 @@
     [ring.util.response :as r]
     [schema.core :as schema]
     [solita.etp.api.response :as api-response]
+    [solita.etp.config :as config]
     [solita.etp.service.rooli :as rooli-service]
     [solita.etp.schema.common :as common-schema]
     [solita.etp.schema.perusparannuspassi :as ppp-schema]
@@ -72,7 +73,8 @@
                               {:type :invalid-value :response 400}]))}}]
     ["/:id"
      (pdf-route)
-     (html-route)
+     (when-not (= config/environment-alias "prod")
+       (html-route))
      [""
       {:get    {:summary    "Hae perusparannuspassi tunnisteella (id)"
                 :parameters {:path {:id common-schema/Key}}
