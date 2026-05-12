@@ -829,29 +829,24 @@
       (find-existing-pdf aws-s3-client id kieli)
       (generate-et-pdf-as-input-stream db whoami kieli complete-energiatodistus))))
 
-(defn find-energiatodistus-html [db aws-s3-client whoami id kieli versio]
-  (when-let [{:keys [allekirjoitusaika] :as complete-energiatodistus}
-             (-> (complete-energiatodistus-service/find-complete-energiatodistus db whoami id)
-                 (#(when (or (= (-> % :perustiedot :kieli) 2)
-                             (contains? (-> % :perustiedot :kieli energiatodistus-service/language-id->codes set) kieli)
-                             (= (-> % :perustiedot :kieli) nil)) %)))]
-    (when (= 2026 versio)
-      (let [kieli-keyword (keyword kieli)
-            luokittelut {:alakayttotarkoitukset              (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
-                         :kayttotarkoitukset                 (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
-                         :laatimisvaiheet                    (luokittelu-service/find-laatimisvaiheet db)
-                         :mahdollisuus-liittya               (luokittelu-service/find-mahdollisuus-liittya db)
-                         :uusiutuva-energia                  (luokittelu-service/find-uusiutuva-energia db)
-                         :lammitysmuodot                     (luokittelu-service/find-lammitysmuodot db)
-                         :ilmanvaihtotyypit                  (luokittelu-service/find-ilmanvaihtotyypit db)
-                         :toimenpide-ehdotukset              (toimenpide-ehdotus-service/find-all db)
-                         :ilmastoselvitys-laadintaperusteet  (luokittelu-service/find-ilmastoselvitys-laadintaperusteet db)}
-            {:keys [alakayttotarkoitukset kayttotarkoitukset laatimisvaiheet
-                    ilmastoselvitys-laadintaperusteet]} luokittelut]
-        (etp2026-pdf/generate-energiatodistus-html
-          {:energiatodistus                    complete-energiatodistus
-           :alakayttotarkoitukset              alakayttotarkoitukset
-           :laatimisvaiheet                    laatimisvaiheet
-           :kieli                              kieli-keyword
-           :kayttotarkoitukset                 kayttotarkoitukset
-           :ilmastoselvitys-laadintaperusteet  ilmastoselvitys-laadintaperusteet})))))
+(defn find-energiatodistus-2026-html [db whoami id kieli]
+  (when-let [complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db whoami id)]
+    (let [kieli-keyword (keyword kieli)
+          luokittelut {:alakayttotarkoitukset              (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
+                       :kayttotarkoitukset                 (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
+                       :laatimisvaiheet                    (luokittelu-service/find-laatimisvaiheet db)
+                       :mahdollisuus-liittya               (luokittelu-service/find-mahdollisuus-liittya db)
+                       :uusiutuva-energia                  (luokittelu-service/find-uusiutuva-energia db)
+                       :lammitysmuodot                     (luokittelu-service/find-lammitysmuodot db)
+                       :ilmanvaihtotyypit                  (luokittelu-service/find-ilmanvaihtotyypit db)
+                       :toimenpide-ehdotukset              (toimenpide-ehdotus-service/find-all db)
+                       :ilmastoselvitys-laadintaperusteet  (luokittelu-service/find-ilmastoselvitys-laadintaperusteet db)}
+          {:keys [alakayttotarkoitukset kayttotarkoitukset laatimisvaiheet
+                  ilmastoselvitys-laadintaperusteet]} luokittelut]
+      (etp2026-pdf/generate-energiatodistus-html
+        {:energiatodistus                    complete-energiatodistus
+         :alakayttotarkoitukset              alakayttotarkoitukset
+         :laatimisvaiheet                    laatimisvaiheet
+         :kieli                              kieli-keyword
+         :kayttotarkoitukset                 kayttotarkoitukset
+         :ilmastoselvitys-laadintaperusteet  ilmastoselvitys-laadintaperusteet}))))

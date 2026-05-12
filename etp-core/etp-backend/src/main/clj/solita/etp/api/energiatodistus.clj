@@ -66,7 +66,7 @@
                            (str "Energiatodistus " id " does not exists."))
                           (r/not-found "File not found")))}}])
 
-(defn html-route [versio]
+(defn html-route-2026 []
   ["/html/:kieli/:filename"
    {:get {:summary    "Lataa energiatodistus HTML-tiedostona"
           :access     (some-fn rooli-service/laatija? rooli-service/paakayttaja?)
@@ -75,15 +75,13 @@
                               :filename schema/Str}}
           :responses  {200 {:body nil}
                        404 {:body schema/Str}}
-          :handler    (fn [{{{:keys [id kieli filename]} :path} :parameters :keys [db aws-s3-client whoami]}]
+          :handler    (fn [{{{:keys [id kieli filename]} :path} :parameters :keys [db whoami]}]
                         (if (valid-html-filename? filename id kieli)
                           (api-response/html-response
-                           (energiatodistus-pdf-service/find-energiatodistus-html db
-                                                                                  aws-s3-client
-                                                                                  whoami
-                                                                                  id
-                                                                                  kieli
-                                                                                  versio)
+                           (energiatodistus-pdf-service/find-energiatodistus-2026-html db
+                                                                                       whoami
+                                                                                       id
+                                                                                       kieli)
                            (str "Energiatodistus " id " does not exists."))
                           (r/not-found "File not found")))}}])
 
@@ -102,7 +100,7 @@
           :access     rooli-service/energiatodistus-reader?
           :handler    (fn [{{:keys [query]} :parameters :keys [db whoami]}]
                         (api-response/response-with-exceptions
-                         #(energiatodistus-search-service/search
+                          #(energiatodistus-search-service/search
                            db
                            whoami
                            (update query :where parse-where)
@@ -228,7 +226,7 @@
                              energiatodistus-schema/EnergiatodistusSave2026
                              rooli-service/ppp-laatija?)
         (pdf-route 2026)
-        (html-route 2026)
+        (html-route-2026)
         crud-api/discarded
         liite-api/routes
         signing-api/routes]]]
