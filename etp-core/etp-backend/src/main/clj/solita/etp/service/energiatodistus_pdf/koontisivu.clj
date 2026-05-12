@@ -1,19 +1,35 @@
 (ns solita.etp.service.energiatodistus-pdf.koontisivu
   (:require
+    [clojure.string :as str]
+    [clojure.tools.logging :as log]
     [hiccup.core :refer [h]]
     [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc])
   (:import
-    (java.time Instant ZoneId)
+    (java.time Instant LocalDate ZoneId)
     (java.time.format DateTimeFormatter)))
 
 (def ^:private datetime-formatter
-  (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
+  (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy, HH:mm")
              (ZoneId/of "Europe/Helsinki")))
+
+(def ^:private date-formatter
+  (DateTimeFormatter/ofPattern "dd.MM.yyyy"))
 
 (defn- fmt
   "Format number with specified decimal places. Returns empty string for nil."
   [value decimals] (or (formats/format-number value decimals false) ""))
+
+(defn- fullname->firstname-last
+  "Converts 'Sukunimi, Etunimi' to 'Etunimi Sukunimi'.
+  Logs a warning (with the id) and returns the original if the format is unexpected."
+  [fullname id]
+  (let [parts (str/split fullname #", " 2)]
+    (if (and (= (count parts) 2)
+             (not (str/includes? (second parts) ",")))
+      (str (second parts) " " (first parts))
+      (do (log/warn "Unexpected format of laatija name for id:" id)
+          fullname))))
 
 (defn format-allekirjoitusaika
   "Format an instant into the desired format in Europe/Helsinki time.
@@ -21,6 +37,14 @@
   [^Instant time]
   (if time
     (.format datetime-formatter time)
+    ""))
+
+(defn- format-havainnointikaynti-date
+  "Format a LocalDate into dd.MM.yyyy format.
+  Returns empty string for nil."
+  [^LocalDate date]
+  (if date
+    (.format date-formatter date)
     ""))
 
 (defn koontisivu [{:keys [energiatodistus kieli]}]
@@ -51,19 +75,23 @@
                    {false :ei true :kylla}
                    l)]]]]
        [:h2 (l :lammitysjarjestelma-kuvaus)]
-       [:dl {:class "table-description-list"}
+
+       [:dl {:class "table-description-list koontisivu-lammitys-compact"}
         [:div
-         [:dt (l :lammitysjarjestelma)]
-         [:dd (-> energiatodistus
-                  (get-in [:lahtotiedot :lammitys (kieli {:fi :lammitysmuoto-label-fi
-                                                          :sv :lammitysmuoto-label-sv})])
-                  h)]]
+         [:dt (str (l :lammitysjarjestelma) ":")]
+         [:dd (->> (-> energiatodistus
+                       (get-in [:lahtotiedot :lammitys (kieli {:fi :lammitysmuoto-label-fi
+                                                               :sv :lammitysmuoto-label-sv})])
+                       (str/split #", "))
+                   (map (fn [lammitysjarjestelma-label]
+                          [:div lammitysjarjestelma-label])))]]
         [:div
-         [:dt (l :lammonjako)]
+         [:dt (str (l :lammonjako) ":")]
          [:dd (-> energiatodistus
                   (get-in [:lahtotiedot :lammitys (kieli {:fi :lammonjako-label-fi
                                                           :sv :lammonjako-label-sv})])
                   h)]]]
+
        [:dl {:id    "koontisivu-lammonjakojarjestelma"
              :class "table-description-list"}
         [:div
@@ -73,22 +101,25 @@
                   {false :ei true :kylla}
                   l)]]]
        [:h2 (l :ilmanvaihtojärjestelmän-kuvaus)]
-       [:dl {:class "table-description-list"}
+
+       [:dl {:class "table-description-list koontisivu-lammitys-compact"}
         [:div
-         [:dt (l :ilmanvaihtojärjestelmä)]
+         [:dt (str (l :ilmanvaihtojärjestelmä) ":")]
          [:dd (-> energiatodistus
                   (get-in [:lahtotiedot :ilmanvaihto (kieli {:fi :label-fi
                                                              :sv :label-sv})])
                   h)]]]
+
        [:h2 (l :toteutunut-ostoenergy-ja-uusiutuva)]
-       [:dl
+       [:dl {:id "koontisivu-tiedot-ovat-vuodelta-dl"}
         [:dt (l :tiedot-ovat-vuodelta)]
         [:dd (-> energiatodistus :toteutunut-ostoenergiankulutus :tietojen-alkuperavuosi (fmt 0))]]
-       [:p (-> energiatodistus
-               :toteutunut-ostoenergiankulutus
-               (get-in [(kieli {:fi :lisatietoja-fi
-                               :sv :lisatietoja-sv})])
-               h)]
+       [:div {:id "koontisivu-toteutunut-ostoenergia-lisatietoja"}
+        (-> energiatodistus
+            :toteutunut-ostoenergiankulutus
+            (get-in [(kieli {:fi :lisatietoja-fi
+                             :sv :lisatietoja-sv})])
+            h)]
        [:table {:class "common-table"}
         [:thead
          [:tr
@@ -148,28 +179,39 @@
 
       [:div {:class "page-section"
              :id    "koontisivu-havaintokaynti-tyokalu"}
-       [:dl
+       [:dl {:class "table-description-list"
+             :id    "koontisivu-havaintokaynti-tyokalu-dl"}
         [:div
          [:dt (l :havainnointikaynti-ajankohta)]
-         [:dd (str (-> energiatodistus :perustiedot :havainnointikaynti h)
-                   " "
-                   (-> energiatodistus
+         [:dd
+          [:span
+           {:id "koontisivu-havaintokaynti-ajankohta"}
+           (-> energiatodistus :perustiedot :havainnointikaynti format-havainnointikaynti-date)]
+          " "
+          [:span
+           {:id "koontisivu-tyokalu"}
+           (-> (some-> energiatodistus
                        :perustiedot
                        (get-in [(kieli {:fi :havainnointikayntityyppi-fi
                                         :sv :havainnointikayntityyppi-sv})])
-                       (or (l :havainnointikayntityyppi-ei-asetettu))
-                       h))]]
+                       str/lower-case)
+               (or (l :havainnointikayntityyppi-ei-asetettu))
+               h)]]]
         [:div
          [:dt (l :laskentatyokalu-nimi-versio)]
          [:dd (-> energiatodistus :tulokset :laskentatyokalu h)]]]]
       [:div {:class "page-section"
              :id    "koontisivu-laatijan-tiedot"}
-       [:dl
+       [:dl {:class "table-description-list"
+             :id    "koontisivu-laatijan-tiedot-dl"}
         [:div
-         [:dt (l :yritys)]
+         [:dt (str (l :yritys) ":")]
          [:dd (-> energiatodistus :perustiedot :yritys :nimi h)]]
         [:div
-         [:dt (l :sahkoinen-allekirjoitus)]
+         [:dt (str (l :sahkoinen-allekirjoitus) ":")]
          [:dd
-          (str (-> energiatodistus :laatija-fullname h) " - "
+          (str (-> energiatodistus :laatija-fullname
+                   (fullname->firstname-last (-> energiatodistus :laatija-id))
+                   h)
+               ", "
                (-> energiatodistus :allekirjoitusaika format-allekirjoitusaika))]]]]]}))

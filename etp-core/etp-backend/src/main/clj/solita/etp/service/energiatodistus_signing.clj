@@ -34,6 +34,18 @@
 (def timezone (ZoneId/of "Europe/Helsinki"))
 (def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
                                timezone))
+
+(defn- allekirjoitusaika->voimassaolo-paattymisaika
+  "Clojure equivalent of the voimassaolo_paattymisaika SQL expression in
+   solita/etp/db/energiatodistus.sql (update-energiatodistus-allekirjoitettu!)"
+  [^Instant allekirjoitusaika]
+  (-> allekirjoitusaika
+      (.atZone timezone)
+      .toLocalDate
+      (.plusDays 1)
+      (.atStartOfDay timezone)
+      (.plusYears 10)
+      .toInstant))
 (defn- transparent-png
   [path width height]
   (let [img (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)]
@@ -98,7 +110,9 @@
              ^String pdf-path (energiatodistus-pdf-service/generate-et-pdf-as-file
                                 db
                                 whoami
-                                (assoc complete-energiatodistus :allekirjoitusaika now)
+                                (assoc complete-energiatodistus
+                                       :allekirjoitusaika now
+                                       :voimassaolo-paattymisaika (allekirjoitusaika->voimassaolo-paattymisaika now))
                                 language
                                 draft?
                                 laatija-allekirjoitus-id)

@@ -828,3 +828,25 @@
     (if allekirjoitusaika
       (find-existing-pdf aws-s3-client id kieli)
       (generate-et-pdf-as-input-stream db whoami kieli complete-energiatodistus))))
+
+(defn find-energiatodistus-2026-html [db whoami id kieli]
+  (when-let [complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db whoami id)]
+    (let [kieli-keyword (keyword kieli)
+          luokittelut {:alakayttotarkoitukset              (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
+                       :kayttotarkoitukset                 (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
+                       :laatimisvaiheet                    (luokittelu-service/find-laatimisvaiheet db)
+                       :mahdollisuus-liittya               (luokittelu-service/find-mahdollisuus-liittya db)
+                       :uusiutuva-energia                  (luokittelu-service/find-uusiutuva-energia db)
+                       :lammitysmuodot                     (luokittelu-service/find-lammitysmuodot db)
+                       :ilmanvaihtotyypit                  (luokittelu-service/find-ilmanvaihtotyypit db)
+                       :toimenpide-ehdotukset              (toimenpide-ehdotus-service/find-all db)
+                       :ilmastoselvitys-laadintaperusteet  (luokittelu-service/find-ilmastoselvitys-laadintaperusteet db)}
+          {:keys [alakayttotarkoitukset kayttotarkoitukset laatimisvaiheet
+                  ilmastoselvitys-laadintaperusteet]} luokittelut]
+      (etp2026-pdf/generate-energiatodistus-html
+        {:energiatodistus                    complete-energiatodistus
+         :alakayttotarkoitukset              alakayttotarkoitukset
+         :laatimisvaiheet                    laatimisvaiheet
+         :kieli                              kieli-keyword
+         :kayttotarkoitukset                 kayttotarkoitukset
+         :ilmastoselvitys-laadintaperusteet  ilmastoselvitys-laadintaperusteet}))))

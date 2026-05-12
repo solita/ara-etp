@@ -290,6 +290,7 @@
         :energiatodistus-laadittu                   "Energiatodistus on laadittu"
         :todistuksen-laatimispaiva                  "Todistuksen laatimispäivä"
         :todistuksen-voimassaolopaiva               "Todistuksen voimassaolopäivä"
+        :todistustunnus-label                       "Todistustunnus"
 
         :kaukolampo                                 "Kauko-\nlämpö"
         :sahko                                      "Sähkö"
@@ -302,9 +303,10 @@
 
         :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvihuonekaasupäästöt"
         :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä"
-        :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP)"
+        :kasvihuonepaastot                          "Rakennuksen elinkaaren aikaiset kasvihuonekaasupäästöt (GWP)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku)"
         :paastoton-rakennus                         "Päästötön rakennus"
+        :vuosi                                      "vuosi"
         :a+luokka-otsikko                           "A+-luokka"
         :a+luokka-teksti                            "Rakennus täyttää A0-luokan vaatimukset, on sitä 20 % energiatehokkaampi ja tuottaa\n
                                                      uusiutuvaa energiaa yli oman tarpeensa."
@@ -435,9 +437,9 @@
         :lammonjako                                 "Lämmönjako"
         :lammonjakojarjestelma-lampotila            "Rakennuksen sisäinen lämmönjakojärjestelmä kykenee toimimaan alhaisissa tai tapauksen mukaan tehokkaammassa lämpötilassa: "
         :ilmanvaihtojärjestelmän-kuvaus             "Ilmanvaihtojärjestelmän kuvaus"
-        :ilmanvaihtojärjestelmä                     "Ilmanvaihtojärjestelmä:"
+        :ilmanvaihtojärjestelmä                     "Ilmanvaihtojärjestelmä"
         :toteutunut-ostoenergy-ja-uusiutuva         "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia"
-        :tiedot-ovat-vuodelta                       "Tiedot ovat vuodelta:"
+        :tiedot-ovat-vuodelta                       "Tiedot ovat vuodelta"
         :kaukolampo-table                           "Kaukolämpö"
         :sahko-table                                "Sähkö"
         :uusiutuva-polttoaine-table                 "Uusiutuva polttoaine"
@@ -500,6 +502,7 @@
         :energiatodistus-laadittu                   "Energiatodistus on laadittu (sv)"
         :todistuksen-laatimispaiva                  "Todistuksen laatimispäivä (sv)"
         :todistuksen-voimassaolopaiva               "Todistuksen voimassaolopäivä (sv)"
+        :todistustunnus-label                       "Certifikatnumret"
 
         :kaukolampo                                 "Kauko-\nlämpö (sv)"
         :sahko                                      "Sähkö (sv)"
@@ -512,9 +515,10 @@
 
         :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvihuonekaasupäästöt (sv)"
         :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä (sv)"
-        :kasvihuonepaastot                          "Elinkaaren aikaiset kasvihuonepaastot(GWP) (sv)"
+        :kasvihuonepaastot                          "Rakennuksen elinkaaren aikaiset kasvihuonekaasupäästöt (GWP) (sv)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku) (sv)"
         :paastoton-rakennus                         "Päästötön rakennus (sv)"
+        :vuosi                                      "år"
         :a+luokka-otsikko                           "A+-luokka"
         :a+luokka-teksti                            "Rakennus täyttää A0-luokan vaatimukset, on sitä 20 % energiatehokkaampi ja tuottaa\n
                                                      uusiutuvaa energiaa yli oman tarpeensa. (sv)"
@@ -643,9 +647,9 @@
         :lammonjako                                 "Lämmönjako (sv)"
         :lammonjakojarjestelma-lampotila            "Rakennuksen sisäinen lämmönjakojärjestelmä kykenee toimimaan alhaisissa tai tapauksen mukaan tehokkaammassa lämpötilassa (sv)"
         :ilmanvaihtojärjestelmän-kuvaus             "Ilmanvaihtojärjestelmän kuvaus (sv)"
-        :ilmanvaihtojärjestelmä                     "Ilmanvaihtojärjestelmä: (sv)"
+        :ilmanvaihtojärjestelmä                     "Ilmanvaihtojärjestelmä (sv)"
         :toteutunut-ostoenergy-ja-uusiutuva         "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia (sv)"
-        :tiedot-ovat-vuodelta                       "Tiedot ovat vuodelta: (sv)"
+        :tiedot-ovat-vuodelta                       "Tiedot ovat vuodelta (sv)"
         :kaukolampo-table                           "Kaukolämpö (sv)"
         :sahko-table                                "Sähkö (sv)"
         :uusiutuva-polttoaine-table                 "Uusiutuva polttoaine (sv)"

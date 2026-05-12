@@ -32,7 +32,7 @@ body {
 }
 
 .page-border-container {
-    background-color: #23323e;
+    background-color: #2a3b49;
     height: 277mm;
     width: 100%;
     padding: 2.5mm;
@@ -124,7 +124,7 @@ body {
 }
 
 .toimenpide-ehdotukset table td {
-    border: 1px solid #bdc6cc;
+    border: 0.4px solid #bdc6cc;
     border-right: none;
     text-align: center;
 }
@@ -163,8 +163,8 @@ body {
     bottom: 7mm;
     left: 0;
     right: 0;
-    font-size: 10pt;
-    color: #666;
+    font-size: 11pt;
+    color: #2a3b49;
     text-align: center;
     font-family: roboto, sans-serif;
 }
@@ -181,7 +181,7 @@ body {
 
 .page-title {
     color: white;
-    font-size: 25px;
+    font-size: 30px;
     font-weight: bold;
     margin: 0 0 8px 0;
     font-family: roboto, sans-serif;
@@ -268,7 +268,7 @@ table.common-table thead > tr > th {
 }
 
 table.common-table tbody th {
-    border: 0.7px solid #ced4dd;
+    border: 0.4px solid #ced4dd;
     border-left: none;
     text-align: left;
     font-weight: normal;
@@ -276,7 +276,7 @@ table.common-table tbody th {
 }
 
 table.common-table td {
-    border: 0.7px solid #ced4dd;
+    border: 0.4px solid #ced4dd;
     text-align: center;
 }
 
@@ -293,39 +293,47 @@ table.common-table td:last-child {
 }
 
 .etusivu-yleistiedot dl {
-    display: table;
-    width: 100%;
-    background-color: white;
-    border-collapse: collapse;
     margin: 0px 5px 5px 0px;
-}
-
-.etusivu-yleistiedot dl div {
-    display: table-row;
 }
 
 .etusivu-yleistiedot dl dt,
 .etusivu-yleistiedot dl dd {
-    display: table-cell;
     padding: 2px;
 }
 
 .etusivu-yleistiedot dl dt {
     color: #23323e;
-    font-weight: bold;
     white-space: nowrap;
-    width: 45%;
+    width: 35%;
     padding-right: 30px;
 }
 
-.etusivu-yleistiedot dl dd {
-    background-color: white;
+div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-row > div {
+    display: table-cell;
+    width: 35%;
+    vertical-align: top;
 }
 
-.etusivu-yleistiedot dl div:last-child dd {
-    font-weight: bold;
-    color: #23323e;
+div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-row > div:last-child {
+    width: 55%;
+}
+
+div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-row > div > dd {
+    display: inline-block;
+    width: auto;
+    padding-left: 4px !important;
+    padding-right: 0 !important;
+    padding-top: 2px !important;
+    margin-left: 0;
+}
+
+div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-row > div > dt {
+    display: inline-block;
+    width: auto;
     white-space: nowrap;
+    padding-left: 2px !important;
+    padding-right: 0 !important;
+    padding-top: 2px !important;
 }
 
 .etusivu-grafiikka-eluku-section {
@@ -346,11 +354,15 @@ table.common-table td:last-child {
 
 .etusivu-ostoenergia th,
 .etusivu-ostoenergia td {
-    border: 1px solid #bdc6cc;
+    border: 0.4px solid #bdc6cc;
     padding: 1px 1px;
     font-weight: normal;
     text-align: center;
     color: #23323e;
+}
+
+.etusivu-ostoenergia thead th {
+    vertical-align: bottom;
 }
 
 .etusivu-ostoenergia th:first-child,
@@ -430,6 +442,10 @@ table.common-table td:last-child {
     padding: 15px 0px 0px 0px;
 }
 
+.etusivu-eluku .value {
+    color: #2a3b49;
+}
+
 .etusivu-eluku .label {
     font-weight: bold;
     color: #23323e;
@@ -439,12 +455,13 @@ table.common-table td:last-child {
 }
 
 .etusivu-grafiikka-otsikko {
+    color: #23323e;
     font-weight: bold;
-    padding: 5px 5px 5px 0px;
+    padding: 0px 5px 5px 0px;
 }
 
 .koontisivu #koontisivu-yleiset-tiedot {
-    height: 142.5mm;
+    height: 141.5mm;
 }
 
 .koontisivu #koontisivu-suuruudet {
@@ -469,8 +486,25 @@ table.common-table td:last-child {
     margin-top: 3mm;
 }
 
+.koontisivu dl.koontisivu-lammitys-compact {
+    line-height: 1.5;
+}
+
+.koontisivu dl.table-description-list.koontisivu-lammitys-compact dt {
+    width: 23%;
+}
+
 .koontisivu #koontisivu-lammonjakojarjestelma {
     width: 164mm;
+}
+
+.koontisivu #koontisivu-tiedot-ovat-vuodelta-dl {
+    margin-bottom: 1mm;
+}
+
+.koontisivu #koontisivu-toteutunut-ostoenergia-lisatietoja {
+    height: 1.5em;
+    vertical-align: top;
 }
 
 .koontisivu #toteutunut-energia-info {
@@ -481,21 +515,46 @@ table.common-table td:last-child {
 
 .koontisivu #toteutunut-energia-info p {
     margin: 0;
+    color: #2a3b49;
 }
 .koontisivu #koontisivu-keskeiset-toimenpiteet-section {
-    height: 90mm;
+    height: 91mm;
+}
+
+.koontisivu #koontisivu-keskeiset-toimenpiteet-section p {
+    margin: 0px 0px 3px 0px;
 }
 
 .koontisivu #koontisivu-keskeiset-toimenpiteet {
-    height: 52mm;
+    height: 62mm;
 }
 
 .koontisivu #koontisivu-havaintokaynti-tyokalu {
     height: 16mm;
 }
 
+.koontisivu #koontisivu-havaintokaynti-tyokalu-dl div {
+    height: 7mm;
+}
+
+.koontisivu #koontisivu-havaintokaynti-tyokalu-dl dt {
+    width: 70mm;
+}
+
+.koontisivu #koontisivu-tyokalu {
+    color: #2a3b49;
+}
+
 .koontisivu #koontisivu-laatijan-tiedot {
     height: 16mm;
+}
+
+.koontisivu #koontisivu-laatijan-tiedot-dl div {
+    height: 7mm;
+}
+
+.koontisivu #koontisivu-laatijan-tiedot-dl dt {
+    width: 70mm;
 }
 
 /* =====================================================
@@ -607,7 +666,7 @@ table.common-table td:last-child {
 
 .lahtotiedot-table td {
     color: #23323e;
-    border: 1px solid #cfd6de;
+    border: 0.4px solid #ced4dd;
 }
 
 .lahtotiedot-table th:first-child,
@@ -741,7 +800,7 @@ table.common-table td:last-child {
 }
 
 .tulokset-eluku-banner {
-    background-color: #2f3a46;
+    background-color: #2a3b49;
     color: white;
     padding: 2px 8px;
     font-weight: bold;
@@ -790,7 +849,7 @@ table.common-table td:last-child {
 
 .tulokset-table td {
     color: #23323e;
-    border: 1px solid #cfd6de;
+    border: 0.4px solid #ced4dd;
 }
 
 .tulokset-table th:first-child,
@@ -841,7 +900,6 @@ table.common-table td:last-child {
 
 .tulokset-subgroup {
     font-weight: bold;
-    color: #111;
     background-color: white;
 }
 
@@ -911,7 +969,7 @@ table.common-table td:last-child {
 
 .ilmastoselvitys th,
 .ilmastoselvitys td {
-    border: 1px solid #bdc6cc;
+    border: 0.4px solid #bdc6cc;
     padding: 2px 3px;
     font-weight: normal;
     text-align: center;
