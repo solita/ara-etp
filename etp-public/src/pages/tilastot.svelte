@@ -89,7 +89,9 @@
       ...(searchmodel.kayttotarkoitus
         ? [['kayttotarkoitus', searchmodel.kayttotarkoitus].join('=')]
         : []),
-      ...(searchmodel.versio && searchmodel.versio !== '0' ? [['versio', searchmodel.versio].join('=')] : []),
+      ...(searchmodel.versio && searchmodel.versio !== '0'
+        ? [['versio', searchmodel.versio].join('=')]
+        : []),
       ...(searchmodel.laatimisvaihe
         ? [['laatimisvaihe', searchmodel.laatimisvaihe].join('=')]
         : []),
@@ -383,8 +385,7 @@
                     name={'laatimisvaihe'}
                     options={['', '1', '2']}
                     format={id => {
-                      if (id === '')
-                        return $_('TILASTOT_LAATIMISVAIHE_KAIKKI');
+                      if (id === '') return $_('TILASTOT_LAATIMISVAIHE_KAIKKI');
                       if (id === '1')
                         return $_('TILASTOT_LAATIMISVAIHE_UUDISRAKENNUS');
                       if (id === '2')
