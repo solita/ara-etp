@@ -77,10 +77,7 @@
       (select-keys result [:rakennus-avg :rakennuspaikka-avg]))))
 
 (defn find-statistics [db query]
-  (let [query (merge default-query
-                     (-> query
-                         (update :versio #(when (and % (pos? %)) %))
-                         (update :laatimisvaihe #(when (and % (pos? %)) %))))
+  (let [query (merge default-query query)
         e-luokka-counts (future-when #(find-e-luokka-counts db query) true)
         lammitys-iv-counts (future-when #(find-lammitys-ilmanvaihto-counts db query) true)
         return-2013? (sufficient-sample-size? (get @e-luokka-counts 2013))

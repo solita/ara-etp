@@ -30,7 +30,7 @@
   export let nettoalamin = '';
   export let nettoalamax = '';
   export let versio = '0';
-  export let laatimisvaihe = '0';
+  export let laatimisvaihe = '';
 
   announceAssertively($_('TILASTOT'));
 
@@ -89,7 +89,7 @@
       ...(searchmodel.kayttotarkoitus
         ? [['kayttotarkoitus', searchmodel.kayttotarkoitus].join('=')]
         : []),
-      ...(searchmodel.versio ? [['versio', searchmodel.versio].join('=')] : []),
+      ...(searchmodel.versio && searchmodel.versio !== '0' ? [['versio', searchmodel.versio].join('=')] : []),
       ...(searchmodel.laatimisvaihe
         ? [['laatimisvaihe', searchmodel.laatimisvaihe].join('=')]
         : []),
@@ -117,7 +117,7 @@
         'valmistumisvuosi-max': searchmodel.vuosimax,
         'lammitetty-nettoala-min': searchmodel.nettoalamin,
         'lammitetty-nettoala-max': searchmodel.nettoalamax,
-        versio: searchmodel.versio,
+        versio: searchmodel.versio === '0' ? '' : searchmodel.versio,
         laatimisvaihe: searchmodel.laatimisvaihe
       }),
       EtApi.lammitysmuoto(fetch),
@@ -381,9 +381,9 @@
                 <div class="w-full lg:w-1/2">
                   <InputSelect
                     name={'laatimisvaihe'}
-                    options={['0', '1', '2']}
+                    options={['', '1', '2']}
                     format={id => {
-                      if (id === '0')
+                      if (id === '')
                         return $_('TILASTOT_LAATIMISVAIHE_KAIKKI');
                       if (id === '1')
                         return $_('TILASTOT_LAATIMISVAIHE_UUDISRAKENNUS');

@@ -800,15 +800,6 @@
     ;; 2026: 3 records — below min sample size, so nil
     (t/is (nil? (get-in result [:counts 2026])))))
 
-(t/deftest find-statistics-laatimisvaihe-zero-treated-as-nil-test
-  ;; Given: mixed test data
-  (laatimisvaihe-test-data-set)
-  ;; When: find-statistics called with laatimisvaihe=0 (should be treated as "kaikki")
-  (let [result-zero (service/find-statistics ts/*db* (assoc query-all :laatimisvaihe 0))
-        result-nil  (service/find-statistics ts/*db* (assoc query-all :laatimisvaihe nil))]
-    ;; Then: results are identical — laatimisvaihe=0 is converted to nil in service layer
-    (t/is (= result-zero result-nil))))
-
 (t/deftest find-statistics-laatimisvaihe-combined-with-versio-test
   ;; Given: mixed test data
   (laatimisvaihe-test-data-set)
