@@ -94,9 +94,10 @@
           et-without-ppp-adds (energiatodistus-test-data/generate-adds 1 2026 true)
           ids-with-ppp (energiatodistus-test-data/insert! et-with-ppp-adds laatija-id)
           ids-without-ppp (energiatodistus-test-data/insert! et-without-ppp-adds laatija-id)]
+      ;; Insert PPP before signing (PPP can only be added to draft ET)
+      (ppp-test-data/generate-and-insert! ids-with-ppp laatija-whoami)
       (energiatodistus-search-test/sign-energiatodistukset!
         (map #(vector laatija-id %) (concat ids-with-ppp ids-without-ppp)))
-      (ppp-test-data/generate-and-insert! ids-with-ppp laatija-whoami)
       ;; When: GET with where clause for perusparannuspassi.valid = true
       ;; URL-encoded: [[["=","perusparannuspassi.valid",true]]]
       (let [response (ts/handler (-> (mock/request :get "/api/private/energiatodistukset?where=%5B%5B%5B%22%3D%22%2C%22perusparannuspassi.valid%22%2Ctrue%5D%5D%5D")
