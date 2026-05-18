@@ -617,13 +617,13 @@
   - The replaced energiatodistus must have a non-expired voimassaolo-paattymisaika
   Throws an exception if any precondition is violated. No-op when yksinkertaistettu-paivitysmenettely is false/nil.
   Returns the fetched replaced energiatodistus (or nil if not a simplified update)."
-  [db energiatodistus ^Instant now]
+  [db energiatodistus ^Instant allekirjoitusaika]
   (when (:yksinkertaistettu-paivitysmenettely energiatodistus)
     (when-not (:korvattu-energiatodistus-id energiatodistus)
       (throw-invalid-replace! nil " yksinkertaistettu-paivitysmenettely requires korvattu-energiatodistus-id"))
     (let [korvattu (find-energiatodistus db (:korvattu-energiatodistus-id energiatodistus))]
       (when-not (and (:voimassaolo-paattymisaika korvattu)
-                     (.isAfter (:voimassaolo-paattymisaika korvattu) now))
+                     (.isAfter (:voimassaolo-paattymisaika korvattu) allekirjoitusaika))
         (throw-invalid-replace! (:korvattu-energiatodistus-id energiatodistus)
                                 " has expired - cannot use yksinkertaistettu paivitysmenettely"))
       korvattu)))
@@ -635,8 +635,8 @@
   Precondition: validate-yksinkertaistettu! must be called before this function
   to ensure the replaced energiatodistus exists and is still valid.
   When korvattu-energiatodistus is provided, uses it directly instead of re-fetching from DB."
-  ([db energiatodistus now]
-   (resolve-voimassaolo-paattymisaika db energiatodistus now nil))
+  ([db energiatodistus allekirjoitusaika]
+   (resolve-voimassaolo-paattymisaika db energiatodistus allekirjoitusaika nil))
   ([db energiatodistus ^Instant now korvattu-energiatodistus]
    (if (:yksinkertaistettu-paivitysmenettely energiatodistus)
      (let [korvattu (or korvattu-energiatodistus
@@ -648,9 +648,8 @@
 (defn end-energiatodistus-signing! [db aws-s3-client whoami id & [{:keys [skip-pdf-signed-assert? allekirjoitusaika]}]]
   (jdbc/with-db-transaction [db db]
                             (let [energiatodistus (find-energiatodistus db id)
-                                  now (or allekirjoitusaika (Instant/now))
-                                  korvattu (validate-yksinkertaistettu! db energiatodistus now)
-                                  voimassaolo (resolve-voimassaolo-paattymisaika db energiatodistus now korvattu)
+                                  korvattu (validate-yksinkertaistettu! db energiatodistus allekirjoitusaika)
+                                  voimassaolo (resolve-voimassaolo-paattymisaika db energiatodistus allekirjoitusaika korvattu)
                                   _ (when-not voimassaolo
                                       (throw (ex-info "resolve-voimassaolo-paattymisaika must not return nil"
                                                       {:energiatodistus-id id})))

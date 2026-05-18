@@ -4,6 +4,7 @@
             [clojure.java.io :as io]
             [clojure.java.jdbc :as jdbc]
             [solita.common.map :as xmap]
+            [solita.common.time :as time]
             [solita.common.xml :as xml]
             [solita.common.sftp :as sftp]
             [solita.etp.config :as config]
@@ -97,7 +98,8 @@
                                                             ts/*aws-s3-client*
                                                             {:id laatija-id}
                                                             energiatodistus-id
-                                                            {:skip-pdf-signed-assert? true}))
+                                                            {:skip-pdf-signed-assert? true
+                                                             :allekirjoitusaika       (time/now)}))
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' WHERE id IN (1, 3, 4, 5, 6, 8, 9, 10)"])
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '10 days' WHERE id = 2"])
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = now() - interval '3 month' WHERE id = 7"])
@@ -429,7 +431,8 @@
                                                             ts/*aws-s3-client*
                                                             {:id laatija-id}
                                                             original-et-id
-                                                            {:skip-pdf-signed-assert? true})
+                                                            {:skip-pdf-signed-assert? true
+                                                             :allekirjoitusaika       (time/now)})
 
       ;; Sign the replacement energiatodistus (signed less than 7 days after original)
       (energiatodistus-service/start-energiatodistus-signing! ts/*db*
@@ -439,7 +442,8 @@
                                                             ts/*aws-s3-client*
                                                             {:id laatija-id}
                                                             replacement-et-id
-                                                            {:skip-pdf-signed-assert? true})
+                                                            {:skip-pdf-signed-assert? true
+                                                             :allekirjoitusaika       (time/now)})
 
       ;; Set the allekirjoitusaika for both to be within last month
       (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' WHERE id = ?" original-et-id])
@@ -478,10 +482,12 @@
     ;; Sign both
     (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-id} korvattava-id)
     (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-id}
-                                                          korvattava-id {:skip-pdf-signed-assert? true})
+                                                          korvattava-id {:skip-pdf-signed-assert? true
+                                                                         :allekirjoitusaika       (time/now)})
     (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-id} korvaava-id)
     (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-id}
-                                                          korvaava-id {:skip-pdf-signed-assert? true})
+                                                          korvaava-id {:skip-pdf-signed-assert? true
+                                                                       :allekirjoitusaika       (time/now)})
 
     ;; Set allekirjoitusaika: korvattava signed first, korvaava signed 2 days later (within 7 days)
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' WHERE id = ?" korvattava-id])
@@ -512,10 +518,12 @@
     ;; Sign both
     (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-id} korvattava-id)
     (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-id}
-                                                          korvattava-id {:skip-pdf-signed-assert? true})
+                                                          korvattava-id {:skip-pdf-signed-assert? true
+                                                                         :allekirjoitusaika       (time/now)})
     (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-id} korvaava-id)
     (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-id}
-                                                          korvaava-id {:skip-pdf-signed-assert? true})
+                                                          korvaava-id {:skip-pdf-signed-assert? true
+                                                                       :allekirjoitusaika       (time/now)})
 
     ;; Set allekirjoitusaika: korvattava signed 10 days before korvaava (>7 days gap)
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' - interval '10 days' WHERE id = ?" korvattava-id])
@@ -543,10 +551,12 @@
     ;; Sign both
     (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-1-id} korvaava-id)
     (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-1-id}
-                                                          korvaava-id {:skip-pdf-signed-assert? true})
+                                                          korvaava-id {:skip-pdf-signed-assert? true
+                                                                       :allekirjoitusaika       (time/now)})
     (energiatodistus-service/start-energiatodistus-signing! ts/*db* {:id laatija-2-id} korvattava-id)
     (energiatodistus-service/end-energiatodistus-signing! ts/*db* ts/*aws-s3-client* {:id laatija-2-id}
-                                                          korvattava-id {:skip-pdf-signed-assert? true})
+                                                          korvattava-id {:skip-pdf-signed-assert? true
+                                                                         :allekirjoitusaika       (time/now)})
 
     ;; Set allekirjoitusaika: both within 2 days (<7 days)
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = date_trunc('month', now()) - interval '1 month' WHERE id = ?" korvattava-id])

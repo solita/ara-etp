@@ -4,6 +4,7 @@
             [clojure.java.io :as io]
             [solita.etp.test :as etp-test]
             [solita.common.map :as xmap]
+            [solita.common.time :as time]
             [solita.etp.test-system :as ts]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
@@ -288,7 +289,8 @@
       (t/is (=  (service/end-energiatodistus-signing! db
                                                       ts/*aws-s3-client*
                                                       whoami
-                                                      id)
+                                                      id
+                                                      {:allekirjoitusaika energiatodistus-test-data/time-when-test-cert-not-expired})
                 :not-in-signing))
       (t/is (= (energiatodistus-tila id) :draft))
       (service/start-energiatodistus-signing! db whoami id)
@@ -297,13 +299,15 @@
       (t/is (= (service/end-energiatodistus-signing! db
                                                      ts/*aws-s3-client*
                                                      whoami
-                                                     id)
+                                                     id
+                                                     {:allekirjoitusaika energiatodistus-test-data/time-when-test-cert-not-expired})
                :ok))
       (t/is (= (energiatodistus-tila id) :signed))
       (t/is (= (service/end-energiatodistus-signing! db
                                                      ts/*aws-s3-client*
                                                      whoami
-                                                     id)
+                                                     id
+                                                     {:allekirjoitusaika energiatodistus-test-data/time-when-test-cert-not-expired})
                :already-signed)))))
 
 (t/deftest cancel-energiatodistus-signing!-test
@@ -911,7 +915,8 @@
                                                                ts/*aws-s3-client*
                                                                whoami
                                                                et-id
-                                                               {:skip-pdf-signed-assert? true})))))
+                                                               {:skip-pdf-signed-assert? true
+                                                                :allekirjoitusaika       (time/now)})))))
           "yksinkertaistettu true without korvattu-energiatodistus-id should fail")))
 
 (t/deftest yksinkertaistettu-with-expired-replaced-certificate-rejected-test
@@ -941,7 +946,8 @@
                                                                ts/*aws-s3-client*
                                                                whoami
                                                                korvaava-id
-                                                               {:skip-pdf-signed-assert? true})))))
+                                                               {:skip-pdf-signed-assert? true
+                                                                :allekirjoitusaika       (time/now)})))))
           "yksinkertaistettu with expired replaced certificate should fail")))
 
 (t/deftest yksinkertaistettu-update-draft-field-persistence-test

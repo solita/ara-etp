@@ -92,7 +92,8 @@
        ts/*aws-s3-client*
        whoami
        id
-       {:skip-pdf-signed-assert? true})
+       {:skip-pdf-signed-assert? true
+        :allekirjoitusaika       now})
       (t/is (= (service/find-energiatodistus-digest db
                                                     whoami
                                                     ts/*aws-s3-client*
