@@ -11,10 +11,10 @@
     (org.apache.pdfbox.multipdf PDFMergerUtility)
     (org.apache.pdfbox.io MemoryUsageSetting)))
 
-(defn- add-font [builder font-resource font-weight font-style]
+(defn- add-font [builder family font-resource font-weight font-style]
   (.useFont builder (reify FSSupplier
                       (supply [^InputStream _]
-                        (-> font-resource io/resource io/input-stream)))  "roboto" (Integer/valueOf font-weight) font-style true))
+                        (-> font-resource io/resource io/input-stream)))  family (int font-weight) font-style true))
 
 (defn- render-template-with-content [template data layout]
   (if-let [content (when template
@@ -31,10 +31,15 @@
     (.usePdfAConformance builder PdfRendererBuilder$PdfAConformance/PDFA_1_A)
     (.usePdfUaAccessbility builder true)
 
-    (add-font builder "fonts/Roboto-Bold.ttf" 700 BaseRendererBuilder$FontStyle/NORMAL)
-    (add-font builder "fonts/Roboto-BoldItalic.ttf" 700 BaseRendererBuilder$FontStyle/ITALIC)
-    (add-font builder "fonts/Roboto-Italic.ttf" 400 BaseRendererBuilder$FontStyle/ITALIC)
-    (add-font builder "fonts/Roboto-Regular.ttf" 400 BaseRendererBuilder$FontStyle/NORMAL)
+    (add-font builder "roboto" "fonts/roboto/Roboto-Bold.ttf" 700 BaseRendererBuilder$FontStyle/NORMAL)
+    (add-font builder "roboto" "fonts/roboto/Roboto-BoldItalic.ttf" 700 BaseRendererBuilder$FontStyle/ITALIC)
+    (add-font builder "roboto" "fonts/roboto/Roboto-Italic.ttf" 400 BaseRendererBuilder$FontStyle/ITALIC)
+    (add-font builder "roboto" "fonts/roboto/Roboto-Regular.ttf" 400 BaseRendererBuilder$FontStyle/NORMAL)
+
+    (add-font builder "carlito" "fonts/carlito/Carlito-Bold.ttf" 700 BaseRendererBuilder$FontStyle/NORMAL)
+    (add-font builder "carlito" "fonts/carlito/Carlito-BoldItalic.ttf" 700 BaseRendererBuilder$FontStyle/ITALIC)
+    (add-font builder "carlito" "fonts/carlito/Carlito-Italic.ttf" 400 BaseRendererBuilder$FontStyle/ITALIC)
+    (add-font builder "carlito" "fonts/carlito/Carlito-Regular.ttf" 400 BaseRendererBuilder$FontStyle/NORMAL)
 
     (.useSVGDrawer builder (BatikSVGDrawer.))
 
