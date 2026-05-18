@@ -5,6 +5,7 @@
   import Input from '@Component/input-search';
   import InputNumber from '@Component/input-number';
   import InputSelect from '@Component/input-select';
+  import InputVersio from '@Component/input-versio';
   import TilastotEntriesList from '@Component/tilastot-entries-list';
   import TilastotEtVersion from '@Component/tilastot-et-version-block';
   import Button, { styles as buttonStyles } from '@Component/button';
@@ -28,6 +29,8 @@
   export let vuosimax = '';
   export let nettoalamin = '';
   export let nettoalamax = '';
+  export let versio = '0';
+  export let laatimisvaihe = '';
 
   announceAssertively($_('TILASTOT'));
 
@@ -45,6 +48,8 @@
   let searchmodel = {
     keyword,
     kayttotarkoitus,
+    versio,
+    laatimisvaihe,
     vuosimin,
     vuosimax,
     nettoalamin,
@@ -84,6 +89,12 @@
       ...(searchmodel.kayttotarkoitus
         ? [['kayttotarkoitus', searchmodel.kayttotarkoitus].join('=')]
         : []),
+      ...(searchmodel.versio && searchmodel.versio !== '0'
+        ? [['versio', searchmodel.versio].join('=')]
+        : []),
+      ...(searchmodel.laatimisvaihe
+        ? [['laatimisvaihe', searchmodel.laatimisvaihe].join('=')]
+        : []),
 
       ...(searchmodel.vuosimin
         ? [['vuosimin', searchmodel.vuosimin].join('=')]
@@ -107,7 +118,9 @@
         'valmistumisvuosi-min': searchmodel.vuosimin,
         'valmistumisvuosi-max': searchmodel.vuosimax,
         'lammitetty-nettoala-min': searchmodel.nettoalamin,
-        'lammitetty-nettoala-max': searchmodel.nettoalamax
+        'lammitetty-nettoala-max': searchmodel.nettoalamax,
+        versio: searchmodel.versio === '0' ? '' : searchmodel.versio,
+        laatimisvaihe: searchmodel.laatimisvaihe
       }),
       EtApi.lammitysmuoto(fetch),
       EtApi.ilmanvaihtotyyppi(fetch)
@@ -341,6 +354,48 @@
             </div>
             <!-- TARKENNETTU HAKU -->
             <div class="w-full lg:w-5/6 flex flex-col my-4 py-4 space-y-2">
+              <div
+                class="tarkennettu-row w-full mx-auto center flex flex-col lg:flex-row items-center">
+                <div class="w-full lg:w-1/2">
+                  <span class="tarkennettu-label text-ashblue tracking-widest">
+                    {$_('ETHAKU_VERSIO')}
+                  </span>
+                </div>
+                <div class="w-full lg:w-1/2 pb-8">
+                  <InputVersio
+                    name={'versio'}
+                    model={searchmodel}
+                    {isEtp2026} />
+                </div>
+              </div>
+              <div
+                class="tarkennettu-row w-full mx-auto center flex flex-col lg:flex-row items-center">
+                <div class="w-full lg:w-1/2">
+                  <InfoTooltip
+                    tooltip={$_('TILASTOT_LAATIMISVAIHE_TOOLTIP')}
+                    title={$_('TILASTOT_LAATIMISVAIHE')}>
+                    <span
+                      class="tarkennettu-label tracking-widest text-ashblue">
+                      {$_('TILASTOT_LAATIMISVAIHE')}
+                    </span>
+                  </InfoTooltip>
+                </div>
+                <div class="w-full lg:w-1/2">
+                  <InputSelect
+                    name={'laatimisvaihe'}
+                    options={['', '1', '2']}
+                    format={id => {
+                      if (id === '') return $_('TILASTOT_LAATIMISVAIHE_KAIKKI');
+                      if (id === '1')
+                        return $_('TILASTOT_LAATIMISVAIHE_UUDISRAKENNUS');
+                      if (id === '2')
+                        return $_('TILASTOT_LAATIMISVAIHE_OLEMASSA_OLEVA');
+                      return '';
+                    }}
+                    label={$_('TILASTOT_LAATIMISVAIHE')}
+                    value={searchmodel.laatimisvaihe} />
+                </div>
+              </div>
               <div
                 class="tarkennettu-row w-full mx-auto center flex flex-col lg:flex-row items-center">
                 <div class="w-full lg:w-1/2">
@@ -836,7 +891,7 @@
                         </dl>
                         <div class="w-full" />
                       </div>
-                      {#if isEtp2026 && results?.['elinkaaren-aikaiset-paastot']}
+                      {#if isEtp2026 && (searchmodel.versio === '0' || searchmodel.versio === '2026') && results?.['elinkaaren-aikaiset-paastot']}
                         <div class="w-full flex flex-col">
                           <div class="my-4">
                             <InfoTooltip

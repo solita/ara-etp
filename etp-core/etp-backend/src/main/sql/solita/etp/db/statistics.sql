@@ -21,6 +21,18 @@ AND (:valmistumisvuosi-min::numeric IS NULL OR e.pt$valmistumisvuosi >= :valmist
 AND (:valmistumisvuosi-max::numeric IS NULL OR e.pt$valmistumisvuosi <= :valmistumisvuosi-max)
 AND (:lammitetty-nettoala-min::numeric IS NULL OR e.lt$lammitetty_nettoala >= :lammitetty-nettoala-min)
 AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max)
+AND (:versio::int IS NULL OR e.versio = :versio)
+AND (:laatimisvaihe::int IS NULL
+     OR (:laatimisvaihe = 1 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = true)
+           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+         ))
+     OR (:laatimisvaihe = 2 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = false)
+           OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
+           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+         ))
+    )
 GROUP BY e.versio, e.t$e_luokka;
 
 -- name: select-lammitys-ilmanvaihto-counts
@@ -48,6 +60,18 @@ AND (:valmistumisvuosi-min::numeric IS NULL OR e.pt$valmistumisvuosi >= :valmist
 AND (:valmistumisvuosi-max::numeric IS NULL OR e.pt$valmistumisvuosi <= :valmistumisvuosi-max)
 AND (:lammitetty-nettoala-min::numeric IS NULL OR e.lt$lammitetty_nettoala >= :lammitetty-nettoala-min)
 AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max)
+AND (:versio::int IS NULL OR e.versio = :versio)
+AND (:laatimisvaihe::int IS NULL
+     OR (:laatimisvaihe = 1 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = true)
+           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+         ))
+     OR (:laatimisvaihe = 2 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = false)
+           OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
+           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+         ))
+    )
 GROUP BY GROUPING SETS ((e.versio, e.lt$lammitys$lammitysmuoto_1$id), (e.versio, e.lt$ilmanvaihto$tyyppi_id));
 
 -- name: select-e-luku-statistics
@@ -74,7 +98,18 @@ AND (:kayttotarkoitus-id::int IS NULL OR (e.pt$kayttotarkoitus, e.versio) IN
 AND (:valmistumisvuosi-min::numeric IS NULL OR e.pt$valmistumisvuosi >= :valmistumisvuosi-min)
 AND (:valmistumisvuosi-max::numeric IS NULL OR e.pt$valmistumisvuosi <= :valmistumisvuosi-max)
 AND (:lammitetty-nettoala-min::numeric IS NULL OR e.lt$lammitetty_nettoala >= :lammitetty-nettoala-min)
-AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max);
+AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max)
+AND (:laatimisvaihe::int IS NULL
+     OR (:laatimisvaihe = 1 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = true)
+           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+         ))
+     OR (:laatimisvaihe = 2 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = false)
+           OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
+           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+         ))
+    );
 
 -- name: select-common-averages
 SELECT avg(e.lt$rakennusvaippa$ilmanvuotoluku) ilmanvuotoluku,
@@ -107,7 +142,19 @@ AND (:kayttotarkoitus-id::int IS NULL OR (e.pt$kayttotarkoitus, e.versio) IN
 AND (:valmistumisvuosi-min::numeric IS NULL OR e.pt$valmistumisvuosi >= :valmistumisvuosi-min)
 AND (:valmistumisvuosi-max::numeric IS NULL OR e.pt$valmistumisvuosi <= :valmistumisvuosi-max)
 AND (:lammitetty-nettoala-min::numeric IS NULL OR e.lt$lammitetty_nettoala >= :lammitetty-nettoala-min)
-AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max);
+AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max)
+AND (:versio::int IS NULL OR e.versio = :versio)
+AND (:laatimisvaihe::int IS NULL
+     OR (:laatimisvaihe = 1 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = true)
+           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+         ))
+     OR (:laatimisvaihe = 2 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = false)
+           OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
+           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+         ))
+    );
 
 -- name: select-uusiutuvat-omavaraisenergiat-counts
 SELECT count(t$uusiutuvat_omavaraisenergiat$aurinkolampo) FILTER (WHERE t$uusiutuvat_omavaraisenergiat$aurinkolampo > 0) as aurinkolampo,
@@ -135,7 +182,18 @@ AND (:kayttotarkoitus-id::int IS NULL OR (e.pt$kayttotarkoitus, e.versio) IN
 AND (:valmistumisvuosi-min::numeric IS NULL OR e.pt$valmistumisvuosi >= :valmistumisvuosi-min)
 AND (:valmistumisvuosi-max::numeric IS NULL OR e.pt$valmistumisvuosi <= :valmistumisvuosi-max)
 AND (:lammitetty-nettoala-min::numeric IS NULL OR e.lt$lammitetty_nettoala >= :lammitetty-nettoala-min)
-AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max);
+AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max)
+AND (:laatimisvaihe::int IS NULL
+     OR (:laatimisvaihe = 1 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = true)
+           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+         ))
+     OR (:laatimisvaihe = 2 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = false)
+           OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
+           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+         ))
+    );
 
 -- name: select-gwp-averages
 SELECT round(avg(
@@ -173,7 +231,18 @@ AND (:kayttotarkoitus-id::int IS NULL OR (e.pt$kayttotarkoitus, e.versio) IN
 AND (:valmistumisvuosi-min::numeric IS NULL OR e.pt$valmistumisvuosi >= :valmistumisvuosi-min)
 AND (:valmistumisvuosi-max::numeric IS NULL OR e.pt$valmistumisvuosi <= :valmistumisvuosi-max)
 AND (:lammitetty-nettoala-min::numeric IS NULL OR e.lt$lammitetty_nettoala >= :lammitetty-nettoala-min)
-AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max);
+AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :lammitetty-nettoala-max)
+AND (:laatimisvaihe::int IS NULL
+     OR (:laatimisvaihe = 1 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = true)
+           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+         ))
+     OR (:laatimisvaihe = 2 AND (
+           (e.versio = 2013 AND e.pt$uudisrakennus = false)
+           OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
+           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+         ))
+    );
 
 -- name: select-count
 select count(*) as count

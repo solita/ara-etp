@@ -9,6 +9,8 @@
 
 (def default-query {:keyword nil
                     :kayttotarkoitus-id nil
+                    :versio nil
+                    :laatimisvaihe nil
                     :valmistumisvuosi-min nil
                     :valmistumisvuosi-max nil
                     :lammitetty-nettoala-min nil
@@ -104,7 +106,7 @@
         elinkaaren-aikaiset-paastot
         (future-when
          #(find-carbon-footprint db query)
-         true)]
+         return-2026?)]
 
     (let [result {:counts                      {2013 (when return-2013?
                                 (merge (get @e-luokka-counts 2013)
