@@ -647,7 +647,7 @@
        (:voimassaolo-paattymisaika korvattu))
      (fresh-voimassaolo-paattymisaika now))))
 
-(defn end-energiatodistus-signing! [db aws-s3-client whoami id & [{:keys [skip-pdf-signed-assert? allekirjoitusaika]}]]
+(defn end-energiatodistus-signing! [db aws-s3-client whoami id {:keys [skip-pdf-signed-assert? allekirjoitusaika]}]
   (jdbc/with-db-transaction [db db]
                             (let [energiatodistus (find-energiatodistus db id)
                                   korvattu (validate-yksinkertaistettu! db energiatodistus allekirjoitusaika)
