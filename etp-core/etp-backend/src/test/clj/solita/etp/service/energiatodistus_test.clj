@@ -1,20 +1,19 @@
 (ns solita.etp.service.energiatodistus-test
-  (:require [clojure.test :as t]
+  (:require [clojure.java.io :as io]
             [clojure.java.jdbc :as jdbc]
-            [clojure.java.io :as io]
-            [solita.etp.test :as etp-test]
+            [clojure.test :as t]
             [solita.common.map :as xmap]
             [solita.common.time :as time]
-            [solita.etp.test-system :as ts]
+            [solita.etp.service.energiatodistus :as service]
+            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
+            [solita.etp.test :as etp-test]
+            [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
-            [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.perusparannuspassi :as perusparannuspassi-test-data]
-            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
-            [solita.etp.service.energiatodistus :as service]
+            [solita.etp.test-system :as ts]
             [solita.etp.whoami :as test-whoami])
-  (:import (java.time Instant ZoneId)
-           (java.time.temporal ChronoUnit)))
+  (:import (java.time Instant ZoneId)))
 
 (t/use-fixtures :each ts/fixture)
 
