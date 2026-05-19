@@ -452,6 +452,7 @@
     "draft-visible-to-paakayttaja": "Valvojat saavat nähdä luonnostilaisen energiatodistuksen",
     "bypass-validation-limits": "Ohita tarkistukset allekirjoittaessa",
     "bypass-validation-limits-reason": "Selite tarkistusten ohittamisesta",
+    "yksinkertaistettu-paivitysmenettely": "Yksinkertaistettu päivitysmenettely",
     "haku": {
       "sarakkeet": {
         "tila": "Tila",

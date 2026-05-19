@@ -430,6 +430,7 @@
     "draft-visible-to-paakayttaja": "Övervakarna får se energicertifikatet i utkaststatus",
     "bypass-validation-limits": "Förbigå kontroller vid underskrift",
     "bypass-validation-limits-reason": "Förklaring av förbigång av kontroll",
+    "yksinkertaistettu-paivitysmenettely": "Yksinkertaistettu päivitysmenettely (sv)",
     "haku": {
       "sarakkeet": {
         "tila": "Status",

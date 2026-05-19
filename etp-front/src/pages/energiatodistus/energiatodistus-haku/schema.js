@@ -773,7 +773,8 @@ export const schema = {
     'lisamerkintoja-fi': [stringContains],
     'lisamerkintoja-sv': [stringContains],
     laskuriviviite: [...stringComparisons],
-    'laatija-id': [laatijaEquals]
+    'laatija-id': [laatijaEquals],
+    'yksinkertaistettu-paivitysmenettely': [singleBoolean]
   },
   perusparannuspassi: {
     id: [...numberComparisons],

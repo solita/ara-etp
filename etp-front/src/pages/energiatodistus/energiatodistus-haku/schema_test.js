@@ -228,6 +228,7 @@ describe('EtHakuSchema', () => {
         'energiatodistus.tulokset.uusiutuvan-energian-osuus',
         'energiatodistus.versio',
         'energiatodistus.voimassaolo-paattymisaika',
+        'energiatodistus.yksinkertaistettu-paivitysmenettely',
         'kunta.id',
         'laatija.voimassaolo-paattymisaika',
         'perusparannuspassi.id',
@@ -454,6 +455,7 @@ describe('EtHakuSchema', () => {
         'energiatodistus.tulokset.uusiutuvat-omavaraisenergiat.tuulisahko-neliovuosikulutus',
         'energiatodistus.versio',
         'energiatodistus.voimassaolo-paattymisaika',
+        'energiatodistus.yksinkertaistettu-paivitysmenettely',
         'kunta.id',
         'laatija.patevyystaso',
         'laatija.toteamispaivamaara',
@@ -463,6 +465,116 @@ describe('EtHakuSchema', () => {
         'postinumero.label'
       ];
       expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('yksinkertaistettu-paivitysmenettely search field', () => {
+    // AE-2590: yksinkertaistettu-paivitysmenettely should be a BOOLEAN field in the search schema
+    it('is a BOOLEAN type field in paakayttajaSchema', () => {
+      // Given: the paakayttajaSchema
+      const key = 'energiatodistus.yksinkertaistettu-paivitysmenettely';
+      // When: checking the field type
+      const field = Schema.paakayttajaSchema[key];
+      // Then: field exists and is BOOLEAN
+      expect(field).toBeDefined();
+      expect(field[0].type).toBe('BOOLEAN');
+    });
+
+    it('format does NOT inject a versio constraint', () => {
+      // Given: the yksinkertaistettu-paivitysmenettely field
+      const key = 'energiatodistus.yksinkertaistettu-paivitysmenettely';
+      const op = Schema.paakayttajaSchema[key][0];
+      // When: format is called with true and false
+      const resultTrue = op.operation.format(
+        op.operation.serverCommand,
+        op.key,
+        true
+      );
+      const resultFalse = op.operation.format(
+        op.operation.serverCommand,
+        op.key,
+        false
+      );
+      // Then: neither result contains a versio constraint
+      const hasVersioConstraint = result =>
+        result.some(
+          entry => Array.isArray(entry) && entry[1] === 'energiatodistus.versio'
+        );
+      expect(hasVersioConstraint(resultTrue)).toBe(false);
+      expect(hasVersioConstraint(resultFalse)).toBe(false);
+    });
+  });
+
+  describe('pppOlemassa filter', () => {
+    // AE-2590: Regression tests - verify existing PPP search filter behavior
+    it('format generates correct query for true (contains PPP)', () => {
+      // Given: the perusparannuspassi.valid field
+      const key = 'perusparannuspassi.valid';
+      const op = Schema.paakayttajaSchema[key][0];
+      // When: format is called with true
+      const result = op.operation.format(
+        op.operation.serverCommand,
+        op.key,
+        true
+      );
+      // Then: produces exact match on valid = true
+      expect(result).toEqual([['=', 'perusparannuspassi.valid', true]]);
+    });
+
+    it('format generates correct query for false (no PPP)', () => {
+      // Given: the perusparannuspassi.valid field
+      const key = 'perusparannuspassi.valid';
+      const op = Schema.paakayttajaSchema[key][0];
+      // When: format is called with false
+      const result = op.operation.format(
+        op.operation.serverCommand,
+        op.key,
+        false
+      );
+      // Then: uses is-distinct-from to include NULL (no PPP record) and false (deleted PPP)
+      expect(result).toEqual([
+        ['is-distinct-from', 'perusparannuspassi.valid', true]
+      ]);
+    });
+  });
+
+  describe('PPP-numero filter', () => {
+    // AE-2590: Regression tests - verify PPP id search field has numeric operators
+    it('perusparannuspassi.id has NUMBER type entries with expected operators', () => {
+      // Given: the perusparannuspassi.id field
+      const key = 'perusparannuspassi.id';
+      const field = Schema.paakayttajaSchema[key];
+      // When: checking operators
+      const browserCommands = field.map(f => f.operation.browserCommand);
+      // Then: has numeric comparison operators
+      expect(browserCommands).toContain('=');
+      expect(browserCommands).toContain('>');
+      expect(browserCommands).toContain('>=');
+      expect(browserCommands).toContain('<');
+      expect(browserCommands).toContain('<=');
+      // And: all entries are NUMBER type
+      expect(field.every(f => f.type === 'NUMBER')).toBe(true);
+    });
+  });
+
+  describe('ET2026 feature flag gating', () => {
+    // AE-2590: When ET2026 is disabled, PPP and yksinkertaistettu fields should be omittable
+    it('PPP and yksinkertaistettu-menettely fields can be omitted from schema', () => {
+      // Given: the full paakayttajaSchema
+      const fieldsToOmit = [
+        'perusparannuspassi.id',
+        'perusparannuspassi.valid',
+        'energiatodistus.yksinkertaistettu-paivitysmenettely'
+      ];
+      // When: omitting ET2026-specific fields (simulating isEtp2026Enabled = false)
+      const filteredSchema = R.omit(fieldsToOmit, Schema.paakayttajaSchema);
+      // Then: the omitted fields are not present
+      fieldsToOmit.forEach(field => {
+        expect(filteredSchema).not.toHaveProperty(field);
+      });
+      // And: other fields are still present
+      expect(filteredSchema).toHaveProperty(['energiatodistus.id']);
+      expect(filteredSchema).toHaveProperty(['energiatodistus.versio']);
     });
   });
 
