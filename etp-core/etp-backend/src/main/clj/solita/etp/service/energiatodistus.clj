@@ -622,8 +622,10 @@
     (when-not (:korvattu-energiatodistus-id energiatodistus)
       (throw-invalid-replace! nil " yksinkertaistettu-paivitysmenettely requires korvattu-energiatodistus-id"))
     (let [korvattu (find-energiatodistus db (:korvattu-energiatodistus-id energiatodistus))]
-      (when-not (and (:voimassaolo-paattymisaika korvattu)
-                     (.isAfter (:voimassaolo-paattymisaika korvattu) allekirjoitusaika))
+      (when-not (:voimassaolo-paattymisaika korvattu)
+        (throw-invalid-replace! (:korvattu-energiatodistus-id energiatodistus)
+                                " does not have voimassaolo-paattymisaika"))
+      (when-not (.isAfter (:voimassaolo-paattymisaika korvattu) allekirjoitusaika)
         (throw-invalid-replace! (:korvattu-energiatodistus-id energiatodistus)
                                 " has expired - cannot use yksinkertaistettu paivitysmenettely"))
       korvattu)))
