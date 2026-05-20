@@ -156,6 +156,9 @@
 (defn is-null-expression [search-schema _ field]
   [(str (field->sql field search-schema) " is null")])
 
+(defn is-not-null-expression [search-schema _ field]
+  [(str (field->sql field search-schema) " is not null")])
+
 (defn is-distinct-from-expression [search-schema _ field value]
   [(str (field->sql field search-schema) " is distinct from ?")
    (coerce-value! field value search-schema)])
@@ -205,6 +208,7 @@
    "not ilike"        infix-notation
    "between"          between-expression
    "nil?"             is-null-expression
+   "not-nil?"         is-not-null-expression
    "is-distinct-from" is-distinct-from-expression
    "in"               in-expression})
 

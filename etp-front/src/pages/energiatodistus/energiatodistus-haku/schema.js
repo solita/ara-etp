@@ -415,6 +415,19 @@ const pppOlemassa = key =>
     singleBoolean(key)
   );
 
+const ilmastoSelvitysOlemassa = key =>
+  R.assocPath(
+    ['operation', 'format'],
+    R.curry((command, key, value) =>
+      R.ifElse(
+        R.equals(true),
+        R.always([['not-nil?', key]]),
+        R.always([['nil?', key]])
+      )(value)
+    ),
+    singleBoolean(key)
+  );
+
 const perustiedot = {
   'nimi-fi': [...stringComparisons],
   'nimi-sv': [...stringComparisons],
@@ -692,6 +705,7 @@ const tulokset = {
     muulampo: [...numberComparisons],
     muusahko: [...numberComparisons]
   },
+  'hiilijalanjalki-rakennus-yhteensa': [...numberComparisons],
   'kasvihuonepaastot-per-nelio': [...numberComparisons],
   'uusiutuvan-energian-osuus': [...numberComparisons],
   laskentatyokalu: [...stringComparisons]
@@ -774,7 +788,10 @@ export const schema = {
     'lisamerkintoja-sv': [stringContains],
     laskuriviviite: [...stringComparisons],
     'laatija-id': [laatijaEquals],
-    'yksinkertaistettu-paivitysmenettely': [singleBoolean]
+    'yksinkertaistettu-paivitysmenettely': [singleBoolean],
+    ilmastoselvitys: {
+      laatimisajankohta: [ilmastoSelvitysOlemassa]
+    }
   },
   perusparannuspassi: {
     id: [...numberComparisons],
@@ -810,6 +827,7 @@ export const laatijaSchema = R.compose(
     R.pick([
       'e-luku',
       'e-luokka',
+      'hiilijalanjalki-rakennus-yhteensa',
       'kasvihuonepaastot-per-nelio',
       'uusiutuvan-energian-osuus'
     ])

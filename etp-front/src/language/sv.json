@@ -485,6 +485,9 @@
       "perusparannuspassi": {
         "id": "Perusparannuspassitunnus (sv)",
         "valid": "Perusparannuspassi on olemassa (sv)"
+      },
+      "ilmastoselvitys": {
+        "laatimisajankohta": "Todistuksella on ilmastoselvitys (sv)"
       }
     },
     "kaikki": "Allt",
@@ -978,6 +981,7 @@
         "muulampo": "Muu lämpö (kWh/vuosi) (sv)",
         "muusahko": "Muu sähkö (kWh/vuosi) (sv)"
       },
+      "hiilijalanjalki-rakennus-yhteensa": "Byggnadens växthusgasutsläpp under livscykeln (kgCO₂ ekv/m²) (sv)",
       "kasvihuonepaastot-per-nelio": "Kasvihuonekaasupäästöt (kg CO₂e/m²/vuosi) (sv)",
       "uusiutuvan-energian-osuus": "Uusiutuvan energian osuus (sv)",
       "tekniset-jarjestelmat": {

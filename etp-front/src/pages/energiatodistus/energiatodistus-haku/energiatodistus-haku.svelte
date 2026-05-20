@@ -38,7 +38,9 @@
     R.omit([
       'perusparannuspassi.id',
       'perusparannuspassi.valid',
-      'energiatodistus.yksinkertaistettu-paivitysmenettely'
+      'energiatodistus.yksinkertaistettu-paivitysmenettely',
+      'energiatodistus.ilmastoselvitys.laatimisajankohta',
+      'energiatodistus.tulokset.hiilijalanjalki-rakennus-yhteensa'
     ])
   )(
     Kayttajat.isPaakayttajaOrLaskuttaja(whoami)
