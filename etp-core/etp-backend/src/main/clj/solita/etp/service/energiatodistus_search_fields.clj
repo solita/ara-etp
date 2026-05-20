@@ -127,6 +127,17 @@
      {:kaukojaahdytys ["energiatodistus.t$kaytettavat_energiamuodot$kaukojaahdytys + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$kaukojaahdytys" common-schema/NonNegative]
       :lampo ["( energiatodistus.lt$ilmanvaihto$tuloilma_lampotila + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$lampo + energiatodistus.t$tekniset_jarjestelmat$kayttoveden_valmistus$lampo + energiatodistus.t$tekniset_jarjestelmat$tilojen_lammitys$lampo + energiatodistus.t$tekniset_jarjestelmat$tuloilman_lammitys$lampo + energiatodistus.t$uusiutuvat_omavaraisenergiat$aurinkolampo + energiatodistus.t$uusiutuvat_omavaraisenergiat$lampopumppu + energiatodistus. t$uusiutuvat_omavaraisenergiat$muulampo )" common-schema/NonNegative]
       :sahko ["( energiatodistus.t$kaytettavat_energiamuodot$sahko + energiatodistus.t$tekniset_jarjestelmat$jaahdytys$sahko + energiatodistus.t$tekniset_jarjestelmat$kayttoveden_valmistus$sahko + energiatodistus.t$tekniset_jarjestelmat$tilojen_lammitys$sahko + energiatodistus.t$tekniset_jarjestelmat$tuloilman_lammitys$sahko)" common-schema/NonNegative]}
+      :hiilijalanjalki-rakennus-yhteensa
+      [(let [fields ["rakennustuotteiden_valmistus"
+                     "kuljetukset_tyomaavaihe"
+                     "rakennustuotteiden_vaihdot"
+                     "energiankaytto"
+                     "purkuvaihe"]
+             terms (map #(str "coalesce(energiatodistus.is$hiilijalanjalki$rakennus$" % ", 0)") fields)]
+         (str "case when energiatodistus.is$laatimisajankohta is not null then ("
+              (str/join " + " terms)
+              ") end"))
+       common-schema/NonNegative]
       :kasvihuonepaastot-per-nelio
       [(let [co2-db-sarakkeet {:kaukolampo      "kaukolampo"
                                :sahko           "sahko"
