@@ -599,7 +599,7 @@
         (exception/throw-ex-info!
           :not-signed (str "Energiatodistus " id " pdf for language " language " is not signed"))))))
 
-(defn- fresh-voimassaolo-paattymisaika
+(defn- standard-voimassaolo-paattymisaika
   "Calculates a fresh 10-year validity period: now + 1 day + 10 years (Helsinki timezone)."
   [^Instant now]
   (-> now
@@ -639,13 +639,13 @@
   When korvattu-energiatodistus is provided, uses it directly instead of re-fetching from DB."
   ([db energiatodistus allekirjoitusaika]
    (resolve-voimassaolo-paattymisaika db energiatodistus allekirjoitusaika nil))
-  ([db energiatodistus ^Instant now korvattu-energiatodistus]
+  ([db energiatodistus ^Instant allekirjoitusaika korvattu-energiatodistus]
    (if (:yksinkertaistettu-paivitysmenettely energiatodistus)
      (let [korvattu (or korvattu-energiatodistus
                         (when-let [korvattu-id (:korvattu-energiatodistus-id energiatodistus)]
                           (find-energiatodistus db korvattu-id)))]
        (:voimassaolo-paattymisaika korvattu))
-     (fresh-voimassaolo-paattymisaika now))))
+     (standard-voimassaolo-paattymisaika allekirjoitusaika))))
 
 (defn end-energiatodistus-signing! [db aws-s3-client whoami id {:keys [skip-pdf-signed-assert? allekirjoitusaika]}]
   (jdbc/with-db-transaction [db db]
