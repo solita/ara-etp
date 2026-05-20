@@ -40,16 +40,10 @@ from et_tilat
 where tila_id = et_tilat.allekirjoituksessa and laatija_id = :laatija-id and id = :id
 
 -- name: update-energiatodistus-allekirjoitettu!
--- Note - there's a Clojure equivalent of the calculation of voimassaolo_paattymisaika in
--- solita.etp.service.energiatodistus-signing/allekirjoitusaika->voimassaolo-paattymisaika
 update energiatodistus set
   tila_id = et_tilat.allekirjoitettu,
-  allekirjoitusaika = coalesce(:allekirjoitusaika, now()),
-  voimassaolo_paattymisaika = coalesce(
-    :voimassaolo-paattymisaika,
-    timezone('Europe/Helsinki',
-      timezone('Europe/Helsinki', now())::date::timestamp without time zone
-        + interval '1 day') + interval '10 year')
+  allekirjoitusaika = :allekirjoitusaika,
+  voimassaolo_paattymisaika = :voimassaolo-paattymisaika
 from et_tilat
 where tila_id = et_tilat.allekirjoituksessa and laatija_id = :laatija-id and id = :id
 

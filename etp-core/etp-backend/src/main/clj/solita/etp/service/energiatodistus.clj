@@ -29,7 +29,10 @@
             [solita.etp.service.rooli :as rooli-service]
             [solita.postgresql.composite :as pg-composite]
             [solita.etp.service.perusparannuspassi :as perusparannuspassi-service])
-  (:import (org.apache.pdfbox.pdmodel PDDocument)))
+  (:import (java.time Instant ZoneId)
+           (org.apache.pdfbox.pdmodel PDDocument)))
+
+(def ^:private helsinki-timezone (ZoneId/of "Europe/Helsinki"))
 
 ; *** Require sql functions ***
 (db/require-queries 'energiatodistus)
@@ -596,33 +599,68 @@
         (exception/throw-ex-info!
           :not-signed (str "Energiatodistus " id " pdf for language " language " is not signed"))))))
 
-(defn- resolve-voimassaolo-paattymisaika [db energiatodistus]
-  (when (:yksinkertaistettu-paivitysmenettely energiatodistus)
-    (when-let [korvattu-id (:korvattu-energiatodistus-id energiatodistus)]
-      (when-let [validity (:voimassaolo-paattymisaika (find-energiatodistus db korvattu-id))]
-        (java.sql.Timestamp/from validity)))))
+(defn- standard-voimassaolo-paattymisaika
+  "Calculates a fresh 10-year validity period: now + 1 day + 10 years (Helsinki timezone)."
+  [^Instant now]
+  (-> now
+      (.atZone helsinki-timezone)
+      .toLocalDate
+      (.plusDays 1)
+      (.atStartOfDay helsinki-timezone)
+      (.plusYears 10)
+      .toInstant))
 
-(defn- validate-yksinkertaistettu! [db energiatodistus]
+(defn validate-yksinkertaistettu!
+  "Validates preconditions for the simplified update procedure (yksinkertaistettu päivitysmenettely).
+  When yksinkertaistettu-paivitysmenettely is true:
+  - korvattu-energiatodistus-id must be set
+  - The replaced energiatodistus must have a non-expired voimassaolo-paattymisaika
+  Throws an exception if any precondition is violated. No-op when yksinkertaistettu-paivitysmenettely is false/nil.
+  Returns the fetched replaced energiatodistus (or nil if not a simplified update)."
+  [db energiatodistus ^Instant allekirjoitusaika]
   (when (:yksinkertaistettu-paivitysmenettely energiatodistus)
     (when-not (:korvattu-energiatodistus-id energiatodistus)
       (throw-invalid-replace! nil " yksinkertaistettu-paivitysmenettely requires korvattu-energiatodistus-id"))
     (let [korvattu (find-energiatodistus db (:korvattu-energiatodistus-id energiatodistus))]
-      (when-not (and (:voimassaolo-paattymisaika korvattu)
-                     (.isAfter (:voimassaolo-paattymisaika korvattu) (java.time.Instant/now)))
+      (when-not (:voimassaolo-paattymisaika korvattu)
         (throw-invalid-replace! (:korvattu-energiatodistus-id energiatodistus)
-                                " has expired - cannot use yksinkertaistettu paivitysmenettely")))))
+                                " does not have voimassaolo-paattymisaika"))
+      (when-not (.isAfter (:voimassaolo-paattymisaika korvattu) allekirjoitusaika)
+        (throw-invalid-replace! (:korvattu-energiatodistus-id energiatodistus)
+                                " has expired - cannot use yksinkertaistettu paivitysmenettely"))
+      korvattu)))
 
-(defn end-energiatodistus-signing! [db aws-s3-client whoami id & [{:keys [skip-pdf-signed-assert? allekirjoitusaika]}]]
+(defn resolve-voimassaolo-paattymisaika
+  "Resolves the validity end date for an energiatodistus being signed.
+  For simplified update procedure: inherits validity from the replaced energiatodistus.
+  For normal procedure: calculates a fresh 10-year period from now.
+  Precondition: validate-yksinkertaistettu! must be called before this function
+  to ensure the replaced energiatodistus exists and is still valid.
+  When korvattu-energiatodistus is provided, uses it directly instead of re-fetching from DB."
+  ([db energiatodistus allekirjoitusaika]
+   (resolve-voimassaolo-paattymisaika db energiatodistus allekirjoitusaika nil))
+  ([db energiatodistus ^Instant allekirjoitusaika korvattu-energiatodistus]
+   (if (:yksinkertaistettu-paivitysmenettely energiatodistus)
+     (let [korvattu (or korvattu-energiatodistus
+                        (when-let [korvattu-id (:korvattu-energiatodistus-id energiatodistus)]
+                          (find-energiatodistus db korvattu-id)))]
+       (:voimassaolo-paattymisaika korvattu))
+     (standard-voimassaolo-paattymisaika allekirjoitusaika))))
+
+(defn end-energiatodistus-signing! [db aws-s3-client whoami id {:keys [skip-pdf-signed-assert? allekirjoitusaika]}]
   (jdbc/with-db-transaction [db db]
                             (let [energiatodistus (find-energiatodistus db id)
-                                  _ (validate-yksinkertaistettu! db energiatodistus)
-                                  voimassaolo (resolve-voimassaolo-paattymisaika db energiatodistus)
+                                  korvattu (validate-yksinkertaistettu! db energiatodistus allekirjoitusaika)
+                                  voimassaolo (resolve-voimassaolo-paattymisaika db energiatodistus allekirjoitusaika korvattu)
+                                  _ (when-not voimassaolo
+                                      (throw (ex-info "resolve-voimassaolo-paattymisaika must not return nil"
+                                                      {:energiatodistus-id id})))
                                   result (energiatodistus-db/update-energiatodistus-allekirjoitettu!
                                            db
                                            {:id                          id
                                             :laatija-id                  (:id whoami)
                                             :allekirjoitusaika           allekirjoitusaika
-                                            :voimassaolo-paattymisaika   voimassaolo})]
+                                            :voimassaolo-paattymisaika   (java.sql.Timestamp/from voimassaolo)})]
                               (if (= result 1)
                                 (let [energiatodistus (find-energiatodistus db id)]
                                   (when-not skip-pdf-signed-assert?

@@ -26,8 +26,6 @@
     (java.awt.image BufferedImage)
     (java.io File InputStream)
     (java.nio.charset StandardCharsets)
-    (java.time Instant ZoneId)
-    (java.time.format DateTimeFormatter)
     (java.util Base64 Base64$Decoder Date)
     (javax.imageio ImageIO)))
 
@@ -35,17 +33,6 @@
 (def time-formatter (.withZone (DateTimeFormatter/ofPattern "dd.MM.yyyy HH:mm:ss")
                                timezone))
 
-(defn- allekirjoitusaika->voimassaolo-paattymisaika
-  "Clojure equivalent of the voimassaolo_paattymisaika SQL expression in
-   solita/etp/db/energiatodistus.sql (update-energiatodistus-allekirjoitettu!)"
-  [^Instant allekirjoitusaika]
-  (-> allekirjoitusaika
-      (.atZone timezone)
-      .toLocalDate
-      (.plusDays 1)
-      (.atStartOfDay timezone)
-      (.plusYears 10)
-      .toInstant))
 (defn- transparent-png
   [path width height]
   (let [img (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)]
@@ -106,13 +93,19 @@
   (when-let [{:keys [laatija-fullname versio] :as complete-energiatodistus} (complete-energiatodistus-service/find-complete-energiatodistus db id)]
     (do-when-signing
       complete-energiatodistus
-      #(let [draft? false
+      #(let [energiatodistus (energiatodistus-service/find-energiatodistus db id)
+             korvattu (energiatodistus-service/validate-yksinkertaistettu! db energiatodistus now)
+             voimassaolo (energiatodistus-service/resolve-voimassaolo-paattymisaika db energiatodistus now korvattu)
+             _ (when-not voimassaolo
+                 (throw (ex-info "resolve-voimassaolo-paattymisaika must not return nil during digest generation"
+                                 {:energiatodistus-id id})))
+             draft? false
              ^String pdf-path (energiatodistus-pdf-service/generate-et-pdf-as-file
                                 db
                                 whoami
                                 (assoc complete-energiatodistus
                                        :allekirjoitusaika now
-                                       :voimassaolo-paattymisaika (allekirjoitusaika->voimassaolo-paattymisaika now))
+                                       :voimassaolo-paattymisaika voimassaolo)
                                 language
                                 draft?
                                 laatija-allekirjoitus-id)

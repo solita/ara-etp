@@ -20,6 +20,7 @@
             [solita.etp.service.co2-kertoimet :as co2]
             [solita.etp.service.uusiutuva-energia :as uusiutuva-energia]
             [solita.common.logic :as logic]
+            [solita.common.time :as time]
             [solita.etp.whoami :as test-whoami])
   (:import (java.time Instant LocalDate)))
 
@@ -46,7 +47,8 @@
       ts/*aws-s3-client*
       {:id laatija-id}
       energiatodistus-id
-      {:skip-pdf-signed-assert? true})))
+      {:skip-pdf-signed-assert? true
+       :allekirjoitusaika       (time/now)})))
 
 (defn test-data-set []
   (let [laatijat (laatija-test-data/generate-and-insert! 3)

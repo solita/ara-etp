@@ -1,11 +1,13 @@
 (ns solita.etp.api.energiatodistus-signing-test
   (:require
     [clojure.java.io :as io]
+    [clojure.java.jdbc :as jdbc]
     [clojure.test :as t]
     [jsonista.core :as j]
     [ring.mock.request :as mock]
     [solita.common.time :as time]
     [solita.etp.config :as config]
+    [solita.etp.service.energiatodistus :as energiatodistus-service]
     [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]
     [solita.etp.test-data.laatija :as test-data.laatija]
     [solita.etp.test-timeserver :as test-timeserver]
@@ -27,15 +29,13 @@
 
 (defn generate-pdf-as-file-mock [_ _ _ _]
   (let [in "src/test/resources/energiatodistukset/signing-process/generate-pdf-as-file.pdf"
-        out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
-    (io/make-parents out)
+        out (str (File/createTempFile "energiatodistus-signing-test" ".pdf"))]
     (io/copy (io/file in) (io/file out))
     out))
 
 (defn generate-2026-pdf-as-file-mock [_ _ _ _ _ _]
   (let [in "src/test/resources/energiatodistukset/signing-process/generate-pdf-as-file.pdf"
-        out "tmp-energiatodistukset/energiatodistus-in-system-signing-test.pdf"]
-    (io/make-parents out)
+        out (str (File/createTempFile "energiatodistus-signing-test" ".pdf"))]
     (io/copy (io/file in) (io/file out))
     out))
 
@@ -328,3 +328,56 @@
                                           (mock/header "Accept" "application/pdf")))]
           (t/is (lt-level? (:body fi-response)))
           (t/is (lt-level? (:body sv-response))))))))
+
+(t/deftest sign-with-system-simplified-update-test
+  (t/testing "given a simplified update energiatodistus signed via system-sign API,
+              when signing completes,
+              then the database voimassaolo-paattymisaika equals the replaced ET's validity"
+    (with-bindings
+      {#'solita.etp.service.energiatodistus-pdf/generate-et-2013-2018-pdf-as-file generate-pdf-as-file-mock
+       ;; Mock the clock because laatija is not allowed to use system signing if the session is too old.
+       #'time/clock                                         (Clock/fixed (.plus laatija-auth-time (Duration/ofSeconds 1))
+                                                                         (ZoneId/systemDefault))
+       #'solita.etp.service.signing.pdf-sign/get-tsp-source test-timeserver/get-tsp-source-in-test
+       #'solita.etp.service.signing.pdf-sign/get-signature-parameters get-parameters-in-test}
+      (let [;; Given: a signed ET A
+            laatija-id (test-data.laatija/insert-suomifi-laatija!)
+            korvattava-add (-> (test-data.energiatodistus/generate-add 2018 true)
+                               (assoc-in [:perustiedot :kieli] 0))
+            [korvattava-id] (test-data.energiatodistus/insert! [korvattava-add] laatija-id)
+            ;; Sign A via API
+            _ (let [url (energiatodistus-sign-url korvattava-id 2018)
+                    response (ts/handler (-> (mock/request :post url)
+                                             (test-data.laatija/with-suomifi-laatija)
+                                             (mock/header "Accept" "application/json")))]
+                (t/is (= (:status response) 200) "Signing korvattava should succeed"))
+            ;; Set a custom 5-year validity on A to distinguish from 10-year
+            custom-validity (java.sql.Timestamp/from
+                              (-> (java.time.Instant/now)
+                                  (.atZone (ZoneId/of "Europe/Helsinki"))
+                                  (.plusYears 5)
+                                  .toInstant))
+            _ (jdbc/execute! ts/*db*
+                                          ["UPDATE energiatodistus SET voimassaolo_paattymisaika = ? WHERE id = ?"
+                                           custom-validity korvattava-id])
+            korvattava-validity (:voimassaolo-paattymisaika
+                                  (energiatodistus-service/find-energiatodistus ts/*db* korvattava-id))
+            ;; And: a draft ET B replacing A with yksinkertaistettu=true
+            korvaava-add (-> (test-data.energiatodistus/generate-add 2018 true)
+                             (assoc-in [:perustiedot :kieli] 0)
+                             (assoc :korvattu-energiatodistus-id korvattava-id
+                                    :yksinkertaistettu-paivitysmenettely true))
+            [korvaava-id] (test-data.energiatodistus/insert! [korvaava-add] laatija-id)]
+        ;; When: sign B via API
+        (let [url (energiatodistus-sign-url korvaava-id 2018)
+              response (ts/handler (-> (mock/request :post url)
+                                       (test-data.laatija/with-suomifi-laatija)
+                                       (mock/header "Accept" "application/json")))]
+          (t/is (= (:status response) 200) "Signing korvaava should succeed")
+          ;; Then: DB validity of B should equal A's validity (inherited)
+          (let [korvaava-et (energiatodistus-service/find-energiatodistus ts/*db* korvaava-id)
+                db-voimassaolo (:voimassaolo-paattymisaika korvaava-et)]
+            (t/is (some? db-voimassaolo)
+                  "voimassaolo-paattymisaika must be set after signing")
+            (t/is (= korvattava-validity db-voimassaolo)
+                  "API-signed simplified update should inherit replaced ET's validity")))))))

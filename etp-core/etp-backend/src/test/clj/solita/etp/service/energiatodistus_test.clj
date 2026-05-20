@@ -1,17 +1,19 @@
 (ns solita.etp.service.energiatodistus-test
-  (:require [clojure.test :as t]
+  (:require [clojure.java.io :as io]
             [clojure.java.jdbc :as jdbc]
-            [clojure.java.io :as io]
-            [solita.etp.test :as etp-test]
+            [clojure.test :as t]
             [solita.common.map :as xmap]
-            [solita.etp.test-system :as ts]
+            [solita.common.time :as time]
+            [solita.etp.service.energiatodistus :as service]
+            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
+            [solita.etp.test :as etp-test]
+            [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
-            [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.perusparannuspassi :as perusparannuspassi-test-data]
-            [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
-            [solita.etp.service.energiatodistus :as service]
-            [solita.etp.whoami :as test-whoami]))
+            [solita.etp.test-system :as ts]
+            [solita.etp.whoami :as test-whoami])
+  (:import (java.time Instant ZoneId)))
 
 (t/use-fixtures :each ts/fixture)
 
@@ -286,7 +288,8 @@
       (t/is (=  (service/end-energiatodistus-signing! db
                                                       ts/*aws-s3-client*
                                                       whoami
-                                                      id)
+                                                      id
+                                                      {:allekirjoitusaika energiatodistus-test-data/time-when-test-cert-not-expired})
                 :not-in-signing))
       (t/is (= (energiatodistus-tila id) :draft))
       (service/start-energiatodistus-signing! db whoami id)
@@ -295,13 +298,15 @@
       (t/is (= (service/end-energiatodistus-signing! db
                                                      ts/*aws-s3-client*
                                                      whoami
-                                                     id)
+                                                     id
+                                                     {:allekirjoitusaika energiatodistus-test-data/time-when-test-cert-not-expired})
                :ok))
       (t/is (= (energiatodistus-tila id) :signed))
       (t/is (= (service/end-energiatodistus-signing! db
                                                      ts/*aws-s3-client*
                                                      whoami
-                                                     id)
+                                                     id
+                                                     {:allekirjoitusaika energiatodistus-test-data/time-when-test-cert-not-expired})
                :already-signed)))))
 
 (t/deftest cancel-energiatodistus-signing!-test
@@ -909,7 +914,8 @@
                                                                ts/*aws-s3-client*
                                                                whoami
                                                                et-id
-                                                               {:skip-pdf-signed-assert? true})))))
+                                                               {:skip-pdf-signed-assert? true
+                                                                :allekirjoitusaika       (time/now)})))))
           "yksinkertaistettu true without korvattu-energiatodistus-id should fail")))
 
 (t/deftest yksinkertaistettu-with-expired-replaced-certificate-rejected-test
@@ -939,7 +945,8 @@
                                                                ts/*aws-s3-client*
                                                                whoami
                                                                korvaava-id
-                                                               {:skip-pdf-signed-assert? true})))))
+                                                               {:skip-pdf-signed-assert? true
+                                                                :allekirjoitusaika       (time/now)})))))
           "yksinkertaistettu with expired replaced certificate should fail")))
 
 (t/deftest yksinkertaistettu-update-draft-field-persistence-test
@@ -966,3 +973,64 @@
     (t/is (= true (:yksinkertaistettu-paivitysmenettely
                      (service/find-energiatodistus ts/*db* et-id)))
           "Updated yksinkertaistettu-paivitysmenettely should persist as true")))
+
+;; ============================================================================
+;; AE-2782: SQL fallback removal — Clojure layer always provides non-nil voimassaolo
+;; ============================================================================
+
+(t/deftest voimassaolo-always-provided-by-clojure-normal-procedure-test
+  ;; Given: a draft ET with yksinkertaistettu-paivitysmenettely false (normal procedure)
+  ;; When: signed via the normal signing flow
+  ;; Then: voimassaolo-paattymisaika is non-nil in DB, confirming Clojure layer provided it
+  ;; The SQL layer does a simple assignment (no coalesce fallback),
+  ;; so the Clojure layer must always provide a non-nil value.
+  (let [{:keys [energiatodistukset laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        id (-> energiatodistukset keys sort first)
+        sign-time energiatodistus-test-data/time-when-test-cert-not-expired]
+    (energiatodistus-test-data/sign! id laatija-id true)
+    (let [et (service/find-energiatodistus ts/*db* id)
+          voimassaolo (:voimassaolo-paattymisaika et)
+          expected (-> sign-time
+                       (.atZone (ZoneId/of "Europe/Helsinki"))
+                       .toLocalDate
+                       (.plusDays 1)
+                       (.atStartOfDay (ZoneId/of "Europe/Helsinki"))
+                       (.plusYears 10)
+                       .toInstant)]
+      (t/is (some? voimassaolo)
+            "voimassaolo-paattymisaika must be non-nil after signing (normal procedure)")
+      (t/is (= expected voimassaolo)
+            "voimassaolo should be sign-time + 1 day + 10 years"))))
+
+(t/deftest voimassaolo-always-provided-by-clojure-simplified-update-test
+  ;; Given: a signed ET A with custom 5-year validity
+  ;; And: a draft ET B replacing A with yksinkertaistettu-paivitysmenettely true
+  ;; When: B is signed
+  ;; Then: B's voimassaolo-paattymisaika equals A's (inherited), confirming Clojure provided it
+
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        korvattava-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
+        [korvattava-id] (energiatodistus-test-data/insert! [korvattava-add] laatija-id)
+        _ (energiatodistus-test-data/sign! korvattava-id laatija-id true)
+        custom-validity (java.sql.Timestamp/from
+                          (-> (Instant/now)
+                              (.atZone (ZoneId/of "Europe/Helsinki"))
+                              (.plusYears 5)
+                              .toInstant))
+        _ (jdbc/execute! ts/*db*
+                         ["UPDATE energiatodistus SET voimassaolo_paattymisaika = ? WHERE id = ?"
+                          custom-validity korvattava-id])
+        korvattava-et (service/find-energiatodistus ts/*db* korvattava-id)
+        korvattava-validity (:voimassaolo-paattymisaika korvattava-et)
+        korvaava-add (-> (first (energiatodistus-test-data/generate-adds 1 2018 true))
+                         (assoc :korvattu-energiatodistus-id korvattava-id
+                                :yksinkertaistettu-paivitysmenettely true))
+        [korvaava-id] (energiatodistus-test-data/insert! [korvaava-add] laatija-id)]
+    (energiatodistus-test-data/sign! korvaava-id laatija-id true)
+    (let [korvaava-et (service/find-energiatodistus ts/*db* korvaava-id)]
+      (t/is (some? (:voimassaolo-paattymisaika korvaava-et))
+            "voimassaolo-paattymisaika must be non-nil after signing (simplified update)")
+      (t/is (= korvattava-validity (:voimassaolo-paattymisaika korvaava-et))
+            "Simplified update must inherit replaced ET's validity (Clojure-provided, not SQL fallback)"))))
