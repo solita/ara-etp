@@ -26,6 +26,10 @@
   // We could generalize this for laatijat also.
   const keyLabel = R.cond([
     [
+      R.equals('energiatodistus.ilmastoselvitys.laatimisajankohta'),
+      R.always($_('energiatodistus.haku.ilmastoselvitys.laatimisajankohta'))
+    ],
+    [
       R.compose(R.equals('energiatodistus'), R.head, R.split('.')),
       R.compose(
         Inputs.propertyLabel($_, 'energiatodistus'),
