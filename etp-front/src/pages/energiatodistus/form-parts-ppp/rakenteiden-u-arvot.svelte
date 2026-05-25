@@ -26,7 +26,6 @@
       EitherMaybe.fold(false, v => v === 0),
       R.path(['lahtotiedot', 'rakennusvaippa', rakenneKeyMap[rakenne], 'ala'])
     )(energiatodistus);
-
 </script>
 
 <H4

@@ -32,10 +32,30 @@ export const pppRequired = (
   const filteredPppRequiredFields = energiatodistus
     ? R.reject(field => {
         const alaMapping = {
-          'rakennuksen-perustiedot.ylapohja-ehdotettu-taso': ['lahtotiedot', 'rakennusvaippa', 'ylapohja', 'ala'],
-          'rakennuksen-perustiedot.alapohja-ehdotettu-taso': ['lahtotiedot', 'rakennusvaippa', 'alapohja', 'ala'],
-          'rakennuksen-perustiedot.ikkunat-ehdotettu-taso': ['lahtotiedot', 'rakennusvaippa', 'ikkunat', 'ala'],
-          'rakennuksen-perustiedot.ulkoovet-ehdotettu-taso': ['lahtotiedot', 'rakennusvaippa', 'ulkoovet', 'ala']
+          'rakennuksen-perustiedot.ylapohja-ehdotettu-taso': [
+            'lahtotiedot',
+            'rakennusvaippa',
+            'ylapohja',
+            'ala'
+          ],
+          'rakennuksen-perustiedot.alapohja-ehdotettu-taso': [
+            'lahtotiedot',
+            'rakennusvaippa',
+            'alapohja',
+            'ala'
+          ],
+          'rakennuksen-perustiedot.ikkunat-ehdotettu-taso': [
+            'lahtotiedot',
+            'rakennusvaippa',
+            'ikkunat',
+            'ala'
+          ],
+          'rakennuksen-perustiedot.ulkoovet-ehdotettu-taso': [
+            'lahtotiedot',
+            'rakennusvaippa',
+            'ulkoovet',
+            'ala'
+          ]
         };
         const alaPath = alaMapping[field];
         if (!alaPath) return false;
@@ -55,7 +75,9 @@ export const pppRequired = (
     )
   )(perusparannuspassi.vaiheet);
   if (R.isEmpty(validVaiheet)) {
-    return R.concat(filteredPppRequiredFields, ['vaiheet.0.tulokset.vaiheen-alku-pvm']);
+    return R.concat(filteredPppRequiredFields, [
+      'vaiheet.0.tulokset.vaiheen-alku-pvm'
+    ]);
   } else {
     const vaiheRequireds = R.compose(
       R.flatten,
