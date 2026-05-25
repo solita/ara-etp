@@ -88,7 +88,8 @@
       pppRequired(
         perusparannuspassi,
         pppValidation,
-        energiatodistus['bypass-validation-limits']
+        energiatodistus['bypass-validation-limits'],
+        energiatodistus
       )
     ),
     schema =>
@@ -263,7 +264,8 @@
             pppRequired(
               perusparannuspassi,
               pppValidation,
-              energiatodistus['bypass-validation-limits']
+              energiatodistus['bypass-validation-limits'],
+              energiatodistus
             ),
             R.assocPath(
               ['perustiedot', 'kieli'],

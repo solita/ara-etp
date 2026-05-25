@@ -19,6 +19,14 @@
     ikkunat: 'ikkunat',
     ulkoovet: 'ulkoovet'
   };
+
+  const isAlaZero = rakenne =>
+    rakenne !== 'ulkoseinat' &&
+    R.compose(
+      EitherMaybe.fold(false, v => v === 0),
+      R.path(['lahtotiedot', 'rakennusvaippa', rakenneKeyMap[rakenne], 'ala'])
+    )(energiatodistus);
+
 </script>
 
 <H4
@@ -77,7 +85,7 @@
               {schema}
               bind:model={perusparannuspassi}
               compact={true}
-              required={true}
+              required={!isAlaZero(rakenteet)}
               i18nRoot="perusparannuspassi"
               path={['rakennuksen-perustiedot', `${rakenteet}-ehdotettu-taso`]}
             ></Input>
