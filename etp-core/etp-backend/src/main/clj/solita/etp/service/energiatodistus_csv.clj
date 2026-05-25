@@ -237,7 +237,8 @@
        (and
         (or (contains? extra-columns column)
             (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2013 column)
-            (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2018 column))
+            (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2018 column)
+            (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2026 column))
         (not (contains? hidden-columns column))))
      private-columns)))
 
@@ -793,8 +794,11 @@
 (def ^:private header-renames
   "CSV header renames applied to the final header string.
    Keys and values are plain strings, matched case-sensitively.
-   Input is already capitalized by str/capitalize so only capitalized forms are needed."
-  {"Nettoala" "Hyötypinta-ala"})
+   Both capitalized and lowercase forms are needed because str/capitalize
+   only capitalizes the first character — compound keywords like
+   :lammitetty-nettoala become Lammitetty-nettoala (lowercase after hyphen)."
+  {"Nettoala" "Hyötypinta-ala"
+   "nettoala" "hyötypinta-ala"})
 
 (defn- apply-header-renames [header]
   (reduce-kv str/replace header header-renames))

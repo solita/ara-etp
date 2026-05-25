@@ -69,7 +69,8 @@
                       [:tulokset :kaytettavat-energiamuodot :muu 2 :muotokerroin]})
 
 (def ^:private header-renames
-  {"Nettoala" "Hyötypinta-ala"})
+  {"Nettoala" "Hyötypinta-ala"
+   "nettoala" "hyötypinta-ala"})
 
 (defn- apply-header-renames [header]
   (reduce-kv str/replace header header-renames))
@@ -100,6 +101,12 @@
     (let [csv-data (csv/read-csv reader :separator \;)
           [header first-line second-line third-line] (take 4 csv-data)]
       [header first-line second-line third-line])))
+
+(defn get-all-csv-lines [key]
+  (with-open [csv-file (file/find-file ts/*aws-s3-client* key)
+              reader (clojure.java.io/reader csv-file)]
+    (let [csv-data (csv/read-csv reader :separator \;)]
+      (doall csv-data))))
 
 (t/deftest test-update-public-csv-in-s3!-handles-empty-query
   (t/testing "CSV contains expected columns when energiatodistus exists"
@@ -190,15 +197,15 @@
           "CSV should exist after generation.")
 
     (t/testing "CSV contains only signed energiatodistus data with kayttotarkoitus 'PK' and excludes 'YAT'"
-      ;; Rakennustunnus matches the first generated energiatodistus
-      (let [[_ first _] (get-first-three-lines-from-csv csv-to-s3/public-csv-key)]
-        (t/is (true? (str/includes? first rakennustunnus-1))))
+      (let [all-lines (get-all-csv-lines csv-to-s3/public-csv-key)
+            data-lines (rest all-lines)
+            all-data-str (str/join "\n" (map #(str/join ";" %) data-lines))]
+        ;; Rakennustunnus matches the first generated energiatodistus
+        (t/is (true? (str/includes? all-data-str rakennustunnus-1)))
 
-      ;; Rakennustunnus matches the second generated energiatodistus
-      (let [[_ _ second] (get-first-three-lines-from-csv csv-to-s3/public-csv-key)]
-        (t/is (true? (str/includes? second rakennustunnus-2))))
+        ;; Rakennustunnus matches the second generated energiatodistus
+        (t/is (true? (str/includes? all-data-str rakennustunnus-2)))
 
-      ;; Rakennustunnus does not match the third generated energiatodistus
-      (let [[_ _ _ third] (get-first-three-lines-from-csv csv-to-s3/public-csv-key)]
-        (t/is (true? (nil? third)))))))
+        ;; Rakennustunnus of YAT todistus should NOT appear (excluded from public CSV)
+        (t/is (false? (str/includes? all-data-str rakennustunnus-3)))))))
 
