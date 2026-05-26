@@ -400,7 +400,7 @@
         :eluvun-muutos                              "E-luku,\nmuuutos"
         :kasvihuonepaastojen-muutos                 "Energiankäytön\nkasvihuonekaasu-\npäästöjen muutos"
         :huomiot-pohjat-otsikko                     "Huomiot – ylä- ja alapohja"
-        :te-lammitys-ilmanvaihto-otsikko            "Toimenpide-ehdotukset: Lämmitys- ja ilmanvaihtojärjestelmät"
+        :te-lammitys-ilmanvaihto-otsikko            "Toimenpide-ehdotukset: Lämmitys-, ilmastointi- ja ilmanvaihtojärjestelmät"
         :lammitys-ilmanvaihto-teksti                "Toimenpide-ehdotusten tavoitteena on parantaa rakennuksen energiatehokkuutta,
                                                     sisäympäristön laatua ja vähen-\ntää energiankäytöstä johtuvia kasvihuonekaasupäästöjä.
                                                     Vaikutukset arvioidaan rakennuksen vakioidulla käytöllä.\n
@@ -610,7 +610,7 @@
         :kasvihuonepaastojen-muutos                 "Energiankäytön\nkasvihuonekaasu-\npäästöjen muutos (sv)"
         :huomiot-pohjat-otsikko                     "Huomiot – ylä- ja alapohja"
 
-        :te-lammitys-ilmanvaihto-otsikko            "Toimenpide-ehdotukset: Lämmitys- ja ilmanvaihtojärjestelmät(sv)"
+        :te-lammitys-ilmanvaihto-otsikko            "Toimenpide-ehdotukset: Lämmitys-, ilmastointi- ja ilmanvaihtojärjestelmät (sv)"
         :lammitys-ilmanvaihto-teksti                "Toimenpide-ehdotusten tavoitteena on parantaa rakennuksen energiatehokkuutta,
                                                     sisäympäristön laatua ja vähen-\ntää energiankäytöstä johtuvia kasvihuonekaasupäästöjä.
                                                     Vaikutukset arvioidaan rakennuksen vakioidulla käytöllä.\n

@@ -8,9 +8,11 @@
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
      [:h1 (l :te-muut-otsikko)]
-     (str (l :te-muut-teksti))
+     [:p {:id "muut-teksti"}
+        (l :te-muut-teksti)]
      [:h3 (l :te-muut-valaistus-otsikko)]
-     [:div {:class "toimenpide-huomiot-teksti"}
+     [:div {:class "toimenpide-huomiot-teksti"
+            :id    "toimenpide-huomiot-muut-teksti"}
       (-> energiatodistus
           (get-in [:huomiot :valaistus-muut (case kieli
                                               :fi :teksti-fi
@@ -46,6 +48,7 @@
 (defn toimenpide-ehdotukset-suositukset [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
+     [:div {:id "toimenpide-ehdotukset-suositukset-spacer"}]
      [:h3 (l :te-suositukset-otsikko)]
      [:div {:class "toimenpide-huomiot-teksti"}
       (-> energiatodistus
