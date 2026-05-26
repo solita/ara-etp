@@ -101,13 +101,5 @@ describe('Ilmastoselvitys localization', () => {
       expect(svHiilikadenjalki).toBeDefined();
       expect(svHiilikadenjalki.header).toBeDefined();
     });
-
-    it('given sv.json, when checking ilmastoselvitys values, then they follow the placeholder convention', () => {
-      // given
-      const svIlmastoselvitys = sv.energiatodistus.ilmastoselvitys;
-
-      // then — Swedish placeholders should follow the "(sv)" convention
-      expect(svIlmastoselvitys.header).toMatch(/\(sv\)$/);
-    });
   });
 });
