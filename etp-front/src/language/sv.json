@@ -1276,6 +1276,7 @@
     },
     "lisamerkintoja": "Tilläggsuppgifter",
     "ilmastoselvitys": {
+      "label-context": "Klimatdeklaration",
       "header": "Ilmastoselvitys (sv)",
       "laatimisajankohta": "Laatimisajankohta (sv)",
       "laatija": "Laatija (sv)",
