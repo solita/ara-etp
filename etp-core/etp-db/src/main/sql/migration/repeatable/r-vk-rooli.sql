@@ -1,8 +1,8 @@
 insert into vk_rooli  (id, ordinal, label_fi, label_sv)
 values
-(0, 1, 'Omistaja', 'Omistaja (sv)'),
+(0, 1, 'Omistaja', 'Ägare'),
 (1, 2, 'Kiinteistövälittäjä', 'Fastighetsmäklare'),
-(2, 3, 'Muu tiedoksisaaja', 'Muu tiedoksisaaja (sv)')
+(2, 3, 'Muu tiedoksisaaja', 'Annan kopiemottagare')
 on conflict (id) do update set
   label_fi = excluded.label_fi,
   label_sv = excluded.label_sv,
