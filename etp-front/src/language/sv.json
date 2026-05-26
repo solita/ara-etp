@@ -12,7 +12,7 @@
     "invalid-email": "Felaktig e-post",
     "invalid-ytunnus": "Felaktigt FO-nummer",
     "postinumero-not-found": "Postnummer saknas",
-    "postinumero-not-normal": "Vain normaalit postinumerot on sallittu SV?",
+    "postinumero-not-normal": "Endast normala postnummer är tillåtna",
     "invalid-henkilotunnus": "Felaktig personbeteckning",
     "invalid-rakennustunnus": "Felaktig byggnadsbeteckning",
     "invalid-verkkolaskuosoite": "Felaktig nätfakturaadress",
@@ -103,7 +103,7 @@
     "celsius": "°C",
     "days": "dagar",
     "screen-reader": {
-      "co2-ekv-tons-per-year": "tonnia hiilidioksidiekvivalenttia per vuosi (sv)"
+      "co2-ekv-tons-per-year": "ton koldioxidekvivalent per år"
     }
   },
   "login_redirect": "Vänta en stund, du hänvisas till inloggningssidan",
@@ -201,8 +201,8 @@
     "email": "E-postadress",
     "kayttajatunnus": "Användarnamn för dataöverföring",
     "puhelin": "Telefon",
-    "titteli-fi": "Titteli (suomi) (sv)",
-    "titteli-sv": "Titteli (ruotsi) (sv)",
+    "titteli-fi": "Titel (finska)",
+    "titteli-sv": "Titel (svenska)",
     "perustiedot-header": "Basuppgifter",
     "api-header": "API",
     "aineistot-header": "Materialer",
@@ -435,7 +435,7 @@
       "sarakkeet": {
         "tila": "Status",
         "tunnus": "EC Beteckning",
-        "ppp-tunnus": "PPP tunnus (sv)",
+        "ppp-tunnus": "Renoveringspass-ID",
         "e-luokka": "E-klass",
         "versio": "Version",
         "voimassa": "Giltig",
@@ -483,11 +483,11 @@
         "label": "Postanstalt"
       },
       "perusparannuspassi": {
-        "id": "Perusparannuspassitunnus (sv)",
-        "valid": "Perusparannuspassi on olemassa (sv)"
+        "id": "Renoveringspass-ID",
+        "valid": "Befintligt renoveringspass"
       },
       "ilmastoselvitys": {
-        "laatimisajankohta": "Todistuksella on ilmastoselvitys (sv)"
+        "laatimisajankohta": "Certifikatet har en klimatdeklaration"
       }
     },
     "kaikki": "Allt",
@@ -585,7 +585,7 @@
       "laatimisvaihe": "Upprättandes period",
       "uudisrakennus": "Nybyggnad",
       "havainnointikaynti": "Datum för iakttagelser på plats",
-      "havainnointikayntityyppi-id": "Havainnointikäynnin tyyppi (sv)",
+      "havainnointikayntityyppi-id": "Observationsbesök genomfört",
       "katuosoite": "Gatuadress",
       "katuosoite-*": "Gatuadress",
       "postinumero": "Postnummer",
@@ -627,7 +627,7 @@
       "U": "U",
       "lammitetty-nettoala": "Uppvärmd nettoarea",
       "energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin": "Energiankulutuksen valmius reagoida ulkoisiin signaaleihin (sv)",
-      "rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin": "Rakennus kykenee reagoimaan ulkoisiin signaaleihin (sv)",
+      "rakennus-kykenee-reagoimaan-ulkoisiin-signaaleihin": "Byggnaden kan reagera på yttre signaler",
       "rakennusvaippa": {
         "header": "Klimatskal",
         "label-context": "Klimatskal",
@@ -807,7 +807,7 @@
           "kuvaus": "Beskrivning av värmedistributionen"
         },
         "lammonjako-lampotilajousto": "Lämmönjaon lämpötilajousto (sv)",
-        "lammonjakojarjestelma-mukautettavissa": "Rakennuksen sisäinen lämmönjakojärjestelmä kykenee toimimaan alhaisissa tai tapauksen mukaan tehokkaammassa lämpötilassa (sv)",
+        "lammonjakojarjestelma-mukautettavissa": "Byggnadens interna värmedistributionssystem kan fungera i låga temperaturer eller, beroende på fallet, vid en mer effektiv temperaturnivå.",
         "tuotonhyotysuhde": "Verknings\u00ADgrad för produktionen",
         "jaonjaluovutuksenhyotysuhde": "Verknings-graden för distribution och avgivning",
         "lampokerroin": "Temperatur-koefficient",
@@ -938,18 +938,18 @@
       },
       "uusiutuvat-omavaraisenergiat": {
         "0": {
-          "label-context": "Omavaraisenergia, hyödynnetty (sv)",
+          "label-context": "Förnybara självförsörjningsenergier",
           "nimi": "Energinamn",
           "vuosikulutus": "Produktion (kWh/år)"
         },
         "header": {
           "2013": "Utnyttjad andel av förnybar egenproducerad energi",
           "2018": "Energi som utvunnits från energi i byggnadens närmiljö, tillvaratagen andel (månatlig specifikation i tilläggsuppgifterna)",
-          "2026": "Rakennuksen hyödyntämä ja tuottama uusiutuva energia (sv)"
+          "2026": "Förnybar energi som utnyttjas och produceras av byggnaden"
         },
-        "table-kokonaistuotto-header": "Kokonaistuotto (sv)",
-        "table-rakennuksen-hyodyntama-osuus-header": "Rakennuksen hyödyntämä osuus (sv)",
-        "label-context": "Omavaraisenergia, hyödynnetty (sv)",
+        "table-kokonaistuotto-header": "Totalproduktion",
+        "table-rakennuksen-hyodyntama-osuus-header": "Andel som utnyttjas av byggnaden",
+        "label-context": "Förnybara självförsörjningsenergier",
         "table-header": "Energilösning",
         "labels": {
           "aurinkosahko": "Solel",
@@ -974,14 +974,14 @@
       },
       "uusiutuvat-omavaraisenergiat-kokonaistuotanto": {
         "label-context": "Omavaraisenergia, kokonaistuotanto (sv)",
-        "aurinkosahko": "Aurinkosähkö (kWh/vuosi) (sv)",
-        "aurinkolampo": "Aurinkolämpö (kWh/vuosi) (sv)",
-        "tuulisahko": "Tuulisähkö (kWh/vuosi) (sv)",
-        "lampopumppu": "Lämpöpumppu (kWh/vuosi) (sv)",
+        "aurinkosahko": "Solel (kWh/år)",
+        "aurinkolampo": "Solvärme (kWh/år)",
+        "tuulisahko": "Vindel (kWh/år)",
+        "lampopumppu": "Värmepump (kWh/år)",
         "muulampo": "Muu lämpö (kWh/vuosi) (sv)",
         "muusahko": "Muu sähkö (kWh/vuosi) (sv)"
       },
-      "hiilijalanjalki-rakennus-yhteensa": "Byggnadens växthusgasutsläpp under livscykeln (kgCO₂ ekv/m²) (sv)",
+      "hiilijalanjalki-rakennus-yhteensa": "Rakennuksen elinkaarenaikaiset kasvihuonekaasupäästöt (kgCO₂ ekv/m²) (sv)",
       "kasvihuonepaastot-per-nelio": "Kasvihuonekaasupäästöt (kg CO₂e/m²/vuosi) (sv)",
       "uusiutuvan-energian-osuus": "Uusiutuvan energian osuus (sv)",
       "tekniset-jarjestelmat": {
@@ -1142,18 +1142,18 @@
       "toteutuneet-yhteensa-header": {
         "2013": "Faktisk köpt energi",
         "2018": "Faktisk köpt energi",
-        "2026": "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia (sv)"
+        "2026": "Realiserad förbrukning av köpt energi och producerad förnybar energi"
       },
       "label-context": "Faktisk köpt energi",
-      "toteutuneet-yhteensa-table-header": "Energianlähde (sv)",
+      "toteutuneet-yhteensa-table-header": "Energikälla",
       "labels": {
         "sahko-vuosikulutus-yhteensa": "El",
         "kaukolampo-vuosikulutus-yhteensa": "Fjärrvärme",
-        "uusiutuvat-polttoaineet-vuosikulutus-yhteensa": "Uusiutuva polttoaine (sv)",
-        "fossiiliset-polttoaineet-vuosikulutus-yhteensa": "Fossiilinen polttoaine (sv)",
+        "uusiutuvat-polttoaineet-vuosikulutus-yhteensa": "Förnybart bränsle",
+        "fossiiliset-polttoaineet-vuosikulutus-yhteensa": "Fossilt bränsle",
         "polttoaineet-vuosikulutus-yhteensa": "Bränsle",
         "kaukojaahdytys-vuosikulutus-yhteensa": "Fjärrkylning",
-        "uusiutuva-energia-vuosituotto-yhteensa": "Tuotettu uusiutuva energia (sv)"
+        "uusiutuva-energia-vuosituotto-yhteensa": "Producerad förnybar energi"
       },
       "sahko-vuosikulutus-yhteensa": "El (kWh/år)",
       "sahko-neliovuosikulutus-yhteensa": "El (kWh/m²år)",
@@ -1165,13 +1165,13 @@
       "polttoaineet-neliovuosikulutus-yhteensa": "Bränsle (kWh/(m²år))",
       "toteutunut-vuosikulutus-yhteensä": "Totalt (kWh/år)",
       "toteutunut-neliovuosikulutus-yhteensä": "Totalt (kWh/(m²år))",
-      "tietojen-alkuperavuosi": "Tiedot ovat vuodelta (sv)",
+      "tietojen-alkuperavuosi": "Uppgifterna är för ett år",
       "uusiutuvat-polttoaineet-vuosikulutus-yhteensa": "Uusiutuvat polttoaineet yhteensä (kWh/vuosi) (sv)",
       "fossiiliset-polttoaineet-vuosikulutus-yhteensa": "Fossiiliset polttoaineet yhteensä (kWh/vuosi) (sv)",
       "uusiutuva-energia-vuosituotto-yhteensa": "Uusiutuva energia, vuosituotto yhteensä (kWh/vuosi) (sv)",
       "lisatietoja-fi": "Lisätietoja (suomeksi) (sv)",
       "lisatietoja-sv": "Lisätietoja (ruotsiksi) (sv)",
-      "lisatietoja": "Lisätietoja (sv)"
+      "lisatietoja": "Mer information"
     },
     "huomiot": {
       "header": {
@@ -1187,7 +1187,7 @@
         "sahko": "El, förändring i köpt energi",
         "jaahdytys": "Kylning, förändring i köpt energi",
         "eluvun-muutos": "E-tal, förändring",
-        "kasvihuonepaastojen-muutos": "Energiankäytön kasvihuone\u00ADkaasupäästöjen muutos (sv)"
+        "kasvihuonepaastojen-muutos": "Ändring av utsläppen av växthus\u00ADgaser från energiförbrukning"
       },
       "suositukset-header": {
         "2013": "Rekommendationer för byggnadens användning och underhåll",
@@ -1231,7 +1231,7 @@
         "header": "Anmärkningar, uppvärmningssystem för utrymmen och tappvatten",
         "label-context": "$unused",
         "teksti": "Anmärkningar, uppvärmningssystem för utrymmen och tappvatten",
-        "kayttoikaa-jaljella-arvio-vuosina": "Arvio lämmitysjärjestelmän jäljellä olevasta teknisestä käyttöiästä (sv)",
+        "kayttoikaa-jaljella-arvio-vuosina": "Uppskattning av uppvärmningssystemet kvarvarande tekniska livslängd",
         "toimenpide": [
           {
             "label-context": "Anmärkningar / Uppvärmningssystem",
@@ -1276,42 +1276,42 @@
     },
     "lisamerkintoja": "Tilläggsuppgifter",
     "ilmastoselvitys": {
-      "header": "Ilmastoselvitys (sv)",
-      "laatimisajankohta": "Laatimisajankohta (sv)",
-      "laatija": "Laatija (sv)",
-      "yritys": "Yritys (sv)",
-      "yritys-osoite": "Yrityksen osoite (sv)",
-      "yritys-postinumero": "Postinumero (sv)",
-      "yritys-postitoimipaikka": "Postitoimipaikka (sv)",
-      "laadintaperuste": "Laadintaperuste (sv)",
+      "header": "Klimatdeklaration",
+      "laatimisajankohta": "Tidpunkt då utarbetats",
+      "laatija": "Utarbetad av",
+      "yritys": "Företag",
+      "yritys-osoite": "Företagets adress",
+      "yritys-postinumero": "Postnummer",
+      "yritys-postitoimipaikka": "Postort",
+      "laadintaperuste": "Grund för utarbetandet",
       "hiilijalanjalki": {
-        "header": "Hiilijalanjälki (sv)",
-        "rakennus": "Rakennus (sv)",
-        "rakennuspaikka": "Rakennuspaikka (sv)",
-        "yhteensa": "Yhteensä (sv)",
-        "rakennustuotteiden-valmistus": "Rakennus\u00ADtuotteiden valmistus (sv)",
-        "kuljetukset-tyomaavaihe": "Kuljetukset ja työmaa\u00ADvaihe (sv)",
-        "rakennustuotteiden-vaihdot": "Rakennus\u00ADtuotteiden vaihdot (sv)",
-        "energiankaytto": "Energian\u00ADkäyttö (sv)",
-        "purkuvaihe": "Purkuvaihe (sv)"
+        "header": "Koldioxidfotavtryck",
+        "rakennus": "Byggnad",
+        "rakennuspaikka": "Byggplats",
+        "yhteensa": "Totalt",
+        "rakennustuotteiden-valmistus": "Tillverkning av byggprodukter",
+        "kuljetukset-tyomaavaihe": "Transporter och byggplatsfas",
+        "rakennustuotteiden-vaihdot": "Byten av byggprodukter",
+        "energiankaytto": "Energianvändning",
+        "purkuvaihe": "Rivningsfas"
       },
       "hiilikadenjalki": {
-        "header": "Hiilikädenjälki (sv)",
-        "uudelleenkaytto": "Uudelleen\u00ADkäyttö (sv)",
-        "kierratys": "Kierrätys (sv)",
-        "ylimaarainen-uusiutuvaenergia": "Ylimääräinen uusiutuva energia (sv)",
-        "hiilivarastovaikutus": "Hiili\u00ADvarasto\u00ADvaikutus (sv)",
-        "karbonatisoituminen": "Karbonati\u00ADsoituminen (sv)"
+        "header": "Koldioxidhandavtryck",
+        "uudelleenkaytto": "Återanvändning",
+        "kierratys": "Återvinning",
+        "ylimaarainen-uusiutuvaenergia": "Överflödig förnybar energi",
+        "hiilivarastovaikutus": "Kollagringseffekt",
+        "karbonatisoituminen": "Karbonatisering"
       }
     },
     "perusparannuspassi": {
-      "header": "Perusparannuspassi (sv)",
-      "add-button": "Lisää perusparannuspassi (sv)",
-      "delete-button": "Poista perusparannuspassi (sv)",
-      "info-text": "Perusparannuspassin käyttö korvaa energiatodistuksen toimenpide-ehdotukset. (sv)",
-      "info-text-when-PPP": "Perusparannuspassi on otettu käyttöön. Passin käyttö korvaa energiatodistuksen toimenpide-ehdotukset. (sv)",
-      "not-added": "Perusparannuspassia ei ole vielä lisätty. Aloita lisäämällä perusparannuspassi. (sv)",
-      "disclaimer": "Perusparannuspassi on tilaajalle vapaaehtoinen. Energiatodistus voidaan laatia ilman perusparannuspassia. Perusparannuspassissa esitetyt eri vaiheiden toteutuneet kulutukset ja kustannukset ovat arvioita. Laskelmissa ei oteta huomioon kuluttajan käyttötottumusten tai energian hintojen muutoksia nykytilanteeseen verrattuna. (sv)"
+      "header": "Renoveringspass",
+      "add-button": "Lägg till renoveringspass",
+      "delete-button": "Ta bort renoveringspass",
+      "info-text": "Användningen av renoveringspasset ersätter energicertifikatets åtgärdsförslag.",
+      "info-text-when-PPP": "Renoveringspasset har tagits i bruk. Användningen av passet ersätter energicertifikatets åtgärdsförslag.",
+      "not-added": "Renoveringspasset har ännu inte lagts till. Börja med att lägga till renoveringspasset.",
+      "disclaimer": "Renoveringspasset är frivilligt för beställaren. Energicertifikatet kan utarbetas utan ett renoveringspass. De realiserade förbrukningarna och kostnaderna för de olika faser som presenterats i renoveringspasset är uppskattningar. I beräkningarna beaktas inte ändringar av konsumentens förbrukningsvanor eller energipriserna jämfört med nuläget."
     },
     "messages": {
       "save-success": "Uppgifterna i energicertifikatet har sparats.",
@@ -1485,206 +1485,206 @@
     }
   },
   "perusparannuspassi": {
-    "id": "Perusparannuspassin tunnus (sv)",
-    "lahtotilanne": "Lähtötilanne (sv)",
+    "id": "Renoveringspassets id",
+    "lahtotilanne": "Utgångsläge",
     "messages": {
-      "validation-error": "Perusparannuspassin lomakkeella virheitä, tarkista kentät: (sv)"
+      "validation-error": "Det finns fel i formuläret för renoveringspasset, kontrollera fälten:"
     },
     "passin-perustiedot": {
       "label-context": "$unused",
-      "header": "Passin perustiedot (sv)",
-      "havainnointikaynti": "Havainnointikäynnin päivämäärä (sv)",
-      "passin-esittely": "Passin esittelyn päivämäärä (sv)",
-      "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A0-luokassa (sv)",
-      "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa (sv)",
+      "header": "Grungläggande uppgifter om passet",
+      "havainnointikaynti": "Datum för observationsbesök",
+      "passin-esittely": "Datum för presentation av passet",
+      "tayttaa-a0-vaatimukset": "Efter den sista fasen är byggnaden i klass A\u2070",
+      "tayttaa-aplus-vaatimukset": "Efter den sista fasen är byggnaden i klass A+",
       "lisatiedot": {
-        "header": "Lisätietoja (sv)"
+        "header": "Mer information"
       },
-      "lisatietoja": "Lisätiedot (sv)"
+      "lisatietoja": "Mer information"
     },
     "rakennuksen-perustiedot": {
       "label-context": "$unused",
-      "header": "Rakennuksen perustiedot (sv)",
-      "lisatietoja": "Lisätiedot (sv)",
-      "ulkoseinat-ehdotettu-taso": "Ulkoseinät viimeisen vaiheen jälkeen (sv)",
-      "ylapohja-ehdotettu-taso": "Yläpohjat viimeisen vaiheen jälkeen (sv)",
-      "alapohja-ehdotettu-taso": "Alapohjat viimeisen vaiheen jälkeen(sv)",
-      "ikkunat-ehdotettu-taso": "Ikkunat viimeisen vaiheen jälkeen(sv)",
-      "ulkoovet-ehdotettu-taso": "Ulko-ovet  viimeisen vaiheen jälkeen(sv)",
+      "header": "Grundläggande uppgifter om byggnaden",
+      "lisatietoja": "Mer information",
+      "ulkoseinat-ehdotettu-taso": "Ytterväggarna efter den sista fasen",
+      "ylapohja-ehdotettu-taso": "Vindsbjälklagen efter den sista fasen",
+      "alapohja-ehdotettu-taso": "Bottenbjälklagen efter den sista fasen",
+      "ikkunat-ehdotettu-taso": "Fönstren efter den sista fasen",
+      "ulkoovet-ehdotettu-taso": "Ytterdörrarna efter den sista fasen",
       "rakenteiden-u-arvot": {
-        "header": "Rakenteiden U-arvot (sv)",
-        "rakenne": "Rakenne (sv)",
-        "lahtotiedot": "U-arvot, lähtötilanne (sv)",
-        "viimeisen-vaiheen-jalkeen": "U-arvot, viimeisen vaiheen jälkeen (sv)",
-        "ulkoseinat": "Ulkoseinät (sv)",
-        "ylapohja": "Yläpohjat (sv)",
-        "alapohja": "Alapohjat (sv)",
-        "ikkunat": "Ikkunat (sv)",
-        "ulkoovet": "Ulko-ovet (sv)"
+        "header": "Konstruktionernas U-värde",
+        "rakenne": "Konstruktion",
+        "lahtotiedot": "U-värden, utgångsläge",
+        "viimeisen-vaiheen-jalkeen": "U-värden, efter den sista fasen",
+        "ulkoseinat": "Ytterväggarna",
+        "ylapohja": "Vindsbjälklagen",
+        "alapohja": "Bottenbjälklagen",
+        "ikkunat": "Fönstren",
+        "ulkoovet": "Ytterdörrarna"
       },
-      "paalammitysjarjestelma-ehdotettu-taso": "Päälämmitysjärjestelmä ehdotettu taso (sv)",
-      "ilmanvaihto-ehdotettu-taso": "Ilmanvaihto ehdotettu taso (sv)",
-      "uusiutuva-energia-ehdotettu-taso": "Uusiutuva energia ehdotettu taso (sv)",
-      "jaahdytys-ehdotettu-taso": "Jäähdytys (optio) ehdotettu taso ehdotettu taso (sv)",
-      "mahdollisuus-liittya-energiatehokkaaseen": "Kohteen liitettävyys ehdotettu taso (sv)",
+      "paalammitysjarjestelma-ehdotettu-taso": "Huvuduppvärmningssystem föreslagen nivå",
+      "ilmanvaihto-ehdotettu-taso": "Ventilation föreslagen nivå",
+      "uusiutuva-energia-ehdotettu-taso": "Förnybar energi föreslagen nivå",
+      "jaahdytys-ehdotettu-taso": "Avkylning (option) föreslagen nivå föreslagen nivå",
+      "mahdollisuus-liittya-energiatehokkaaseen": "Objektets anslutningsbarhet föreslagen nivå",
       "energiajarjestelmat": {
-        "header": "Energiajärjestelmät (sv)",
-        "title": "Energiajärjestelmä (sv)",
-        "ehdotettu-taso": "Ehdotettu taso (sv)",
-        "lisatiedot-kuvaus": "Ilmoita mahdolliset muut energiajärjestelmät lisätiedoissa. (sv)",
-        "paalammitysjarjestelma": "Päälämmitysjärjestelmä (sv)",
-        "ilmanvaihto": "Ilmanvaihto (sv)",
-        "uusiutuvaenergia": "Uusiutuva energia (sv)",
-        "jaahdytys": "Jäähdytys (optio) (sv)",
+        "header": "Energisystem",
+        "title": "Energisystem",
+        "ehdotettu-taso": "Föreslagen nivå",
+        "lisatiedot-kuvaus": "Uppge eventuella andra energisystem i tilläggsuppgifterna.",
+        "paalammitysjarjestelma": "Huvuduppvärmningssystem",
+        "ilmanvaihto": "Ventilation",
+        "uusiutuvaenergia": "Förnybar energi",
+        "jaahdytys": "Avkylning (option)",
         "kohteen-liitettavyys": {
-          "header": "Kohteen liitettävyys (sv)",
-          "label": "Mahdollisuus liittyä (sv)",
-          "kuvaus": "Ilmoita tässä kohteen mahdollisuudesta liittyä energiatehokkaaseen kaukolämpöön tai kaukojäähdytykseen. (sv)"
+          "header": "Objektets anslutningsbarhet",
+          "label": "Möjlighet till anslutning",
+          "kuvaus": "Uppge här möjligheten att ansluta byggnaden till energieffektiv fjärrvärme eller fjärrkyla."
         },
         "korjausrakentamisen-vahimmaisvaatimustaso": {
-          "header": "Korjausrakentamisen vähimmäisvaatimustaso (sv)",
-          "kuvaus": "YM:n asetusten 4/13 mukainen korjausrakentamisen vähimmäisvaatimustaso (sv)"
+          "header": "Minikravnivå för ombyggnad",
+          "kuvaus": "Minimikravnivå för ombyggnad enligt MM:s förordningar 4/13"
         }
       }
     },
     "tulokset": {
       "label-context": "$unused",
-      "kaukolampo-hinta": "Kaukolämpö hinta (sv)",
-      "sahko-hinta": "Sähkö hinta (sv)",
-      "uusiutuvat-pat-hinta": "Uusiutuva polttoaine hinta (sv)",
-      "fossiiliset-pat-hinta": "Fossiilinen polttoaine hinta (sv)",
-      "kaukojaahdytys-hinta": "Kaukojäähdytys hinta (sv)"
+      "kaukolampo-hinta": "Fjärrvärme pris",
+      "sahko-hinta": "El pris",
+      "uusiutuvat-pat-hinta": "Förnybart bränsle pris",
+      "fossiiliset-pat-hinta": "Fossilt bränsle pris",
+      "kaukojaahdytys-hinta": "Fjärrkyla pris"
     },
     "laskennan-tulokset": {
-      "header": "Laskennan tulokset (sv)",
-      "vaihe": "Vaihe (sv)",
-      "aloitusvuosi": "Aloitusvuosi (sv)",
-      "ei-aloitusvuotta": "Ei aloitusvuotta (sv)",
-      "kwh-per-vuosi": "kWh/vuosi (sv)",
-      "eur-per-vuosi": "€/vuosi (sv)",
-      "lahtotilanne": "Lähtötilanne (sv)",
-      "lahtotilanne-kwh-vuosi": "Lähtötilanne kWh/vuosi (sv)",
-      "info-kirjaa-arvot": "Kirjaa arvot vaiheen muutosten jälkeen. (sv)",
+      "header": "Beräkningens resultat",
+      "vaihe": "Fas",
+      "aloitusvuosi": "Inledningsår",
+      "ei-aloitusvuotta": "Inget inledningsår",
+      "kwh-per-vuosi": "kWh/år",
+      "eur-per-vuosi": "€/år",
+      "lahtotilanne": "Utgångsläge",
+      "lahtotilanne-kwh-vuosi": "Utgångsläge kWh/år",
+      "info-kirjaa-arvot": "Skriv in värdena efter fasens ändringar.",
       "vaiheistus": {
-        "header": "Vaiheistus (sv)",
-        "info": "Tiedot kirjataan vain niille vaiheille, joilla on (sv)",
-        "info-aloitusvuosi": "aloitusvuosi (sv)"
+        "header": "Fasning",
+        "info": "Uppgifter registreras endast för de skeden som har ett",
+        "info-aloitusvuosi": "inledningsår"
       },
       "laskennallinen-ostoenergia": {
-        "header": "Laskennallinen ostoenergia (sv)",
-        "kaukolampo": "Kaukolämpö (sv)",
-        "sahko": "Sähkö (sv)",
-        "uusiutuva-polttoaine": "Uusiutuvat polttoaineet (sv)",
-        "fossiilinen-polttoaine": "Fossiiliset polttoaineet (sv)",
-        "kaukojaahdytys": "Kaukojäähdytys (sv)"
+        "header": "Kalkylmässig köpt energi",
+        "kaukolampo": "Fjärrvärme",
+        "sahko": "El",
+        "uusiutuva-polttoaine": "Förnybara bränslen",
+        "fossiilinen-polttoaine": "Fossila bränslen",
+        "kaukojaahdytys": "Fjärrkyla"
       },
       "uusiutuva-energia": {
-        "header": "Uusiutuva energia (sv)",
-        "energialaji": "Energialaji (sv)",
-        "vuotuinen-tuotto": "Uusiutuvan energian vuotuinen tuotto (sv)",
-        "hyodynnetty-osuus": "Rakennuksen hyödyntämä osuus uusiutuvan energian tuotosta (sv)"
+        "header": "Förnybar energi",
+        "energialaji": "Energislag",
+        "vuotuinen-tuotto": "Årlig produktion av förnybar energi",
+        "hyodynnetty-osuus": "Andel av produktion av förnybar energi som byggnaden utnyttjar"
       },
       "toteutunut-ostoenergia": {
-        "header": "Toteutunut ostoenergia (sv)",
-        "kaukolampo": "Kaukolämpö (sv)",
-        "sahko": "Sähkö (sv)",
-        "uusiutuva-polttoaine": "Uusiutuvat polttoaineet (sv)",
-        "fossiilinen-polttoaine": "Fossiiliset polttoaineet (sv)",
-        "kaukojaahdytys": "Kaukojäähdytys (sv)"
+        "header": "Realiserad köpt energi",
+        "kaukolampo": "Fjärrvärme",
+        "sahko": "El",
+        "uusiutuva-polttoaine": "Förnybara bränslen",
+        "fossiilinen-polttoaine": "Fossila bränslen",
+        "kaukojaahdytys": "Fjärrkyla"
       },
       "energian-hinta": {
-        "header": "Energian hinta (sv)",
-        "kuvaus": "Kirjaa käyttämäsi energian hinnat. (sv)",
-        "energia": "Energia (sv)",
-        "hinta-snt-kwh": "Hinta snt/kWh (sv)",
-        "kaukolampo": "Kaukolämpö (sv)",
-        "sahko": "Sähkö (sv)",
-        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)",
-        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
-        "kaukojaahdytys": "Kaukojäähdytys (sv)"
+        "header": "Energipris",
+        "kuvaus": "Skriv in priserna för den energi du använt.",
+        "energia": "Energi",
+        "hinta-snt-kwh": "Pris cnt/kWh",
+        "kaukolampo": "Fjärrvärme",
+        "sahko": "El",
+        "uusiutuva-polttoaine": "Förnybart bränsle",
+        "fossiilinen-polttoaine": "Fossila bränslen",
+        "kaukojaahdytys": "Fjärrkyla"
       },
       "kustannukset-laskennallinen": {
-        "header": "Energiakustannukset, laskennallinen ostoenergia (sv)",
-        "kuvaus": "Kustannukset lasketaan automaattisesti ilmoitettujen tietojen perusteella. (sv)",
-        "energia": "Energia (sv)",
-        "lahtotilanne": "Lähtötilanne €/vuosi (sv)",
-        "vaihe-1": "Vaihe 1 €/vuosi (sv)",
-        "vaihe-2": "Vaihe 2 €/vuosi (sv)",
-        "vaihe-3": "Vaihe 3 €/vuosi (sv)",
-        "vaihe-4": "Vaihe 4 €/vuosi (sv)",
-        "yhteensa": "Yhteensä (sv)",
-        "erotus": "Erotus edelliseen vaiheeseen (sv)",
-        "kaukolampo": "Kaukolämpö (sv)",
-        "sahko": "Sähkö (sv)",
-        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)",
-        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
-        "kaukojaahdytys": "Kaukojäähdytys (sv)"
+        "header": "Energikostnader, kalkylmässig köpt energi",
+        "kuvaus": "Kostnaderna beräknas automatiskt på basis av de priser som uppgetts",
+        "energia": "Energi",
+        "lahtotilanne": "Utgångsläge €/år",
+        "vaihe-1": "Fas 1 €/år",
+        "vaihe-2": "Fas 2 €/år",
+        "vaihe-3": "Fas 3 €/år",
+        "vaihe-4": "Fas 4 €/år",
+        "yhteensa": "Totalt",
+        "erotus": "Differens från föregående fas",
+        "kaukolampo": "Fjärrvärme",
+        "sahko": "El",
+        "uusiutuva-polttoaine": "Förnybart bränsle",
+        "fossiilinen-polttoaine": "Fossila bränslen",
+        "kaukojaahdytys": "Fjärrkyla"
       },
       "kustannukset-toteutunut": {
-        "header": "Energiakustannukset, toteutunut ostoenergia (sv)",
-        "kuvaus": "Kustannukset lasketaan automaattisesti ilmoitettujen tietojen perusteella. (sv)",
-        "energia": "Energia (sv)",
-        "lahtotilanne": "Lähtötilanne €/vuosi (sv)",
-        "vaihe-1": "Vaihe 1 €/vuosi (sv)",
-        "vaihe-2": "Vaihe 2 €/vuosi (sv)",
-        "vaihe-3": "Vaihe 3 €/vuosi (sv)",
-        "vaihe-4": "Vaihe 4 €/vuosi (sv)",
-        "yhteensa": "Yhteensä (sv)",
-        "erotus": "Erotus edelliseen vaiheeseen (sv)",
-        "kaukolampo": "Kaukolämpö (sv)",
-        "sahko": "Sähkö (sv)",
-        "uusiutuva-polttoaine": "Uusiutuva polttoaine (sv)",
-        "fossiilinen-polttoaine": "Fossiilinen polttoaine (sv)",
-        "kaukojaahdytys": "Kaukojäähdytys (sv)"
+        "header": "Energikostnader, realiserad köpt energi",
+        "kuvaus": "Kostnaderna beräknas automatiskt på basis av de priser som uppgetts",
+        "energia": "Energi",
+        "lahtotilanne": "Utgångsläge €/år",
+        "vaihe-1": "Fas 1 €/år",
+        "vaihe-2": "Fas 2 €/år",
+        "vaihe-3": "Fas 3 €/år",
+        "vaihe-4": "Fas 4 €/år",
+        "yhteensa": "Totalt",
+        "erotus": "Differens från föregående fas",
+        "kaukolampo": "Fjärrvärme",
+        "sahko": "El",
+        "uusiutuva-polttoaine": "Förnybart bränsle",
+        "fossiilinen-polttoaine": "Fossila bränslen",
+        "kaukojaahdytys": "Fjärrkyla"
       }
     },
     "toimenpiteet": {
-      "header": "Toimenpiteet (sv)",
+      "header": "Åtgärder",
       "osio": {
-        "header": "Vaiheessa {vaihe} toteutettavat toimenpiteet (sv)",
-        "avaa": "Avaa osio (sv)",
-        "sulje": "Sulje osio (sv)"
+        "header": "Åtgärder som ska genomföras i fas {vaihe}",
+        "avaa": "Öppna avsnitt",
+        "sulje": "Stäng avsnitt"
       },
       "ehdotukset": {
-        "header": "Toimenpide-ehdotukset (sv)",
-        "toimenpide-n": "{n}. toimenpide-ehdotus (sv)"
+        "header": "Förslag till åtgärder",
+        "toimenpide-n": "{n}. åtgärdsförslag"
       },
-      "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä (sv)",
-      "vaihe-alkaa": "Vaihe alkaa (sv)",
-      "e-luokka-jalkeen": "E-luokka vaiheen jälkeen (sv)",
-      "e-luku-jalkeen": "E-luku vaiheen jälkeen (sv)",
+      "vaiheen-alku-pvm": "Inledningsdatum för fasen",
+      "vaihe-alkaa": "Fasen inleds",
+      "e-luokka-jalkeen": "E-klass efter fasen",
+      "e-luku-jalkeen": "E-tal efter fasen",
       "energiankulutus-vaiheen-jalkeen": {
-        "header": "Energiankulutus vaiheen jälkeen (sv)",
-        "ostoenergian-tarve-kaukolampo": "Kaukolämpö (sv)",
-        "ostoenergian-tarve-sahko": "Sähkö (sv)",
-        "ostoenergian-tarve-uusiutuvat-pat": "Uusiutuvat polttoaineet (sv)",
-        "ostoenergian-tarve-fossiiliset-pat": "Fossiiliset polttoaineet (sv)",
-        "ostoenergian-tarve-kaukojaahdytys": "Kaukojäähdytys (sv)"
+        "header": "Energiförbrukning efter fasen",
+        "ostoenergian-tarve-kaukolampo": "Fjärrvärme",
+        "ostoenergian-tarve-sahko": "El",
+        "ostoenergian-tarve-uusiutuvat-pat": "Förnybara bränslen",
+        "ostoenergian-tarve-fossiiliset-pat": "Fossila bränslen",
+        "ostoenergian-tarve-kaukojaahdytys": "Fjärrkyla"
       },
-      "vaiheen-alku-pvm-vaihe-alkaa": "Vaihe alkaa (sv)",
-      "e-luokka-vaiheen-jalkeen": "E-luokka vaiheen jälkeen (sv)",
-      "e-luku-vaiheen-jalkeen": "E-luku vaiheen jälkeen (sv)",
-      "ostoenergian-kokonaistarve-vaiheen-jalkeen": "Ostoenergian kokonaistarve vaiheen jälkeen (sv)",
-      "uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta": "Uusiutuvan energian osuus ostoenergian kokonaistarpeesta (sv)",
-      "ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus": "Ostoenergian kokonaistarve vaiheen jälkeen, toteutunut kulutus (sv)",
-      "toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio": "Toteutuneen ostoenergian vuotuinen energiakustannus, arvio (sv)",
-      "energiankaytosta-aiheutuvat-hiilidioksidipaastot": "Energiankäytöstä aiheutuvat hiilidioksidipäästöt (sv)"
+      "vaiheen-alku-pvm-vaihe-alkaa": "Fasen inleds",
+      "e-luokka-vaiheen-jalkeen": "E-klass efter fasen",
+      "e-luku-vaiheen-jalkeen": "E-tal efter fasen",
+      "ostoenergian-kokonaistarve-vaiheen-jalkeen": "Totalbehov av köpt energi efter fasen",
+      "uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta": "Andel förnybar energi av det totala behovet köpt energi",
+      "ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus": "Totalbehov av köpt energi efter fasen, realiserad förbrukning",
+      "toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio": "Årlig energiförbrukning av realiserad köpt energi, uppskattning",
+      "energiankaytosta-aiheutuvat-hiilidioksidipaastot": "Koldioxidutsläpp från energiförbrukningen"
     },
     "vaiheet": {
       "0": {
         "toimenpiteet": {
-          "toimenpideseloste": "Toimenpideseloste (sv)"
+          "toimenpideseloste": "Åtgärdsredovisning"
         },
         "tulokset": {
           "label-context": "$unused",
-          "vaiheen-alku-pvm": "vaiheen aloituspäivämäärä (sv)",
-          "ostoenergian-tarve-kaukolampo": "Vaiheen kaukolämpö (sv)",
-          "ostoenergian-tarve-uusiutuvat-pat": "vaiheen uusiutuvat polttoaineet (sv)",
-          "ostoenergian-tarve-fossiiliset-pat": "Vaiheen fossiiliset polttoaineet (sv)",
-          "ostoenergian-tarve-kaukojaahdytys": "Vaiheen kaukojäähdytys (sv)",
-          "ostoenergian-tarve-sahko": "Vaiheeen sähkö (sv)",
-          "uusiutuvan-energian-kokonaistuotto": "Vaiheen uusiutuvan energian kokonaistuotto (sv)",
-          "uusiutuvan-energian-hyodynnetty-osuus": "Vaiheen uusiutuvan energian hyödynnetty osuus (sv)"
+          "vaiheen-alku-pvm": "inledningsdatum för fasen",
+          "ostoenergian-tarve-kaukolampo": "Fasens fjärrvärme",
+          "ostoenergian-tarve-uusiutuvat-pat": "fasens förnybara bränslen",
+          "ostoenergian-tarve-fossiiliset-pat": "Fasens fossila bränslen",
+          "ostoenergian-tarve-kaukojaahdytys": "Fasens fjärrkyla",
+          "ostoenergian-tarve-sahko": "Fasens el",
+          "uusiutuvan-energian-kokonaistuotto": "Fasens totalproduktion av förnybar energi",
+          "uusiutuvan-energian-hyodynnetty-osuus": "Fasens utnyttjade andel av förnybar energi"
         }
       }
     }
@@ -1881,11 +1881,11 @@
     "self": "Jag",
     "valvoja": "Övervakare",
     "aloita-valvonta": "Inled kontroll",
-    "jatka-valvontaa": "Jatka valvontaa (sv)",
+    "jatka-valvontaa": "Fortsätt tillsyn",
     "no-events": "Inga händelser",
     "add-muistiinpano": "Lägg till anteckning",
     "new-toimenpide": "Ny åtgärd",
-    "reopen-warning": "Uudelleenavattu valvonta tulee avata erikseen myös asianhallinnassa ennen käsittelyn jatkamista. (sv)",
+    "reopen-warning": "En återupptagen tillsyn ska även öppnas separat i ärendehanteringen innan handläggningen fortsätter.",
     "select-toimenpide": "Välj åtgärd",
     "oikeellisuus": {
       "all": {
@@ -2156,7 +2156,7 @@
         "empty": "Inga kontrollåtgärder",
         "ei-valvojaa": "Ingen övervakare",
         "include-closed": "Visa även avslutade",
-        "only-uhkasakkoprosessi": "Näytä vain uhkasakkoprosessissa olevat valvonnat (sv)",
+        "only-uhkasakkoprosessi": "Visa endast tillsynsärenden som är i vitesprocessen",
         "diaarinumero": "Diarienummer",
         "last-toimenpide": "Föregående händelse",
         "last-template": "Dokumentmall",
@@ -2241,17 +2241,17 @@
           "toimitustapa-none": "Inget leveranssätt",
           "fyi": "För kännedom",
           "fyi-disabled": "meddelas inte",
-          "no-document": "osapuolelle ei luotu dokumenttia (sv)",
-          "court-attachment": "hallinto-oikeuden liite (sv)"
+          "no-document": "inget dokument skapades för parten",
+          "court-attachment": "förvaltningsdomstolens bilaga"
         }
       },
       "toimenpide": {
         "cancel-button": "Återkalla",
         "preview-button": "Förhandsvisa",
         "download-button": "Ladda ner",
-        "administrative-court": "Hallinto-oikeus (sv)",
-        "manually-sent": "Valitun toimenpiteen asiakirja tulee toimittaa manuaalisesti (sv)",
-        "no-delivery": "Dokumenttia ei toimiteta osapuolelle (sv)",
+        "administrative-court": "Förvaltningsdomstolen",
+        "manually-sent": "Dokumentet för den valda åtgärden ska levereras manuellt",
+        "no-delivery": "Dokumentet levereras inte till parten",
         "case": {
           "title": "Inledande av kontroll",
           "info": "Med den här åtgärden inleds den officiella kontrollprocessen och ärendet görs anhängigt i ärendehanteringen.",
@@ -2287,137 +2287,137 @@
           "force-button": "Avsulta (endast ETP)"
         },
         "decision-order-hearing-letter": {
-          "title": "Käskypäätös / kuulemiskirje (sv)",
-          "info": "Rakennuksen omistajilla on mahdollisuus perustella, miksi energiatodistusta ei ole hankittu. (sv)",
+          "title": "Beslut om order / brev om hörande",
+          "info": "Byggandens ägare har möjlighet att motivera varför ett energicertifikat inte har anskaffats.",
           "description": "Kommentar",
-          "fine": "Sakon suuruus € (sv)",
-          "publish-button": "Luo toimenpide (sv)"
+          "fine": "Bötesbelopp €",
+          "publish-button": "Skapa åtgärd"
         },
         "decision-order-actual-decision": {
-          "title": "Käskypäätös / varsinainen päätös (sv)",
-          "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten käsketään omistajaa hankkimaan energiatodistus ja tehdään käskypäätös uhkasakon asettamisesta. Käskypäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. (sv)",
-          "osapuoli-specific-data": "Osapuolikohtaiset tiedot (sv)",
-          "document": "Osapuolelle toimitetaan dokumentti (sv)",
-          "preview-button": "Esikatsele osapuolen dokumentti (sv)",
+          "title": "Beslut om order / egentligt beslut",
+          "info": "Byggnadens ägare har inte svarat på brevet om hörande eller i tillräcklig utsträckning motiverat varför energicertifikatet saknas, så ägaren åläggs att skaffa ett energicertifikat, och ett beslut om order vid vite meddelas. Beslutet om order undertecknas utanför detta system.",
+          "osapuoli-specific-data": "Partspecifika uppgifter",
+          "document": "Dokumentet levereras till parten",
+          "preview-button": "Förhandsgranska partens dokument",
           "hearing-letter-answered": {
-            "label": "Omistaja vastasi kuulemiskirjeeseen (sv)",
-            "true": "Kyllä (sv)",
-            "false": "Ei (sv)"
+            "label": "Ägaren har svarat på brevet om hörande",
+            "true": "Ja",
+            "false": "Nej"
           },
-          "answer-commentary-fi": "Vastineen kommentit, suomi (sv)",
-          "answer-commentary-sv": "Vastineen kommentit, ruotsi (sv)",
-          "statement-fi": "Kannanotto vastineeseen, suomi (sv)",
-          "statement-sv": "Kannanotto vastineeseen, ruotsi (sv)",
-          "description": "Kommentti (sv)",
-          "fine": "Sakon suuruus € (sakko jaetaan sakotettavien lukumäärällä) (sv)",
-          "administrative-court": "Hallinto-oikeus (sv)",
-          "department-head-title-fi": "Yksikön päällikön titteli, suomi (sv)",
-          "department-head-title-sv": "Yksikön päällikön titteli, ruotsi (sv)",
-          "department-head-name": "Yksikön päällikön nimi (sv)",
-          "publish-button": "Luo toimenpide (sv)"
+          "answer-commentary-fi": "Svaromålets kommentarer, finska",
+          "answer-commentary-sv": "Svaromålets kommentarer, svenska",
+          "statement-fi": "Ställningstagande till svaromålet, finska",
+          "statement-sv": "Ställningstagande till svaromålet, svenska",
+          "description": "Kommentar",
+          "fine": "Vitets belopp € (vitet delas mellan de vitesskyldiga)",
+          "administrative-court": "Förvaltningsdomstolen",
+          "department-head-title-fi": "Enhetschefens titel, finska",
+          "department-head-title-sv": "Enhetschefens titel, svenska",
+          "department-head-name": "Enhetschefens namn",
+          "publish-button": "Skapa åtgärd"
         },
         "decision-order-notice-first-mailing": {
-          "title": "Käskypäätös tiedoksianto / (ensimmäinen postitus) (sv)",
-          "info": "Käskypäätös postitetaan liitteineen kirjeitse kirjaamon kautta saantitodistuksella. (sv)",
-          "description": "Kommentti (sv)",
-          "publish-button": "Luo toimenpide (sv)"
+          "title": "Beslut om order delgivning / (första utskick)",
+          "info": "Beslutet om order jämte bilagor skickas per brev via registratorskontoret med mottagningsbevis.",
+          "description": "Kommentar",
+          "publish-button": "Skapa åtgärd"
         },
         "decision-order-notice-second-mailing": {
-          "title": "Käskypäätös tiedoksianto / (toinen postitus) (sv)",
-          "info": "Käskypäätös postitetaan liitteineen uudestaan kirjeitse kirjaamon kautta saantitodistuksella, jos ensimmäinen kirje palautuu takaisin. (sv)",
-          "description": "Kommentti (sv)",
-          "publish-button": "Luo toimenpide (sv)"
+          "title": "Beslut om order delgivning / (andra utskick)",
+          "info": "Beslutet om order jämte bilagor skickas på nytt per brev via registratorskontoret med mottagningsbevis, ifall det första brevet returneras.",
+          "description": "Kommentar",
+          "publish-button": "Skapa åtgärd"
         },
         "decision-order-notice-bailiff": {
-          "title": "Tiedoksianto haastemiehelle (sv)",
-          "info": "Käskypäätös toimitetaan kirjaamon kautta haastemiehelle, jos toinen postitus palautuu takaisin. (sv)",
-          "description": "Kommentti (sv)",
-          "publish-button": "Luo toimenpide (sv)",
-          "district-court": "Käräjäoikeus (sv)",
-          "bailiff-email": "Haastemiehen sähköpostiosoite (sv)"
+          "title": "Delgivning till stämningsmannen",
+          "info": "Beslutet om order levereras via registratorskontoret till stämningsmannen, om det andra utskicket returneras.",
+          "description": "Kommentar",
+          "publish-button": "Skapa åtgärd",
+          "district-court": "Tingsrätten",
+          "bailiff-email": "Stämningsmannens e-postadress"
         },
         "decision-order-waiting-for-deadline": {
-          "title": "Käskypäätös / valitusajan odotus ja umpeutuminen (sv)",
-          "info": "Rakennuksen omistajilla on mahdollisuus valittaa käskypäätöksestä hallinto-oikeuteen. Valitusajan umpeuduttua tiedustellaan HaO:lta sähköpostitse, onko käskypäätöksestä valitettu. (sv)",
-          "description": "Kommentti (sv)",
-          "publish-button": "Luo toimenpide (sv)"
+          "title": "Beslut om order / avvaktan på och utgång av besvärstiden",
+          "info": "Byggnadens ägare har möjlighet att överklaga beslutet om order till förvaltningsdomstolen. Då besvärstiden löpt ut hör man sig för hos förvaltningsdomstolen per e-post huruvida beslutet om order har överklagats.",
+          "description": "Kommentar",
+          "publish-button": "Skapa åtgärd"
         },
         "penalty-decision-hearing-letter": {
-          "title": "Sakkopäätös / kuulemiskirje (sv)",
-          "info": "Rakennuksen omistajilla on viimeinen mahdollisuus perustella, miksi energiatodistusta ei ole hankittu. (sv)",
-          "description": "Kommentti (sv)",
-          "fine": "Sakon suuruus € (sakko jaetaan sakotettavien lukumäärällä) (sv)",
-          "publish-button": "Luo toimenpide (sv)"
+          "title": "Beslut om vite / brev om hörande",
+          "info": "Byggnadens ägare har en sista möjlighet att motivera varför man inte har skaffat ett energicertifikat.",
+          "description": "Kommentar",
+          "fine": "Vitets belopp € (vitet delas mellan de vitesskyldiga)",
+          "publish-button": "Skapa åtgärd"
         },
         "penalty-decision-actual-decision": {
-          "title": "Sakkopäätös / varsinainen päätös (sv)",
-          "info": "Rakennuksen omistaja ei ole vastannut kuulemiskirjeeseen tai perustellut riittävästi energiatodistuksen puuttumista, joten tehdään uhkasakkopäätös. Sakkopäätöksen allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. (sv)",
-          "description": "Kommentti (sv)",
-          "fine": "Sakon suuruus € (sakko jaetaan sakotettavien lukumäärällä) (sv)",
-          "publish-button": "Luo toimenpide (sv)",
-          "osapuoli-specific-data": "Osapuolikohtaiset tiedot (sv)",
-          "document": "Osapuolelle toimitetaan dokumentti (sv)",
-          "preview-button": "Esikatsele osapuolen dokumentti (sv)",
+          "title": "Beslut om vite / egentligt beslut",
+          "info": "Byggnadens ägare har inte svarat på brevet om hörande eller i tillräcklig utsträckning motiverat varför energicertifikatet saknas, så ett beslut om vite meddelas. Beslutet om vite undertecknas utanför detta system.",
+          "description": "Kommentar",
+          "fine": "Vitets belopp € (vitet delas mellan de vitesskyldiga)",
+          "publish-button": "Skapa åtgärd",
+          "osapuoli-specific-data": "Partspecifika uppgifter",
+          "document": "Dokumentet levereras till parten",
+          "preview-button": "Förhandsgranska partens dokument",
           "hearing-letter-answered": {
-            "label": "Omistaja vastasi kuulemiskirjeeseen (sv)",
-            "true": "Kyllä (sv)",
-            "false": "Ei (sv)",
-            "warning": "Tarkista ja muuta teksti kohdassa kannanotto vastineeseen (sv)"
+            "label": "Ägaren har svarat på brevet om hörande",
+            "true": "Ja",
+            "false": "Nej",
+            "warning": "Granska och ändra texten i punkten ställningstagande till svaromålet"
           },
-          "answer-commentary-fi": "Vastineen kommentit, suomi (sv)",
-          "answer-commentary-sv": "Vastineen kommentit, ruotsi (sv)",
-          "statement-fi": "Kannanotto vastineeseen, suomi (sv)",
-          "statement-sv": "Kannanotto vastineeseen, ruotsi (sv)",
-          "administrative-court": "Hallinto-oikeus (sv)",
-          "department-head-title-fi": "Yksikön päällikön titteli, suomi (sv)",
-          "department-head-title-sv": "Yksikön päällikön titteli, ruotsi (sv)",
-          "department-head-name": "Yksikön päällikön nimi (sv)",
+          "answer-commentary-fi": "Svaromålets kommentarer, finska",
+          "answer-commentary-sv": "Svaromålets kommentarer, svenska",
+          "statement-fi": "Ställningstagande till svaromålet, finska",
+          "statement-sv": "Ställningstagande till svaromålet, svenska",
+          "administrative-court": "Förvaltningsdomstolen",
+          "department-head-title-fi": "Enhetschefens titel, finska",
+          "department-head-title-sv": "Enhetschefens titel, svenska",
+          "department-head-name": "Enhetschefens namn",
           "default-statement-fi": "Varken päätökseen ei ole haettu muutosta, eli päätös on lainvoimainen. Maksuun tuomittavan uhkasakon määrä on sama kuin mitä se on ollut Varken päätöksessä. Varken näkemyksen mukaan uhkasakko tuomitaan maksuun täysimääräisenä, koska Asianosainen ei ole noudattanut päävelvoitetta lainkaan, eikä ole myöskään esittänyt noudattamatta jättämiselle pätevää syytä.",
           "default-statement-sv": "Ändring i Varkes beslut har inte sökts, dvs. beslutet har vunnit laga kraft. Vitesbeloppet som döms ut är detsamma som det var i Varkes beslut. Enligt Varkes uppfattning döms vitet ut till fullt belopp, eftersom %s inte alls har iakttagit huvudförpliktelsen och inte heller har angett någon giltig orsak till försummelsen."
         },
         "penalty-decision-notice-first-mailing": {
-          "title": "Sakkopäätös tiedoksianto / (ensimmäinen postitus) (sv)",
-          "info": "Sakkopäätös postitetaan liitteineen (mukana myös sakkolappu) kirjeitse kirjaamon kautta saantitodistuksella. (sv)",
-          "description": "Kommentti (sv)",
-          "publish-button": "Luo toimenpide (sv)"
+          "title": "Beslut om vite delgivning / (första utskick)",
+          "info": "Beslutet om vite jämte bilagor (även böteslappen) skickas per brev via registratorskontoret med mottagningsbevis.",
+          "description": "Kommentar",
+          "publish-button": "Skapa åtgärd"
         },
         "penalty-decision-notice-second-mailing": {
-          "title": "Sakkopäätös / tiedoksianto (toinen postitus) (sv)",
-          "info": "Sakkopäätös postitetaan uudestaan liitteineen (mukana myös sakkolappu) kirjeitse kirjaamon kautta saantitodistuksella, jos ensimmäinen kirje palautuu takaisin. (sv)",
-          "description": "Kommentti (sv)",
-          "publish-button": "Luo toimenpide (sv)"
+          "title": "Beslut om vite / delgivning (andra utskick)",
+          "info": "Beslutet om vite jämte bilagor (även böteslappen) skickas på nytt per brev via registratorskontoret med mottagningsbevis, ifall det första brevet returneras.",
+          "description": "Kommentar",
+          "publish-button": "Skapa åtgärd"
         },
         "penalty-decision-notice-bailiff": {
-          "title": "Tiedoksianto haastemiehelle (sv)",
-          "info": "Sakkopäätös toimitetaan kirjaamon kautta haastemiehelle, jos toinen postitus palautuu takaisin. (sv)",
-          "description": "Kommentti (sv)",
-          "publish-button": "Luo toimenpide (sv)",
-          "district-court": "Käräjäoikeus (sv)",
-          "bailiff-email": "Haastemiehen sähköpostiosoite (sv)"
+          "title": "Delgivning till stämningsmannen",
+          "info": "Beslutet om vite levereras till stämningsmannen via registratorskontoret, ifall det andra utskicket returneras.",
+          "description": "Kommentar",
+          "publish-button": "Skapa åtgärd",
+          "district-court": "Tingsrätten",
+          "bailiff-email": "Stämningsmannens e-postadress"
         },
         "penalty-decision-waiting-for-deadline": {
-          "title": "Sakkopäätös / Valitusajan odotus ja umpeutuminen (sv)",
-          "info": "Rakennuksen omistajilla on mahdollisuus valittaa sakkopäätöksestä hallinto-oikeuteen. Valitusajan umpeuduttua tiedustellaan HaO:lta sähköpostitse, onko sakkopäätöksestä valitettu. (sv)",
-          "description": "Kommentti (sv)",
-          "publish-button": "Luo toimenpide (sv)"
+          "title": "Beslut om vite / Avvaktan på och utgång av besvärstiden",
+          "info": "Byggnadens ägare har möjlighet att överklaga beslutet om vite till förvaltningsdomstolen. Efter att besvärstiden löpt ut hör man sig för hos förvaltningsdomstolen per e-post, huruvida beslutet om vite har överklagats.",
+          "description": "Kommentar",
+          "publish-button": "Skapa åtgärd"
         },
         "penalty-list-delivery-in-progress": {
-          "title": "Sakkoluettelon lähetys menossa (sv)",
-          "info": "Sakkoluettelo täytetään ja allekirjoitus tapahtuu tämän järjestelmän ulkopuolella. Sakkoluettelo lähetetään sähköpostitse seuraamusmaksut.ork (at) om.fi.sec (sv)",
-          "description": "Kommentti (sv)",
-          "publish-button": "Kirjaa kommentti (sv)"
+          "title": "Utskick av bötesförteckning pågår",
+          "info": "Bötesförteckningen fylls i och undertecknandet sker utanför detta system. Bötesförteckningen skickas per e-post seuraamusmaksut.ork (at) om.fi.sec",
+          "description": "Kommentar",
+          "publish-button": "Skriv in kommentar"
         },
         "reopen": {
-          "title": "Jatka valvontaa (sv)",
-          "info": "Suljettu valvonta tulee avata erikseen myös asianhallinnassa, jotta käsittelyn jatkaminen onnistuu. Tämä toimenpide mahdollistaa ainoastaan käsittelyn jatkamisen ETP:n puolella. (sv)",
-          "description": "Kommentti (sv)",
-          "publish-button": "Jatka valvontaa (sv)"
+          "title": "Fortsätt tillsyn",
+          "info": "En avslutad tillsyn ska även öppnas separat i ärendehanteringen innan handläggningen kan fortsätta. Denna åtgärd möjliggör endast fortsatt behandling i ETP.",
+          "description": "Kommentar",
+          "publish-button": "Fortsätt tillsyn"
         },
         "court-hearing": {
-          "title": "HaO-käsittely (sv)",
-          "info": "Rakennuksen omistaja on valittanut päätöksestä hallinto-oikeuteen ja HaO käsittelee valituksen. (sv)",
-          "description": "Kommentti (sv)",
-          "publish-button": "Kirjaa kommentti (sv)"
+          "title": "Behandling i förvaltningsdomstolen",
+          "info": "Byggnadens ägare har överklagat beslutet till förvaltningsdomstolen och förvaltningsdomstolen handlägger besväret.",
+          "description": "Kommentar",
+          "publish-button": "Skriv in kommentar"
         },
         "messages": {
           "not-found": "Det existerar ingen åtgärd.",
@@ -2444,7 +2444,7 @@
         "toimitustapa": "Leveranssätt",
         "esikatselu": "Förhandsvisning",
         "fyi-disabled": "Dokument skickas inte för kännedom",
-        "delete": "Poista osapuoli vastaanottajista (sv)",
+        "delete": "Ta bort parten från mottagarna",
         "decision-order": {
           "title": "Beslut om påbud",
           "info": "Om energicertifikatet inte fås kan man slutligen fatta ett beslut om påbud och förelägga vite. Dokumenten för fasen upprättas utanför detta system.",
