@@ -1,7 +1,7 @@
 insert into vk_toimitustapa  (id, ordinal, label_fi, label_sv)
 values
 (0, 1, 'Suomi.fi', 'Suomi.fi'),
-(1, 2, 'Sähköposti', 'E-postadress'),
+(1, 2, 'Sähköposti', 'E-post'),
 (2, 3, 'Muu', 'Annan')
 on conflict (id) do update set
   label_fi = excluded.label_fi,
