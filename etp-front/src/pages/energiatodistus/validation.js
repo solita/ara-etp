@@ -69,7 +69,23 @@ const requiredCondition = {
   'lahtotiedot.lammitys.lammonjako.kuvaus-sv': isLammonjakoKuvausRequired,
 
   'huomiot.ymparys.teksti-fi': laatimisvaiheet.isOlemassaOlevaRakennus,
-  'huomiot.ymparys.teksti-sv': laatimisvaiheet.isOlemassaOlevaRakennus
+  'huomiot.ymparys.teksti-sv': laatimisvaiheet.isOlemassaOlevaRakennus,
+
+  'toteutunut-ostoenergiankulutus.tietojen-alkuperavuosi': if2026Else(
+    R.complement(laatimisvaiheet.isUudisrakennus),
+    R.F
+  ),
+
+  'ilmastoselvitys.laatimisajankohta': if2026Else(
+    R.both(
+      R.pathEq(true, ['perustiedot', 'tayttaa-aplus-vaatimukset']),
+      R.anyPass([
+        laatimisvaiheet.isRakennuslupaPerusparannus,
+        laatimisvaiheet.isKayttoonotto
+      ])
+    ),
+    R.F
+  )
 };
 
 export const predicate = R.compose(

@@ -1277,6 +1277,7 @@
     "lisamerkintoja": "Tilläggsuppgifter",
     "ilmastoselvitys": {
       "header": "Klimatdeklaration",
+      "label-context": "Klimatdeklaration",
       "laatimisajankohta": "Tidpunkt då utarbetats",
       "laatija": "Utarbetad av",
       "yritys": "Företag",
