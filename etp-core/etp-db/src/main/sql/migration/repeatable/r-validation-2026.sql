@@ -1,6 +1,3 @@
-update validation_required_column
-set valid = false
-where versio = 2026 and column_name = 'pt$nimi';
 
 insert into validation_required_column (versio, column_name, ordinal, bypass_allowed)
 values
@@ -56,35 +53,51 @@ values
 (2026, 'lt$ilmanvaihto$tyyppi_id', 45, false),
 (2026, 'lt$ilmanvaihto$kuvaus_fi', 46, false),
 (2026, 'lt$ilmanvaihto$kuvaus_sv', 47, false),
-(2026, 'lt$ilmanvaihto$ivjarjestelma$poisto', 48, false),
-(2026, 'lt$ilmanvaihto$ivjarjestelma$sfp', 49, false),
-(2026, 'lt$ilmanvaihto$lto_vuosihyotysuhde', 50, false),
+(2026, 'lt$ilmanvaihto$paaiv$tulo', 48, false),
+(2026, 'lt$ilmanvaihto$paaiv$poisto', 49, false),
+(2026, 'lt$ilmanvaihto$erillispoistot$tulo', 50, false),
+(2026, 'lt$ilmanvaihto$erillispoistot$poisto', 51, false),
+(2026, 'lt$ilmanvaihto$ivjarjestelma$tulo', 52, false),
+(2026, 'lt$ilmanvaihto$ivjarjestelma$poisto', 53, false),
+(2026, 'lt$ilmanvaihto$ivjarjestelma$sfp', 54, false),
+(2026, 'lt$ilmanvaihto$lto_vuosihyotysuhde', 55, false),
 
-(2026, 'lt$lammitys$lammitysmuoto_1$id', 51, false),
-(2026, 'lt$lammitys$lammitysmuoto_1$kuvaus_fi', 52, false),
-(2026, 'lt$lammitys$lammitysmuoto_1$kuvaus_sv', 53, false),
-(2026, 'lt$lammitys$lammitysmuoto_2$kuvaus_fi', 54, false),
-(2026, 'lt$lammitys$lammitysmuoto_2$kuvaus_sv', 55, false),
-(2026, 'lt$lammitys$lammonjako$id', 56, false),
-(2026, 'lt$lammitys$lammonjako$kuvaus_fi', 57, false),
-(2026, 'lt$lammitys$lammonjako$kuvaus_sv', 58, false),
-(2026, 'lt$lammitys$tilat_ja_iv$jaon_hyotysuhde', 59, false),
-(2026, 'lt$lammitys$tilat_ja_iv$apulaitteet', 60, false),
-(2026, 'lt$lammitys$lammin_kayttovesi$jaon_hyotysuhde', 61, false),
+(2026, 'lt$lammitys$lammitysmuoto_1$id', 56, false),
+(2026, 'lt$lammitys$lammitysmuoto_1$kuvaus_fi', 57, false),
+(2026, 'lt$lammitys$lammitysmuoto_1$kuvaus_sv', 58, false),
+(2026, 'lt$lammitys$lammitysmuoto_2$kuvaus_fi', 59, false),
+(2026, 'lt$lammitys$lammitysmuoto_2$kuvaus_sv', 60, false),
+(2026, 'lt$lammitys$lammonjako$id', 61, false),
+(2026, 'lt$lammitys$lammonjako$kuvaus_fi', 62, false),
+(2026, 'lt$lammitys$lammonjako$kuvaus_sv', 63, false),
+(2026, 'lt$lammitys$tilat_ja_iv$jaon_hyotysuhde', 64, false),
+(2026, 'lt$lammitys$tilat_ja_iv$apulaitteet', 65, false),
+(2026, 'lt$lammitys$lammin_kayttovesi$jaon_hyotysuhde', 66, false),
 
-(2026, 'lt$lkvn_kaytto$ominaiskulutus', 62, false),
-(2026, 'lt$lkvn_kaytto$lammitysenergian_nettotarve', 63, false),
+(2026, 'lt$lkvn_kaytto$ominaiskulutus', 67, false),
+(2026, 'lt$lkvn_kaytto$lammitysenergian_nettotarve', 68, false),
 
-(2026, 'h$ymparys$teksti_fi', 64, false),
-(2026, 'h$ymparys$teksti_sv', 65, false),
+(2026, 'h$ymparys$teksti_fi', 69, false),
+(2026, 'h$ymparys$teksti_sv', 70, false),
 
-(2026, 'to$tietojen_alkuperavuosi', 66, false),
+(2026, 'to$tietojen_alkuperavuosi', 71, false),
 
-(2026, 'is$laatimisajankohta', 67, false)
+(2026, 'is$laatimisajankohta', 72, false)
 
 on conflict (column_name, versio) do update set
   ordinal = excluded.ordinal,
   bypass_allowed = excluded.bypass_allowed;
+
+update validation_required_column
+set valid = false
+where versio = 2026 and column_name in (
+  'pt$nimi',
+  'lt$ilmanvaihto$paaiv$tulo',
+  'lt$ilmanvaihto$paaiv$poisto',
+  'lt$ilmanvaihto$erillispoistot$tulo',
+  'lt$ilmanvaihto$erillispoistot$poisto',
+  'lt$ilmanvaihto$ivjarjestelma$tulo'
+);
 
 insert into validation_sisainen_kuorma (
   versio, kayttotarkoitusluokka_id,
