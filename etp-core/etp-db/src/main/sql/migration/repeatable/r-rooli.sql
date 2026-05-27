@@ -1,7 +1,7 @@
 insert into rooli (id, label_fi, label_sv)
 values
 (-1, 'Järjestelmä', 'System'),
-(0, 'Laatija', 'Utarbetad av'),
+(0, 'Laatija', 'Upprättare'),
 (1, 'Pätevyyden toteaja', 'Behörighet konstaterats av'),
 (2, 'Pääkäyttäjä', 'Huvudanvändare'),
 (3, 'Laskuttaja', 'Fakturare'),
