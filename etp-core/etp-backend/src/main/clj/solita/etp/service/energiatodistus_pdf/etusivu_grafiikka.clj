@@ -169,7 +169,7 @@
 
 (defn stacked-arrows [{:keys [kieli e-luokka e-luku rajat]}]
   (let [l (kieli loc/et-pdf-localization)
-        arrows (set-arrow-thresholds rajat)
+        arrows (if rajat (set-arrow-thresholds rajat) arrows)
         num-arrows (count arrows)
         row-height (+ arrow-height arrow-spacing)
         total-height (* row-height num-arrows)
@@ -210,7 +210,8 @@
         versio (get-in energiatodistus [:versio])
         alakayttotarkoitus-id (get-in energiatodistus [:perustiedot :kayttotarkoitus])
         nettoala (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
-        rajat (e-luokka/e-luokka-rajat kayttotarkoitukset alakayttotarkoitukset versio alakayttotarkoitus-id nettoala)]
+        rajat (when nettoala
+                (e-luokka/e-luokka-rajat kayttotarkoitukset alakayttotarkoitukset versio alakayttotarkoitus-id nettoala))]
     [:div {:class "etusivu-grafiikka"}
      [:div {:class "etusivu-grafiikka-otsikko"} (l :energiatehokkuusluokka-otsikko)]
      (stacked-arrows {:kieli kieli :e-luokka e-luokka :e-luku e-luku :rajat rajat})]))
