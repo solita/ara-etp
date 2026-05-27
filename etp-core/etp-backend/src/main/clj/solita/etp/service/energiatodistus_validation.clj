@@ -29,7 +29,17 @@
    "lahtotiedot.lammitys.lammonjako.kuvaus-sv" luokittelu/lammonjako-kuvaus-required?
 
    "huomiot.ymparys.teksti-fi" laatimisvaihe/olemassaoleva-rakennus?
-   "huomiot.ymparys.teksti-sv" laatimisvaihe/olemassaoleva-rakennus?})
+   "huomiot.ymparys.teksti-sv" laatimisvaihe/olemassaoleva-rakennus?
+
+   "toteutunut-ostoenergiankulutus.tietojen-alkuperavuosi"
+   (complement (some-fn laatimisvaihe/rakennuslupa? laatimisvaihe/kayttoonotto?))
+
+   "ilmastoselvitys.laatimisajankohta"
+   (every-pred
+     (comp true? :tayttaa-aplus-vaatimukset :perustiedot)
+     (some-fn
+       laatimisvaihe/rakennuslupa-perusparannus?
+       laatimisvaihe/kayttoonotto?))})
 
 (defn localized-property-condition [property]
   (cond

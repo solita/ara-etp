@@ -22,6 +22,9 @@
 (def rakennuslupa? (partial in-vaihe? 0))
 (def kayttoonotto? (partial in-vaihe? 1))
 
+;; applicable only for 2026 version
+(def rakennuslupa-perusparannus? (partial in-vaihe? 3))
+
 ;; applicable 2013 and 2018 versions
 (def olemassaoleva-rakennus?
   (logic/if* (logic/pred = :versio 2013)
