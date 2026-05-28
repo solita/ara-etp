@@ -53,7 +53,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - name: Publish Test Report
-        uses: mikepenz/action-junit-report@v5
+        uses: mikepenz/action-junit-report@v6
         if: success() || failure()
         with:
           report_paths: '**/etp-front/test_report.xml'
@@ -114,9 +114,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3.7.1
+        uses: docker/setup-buildx-action@v4
       - name: Build storybook-test-image
-        uses: docker/build-push-action@v6.18.0
+        uses: docker/build-push-action@v7
         with:
           context: etp-front
           file: etp-front/visual-tests.Dockerfile
