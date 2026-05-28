@@ -168,19 +168,23 @@
         dataCy="korvaavuus-checkbox"
         bind:model={checked}
         disabled={!enabled} />
-      <Checkbox
-        label={i18n(
-          'energiatodistus.korvaavuus.yksinkertaistettu-paivitysmenettely'
-        )}
-        dataCy="yksinkertaistettu-paivitysmenettely-checkbox"
-        bind:model={energiatodistus}
-        lens={yksinkertaistettuLens}
-        disabled={!simplifiedProcedureAvailable} />
+      {#if energiatodistus.versio === 2026}
+        <Checkbox
+          label={i18n(
+            'energiatodistus.korvaavuus.yksinkertaistettu-paivitysmenettely'
+          )}
+          dataCy="yksinkertaistettu-paivitysmenettely-checkbox"
+          bind:model={energiatodistus}
+          lens={yksinkertaistettuLens}
+          disabled={!simplifiedProcedureAvailable} />
+      {/if}
     </div>
-    <p class="ml-1 mt-2 flex text-sm">
-      <span class="mr-1 font-icon">info</span>
-      {i18n('energiatodistus.korvaavuus.yksinkertaistettu-info')}
-    </p>
+    {#if energiatodistus.versio === 2026}
+      <p class="ml-1 mt-2 flex text-sm">
+        <span class="mr-1 font-icon">info</span>
+        {i18n('energiatodistus.korvaavuus.yksinkertaistettu-info')}
+      </p>
+    {/if}
   {/if}
 
   {#if !enabled}
