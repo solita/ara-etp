@@ -613,15 +613,12 @@
 (defn validate-yksinkertaistettu!
   "Validates preconditions for the simplified update procedure (yksinkertaistettu päivitysmenettely).
   When yksinkertaistettu-paivitysmenettely is true:
-  - versio must be 2026
   - korvattu-energiatodistus-id must be set
   - The replaced energiatodistus must have a non-expired voimassaolo-paattymisaika
   Throws an exception if any precondition is violated. No-op when yksinkertaistettu-paivitysmenettely is false/nil.
   Returns the fetched replaced energiatodistus (or nil if not a simplified update)."
   [db energiatodistus ^Instant allekirjoitusaika]
   (when (:yksinkertaistettu-paivitysmenettely energiatodistus)
-    (when-not (= (:versio energiatodistus) 2026)
-      (throw-invalid-replace! nil " yksinkertaistettu-paivitysmenettely is only allowed for versio 2026"))
     (when-not (:korvattu-energiatodistus-id energiatodistus)
       (throw-invalid-replace! nil " yksinkertaistettu-paivitysmenettely requires korvattu-energiatodistus-id"))
     (let [korvattu (find-energiatodistus db (:korvattu-energiatodistus-id energiatodistus))]
