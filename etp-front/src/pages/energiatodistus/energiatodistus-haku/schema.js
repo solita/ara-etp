@@ -788,7 +788,7 @@ export const schema = {
     'lisamerkintoja-sv': [stringContains],
     laskuriviviite: [...stringComparisons],
     'laatija-id': [laatijaEquals],
-    'yksinkertaistettu-paivitysmenettely': [et2026OnlyBoolean],
+    'yksinkertaistettu-paivitysmenettely': [singleBoolean],
     ilmastoselvitys: {
       laatimisajankohta: [ilmastoSelvitysOlemassa]
     }
