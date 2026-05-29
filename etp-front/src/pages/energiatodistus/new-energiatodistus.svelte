@@ -46,6 +46,7 @@
 
   const cleanEnergiatodistusCopy = R.compose(
     R.assoc('korvattu-energiatodistus-id', Maybe.None()),
+    R.assoc('yksinkertaistettu-paivitysmenettely', false),
     R.assoc('laskutettava-yritys-id', Maybe.None()),
     R.assoc('laskutusosoite-id', Maybe.None()),
     R.assoc('laskuriviviite', Maybe.None()),
