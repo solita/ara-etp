@@ -53,9 +53,9 @@
         {$_(
           'perusparannuspassi.laskennan-tulokset.uusiutuva-energia.vuotuinen-tuotto'
         )}
-          <span class="block">
-            <KwheM2/>
-          </span>
+        <span class="block">
+          <KwheM2 />
+        </span>
       </td>
       <td class="et-table--td">
         {R.sum(
@@ -64,9 +64,18 @@
             R.compose(
               R.values,
               R.pick([
-                'aurinkosahko', 'tuulisahko', 'aurinkolampo', 'muulampo', 'muusahko', 'lampopumppu'
+                'aurinkosahko',
+                'tuulisahko',
+                'aurinkolampo',
+                'muulampo',
+                'muusahko',
+                'lampopumppu'
               ])
-            )(energiatodistus.tulokset['uusiutuvat-omavaraisenergiat-kokonaistuotanto'])
+            )(
+              energiatodistus.tulokset[
+                'uusiutuvat-omavaraisenergiat-kokonaistuotanto'
+              ]
+            )
           )
         )}
       </td>
@@ -95,7 +104,9 @@
           'perusparannuspassi.laskennan-tulokset.uusiutuva-energia.hyodynnetty-osuus'
         )}
       </td>
-      <td class="et-table--td"> {lahtotilanneOsuus != null ? `${lahtotilanneOsuus}` : ''} </td>
+      <td class="et-table--td">
+        {lahtotilanneOsuus != null ? `${lahtotilanneOsuus}` : ''}
+      </td>
       {#each perusparannuspassi.vaiheet as vaihe}
         <td class="et-table--td">
           <Input

@@ -441,12 +441,12 @@ export const isLaskutettu = R.propSatisfies(Maybe.isSome, 'laskutusaika');
  * energiamuotokerroin 2026 values but are separate concepts.
  */
 const uusiutuvaKerroin = {
-  aurinkosahko: 0.90,
-  tuulisahko: 0.90,
+  aurinkosahko: 0.9,
+  tuulisahko: 0.9,
   aurinkolampo: 0.38
 };
 
-const painotettuUusiutuvaSumma = (energyMap) =>
+const painotettuUusiutuvaSumma = energyMap =>
   Object.entries(uusiutuvaKerroin).reduce((acc, [k, coeff]) => {
     const val = energyMap?.[k];
     const num = val != null ? EitherMaybe.orSome(0)(val) : 0;
@@ -459,8 +459,10 @@ const painotettuUusiutuvaSumma = (energyMap) =>
  *
  * Formula: round((Σ(E_tuotto × k) / A_netto) / (E_luku + Σ(E_hyödynnetty × k) / A_netto) × 100)
  */
-export const uusiutuvanEnergianOsuus = (energiatodistus) => {
-  const nettoala = EitherMaybe.orSome(null)(energiatodistus?.lahtotiedot?.['lammitetty-nettoala']);
+export const uusiutuvanEnergianOsuus = energiatodistus => {
+  const nettoala = EitherMaybe.orSome(null)(
+    energiatodistus?.lahtotiedot?.['lammitetty-nettoala']
+  );
   const eLuku = Maybe.orSome(null)(
     eluku(
       energiatodistus.versio,
@@ -470,7 +472,8 @@ export const uusiutuvanEnergianOsuus = (energiatodistus) => {
   );
   if (!nettoala || nettoala <= 0 || eLuku == null) return null;
 
-  const tuotto = energiatodistus.tulokset['uusiutuvat-omavaraisenergiat-kokonaistuotanto'];
+  const tuotto =
+    energiatodistus.tulokset['uusiutuvat-omavaraisenergiat-kokonaistuotanto'];
   const hyodynnetty = energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'];
 
   const numerator = painotettuUusiutuvaSumma(tuotto) / nettoala;
