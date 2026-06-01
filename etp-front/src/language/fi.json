@@ -1594,7 +1594,7 @@
       "kwh-per-vuosi": "kWh/vuosi",
       "eur-per-vuosi": "€/vuosi",
       "lahtotilanne": "Lähtötilanne",
-      "lahtotilanne-kwh-vuosi": "Lähtötilanne kWh/vuosi",
+      "lahtotilanne-kwh-vuosi": "Lähtötilanne",
       "info-kirjaa-arvot": "Kirjaa arvot vaiheen muutosten jälkeen.",
       "vaiheistus": {
         "header": "Vaiheistus",
@@ -1611,9 +1611,9 @@
       },
       "uusiutuva-energia": {
         "header": "Uusiutuva energia",
-        "energialaji": "Energialaji",
-        "vuotuinen-tuotto": "Uusiutuvan energian vuotuinen tuotto",
-        "hyodynnetty-osuus": "Rakennuksen hyödyntämä osuus uusiutuvan energian tuotosta"
+        "energialaji": "Uusiutuva energia",
+        "vuotuinen-tuotto": "Paikan päällä tuotettu",
+        "hyodynnetty-osuus": "Osuus energiankäytöstä (%)"
       },
       "toteutunut-ostoenergia": {
         "header": "Toteutunut ostoenergia",

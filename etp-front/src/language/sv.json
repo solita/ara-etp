@@ -1581,9 +1581,9 @@
       },
       "uusiutuva-energia": {
         "header": "Förnybar energi",
-        "energialaji": "Energislag",
-        "vuotuinen-tuotto": "Årlig produktion av förnybar energi",
-        "hyodynnetty-osuus": "Andel av produktion av förnybar energi som byggnaden utnyttjar"
+        "energialaji": "Förnybar energi",
+        "vuotuinen-tuotto": "Paikan päällä tuotettu (sv)",
+        "hyodynnetty-osuus": "Osuus energiankäytöstä (%) (sv)"
       },
       "toteutunut-ostoenergia": {
         "header": "Realiserad köpt energi",
