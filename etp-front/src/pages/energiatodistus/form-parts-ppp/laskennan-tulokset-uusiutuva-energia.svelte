@@ -2,16 +2,20 @@
   import * as R from 'ramda';
 
   import * as EitherMaybe from '@Utility/either-maybe.js';
+  import * as ETUtils from '@Pages/energiatodistus/energiatodistus-utils';
 
   import H4 from '@Component/H/H4';
   import { _ } from '@Language/i18n';
   import Input from '@Pages/energiatodistus/Input';
   import * as PPPUtils from './ppp-utils.js';
+  import KwheM2 from '../form-parts/units/annual-kwhe-m2.svelte';
 
   export let energiatodistus;
   export let perusparannuspassi;
   export let schema;
   export let disabled = false;
+
+  $: lahtotilanneOsuus = ETUtils.uusiutuvanEnergianOsuus(energiatodistus);
 </script>
 
 <H4
@@ -35,7 +39,7 @@
         <th class="et-table--th et-table--th-right-aligned">
           {PPPUtils.formatVaiheHeading(
             `${$_('perusparannuspassi.laskennan-tulokset.vaihe')} ${vaihe['vaihe-nro']}`,
-            $_('perusparannuspassi.laskennan-tulokset.kwh-per-vuosi'),
+            '',
             vaihe.tulokset['vaiheen-alku-pvm'],
             $_('perusparannuspassi.laskennan-tulokset.ei-aloitusvuotta')
           )}
@@ -49,6 +53,9 @@
         {$_(
           'perusparannuspassi.laskennan-tulokset.uusiutuva-energia.vuotuinen-tuotto'
         )}
+          <span class="block">
+            <KwheM2/>
+          </span>
       </td>
       <td class="et-table--td">
         {R.sum(
@@ -57,9 +64,9 @@
             R.compose(
               R.values,
               R.pick([
-                'aurinkosahko, tuulisahko, aurinkolampo, muulampo, muusahko, lampopumppu'
+                'aurinkosahko', 'tuulisahko', 'aurinkolampo', 'muulampo', 'muusahko', 'lampopumppu'
               ])
-            )(energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'])
+            )(energiatodistus.tulokset['uusiutuvat-omavaraisenergiat-kokonaistuotanto'])
           )
         )}
       </td>
@@ -88,7 +95,7 @@
           'perusparannuspassi.laskennan-tulokset.uusiutuva-energia.hyodynnetty-osuus'
         )}
       </td>
-      <td class="et-table--td"> TODO </td>
+      <td class="et-table--td"> {lahtotilanneOsuus != null ? `${lahtotilanneOsuus}` : ''} </td>
       {#each perusparannuspassi.vaiheet as vaihe}
         <td class="et-table--td">
           <Input
