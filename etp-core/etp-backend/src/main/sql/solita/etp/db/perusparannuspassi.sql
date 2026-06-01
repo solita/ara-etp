@@ -81,6 +81,20 @@ set
 where
     perusparannuspassi_id = :perusparannuspassi-id;
 
+-- name: invalidate-perusparannuspassit-by-energiatodistus-id!
+update perusparannuspassi
+set
+    valid = false
+where energiatodistus_id = :energiatodistus-id;
+
+-- name: invalidate-perusparannuspassi-vaiheet-by-energiatodistus-id!
+update perusparannuspassi_vaihe vaihe
+set
+    valid = false
+from perusparannuspassi ppp
+where vaihe.perusparannuspassi_id = ppp.id
+  and ppp.energiatodistus_id = :energiatodistus-id;
+
 -- name: select-ppp-numeric-validations
 select column_name, warning$min, warning$max, error$min, error$max
 from ppp_validation_numeric_column where versio = :versio;

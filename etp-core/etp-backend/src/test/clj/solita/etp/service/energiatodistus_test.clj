@@ -11,6 +11,7 @@
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-data.perusparannuspassi :as perusparannuspassi-test-data]
+            [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]
             [solita.etp.test-system :as ts]
             [solita.etp.whoami :as test-whoami])
   (:import (java.time Instant ZoneId)))
@@ -308,6 +309,55 @@
                                                      id
                                                      {:allekirjoitusaika energiatodistus-test-data/time-when-test-cert-not-expired})
                :already-signed)))))
+
+(t/deftest signing-resets-toimenpide-ehdotukset-and-suositukset-when-not-included
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+        whoami {:id laatija-id :rooli 0}
+        db (ts/db-user laatija-id)
+        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)
+                  keys
+                  first)
+        update (-> (energiatodistus-test-data/generate-add 2026 true)
+             ;; laatimisvaihe != 2 means toimenpide pages are not included in 2026 output
+             (assoc-in [:perustiedot :laatimisvaihe] 1)
+             (assoc-in [:perustiedot :keskeiset-suositukset-fi] "fi-keskeiset")
+             (assoc-in [:perustiedot :keskeiset-suositukset-sv] "sv-keskeiset")
+             (assoc-in [:huomiot :suositukset-fi] "fi-suositus")
+             (assoc-in [:huomiot :suositukset-sv] "sv-suositus")
+             (assoc-in [:huomiot :ymparys :teksti-fi] "fi-ymparys")
+             (assoc-in [:huomiot :ymparys :teksti-sv] "sv-ymparys"))]
+    (service/update-energiatodistus! db whoami et-id update)
+    (energiatodistus-test-data/sign! et-id laatija-id true)
+    (let [signed (service/find-energiatodistus db et-id)]
+      (t/is (nil? (get-in signed [:perustiedot :keskeiset-suositukset-fi])))
+      (t/is (nil? (get-in signed [:perustiedot :keskeiset-suositukset-sv])))
+      (t/is (nil? (get-in signed [:huomiot :suositukset-fi])))
+      (t/is (nil? (get-in signed [:huomiot :suositukset-sv])))
+      (t/is (nil? (get-in signed [:huomiot :ymparys :teksti-fi])))
+      (t/is (nil? (get-in signed [:huomiot :ymparys :teksti-sv]))))))
+
+(t/deftest signing-invalidates-deleted-perusparannuspassi-vaiheet
+  (let [{:keys [laatijat]} (test-data-set)
+        laatija-id (-> laatijat keys sort first)
+    whoami {:id laatija-id :rooli 0 :patevyystaso 4}
+        db (ts/db-user laatija-id)
+        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)
+                  keys
+                  first)
+        ppp-add (perusparannuspassi-test-data/generate-add et-id)
+        ppp-id (:id (perusparannuspassi-service/insert-perusparannuspassi! db whoami ppp-add))]
+    (perusparannuspassi-service/delete-perusparannuspassi! db whoami ppp-id)
+    (let [vaiheet-before (jdbc/query db
+                                     ["select valid from perusparannuspassi_vaihe where perusparannuspassi_id = ?" ppp-id])]
+      (t/is (some true? (map :valid vaiheet-before))))
+    (energiatodistus-test-data/sign! et-id laatija-id true)
+    (let [vaiheet-after (jdbc/query db
+                                    ["select valid from perusparannuspassi_vaihe where perusparannuspassi_id = ?" ppp-id])
+          ppp-after (jdbc/query db
+                               ["select valid from perusparannuspassi where id = ?" ppp-id])]
+      (t/is (every? false? (map :valid vaiheet-after)))
+      (t/is (every? false? (map :valid ppp-after))))))
 
 (t/deftest cancel-energiatodistus-signing!-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)

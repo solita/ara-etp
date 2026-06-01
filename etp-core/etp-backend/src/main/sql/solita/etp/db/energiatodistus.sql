@@ -47,6 +47,30 @@ update energiatodistus set
 from et_tilat
 where tila_id = et_tilat.allekirjoituksessa and laatija_id = :laatija-id and id = :id
 
+-- name: reset-toimenpide-ehdotukset-and-suositukset!
+update energiatodistus
+set
+  pt$keskeiset_suositukset_fi = null,
+  pt$keskeiset_suositukset_sv = null,
+  h$alapohja_ylapohja$teksti_fi = null,
+  h$alapohja_ylapohja$teksti_sv = null,
+  h$alapohja_ylapohja$toimenpide = null,
+  h$iv_ilmastointi$teksti_fi = null,
+  h$iv_ilmastointi$teksti_sv = null,
+  h$iv_ilmastointi$toimenpide = null,
+  h$lammitys$teksti_fi = null,
+  h$lammitys$teksti_sv = null,
+  h$lammitys$toimenpide = null,
+  h$valaistus_muut$teksti_fi = null,
+  h$valaistus_muut$teksti_sv = null,
+  h$valaistus_muut$toimenpide = null,
+  h$ymparys$teksti_fi = null,
+  h$ymparys$teksti_sv = null,
+  h$ymparys$toimenpide = null,
+  h$suositukset_fi = null,
+  h$suositukset_sv = null
+where id = :id;
+
 -- name: update-energiatodistus-korvattu!
 update energiatodistus set
   tila_id = et_tilat.korvattu

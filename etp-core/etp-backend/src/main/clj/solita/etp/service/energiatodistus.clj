@@ -586,6 +586,31 @@
 (def swedish-language-id 1)
 (def multilingual-language-id 2)
 
+(def ^:private toimenpide-ehdotukset-hidden-e-luokat #{"A" "A0" "A+"})
+
+(defn- toimenpide-pages-visible? [energiatodistus]
+  (let [e-luokka (-> energiatodistus :tulokset :e-luokka)
+        has-valid-ppp? (-> energiatodistus :perusparannuspassi-valid)
+        laatimisvaihe (-> energiatodistus :perustiedot :laatimisvaihe)]
+    (and (= 2 laatimisvaihe)
+         (not (contains? toimenpide-ehdotukset-hidden-e-luokat e-luokka))
+         (not has-valid-ppp?))))
+
+(defn- reset-signing-time-sensitive-fields! [db energiatodistus]
+  (when (and (= 2026 (:versio energiatodistus))
+             (not (toimenpide-pages-visible? energiatodistus)))
+    (energiatodistus-db/reset-toimenpide-ehdotukset-and-suositukset!
+      db
+      {:id (:id energiatodistus)}))
+  (when (and (= 2026 (:versio energiatodistus))
+             (not (true? (:perusparannuspassi-valid energiatodistus))))
+    (perusparannuspassi-db/invalidate-perusparannuspassit-by-energiatodistus-id!
+      db
+      {:energiatodistus-id (:id energiatodistus)})
+    (perusparannuspassi-db/invalidate-perusparannuspassi-vaiheet-by-energiatodistus-id!
+      db
+      {:energiatodistus-id (:id energiatodistus)})))
+
 (defn language-id->codes [language]
   (get {finnish-language-id      ["fi"]
         swedish-language-id      ["sv"]
@@ -662,7 +687,8 @@
                                             :allekirjoitusaika           allekirjoitusaika
                                             :voimassaolo-paattymisaika   (java.sql.Timestamp/from voimassaolo)})]
                               (if (= result 1)
-                                (let [energiatodistus (find-energiatodistus db id)]
+                                (let [_ (reset-signing-time-sensitive-fields! db energiatodistus)
+                                      energiatodistus (find-energiatodistus db id)]
                                   (when-not skip-pdf-signed-assert?
                                     (assert-energiatodistus-pdf-signed! aws-s3-client energiatodistus))
                                   (mark-energiatodistus-korvattu! db (:korvattu-energiatodistus-id energiatodistus))
