@@ -3,6 +3,7 @@ import * as R from 'ramda';
 import * as deep from '@Utility/deep-objects';
 import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
+import * as EitherMaybe from '@Utility/either-maybe.js';
 import * as objects from '@Utility/objects';
 import * as fxmath from '@Utility/fxmath';
 
@@ -433,3 +434,51 @@ export const kielisyys = R.compose(R.map(parseInt), R.invertObj)(kielisyydet);
 export const kielisyysKey = id => kielisyydet[id];
 
 export const isLaskutettu = R.propSatisfies(Maybe.isSome, 'laskutusaika');
+
+/**
+ * Coefficients for renewable energy share calculation.
+ * These are defined independently in the spec and happen to coincide with
+ * energiamuotokerroin 2026 values but are separate concepts.
+ */
+const uusiutuvaKerroin = {
+  aurinkosahko: 0.9,
+  tuulisahko: 0.9,
+  aurinkolampo: 0.38
+};
+
+const painotettuUusiutuvaSumma = energyMap =>
+  Object.entries(uusiutuvaKerroin).reduce((acc, [k, coeff]) => {
+    const val = energyMap?.[k];
+    const num = val != null ? EitherMaybe.orSome(0)(val) : 0;
+    return acc + coeff * num;
+  }, 0.0);
+
+/**
+ * Calculate the percentage of on-site renewable energy production relative to energy consumption.
+ * Returns a rounded integer percentage or null if the calculation cannot be performed.
+ *
+ * Formula: round((Σ(E_tuotto × k) / A_netto) / (E_luku + Σ(E_hyödynnetty × k) / A_netto) × 100)
+ */
+export const uusiutuvanEnergianOsuus = energiatodistus => {
+  const nettoala = EitherMaybe.orSome(null)(
+    energiatodistus?.lahtotiedot?.['lammitetty-nettoala']
+  );
+  const eLuku = Maybe.orSome(null)(
+    eluku(
+      energiatodistus.versio,
+      energiatodistus.lahtotiedot['lammitetty-nettoala'],
+      energiatodistus.tulokset['kaytettavat-energiamuodot']
+    )
+  );
+  if (!nettoala || nettoala <= 0 || eLuku == null) return null;
+
+  const tuotto =
+    energiatodistus.tulokset['uusiutuvat-omavaraisenergiat-kokonaistuotanto'];
+  const hyodynnetty = energiatodistus.tulokset['uusiutuvat-omavaraisenergiat'];
+
+  const numerator = painotettuUusiutuvaSumma(tuotto) / nettoala;
+  const denominator = eLuku + painotettuUusiutuvaSumma(hyodynnetty) / nettoala;
+  if (denominator <= 0) return null;
+
+  return Math.round((numerator / denominator) * 100);
+};
