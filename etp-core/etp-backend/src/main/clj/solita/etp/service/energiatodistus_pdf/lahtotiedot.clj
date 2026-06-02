@@ -80,7 +80,7 @@
         lammin-kayttovesi (:lammin-kayttovesi lammitys)
         takka (:takka lammitys)
         ilmalampopumppu (:ilmalampopumppu lammitys)]
-    {:kuvaukset (-> lammitys (get kuvaus-key) (str/split #", "))
+    {:kuvaukset (-> lammitys (get kuvaus-key) (str/split #", ") (->> (map h)))
      :lammonjako (-> lammitys (get lammonjako-key) h)
      :jarjestelmat [{:nimi (l :lahtotiedot-tilojen-iv-lammitys)
                      :jaon-hyotysuhde (fmt (:jaon-hyotysuhde tilat-ja-iv))
