@@ -96,7 +96,8 @@ where versio = 2026 and column_name in (
   'lt$ilmanvaihto$paaiv$poisto',
   'lt$ilmanvaihto$erillispoistot$tulo',
   'lt$ilmanvaihto$erillispoistot$poisto',
-  'lt$ilmanvaihto$ivjarjestelma$tulo'
+  'lt$ilmanvaihto$ivjarjestelma$tulo',
+  'to$tietojen_alkuperavuosi'
 );
 
 insert into validation_sisainen_kuorma (
