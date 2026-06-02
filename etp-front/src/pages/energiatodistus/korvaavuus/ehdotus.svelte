@@ -156,11 +156,13 @@
                 <tr
                   class="etp-table-tr etp-table--tr__link"
                   on:click={() => {
-                    energiatodistus = R.assoc(
-                      'korvattu-energiatodistus-id',
-                      Maybe.Some(korvattava.id),
-                      energiatodistus
-                    );
+                    energiatodistus = R.compose(
+                      R.assoc('yksinkertaistettu-paivitysmenettely', false),
+                      R.assoc(
+                        'korvattu-energiatodistus-id',
+                        Maybe.Some(korvattava.id)
+                      )
+                    )(energiatodistus);
                     dirty = true;
                     checked = true;
                   }}>

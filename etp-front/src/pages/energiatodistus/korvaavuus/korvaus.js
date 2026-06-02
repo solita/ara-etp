@@ -41,6 +41,7 @@ export const isReplacedCertificateValid = korvattava =>
 
 export const canUseSimplifiedProcedure = (energiatodistus, korvattava) =>
   ET.isDraft(energiatodistus) &&
+  energiatodistus.versio === 2026 &&
   R.compose(
     Maybe.isSome,
     R.prop('korvattu-energiatodistus-id')
