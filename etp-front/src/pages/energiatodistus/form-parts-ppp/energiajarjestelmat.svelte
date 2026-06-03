@@ -102,7 +102,10 @@
                 {disabled}
                 allowNone={false}
                 bind:model={perusparannuspassi}
-                lens={R.lensPath(['rakennuksen-perustiedot', 'uusiutuva-energia-lahtotilanne'])}
+                lens={R.lensPath([
+                  'rakennuksen-perustiedot',
+                  'uusiutuva-energia-lahtotilanne'
+                ])}
                 items={energiajarjestelmatConfig[energiajarjestelma].items}
                 format={energiajarjestelmatConfig[energiajarjestelma].format}
                 parse={Maybe.Some} />
