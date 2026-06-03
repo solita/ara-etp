@@ -71,11 +71,6 @@ const requiredCondition = {
   'huomiot.ymparys.teksti-fi': laatimisvaiheet.isOlemassaOlevaRakennus,
   'huomiot.ymparys.teksti-sv': laatimisvaiheet.isOlemassaOlevaRakennus,
 
-  'toteutunut-ostoenergiankulutus.tietojen-alkuperavuosi': if2026Else(
-    R.complement(laatimisvaiheet.isUudisrakennus),
-    R.F
-  ),
-
   'ilmastoselvitys.laatimisajankohta': if2026Else(
     R.both(
       R.pathEq(true, ['perustiedot', 'tayttaa-aplus-vaatimukset']),
