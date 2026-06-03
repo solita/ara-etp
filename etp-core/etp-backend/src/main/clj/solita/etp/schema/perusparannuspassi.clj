@@ -20,6 +20,7 @@
    :ulkoovet-ehdotettu-taso                  schema/Num
    :paalammitysjarjestelma-ehdotettu-taso    common-schema/Key
    :ilmanvaihto-ehdotettu-taso               common-schema/Key
+   :uusiutuva-energia-lahtotilanne           common-schema/Key
    :uusiutuva-energia-ehdotettu-taso         common-schema/Key
    :jaahdytys-ehdotettu-taso                 common-schema/Key
    :mahdollisuus-liittya-energiatehokkaaseen common-schema/Key

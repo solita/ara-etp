@@ -421,6 +421,7 @@ const emptyPerusparannusRakennuksenPerustiedot = _ => ({
   'ulkoovet-ehdotettu-taso': ValidNone(),
   'paalammitysjarjestelma-ehdotettu-taso': Maybe.None(),
   'ilmanvaihto-ehdotettu-taso': Maybe.None(),
+  'uusiutuva-energia-lahtotilanne': Maybe.None(),
   'uusiutuva-energia-ehdotettu-taso': Maybe.None(),
   'jaahdytys-ehdotettu-taso': Maybe.None(),
   'mahdollisuus-liittya-energiatehokkaaseen': Maybe.None(),

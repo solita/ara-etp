@@ -43,11 +43,6 @@
         'uusiutuva-energia-ehdotettu-taso'
       ])
     },
-    jaahdytys: {
-      items: R.pluck('id', luokittelut.jaahdytys),
-      format: et.selectFormat(labelLocale, luokittelut.jaahdytys),
-      lens: R.lensPath(['rakennuksen-perustiedot', 'jaahdytys-ehdotettu-taso'])
-    },
     mahdollisuusliittya: {
       format: et.selectFormat(labelLocale, luokittelut.mahdollisuusLiittya)
     }
@@ -60,12 +55,7 @@
       'lammitysmuoto-1',
       'id'
     ],
-    ilmanvaihto: ['lahtotiedot', 'ilmanvaihto', 'tyyppi-id'],
-    uusiutuvaenergia: [
-      'rakennuksen-perustiedot',
-      'uusiutuva-energia-ehdotettu-taso'
-    ],
-    jaahdytys: ['rakennuksen-perustiedot', 'jaahdytys-ehdotettu-taso']
+    ilmanvaihto: ['lahtotiedot', 'ilmanvaihto', 'tyyppi-id']
   };
 </script>
 
@@ -99,7 +89,7 @@
       </tr>
     </thead>
     <tbody class="et-table--tbody">
-      {#each ['paalammitysjarjestelma', 'ilmanvaihto', 'uusiutuvaenergia', 'jaahdytys'] as energiajarjestelma}
+      {#each ['paalammitysjarjestelma', 'ilmanvaihto', 'uusiutuvaenergia'] as energiajarjestelma}
         <tr class="et-table--tr">
           <td class="et-table--td">
             {$_(
@@ -107,7 +97,16 @@
             )}
           </td>
           <td>
-            {#if R.path(currentValuePaths[energiajarjestelma], energiatodistus)?.isValue}
+            {#if energiajarjestelma === 'uusiutuvaenergia'}
+              <Select
+                {disabled}
+                allowNone={false}
+                bind:model={perusparannuspassi}
+                lens={R.lensPath(['rakennuksen-perustiedot', 'uusiutuva-energia-lahtotilanne'])}
+                items={energiajarjestelmatConfig[energiajarjestelma].items}
+                format={energiajarjestelmatConfig[energiajarjestelma].format}
+                parse={Maybe.Some} />
+            {:else if R.path(currentValuePaths[energiajarjestelma], energiatodistus)?.isValue}
               {energiajarjestelmatConfig[energiajarjestelma].format(
                 R.path(currentValuePaths[energiajarjestelma], energiatodistus)
                   .val
