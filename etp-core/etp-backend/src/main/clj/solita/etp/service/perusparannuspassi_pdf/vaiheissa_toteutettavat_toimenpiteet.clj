@@ -155,7 +155,7 @@
                          perf-label (str e-luokka " - " e-luku)]
                      [:svg {:xmlns "http://www.w3.org/2000/svg"
                             :viewBox "-6 -60 120 65"
-                            :width "38.2m"
+                            :width "38.2mm"
                             :height "20.5mm"}
                       (tv/arrow color 0 vaihe-title perf-label)])]]]
          :title-class "vaihe-title"
