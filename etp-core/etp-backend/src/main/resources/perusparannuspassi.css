@@ -1,0 +1,688 @@
+@page {
+    size: A4;
+    margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: carlito, sans-serif;
+    font-size: 12pt;
+    line-height: 1.07;
+}
+
+.page {
+    page-break-after: always;
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 0;
+}
+
+.page:last-child {
+    page-break-after: auto;
+}
+
+.page-header {
+    background-color: #2c5234;
+    height: 37.4mm;
+    width: 100%;
+}
+
+.page-title {
+    color: white;
+    margin: 0;
+    padding: 8.6mm 16mm 0 15.1mm;
+    font-weight: bold;
+    letter-spacing: -1.5pt;
+}
+
+.etusivu-title {
+    font-size: 48pt;
+}
+
+.vaihe-title {
+    font-size: 30pt;
+}
+
+.vaiheistuksen-yhteenveto-title {
+    font-size: 30pt;
+}
+
+.laskennan-taustatiedot-title {
+    font-size: 30pt;
+}
+
+.lisatietoja-title {
+    font-size: 30pt;
+}
+
+.page-content {
+    padding: 14.8mm;
+    min-height: 227mm;
+}
+
+.etusivu-content {
+    padding-top: 0mm;
+}
+
+.page-footer {
+    position: absolute;
+    bottom: 5.3mm;
+    left: 2cm;
+    right: 2cm;
+    text-align: center;
+    font-size: 12pt;
+    color: #2c5234;
+}
+
+.energialuokka-a {
+    background-color: #449841;
+}
+
+.energialuokka-b {
+    background-color: #7dae35;
+}
+
+.energialuokka-c {
+    background-color: #cad344;
+}
+
+.energialuokka-d {
+    background-color: #fced4f;
+}
+
+.energialuokka-e {
+    background-color: #e8b63e;
+}
+
+h1 {
+    font-size: 30pt;
+}
+
+h2 {
+    font-size: 13pt;
+    color: #2c5234;
+}
+
+h3 {
+    font-size: 12pt;
+}
+
+p {
+    font-size: 12pt;
+}
+
+dl.etusivu-yleistiedot {
+    display: table;
+    width: 100%;
+    background-color: #2c5234;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+}
+
+dl.etusivu-yleistiedot div {
+    display: table-row;
+}
+
+dl.etusivu-yleistiedot div.potentially-two-rows {
+    min-height: 13.40mm;
+}
+
+dl.etusivu-yleistiedot dt,
+dl.etusivu-yleistiedot dd {
+    vertical-align: middle;
+    display: table-cell;
+    -fs-border-rendering: no-bevel;
+    border: 0.16mm solid #2c5234;
+    padding: 0.75mm 1mm;
+}
+
+dl.etusivu-yleistiedot dt {
+    color: white;
+    white-space: nowrap;
+    width: 1px;
+}
+
+dl.etusivu-yleistiedot dd {
+    background-color: white;
+}
+
+dl.etusivu-laatija-allekirjoitus {
+    position: absolute;
+    bottom: 26mm;
+    left: 34mm;
+    width: 80%;
+}
+
+dl.etusivu-laatija-allekirjoitus > div {
+    position: absolute;
+    top: 0;
+}
+
+dl.etusivu-laatija-allekirjoitus > div.laatija-block {
+    left: 0;
+}
+
+dl.etusivu-laatija-allekirjoitus > div.allekirjoituspaiva-block {
+    left: 118mm;
+}
+
+dl.etusivu-laatija-allekirjoitus dt,
+dl.etusivu-laatija-allekirjoitus dd {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    vertical-align: middle;
+    border: none;
+}
+
+dl.etusivu-laatija-allekirjoitus dt {
+    margin-right: 2mm;
+}
+
+dl.etusivu-laatija-allekirjoitus dt.hidden-dt {
+    width: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-size: 0;
+    border: none;
+}
+
+.vaikutukset-box {
+    background-color: #eaeeeb;
+    border-radius: 3mm;
+    padding: 3mm 6mm 6mm 6mm;
+    width: 100%;
+    min-height: 80mm;
+}
+
+.kohdistuminen-box {
+    background-color: #ffffff;
+    border-radius: 3mm;
+    width: 100%;
+    padding-left: 5mm;
+}
+
+dl.tayttaa-vaatimukset-list {
+    display: table;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+dl.tayttaa-vaatimukset-list > div {
+    display: table-cell;
+    padding-right: 10mm;
+    vertical-align: top;
+}
+
+dl.tayttaa-vaatimukset-list > div:last-child {
+    padding-right: 0;
+}
+
+dl.tayttaa-vaatimukset-list > div > dt,
+dl.tayttaa-vaatimukset-list > div > dd {
+    display: inline-block;
+    border: 1px solid #2c5234;
+    padding: 6px 8px;
+    margin: 0;
+    vertical-align: top;
+}
+
+dl.tayttaa-vaatimukset-list > div > dt {
+    width: 60mm;
+    border-right: none;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+dl.tayttaa-vaatimukset-list > div > dd {
+    width: 14mm;
+}
+
+.vaatimukset-selitteet-box {
+    margin-top: 3mm;
+}
+
+.vaatimukset-selitteet {
+    display: table-row;
+    width: 100%;
+}
+
+.vaatimukset-selitteet > div {
+    display: table-cell;
+    width: 50%;
+    margin-right: 10mm;
+}
+
+.vaatimukset-selitteet > div:last-child {
+    margin-right: 0;
+    padding-left: 5mm;
+}
+
+.vaiheistuksen-yhteenveto {
+}
+
+.vaiheistuksen-yhteenveto table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+}
+
+.vaiheistuksen-yhteenveto th {
+    padding: 5px;
+    text-align: center;
+}
+
+.vaiheistuksen-yhteenveto th .year-range {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+.vaiheistuksen-yhteenveto td {
+    padding: 4px 2px;
+    margin: 4px 2px;
+    text-align: center;
+    border: 0.5px solid #2c5234;
+}
+
+.vaiheistuksen-yhteenveto th {
+    padding: 4px 4px;
+    margin: 4px 2px;
+}
+
+.vaiheistuksen-yhteenveto td.shaded {
+    background-color: #eaeeeb;
+}
+
+.vaiheistuksen-yhteenveto table.shaded td {
+    background-color: #eaeeeb;
+}
+
+.vaiheistuksen-yhteenveto th.th1 {
+    text-align: left;
+    background-color: #2c5234;
+    color: white;
+    font-weight: bold;
+    height: 30px;
+    border: 0.5px solid #2c5234;
+    padding: 0 4px;
+    margin: 0 2px;
+}
+
+.vaiheistuksen-yhteenveto thead th.th1 {
+    text-align: center;
+}
+
+.vaiheistuksen-yhteenveto th.th2 {
+    text-align: left;
+    font-weight: normal;
+    border: 0.5px solid #2c5234;
+}
+
+.ppp-vaihe-no-top-margin {
+    margin-top: -40px;
+}
+
+.ppp-vaihe-section {
+    margin-top: 24px;
+}
+
+.ppp-vaihe-ehdotukset-columns {
+    margin: 0;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border: none;
+}
+
+.ppp-vaihe-ehdotukset-column {
+    display: table-cell;
+    width: 50%;
+    vertical-align: top;
+    border: none;
+}
+
+.ppp-vaihe-ehdotukset-column-left {
+    padding-right: 5mm;
+}
+
+.ppp-vaihe-ehdotukset-column-right {
+    padding-left: 5mm;
+}
+
+dl.ppp-vaihe-ehdotukset-list {
+    display: table;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+dl.ppp-vaihe-ehdotukset-list {
+    display: table;
+    width: 100%;
+    background-color: #2c5234;
+    border-collapse: collapse;
+}
+
+dl.ppp-vaihe-ehdotukset-list div {
+    display: table-row;
+}
+
+dl.ppp-vaihe-ehdotukset-list dt,
+dl.ppp-vaihe-ehdotukset-list dd {
+    display: table-cell;
+    vertical-align: middle;
+    border: 0.16mm solid #2c5234;
+}
+
+dl.ppp-vaihe-ehdotukset-list dt.ppp-vaihe-ehdotukset-number {
+    width: 8.5mm;
+    padding: 6px 8px;
+    background-color: #2c5234;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+}
+
+dl.ppp-vaihe-ehdotukset-list dd.ppp-vaihe-ehdotukset-item {
+    background-color: #ffffff;
+    padding: 1.6mm 0 1.6mm 1.6mm;
+}
+
+dl.ppp-vaihe-energiankulutuksen-list {
+    display: table;
+    width: 100%;
+    margin-top: -12px;
+    padding: 0;
+    border-collapse: collapse;
+    background-color: #2c5234;
+    -fs-border-rendering: no-bevel;
+}
+
+dl.ppp-vaihe-energiankulutuksen-list div {
+    display: table-cell;
+    width: 20%;
+    vertical-align: top;
+}
+
+dl.ppp-vaihe-energiankulutuksen-list dt,
+dl.ppp-vaihe-energiankulutuksen-list dd {
+    display: block;
+    margin: 0;
+    -fs-border-rendering: no-bevel;
+}
+
+dl.ppp-vaihe-energiankulutuksen-list dt.ppp-vaihe-energiankulutuksen-label {
+    border: 0.16mm solid #2c5234;
+    background-color: #2c5234;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 5px;
+}
+
+dl.ppp-vaihe-energiankulutuksen-list dd.ppp-vaihe-energiankulutuksen-value {
+    border: 0.16mm solid #2c5234;
+    background-color: #ffffff;
+    text-align: center;
+    border-top: none;
+    padding: 6px 8px;
+    min-height: 1.5em;
+}
+
+.ppp-vaihe-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-top: -11px;
+    text-algin: center;
+}
+
+.ppp-vaihe-energiankulutus-kustannukset-ja-co2-paastot {
+    margin-top: -3px;
+}
+
+.ppp-vaihe-kustannukset-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: -12px;
+}
+
+.ppp-vaihe-kustannukset-info {
+    margin-top: -1px;
+}
+
+.ppp-vaihe-title-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: -10px;
+}
+
+.ppp-vaihe-cell {
+    border: 1px solid #2c5234;
+    padding: 6px 8px;
+}
+
+.ppp-vaihe-item-cell {
+    width: 40%;
+    vertical-align: middle;
+}
+
+.ppp-vaihe-value-cell {
+    text-align: center;
+    width: 17%;
+}
+
+.ppp-vaihe-unit-cell {
+    text-align: center;
+    width: 20%;
+}
+
+.ppp-vaihe-header-cell {
+    width: 20%;
+    border: 1px solid #2c5234;
+    background-color: #2c5234;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    padding: 10px 5px;
+}
+
+.ppp-vaihe-number-cell {
+    border: 1px solid #2c5234;
+    background-color: #2c5234;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    width: 40px;
+    padding: 10px 0;
+}
+
+.ppp-vaihe-row-header {
+    border: 1px solid #2c5234;
+    padding: 6px 8px;
+    text-align: left;
+    font-weight: normal;
+    width: 63%;
+}
+
+.ppp-vaihe-spacer {
+    width: 42px;
+    border: none;
+}
+
+.ppp-vaihe-toimenpideseloste {
+    line-height: 1.07;
+    height: 97mm;
+    white-space: pre-line;
+    margin-top: -12px;
+}
+
+.ppp-vaihe-top-align {
+    vertical-align: top;
+}
+
+.ppp-vaihe-title-right {
+    padding-left: 20mm;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.ppp-vaihe-bottom-align {
+    vertical-align: bottom;
+}
+
+.ppp-vaihe-fill-row {
+    height: 100%;
+}
+
+table.lt-u-arvot {
+    margin-top: -9mm;
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+    margin-bottom: 30px;
+}
+
+table.lt-u-arvot th,
+table.lt-u-arvot td {
+    display: table-cell;
+    -fs-border-rendering: no-bevel;
+    border: 1px solid #2c5234;
+    padding: 5px 8px;
+}
+
+th.lt-otsikko {
+    background-color: #2c5234;
+    color: white;
+    font-weight: bold;
+    padding: 5px 8px;
+}
+
+table.lt-u-arvot .lt-sarakkeet th {
+    font-weight: normal;
+}
+
+table.lt-lammitys {
+    margin-top: -4.5mm
+}
+
+table.lt-lammitys th,
+table.lt-lammitys td {
+    display: table-cell;
+    -fs-border-rendering: no-bevel;
+    border: 1px solid #2c5234;
+    padding: 5px 8px;
+}
+
+tr.sarakkeet.lammitys-ilmanvaihto {
+    background-color: #2c5234;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 8px;
+}
+
+table.lt-lammitys th.empty {
+    border: none;
+    background: none;
+}
+
+table.lt-lammitys th {
+    font-weight: normal;
+    text-align: center;
+}
+
+table.lt-lammitys {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+}
+
+dl.lt-vahimmaisvaatimustaso {
+    display: table;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+    width: 100%;
+}
+
+dl.lt-vahimmaisvaatimustaso dd {
+    display: table-cell;
+    padding: 5px 8px;
+    white-space: nowrap;
+}
+
+dl.lt-vahimmaisvaatimustaso dd {
+    border: 1px solid #2c5234;
+}
+
+dl.lt-korjausrakentamisen-saadokset {
+}
+
+table.lt-mahdollisuus-liittya {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+    margin-bottom: 30px;
+}
+
+table.lt-mahdollisuus-liittya th,
+table.lt-mahdollisuus-liittya td {
+    display: table-cell;
+    border: 1px solid #2c5234;
+    padding: 5px 8px;
+}
+
+table.lt-lisatietoja {
+    margin-top: -3mm;
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
+}
+
+table.lt-lisatietoja th,
+table.lt-lisatietoja td {
+    display: table-cell;
+    -fs-border-rendering: no-bevel;
+    border: 1px solid #2c5234;
+    padding: 5px 8px;
+}
+
+dl.lt-voimassaolo {
+}
+
+.lisatietoja-box {
+    display: block;
+    border: 1px solid #2c5234;
+    padding: 3px;
+}
+
+.lisatietoja-field {
+    height: 200mm;
+    white-space: pre-line;
+}
+
+.lisatietoja-sivu-otsikko {
+    background-color: #2c5234;
+    color: white;
+    font-weight: bold;
+    padding: 5px 8px;
+    margin: 0;
+}
