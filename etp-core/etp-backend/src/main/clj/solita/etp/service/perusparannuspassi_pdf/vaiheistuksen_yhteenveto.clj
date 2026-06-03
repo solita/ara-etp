@@ -111,7 +111,7 @@
       [:thead
        [:tr
         [:th]
-        [:th {:class "th1" :scope "col"} (l :lahtotilanne)]
+        [:th {:class "th1" :scope "col"} (l :lahtotilanne-tavutettu)]
         (for [i (range 1 5)]
           (let [vaihe (nth padded-vaiheet i)]
             [:th {:class "th1" :scope "col"}
