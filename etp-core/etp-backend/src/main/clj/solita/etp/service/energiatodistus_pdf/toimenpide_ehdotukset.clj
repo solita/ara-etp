@@ -15,11 +15,11 @@
      [:thead
       [:tr
        [:th.empty]
-       [:th.header-text [:strong (str (l :te-lampo-muutos))]]
-       [:th.header-text [:strong (str (l :te-sahko-muutos))]]
-       [:th.header-text [:strong (str (l :te-jaahdytyden-muutos))]]
-       [:th.header-text [:strong (str (l :eluvun-muutos))]]
-       [:th.header-text [:strong (str (l :kasvihuonepaastojen-muutos))]]]
+       [:th.header-text (str (l :te-lampo-muutos))]
+       [:th.header-text (str (l :te-sahko-muutos))]
+       [:th.header-text (str (l :te-jaahdytyden-muutos))]
+       [:th.header-text (str (l :eluvun-muutos))]
+       [:th.header-text (str (l :kasvihuonepaastojen-muutos))]]
       [:tr
        [:th.empty]
        [:th.header-unit (str (l :kwh-vuosi))]

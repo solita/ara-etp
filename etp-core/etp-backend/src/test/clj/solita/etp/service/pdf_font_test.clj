@@ -152,15 +152,15 @@
       (assert-font-family-present! "Perusparannuspassi 2026" (get document-fonts "Perusparannuspassi 2026") "roboto")
       (assert-font-family-absent! "Perusparannuspassi 2026" (get document-fonts "Perusparannuspassi 2026") "carlito"))
 
-    (t/testing "Energiatodistus 2026 uses Roboto and does not use Carlito"
-      (assert-font-family-present! "Energiatodistus 2026" (get document-fonts "Energiatodistus 2026") "roboto")
-      (assert-font-family-absent! "Energiatodistus 2026" (get document-fonts "Energiatodistus 2026") "carlito"))
+    (t/testing "Energiatodistus 2026 uses Carlito and does not use Roboto"
+      (assert-font-family-present! "Energiatodistus 2026" (get document-fonts "Energiatodistus 2026") "carlito")
+      (assert-font-family-absent! "Energiatodistus 2026" (get document-fonts "Energiatodistus 2026") "roboto"))
 
-    (t/testing "Energiatodistus 2026 + Perusparannuspassi uses Roboto and does not use Carlito"
+    (t/testing "Energiatodistus 2026 + Perusparannuspassi uses both Roboto and Carlito"
       (assert-font-family-present! "Energiatodistus 2026 + Perusparannuspassi"
                                    (get document-fonts "Energiatodistus 2026 + Perusparannuspassi")
                                    "roboto")
-      (assert-font-family-absent! "Energiatodistus 2026 + Perusparannuspassi"
+      (assert-font-family-present! "Energiatodistus 2026 + Perusparannuspassi"
                                   (get document-fonts "Energiatodistus 2026 + Perusparannuspassi")
                                   "carlito"))
 

@@ -1,8 +1,10 @@
 (ns solita.etp.service.energiatodistus-pdf.lahtotiedot
   "E-luvun laskennan lähtötiedot page for Energiatodistus 2026 PDF"
-  (:require [solita.common.formats :as formats]
-            [solita.etp.service.localization :as loc]
-            [hiccup.core :refer [h]]))
+  (:require
+    [clojure.string :as str]
+    [solita.common.formats :as formats]
+    [solita.etp.service.localization :as loc]
+    [hiccup.core :refer [h]]))
 
 (defn- fmt
   "Format number with specified decimal places. Returns empty string for nil."
@@ -21,27 +23,33 @@
     [{:nimi (l :lahtotiedot-ulkoseinat)
       :a (fmt (get-in vaippa [:ulkoseinat :ala]) 1)
       :u (fmt (get-in vaippa [:ulkoseinat :U]) 1)
-      :osuus (fmt-pct (get-in vaippa [:ulkoseinat :osuus-lampohaviosta]) )}
+      :osuus (fmt-pct (get-in vaippa [:ulkoseinat :osuus-lampohaviosta]) )
+      :borders? true}
      {:nimi (l :lahtotiedot-ylapohja)
       :a (fmt (get-in vaippa [:ylapohja :ala]) 1)
       :u (fmt (get-in vaippa [:ylapohja :U]) 1)
-      :osuus (fmt-pct (get-in vaippa [:ylapohja :osuus-lampohaviosta]))}
+      :osuus (fmt-pct (get-in vaippa [:ylapohja :osuus-lampohaviosta]))
+      :borders? true}
      {:nimi (l :lahtotiedot-alapohja)
       :a (fmt (get-in vaippa [:alapohja :ala]) 1)
       :u (fmt (get-in vaippa [:alapohja :U]) 1)
-      :osuus (fmt-pct (get-in vaippa [:alapohja :osuus-lampohaviosta]))}
+      :osuus (fmt-pct (get-in vaippa [:alapohja :osuus-lampohaviosta]))
+      :borders? true}
      {:nimi (l :lahtotiedot-ikkunat)
       :a (fmt (get-in vaippa [:ikkunat :ala]) 1)
       :u (fmt (get-in vaippa [:ikkunat :U]) 1)
-      :osuus (fmt-pct (get-in vaippa [:ikkunat :osuus-lampohaviosta]))}
+      :osuus (fmt-pct (get-in vaippa [:ikkunat :osuus-lampohaviosta]))
+      :borders? true}
      {:nimi (l :lahtotiedot-ulkoovet)
       :a (fmt (get-in vaippa [:ulkoovet :ala]) 1)
       :u (fmt (get-in vaippa [:ulkoovet :U]) 1)
-      :osuus (fmt-pct (get-in vaippa [:ulkoovet :osuus-lampohaviosta]))}
+      :osuus (fmt-pct (get-in vaippa [:ulkoovet :osuus-lampohaviosta]))
+      :borders? true}
      {:nimi (l :lahtotiedot-kylmasillat)
       :a ""
       :u ""
-      :osuus (fmt-pct (get-in vaippa [:kylmasillat-osuus-lampohaviosta]))}]))
+      :osuus (fmt-pct (get-in vaippa [:kylmasillat-osuus-lampohaviosta]))
+      :borders? false}]))
 
 (defn- extract-ilmanvaihto-data
   "Extract ilmanvaihto data from energiatodistus."
@@ -72,7 +80,7 @@
         lammin-kayttovesi (:lammin-kayttovesi lammitys)
         takka (:takka lammitys)
         ilmalampopumppu (:ilmalampopumppu lammitys)]
-    {:kuvaus (-> lammitys (get kuvaus-key) h)
+    {:kuvaukset (-> lammitys (get kuvaus-key) (str/split #", ") (->> (map h)))
      :lammonjako (-> lammitys (get lammonjako-key) h)
      :jarjestelmat [{:nimi (l :lahtotiedot-tilojen-iv-lammitys)
                      :jaon-hyotysuhde (fmt (:jaon-hyotysuhde tilat-ja-iv))
@@ -150,12 +158,12 @@
      [:span (l :lahtotiedot-ilmanvuotoluku) [:sub "50"]]
      (:ilmanvuotoluku data)
      "m³/(h m²)")
-   [:table {:class "lahtotiedot-table"}
+   [:table {:class "lahtotiedot-table lahtotiedot-4col-table"}
     [:colgroup
-     [:col {:class "col-w30"}]
-     [:col {:class "col-w20"}]
-     [:col {:class "col-w20"}]
-     [:col {:class "col-w30"}]]
+     [:col ]
+     [:col ]
+     [:col ]
+     [:col ]]
     [:thead
      [:tr
       [:th {:class "lahtotiedot-th"}]
@@ -166,21 +174,22 @@
      (for [row (:rakennusvaippa data)]
        [:tr
         [:td {:class "lahtotiedot-td-label"} (:nimi row)]
-        [:td {:class "num"} (:a row)]
-        [:td {:class "num"} (:u row)]
+        [:td {:class (if (:borders? row) "num" "num without-border")} (:a row)]
+        [:td {:class (if (:borders? row) "num" "num without-border")} (:u row)]
         [:td {:class "num"} (:osuus row)]])]]])
 
 (defn- ilmanvaihto-section [data l]
   (let [iv (:ilmanvaihto data)]
     [:section {:class "lahtotiedot-section"}
      (section-title (l :lahtotiedot-ilmanvaihtojarjestelma))
-     (label-value-row (l :lahtotiedot-ilmanvaihto-kuvaus) (:kuvaus iv))
-     [:table {:class "lahtotiedot-table"}
+     [:div {:class "lahtotiedot-section-top-box"}
+      (label-value-row (l :lahtotiedot-ilmanvaihto-kuvaus) (:kuvaus iv))]
+     [:table {:class "lahtotiedot-table lahtotiedot-4col-table"}
       [:colgroup
-       [:col {:class "col-w30"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w30"}]]
+       [:col]
+       [:col]
+       [:col]
+       [:col]]
       [:thead
        [:tr
         [:th {:class "lahtotiedot-th"}]
@@ -199,36 +208,43 @@
   (let [lam (:lammitys data)]
     [:section {:class "lahtotiedot-section"}
      (section-title (l :lahtotiedot-lammitysjarjestelma))
-     [:div {:class "lahtotiedot-two-col"}
-      (label-value-row (l :lahtotiedot-lammitys-kuvaus) (:kuvaus lam))
-      (label-value-row (l :lahtotiedot-lammonjako) (:lammonjako lam))]
-     [:table {:class "lahtotiedot-table"}
+     [:div {:class "lahtotiedot-section-top-box"}
+      [:dl {:class "table-description-list"}
+       [:div
+        [:dt (l :lahtotiedot-lammitys-kuvaus)]
+        [:dd (->> lam
+                  :kuvaukset
+                  (map (fn [label] [:div label])))]]
+       [:div
+        [:dt (l :lahtotiedot-lammonjako)]
+        [:dd          (:lammonjako lam)]]]]
+     [:table {:class "lahtotiedot-table lahtotiedot-5col-table"}
       [:colgroup
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]]
+       [:col]
+       [:col]
+       [:col]
+       [:col]
+       [:col]]
       [:thead
        [:tr
         [:th {:class "lahtotiedot-th"}]
-        [:th {:class "lahtotiedot-th"} (l :lahtotiedot-jaon-luovutuksen-hyotysuhde)]
         [:th {:class "lahtotiedot-th"} (l :lahtotiedot-tuoton-hyotysuhde)]
+        [:th {:class "lahtotiedot-th"} (l :lahtotiedot-jaon-luovutuksen-hyotysuhde)]
         [:th {:class "lahtotiedot-th"} (l :lahtotiedot-lampokerroin-tuotto-osuus)]
         (table-header-cell [:span (l :lahtotiedot-apulaitteiden-sahkonkaytto) [:br] [:span {:class "lahtotiedot-th-sub"} "kWh/m²/vuosi"]])]]
       [:tbody
        (for [row (:jarjestelmat lam)]
          [:tr
           [:td {:class "lahtotiedot-td-label"} (:nimi row)]
-          [:td {:class "num"} (:jaon-hyotysuhde row)]
           [:td {:class "num"} (:tuoton-hyotysuhde row)]
+          [:td {:class "num"} (:jaon-hyotysuhde row)]
           [:td {:class "num"} (:lampokerroin row)]
           [:td {:class "num"} (:apulaitteet row)]])]]
-     [:table {:class "lahtotiedot-table lahtotiedot-table-margin"}
+     [:table {:class "lahtotiedot-table lahtotiedot-3col-table lahtotiedot-table-margin"}
       [:colgroup
-       [:col {:class "col-w50"}]
-       [:col {:class "col-w25"}]
-       [:col {:class "col-w25"}]]
+       [:col]
+       [:col]
+       [:col]]
       [:thead
        [:tr
         [:th {:class "lahtotiedot-th"}]
@@ -249,11 +265,11 @@
 (defn- lampokuormat-section [data l]
   [:section {:class "lahtotiedot-section"}
    (section-title (l :lahtotiedot-sisaiset-lampokuormat))
-   [:table {:class "lahtotiedot-table"}
+   [:table {:class "lahtotiedot-table lahtotiedot-3col-table"}
     [:colgroup
-     [:col {:class "col-w40"}]
-     [:col {:class "col-w30"}]
-     [:col {:class "col-w30"}]]
+     [:col]
+     [:col]
+     [:col]]
     [:thead
      [:tr
       [:th {:class "lahtotiedot-th"}]
