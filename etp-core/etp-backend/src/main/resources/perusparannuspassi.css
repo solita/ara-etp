@@ -362,18 +362,12 @@ dl.tayttaa-vaatimukset-list > div > dd {
 
 dl.ppp-vaihe-ehdotukset-list {
     display: table;
-    border-collapse: collapse;
-    -fs-border-rendering: no-bevel;
     width: 100%;
     margin: 0;
     padding: 0;
-}
-
-dl.ppp-vaihe-ehdotukset-list {
-    display: table;
-    width: 100%;
     background-color: #2c5234;
     border-collapse: collapse;
+    -fs-border-rendering: no-bevel;
 }
 
 dl.ppp-vaihe-ehdotukset-list div {
