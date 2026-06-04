@@ -135,7 +135,7 @@
   (let [l (kieli loc/et-pdf-localization)
         ilmastoselvitys (:ilmastoselvitys energiatodistus)]
     [:div {:class "ilmastoselvitys"}
-     [:h2 (l :ilmastoselvitys-otsikko)]
+     [:h2 {:class "top-of-page"} (l :ilmastoselvitys-otsikko)]
      [:p {:class "is-intro"} (l :is-intro-teksti)]
      [:div {:class "is-separator"}]
      (metatiedot-section ilmastoselvitys l ilmastoselvitys-laadintaperusteet kieli)

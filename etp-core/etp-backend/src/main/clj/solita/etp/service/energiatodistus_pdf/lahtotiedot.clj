@@ -289,7 +289,7 @@
   (let [l (kieli loc/et-pdf-localization)
         data (extract-lahtotiedot energiatodistus kieli l)]
     [:div {:class "lahtotiedot-page"}
-     [:h2 {:class "lahtotiedot-page-title"} (l :lahtotiedot-title)]
+     [:h2 {:class "top-of-page"} (l :lahtotiedot-title)]
      [:div {:class "lahtotiedot-content"}
       (rakennusvaippa-section data l)
       (ilmanvaihto-section data l)

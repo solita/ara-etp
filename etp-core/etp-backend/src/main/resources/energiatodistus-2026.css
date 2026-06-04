@@ -261,11 +261,22 @@ h1 {
 
 h2 {
     font-size: 14pt;
-    color: #23323e;
     text-transform: uppercase;
+    color: #2a3b49;
     text-align: center;
+    letter-spacing: 0.03em;
     margin-top: 0mm;
     margin-bottom: 1mm;
+}
+
+h2.top-of-page {
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #2a3b49;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 0.03em;
+    margin: 0 0 2px 0;
 }
 
 h3 {
@@ -273,7 +284,7 @@ h3 {
     color: white;
     padding: 1px 4px;
     font-weight: normal;
-    font-size: 19px;
+    font-size: 18px;
     letter-spacing: 0.01em;
     margin: 0 0 5px 0;
     font-family: carlito, sans-serif;
@@ -665,16 +676,6 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     padding: 0;
 }
 
-.lahtotiedot-page-title {
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    letter-spacing: 0.02em;
-    margin: 0 0 2px 0;
-    color: #2a3b49;
-    text-transform: uppercase;
-}
-
 .lahtotiedot-content {
     line-height: 1.2;
     color: #23323e;
@@ -824,27 +825,6 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 .lahtotiedot-3col-table col { width: 25% }
 .lahtotiedot-3col-table col:first-child { width: 50% }
 
-.lisamerkintoja h1 {
-    background-color: white;
-    color: #23323e;
-    height: auto;
-    padding: 0px;
-    font-size: 20px;
-    text-align: center;
-    text-transform: uppercase;
-    margin-top: 0;
-    margin-bottom: 5px;
-}
-
-.lisamerkintoja h2 {
-    background-color: #23323e;
-    color: white;
-    padding: 2px;
-    font-size: 15px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 .lisamerkintoja-separator {
     background-color: #23323e;
     padding: 12px;
@@ -891,16 +871,6 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 .tulokset-page {
     padding: 0;
     page-break-inside: avoid;
-}
-
-.tulokset-page-title {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: 0.02em;
-    margin: 0 0 2px 0;
-    color: #23323e;
-    text-transform: uppercase;
 }
 
 .tulokset-eluku-row {

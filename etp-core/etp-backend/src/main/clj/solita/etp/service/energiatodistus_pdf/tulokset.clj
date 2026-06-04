@@ -17,10 +17,10 @@
 
 (defn- ostoenergia-row
   [label energiamuoto prefix]
-  (let [ostoenergia       (get energiamuoto (keyword prefix))
+  (let [ostoenergia (get energiamuoto (keyword prefix))
         ostoenergia-netto (get energiamuoto (keyword (str prefix "-nettoala")))
-        kerroin           (get energiamuoto (keyword (str prefix "-kerroin")))
-        kertoimella       (get energiamuoto (keyword (str prefix "-kertoimella")))
+        kerroin (get energiamuoto (keyword (str prefix "-kerroin")))
+        kertoimella (get energiamuoto (keyword (str prefix "-kertoimella")))
         kertoimella-netto (get energiamuoto (keyword (str prefix "-nettoala-kertoimella")))]
     [:tr
      [:td {:class "tulokset-label"} label]
@@ -56,11 +56,11 @@
         [:th {:class "tulokset-th-sub"} "kWh/vuosi"]
         [:th {:class "tulokset-th-sub"} "kWh/m²/vuosi"]]]
       [:tbody
-       (ostoenergia-row (l :kaukolampo-table)             energiamuoto "kaukolampo")
-       (ostoenergia-row (l :sahko-table)                  energiamuoto "sahko")
-       (ostoenergia-row (l :uusiutuva-polttoaine-table)   energiamuoto "uusiutuva-polttoaine")
+       (ostoenergia-row (l :kaukolampo-table) energiamuoto "kaukolampo")
+       (ostoenergia-row (l :sahko-table) energiamuoto "sahko")
+       (ostoenergia-row (l :uusiutuva-polttoaine-table) energiamuoto "uusiutuva-polttoaine")
        (ostoenergia-row (l :fossiilinen-polttoaine-table) energiamuoto "fossiilinen-polttoaine")
-       (ostoenergia-row (l :kaukojaahdytys-table)         energiamuoto "kaukojaahdytys")
+       (ostoenergia-row (l :kaukojaahdytys-table) energiamuoto "kaukojaahdytys")
        [:tr
         [:td {:class "tulokset-label"} (l :tulokset-yhteensa)]
         [:td {:class "num"} (fmt-summa (:summa energiamuoto))]
@@ -71,9 +71,9 @@
 
 (defn- uusiutuva-row
   [label omavarais kokonaistuotanto field-key]
-  (let [hyodynnetty      (get omavarais field-key)
+  (let [hyodynnetty (get omavarais field-key)
         hyodynnetty-netto (get omavarais (keyword (str (name field-key) "-nettoala")))
-        kokonais          (get kokonaistuotanto field-key)]
+        kokonais (get kokonaistuotanto field-key)]
     [:tr
      [:td {:class "tulokset-label"} label]
      [:td {:class "num"} (fmt hyodynnetty)]
@@ -82,7 +82,7 @@
 
 (defn- uusiutuva-section
   [energiatodistus l]
-  (let [omavarais        (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat])
+  (let [omavarais (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat])
         kokonaistuotanto (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto])]
     [:div {:class "tulokset-section"}
      [:h3 (l :tulokset-uusiutuva-energia)]
@@ -103,12 +103,12 @@
         [:th {:class "tulokset-th-sub"} "kWh/m²/vuosi"]
         [:th {:class "tulokset-th-sub"} "\u00a0"]]]
       [:tbody
-       (uusiutuva-row (l :tulokset-aurinkosahko)  omavarais kokonaistuotanto :aurinkosahko)
-       (uusiutuva-row (l :tulokset-aurinkolampo)  omavarais kokonaistuotanto :aurinkolampo)
-       (uusiutuva-row (l :tulokset-tuulisahko)    omavarais kokonaistuotanto :tuulisahko)
-       (uusiutuva-row (l :tulokset-lampopumppu)   omavarais kokonaistuotanto :lampopumppu)
-       (uusiutuva-row (l :tulokset-muusahko)      omavarais kokonaistuotanto :muusahko)
-       (uusiutuva-row (l :tulokset-muulampo)      omavarais kokonaistuotanto :muulampo)]]]))
+       (uusiutuva-row (l :tulokset-aurinkosahko) omavarais kokonaistuotanto :aurinkosahko)
+       (uusiutuva-row (l :tulokset-aurinkolampo) omavarais kokonaistuotanto :aurinkolampo)
+       (uusiutuva-row (l :tulokset-tuulisahko) omavarais kokonaistuotanto :tuulisahko)
+       (uusiutuva-row (l :tulokset-lampopumppu) omavarais kokonaistuotanto :lampopumppu)
+       (uusiutuva-row (l :tulokset-muusahko) omavarais kokonaistuotanto :muusahko)
+       (uusiutuva-row (l :tulokset-muulampo) omavarais kokonaistuotanto :muulampo)]]]))
 
 (defn- tekniset-cell
   ([value] (tekniset-cell value 0))
@@ -243,7 +243,7 @@
   [energiatodistus l]
   (let [e-luku (get-in energiatodistus [:tulokset :e-luku])]
     [:div {:class "tulokset-eluku-row"}
-     [:div {:class "tulokset-eluku-banner"}
+     [:h3
       (l :eluku-otsikko)
       [:span {:class "tulokset-eluku-value"} (fmt e-luku)]
       "kWh/m²/vuosi"]]))
@@ -252,7 +252,7 @@
   [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "tulokset-page"}
-     [:h2 {:class "tulokset-page-title"} (l :tulokset-title)]
+     [:h2 {:class "top-of-page"} (l :tulokset-title)]
      (e-luku energiatodistus l)
      [:div {:class "tulokset-content"}
       (ostoenergia-section energiatodistus l)

@@ -13,7 +13,7 @@
 (defn lisamerkintoja [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "lisamerkintoja"}
-     [:h1 (l :lisamerkintoja-otsikko)]
+     [:h2 {:class "top-of-page"} (l :lisamerkintoja-otsikko)]
      [:div {:class "lisamerkintoja-separator"}]
      [:div {:class "lisamerkintoja-teksti"}
       (-> energiatodistus
@@ -25,7 +25,7 @@
 (defn lisatietoja [{:keys [kieli]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "lisamerkintoja"}
-     [:h2 (l :lisatietoja-otsikko)]
+     [:h3 (l :lisatietoja-otsikko)]
      (description-list
        [{:dt (l :lisatietoja-energiatehokkuus)
          :dd (l :lisatietoja-urlit )}
