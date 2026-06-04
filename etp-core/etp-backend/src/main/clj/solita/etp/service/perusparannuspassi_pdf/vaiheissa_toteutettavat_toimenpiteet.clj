@@ -156,6 +156,7 @@
                      [:svg {:xmlns "http://www.w3.org/2000/svg"
                             :viewBox "-6 -60 120 65"
                             :width "38.2mm"
+                            :alt (format (l :vaihe-arrow-alt-text) vaihe e-luokka vaihe e-luku)
                             :height "20.5mm"}
                       (tv/arrow color 0 vaihe-title perf-label)])]]]
          :title-class "vaihe-title"

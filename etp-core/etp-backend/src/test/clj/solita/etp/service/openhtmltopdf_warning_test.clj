@@ -155,7 +155,7 @@
   (t/testing "perusparannuspassi emits all and only the expected OpenHTMLToPDF warnings"
     (let [[laatija-id whoami] (create-laatija-and-whoami!)
           ppp-id (create-perusparannuspassi! laatija-id whoami)
-          expected-warnings [#"No alt attribute provided for image/replaced in PDF/UA document\."]
+          expected-warnings []
           {:keys [result warnings]}
           (capture-openhtmltopdf-warnings
             #(with-open [^InputStream pdf-stream
