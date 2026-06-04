@@ -246,8 +246,7 @@
             [:td]))]]]
 
      ;; Energy prices table
-     [:div {:style "height: 20px; margin-top: -1mm;"}]
-     [:table {:class "shaded"}
+     [:table {:class "shaded energy-prices-table"}
       [:colgroup
        [:col {:style "width: 165px;"}]
        [:col {:style "width: 80px;"}]
@@ -257,22 +256,22 @@
        [:col {:style "width: 80px;"}]]
 
       (mid-header-tr (l :energialaskuissa-kaytetyt-hinnat))
-      [:tr [:td {:style "text-align: left; padding-left: 6px;"} (l :kaukolampo)]
+      [:tr [:td {:class "energy-prices-table-row-header"} (l :kaukolampo)]
        [:td (when-let [hinta (:kaukolampo-hinta ppp-tulokset)] (format-float hinta))]
        [:td (l :snt-kwh)]
-       [:td {:style "text-align: left; padding-left: 6px;"} (l :uusiutuvat-polttoaineet)]
+       [:td {:class "energy-prices-table-row-header"} (l :uusiutuvat-polttoaineet)]
        [:td (when-let [hinta (:uusiutuvat-pat-hinta ppp-tulokset)] (format-float hinta))]
        [:td (l :snt-kwh)]]
-      [:tr [:td {:style "text-align: left; padding-left: 6px;"} (l :sahko)]
+      [:tr [:td {:class "energy-prices-table-row-header"} (l :sahko)]
        [:td (when-let [hinta (:sahko-hinta ppp-tulokset)] (format-float hinta))]
        [:td (l :snt-kwh)]
-       [:td {:style "text-align: left; padding-left: 6px;"} (l :fossiiliset-polttoaineet)]
+       [:td {:class "energy-prices-table-row-header"} (l :fossiiliset-polttoaineet)]
        [:td (when-let [hinta (:fossiiliset-pat-hinta ppp-tulokset)] (format-float hinta))]
        [:td (l :snt-kwh)]]
-      [:tr [:td {:style "text-align: left; padding-left: 6px;"}]
+      [:tr [:td {:class "energy-prices-table-row-header"}]
        [:td]
        [:td]
-       [:td {:style "text-align: left; padding-left: 6px;"} (l :kaukojaahdytys)]
+       [:td {:class "energy-prices-table-row-header"} (l :kaukojaahdytys)]
        [:td (when-let [hinta (:kaukojaahdytys-hinta ppp-tulokset)] (format-float hinta))]
        [:td (l :snt-kwh)]]]
      [:p  (l :co2ekv-vahenema-huomautus)]]))

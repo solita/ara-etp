@@ -12,5 +12,5 @@
                                                                              :fi :lisatietoja-fi
                                                                              :sv :lisatietoja-sv)])
                                               h)]]
-     [:div {:class "lisatietoja-box" :style "border-top: none;" }
+     [:div {:class "lisatietoja-box no-top-border" }
       [:div {:class "lisatietoja-info"} (str (l :perusparannuspassi-info))]]]))

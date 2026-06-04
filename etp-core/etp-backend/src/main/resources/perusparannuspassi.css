@@ -329,6 +329,15 @@ dl.tayttaa-vaatimukset-list > div > dd {
     border: 0.5px solid #2c5234;
 }
 
+.energy-prices-table {
+    margin-top: 2.5mm;
+}
+
+.energy-prices-table-row-header {
+    text-align: left;
+    padding-left: 6px;
+}
+
 .ppp-vaihe-no-top-margin {
     margin-top: -40px;
 }
@@ -640,6 +649,7 @@ table.lt-mahdollisuus-liittya td {
     display: table-cell;
     border: 1px solid #2c5234;
     padding: 5px 8px;
+    height: 10mm;
 }
 
 table.lt-lisatietoja {
@@ -665,6 +675,10 @@ dl.lt-voimassaolo {
     display: block;
     border: 1px solid #2c5234;
     padding: 3px;
+}
+
+.no-top-border {
+    border-top: none;
 }
 
 .lisatietoja-field {
