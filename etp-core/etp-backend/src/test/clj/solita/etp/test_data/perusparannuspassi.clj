@@ -73,6 +73,7 @@
                                :ulkoovet-ehdotettu-taso                  1
                                :paalammitysjarjestelma-ehdotettu-taso    1
                                :ilmanvaihto-ehdotettu-taso               1
+                               :uusiutuva-energia-lahtotilanne           1
                                :uusiutuva-energia-ehdotettu-taso         1
                                :jaahdytys-ehdotettu-taso                 1
                                :mahdollisuus-liittya-energiatehokkaaseen 1

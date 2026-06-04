@@ -120,7 +120,7 @@
 
         lammitys-id (get-in energiatodistus [:lahtotiedot :lammitys :lammitysmuoto-1 :id])
         ilmanvaihto-id (get-in energiatodistus [:lahtotiedot :ilmanvaihto :tyyppi-id])
-        uusiutuva-energia-id (get-in energiatodistus [""])
+        uusiutuva-energia-id (get-in perusparannuspassi [:rakennuksen-perustiedot :uusiutuva-energia-lahtotilanne])
         lammitys-kuvaus (some #(when (= (:id %) lammitys-id) (kuvaus-kieli %)) lammitysmuodot)
         ilmanvaihto-kuvaus (some #(when (= (:id %) ilmanvaihto-id) (kuvaus-kieli %)) ilmanvaihtotyypit)
         uusiutuva-energia-kuvaus (some #(when (= (:id %) uusiutuva-energia-id) (kuvaus-kieli %)) uusiutuva-energia)
