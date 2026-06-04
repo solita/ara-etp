@@ -228,7 +228,7 @@
         (row-header-th (l :rakennuksen-hyodyntama-osuus))
          [:td {:class "shaded"}
            (when-let [result (uusiutuva-energia/uusiutuvan-energian-osuus (:versio energiatodistus) energiatodistus)]
-             result)]
+             (format-percentage result))]
         (for [i (range 1 5)]
           (if-let [tulokset (-> padded-vaiheet (nth i) :tulokset)]
             (if-let [osuus (:uusiutuvan-energian-hyodynnetty-osuus tulokset)]
