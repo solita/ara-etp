@@ -2,7 +2,8 @@
   (:require
     [clojure.string :as str]
     [clojure.pprint :as pp]
-    [solita.etp.service.localization :as loc])
+    [solita.etp.service.localization :as loc]
+    [solita.etp.service.uusiutuva-energia :as uusiutuva-energia])
   (:import
     [java.text DecimalFormat DecimalFormatSymbols]))
 
@@ -80,7 +81,7 @@
        :co2-muutos              (when (and co2-prev co2-curr)
                                   (- co2-curr co2-prev))})))
 
-(defn vaiheistuksen-yhteenveto [{:keys [kieli perusparannuspassi]}]
+(defn vaiheistuksen-yhteenveto [{:keys [kieli perusparannuspassi energiatodistus]}]
   (let [l (kieli loc/ppp-pdf-localization)
         vaiheet (build-vaihe-data perusparannuspassi)
         ppp-tulokset (:tulokset perusparannuspassi)
@@ -225,7 +226,9 @@
 
        [:tr
         (row-header-th (l :rakennuksen-hyodyntama-osuus))
-        [:td {:class "shaded"}]
+         [:td {:class "shaded"}
+           (when-let [result (uusiutuva-energia/uusiutuvan-energian-osuus (:versio energiatodistus) energiatodistus)]
+             result)]
         (for [i (range 1 5)]
           (if-let [tulokset (-> padded-vaiheet (nth i) :tulokset)]
             (if-let [osuus (:uusiutuvan-energian-hyodynnetty-osuus tulokset)]
