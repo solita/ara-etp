@@ -24,7 +24,6 @@
                                                       (:tayttaa-aplus-vaatimukset passin-perustiedot)
                                                       (:tayttaa-a0-vaatimukset passin-perustiedot))
                            :e-luokka))]
-        (println e-luku)
         {:vaihe vaihe
          :seuraava-vaihe seuraava-vaihe
          :e-luku e-luku
