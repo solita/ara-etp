@@ -90,7 +90,11 @@
   (let [laatija-id (laatija-test-data/insert-suomifi-laatija!
                      (-> (laatija-test-data/generate-adds 1)
                          first
-                         (merge {:patevyystaso 4})))
+                         (merge {:patevyystaso 4
+                                 ;; The name might cause problems and testing that is not in the scope of this test.
+                                 :etunimi "Goodfirstname"
+                                 :sukunim "Goodlastname"
+                                 })))
         whoami {:id laatija-id :rooli 0 :patevyystaso 4}]
     [laatija-id whoami]))
 
