@@ -126,7 +126,7 @@
                                     energiatodistus-service/language-id->codes
                                     first)
                             "fi")
-          expected-warnings [#"No document description provided\. Document will not be PDF/UA compliant\."]
+          expected-warnings []
           {:keys [result warnings]}
           (capture-openhtmltopdf-warnings
             #(let [pdf-path (energiatodistus-pdf-service/generate-et-pdf-as-file

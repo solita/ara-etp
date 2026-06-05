@@ -63,6 +63,7 @@
     [:html
      [:head
       [:meta {:charset "UTF-8"}]
+      [:meta {:name "subject" :content "Energiatodistus"}]
       [:title "Energiatodistus"]
       [:style (styles)]]
      [:body
