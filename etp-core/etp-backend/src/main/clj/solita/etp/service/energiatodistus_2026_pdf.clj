@@ -64,6 +64,7 @@
      [:head
       [:meta {:charset "UTF-8"}]
       [:meta {:name "subject" :content (l :energiatodistus)}]
+      [:meta {:name "description" :content (l :energiatodistus)}]
       [:title (l :energiatodistus)]
       [:style (styles)]]
      [:body

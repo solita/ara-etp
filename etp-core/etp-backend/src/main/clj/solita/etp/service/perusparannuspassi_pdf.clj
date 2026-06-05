@@ -70,6 +70,7 @@
        [:head
         [:meta {:charset "UTF-8"}]
         [:meta {:name "subject" :content (l :perusparannuspassi)}]
+        [:meta {:name "description" :content (l :perusparannuspassi)}]
         [:title (l :perusparannuspassi)]
         [:style (styles)]]
        [:body
