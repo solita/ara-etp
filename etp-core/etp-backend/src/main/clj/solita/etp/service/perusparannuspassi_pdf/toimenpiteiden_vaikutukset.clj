@@ -225,13 +225,13 @@
                                 (let [versio 2026
                                       passin-perustiedot (:passin-perustiedot perusparannuspassi)
                                       e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus vaihe)
-                                      e-luokka (when e-luku (-> (e-luokka-service/e-luokka kayttotarkoitukset alakayttotarkoitukset versio
+                                      e-luokka (-> (e-luokka-service/e-luokka kayttotarkoitukset alakayttotarkoitukset versio
                                                                               (get-in energiatodistus [:perustiedot :kayttotarkoitus])
                                                                               (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
                                                                               e-luku
                                                                               (:tayttaa-aplus-vaatimukset passin-perustiedot)
                                                                               (:tayttaa-a0-vaatimukset passin-perustiedot))
-                                                   :e-luokka))]
+                                                   :e-luokka)]
                                   {:e-luku e-luku
                                    :e-luokka e-luokka}))))
         all-vaiheet (cons lahtotilanne ppp-vaiheet)]
