@@ -497,6 +497,7 @@
 
    :sv {:kylla                                      "Ja"
         :ei                                         "Nej"
+        :energiatodistus                            "Energicertifikat"
         :rakennuksen-nimi-ja-osoite                 "Rakennuksen nimi ja osoite (sv)"
         :energiatodistus-2026-subtitle              "Energicertifikat i enlighet med 2026 års lagstiftning"
         :pysyva-rakennustunnus                      "Pysyvä rakennustunnus (sv)"

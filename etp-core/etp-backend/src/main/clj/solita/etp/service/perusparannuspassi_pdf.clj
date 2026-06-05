@@ -59,7 +59,7 @@
    - ppp-tunnus: The perusparannuspassi identifier (e.g., \"1234567\")
 
    Returns: HTML string ready for PDF conversion."
-  [pages ppp-tunnus]
+  [pages ppp-tunnus l]
   (let [total-pages (count pages)
         pages-html (map-indexed
                      (fn [idx page-data]
@@ -69,8 +69,8 @@
       [:html
        [:head
         [:meta {:charset "UTF-8"}]
-        [:meta {:name "subject" :content "Perusparannuspassi"}]
-        [:title "Perusparannuspassi"]
+        [:meta {:name "subject" :content (l :perusparannuspassi)}]
+        [:title (l :perusparannuspassi)]
         [:style (styles)]]
        [:body
         pages-html]])))
@@ -105,7 +105,7 @@
                  :content
                  [:div
                   (lisatietoja/lisatietoja params)]}])]
-    (generate-document-html pages (:id perusparannuspassi))))
+    (generate-document-html pages (:id perusparannuspassi) l)))
 
 (defn- generate-perusparannuspassi-ohtp-pdf
   "Use OpenHTMLToPDF to generate a PPP PDF, return as a byte array"
