@@ -488,7 +488,6 @@ export const appendRequiredValidators = (schema, isRequired) =>
     schema
   );
 
-
 export const redefineVaiheNumericValidation = (schema, constraint) => {
   const vaiheCount = schema.vaiheet.length;
   return R.reduce(
