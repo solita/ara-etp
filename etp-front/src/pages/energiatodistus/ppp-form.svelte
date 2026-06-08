@@ -62,7 +62,7 @@
   )(schemas.perusparannuspassi);
 
   const vaiheSchema = R.reduce(
-    schemas.redefineNumericValidation,
+    schemas.redefineVaiheNumericValidation,
     schemas.perusparannuspassi,
     pppValidation.vaiheNumeric
   );
@@ -157,7 +157,7 @@
       <UusiutuvaEnergia
         bind:perusparannuspassi
         {energiatodistus}
-        {schema}
+        schema={vaiheSchema}
         {disabled} />
       <ToteutunutOstoenergia
         bind:perusparannuspassi
