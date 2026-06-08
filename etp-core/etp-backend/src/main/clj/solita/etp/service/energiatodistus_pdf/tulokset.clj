@@ -35,14 +35,14 @@
   (let [energiamuoto (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])
         e-luku-value (get-in energiatodistus [:tulokset :e-luku])]
     [:div {:class "tulokset-section"}
-     [:table {:class "tulokset-table tulokset-ostoenergia-table"}
+     [:table {:class "tulokset-table tulokset-ostoenergia-table tulokset-6col-table"}
       [:colgroup
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w10"}]
-       [:col {:class "col-w10"}]]
+       [:col ]
+       [:col ]
+       [:col ]
+       [:col ]
+       [:col ]
+       [:col ]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :rowspan "2" :style "text-align:left;"} "\u00a0"]
@@ -64,8 +64,8 @@
        [:tr
         [:td {:class "tulokset-label"} (l :tulokset-yhteensa)]
         [:td {:class "num"} (fmt-summa (:summa energiamuoto))]
-        [:td {:class "num"} "\u00a0"]
-        [:td {:class "num"} "\u00a0"]
+        [:td {:class "num"} ""]
+        [:td {:class "num"} ""]
         [:td {:class "num"} (fmt-summa (:kertoimella-summa energiamuoto))]
         [:td {:class "num"} (fmt-summa e-luku-value)]]]]]))
 
@@ -86,12 +86,12 @@
         kokonaistuotanto (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto])]
     [:div {:class "tulokset-section"}
      [:h3 (l :tulokset-uusiutuva-energia)]
-     [:table {:class "tulokset-table tulokset-uusiutuva-table"}
+     [:table {:class "tulokset-table tulokset-4col-table tulokset-uusiutuva-table"}
       [:colgroup
-       [:col {:class "col-w40"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]]
+       [:col ]
+       [:col ]
+       [:col ]
+       [:col ]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
@@ -128,12 +128,12 @@
   (let [tj (get-in energiatodistus [:tulokset :tekniset-jarjestelmat])]
     [:div {:class "tulokset-section"}
      [:h3 (l :tulokset-tekniset-jarjestelmat)]
-     [:table {:class "tulokset-table tulokset-tekniset-table"}
+     [:table {:class "tulokset-table tulokset-4col-table tulokset-tekniset-table"}
       [:colgroup
-       [:col {:class "col-w40"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]]
+       [:col ]
+       [:col ]
+       [:col ]
+       [:col ]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
@@ -182,11 +182,11 @@
   (let [nt (get-in energiatodistus [:tulokset :nettotarve])]
     [:div {:class "tulokset-section"}
      [:h3 (l :tulokset-nettotarve)]
-     [:table {:class "tulokset-table tulokset-nettotarve-table"}
+     [:table {:class "tulokset-table tulokset-3col-table tulokset-nettotarve-table"}
       [:colgroup
-       [:col {:class "col-w60"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]]
+       [:col ]
+       [:col ]
+       [:col ]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
@@ -217,11 +217,11 @@
   (let [lk (get-in energiatodistus [:tulokset :lampokuormat])]
     [:div {:class "tulokset-section"}
      [:h3 (l :tulokset-lampokuormat)]
-     [:table {:class "tulokset-table tulokset-lampokuormat-table"}
+     [:table {:class "tulokset-table tulokset-3col-table tulokset-lampokuormat-table"}
       [:colgroup
-       [:col {:class "col-w60"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]]
+       [:col ]
+       [:col ]
+       [:col ]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]

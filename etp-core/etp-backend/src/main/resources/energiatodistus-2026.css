@@ -987,6 +987,15 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     font-weight: bold;
 }
 
+.tulokset-6col-table col { width: 15.5%; }
+.tulokset-6col-table col:first-child { width: 22.5%; }
+
+.tulokset-4col-table col { width: 18%; }
+.tulokset-4col-table col:first-child { width: 46%; }
+
+.tulokset-3col-table col { width: 24%; }
+.tulokset-3col-table col:first-child { width: 52%; }
+
 .is-metatiedot dl {
     display: table;
     width: 100%;
