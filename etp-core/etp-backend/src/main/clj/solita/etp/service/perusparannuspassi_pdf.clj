@@ -1,5 +1,6 @@
 (ns solita.etp.service.perusparannuspassi-pdf
   (:require
+    [clojure.java.io :as io]
     [hiccup.core :as hiccup]
     [solita.etp.config :as config]
     [solita.etp.service.localization :as loc]
@@ -25,461 +26,25 @@
 (def ^:private test-watermark-texts {"fi" "TESTI"
                                      "sv" "TEST"})
 
-;; CSS styles for the document
 (defn- styles []
-  (str
-  "@page {
-      size: A4;
-      margin: 0;
-    }
+  (slurp (io/resource "perusparannuspassi.css")))
 
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: roboto, sans-serif;
-      font-size: 11pt;
-    }
-
-    .page {
-      page-break-after: always;
-      position: relative;
-      width: 210mm;
-      min-height: 297mm;
-      padding: 0;
-    }
-
-    .page:last-child {
-      page-break-after: auto;
-    }
-
-    .page-header {
-      background-color: #2c5234;
-      height: 35mm;
-      width: 100%;
-      padding: 10mm 16mm 0 16mm;
-    }
-
-    .page-title {
-      color: white;
-      font-size: 24pt;
-      font-weight: bold;
-      margin: 0;
-      font-family: roboto, sans-serif;
-    }
-
-    .page-content {
-      padding: 16mm;
-      min-height: 227mm;
-    }
-
-    .page-footer {
-      position: absolute;
-      bottom: 1cm;
-      left: 2cm;
-      right: 2cm;
-      font-size: 10pt;
-      color: #666;
-      font-family: roboto, sans-serif;
-    }
-
-    .energialuokka-a {
-      background-color: #449841;
-    }
-
-    .energialuokka-b {
-      background-color: #7dae35;
-    }
-
-    .energialuokka-c {
-      background-color: #cad344;
-    }
-
-    .energialuokka-d {
-      background-color: #fced4f;
-    }
-
-    .energialuokka-e {
-      background-color: #e8b63e;
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-      font-family: roboto, sans-serif;
-    }
-
-    h1 {
-      font-size: 30pt;
-    }
-
-    h2 {
-      font-size: 13pt;
-      color: #2c5234;
-    }
-
-    h3 {
-      font-size: 11pt;
-    }
-
-    p {
-      font-size: 11pt;
-    }
-
-    p, div, span, li, ul, ol {
-      font-family: roboto, sans-serif;
-    }
-
-    dl.etusivu-yleistiedot {
-      display: table;
-      width: 100%;
-      background-color: #2c5234;
-      border-collapse: collapse;
-      -fs-border-rendering: no-bevel;
-    }
-
-    dl.etusivu-yleistiedot div {
-      display: table-row;
-    }
-
-    dl.etusivu-yleistiedot dt,
-    dl.etusivu-yleistiedot dd {
-      display: table-cell;
-      -fs-border-rendering: no-bevel;
-      border: 1px solid #2c5234;
-      padding: 6.5px 8px;
-    }
-
-    dl.etusivu-yleistiedot dt {
-      color: white;
-      white-space: nowrap;
-      width: 1px;
-    }
-
-    dl.etusivu-yleistiedot dd {
-      background-color: white;
-    }
-
-    dl.etusivu-laatija-allekirjoitus {
-      display: table;
-      width: 80%;
-      margin: auto;
-      border-collapse: collapse;
-      -fs-border-rendering: no-bevel;
-    }
-
-    dl.etusivu-laatija-allekirjoitus div{
-      display: table-row;
-    }
-
-    dl.etusivu-laatija-allekirjoitus dt,
-    dl.etusivu-laatija-allekirjoitus dd {
-      display: table-cell;
-      padding: 6.5px 8px;
-      white-space: nowrap;
-    }
-
-    dl.etusivu-laatija-allekirjoitus dd {
-      border: 1px solid #2c5234;
-    }
-
-    dl.etusivu-laatija-allekirjoitus dd.laatija-nimi {
-      border-right: none;
-      width: 100%
-    }
-
-    dt.hidden-dt {
-      font-size: 0;
-      border: 1px solid #2c5234;
-      border-left: none;
-    }
-
-    .vaikutukset-box {
-      background-color: #eaeeeb;
-      border-radius: 3mm;
-      padding: 3mm 6mm 6mm 6mm;
-      width: 100%;
-      min-height: 80mm;
-    }
-
-    .kohdistuminen-box {
-      background-color: #d5dcd6;
-      border-radius: 3mm;
-      width: 100%;
-      padding-left: 5mm;
-    }
-
-    dl.tayttaa-vaatimukset-list {
-      display: table;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-    }
-
-    dl.tayttaa-vaatimukset-list > div {
-      display: table-cell;
-      padding-right: 10mm;
-      vertical-align: top;
-    }
-
-    dl.tayttaa-vaatimukset-list > div:last-child {
-      padding-right: 0;
-    }
-
-    dl.tayttaa-vaatimukset-list > div > dt,
-    dl.tayttaa-vaatimukset-list > div > dd {
-      display: inline-block;
-      border: 1px solid #2c5234;
-      padding: 6px 8px;
-      margin: 0;
-      vertical-align: top;
-    }
-
-    dl.tayttaa-vaatimukset-list > div > dt {
-      width: 60mm;
-      border-right: none;
-      font-weight: normal;
-      white-space: nowrap;
-    }
-
-    dl.tayttaa-vaatimukset-list > div > dd {
-      width: 14mm;
-    }
-
-    .vaatimukset-selitteet-box {
-      margin-top: 3mm;
-    }
-
-    .vaatimukset-selitteet {
-      display: table-row;
-      width: 100%;
-    }
-
-    .vaatimukset-selitteet > div {
-      display: table-cell;
-      width: 50%;
-      margin-right: 10mm;
-    }
-
-    .vaatimukset-selitteet > div:last-child {
-      margin-right: 0;
-      padding-left: 5mm;
-    }
-
-    .vaiheistuksen-yhteenveto {
-      font-size: 13px;
-    }
-
-    .vaiheistuksen-yhteenveto table {
-      display: table;
-      width: 100%;
-      border-collapse: collapse;
-      -fs-border-rendering: no-bevel;
-    }
-
-    .vaiheistuksen-yhteenveto th {
-      padding: 5px;
-      text-align: center;
-    }
-
-    .vaiheistuksen-yhteenveto th .year-range {
-      font-weight: normal;
-    }
-
-    .vaiheistuksen-yhteenveto td {
-      padding: 5px;
-      text-align: center;
-      border: 0.5px solid #2c5234;
-    }
-
-    .vaiheistuksen-yhteenveto td.shaded {
-      background-color: #eaeeeb;
-    }
-
-    .vaiheistuksen-yhteenveto table.shaded td {
-      background-color: #eaeeeb;
-    }
-
-    .vaiheistuksen-yhteenveto th.th1 {
-      text-align: left;
-      background-color: #2c5234;
-      color: white;
-      font-weight: bold;
-      font-size: 13px;
-      height: 30px;
-      border: 0.5px solid #2c5234;
-    }
-
-    .vaiheistuksen-yhteenveto thead th.th1 {
-      text-align: center;
-    }
-
-    .vaiheistuksen-yhteenveto th.th2 {
-      text-align: left;
-      font-weight: normal;
-      border: 0.5px solid #2c5234;
-    }
-
-    table.lt-u-arvot {
-      display: table;
-      width: 100%;
-      border-collapse: collapse;
-      -fs-border-rendering: no-bevel;
-      margin-bottom: 30px;
-    }
-
-    table.lt-u-arvot th,
-    table.lt-u-arvot td {
-      display: table-cell;
-      -fs-border-rendering: no-bevel;
-      border: 1px solid #2c5234;
-      padding: 5px 8px;
-      font-size: 14px;
-   }
-
-   th.lt-otsikko {
-     background-color: #2c5234;
-     color: white;
-     font-weight:bold;
-     padding: 5px 8px;
-     font-size: 14px;
-   }
-
-   table.lt-u-arvot .lt-sarakkeet th {
-     font-weight: normal;
-     font-size: 14px;
-   }
-
-   table.lt-lammitys th,
-   table.lt-lammitys td {
-     display: table-cell;
-     -fs-border-rendering: no-bevel;
-     border: 1px solid #2c5234;
-     padding: 5px 8px;
-     font-size: 14px;
-   }
-
-   tr.sarakkeet.lammitys-ilmanvaihto {
-     background-color: #2c5234;
-     color: white;
-     text-align:center;
-     font-weight:bold;
-     padding: 5px 8px;
-     font-size: 14px;
-   }
-
-   table.lt-lammitys th.empty {
-    border: none;
-    background: none;
-   }
-
-    table.lt-lammitys th {
-     font-weight: normal;
-     text-align: center;
-     font-size: 14px;
-    }
-
-   table.lt-lammitys {
-    display: table;
-    width: 100%;
-    border-collapse: collapse;
-    -fs-border-rendering: no-bevel;
-   }
-
-   dl.lt-vahimmaisvaatimustaso {
-    display: table;
-    border-collapse: collapse;
-    -fs-border-rendering: no-bevel;
-    font-size: 14px;
-    width: 100%;
-    }
-
-  dl.lt-vahimmaisvaatimustaso dd {
-    display: table-cell;
-    padding: 5px 8px;
-    white-space: nowrap
-   }
-
-   dl.lt-vahimmaisvaatimustaso dd {
-    border: 1px solid #2c5234;
-   }
-
-   dl.lt-korjausrakentamisen-saadokset {
-    font-size: 14px;
-   }
-
-   table.lt-mahdollisuus-liittya {
-     display: table;
-     width: 100%;
-     border-collapse: collapse;
-     -fs-border-rendering: no-bevel;
-     margin-bottom: 30px;
-   }
-
-   table.lt-mahdollisuus-liittya th,
-   table.lt-mahdollisuus-liittya td {
-     display: table-cell;
-     border: 1px solid #2c5234;
-     padding: 5px 8px;
-     font-size: 14px;
-   }
-
-   table.lt-lisatietoja {
-     display: table;
-     width: 100%;
-     border-collapse: collapse;
-     -fs-border-rendering: no-bevel;
-   }
-
-   table.lt-lisatietoja th,
-   table.lt-lisatietoja td {
-     display: table-cell;
-     -fs-border-rendering: no-bevel;
-     border: 1px solid #2c5234;
-     padding: 5px 8px;
-     font-size: 14px;
-   }
-
-   dl.lt-voimassaolo {
-     font-size: 14px;
-   }
-
-  .lisatietoja-box {
-    display: block;
-    border: 1px solid #2c5234;
-    padding: 3px;
-    border-top: none;
-    font-size: 13.8px;
-    }
-
-   .lisatietoja-field {
-     min-height: 180mm;
-     white-space: pre-line;
-   }
-
-   .lisatietoja-sivu-otsikko {
-     background-color: #2c5234;
-     color: white;
-     font-weight: bold;
-     padding: 5px 8px;
-     font-size: 14px;
-     margin: 0;
-   }"))
-
-(defn- page-header [title]
+(defn- page-header [title title-class]
   [:div {:class "page-header"}
-   [:h1 {:class "page-title"} title]])
+   [:h1 (cond-> {:class "page-title"}
+          title-class (update :class str " " title-class))
+    title]])
 
 (defn- page-footer [ppp-tunnus page-num total-pages]
   [:div {:class "page-footer"}
    (str "Perusparannuspassin tunnus: " ppp-tunnus " | " page-num "/" total-pages)])
 
 (defn- render-page [page-data page-num total-pages ppp-tunnus]
-  (let [{:keys [title content header]} page-data]
+  (let [{:keys [title content header title-class content-class]} page-data]
     [:div {:class "page"}
-     (or header (page-header title))
-     [:div {:class "page-content"}
+     (or header (page-header title title-class))
+     [:div (cond-> {:class "page-content"}
+             content-class (update :class str " " content-class))
       content]
      (page-footer ppp-tunnus page-num total-pages)]))
 
@@ -489,11 +54,12 @@
    Parameters:
    - pages: A sequence of page data maps, each containing:
      - :title - The title to display in the header
+     - :title-class - Optional additional CSS class for the page title h1
      - :content - Hiccup data for the page body
    - ppp-tunnus: The perusparannuspassi identifier (e.g., \"1234567\")
 
    Returns: HTML string ready for PDF conversion."
-  [pages ppp-tunnus]
+  [pages ppp-tunnus l]
   (let [total-pages (count pages)
         pages-html (map-indexed
                      (fn [idx page-data]
@@ -503,8 +69,9 @@
       [:html
        [:head
         [:meta {:charset "UTF-8"}]
-        [:meta {:name "subject" :content "Perusparannuspassi"}]
-        [:title "Perusparannuspassi"]
+        [:meta {:name "subject" :content (l :perusparannuspassi)}]
+        [:meta {:name "description" :content (l :perusparannuspassi)}]
+        [:title (l :perusparannuspassi)]
         [:style (styles)]]
        [:body
         pages-html]])))
@@ -517,6 +84,8 @@
                          (remove nil?))
         pages (concat
                [{:title (l :perusparannuspassi)
+                 :title-class "etusivu-title"
+                 :content-class "etusivu-content"
                  :content
                  [:div
                   (etusivu-yleistiedot/etusivu-yleistiedot params)
@@ -525,16 +94,19 @@
                   (etusivu-laatija/etusivu-laatija params)]}]
                vaihe-pages
                [{:title (l :vaiheistuksen-yhteenveto)
+                 :title-class "vaiheistuksen-yhteenveto-title"
                  :content (vaiheistuksen-yhteenveto params)}
                 {:title (l :laskennan-taustatiedot-otsikko)
+                 :title-class "laskennan-taustatiedot-title"
                  :content
                  (into [:div]
                        (vals (laskennan-taustatiedot/generate-all-laskennan-taustatiedot params)))}
                 {:title "Lisätietoja"
+                 :title-class "lisatietoja-title"
                  :content
                  [:div
                   (lisatietoja/lisatietoja params)]}])]
-    (generate-document-html pages (:id perusparannuspassi))))
+    (generate-document-html pages (:id perusparannuspassi) l)))
 
 (defn- generate-perusparannuspassi-ohtp-pdf
   "Use OpenHTMLToPDF to generate a PPP PDF, return as a byte array"
