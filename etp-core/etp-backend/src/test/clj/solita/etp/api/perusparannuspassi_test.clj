@@ -240,16 +240,16 @@
       (assert-status post-res 201 "Expected status 201 from ET creation")
       (let [et-id (-> post-res :body (j/read-value object-mapper) :id)]
 
-        (t/testing "PPP with vaihe uusiutuvan-energian-hyodynnetty-osuus above 100 should fail with 400"
+        (t/testing "PPP with vaihe uusiutuvan-energian-hyodynnetty-osuus above 500 should fail with 400"
           (let [ppp (-> (ppp-test-data/generate-add et-id)
-                        (assoc-in [:vaiheet 0 :tulokset :uusiutuvan-energian-hyodynnetty-osuus] 101))
+                        (assoc-in [:vaiheet 0 :tulokset :uusiutuvan-energian-hyodynnetty-osuus] 501))
                 ppp-body (-> ppp j/write-value-as-string)
                 post-res (ts/handler (-> (mock/request :post "/api/private/perusparannuspassit/2026")
                                          (mock/header "Accept" "application/json")
                                          (mock/header "Content-Type" "application/json")
                                          (mock/body ppp-body)
                                          (laatija-test-data/with-suomifi-laatija)))]
-            (assert-status post-res 400 "Expected status 400 - value is outside error range 0-100")))
+            (assert-status post-res 400 "Expected status 400 - value is outside error range 0-500")))
 
         (t/testing "PPP with vaihe uusiutuvan-energian-hyodynnetty-osuus at 50 should succeed"
           (let [ppp (-> (ppp-test-data/generate-add et-id)
@@ -260,7 +260,7 @@
                                          (mock/header "Content-Type" "application/json")
                                          (mock/body ppp-body)
                                          (laatija-test-data/with-suomifi-laatija)))]
-            (assert-status post-res 201 "Expected status 201 - value is within valid range 0-100")))))))
+            (assert-status post-res 201 "Expected status 201 - value is within valid range 0-500")))))))
 
 
 
@@ -291,15 +291,15 @@
             ppp-id (-> create-res :body (j/read-value object-mapper) :id)]
         (assert-status create-res 201 "Expected status 201 from initial PPP creation")
 
-        (t/testing "PUT: Update PPP vaihe with uusiutuvan-energian-hyodynnetty-osuus above 100 should fail with 400"
-          (let [invalid-ppp (assoc-in initial-ppp [:vaiheet 0 :tulokset :uusiutuvan-energian-hyodynnetty-osuus] 101)
+        (t/testing "PUT: Update PPP vaihe with uusiutuvan-energian-hyodynnetty-osuus above 500 should fail with 400"
+          (let [invalid-ppp (assoc-in initial-ppp [:vaiheet 0 :tulokset :uusiutuvan-energian-hyodynnetty-osuus] 501)
                 invalid-ppp-body (-> invalid-ppp j/write-value-as-string)
                 put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2026/" ppp-id))
                                         (mock/header "Accept" "application/json")
                                         (mock/header "Content-Type" "application/json")
                                         (mock/body invalid-ppp-body)
                                         (laatija-test-data/with-suomifi-laatija)))]
-            (assert-status put-res 400 "Expected status 400 - value is outside error range 0-100 on PUT")))
+            (assert-status put-res 400 "Expected status 400 - value is outside error range 0-500 on PUT")))
 
         (t/testing "PUT: Update PPP vaihe with uusiutuvan-energian-hyodynnetty-osuus at 75 should succeed"
           (let [updated-ppp (assoc-in initial-ppp [:vaiheet 0 :tulokset :uusiutuvan-energian-hyodynnetty-osuus] 75)
@@ -309,7 +309,7 @@
                                         (mock/header "Content-Type" "application/json")
                                         (mock/body updated-ppp-body)
                                         (laatija-test-data/with-suomifi-laatija)))]
-            (assert-status put-res 200 "Expected status 200 - value is within valid range 0-100 on PUT")))))))
+            (assert-status put-res 200 "Expected status 200 - value is within valid range 0-500 on PUT")))))))
 
 (t/deftest ppp-paakayttaja-access-test
   ;; Given: a laatija with ppp-pätevyys creates an energiatodistus and perusparannuspassi
