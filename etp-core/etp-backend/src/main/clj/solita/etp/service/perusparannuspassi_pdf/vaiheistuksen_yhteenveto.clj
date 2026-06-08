@@ -10,15 +10,20 @@
 (defn- format-number [n]
   (str/replace (pp/cl-format nil "~:d" (Math/round (double n))) "," " "))
 
+(defn- dot->comma [s]
+  (when s
+    (str/replace s "." ",")))
+
 (def format-float
   (let [dfs (doto (DecimalFormatSymbols.)
               (.setGroupingSeparator \space))
         fmt (DecimalFormat. "#,###.##", dfs)]
-    (fn [n] (.format fmt n))))
+    (fn [n] (dot->comma (.format fmt n)))))
 
 (defn- format-percentage [value]
-  (when value
-    (str value " %")))
+  (dot->comma
+    (when value
+      (str value " %"))))
 
 (defn- safe-divide [numerator denominator]
   (when (and numerator denominator (not (zero? denominator)))

@@ -6,6 +6,11 @@
             [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :as tv]
             [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]))
 
+(defn- dot->comma [s]
+  (when s
+    (str/replace s "." ",")))
+
+
 (defn- get-vaihe-data [params vaihe-nro]
   (let [{:keys [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset]} params
         vaiheet (:vaiheet perusparannuspassi)
@@ -96,13 +101,13 @@
     [:div {:class "ppp-vaihe-section"}
      [:h2 (l :energiankulutus-vaiheen-jalkeen)]
      (into
-      [:dl {:class "ppp-vaihe-energiankulutuksen-list" :role "presentation"}]
-      (for [key [:kaukolampo :sahko :uusiutuvat-pat :fossiiliset-pat :kaukojaahdytys]]
-        [:div
+       [:dl {:class "ppp-vaihe-energiankulutuksen-list" :role "presentation"}]
+       (for [key [:kaukolampo :sahko :uusiutuvat-pat :fossiiliset-pat :kaukojaahdytys]]
+         [:div
          [:dt {:class "ppp-vaihe-energiankulutuksen-label"}
           (l key)]
          [:dd {:class "ppp-vaihe-energiankulutuksen-value"}
-          (or (get tulokset (get perusparannuspassi-service/energy-keys-laskennallinen key)) "-")]]))]))
+          (or (dot->comma (get tulokset (get perusparannuspassi-service/energy-keys-laskennallinen key))) "-")]]))]))
 
 (defn- parse-double-safe [v]
   (cond
@@ -116,15 +121,15 @@
 
 (defn- format-2dp [v]
   (when-let [d (parse-double-safe v)]
-    (format "%.2f" d)))
+    (.replace (format "%.2f" d) "." ",")))
 
 (defn- render-energiankulutus-kustannukset-ja-co2-paastot [vaihe l]
   (let [tulokset (:tulokset vaihe)]
     [:div {:class "ppp-vaihe-section ppp-vaihe-energiankulutus-kustannukset-ja-co2-paastot"}
        [:h2 (l :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen)]
      [:table {:class "ppp-vaihe-kustannukset-table" :role "presentation"}
-      (for [[label value unit] [[(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen) (get tulokset :ostoenergia) (l :kwh-vuosi)]
-                                [(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus) (get tulokset :toteutunut-ostoenergia) (l :kwh-vuosi)]
+      (for [[label value unit] [[(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen) (-> tulokset (get :ostoenergia) dot->comma) (l :kwh-vuosi)]
+                                [(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus) (-> tulokset (get :toteutunut-ostoenergia) dot->comma) (l :kwh-vuosi)]
                                 [(l :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio) (-> tulokset :toteutunut-energia-kustannukset format-2dp) (l :euroa-vuosi)]
                                 [(l :energiankaytosta-aiheutuvat-hiilidioksidipaastot-laskennallinen) (-> tulokset :co2-paastot format-2dp) (l :tco2ekv-vuosi)]]]
         [:tr
