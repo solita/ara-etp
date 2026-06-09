@@ -65,8 +65,8 @@
        [:tr
         [:td {:class "tulokset-label"} (l :tulokset-yhteensa)]
         [:td {:class "num"} (fmt-summa (:summa energiamuoto))]
-        [:td {:class "num"} ""]
-        [:td {:class "num"} ""]
+        [:td {:class "num without-border"} ""]
+        [:td {:class "num without-border"} ""]
         [:td {:class "num"} (fmt-summa (:kertoimella-summa energiamuoto))]
         [:td {:class "num"} (fmt-summa e-luku-value)]]]]]))
 
@@ -97,12 +97,14 @@
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
         [:th {:class "tulokset-th" :colspan "2"} (l :tulokset-hyodynnetty-osuus)]
-        [:th {:class "tulokset-th"} (str (l :tulokset-kokonaistuotanto) "\nkWh/vuosi")]]
+        [:th {:class "tulokset-th" :rowspan 2}
+         [:span (str (l :tulokset-kokonaistuotanto))]
+         [:br]
+         [:span {:class "tulokset-th-unit"} (l :kwh-vuosi)]]]
        [:tr
         [:th {:class "tulokset-th"} "\u00a0"]
-        [:th {:class "tulokset-th-sub"} "kWh/vuosi"]
-        [:th {:class "tulokset-th-sub"} "kWh/m²/vuosi"]
-        [:th {:class "tulokset-th-sub"} "\u00a0"]]]
+        [:th {:class "tulokset-th-sub"} (l :kwh-vuosi)]
+        [:th {:class "tulokset-th-sub"} (l :kwh-m2-vuosi)]]]
       [:tbody
        (uusiutuva-row (l :tulokset-aurinkosahko) omavarais kokonaistuotanto :aurinkosahko)
        (uusiutuva-row (l :tulokset-aurinkolampo) omavarais kokonaistuotanto :aurinkolampo)

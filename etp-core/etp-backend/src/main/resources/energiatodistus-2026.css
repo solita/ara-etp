@@ -912,6 +912,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
+    table-layout: fixed;
     margin-top: 0;
     margin-bottom: 8px;
     page-break-inside: avoid;
@@ -930,9 +931,18 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     border: none;
 }
 
+span.tulokset-th-unit {
+    font-weight: 400;
+    color: #23323e;
+}
+
 .tulokset-table td {
     color: black;
     border: 0.6px solid #ced4dd;
+}
+
+.tulokset-table td.without-border {
+    border:none;
 }
 
 .tulokset-table th:first-child,
