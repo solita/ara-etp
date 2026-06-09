@@ -448,7 +448,7 @@
         :sahko-table                                "Sähkö"
         :uusiutuva-polttoaine-table                 "Uusiutuva polttoaine"
         :fossiilinen-polttoaine-table               "Fossiilinen polttoaine"
-        :kaukojaahdytys-table                       "Kauko-jäähdytys"
+        :kaukojaahdytys-table                       "Kaukojäähdytys"
         :uusiutuva-energia-table                    "Uusiutuva energia"
         :kwh-vuosi                                  "kWh/vuosi"
         :kwh-m2-vuosi                               "kWh/m²/vuosi"

@@ -140,9 +140,19 @@
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
-        [:th {:class "tulokset-th"} (str (l :sahko-table) "\nkWh/m²/vuosi")]
-        [:th {:class "tulokset-th"} (str (l :tulokset-lampo) "\nkWh/m²/vuosi")]
-        [:th {:class "tulokset-th"} (str (l :kaukojaahdytys-table) "\nkWh/m²/vuosi")]]]
+        [:th {:class "tulokset-th"}
+         [:span (l :sahko-table)]
+         [:br]
+         [:span {:class "tulokset-th-unit"} (l :kwh-m2-vuosi)]]
+        [:th {:class "tulokset-th"}
+         [:span (l :tulokset-lampo)]
+         [:br]
+         [:span {:class "tulokset-th-unit"} (l :kwh-m2-vuosi)]]
+        [:th {:class "tulokset-th"}
+         [:span (l :kaukojaahdytys-table)]
+         [:br]
+         [:span {:class "tulokset-th-unit"}
+          (l :kwh-m2-vuosi)]]]]
       [:tbody
        (tekniset-row (l :tulokset-lammitysjarjestelma) :class "tulokset-subgroup")
        (tekniset-row (l :tulokset-tilojen-lammitys)
@@ -193,8 +203,10 @@
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
-        [:th {:class "tulokset-th"} "kWh/vuosi"]
-        [:th {:class "tulokset-th"} "kWh/m²/vuosi"]]]
+        [:th {:class "tulokset-th"}
+         [:span {:class "tulokset-th-unit"} (l :kwh-vuosi)]]
+        [:th {:class "tulokset-th"}
+         [:span {:class "tulokset-th-unit"} (l :kwh-m2-vuosi)]]]]
       [:tbody
        (nettotarve-row (l :tulokset-tilojen-lammitys)
                        (:tilojen-lammitys-vuosikulutus nt)
@@ -228,8 +240,10 @@
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
-        [:th {:class "tulokset-th"} "kWh/vuosi"]
-        [:th {:class "tulokset-th"} "kWh/m²/vuosi"]]]
+        [:th {:class "tulokset-th"}
+         [:span {:class "tulokset-th-unit"} (l :kwh-vuosi)]]
+        [:th {:class "tulokset-th"}
+         [:span {:class "tulokset-th-unit"} (l :kwh-m2-vuosi)]]]]
       [:tbody
        (lampokuormat-row (l :tulokset-aurinko)
                          (:aurinko lk) (:aurinko-nettoala lk))

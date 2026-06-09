@@ -747,7 +747,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .lahtotiedot-table th,
 .lahtotiedot-table td {
-    padding: 2px 4px;
+    padding: 1.9px 4px;
     vertical-align: middle;
     text-align: center;
     line-height: 1.15;
@@ -920,7 +920,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .tulokset-table th,
 .tulokset-table td {
-    padding: 2px 4px;
+    padding: 1.9px 4px;
     vertical-align: middle;
     text-align: center;
     line-height: 1.15;
