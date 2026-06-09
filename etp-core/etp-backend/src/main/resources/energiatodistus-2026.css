@@ -1040,7 +1040,7 @@ span.tulokset-th-unit {
 }
 
 .is-metatiedot dl dt {
-    color: #23323e;
+    color: #2a3b49;
     font-weight: bold;
     white-space: nowrap;
     width: 1px;
@@ -1052,15 +1052,16 @@ span.tulokset-th-unit {
 }
 
 .is-separator {
-    background-color: #23323e;
+    background-color: #2a3b49;
     padding: 12px;
     margin-top: 8px;
     margin-bottom: 15px;
 }
 
 .is-intro {
-    margin-top: 8px;
+    margin-top: 0;
     margin-bottom: 0;
+    line-height: 1.05;
 }
 
 .is-description {
@@ -1071,7 +1072,7 @@ span.tulokset-th-unit {
 .ilmastoselvitys table {
     width: 100%;
     border-collapse: collapse;
-    margin: 4px 5px 20px 5px;
+    margin: 5px 0;
     table-layout: fixed;
 }
 
@@ -1082,17 +1083,17 @@ span.tulokset-th-unit {
 
 .ilmastoselvitys th,
 .ilmastoselvitys td {
-    border: 0.4px solid #bdc6cc;
+    border: 0.6px solid #ced4dd;
     padding: 2px 3px;
     font-weight: normal;
     text-align: center;
-    color: #23323e;
+    color: #2a3b49;
 }
 
 .ilmastoselvitys th:first-child,
 .ilmastoselvitys td:first-child {
     border-left: none;
-    border-right: 1px solid #bdc6cc;
+    border-right: 1px solid #ced4dd;
     font-weight: bold;
     text-align: left;
     width: 18%;

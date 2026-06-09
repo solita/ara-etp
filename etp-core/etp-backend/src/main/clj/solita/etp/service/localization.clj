@@ -487,7 +487,7 @@
         :is-laatija                                 "Ilmastoselvityksen laatija"
         :is-laadintaperuste                         "Ilmastoselvitys koskee"
         :is-yksikko                                 "kgCO2e/m²"
-        :is-intro-teksti                            "Tarkemmat hiilijalan- ja hiilikädenjälkitiedot löytyvät ilmastoselvityksestä. Ilmastoselvitys koskee uusia rakennuksia ja rakennuksia, jotka perusparannetaan A+-luokkaan. Ilmastoselvityksen laatija vastaa tiedon oikeellisuudesta."
+        :is-intro-teksti                            "Tarkemmat hiilijalanjälki- ja hiilikädenjälkitiedot löytyvät ilmastoselvityksestä. Ilmastoselvitys koskee uusia rakennuksia. Rakennuksille, jotka perusparannetaan A+ -luokkaan on suositeltavaa laatia ilmastoselvitys, koska niistä on ilmoitettava vastaavat tiedot. Ilmastoselvityksen laatija vastaa tietojen oikeellisuudesta."
         :is-hiilijalanjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilijalanjälki kuvaa negatiiviset ilmastovaikutukset. Hiilijalanjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana aiheutuneet kasvihuonepäästöt."
         :is-hiilikadenjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilikädenjälki kuvaa positiiviset ilmastovaikutukset. Hiilikädenjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana vältetyt ja poistetut kasvihuonepäästöt. Hiilikädenjälkeä ei voi summata hiilijalanjäljen kanssa."
 
@@ -700,7 +700,7 @@
         :is-yritys-postitoimipaikka                 "Postitoimipaikka (sv)"
         :is-laadintaperuste                         "Ilmastoselvitys koskee (sv)"
         :is-yksikko                                 "kgCO2e/m² (sv)"
-        :is-intro-teksti                            "Tarkemmat hiilijalan- ja hiilikädenjälkitiedot löytyvät ilmastoselvityksestä. Ilmastoselvitys koskee vain uusia rakennuksia ja rakennuksia, jotka perusparannetaan A+-luokkaan. Ilmastoselvityksen laatija vastaa tiedon oikeellisuudesta. (sv)"
+        :is-intro-teksti                            "Tarkemmat hiilijalanjälki- ja hiilikädenjälkitiedot löytyvät ilmastoselvityksestä. Ilmastoselvitys koskee uusia rakennuksia. Rakennuksille, jotka perusparannetaan A+ -luokkaan on suositeltavaa laatia ilmastoselvitys, koska niistä on ilmoitettava vastaavat tiedot. Ilmastoselvityksen laatija vastaa tietojen oikeellisuudesta. (sv)"
         :is-hiilijalanjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilijalanjälki kuvaa negatiiviset ilmastovaikutukset. Hiilijalanjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana aiheutuneet kasvihuonepäästöt. (sv)"
         :is-hiilikadenjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilikädenjälki kuvaa positiiviset ilmastovaikutukset. Hiilikädenjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana vältetyt ja poistetut kasvihuonepäästöt. Hiilikädenjälkeä ei voi summata hiilijalanjäljen kanssa. (sv)"
 
