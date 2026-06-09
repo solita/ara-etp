@@ -869,6 +869,12 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     line-height: 1.1;
     color: #2a3b49;
     margin-bottom: 10px;
+    margin-block-start: 0.5em;
+}
+
+.lisamerkintoja p {
+    margin-top: 0.2em;
+    margin-block-start: 0.2em;
 }
 
 /* =====================================================

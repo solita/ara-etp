@@ -3,13 +3,6 @@
     [solita.etp.service.localization :as loc]
     [hiccup.core :refer [h]]))
 
-(defn description-list [key-vals]
-  (into [:dl]
-        (mapv #(vec [:div
-                     [:dt (str (:dt %) ":")]
-                     [:dd (:dd %)]]) key-vals)))
-
-
 (defn lisamerkintoja [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "lisamerkintoja"}
@@ -26,15 +19,10 @@
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "lisamerkintoja"}
      [:h3 (l :lisatietoja-otsikko)]
-     (description-list
-       [{:dt (l :lisatietoja-energiatehokkuus)
-         :dd (l :lisatietoja-urlit )}
-        {:dt (l :lisatietoja-rahoitus)
-         :dd (l :motiva)}
-        {:dt (l :lisatietoja-energianeuvonta)
-         :dd (l :motiva)}])
+     [:p (l :lisatietoja-ehto)]
+     [:p (l :lisatietoja-energia-tiedot) [:br] "https://www.motiva.fi/motivan-energianeuvonta/"]
+     [:p (l :lisatietoja-rahoitus-info) [:br] "www.motiva.fi/rahoituksentietopalvelu"]
      ]))
-
 
 (defn generate-lisamerkintoja [params]
   (into [:div]

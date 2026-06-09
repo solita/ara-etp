@@ -423,11 +423,9 @@
 
         :lisamerkintoja-otsikko                     "Lisämerkintöjä"
         :lisatietoja-otsikko                        "Lisätietoja energiatehokkuudesta"
-        :lisatietoja-energiatehokkuus               "Hae tietoa toimista parantaa energiatehokkuutta ja lisätä uusiutuvan energian käyttöä"
-        :lisatietoja-urlit                          "www.motiva.fi sekä\n wwww.energiatehokaskoti.fi"
-        :lisatietoja-rahoitus                       "Rahoituksen tietopalvelu kokoaa tietoa energiatehokkuuden parantamiseen tarkoitetuista tuista ja muista\nrahoitusmuodoista"
-        :lisatietoja-energianeuvonta                "Kuluttajien energianeuvonta tarjoaa maksutonta opastusta suomaisille kotitalouksille ja taloyhtiöille.\nKuluttajatvoivat
-                                                    ottaa yhteyttä joko valtakunnalliseen Asiaa energiasta -neuvontaan tai maakunnissa toimiviin\nenergianeuvojiin. Lisätietoa osoitteessa"
+        :lisatietoja-ehto                           "Jos rakennuksen energialuokka on C- tai sitä huonompi, ota yhteyttä energianeuvontaan:"
+        :lisatietoja-energia-tiedot                 "Tietoa toimista parantaa energiatehokkuutta ja lisätä uusiutuvan energiankäyttöä sekä neuvoja asiantuntijoilta:"
+        :lisatietoja-rahoitus-info                  "Tietoa energiatehokkuuden parantamiseen tarkoitetuista tuista ja muista rahoitusmuodoista:"
         :motiva                                     "www.motiva.fi"
 
         ;; Koontisivu
@@ -634,11 +632,9 @@
 
         :lisamerkintoja-otsikko                     "Lisämerkintöjä (sv)"
         :lisatietoja-otsikko                        "Lisätietoja energiatehokkuudesta (sv)"
-        :lisatietoja-energiatehokkuus               "Hae tietoa toimista parantaa energiatehokkuutta ja lisätä uusiutuvan energian käyttöä (sv)"
-        :lisatietoja-urlit                          "www.motiva.fi sekä\n wwww.energiatehokaskoti.fi (sv)"
-        :lisatietoja-rahoitus                       "Rahoituksen tietopalvelu kokoaa tietoa energiatehokkuuden parantamiseen tarkoitetuista tuista ja muista\nrahoitusmuodoista (sv)"
-        :lisatietoja-energianeuvonta                "Kuluttajien energianeuvonta tarjoaa maksutonta opastusta suomaisille kotitalouksille ja taloyhtiöille.\nKuluttajatvoivat
-                                                    ottaa yhteyttä joko valtakunnalliseen Asiaa energiasta -neuvontaan tai maakunnissa toimiviin\nenergianeuvojiin. Lisätietoa osoitteessa (sv)"
+        :lisatietoja-ehto                           "Jos rakennuksen energialuokka on C- tai sitä huonompi, ota yhteyttä energianeuvontaan: (sv)"
+        :lisatietoja-energia-tiedot                 "Tietoa toimista parantaa energiatehokkuutta ja lisätä uusiutuvan energiankäyttöä sekä neuvoja asiantuntijoilta: (sv)"
+        :lisatietoja-rahoitus-info                  "Tietoa energiatehokkuuden parantamiseen tarkoitetuista tuista ja muista rahoitusmuodoista: (sv)"
         :motiva                                     "www.motiva.fi (sv)"
 
         ;; Koontisivu
