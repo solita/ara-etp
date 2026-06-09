@@ -132,17 +132,16 @@
     (let [versio 2026
           tulokset (:tulokset ppp-vaihe)
           e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus ppp-vaihe)
-          e-luokka (when e-luku
-                     (-> (e-luokka-service/e-luokka
-                           (get kayttotarkoitukset versio)
-                           (get alakayttotarkoitukset versio)
-                           versio
-                           (get-in energiatodistus [:perustiedot :kayttotarkoitus])
-                           (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
-                           e-luku
-                           (:tayttaa-aplus-vaatimukset ppp-perustiedot)
-                           (:tayttaa-a0-vaatimukset ppp-perustiedot))
-                         :e-luokka))
+          e-luokka (-> (e-luokka-service/e-luokka
+                         (get kayttotarkoitukset versio)
+                         (get alakayttotarkoitukset versio)
+                         versio
+                         (get-in energiatodistus [:perustiedot :kayttotarkoitus])
+                         (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
+                         e-luku
+                         (:tayttaa-aplus-vaatimukset ppp-perustiedot)
+                         (:tayttaa-a0-vaatimukset ppp-perustiedot))
+                       :e-luokka)
           ostoenergia (total-ostoenergia-ppp tulokset)
           painotettu (painotettu-ostoenergia tulokset)
           kustannukset (energia-kustannukset tulokset ppp-tulokset)
