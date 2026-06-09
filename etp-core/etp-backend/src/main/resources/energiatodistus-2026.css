@@ -864,6 +864,13 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     white-space: pre-line;
 }
 
+.lisamerkintoja-teksti {
+    font-size: 16px;
+    line-height: 1.1;
+    color: #2a3b49;
+    margin-bottom: 10px;
+}
+
 /* =====================================================
    Tulokset (E-luvun laskennan tulokset) page styles
    ===================================================== */
