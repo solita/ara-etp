@@ -888,12 +888,17 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 }
 
 .tulokset-eluku-value {
-    padding: 0 6px;
+    padding: 0 12px;
     display: inline;
+    font-size: 16px;
+}
+
+.tulokset-eluku-unit {
+    display: inline;
+    font-size: 16px;
 }
 
 .tulokset-content {
-    font-size: 14px;
     line-height: 1.2;
     color: #23323e;
     font-family: carlito, sans-serif;
@@ -909,7 +914,6 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     border-spacing: 0;
     margin-top: 0;
     margin-bottom: 8px;
-    font-size: 14px;
     page-break-inside: avoid;
 }
 
@@ -927,14 +931,14 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 }
 
 .tulokset-table td {
-    color: #23323e;
-    border: 0.4px solid #ced4dd;
+    color: black;
+    border: 0.6px solid #ced4dd;
 }
 
 .tulokset-table th:first-child,
 .tulokset-table td:first-child {
     text-align: left;
-    color: #23323e;
+    color: #2a3b49;
     border-left: none;
 }
 
@@ -952,15 +956,13 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 .tulokset-th {
     font-weight: bold;
     color: #23323e;
-    font-size: 13px;
     text-align: center;
     white-space: pre-wrap;
 }
 
 .tulokset-th-sub {
-    font-weight: 600;
+    font-weight: 400;
     color: #23323e;
-    font-size: 12px;
 }
 
 .tulokset-table .num {
