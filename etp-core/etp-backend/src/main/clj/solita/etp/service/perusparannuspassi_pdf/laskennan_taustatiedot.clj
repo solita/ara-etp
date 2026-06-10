@@ -1,7 +1,12 @@
 (ns solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot
   (:require
+    [clojure.string :as str]
     [hiccup.core :refer [h]]
     [solita.etp.service.localization :as loc]))
+
+(defn- dot->comma [s]
+  (when s
+    (str/replace s "." ",")))
 
 (defn- table-u-arvot [kieli items]
   (let [l (kieli loc/ppp-pdf-localization)]
@@ -30,7 +35,7 @@
         [:tr
          [:td dt]
          (for [row dd]
-           [:td (or row "")])])]]))
+           [:td (or (dot->comma row) "")])])]]))
 
 (defn- table-lammitys-ilmavaihto [kieli items]
   (let [l (kieli loc/ppp-pdf-localization)
