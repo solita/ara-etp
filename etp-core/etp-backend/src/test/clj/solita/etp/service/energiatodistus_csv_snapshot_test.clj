@@ -534,7 +534,8 @@
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]
-    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]))
+    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]
+    [:tulokset :uusiutuvan-energian-osuus]))
 
 (def ^:private expected-public-columns
   '([:id]
@@ -670,7 +671,8 @@
     [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu]
     [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo]
     [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko]
-    [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]))
+    [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]
+    [:tulokset :uusiutuvan-energian-osuus]))
 
 (def ^:private expected-anonymized-columns
   '([:versio]
@@ -1150,7 +1152,8 @@
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]
-    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]))
+    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]
+    [:tulokset :uusiutuvan-energian-osuus]))
 
 (def ^:private expected-tilastokeskus-columns
   '([:id]
@@ -1649,7 +1652,8 @@
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]
-    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]))
+    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]
+    [:tulokset :uusiutuvan-energian-osuus]))
 
 (t/deftest csv-snapshots-test
   (t/testing "Private columns are what we expect"
