@@ -144,4 +144,5 @@
      (hiilijalanjalki-table (:hiilijalanjalki ilmastoselvitys) l)
      [:h3 (l :is-hiilikadenjalki-otsikko)]
      [:p {:class "is-description"} (l :is-hiilikadenjalki-teksti)]
-     (hiilikadenjalki-table (:hiilikadenjalki ilmastoselvitys) l)]))
+     (hiilikadenjalki-table (:hiilikadenjalki ilmastoselvitys) l)
+     [:div {:class "is-gwp-selite"} (l :is-gwp-selite)]]))

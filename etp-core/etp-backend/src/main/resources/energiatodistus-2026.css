@@ -1067,6 +1067,7 @@ span.tulokset-th-unit {
 .is-description {
     margin-top: 5px;
     margin-bottom: 12px;
+    line-height: 1.05;
 }
 
 .ilmastoselvitys table {
@@ -1087,7 +1088,12 @@ span.tulokset-th-unit {
     padding: 2px 3px;
     font-weight: normal;
     text-align: center;
+    line-height: 1.05;
     color: #2a3b49;
+}
+
+.ilmastoselvitys table tbody td:first-child {
+    line-height: 1.2;
 }
 
 .ilmastoselvitys th:first-child,
@@ -1119,4 +1125,12 @@ span.tulokset-th-unit {
 
 .ilmastoselvitys .is-unit {
     font-weight: normal;
+}
+
+.ilmastoselvitys .is-gwp-selite {
+    color: #2a3b49;
+    position: absolute;
+    bottom: 19.9mm;
+    left: 7mm;
+    right: 7mm;
 }

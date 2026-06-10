@@ -467,11 +467,11 @@
         :asteikko-teksti                            "Asteikko on A+-luokasta G-luokkaan, jossa A+-luokka on energiatehokkain ja G-luokka tehottomin."
 
         ;; Ilmastoselvitys
-        :ilmastoselvitys-otsikko                    "Hiilijalanjälki ja hiilikädenjälki (GWP)"
+        :ilmastoselvitys-otsikko                    "Hiilijalanjälki ja hiilikädenjälki (GWP*)"
         :is-hiilijalanjalki-otsikko                 "Hiilijalanjälki"
         :is-rakennustuotteiden-valmistus            "Rakennus-\ntuotteiden \nvalmistus \nA1-A3"
-        :is-kuljetukset-tyomaavaihe                 "Kuljetukset ja työmaavaihe \nA4-A5"
-        :is-rakennustuotteiden-vaihdot              "Rakennustuot-\nteiden vaihdot \nB4"
+        :is-kuljetukset-tyomaavaihe                 "Kuljetukset ja työmaa\u00adtoiminnot\nA4-A5"
+        :is-rakennustuotteiden-vaihdot              "Tuotteiden käyttö rakennuksessa, kunnossapito, korjaukset ja rakennustuot\u00ADteiden vaihdot\nB1-B4"
         :is-energiankaytto                          "Energian\nkäyttö \nB6"
         :is-purkuvaihe                              "Purkuvaihe \nC1-C4"
         :is-yhteensa                                "Yhteensä"
@@ -488,9 +488,9 @@
         :is-laadintaperuste                         "Ilmastoselvitys koskee"
         :is-yksikko                                 "kgCO2e/m²"
         :is-intro-teksti                            "Tarkemmat hiilijalanjälki- ja hiilikädenjälkitiedot löytyvät ilmastoselvityksestä. Ilmastoselvitys koskee uusia rakennuksia. Rakennuksille, jotka perusparannetaan A+ -luokkaan on suositeltavaa laatia ilmastoselvitys, koska niistä on ilmoitettava vastaavat tiedot. Ilmastoselvityksen laatija vastaa tietojen oikeellisuudesta."
-        :is-hiilijalanjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilijalanjälki kuvaa negatiiviset ilmastovaikutukset. Hiilijalanjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana aiheutuneet kasvihuonepäästöt."
-        :is-hiilikadenjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilikädenjälki kuvaa positiiviset ilmastovaikutukset. Hiilikädenjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana vältetyt ja poistetut kasvihuonepäästöt. Hiilikädenjälkeä ei voi summata hiilijalanjäljen kanssa."
-
+        :is-hiilijalanjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilijalanjälki kuvaa negatiiviset ilmastovaikutukset. Hiilijalanjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana aiheutuneet kasvihuonekaasupäästöt."
+        :is-hiilikadenjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilikädenjälki kuvaa positiiviset ilmastovaikutukset. Hiilikädenjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana vältetyt ja poistetut kasvihuonekaasupäästöt. Hiilikädenjälkeä ei voi summata hiilijalanjäljen kanssa."
+        :is-gwp-selite                              "*GWP = Elinkaarenaikainen ilmakehän lämmitysvaikutuspotentiaali."
    }
 
    :sv {:kylla                                      "Ja"
@@ -676,11 +676,11 @@
         :asteikko-teksti                            "Asteikko on A+-luokasta G-luokkaan, jossa A+-luokka on energiatehokkain ja G-luokka tehottomin. (sv)"
 
         ;; Ilmastoselvitys page
-        :ilmastoselvitys-otsikko                    "Hiilijalanjälki ja hiilikädenjälki (GWP) (sv)"
+        :ilmastoselvitys-otsikko                    "Hiilijalanjälki ja hiilikädenjälki (GWP*) (sv)"
         :is-hiilijalanjalki-otsikko                 "Hiilijalanjälki (sv)"
         :is-rakennustuotteiden-valmistus            "Rakennustuotteiden valmistus (sv)"
         :is-kuljetukset-tyomaavaihe                 "Kuljetukset ja työmaa (sv)"
-        :is-rakennustuotteiden-vaihdot              "Rakennustuotteiden vaihdot (sv)"
+        :is-rakennustuotteiden-vaihdot              "Tuotteiden käyttö rakennuksessa, kunnossapito, korjaukset ja rakennustuot\u00ADteiden vaihdot\nB1-B4 (sv)"
         :is-energiankaytto                          "Energiankäyttö (sv)"
         :is-purkuvaihe                              "Purkuvaihe (sv)"
         :is-yhteensa                                "Yhteensä (sv)"
@@ -701,9 +701,9 @@
         :is-laadintaperuste                         "Ilmastoselvitys koskee (sv)"
         :is-yksikko                                 "kgCO2e/m² (sv)"
         :is-intro-teksti                            "Tarkemmat hiilijalanjälki- ja hiilikädenjälkitiedot löytyvät ilmastoselvityksestä. Ilmastoselvitys koskee uusia rakennuksia. Rakennuksille, jotka perusparannetaan A+ -luokkaan on suositeltavaa laatia ilmastoselvitys, koska niistä on ilmoitettava vastaavat tiedot. Ilmastoselvityksen laatija vastaa tietojen oikeellisuudesta. (sv)"
-        :is-hiilijalanjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilijalanjälki kuvaa negatiiviset ilmastovaikutukset. Hiilijalanjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana aiheutuneet kasvihuonepäästöt. (sv)"
-        :is-hiilikadenjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilikädenjälki kuvaa positiiviset ilmastovaikutukset. Hiilikädenjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana vältetyt ja poistetut kasvihuonepäästöt. Hiilikädenjälkeä ei voi summata hiilijalanjäljen kanssa. (sv)"
-
+        :is-hiilijalanjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilijalanjälki kuvaa negatiiviset ilmastovaikutukset. Hiilijalanjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana aiheutuneet kasvihuonekaasupäästöt. (sv)"
+        :is-hiilikadenjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilikädenjälki kuvaa positiiviset ilmastovaikutukset. Hiilikädenjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana vältetyt ja poistetut kasvihuonekaasupäästöt. Hiilikädenjälkeä ei voi summata hiilijalanjäljen kanssa. (sv)"
+        :is-gwp-selite                              "*GWP = Elinkaarenaikainen ilmakehän lämmitysvaikutuspotentiaali. (sv)"
         }})
 
 
