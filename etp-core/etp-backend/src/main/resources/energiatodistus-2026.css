@@ -507,6 +507,23 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     white-space: nowrap;
 }
 
+.etusivu-ostoenergia:last-child {
+    margin-top: 4mm;
+}
+
+.etusivu-ostoenergia .value {
+    display: inline-block;
+    color: black;
+    text-align: right;
+    width: 20mm;
+}
+
+.etusivu-ostoenergia .unit {
+    display: inline-block;
+    color: #2a3b49;
+    text-align: left;
+}
+
 .etusivu-eluku {
     line-height: 1.1;
     padding: 15px 0px 0px 0px;

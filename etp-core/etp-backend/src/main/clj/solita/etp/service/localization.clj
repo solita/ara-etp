@@ -398,6 +398,7 @@
         :kwhE-m2-vuosi                              "kWh<sub>E</sub>/m²/vuosi"
         :kgCO2ekv/vuosi                             "kgCO<sub>2</sub>ekv/vuosi"
         :kgCO2ekv-m2/vuosi                          "kgCO<sub>2</sub>ekv/m²/vuosi"
+        :kgCO2ekv-m2                                "kgCO<sub>2</sub>ekv/m²"
         :te-lampo-muutos                            "Lämpö,\nostoenergian\nmuutos"
         :te-sahko-muutos                            "Sähkö,\nostoenergian\nmuutos"
         :te-jaahdytyden-muutos                      "Jäähdytys,\nostoenergian\nmuutos"
