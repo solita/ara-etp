@@ -8,6 +8,7 @@
     [solita.etp.service.pdf :as pdf-service]
     [solita.etp.service.complete-perusparannuspassi :as complete-ppp]
     [solita.etp.service.energiatodistus :as energiatodistus-service]
+    [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
     [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-yleistiedot :as etusivu-yleistiedot]
     [solita.etp.service.perusparannuspassi-pdf.etusivu-laatija :as etusivu-laatija]
@@ -161,7 +162,7 @@
   [db whoami ppp-id kieli]
   (when-let [perusparannuspassi (complete-ppp/find-complete-perusparannuspassi db whoami ppp-id)]
     (let [energiatodistus-id (:energiatodistus-id perusparannuspassi)
-          energiatodistus (energiatodistus-service/find-energiatodistus db whoami energiatodistus-id)
+          energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db energiatodistus-id)
           versio (:versio energiatodistus)
           luokittelut {:kayttotarkoitukset    (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
                        :alakayttotarkoitukset (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
