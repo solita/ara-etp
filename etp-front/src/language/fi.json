@@ -1009,8 +1009,8 @@
         "muulampo": "Muu lämpö (kWh/vuosi)",
         "muusahko": "Muu sähkö (kWh/vuosi)"
       },
-      "hiilijalanjalki-rakennus-yhteensa": "Rakennuksen elinkaarenaikaiset kasvihuonekaasupäästöt (kgCO₂ ekv/m²)",
-      "kasvihuonepaastot-per-nelio": "Kasvihuonekaasupäästöt (kg CO₂e/m²/vuosi)",
+      "hiilijalanjalki-rakennus-yhteensa": "Kasvihuonepäästöt GWP (kgCO₂ ekv/m²)",
+      "kasvihuonepaastot-per-nelio": "Energian käytön kasvihuonepäästöt (kg CO₂e/m²/vuosi)",
       "uusiutuvan-energian-osuus": "Uusiutuvan energian osuus",
       "tekniset-jarjestelmat": {
         "header": "Rakennuksen teknisten järjestelmien energiankulutus",
