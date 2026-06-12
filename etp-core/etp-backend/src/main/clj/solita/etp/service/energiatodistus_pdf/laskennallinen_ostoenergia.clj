@@ -29,12 +29,6 @@
            (for [row dd]
              [:td (or row "")])))]]]))
 
-(defn- description-list [key-vals]
-  (into [:dl]
-        (mapv #(vec [:div
-                     [:dt (str (:dt %) ":")]
-                     [:dd (:dd %)]]) key-vals)))
-
 (defn- laskennallinen-helper [value nettoala]
   (if nettoala
     (^[double] Math/round (/ (double (or value 0)) (double nettoala)))
@@ -82,23 +76,28 @@
             painotettu-fossiilinen
             painotettu-kaukojaahdytys]}])))
 
-(defn uusiutuvan-energian-osuus
-  "Calculate the percentage of on-site renewable energy production.
-   Returns a formatted string like '24 %' or nil if the calculation cannot be performed."
-  [versio energiatodistus]
-  (when-let [result (uusiutuva-energia/uusiutuvan-energian-osuus versio energiatodistus)]
-    (str result " %")))
-
-
 (defn ostoenergia-tiedot [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
-        uusiutuvan-osuus (uusiutuvan-energian-osuus (:versio energiatodistus) energiatodistus)]
-
+        uusiutuvan-osuus (uusiutuva-energia/uusiutuvan-energian-osuus (:versio energiatodistus)
+                                                                      energiatodistus)]
     [:div {:class "etusivu-ostoenergia"}
-     (description-list
-       [{:dt (l :energiakaytosta-syntyvat-kasvihuonepaastot)
-         :dd (str (-> energiatodistus :tulokset :kasvihuonepaastot-nettoala (fmt 2)) " " (l :kgCO2ekv-m2/vuosi))}
-        {:dt (l :uusiutuva-energian-osuus)
-         :dd (or uusiutuvan-osuus "-")}
-        {:dt (l :kasvihuonepaastot)
-         :dd (ilmastoselvitys/gwp-value-for-etusivu energiatodistus)}])]))
+     [:dl
+      [:div
+       [:dt (str (l :energiakaytosta-syntyvat-kasvihuonepaastot) ":")]
+       [:dd
+        [:span {:class "value"}
+         (-> energiatodistus :tulokset :kasvihuonepaastot-nettoala (fmt 2))]
+        [:span " "]
+        [:span {:class "unit"} (l :kgCO2ekv-m2/vuosi)]]]
+      [:div
+       [:dt (str (l :uusiutuva-energian-osuus) ":")]
+       [:dd
+        [:span {:class "value"} (if uusiutuvan-osuus (str uusiutuvan-osuus) "-")]
+        [:span " "]
+        [:span {:class "unit"} "%"]]]
+      [:div
+       [:dt (str (l :kasvihuonepaastot) ":")]
+       [:dd
+        [:span {:class "value"} (ilmastoselvitys/gwp-value-for-etusivu energiatodistus)]
+        [:span " "]
+        [:span {:class "unit"} (l :kgCO2ekv-m2)]]]]]))

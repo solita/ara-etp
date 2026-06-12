@@ -398,6 +398,7 @@
         :kwhE-m2-vuosi                              "kWh<sub>E</sub>/m²/vuosi"
         :kgCO2ekv/vuosi                             "kgCO<sub>2</sub>ekv/vuosi"
         :kgCO2ekv-m2/vuosi                          "kgCO<sub>2</sub>ekv/m²/vuosi"
+        :kgCO2ekv-m2                                "kgCO<sub>2</sub>ekv/m²"
         :te-lampo-muutos                            "Lämpö,\nostoenergian\nmuutos"
         :te-sahko-muutos                            "Sähkö,\nostoenergian\nmuutos"
         :te-jaahdytyden-muutos                      "Jäähdytys,\nostoenergian\nmuutos"
@@ -423,11 +424,9 @@
 
         :lisamerkintoja-otsikko                     "Lisämerkintöjä"
         :lisatietoja-otsikko                        "Lisätietoja energiatehokkuudesta"
-        :lisatietoja-energiatehokkuus               "Hae tietoa toimista parantaa energiatehokkuutta ja lisätä uusiutuvan energian käyttöä"
-        :lisatietoja-urlit                          "www.motiva.fi sekä\n wwww.energiatehokaskoti.fi"
-        :lisatietoja-rahoitus                       "Rahoituksen tietopalvelu kokoaa tietoa energiatehokkuuden parantamiseen tarkoitetuista tuista ja muista\nrahoitusmuodoista"
-        :lisatietoja-energianeuvonta                "Kuluttajien energianeuvonta tarjoaa maksutonta opastusta suomaisille kotitalouksille ja taloyhtiöille.\nKuluttajatvoivat
-                                                    ottaa yhteyttä joko valtakunnalliseen Asiaa energiasta -neuvontaan tai maakunnissa toimiviin\nenergianeuvojiin. Lisätietoa osoitteessa"
+        :lisatietoja-ehto                           "Jos rakennuksen energialuokka on C- tai sitä huonompi, ota yhteyttä energianeuvontaan:"
+        :lisatietoja-energia-tiedot                 "Tietoa toimista parantaa energiatehokkuutta ja lisätä uusiutuvan energiankäyttöä sekä neuvoja asiantuntijoilta:"
+        :lisatietoja-rahoitus-info                  "Tietoa energiatehokkuuden parantamiseen tarkoitetuista tuista ja muista rahoitusmuodoista:"
         :motiva                                     "www.motiva.fi"
 
         ;; Koontisivu
@@ -448,7 +447,7 @@
         :sahko-table                                "Sähkö"
         :uusiutuva-polttoaine-table                 "Uusiutuva polttoaine"
         :fossiilinen-polttoaine-table               "Fossiilinen polttoaine"
-        :kaukojaahdytys-table                       "Kauko-jäähdytys"
+        :kaukojaahdytys-table                       "Kaukojäähdytys"
         :uusiutuva-energia-table                    "Uusiutuva energia"
         :kwh-vuosi                                  "kWh/vuosi"
         :kwh-m2-vuosi                               "kWh/m²/vuosi"
@@ -469,11 +468,11 @@
         :asteikko-teksti                            "Asteikko on A+-luokasta G-luokkaan, jossa A+-luokka on energiatehokkain ja G-luokka tehottomin."
 
         ;; Ilmastoselvitys
-        :ilmastoselvitys-otsikko                    "Hiilijalanjälki ja hiilikädenjälki (GWP)"
+        :ilmastoselvitys-otsikko                    "Hiilijalanjälki ja hiilikädenjälki (GWP*)"
         :is-hiilijalanjalki-otsikko                 "Hiilijalanjälki"
         :is-rakennustuotteiden-valmistus            "Rakennus-\ntuotteiden \nvalmistus \nA1-A3"
-        :is-kuljetukset-tyomaavaihe                 "Kuljetukset ja työmaavaihe \nA4-A5"
-        :is-rakennustuotteiden-vaihdot              "Rakennustuot-\nteiden vaihdot \nB4"
+        :is-kuljetukset-tyomaavaihe                 "Kuljetukset ja työmaa\u00adtoiminnot\nA4-A5"
+        :is-rakennustuotteiden-vaihdot              "Tuotteiden käyttö rakennuksessa, kunnossapito, korjaukset ja rakennustuot\u00ADteiden vaihdot\nB1-B4"
         :is-energiankaytto                          "Energian\nkäyttö \nB6"
         :is-purkuvaihe                              "Purkuvaihe \nC1-C4"
         :is-yhteensa                                "Yhteensä"
@@ -489,10 +488,10 @@
         :is-laatija                                 "Ilmastoselvityksen laatija"
         :is-laadintaperuste                         "Ilmastoselvitys koskee"
         :is-yksikko                                 "kgCO2e/m²"
-        :is-intro-teksti                            "Tarkemmat hiilijalan- ja hiilikädenjälkitiedot löytyvät ilmastoselvityksestä. Ilmastoselvitys koskee uusia rakennuksia ja rakennuksia, jotka perusparannetaan A+-luokkaan. Ilmastoselvityksen laatija vastaa tiedon oikeellisuudesta."
-        :is-hiilijalanjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilijalanjälki kuvaa negatiiviset ilmastovaikutukset. Hiilijalanjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana aiheutuneet kasvihuonepäästöt."
-        :is-hiilikadenjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilikädenjälki kuvaa positiiviset ilmastovaikutukset. Hiilikädenjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana vältetyt ja poistetut kasvihuonepäästöt. Hiilikädenjälkeä ei voi summata hiilijalanjäljen kanssa."
-
+        :is-intro-teksti                            "Tarkemmat hiilijalanjälki- ja hiilikädenjälkitiedot löytyvät ilmastoselvityksestä. Ilmastoselvitys koskee uusia rakennuksia. Rakennuksille, jotka perusparannetaan A+ -luokkaan on suositeltavaa laatia ilmastoselvitys, koska niistä on ilmoitettava vastaavat tiedot. Ilmastoselvityksen laatija vastaa tietojen oikeellisuudesta."
+        :is-hiilijalanjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilijalanjälki kuvaa negatiiviset ilmastovaikutukset. Hiilijalanjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana aiheutuneet kasvihuonekaasupäästöt."
+        :is-hiilikadenjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilikädenjälki kuvaa positiiviset ilmastovaikutukset. Hiilikädenjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana vältetyt ja poistetut kasvihuonekaasupäästöt. Hiilikädenjälkeä ei voi summata hiilijalanjäljen kanssa."
+        :is-gwp-selite                              "*GWP = Elinkaarenaikainen ilmakehän lämmitysvaikutuspotentiaali."
    }
 
    :sv {:kylla                                      "Ja"
@@ -634,11 +633,9 @@
 
         :lisamerkintoja-otsikko                     "Lisämerkintöjä (sv)"
         :lisatietoja-otsikko                        "Lisätietoja energiatehokkuudesta (sv)"
-        :lisatietoja-energiatehokkuus               "Hae tietoa toimista parantaa energiatehokkuutta ja lisätä uusiutuvan energian käyttöä (sv)"
-        :lisatietoja-urlit                          "www.motiva.fi sekä\n wwww.energiatehokaskoti.fi (sv)"
-        :lisatietoja-rahoitus                       "Rahoituksen tietopalvelu kokoaa tietoa energiatehokkuuden parantamiseen tarkoitetuista tuista ja muista\nrahoitusmuodoista (sv)"
-        :lisatietoja-energianeuvonta                "Kuluttajien energianeuvonta tarjoaa maksutonta opastusta suomaisille kotitalouksille ja taloyhtiöille.\nKuluttajatvoivat
-                                                    ottaa yhteyttä joko valtakunnalliseen Asiaa energiasta -neuvontaan tai maakunnissa toimiviin\nenergianeuvojiin. Lisätietoa osoitteessa (sv)"
+        :lisatietoja-ehto                           "Jos rakennuksen energialuokka on C- tai sitä huonompi, ota yhteyttä energianeuvontaan: (sv)"
+        :lisatietoja-energia-tiedot                 "Tietoa toimista parantaa energiatehokkuutta ja lisätä uusiutuvan energiankäyttöä sekä neuvoja asiantuntijoilta: (sv)"
+        :lisatietoja-rahoitus-info                  "Tietoa energiatehokkuuden parantamiseen tarkoitetuista tuista ja muista rahoitusmuodoista: (sv)"
         :motiva                                     "www.motiva.fi (sv)"
 
         ;; Koontisivu
@@ -680,11 +677,11 @@
         :asteikko-teksti                            "Asteikko on A+-luokasta G-luokkaan, jossa A+-luokka on energiatehokkain ja G-luokka tehottomin. (sv)"
 
         ;; Ilmastoselvitys page
-        :ilmastoselvitys-otsikko                    "Hiilijalanjälki ja hiilikädenjälki (GWP) (sv)"
+        :ilmastoselvitys-otsikko                    "Hiilijalanjälki ja hiilikädenjälki (GWP*) (sv)"
         :is-hiilijalanjalki-otsikko                 "Hiilijalanjälki (sv)"
         :is-rakennustuotteiden-valmistus            "Rakennustuotteiden valmistus (sv)"
         :is-kuljetukset-tyomaavaihe                 "Kuljetukset ja työmaa (sv)"
-        :is-rakennustuotteiden-vaihdot              "Rakennustuotteiden vaihdot (sv)"
+        :is-rakennustuotteiden-vaihdot              "Tuotteiden käyttö rakennuksessa, kunnossapito, korjaukset ja rakennustuot\u00ADteiden vaihdot\nB1-B4 (sv)"
         :is-energiankaytto                          "Energiankäyttö (sv)"
         :is-purkuvaihe                              "Purkuvaihe (sv)"
         :is-yhteensa                                "Yhteensä (sv)"
@@ -704,10 +701,10 @@
         :is-yritys-postitoimipaikka                 "Postitoimipaikka (sv)"
         :is-laadintaperuste                         "Ilmastoselvitys koskee (sv)"
         :is-yksikko                                 "kgCO2e/m² (sv)"
-        :is-intro-teksti                            "Tarkemmat hiilijalan- ja hiilikädenjälkitiedot löytyvät ilmastoselvityksestä. Ilmastoselvitys koskee vain uusia rakennuksia ja rakennuksia, jotka perusparannetaan A+-luokkaan. Ilmastoselvityksen laatija vastaa tiedon oikeellisuudesta. (sv)"
-        :is-hiilijalanjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilijalanjälki kuvaa negatiiviset ilmastovaikutukset. Hiilijalanjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana aiheutuneet kasvihuonepäästöt. (sv)"
-        :is-hiilikadenjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilikädenjälki kuvaa positiiviset ilmastovaikutukset. Hiilikädenjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana vältetyt ja poistetut kasvihuonepäästöt. Hiilikädenjälkeä ei voi summata hiilijalanjäljen kanssa. (sv)"
-
+        :is-intro-teksti                            "Tarkemmat hiilijalanjälki- ja hiilikädenjälkitiedot löytyvät ilmastoselvityksestä. Ilmastoselvitys koskee uusia rakennuksia. Rakennuksille, jotka perusparannetaan A+ -luokkaan on suositeltavaa laatia ilmastoselvitys, koska niistä on ilmoitettava vastaavat tiedot. Ilmastoselvityksen laatija vastaa tietojen oikeellisuudesta. (sv)"
+        :is-hiilijalanjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilijalanjälki kuvaa negatiiviset ilmastovaikutukset. Hiilijalanjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana aiheutuneet kasvihuonekaasupäästöt. (sv)"
+        :is-hiilikadenjalki-teksti                  "Rakennuksen ja rakennuspaikan hiilikädenjälki kuvaa positiiviset ilmastovaikutukset. Hiilikädenjäljessä otetaan huomioon rakentaminen, käyttö ja käytön jälkeinen aika ja kuvataan niiden aikana vältetyt ja poistetut kasvihuonekaasupäästöt. Hiilikädenjälkeä ei voi summata hiilijalanjäljen kanssa. (sv)"
+        :is-gwp-selite                              "*GWP = Elinkaarenaikainen ilmakehän lämmitysvaikutuspotentiaali. (sv)"
         }})
 
 

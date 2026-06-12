@@ -7,7 +7,7 @@
 (defn toimenpide-ehdotukset-muut [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
-     [:h1 (l :te-muut-otsikko)]
+     [:h2 {:class "top-of-page"} (l :te-muut-otsikko)]
      [:p {:id "muut-teksti"}
         (l :te-muut-teksti)]
      [:h3 (l :te-muut-valaistus-otsikko)]

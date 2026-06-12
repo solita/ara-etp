@@ -261,11 +261,22 @@ h1 {
 
 h2 {
     font-size: 14pt;
-    color: #23323e;
     text-transform: uppercase;
+    color: #2a3b49;
     text-align: center;
+    letter-spacing: 0.03em;
     margin-top: 0mm;
     margin-bottom: 1mm;
+}
+
+h2.top-of-page {
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #2a3b49;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 0.03em;
+    margin: 0 0 2px 0;
 }
 
 h3 {
@@ -273,7 +284,7 @@ h3 {
     color: white;
     padding: 1px 4px;
     font-weight: normal;
-    font-size: 19px;
+    font-size: 18px;
     letter-spacing: 0.01em;
     margin: 0 0 5px 0;
     font-family: carlito, sans-serif;
@@ -496,6 +507,23 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     white-space: nowrap;
 }
 
+.etusivu-ostoenergia:last-child {
+    margin-top: 4mm;
+}
+
+.etusivu-ostoenergia .value {
+    display: inline-block;
+    color: black;
+    text-align: right;
+    width: 20mm;
+}
+
+.etusivu-ostoenergia .unit {
+    display: inline-block;
+    color: #2a3b49;
+    text-align: left;
+}
+
 .etusivu-eluku {
     line-height: 1.1;
     padding: 15px 0px 0px 0px;
@@ -665,16 +693,6 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     padding: 0;
 }
 
-.lahtotiedot-page-title {
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    letter-spacing: 0.02em;
-    margin: 0 0 2px 0;
-    color: #2a3b49;
-    text-transform: uppercase;
-}
-
 .lahtotiedot-content {
     line-height: 1.2;
     color: #23323e;
@@ -746,7 +764,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .lahtotiedot-table th,
 .lahtotiedot-table td {
-    padding: 2px 4px;
+    padding: 1.9px 4px;
     vertical-align: middle;
     text-align: center;
     line-height: 1.15;
@@ -824,27 +842,6 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 .lahtotiedot-3col-table col { width: 25% }
 .lahtotiedot-3col-table col:first-child { width: 50% }
 
-.lisamerkintoja h1 {
-    background-color: white;
-    color: #23323e;
-    height: auto;
-    padding: 0px;
-    font-size: 20px;
-    text-align: center;
-    text-transform: uppercase;
-    margin-top: 0;
-    margin-bottom: 5px;
-}
-
-.lisamerkintoja h2 {
-    background-color: #23323e;
-    color: white;
-    padding: 2px;
-    font-size: 15px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 .lisamerkintoja-separator {
     background-color: #23323e;
     padding: 12px;
@@ -884,6 +881,17 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     white-space: pre-line;
 }
 
+.lisamerkintoja-teksti {
+    font-size: 16px;
+    line-height: 1.1;
+    color: #2a3b49;
+    margin-bottom: 10px;
+}
+
+.lisamerkintoja p {
+    margin-top: 0.2em;
+}
+
 /* =====================================================
    Tulokset (E-luvun laskennan tulokset) page styles
    ===================================================== */
@@ -891,16 +899,6 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 .tulokset-page {
     padding: 0;
     page-break-inside: avoid;
-}
-
-.tulokset-page-title {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: 0.02em;
-    margin: 0 0 2px 0;
-    color: #23323e;
-    text-transform: uppercase;
 }
 
 .tulokset-eluku-row {
@@ -918,12 +916,17 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 }
 
 .tulokset-eluku-value {
-    padding: 0 6px;
+    padding: 0 12px;
     display: inline;
+    font-size: 16px;
+}
+
+.tulokset-eluku-unit {
+    display: inline;
+    font-size: 16px;
 }
 
 .tulokset-content {
-    font-size: 14px;
     line-height: 1.2;
     color: #23323e;
     font-family: carlito, sans-serif;
@@ -937,15 +940,15 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
+    table-layout: fixed;
     margin-top: 0;
     margin-bottom: 8px;
-    font-size: 14px;
     page-break-inside: avoid;
 }
 
 .tulokset-table th,
 .tulokset-table td {
-    padding: 2px 4px;
+    padding: 1.9px 4px;
     vertical-align: middle;
     text-align: center;
     line-height: 1.15;
@@ -956,15 +959,24 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     border: none;
 }
 
-.tulokset-table td {
+span.tulokset-th-unit {
+    font-weight: 400;
     color: #23323e;
-    border: 0.4px solid #ced4dd;
+}
+
+.tulokset-table td {
+    color: black;
+    border: 0.6px solid #ced4dd;
+}
+
+.tulokset-table td.without-border {
+    border:none;
 }
 
 .tulokset-table th:first-child,
 .tulokset-table td:first-child {
     text-align: left;
-    color: #23323e;
+    color: #2a3b49;
     border-left: none;
 }
 
@@ -982,15 +994,13 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 .tulokset-th {
     font-weight: bold;
     color: #23323e;
-    font-size: 13px;
     text-align: center;
     white-space: pre-wrap;
 }
 
 .tulokset-th-sub {
-    font-weight: 600;
+    font-weight: 400;
     color: #23323e;
-    font-size: 12px;
 }
 
 .tulokset-table .num {
@@ -1017,6 +1027,15 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     font-weight: bold;
 }
 
+.tulokset-6col-table col { width: 15.5%; }
+.tulokset-6col-table col:first-child { width: 22.5%; }
+
+.tulokset-4col-table col { width: 18%; }
+.tulokset-4col-table col:first-child { width: 46%; }
+
+.tulokset-3col-table col { width: 24%; }
+.tulokset-3col-table col:first-child { width: 52%; }
+
 .is-metatiedot dl {
     display: table;
     width: 100%;
@@ -1036,7 +1055,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 }
 
 .is-metatiedot dl dt {
-    color: #23323e;
+    color: #2a3b49;
     font-weight: bold;
     white-space: nowrap;
     width: 1px;
@@ -1048,26 +1067,28 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 }
 
 .is-separator {
-    background-color: #23323e;
+    background-color: #2a3b49;
     padding: 12px;
     margin-top: 8px;
     margin-bottom: 15px;
 }
 
 .is-intro {
-    margin-top: 8px;
+    margin-top: 0;
     margin-bottom: 0;
+    line-height: 1.05;
 }
 
 .is-description {
     margin-top: 5px;
     margin-bottom: 12px;
+    line-height: 1.05;
 }
 
 .ilmastoselvitys table {
     width: 100%;
     border-collapse: collapse;
-    margin: 4px 5px 20px 5px;
+    margin: 5px 0;
     table-layout: fixed;
 }
 
@@ -1078,17 +1099,22 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .ilmastoselvitys th,
 .ilmastoselvitys td {
-    border: 0.4px solid #bdc6cc;
+    border: 0.6px solid #ced4dd;
     padding: 2px 3px;
     font-weight: normal;
     text-align: center;
-    color: #23323e;
+    line-height: 1.05;
+    color: #2a3b49;
+}
+
+.ilmastoselvitys table tbody td:first-child {
+    line-height: 1.2;
 }
 
 .ilmastoselvitys th:first-child,
 .ilmastoselvitys td:first-child {
     border-left: none;
-    border-right: 1px solid #bdc6cc;
+    border-right: 1px solid #ced4dd;
     font-weight: bold;
     text-align: left;
     width: 18%;
@@ -1114,4 +1140,12 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .ilmastoselvitys .is-unit {
     font-weight: normal;
+}
+
+.ilmastoselvitys .is-gwp-selite {
+    color: #2a3b49;
+    position: absolute;
+    bottom: 19.9mm;
+    left: 7mm;
+    right: 7mm;
 }
