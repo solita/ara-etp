@@ -9,7 +9,7 @@
   ([value decimals] (or (formats/format-number value decimals false) "")))
 
 (defn- fmt-summa
-  "Format a sum value as bold, returning empty string for nil or zero."
+  "Format a sum value, returning empty string for nil or zero."
   ([value] (fmt-summa value 0))
   ([value decimals]
    (when (and (some? value) (not (zero? value)))
@@ -52,10 +52,10 @@
         [:th {:class "tulokset-th" :colspan "2"} (l :tulokset-painotettu-energiankulutus)]]
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
-        [:th {:class "tulokset-th-sub"} "kWh/vuosi"]
-        [:th {:class "tulokset-th-sub"} "kWh/m²/vuosi"]
-        [:th {:class "tulokset-th-sub"} "kWh/vuosi"]
-        [:th {:class "tulokset-th-sub"} "kWh/m²/vuosi"]]]
+        [:th {:class "tulokset-th-sub"} (l :kwh-vuosi)]
+        [:th {:class "tulokset-th-sub"} (l :kwh-m2-vuosi)]
+        [:th {:class "tulokset-th-sub"} (l :kwh-vuosi)]
+        [:th {:class "tulokset-th-sub"} (l :kwh-m2-vuosi)]]]
       [:tbody
        (ostoenergia-row (l :kaukolampo-table) energiamuoto "kaukolampo")
        (ostoenergia-row (l :sahko-table) energiamuoto "sahko")
@@ -97,7 +97,7 @@
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
         [:th {:class "tulokset-th" :colspan "2"} (l :tulokset-hyodynnetty-osuus)]
-        [:th {:class "tulokset-th" :rowspan 2}
+        [:th {:class "tulokset-th" :rowspan "2"}
          [:span (str (l :tulokset-kokonaistuotanto))]
          [:br]
          [:span {:class "tulokset-th-unit"} (l :kwh-vuosi)]]]
