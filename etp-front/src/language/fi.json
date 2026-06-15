@@ -1704,6 +1704,7 @@
     "vaiheet": {
       "0": {
         "toimenpiteet": {
+          "label-context":"Toimenpiteet",
           "toimenpideseloste": "Toimenpideseloste"
         },
         "tulokset": {
@@ -1714,7 +1715,7 @@
           "ostoenergian-tarve-fossiiliset-pat": "Vaiheen fossiiliset polttoaineet",
           "ostoenergian-tarve-kaukojaahdytys": "Vaiheen kaukojäähdytys",
           "ostoenergian-tarve-sahko": "Vaiheeen sähkö",
-          "uusiutuvan-energian-kokonaistuotto": "Vaiheen uusiutuvan energian kokonaistuotto",
+          "uusiutuvan-energian-kokonaistuotto": "Vaiheen paikan päällä tuotettu uusiutuva energia",
           "uusiutuvan-energian-hyodynnetty-osuus": "Vaiheen uusiutuvan energian hyödynnetty osuus"
         }
       }

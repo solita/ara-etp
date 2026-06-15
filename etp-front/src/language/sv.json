@@ -1674,6 +1674,7 @@
     "vaiheet": {
       "0": {
         "toimenpiteet": {
+          "label-context": "Åtgärder",
           "toimenpideseloste": "Åtgärdsredovisning"
         },
         "tulokset": {
