@@ -241,7 +241,8 @@
                 versio alakayttotarkoitus-id nettoala e-luku
                 tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset]
   (logic/if-let*
-    [{:keys [raja-asteikko] :as rajat}
+    [e-luku e-luku
+     {:keys [raja-asteikko] :as rajat}
      (e-luokka-rajat kayttotarkoitukset alakayttotarkoitukset
                      versio alakayttotarkoitus-id nettoala)]
 

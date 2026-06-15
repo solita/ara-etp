@@ -2,22 +2,28 @@
   (:require
     [clojure.string :as str]
     [clojure.pprint :as pp]
-    [solita.etp.service.localization :as loc])
+    [solita.etp.service.localization :as loc]
+    [solita.etp.service.uusiutuva-energia :as uusiutuva-energia])
   (:import
     [java.text DecimalFormat DecimalFormatSymbols]))
 
 (defn- format-number [n]
   (str/replace (pp/cl-format nil "~:d" (Math/round (double n))) "," " "))
 
+(defn- dot->comma [s]
+  (when s
+    (str/replace s "." ",")))
+
 (def format-float
   (let [dfs (doto (DecimalFormatSymbols.)
               (.setGroupingSeparator \space))
         fmt (DecimalFormat. "#,###.##", dfs)]
-    (fn [n] (.format fmt n))))
+    (fn [n] (dot->comma (.format fmt n)))))
 
 (defn- format-percentage [value]
-  (when value
-    (str value " %")))
+  (dot->comma
+    (when value
+      (str value " %"))))
 
 (defn- safe-divide [numerator denominator]
   (when (and numerator denominator (not (zero? denominator)))
@@ -80,7 +86,7 @@
        :co2-muutos              (when (and co2-prev co2-curr)
                                   (- co2-curr co2-prev))})))
 
-(defn vaiheistuksen-yhteenveto [{:keys [kieli perusparannuspassi]}]
+(defn vaiheistuksen-yhteenveto [{:keys [kieli perusparannuspassi energiatodistus]}]
   (let [l (kieli loc/ppp-pdf-localization)
         vaiheet (build-vaihe-data perusparannuspassi)
         ppp-tulokset (:tulokset perusparannuspassi)
@@ -102,16 +108,16 @@
     [:div {:class "vaiheistuksen-yhteenveto"}
      [:table
       [:colgroup
-       [:col {:style "width: 250px;"}]
-       [:col {:style "width: 80px;"}]
-       [:col {:style "width: 80px;"}]
-       [:col {:style "width: 80px;"}]
-       [:col {:style "width: 80px;"}]
-       [:col {:style "width: 80px;"}]]
+       [:col {:style "width: 37%;"}]
+       [:col {:style "width: 12.6%;"}]
+       [:col {:style "width: 12.6%"}]
+       [:col {:style "width: 12.6%"}]
+       [:col {:style "width: 12.6%"}]
+       [:col {:style "width: 12.6%"}]]
       [:thead
        [:tr
         [:th]
-        [:th {:class "th1" :scope "col"} (l :lahtotilanne)]
+        [:th {:class "th1" :scope "col"} (l :lahtotilanne-tavutettu)]
         (for [i (range 1 5)]
           (let [vaihe (nth padded-vaiheet i)]
             [:th {:class "th1" :scope "col"}
@@ -225,7 +231,9 @@
 
        [:tr
         (row-header-th (l :rakennuksen-hyodyntama-osuus))
-        [:td {:class "shaded"}]
+         [:td {:class "shaded"}
+           (when-let [result (uusiutuva-energia/uusiutuvan-energian-osuus (:versio energiatodistus) energiatodistus)]
+             (format-percentage result))]
         (for [i (range 1 5)]
           (if-let [tulokset (-> padded-vaiheet (nth i) :tulokset)]
             (if-let [osuus (:uusiutuvan-energian-hyodynnetty-osuus tulokset)]
@@ -246,8 +254,7 @@
             [:td]))]]]
 
      ;; Energy prices table
-     [:div {:style "height: 20px;"}]
-     [:table {:class "shaded"}
+     [:table {:class "shaded energy-prices-table"}
       [:colgroup
        [:col {:style "width: 165px;"}]
        [:col {:style "width: 80px;"}]
@@ -257,22 +264,22 @@
        [:col {:style "width: 80px;"}]]
 
       (mid-header-tr (l :energialaskuissa-kaytetyt-hinnat))
-      [:tr [:td (l :kaukolampo)]
+      [:tr [:td {:class "energy-prices-table-row-header"} (l :kaukolampo)]
        [:td (when-let [hinta (:kaukolampo-hinta ppp-tulokset)] (format-float hinta))]
        [:td (l :snt-kwh)]
-       [:td (l :uusiutuvat-polttoaineet)]
+       [:td {:class "energy-prices-table-row-header"} (l :uusiutuvat-polttoaineet)]
        [:td (when-let [hinta (:uusiutuvat-pat-hinta ppp-tulokset)] (format-float hinta))]
        [:td (l :snt-kwh)]]
-      [:tr [:td (l :sahko)]
+      [:tr [:td {:class "energy-prices-table-row-header"} (l :sahko)]
        [:td (when-let [hinta (:sahko-hinta ppp-tulokset)] (format-float hinta))]
        [:td (l :snt-kwh)]
-       [:td (l :fossiiliset-polttoaineet)]
+       [:td {:class "energy-prices-table-row-header"} (l :fossiiliset-polttoaineet)]
        [:td (when-let [hinta (:fossiiliset-pat-hinta ppp-tulokset)] (format-float hinta))]
        [:td (l :snt-kwh)]]
-      [:tr [:td]
+      [:tr [:td {:class "energy-prices-table-row-header"}]
        [:td]
        [:td]
-       [:td (l :kaukojaahdytys)]
+       [:td {:class "energy-prices-table-row-header"} (l :kaukojaahdytys)]
        [:td (when-let [hinta (:kaukojaahdytys-hinta ppp-tulokset)] (format-float hinta))]
        [:td (l :snt-kwh)]]]
-     [:p (l :co2ekv-vahenema-huomautus)]]))
+     [:p  (l :co2ekv-vahenema-huomautus)]]))

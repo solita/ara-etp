@@ -63,7 +63,9 @@
     [:html
      [:head
       [:meta {:charset "UTF-8"}]
-      [:title "Energiatodistus"]
+      [:meta {:name "subject" :content (l :energiatodistus)}]
+      [:meta {:name "description" :content (l :energiatodistus)}]
+      [:title (l :energiatodistus)]
       [:style (styles)]]
      [:body
       pages-html]]))
@@ -113,11 +115,10 @@
                   :content (et-tulokset/tulokset-page-content params)}
                  {:page-border? false
                   :content
-                  [:div {:class "page-section"}
-                   (et-lisamerkintoja/generate-lisamerkintoja params)]}]
+                  (et-lisamerkintoja/generate-lisamerkintoja params)}]
                 (if show-ilmastoselvitys?
                   [{:page-border? false
-                    :content (ilmastoselvitys/ilmastoselvitys-page-content params)}]
+                    :content      (ilmastoselvitys/ilmastoselvitys-page-content params)}]
                   []))]
     (generate-document-hiccup pages (:id energiatodistus) l)))
 

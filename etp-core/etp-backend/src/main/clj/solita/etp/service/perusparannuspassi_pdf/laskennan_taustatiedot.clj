@@ -1,16 +1,28 @@
 (ns solita.etp.service.perusparannuspassi-pdf.laskennan-taustatiedot
   (:require
+    [clojure.string :as str]
     [hiccup.core :refer [h]]
     [solita.etp.service.localization :as loc]))
 
+(defn- dot->comma [s]
+  (when s
+    (str/replace s "." ",")))
+
 (defn- table-u-arvot [kieli items]
   (let [l (kieli loc/ppp-pdf-localization)]
-    [:table.lt-u-arvot
+    [:table {:class "lt-u-arvot"}
+     [:colgroup
+      [:col {:style "width: 37.5%;"}]
+      [:col {:style "width: 12.5%;"}]
+      [:col {:style "width: 12.5%;"}]
+      [:col {:style "width: 12.5%;"}]
+      [:col {:style "width: 12.5%;"}]
+      [:col {:style "width: 12.5%;"}]]
      [:thead
       [:tr
-       [:th.lt-otsikko {:colspan 6}
+       [:th {:class "lt-otsikko" :colspan 6}
         (l :lt-otsikko)]]
-      [:tr.lt-sarakkeet
+      [:tr {:class "lt-sarakkeet"}
        [:th (l :U-arvot-lt)]
        [:th (l :ulkoseinat-lt)]
        [:th (l :ylapohja-lt)]
@@ -23,18 +35,23 @@
         [:tr
          [:td dt]
          (for [row dd]
-           [:td (or row "")])])]]))
+           [:td (or (dot->comma row) "")])])]]))
 
 (defn- table-lammitys-ilmavaihto [kieli items]
   (let [l (kieli loc/ppp-pdf-localization)
         last-index (dec (count items))]
-    [:table.lt-lammitys
+    [:table {:class "lt-lammitys"}
+     [:colgroup
+      [:col {:style "width: 25%;"}]
+      [:col {:style "width: 25%;"}]
+      [:col {:style "width: 25%;"}]
+      [:col {:style "width: 25%;"}]]
      [:thead
       [:tr
-       [:th.lt-otsikko.lammitys.empty]
-       [:th.lt-otsikko.lammitys (l :paalammitysjarjestelma)]
-       [:th.lt-otsikko.lammitys (l :ilmanvaihto-lt)]
-       [:th.lt-otsikko.lammitys (l :uusiutuva-energia-lt)]]]
+       [:th {:class "lt-otsikko lammitys empty"}]
+       [:th {:class "lt-otsikko lammitys"} (l :paalammitysjarjestelma)]
+       [:th {:class "lt-otsikko lammitys"} (l :ilmanvaihto-lt)]
+       [:th {:class "lt-otsikko lammitys"} (l :uusiutuva-energia-lt)]]]
 
      [:tbody
       (map-indexed
@@ -53,22 +70,22 @@
 (defn- table-mahdollisuus-liittya [kieli items]
   (let [l (kieli loc/ppp-pdf-localization)]
     (let [{:keys [dd]} (first items)]
-      [:table.lt-mahdollisuus-liittya
+      [:table {:class "lt-mahdollisuus-liittya"}
        [:thead
         [:tr
-         [:th.lt-otsikko (l :mahdollisuus-liittya-otsikko)]]]
+         [:th {:class "lt-otsikko"} (l :mahdollisuus-liittya-otsikko)]]]
        [:tbody
         (for [row dd]
           [:tr
-           [:td (or row "")]])]])))
+           [:td {:style "height: 10mm"} (or row "")]])]])))
 
 (defn- table-lisatietoja [kieli items]
   (let [l (kieli loc/ppp-pdf-localization)]
     (let [{:keys [dd]} (first items)]
-      [:table.lt-lisatietoja
+      [:table {:class "lt-lisatietoja"}
        [:thead
         [:tr
-         [:th.lt-otsikko (l :lisatietoja-saatavilla)]]]
+         [:th {:class "lt-otsikko"} (l :lisatietoja-saatavilla)]]]
        [:tbody
         (for [row dd]
           [:tr
@@ -153,15 +170,15 @@
 
 (defn- lt-vahimmaisvaatimustaso [{:keys [kieli]}]
   (let [l (kieli loc/ppp-pdf-localization)]
-    [:dl.lt-vahimmaisvaatimustaso
+    [:dl {:class "lt-vahimmaisvaatimustaso"}
       [:dt (l :vahimmaisvaatimustaso)]
-      [:dd.e-luku (str "154")]
-      [:dd.yksikko (str (l :yksikko))]]))
+      [:dd {:class "e-luku"} (str "154")]
+      [:dd {:class "yksikko"} (str (l :yksikko))]]))
 
 (defn- lt-korjausrakentamisen-saadokset [{:keys [kieli]}]
   (let [l (kieli loc/ppp-pdf-localization)]
-    [:dl.lt-korjausrakentamisen-saadokset
-    [:p.note (l :korjausrakentamisen-saadokset)]]))
+    [:dl {:class "lt-korjausrakentamisen-saadokset"}
+    [:p {:class "note"} (l :korjausrakentamisen-saadokset)]]))
 
 (defn- lt-mahdollisuus-liittya [{:keys [perusparannuspassi mahdollisuus-liittya kieli]}]
   (let [id (get-in perusparannuspassi [:rakennuksen-perustiedot :mahdollisuus-liittya-energiatehokkaaseen])
@@ -179,8 +196,8 @@
 
 (defn- lt-voimassa-olo [{:keys [kieli]}]
   (let [l (kieli loc/ppp-pdf-localization)]
-    [:dl.lt-voimassaolo
-     [:p.note (l :voimassa-olo)]]))
+    [:dl {:class "lt-voimassaolo"}
+     [:p {:class "note"} (l :voimassa-olo)]]))
 
 (defn generate-all-laskennan-taustatiedot [params]
   {:lt-u-arvot (lt-u-arvot params)

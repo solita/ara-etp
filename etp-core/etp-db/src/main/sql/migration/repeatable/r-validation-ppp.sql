@@ -9,18 +9,19 @@ values
 (2026, 'rpt$ylapohja_ehdotettu_taso', 3, false),
 (2026, 'rpt$alapohja_ehdotettu_taso', 4, false),
 (2026, 'rpt$ikkunat_ehdotettu_taso', 5, false),
-(2026, 'rpt$paalammitysjarjestelma_ehdotettu_taso', 6, false),
-(2026, 'rpt$ilmanvaihto_ehdotettu_taso', 7, false),
-(2026, 'rpt$uusiutuva_energia_ehdotettu_taso', 8, false),
-(2026, 'rpt$jaahdytys_ehdotettu_taso', 9, false),
-(2026, 'rpt$mahdollisuus_liittya_energiatehokkaaseen', 10, false),
+(2026, 'rpt$ulkoovet_ehdotettu_taso', 6, false),
+(2026, 'rpt$paalammitysjarjestelma_ehdotettu_taso', 7, false),
+(2026, 'rpt$ilmanvaihto_ehdotettu_taso', 8, false),
+(2026, 'rpt$uusiutuva_energia_ehdotettu_taso', 9, false),
+(2026, 'rpt$jaahdytys_ehdotettu_taso', 10, false),
+(2026, 'rpt$mahdollisuus_liittya_energiatehokkaaseen', 11, false),
 
 -- Tulokset / Energian hinnat (kaikki hinnat)
-(2026, 't$kaukolampo_hinta', 11, false),
-(2026, 't$sahko_hinta', 12, false),
-(2026, 't$uusiutuvat_pat_hinta', 13, false),
-(2026, 't$fossiiliset_pat_hinta', 14, false),
-(2026, 't$kaukojaahdytys_hinta', 15, false)
+(2026, 't$kaukolampo_hinta', 12, false),
+(2026, 't$sahko_hinta', 13, false),
+(2026, 't$uusiutuvat_pat_hinta', 14, false),
+(2026, 't$fossiiliset_pat_hinta', 15, false),
+(2026, 't$kaukojaahdytys_hinta', 16, false)
 
 on conflict (column_name, versio) do update set
   ordinal = excluded.ordinal,

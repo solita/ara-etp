@@ -148,19 +148,19 @@
                         "Energiatodistus 2026 + Perusparannuspassi" (-> (generate-energiatodistus-2026-pdf-bytes ts/*db* ppp-whoami et-with-ppp-id) pdf-font-names)
                         "template-letter"                        (-> (generate-template-letter-pdf-bytes) pdf-font-names)
                         "iPost"                                  (-> (generate-ipost-address-page-pdf-bytes) pdf-font-names)}]
-    (t/testing "Perusparannuspassi 2026 uses Roboto and does not use Carlito"
-      (assert-font-family-present! "Perusparannuspassi 2026" (get document-fonts "Perusparannuspassi 2026") "roboto")
-      (assert-font-family-absent! "Perusparannuspassi 2026" (get document-fonts "Perusparannuspassi 2026") "carlito"))
+    (t/testing "Perusparannuspassi 2026 uses Carlito and does not use Roboto"
+      (assert-font-family-present! "Perusparannuspassi 2026" (get document-fonts "Perusparannuspassi 2026") "carlito")
+      (assert-font-family-absent! "Perusparannuspassi 2026" (get document-fonts "Perusparannuspassi 2026") "roboto"))
 
-    (t/testing "Energiatodistus 2026 uses Roboto and does not use Carlito"
-      (assert-font-family-present! "Energiatodistus 2026" (get document-fonts "Energiatodistus 2026") "roboto")
-      (assert-font-family-absent! "Energiatodistus 2026" (get document-fonts "Energiatodistus 2026") "carlito"))
+    (t/testing "Energiatodistus 2026 uses Carlito and does not use Roboto"
+      (assert-font-family-present! "Energiatodistus 2026" (get document-fonts "Energiatodistus 2026") "carlito")
+      (assert-font-family-absent! "Energiatodistus 2026" (get document-fonts "Energiatodistus 2026") "roboto"))
 
-    (t/testing "Energiatodistus 2026 + Perusparannuspassi uses Roboto and does not use Carlito"
-      (assert-font-family-present! "Energiatodistus 2026 + Perusparannuspassi"
+    (t/testing "Energiatodistus 2026 + Perusparannuspassi use only Carlito"
+      (assert-font-family-absent! "Energiatodistus 2026 + Perusparannuspassi"
                                    (get document-fonts "Energiatodistus 2026 + Perusparannuspassi")
                                    "roboto")
-      (assert-font-family-absent! "Energiatodistus 2026 + Perusparannuspassi"
+      (assert-font-family-present! "Energiatodistus 2026 + Perusparannuspassi"
                                   (get document-fonts "Energiatodistus 2026 + Perusparannuspassi")
                                   "carlito"))
 

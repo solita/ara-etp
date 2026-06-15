@@ -15,10 +15,12 @@
 (defn toimenpide-ehdotukset-lammitys [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
-     [:h1 (l :te-lammitys-ilmanvaihto-otsikko)]
-     (str (l :lammitys-ilmanvaihto-teksti))
+     [:h2 {:class "top-of-page"} (l :te-lammitys-ilmanvaihto-otsikko)]
+     [:p {:id "lammitys-ilmanvaihto-teksti"}
+        (l :lammitys-ilmanvaihto-teksti)]
      [:h3 (l :huomiot-lammitys-otsikko)]
-     [:div {:class "toimenpide-huomiot-teksti"}
+     [:div {:class "toimenpide-huomiot-teksti"
+            :id   "toimenpide-huomiot-lammitys-teksti"}
       (-> energiatodistus
           (get-in [:huomiot :lammitys (case kieli
                                         :fi :teksti-fi
@@ -63,7 +65,8 @@
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
      [:h3 (l :huomiot-ilmanvaihto-otsikko)]
-     [:div {:class "toimenpide-huomiot-teksti"}
+     [:div {:class "toimenpide-huomiot-teksti"
+            :id    "toimenpide-huomiot-ilmanvaihto-teksti"}
       (-> energiatodistus
           (get-in [:huomiot :iv-ilmastointi (case kieli
                                               :fi :teksti-fi

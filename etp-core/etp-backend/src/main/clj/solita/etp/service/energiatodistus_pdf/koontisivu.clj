@@ -59,21 +59,24 @@
         [:dl
          [:div
           [:dt (l :vertailupinta-ala)]
-          [:dd (-> energiatodistus
-                   (get-in [:lahtotiedot :lammitetty-nettoala])
-                   (fmt 1)
-                   (str " " (l :m2)))]
+          [:dd {:id "koontisivu-lammitetty-nettoala"}
+           (-> energiatodistus
+               (get-in [:lahtotiedot :lammitetty-nettoala])
+               (fmt 1)
+               (str " " (l :m2)))]
           [:dt (l :lammin-ilmatilavuus)]
-          [:dd (-> energiatodistus
-                   (get-in [:lahtotiedot :rakennusvaippa :ilmatilavuus])
-                   (fmt 0)
-                   (str " " (l :m3)))]]
+          [:dd {:id "koontisivu-ilmatilavuus"}
+           (-> energiatodistus
+               (get-in [:lahtotiedot :rakennusvaippa :ilmatilavuus])
+               (fmt 0)
+               (str " " (l :m3)))]]
          [:div
           [:dt (l :rakennus-kykenee-reagoimaan)]
-          [:dd (-> energiatodistus
-                   :lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin
-                   {false :ei true :kylla}
-                   l)]]]]
+          [:dd  {:id "koontisivu-valmius-reagoida-ulkoisiin-signaaleihin"}
+            (-> energiatodistus
+                :lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin
+                {false :ei true :kylla}
+                l)]]]]
        [:h2 (l :lammitysjarjestelma-kuvaus)]
 
        [:dl {:class "table-description-list koontisivu-lammitys-compact"}
@@ -96,10 +99,12 @@
              :class "table-description-list"}
         [:div
          [:dt (l :lammonjakojarjestelma-lampotila)]
-         [:dd (-> energiatodistus
-                  :lahtotiedot :lammitys :lammonjako-lampotilajousto
-                  {false :ei true :kylla}
-                  l)]]]
+         [:dd
+          [:div {:id "lammonjako-lampotilajousto"}
+           (-> energiatodistus
+               :lahtotiedot :lammitys :lammonjako-lampotilajousto
+               {false :ei true :kylla}
+               l)]]]]
        [:h2 (l :ilmanvaihtojärjestelmän-kuvaus)]
 
        [:dl {:class "table-description-list koontisivu-lammitys-compact"}

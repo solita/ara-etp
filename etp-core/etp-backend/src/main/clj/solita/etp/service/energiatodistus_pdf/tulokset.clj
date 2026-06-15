@@ -9,18 +9,18 @@
   ([value decimals] (or (formats/format-number value decimals false) "")))
 
 (defn- fmt-summa
-  "Format a sum value as bold, returning empty string for nil or zero."
+  "Format a sum value, returning empty string for nil or zero."
   ([value] (fmt-summa value 0))
   ([value decimals]
    (when (and (some? value) (not (zero? value)))
-     [:strong (fmt value decimals)])))
+     (fmt value decimals))))
 
 (defn- ostoenergia-row
   [label energiamuoto prefix]
-  (let [ostoenergia       (get energiamuoto (keyword prefix))
+  (let [ostoenergia (get energiamuoto (keyword prefix))
         ostoenergia-netto (get energiamuoto (keyword (str prefix "-nettoala")))
-        kerroin           (get energiamuoto (keyword (str prefix "-kerroin")))
-        kertoimella       (get energiamuoto (keyword (str prefix "-kertoimella")))
+        kerroin (get energiamuoto (keyword (str prefix "-kerroin")))
+        kertoimella (get energiamuoto (keyword (str prefix "-kertoimella")))
         kertoimella-netto (get energiamuoto (keyword (str prefix "-nettoala-kertoimella")))]
     [:tr
      [:td {:class "tulokset-label"} label]
@@ -35,45 +35,46 @@
   (let [energiamuoto (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])
         e-luku-value (get-in energiatodistus [:tulokset :e-luku])]
     [:div {:class "tulokset-section"}
-     [:table {:class "tulokset-table tulokset-ostoenergia-table"}
+     [:table {:class "tulokset-table tulokset-ostoenergia-table tulokset-6col-table"}
       [:colgroup
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w10"}]
-       [:col {:class "col-w10"}]]
+       [:col ]
+       [:col ]
+       [:col ]
+       [:col ]
+       [:col ]
+       [:col ]]
       [:thead
        [:tr
-        [:th {:class "tulokset-th" :rowspan "2" :style "text-align:left;"} "\u00a0"]
+        [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
         [:th {:class "tulokset-th" :colspan "2"} (l :tulokset-laskennallinen-ostoenergia)]
         [:th {:class "tulokset-th" :rowspan "2"}
          (l :tulokset-energiamuodon-kerroin)]
         [:th {:class "tulokset-th" :colspan "2"} (l :tulokset-painotettu-energiankulutus)]]
        [:tr
-        [:th {:class "tulokset-th-sub"} "kWh/vuosi"]
-        [:th {:class "tulokset-th-sub"} "kWh/m²/vuosi"]
-        [:th {:class "tulokset-th-sub"} "kWh/vuosi"]
-        [:th {:class "tulokset-th-sub"} "kWh/m²/vuosi"]]]
+        [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
+        [:th {:class "tulokset-th-sub"} (l :kwh-vuosi)]
+        [:th {:class "tulokset-th-sub"} (l :kwh-m2-vuosi)]
+        [:th {:class "tulokset-th-sub"} (l :kwh-vuosi)]
+        [:th {:class "tulokset-th-sub"} (l :kwh-m2-vuosi)]]]
       [:tbody
-       (ostoenergia-row (l :kaukolampo-table)             energiamuoto "kaukolampo")
-       (ostoenergia-row (l :sahko-table)                  energiamuoto "sahko")
-       (ostoenergia-row (l :uusiutuva-polttoaine-table)   energiamuoto "uusiutuva-polttoaine")
+       (ostoenergia-row (l :kaukolampo-table) energiamuoto "kaukolampo")
+       (ostoenergia-row (l :sahko-table) energiamuoto "sahko")
+       (ostoenergia-row (l :uusiutuva-polttoaine-table) energiamuoto "uusiutuva-polttoaine")
        (ostoenergia-row (l :fossiilinen-polttoaine-table) energiamuoto "fossiilinen-polttoaine")
-       (ostoenergia-row (l :kaukojaahdytys-table)         energiamuoto "kaukojaahdytys")
+       (ostoenergia-row (l :kaukojaahdytys-table) energiamuoto "kaukojaahdytys")
        [:tr
         [:td {:class "tulokset-label"} (l :tulokset-yhteensa)]
         [:td {:class "num"} (fmt-summa (:summa energiamuoto))]
-        [:td {:class "num"} "\u00a0"]
-        [:td {:class "num"} "\u00a0"]
+        [:td {:class "num without-border"} ""]
+        [:td {:class "num without-border"} ""]
         [:td {:class "num"} (fmt-summa (:kertoimella-summa energiamuoto))]
         [:td {:class "num"} (fmt-summa e-luku-value)]]]]]))
 
 (defn- uusiutuva-row
   [label omavarais kokonaistuotanto field-key]
-  (let [hyodynnetty      (get omavarais field-key)
+  (let [hyodynnetty (get omavarais field-key)
         hyodynnetty-netto (get omavarais (keyword (str (name field-key) "-nettoala")))
-        kokonais          (get kokonaistuotanto field-key)]
+        kokonais (get kokonaistuotanto field-key)]
     [:tr
      [:td {:class "tulokset-label"} label]
      [:td {:class "num"} (fmt hyodynnetty)]
@@ -82,33 +83,35 @@
 
 (defn- uusiutuva-section
   [energiatodistus l]
-  (let [omavarais        (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat])
+  (let [omavarais (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat])
         kokonaistuotanto (get-in energiatodistus [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto])]
     [:div {:class "tulokset-section"}
      [:h3 (l :tulokset-uusiutuva-energia)]
-     [:table {:class "tulokset-table tulokset-uusiutuva-table"}
+     [:table {:class "tulokset-table tulokset-4col-table tulokset-uusiutuva-table"}
       [:colgroup
-       [:col {:class "col-w40"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]]
+       [:col ]
+       [:col ]
+       [:col ]
+       [:col ]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
         [:th {:class "tulokset-th" :colspan "2"} (l :tulokset-hyodynnetty-osuus)]
-        [:th {:class "tulokset-th"} (str (l :tulokset-kokonaistuotanto) "\nkWh/vuosi")]]
+        [:th {:class "tulokset-th" :rowspan "2"}
+         [:span (str (l :tulokset-kokonaistuotanto))]
+         [:br]
+         [:span {:class "tulokset-th-unit"} (l :kwh-vuosi)]]]
        [:tr
         [:th {:class "tulokset-th"} "\u00a0"]
-        [:th {:class "tulokset-th-sub"} "kWh/vuosi"]
-        [:th {:class "tulokset-th-sub"} "kWh/m²/vuosi"]
-        [:th {:class "tulokset-th-sub"} "\u00a0"]]]
+        [:th {:class "tulokset-th-sub"} (l :kwh-vuosi)]
+        [:th {:class "tulokset-th-sub"} (l :kwh-m2-vuosi)]]]
       [:tbody
-       (uusiutuva-row (l :tulokset-aurinkosahko)  omavarais kokonaistuotanto :aurinkosahko)
-       (uusiutuva-row (l :tulokset-aurinkolampo)  omavarais kokonaistuotanto :aurinkolampo)
-       (uusiutuva-row (l :tulokset-tuulisahko)    omavarais kokonaistuotanto :tuulisahko)
-       (uusiutuva-row (l :tulokset-lampopumppu)   omavarais kokonaistuotanto :lampopumppu)
-       (uusiutuva-row (l :tulokset-muusahko)      omavarais kokonaistuotanto :muusahko)
-       (uusiutuva-row (l :tulokset-muulampo)      omavarais kokonaistuotanto :muulampo)]]]))
+       (uusiutuva-row (l :tulokset-aurinkosahko) omavarais kokonaistuotanto :aurinkosahko)
+       (uusiutuva-row (l :tulokset-aurinkolampo) omavarais kokonaistuotanto :aurinkolampo)
+       (uusiutuva-row (l :tulokset-tuulisahko) omavarais kokonaistuotanto :tuulisahko)
+       (uusiutuva-row (l :tulokset-lampopumppu) omavarais kokonaistuotanto :lampopumppu)
+       (uusiutuva-row (l :tulokset-muusahko) omavarais kokonaistuotanto :muusahko)
+       (uusiutuva-row (l :tulokset-muulampo) omavarais kokonaistuotanto :muulampo)]]]))
 
 (defn- tekniset-cell
   ([value] (tekniset-cell value 0))
@@ -128,18 +131,28 @@
   (let [tj (get-in energiatodistus [:tulokset :tekniset-jarjestelmat])]
     [:div {:class "tulokset-section"}
      [:h3 (l :tulokset-tekniset-jarjestelmat)]
-     [:table {:class "tulokset-table tulokset-tekniset-table"}
+     [:table {:class "tulokset-table tulokset-4col-table tulokset-tekniset-table"}
       [:colgroup
-       [:col {:class "col-w40"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]]
+       [:col ]
+       [:col ]
+       [:col ]
+       [:col ]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
-        [:th {:class "tulokset-th"} (str (l :sahko-table) "\nkWh/m²/vuosi")]
-        [:th {:class "tulokset-th"} (str (l :tulokset-lampo) "\nkWh/m²/vuosi")]
-        [:th {:class "tulokset-th"} (str (l :kaukojaahdytys-table) "\nkWh/m²/vuosi")]]]
+        [:th {:class "tulokset-th"}
+         [:span (l :sahko-table)]
+         [:br]
+         [:span {:class "tulokset-th-unit"} (l :kwh-m2-vuosi)]]
+        [:th {:class "tulokset-th"}
+         [:span (l :tulokset-lampo)]
+         [:br]
+         [:span {:class "tulokset-th-unit"} (l :kwh-m2-vuosi)]]
+        [:th {:class "tulokset-th"}
+         [:span (l :kaukojaahdytys-table)]
+         [:br]
+         [:span {:class "tulokset-th-unit"}
+          (l :kwh-m2-vuosi)]]]]
       [:tbody
        (tekniset-row (l :tulokset-lammitysjarjestelma) :class "tulokset-subgroup")
        (tekniset-row (l :tulokset-tilojen-lammitys)
@@ -182,16 +195,18 @@
   (let [nt (get-in energiatodistus [:tulokset :nettotarve])]
     [:div {:class "tulokset-section"}
      [:h3 (l :tulokset-nettotarve)]
-     [:table {:class "tulokset-table tulokset-nettotarve-table"}
+     [:table {:class "tulokset-table tulokset-3col-table tulokset-nettotarve-table"}
       [:colgroup
-       [:col {:class "col-w60"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]]
+       [:col ]
+       [:col ]
+       [:col ]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
-        [:th {:class "tulokset-th"} "kWh/vuosi"]
-        [:th {:class "tulokset-th"} "kWh/m²/vuosi"]]]
+        [:th {:class "tulokset-th"}
+         [:span {:class "tulokset-th-unit"} (l :kwh-vuosi)]]
+        [:th {:class "tulokset-th"}
+         [:span {:class "tulokset-th-unit"} (l :kwh-m2-vuosi)]]]]
       [:tbody
        (nettotarve-row (l :tulokset-tilojen-lammitys)
                        (:tilojen-lammitys-vuosikulutus nt)
@@ -217,16 +232,18 @@
   (let [lk (get-in energiatodistus [:tulokset :lampokuormat])]
     [:div {:class "tulokset-section"}
      [:h3 (l :tulokset-lampokuormat)]
-     [:table {:class "tulokset-table tulokset-lampokuormat-table"}
+     [:table {:class "tulokset-table tulokset-3col-table tulokset-lampokuormat-table"}
       [:colgroup
-       [:col {:class "col-w60"}]
-       [:col {:class "col-w20"}]
-       [:col {:class "col-w20"}]]
+       [:col ]
+       [:col ]
+       [:col ]]
       [:thead
        [:tr
         [:th {:class "tulokset-th" :style "text-align:left;"} "\u00a0"]
-        [:th {:class "tulokset-th"} "kWh/vuosi"]
-        [:th {:class "tulokset-th"} "kWh/m²/vuosi"]]]
+        [:th {:class "tulokset-th"}
+         [:span {:class "tulokset-th-unit"} (l :kwh-vuosi)]]
+        [:th {:class "tulokset-th"}
+         [:span {:class "tulokset-th-unit"} (l :kwh-m2-vuosi)]]]]
       [:tbody
        (lampokuormat-row (l :tulokset-aurinko)
                          (:aurinko lk) (:aurinko-nettoala lk))
@@ -243,16 +260,16 @@
   [energiatodistus l]
   (let [e-luku (get-in energiatodistus [:tulokset :e-luku])]
     [:div {:class "tulokset-eluku-row"}
-     [:div {:class "tulokset-eluku-banner"}
+     [:h3
       (l :eluku-otsikko)
       [:span {:class "tulokset-eluku-value"} (fmt e-luku)]
-      "kWh/m²/vuosi"]]))
+      [:span {:class "tulokset-eluku-unit"} (l :kwh-m2-vuosi)]]]))
 
 (defn tulokset-page-content
   [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "tulokset-page"}
-     [:h2 {:class "tulokset-page-title"} (l :tulokset-title)]
+     [:h2 {:class "top-of-page"} (l :tulokset-title)]
      (e-luku energiatodistus l)
      [:div {:class "tulokset-content"}
       (ostoenergia-section energiatodistus l)

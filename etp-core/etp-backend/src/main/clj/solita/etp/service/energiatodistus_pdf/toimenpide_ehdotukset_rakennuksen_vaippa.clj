@@ -7,10 +7,11 @@
 (defn toimenpide-ehdotukset-ulkoseinat [{:keys [kieli energiatodistus]}]
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
-     [:h1 (l :te-rakennusvaippa-otsikko)]
-     (str (l :rakennusvaippa-teksti))
+     [:h2 {:class "top-of-page"} (l :te-rakennusvaippa-otsikko)]
+     [:p (l :rakennusvaippa-teksti)]
      [:h3 (l :huomiot-ymparys-otsikko)]
-     [:div {:class "toimenpide-huomiot-teksti"}
+     [:div {:class "toimenpide-huomiot-teksti"
+            :id    "toimenpide-ehdotukset-ulkoseinat-teksti"}
       (-> energiatodistus
           (get-in [:huomiot :ymparys (case kieli
                                        :fi :teksti-fi
@@ -47,7 +48,8 @@
   (let [l (kieli loc/et-pdf-localization)]
     [:div {:class "toimenpide-ehdotukset"}
      [:h3 (l :huomiot-pohjat-otsikko)]
-     [:div {:class "toimenpide-huomiot-teksti"}
+     [:div {:class "toimenpide-huomiot-teksti"
+            :id    "toimenpide-huomiot-pohjat-teksti"}
       (-> energiatodistus
           (get-in [:huomiot :alapohja-ylapohja (case kieli
                                                  :fi :teksti-fi

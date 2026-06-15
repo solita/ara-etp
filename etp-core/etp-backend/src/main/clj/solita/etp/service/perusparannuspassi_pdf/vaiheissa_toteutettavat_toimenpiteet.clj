@@ -6,6 +6,11 @@
             [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :as tv]
             [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]))
 
+(defn- dot->comma [s]
+  (when s
+    (str/replace s "." ",")))
+
+
 (defn- get-vaihe-data [params vaihe-nro]
   (let [{:keys [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset]} params
         vaiheet (:vaiheet perusparannuspassi)
@@ -28,12 +33,6 @@
          :seuraava-vaihe seuraava-vaihe
          :e-luku e-luku
          :e-luokka e-luokka}))))
-
-(def ^:private table-style "width: 100%; border-collapse: collapse; table-layout: fixed;")
-(def ^:private cell-style "border: 1px solid #2c5234; padding: 6px 8px;")
-(def ^:private header-cell-style "width: 20%; border: 1px solid #2c5234; background-color: #2c5234; color: #ffffff; font-weight: bold; text-align: left; padding: 10px 5px; font-size: 14px;")
-(def ^:private number-cell-style "border: 1px solid #2c5234; background-color: #2c5234; color: #ffffff; font-weight: bold; text-align: center; width: 40px; padding: 10px 0;")
-(def ^:private row-header-style "border: 1px solid #2c5234; padding: 6px 8px; text-align: left; font-weight: normal; width: 70%;")
 
 (defn- format-year-range [vaihe seuraava-vaihe]
   (let [alku-pvm (get-in vaihe [:tulokset :vaiheen-alku-pvm])
@@ -70,51 +69,45 @@
         slots (take 6 (concat toimenpide-ehdotukset (repeat nil)))
         [col1 col2] (split-at 3 slots)
         title-suffix (format-year-range vaihe seuraava-vaihe)
-        title-text (str (l :toimenpide-ehdotukset) title-suffix)]
-    [:div
-     [:h2 {:style "margin-top: 0;"} title-text]
-     [:table {:role "presentation" :style table-style}
-      (map-indexed
-       (fn [idx item1]
-         (let [item2 (nth col2 idx)]
-           [:tr
-            ;; Left Item
-            [:td {:style number-cell-style}
-             (inc idx)]
-            [:td {:style (str cell-style " width: 40%; vertical-align: middle;")}
-             (or item1 "\u00A0")]
-
-            ;; Spacer
-            [:td {:style "width: 42px; border: none;"}]
-
-            ;; Right Item
-            [:td {:style number-cell-style}
-             (+ 4 idx)]
-            [:td {:style (str cell-style " width: 40%; vertical-align: middle;")}
-             (or item2 "\u00A0")]]))
-       col1)]]))
+        title-text (str (l :toimenpide-ehdotukset) title-suffix)
+        render-column (fn [items start-index column-class]
+                        [:div {:class column-class}
+                         (into
+                          [:dl {:class "ppp-vaihe-ehdotukset-list" :role "presentation"}]
+                          (map-indexed
+                           (fn [idx item]
+                             [:div
+                              [:dt {:class "ppp-vaihe-ehdotukset-number"}
+                               (str (+ start-index idx))]
+                              [:dd {:class "ppp-vaihe-ehdotukset-item"}
+                               (or item "\u00A0")]])
+                           items))])]
+    [:div {:class "ppp-vaihe-no-top-margin"}
+     [:h2 {:class "ppp-vaihe-no-top-margin"} title-text]
+     [:div {:class "ppp-vaihe-ehdotukset-columns"}
+      (render-column col1 1 "ppp-vaihe-ehdotukset-column ppp-vaihe-ehdotukset-column-left")
+      (render-column col2 4 "ppp-vaihe-ehdotukset-column ppp-vaihe-ehdotukset-column-right")]]))
 
 (defn- render-toimenpideseloste [vaihe kieli l]
   (let [seloste-key (if (= kieli :sv) :toimenpideseloste-sv :toimenpideseloste-fi)
         seloste (get-in vaihe [:toimenpiteet seloste-key])]
-    (when (not-empty seloste)
-      [:div {:style "margin-top: 24px;"}
-       [:h2 (l :toimenpideseloste)]
-       [:p {:style "white-space: pre-line;"} (h seloste)]])))
+    [:div {:class "ppp-vaihe-section"}
+     [:h2 (l :toimenpideseloste)]
+      [:p {:class "ppp-vaihe-toimenpideseloste"}
+       (h (or seloste ""))]]))
 
 (defn- render-energiankulutuksen-muutos [vaihe l]
   (let [tulokset (:tulokset vaihe)]
-    [:div {:style "margin-top: 24px;"}
+    [:div {:class "ppp-vaihe-section"}
      [:h2 (l :energiankulutus-vaiheen-jalkeen)]
-     [:table {:role "presentation" :style table-style}
-      [:tr
-       (for [header [:kaukolampo :sahko :uusiutuvat-pat :fossiiliset-pat :kaukojaahdytys]]
-         [:th {:style header-cell-style}
-          (l header)])]
-      [:tr
+     (into
+       [:dl {:class "ppp-vaihe-energiankulutuksen-list" :role "presentation"}]
        (for [key [:kaukolampo :sahko :uusiutuvat-pat :fossiiliset-pat :kaukojaahdytys]]
-         [:td {:style cell-style}
-          (or (get tulokset (get perusparannuspassi-service/energy-keys-laskennallinen key)) "-")])]]]))
+         [:div
+         [:dt {:class "ppp-vaihe-energiankulutuksen-label"}
+          (l key)]
+         [:dd {:class "ppp-vaihe-energiankulutuksen-value"}
+          (or (dot->comma (get tulokset (get perusparannuspassi-service/energy-keys-laskennallinen key))) "-")]]))]))
 
 (defn- parse-double-safe [v]
   (cond
@@ -128,23 +121,22 @@
 
 (defn- format-2dp [v]
   (when-let [d (parse-double-safe v)]
-    (format "%.2f" d)))
+    (.replace (format "%.2f" d) "." ",")))
 
 (defn- render-energiankulutus-kustannukset-ja-co2-paastot [vaihe l]
   (let [tulokset (:tulokset vaihe)]
-    [:div {:style "margin-top: 24px;"}
-     (let [[before after] (str/split (l :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen) #"\{subscript\}")]
-       [:h2 before [:sub "2"] after])
-     [:table {:role "presentation" :style "width: 100%; border-collapse: collapse;"}
-      (for [[label value unit] [[(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen) (get tulokset :ostoenergia) (l :kwh-vuosi)]
-                                [(l :uusiutuvan-energian-osuus-ostoenergian-kokonaistarpeesta) (get tulokset :uusiutuvan-energian-hyodynnetty-osuus) (l :prosenttia)]
-                                [(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus) (get tulokset :toteutunut-ostoenergia) (l :kwh-vuosi)]
+    [:div {:class "ppp-vaihe-section ppp-vaihe-energiankulutus-kustannukset-ja-co2-paastot"}
+       [:h2 (l :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen)]
+     [:table {:class "ppp-vaihe-kustannukset-table" :role "presentation"}
+      (for [[label value unit] [[(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen) (-> tulokset (get :ostoenergia) dot->comma) (l :kwh-vuosi)]
+                                [(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus) (-> tulokset (get :toteutunut-ostoenergia) dot->comma) (l :kwh-vuosi)]
                                 [(l :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio) (-> tulokset :toteutunut-energia-kustannukset format-2dp) (l :euroa-vuosi)]
                                 [(l :energiankaytosta-aiheutuvat-hiilidioksidipaastot-laskennallinen) (-> tulokset :co2-paastot format-2dp) (l :tco2ekv-vuosi)]]]
         [:tr
-         [:th {:scope "row" :style row-header-style} label]
-         [:td {:style (str cell-style " width: 12%;")} (or value "-")]
-         [:td {:style (str cell-style " width: 18%;")} unit]])]]))
+         [:th {:class "ppp-vaihe-row-header" :scope "row"} label]
+         [:td {:class "ppp-vaihe-cell ppp-vaihe-value-cell"} (or value "-")]
+         [:td {:class "ppp-vaihe-cell ppp-vaihe-unit-cell"} unit]])]
+     [:p {:class "ppp-vaihe-kustannukset-info"} (l :katso-hinnat-info)]]))
 
 (defn render-page [params vaihe-nro]
   (let [{:keys [kieli toimenpide-ehdotukset]} params
@@ -155,30 +147,26 @@
     (when vaihe-data
       (let [{:keys [vaihe e-luku e-luokka]} vaihe-data
             title-text (format (l :vaiheessa-n-toteutettavat-toimenpiteet) vaihe-nro)
-            parts (clojure.string/split title-text (re-pattern (str "(?<=" vaihe-nro ")")))]
-        {:title [:table {:style "width: 100%; border-collapse: collapse; margin-top: -10px;"}
+            parts (str/split title-text (re-pattern (str "(?<=" vaihe-nro ")")))]
+        {:title [:table {:class "ppp-vaihe-title-table"}
                  [:tr
-                  [:td {:style "vertical-align: top;"}
+                  [:td {:class "ppp-vaihe-top-align"}
                    (if (> (count parts) 1)
                      [:span (first parts) [:br] (clojure.string/join "" (rest parts))]
                      title-text)]
-                  [:td {:style "text-align: right; vertical-align: top;"}
+                  [:td {:class "ppp-vaihe-title-right"}
                    (let [color (get tv/colors-by-e-luokka e-luokka "#e8b63e")
                          vaihe-title (str (l :vaihe) " " vaihe-nro)
                          perf-label (str e-luokka " - " e-luku)]
                      [:svg {:xmlns "http://www.w3.org/2000/svg"
                             :viewBox "-6 -60 120 65"
-                            :width "120px"
-                            :height "65px"}
+                            :width "38.2mm"
+                            :alt (format (l :vaihe-arrow-alt-text) vaihe e-luokka vaihe e-luku)
+                            :height "20.5mm"}
                       (tv/arrow color 0 vaihe-title perf-label)])]]]
-       :content [:table {:style "width: 100%; height: 100%; border-collapse: collapse;"}
-                 [:tr
-                  [:td {:style "vertical-align: top;"}
+         :title-class "vaihe-title"
+        :content [:div {:class "ppp-vaihe-no-top-margin"}
                    (render-toimenpide-ehdotukset vaihe (:seuraava-vaihe vaihe-data) kieli l toimenpide-ehdotukset)
-                   (render-toimenpideseloste vaihe kieli l)]]
-                 [:tr {:style "height: 100%;"}
-                  [:td]]
-                 [:tr
-                  [:td {:style "vertical-align: bottom;"}
+                   (render-toimenpideseloste vaihe kieli l)
                    (render-energiankulutuksen-muutos vaihe l)
-                   (render-energiankulutus-kustannukset-ja-co2-paastot vaihe l)]]]}))))
+                   (render-energiankulutus-kustannukset-ja-co2-paastot vaihe l)]}))))

@@ -135,7 +135,7 @@
   (let [l (kieli loc/et-pdf-localization)
         ilmastoselvitys (:ilmastoselvitys energiatodistus)]
     [:div {:class "ilmastoselvitys"}
-     [:h2 (l :ilmastoselvitys-otsikko)]
+     [:h2 {:class "top-of-page"} (l :ilmastoselvitys-otsikko)]
      [:p {:class "is-intro"} (l :is-intro-teksti)]
      [:div {:class "is-separator"}]
      (metatiedot-section ilmastoselvitys l ilmastoselvitys-laadintaperusteet kieli)
@@ -144,4 +144,5 @@
      (hiilijalanjalki-table (:hiilijalanjalki ilmastoselvitys) l)
      [:h3 (l :is-hiilikadenjalki-otsikko)]
      [:p {:class "is-description"} (l :is-hiilikadenjalki-teksti)]
-     (hiilikadenjalki-table (:hiilikadenjalki ilmastoselvitys) l)]))
+     (hiilikadenjalki-table (:hiilikadenjalki ilmastoselvitys) l)
+     [:div {:class "is-gwp-selite"} (l :is-gwp-selite)]]))

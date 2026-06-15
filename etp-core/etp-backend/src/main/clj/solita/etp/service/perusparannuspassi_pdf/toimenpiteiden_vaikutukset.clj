@@ -189,7 +189,7 @@
      (circle-with-text 110 10 (l :jaahdytys) jaahdytys)
      (circle-with-text 110 18 (l :valaistus) valaistus)
      (circle-with-text 110 26 (l :uusiutuva-energia) uusiutuva-energia)
-     [:rect {:x 55 :y 35.5 :width 103.8 :height 9 :ry 2 :fill "#c0cbc2"}]
+     [:rect {:x 55 :y 35.5 :width 103.8 :height 9 :ry 2 :fill "#eaeeeb"}]
      (circle-with-text 60 38 (l :kohdistuu-muutoksia) true)
      (circle-with-text 110 38 (l :ei-kohdistu-muutoksia) false)]))
 
