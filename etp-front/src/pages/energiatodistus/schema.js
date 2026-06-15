@@ -488,19 +488,6 @@ export const appendRequiredValidators = (schema, isRequired) =>
     schema
   );
 
-export const redefineVaiheNumericValidation = (schema, constraint) => {
-  const vaiheCount = schema.vaiheet.length;
-  return R.reduce(
-    (s, i) =>
-      redefineNumericValidation(s, {
-        ...constraint,
-        property: `vaiheet.${i}.${constraint.property}`
-      }),
-    schema,
-    R.range(0, vaiheCount)
-  );
-};
-
 export const EnumerationIdType = (values, i18nKey) => ({
   validators: [
     Validations.liftValidator(validations.isValidId(values, i18nKey))
