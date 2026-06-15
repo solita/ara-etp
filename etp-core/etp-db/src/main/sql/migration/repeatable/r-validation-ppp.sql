@@ -26,6 +26,11 @@ on conflict (column_name, versio) do update set
   ordinal = excluded.ordinal,
   bypass_allowed = excluded.bypass_allowed;
 
+update ppp_validation_required_column
+set valid = false
+where column_name = 'rpt$jaahdytys_ehdotettu_taso';
+
+
 insert into ppp_vaihe_validation_required_column (versio, column_name, ordinal, bypass_allowed, valid)
 values
 -- Vaihe / Toimenpideseloste (non-localized version, kept as invalid for backwards compatibility)
