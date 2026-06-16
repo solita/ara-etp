@@ -55,13 +55,11 @@
   "Extract ilmanvaihto data from energiatodistus."
   [energiatodistus kieli]
   (let [iv (get-in energiatodistus [:lahtotiedot :ilmanvaihto])
-        kuvaus-key (if (= kieli :sv) :label-sv :label-fi)
-        paaiv (:paaiv iv)
-        ivjarjestelma (:ivjarjestelma iv)]
+        kuvaus-key (if (= kieli :sv) :label-sv :label-fi)]
     {:kuvaus (-> iv (get kuvaus-key) h)
-     :jarjestelmat [{:ilmavirta (fmt (:tulo paaiv) 3)
-                     :sfp (fmt (:sfp ivjarjestelma) 3)
-                     :lto (fmt-pct (:lto-vuosihyotysuhde iv))}]}))
+     :jarjestelmat [{:ilmavirta (-> iv :ivjarjestelma :poisto (fmt 3))
+                     :sfp (-> iv :ivjarjestelma :sfp (fmt 3))
+                     :lto  (-> iv :lto-vuosihyotysuhde fmt-pct)}]}))
 
 (defn- format-lampokerroin-tuotto-osuus
   "Format lämpökerroin and tuotto-osuus as 'kerroin/osuus'."
