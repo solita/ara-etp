@@ -316,7 +316,7 @@
                                                      uusiutuvaa energiaa yli oman tarpeensa."
         :a0luokka-otsikko                           "A0-luokka"
         :a0luokka-teksti                            "E-lukuvaatimuksen lisäksi paikan päällä tuotettu energia on fossiilivapaata ja rakennus kykenee\n
-                                                    reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan"
+                                                    reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan."
         :eluku-otsikko                              "E-luku"
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                     Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
@@ -528,7 +528,7 @@
                                                      uusiutuvaa energiaa yli oman tarpeensa. (sv)"
         :a0luokka-otsikko                           "A0-luokka (sv)"
         :a0luokka-teksti                            "E-lukuvaatimuksen lisäksi paikan päällä tuotettu energia on fossiilivapaata ja rakennus kykenee\n
-                                                     reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan (sv)"
+                                                     reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan. (sv)"
         :eluku-otsikko                              "E-luku (sv)"
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                      Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
