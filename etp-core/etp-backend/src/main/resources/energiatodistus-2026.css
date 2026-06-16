@@ -580,6 +580,9 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     margin-right: 0mm;
 }
 
+.koontisivu #koontisivu-lammonjakojarjestelma-lampotilajousto-value {
+    vertical-align: bottom;
+}
 
 .koontisivu #koontisivu-suuruudet div {
     margin-top: 3mm;
