@@ -306,7 +306,7 @@
         :energiakulutus                             "Energiamuodon\nkertoimella painotettu\nenergiakulutus"
 
         :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvihuonekaasupäästöt"
-        :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä"
+        :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusiutuvan energian osuus energiankäytöstä"
         :kasvihuonepaastot                          "Rakennuksen elinkaaren aikaiset kasvihuonekaasupäästöt (GWP)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku)"
         :paastoton-rakennus                         "Päästötön rakennus"
@@ -518,7 +518,7 @@
         :energiakulutus                             "Energiamuodon\nkertoimella painotettu\nenergiakulutus (sv)"
 
         :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvihuonekaasupäästöt (sv)"
-        :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä (sv)"
+        :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusiutuvan energian osuus energiankäytöstä (sv)"
         :kasvihuonepaastot                          "Rakennuksen elinkaaren aikaiset kasvihuonekaasupäästöt (GWP) (sv)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku) (sv)"
         :paastoton-rakennus                         "Päästötön rakennus (sv)"
