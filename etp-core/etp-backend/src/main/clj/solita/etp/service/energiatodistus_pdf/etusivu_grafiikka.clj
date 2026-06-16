@@ -84,13 +84,20 @@
 
 (def arrow-height 26)
 (def arrow-spacing 5)
-(def min-body-width 110)
-(def width-increment 20)
-(def tip-width 13)
-(def tip-width-increment 2)
 (def indicator-line-length 370)
 (def e-luokka-indicator-margin 210)
 (def svg-width (+ indicator-line-length e-luokka-indicator-margin))
+
+(def arrow-body-widths
+  [116
+   128
+   141
+   155
+   171
+   205
+   232
+   263
+   301])
 
 (defn e-luokka-indicator
   [{:keys [e-luokka e-luku arrows pdf-localization]}]
@@ -177,8 +184,8 @@
         alt-text (stacked-arrows-alt kieli e-luokka e-luku)
 
         arrow-elements (for [[i {:keys [letter numbers color text-color]}](map-indexed vector arrows)]
-          (let [body-width (+ min-body-width (* width-increment i))
-                tip-w (+ tip-width (* tip-width-increment i))]
+          (let [body-width (get arrow-body-widths i)
+                tip-w (* 0.1 body-width)]
             (arrow
               {:x 0
                :y (* i row-height)
