@@ -63,11 +63,11 @@
             laskennallinen-kaukojaahdytys]}
       {:dt (l :energimuodon-kerroin)
        :dd [(str "")
-            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin])
-            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :sahko-kerroin])
-            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-kerroin])
-            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-kerroin])
-            (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-kerroin])]}
+            (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]) (fmt 2))
+            (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :sahko-kerroin]) (fmt 2))
+            (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-kerroin]) (fmt 2))
+            (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-kerroin]) (fmt 2))
+            (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :kaukojaahdytys-kerroin]) (fmt 2))]}
       {:dt (l :energiakulutus)
        :dd [(l :kwhE-m2-vuosi)
             painotettu-kaukolampo
