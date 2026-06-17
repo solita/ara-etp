@@ -385,10 +385,10 @@ const runTests = () => {
       cy.wait('@getEtAfterSign')
         .its('response.body')
         .then(et => {
-          expect(et.perustiedot['keskeiset-suositukset'].fi).to.be.null;
-          expect(et.perustiedot['keskeiset-suositukset'].sv).to.be.null;
-          expect(et.huomiot.suositukset.fi).to.be.null;
-          expect(et.huomiot.suositukset.sv).to.be.null;
+          expect(et.perustiedot['keskeiset-suositukset-fi']).to.be.null;
+          expect(et.perustiedot['keskeiset-suositukset-sv']).to.be.null;
+          expect(et.huomiot['suositukset-fi']).to.be.null;
+          expect(et.huomiot['suositukset-sv']).to.be.null;
         });
 
       // After signing, a link to the signed PDF should be visible and
