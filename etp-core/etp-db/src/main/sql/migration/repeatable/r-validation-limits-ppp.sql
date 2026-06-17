@@ -23,7 +23,7 @@ on conflict (column_name, versio) do update set
 insert into ppp_vaihe_validation_numeric_column
   (versio, column_name, warning$min, warning$max, error$min, error$max)
 values
-(2026, 't$uusiutuvan_energian_hyodynnetty_osuus', 0, 100, 0, 100)
+(2026, 't$uusiutuvan_energian_hyodynnetty_osuus', 0, 100, 0, 500)
 on conflict (column_name, versio) do update set
   warning$min = excluded.warning$min,
   warning$max = excluded.warning$max,

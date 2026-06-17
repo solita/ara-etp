@@ -98,7 +98,13 @@
         : R.reduce(
             schemas.redefineNumericValidation,
             schema,
-            pppValidation.numeric
+            R.concat(
+              pppValidation.numeric,
+              R.map(
+                R.over(R.lensProp('property'), R.concat('vaiheet.0.')),
+                pppValidation.vaiheNumeric
+              )
+            )
           )
   )(schemas.perusparannuspassi);
 

@@ -7,7 +7,12 @@ import * as Either from '@Utility/either-utils';
 import * as R from 'ramda';
 
 const pppValidation = {
-  requiredAll: []
+  requiredAll: [],
+  requiredBypass: [],
+  numeric: [],
+  vaiheNumeric: [],
+  vaiheAll: [],
+  vaiheBypass: []
 };
 
 /* For ET this comes from the /validation/required API endpoint */

@@ -57,15 +57,15 @@
         : R.reduce(
             schemas.redefineNumericValidation,
             schema,
-            pppValidation.numeric
+            R.concat(
+              pppValidation.numeric,
+              R.map(
+                R.over(R.lensProp('property'), R.concat('vaiheet.0.')),
+                pppValidation.vaiheNumeric
+              )
+            )
           )
   )(schemas.perusparannuspassi);
-
-  const vaiheSchema = R.reduce(
-    schemas.redefineNumericValidation,
-    schemas.perusparannuspassi,
-    pppValidation.vaiheNumeric
-  );
 </script>
 
 <style>
@@ -146,7 +146,7 @@
         {disabled} />
 
       <H3 text={$_('perusparannuspassi.laskennan-tulokset.header')} />
-      <Vaiheistus bind:perusparannuspassi schema={vaiheSchema} {disabled} />
+      <Vaiheistus bind:perusparannuspassi schema={saveSchema} {disabled} />
 
       <LaskennallinenOstoenergia
         bind:perusparannuspassi
@@ -157,7 +157,7 @@
       <UusiutuvaEnergia
         bind:perusparannuspassi
         {energiatodistus}
-        {schema}
+        schema={saveSchema}
         {disabled} />
       <ToteutunutOstoenergia
         bind:perusparannuspassi
