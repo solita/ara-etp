@@ -22,27 +22,27 @@
   (let [vaippa (get-in energiatodistus [:lahtotiedot :rakennusvaippa])]
     [{:nimi (l :lahtotiedot-ulkoseinat)
       :a (fmt (get-in vaippa [:ulkoseinat :ala]) 1)
-      :u (fmt (get-in vaippa [:ulkoseinat :U]) 1)
+      :u (fmt (get-in vaippa [:ulkoseinat :U]) 2)
       :osuus (fmt-pct (get-in vaippa [:ulkoseinat :osuus-lampohaviosta]) )
       :borders? true}
      {:nimi (l :lahtotiedot-ylapohja)
       :a (fmt (get-in vaippa [:ylapohja :ala]) 1)
-      :u (fmt (get-in vaippa [:ylapohja :U]) 1)
+      :u (fmt (get-in vaippa [:ylapohja :U]) 2)
       :osuus (fmt-pct (get-in vaippa [:ylapohja :osuus-lampohaviosta]))
       :borders? true}
      {:nimi (l :lahtotiedot-alapohja)
       :a (fmt (get-in vaippa [:alapohja :ala]) 1)
-      :u (fmt (get-in vaippa [:alapohja :U]) 1)
+      :u (fmt (get-in vaippa [:alapohja :U]) 2)
       :osuus (fmt-pct (get-in vaippa [:alapohja :osuus-lampohaviosta]))
       :borders? true}
      {:nimi (l :lahtotiedot-ikkunat)
       :a (fmt (get-in vaippa [:ikkunat :ala]) 1)
-      :u (fmt (get-in vaippa [:ikkunat :U]) 1)
+      :u (fmt (get-in vaippa [:ikkunat :U]) 2)
       :osuus (fmt-pct (get-in vaippa [:ikkunat :osuus-lampohaviosta]))
       :borders? true}
      {:nimi (l :lahtotiedot-ulkoovet)
       :a (fmt (get-in vaippa [:ulkoovet :ala]) 1)
-      :u (fmt (get-in vaippa [:ulkoovet :U]) 1)
+      :u (fmt (get-in vaippa [:ulkoovet :U]) 2)
       :osuus (fmt-pct (get-in vaippa [:ulkoovet :osuus-lampohaviosta]))
       :borders? true}
      {:nimi (l :lahtotiedot-kylmasillat)
@@ -55,13 +55,11 @@
   "Extract ilmanvaihto data from energiatodistus."
   [energiatodistus kieli]
   (let [iv (get-in energiatodistus [:lahtotiedot :ilmanvaihto])
-        kuvaus-key (if (= kieli :sv) :label-sv :label-fi)
-        paaiv (:paaiv iv)
-        ivjarjestelma (:ivjarjestelma iv)]
+        kuvaus-key (if (= kieli :sv) :label-sv :label-fi)]
     {:kuvaus (-> iv (get kuvaus-key) h)
-     :jarjestelmat [{:ilmavirta (fmt (:tulo paaiv) 3)
-                     :sfp (fmt (:sfp ivjarjestelma) 3)
-                     :lto (fmt-pct (:lto-vuosihyotysuhde iv))}]}))
+     :jarjestelmat [{:ilmavirta (-> iv :ivjarjestelma :poisto (fmt 3))
+                     :sfp (-> iv :ivjarjestelma :sfp (fmt 3))
+                     :lto  (-> iv :lto-vuosihyotysuhde fmt-pct)}]}))
 
 (defn- format-lampokerroin-tuotto-osuus
   "Format lämpökerroin and tuotto-osuus as 'kerroin/osuus'."

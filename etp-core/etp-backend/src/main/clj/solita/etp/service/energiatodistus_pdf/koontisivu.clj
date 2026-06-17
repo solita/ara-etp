@@ -99,7 +99,7 @@
              :class "table-description-list"}
         [:div
          [:dt (l :lammonjakojarjestelma-lampotila)]
-         [:dd
+         [:dd {:id "koontisivu-lammonjakojarjestelma-lampotilajousto-value"}
           [:div {:id "lammonjako-lampotilajousto"}
            (-> energiatodistus
                :lahtotiedot :lammitys :lammonjako-lampotilajousto

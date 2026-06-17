@@ -290,7 +290,7 @@
         :pysyva-rakennustunnus                      "Pysyvä rakennustunnus"
         :rakennuksen-valmistumisvuosi               "Rakennuksen valmistumisvuosi"
         :rakennuksen-kayttotarkoitusluokka          "Rakennuksen käyttötarkoitusluokka"
-        :energiatodistuksen-tunnus                  "Energiatodstuksen tunnus"
+        :energiatodistuksen-tunnus                  "Energiatodistuksen tunnus"
         :energiatodistus-laadittu                   "Energiatodistus on laadittu"
         :todistuksen-laatimispaiva                  "Todistuksen laatimispäivä"
         :todistuksen-voimassaolopaiva               "Todistuksen voimassaolopäivä"
@@ -306,7 +306,7 @@
         :energiakulutus                             "Energiamuodon\nkertoimella painotettu\nenergiakulutus"
 
         :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvihuonekaasupäästöt"
-        :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä"
+        :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusiutuvan energian osuus energiankäytöstä"
         :kasvihuonepaastot                          "Rakennuksen elinkaaren aikaiset kasvihuonekaasupäästöt (GWP)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku)"
         :paastoton-rakennus                         "Päästötön rakennus"
@@ -316,7 +316,7 @@
                                                      uusiutuvaa energiaa yli oman tarpeensa."
         :a0luokka-otsikko                           "A0-luokka"
         :a0luokka-teksti                            "E-lukuvaatimuksen lisäksi paikan päällä tuotettu energia on fossiilivapaata ja rakennus kykenee\n
-                                                    reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan"
+                                                    reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan."
         :eluku-otsikko                              "E-luku"
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                     Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
@@ -502,7 +502,7 @@
         :pysyva-rakennustunnus                      "Pysyvä rakennustunnus (sv)"
         :rakennuksen-valmistumisvuosi               "Rakennuksen valmistumisvuosi (sv)"
         :rakennuksen-kayttotarkoitusluokka          "Rakennuksen käyttötarkoitusluokka (sv)"
-        :energiatodistuksen-tunnus                  "Energiatodstuksen tunnus (sv)"
+        :energiatodistuksen-tunnus                  "Energiatodistuksen tunnus (sv)"
         :energiatodistus-laadittu                   "Energiatodistus on laadittu (sv)"
         :todistuksen-laatimispaiva                  "Todistuksen laatimispäivä (sv)"
         :todistuksen-voimassaolopaiva               "Todistuksen voimassaolopäivä (sv)"
@@ -518,7 +518,7 @@
         :energiakulutus                             "Energiamuodon\nkertoimella painotettu\nenergiakulutus (sv)"
 
         :energiakaytosta-syntyvat-kasvihuonepaastot "Energiakäytöstä syntyvät kasvihuonekaasupäästöt (sv)"
-        :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusituvan energian osuus energiankäytöstä (sv)"
+        :uusiutuva-energian-osuus                   "Paikan päällä tuotetun uusiutuvan energian osuus energiankäytöstä (sv)"
         :kasvihuonepaastot                          "Rakennuksen elinkaaren aikaiset kasvihuonekaasupäästöt (GWP) (sv)"
         :energiatehokkuusluokka-otsikko             "Rakennuksen laskennallinen energiatehokkuusluokka ja vertailuluku (E-luku) (sv)"
         :paastoton-rakennus                         "Päästötön rakennus (sv)"
@@ -528,7 +528,7 @@
                                                      uusiutuvaa energiaa yli oman tarpeensa. (sv)"
         :a0luokka-otsikko                           "A0-luokka (sv)"
         :a0luokka-teksti                            "E-lukuvaatimuksen lisäksi paikan päällä tuotettu energia on fossiilivapaata ja rakennus kykenee\n
-                                                     reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan (sv)"
+                                                     reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan. (sv)"
         :eluku-otsikko                              "E-luku (sv)"
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                      Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
