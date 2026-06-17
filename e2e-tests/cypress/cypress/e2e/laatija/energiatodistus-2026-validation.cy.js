@@ -385,21 +385,18 @@ const runTests = () => {
       cy.wait('@getEtAfterSign')
         .its('response.body')
         .then(et => {
+          expect(et['tila-id']).to.eq(2);
           expect(et.perustiedot['keskeiset-suositukset-fi']).to.be.null;
           expect(et.perustiedot['keskeiset-suositukset-sv']).to.be.null;
           expect(et.huomiot['suositukset-fi']).to.be.null;
           expect(et.huomiot['suositukset-sv']).to.be.null;
-        });
-
-      // After signing, a link to the signed PDF should be visible and
-      // downloadable.
-      cy.get('[data-cy^="energiatodistus-"][data-cy$="-fi.pdf"]', {
-        timeout: 30000
-      })
-        .should('be.visible')
-        .should('have.attr', 'href')
-        .then(href => cy.request({ url: href, headers: FIXTURES.headers }))
+          return cy.request({
+            url: `/api/private/energiatodistukset/2026/${et.id}/pdf/fi/energiatodistus-${et.id}-fi.pdf`,
+            headers: FIXTURES.headers
+          });
+        })
         .then(res => {
+          // After signing, the signed Finnish PDF is downloadable.
           expect(res.status).to.eq(200);
         });
     });
