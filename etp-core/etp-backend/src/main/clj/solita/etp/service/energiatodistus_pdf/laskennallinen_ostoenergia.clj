@@ -2,8 +2,7 @@
   (:require
     [solita.common.formats :as formats]
     [solita.etp.service.localization :as loc]
-    [solita.etp.service.energiatodistus-pdf.ilmastoselvitys :as ilmastoselvitys]
-    [solita.etp.service.uusiutuva-energia :as uusiutuva-energia]))
+    [solita.etp.service.energiatodistus-pdf.ilmastoselvitys :as ilmastoselvitys]))
 
 (defn- fmt
   "Format number with specified decimal places. Returns empty string for nil."
@@ -78,8 +77,8 @@
 
 (defn ostoenergia-tiedot [{:keys [energiatodistus kieli]}]
   (let [l (kieli loc/et-pdf-localization)
-        uusiutuvan-osuus (uusiutuva-energia/uusiutuvan-energian-osuus (:versio energiatodistus)
-                                                                      energiatodistus)]
+        uusiutuvan-osuus (get-in energiatodistus [:tulokset :uusiutuvan-energian-osuus])]
+
     [:div {:class "etusivu-ostoenergia"}
      [:dl
       [:div

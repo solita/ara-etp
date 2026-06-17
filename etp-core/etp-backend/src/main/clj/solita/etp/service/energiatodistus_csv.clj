@@ -216,7 +216,8 @@
     (for [parent [:rakennus :rakennuspaikka]
          child [:uudelleenkaytto :kierratys :ylimaarainen-uusiutuvaenergia
                 :hiilivarastovaikutus :karbonatisoituminen]]
-     [:ilmastoselvitys :hiilikadenjalki parent child])))
+     [:ilmastoselvitys :hiilikadenjalki parent child])
+    [[:tulokset :uusiutuvan-energian-osuus]]))
 
 (def public-columns
   (let [extra-columns #{[:perustiedot :alakayttotarkoitus-fi]
@@ -320,7 +321,8 @@
    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :lampopumppu]
    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muulampo]
    [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :muusahko]
-   [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]])
+   [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]
+   [:tulokset :uusiutuvan-energian-osuus]])
 
 (def anonymized-columns
   (concat
@@ -550,7 +552,8 @@
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]
-    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]]))
+    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]
+    [:tulokset :uusiutuvan-energian-osuus]]))
 
 (def tilastokeskus-columns
   (concat
@@ -789,7 +792,8 @@
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]
-    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]]))
+    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]
+    [:tulokset :uusiutuvan-energian-osuus]]))
 
 (def ^:private header-renames
   "CSV header renames applied to the final header string.

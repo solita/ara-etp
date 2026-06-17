@@ -9,6 +9,7 @@
             [solita.etp.service.luokittelu :as luokittelu]
             [solita.etp.service.polttoaine :as polttoaine]
             [solita.etp.service.co2-kertoimet :as co2]
+            [solita.etp.service.uusiutuva-energia :as uusiutuva-energia]
             [solita.common.map :as map]
             [solita.common.formats :as formats]))
 
@@ -545,6 +546,8 @@
           (#(assoc-in % [:tulokset :kasvihuonepaastot]
                       (co2-paastot-et (get-in % [:tulokset :kaytettavat-energiamuodot]))))
           (assoc-div-nettoala [:tulokset :kasvihuonepaastot])
+          (#(assoc-in % [:tulokset :uusiutuvan-energian-osuus]
+                       (uusiutuva-energia/uusiutuvan-energian-osuus versio %)))
           (assoc-in [:ilmastoselvitys :hiilijalanjalki :rakennus :yhteensa]
                     (hiilijalanjalki-yhteensa
                       (get-in energiatodistus [:ilmastoselvitys :hiilijalanjalki :rakennus])))
