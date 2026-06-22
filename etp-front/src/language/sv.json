@@ -1489,7 +1489,8 @@
     "id": "Renoveringspassets id",
     "lahtotilanne": "Utgångsläge",
     "messages": {
-      "validation-error": "Det finns fel i formuläret för renoveringspasset, kontrollera fälten:"
+      "validation-error": "Det finns fel i formuläret för renoveringspasset, kontrollera fälten:",
+      "validation-vaihe-gap-error": "Perusparannuspassin vaiheiden aloitusvuodet tulee täyttää järjestyksessä (sv)."
     },
     "passin-perustiedot": {
       "label-context": "$unused",

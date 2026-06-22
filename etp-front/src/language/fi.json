@@ -1519,7 +1519,8 @@
     "id": "Perusparannuspassin tunnus",
     "lahtotilanne": "Lähtötilanne",
     "messages": {
-      "validation-error": "Perusparannuspassin lomakkeella virheitä, tarkista kentät:"
+      "validation-error": "Perusparannuspassin lomakkeella virheitä, tarkista kentät:",
+      "validation-vaihe-gap-error": "Perusparannuspassin vaiheiden aloitusvuodet tulee täyttää järjestyksessä."
     },
     "passin-perustiedot": {
       "label-context": "$unused",
@@ -1714,7 +1715,7 @@
           "ostoenergian-tarve-uusiutuvat-pat": "vaiheen uusiutuvat polttoaineet",
           "ostoenergian-tarve-fossiiliset-pat": "Vaiheen fossiiliset polttoaineet",
           "ostoenergian-tarve-kaukojaahdytys": "Vaiheen kaukojäähdytys",
-          "ostoenergian-tarve-sahko": "Vaiheeen sähkö",
+          "ostoenergian-tarve-sahko": "Vaiheen sähkö",
           "uusiutuvan-energian-kokonaistuotto": "Vaiheen paikan päällä tuotettu uusiutuva energia",
           "uusiutuvan-energian-hyodynnetty-osuus": "Vaiheen uusiutuvan energian hyödynnetty osuus"
         }
