@@ -9,7 +9,7 @@
   import * as Validations from '@Utility/validation';
   import * as schemas from './schema';
   import { _ } from '@Language/i18n';
-  import { pppRequired } from './perusparannuspassi-utils.js';
+  import { pppRequired, pppVaiheGaps } from './perusparannuspassi-utils.js';
 
   import Signing from './signing/SigningDialog.svelte';
   import EtForm from './et-form.svelte';
@@ -156,7 +156,7 @@
       )(invalidProperties);
 
       announceError(
-        $_('perusparannuspassi.messages.validation-error') + invalidTxt
+        $_('perusparannuspassi.messages.validation-error') + ' ' + invalidTxt
       );
 
       Inputs.scrollIntoView(document, invalidProperties[0][0]);
@@ -280,6 +280,11 @@
             )
           )
         );
+
+        const vaiheGaps = pppVaiheGaps(perusparannuspassi);
+        if (!R.isEmpty(vaiheGaps)) {
+          missingPPP.push(...vaiheGaps);
+        }
       }
 
       const allMissing = [...missing, ...missingPPP];
@@ -298,7 +303,24 @@
         );
 
         const allMissingFields = missingETFields + ', ' + missingPPPFields;
-        showError(allMissingFields, allMissing);
+
+        if (
+          perusparannuspassi &&
+          perusparannuspassi.valid &&
+          !R.isEmpty(pppVaiheGaps(perusparannuspassi))
+        ) {
+          announceError(
+            $_('perusparannuspassi.messages.validation-vaihe-gap-error') +
+              ' ' +
+              $_('energiatodistus.messages.validation-required-error') +
+              ' ' +
+              allMissingFields
+          );
+          Inputs.scrollIntoView(document, allMissing[0]);
+        } else {
+          showError(allMissingFields, allMissing);
+        }
+
         schema = signatureSchema;
         tick().then(_ => Validations.blurForm(etFormElement));
       }

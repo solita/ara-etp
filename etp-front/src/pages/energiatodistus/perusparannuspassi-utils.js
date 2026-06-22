@@ -91,3 +91,25 @@ export const pppRequired = (
     return R.concat(filteredPppRequiredFields, vaiheRequireds);
   }
 };
+
+/**
+ * Checks that filled vaiheen-alku-pvm fields are consecutive with no gaps.
+ * Returns the field paths of the gap fields that need to be filled.
+ */
+export const pppVaiheGaps = perusparannuspassi => {
+  const vaiheet = perusparannuspassi.vaiheet;
+  const filled = R.map(
+    vaihe =>
+      R.compose(R.isNotEmpty, EM.toArray)(vaihe.tulokset['vaiheen-alku-pvm']),
+    vaiheet
+  );
+
+  const lastFilledIndex = R.findLastIndex(R.identity, filled);
+  if (lastFilledIndex <= 0) return [];
+
+  return R.compose(
+    R.map(i => 'vaiheet.' + i + '.tulokset.vaiheen-alku-pvm'),
+    R.filter(i => !filled[i]),
+    R.range(0)
+  )(lastFilledIndex);
+};
