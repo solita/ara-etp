@@ -1,5 +1,15 @@
-#! /usr/bin/env nix-shell
-#! nix-shell -I channel:nixos-24.05-small --pure -i bash -p openssl git
+#!/usr/bin/env bash
+
+# This script has the following dependencies:
+# - openssl
+# - git
+# - easyrsa
+#
+# You need to symlink `easyrsa` to the same directory as this script.
+# Just git clone easyrsa somewhere on your machine and add the symlink.
+# https://github.com/OpenVPN/easy-rsa
+
+
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
