@@ -20,6 +20,7 @@
     "invalid-verkkolaskuoperaattori": "Virheellinen verkkolaskuoperaattori",
     "invalid-api-key": "Virheellinen tiedonsiirron salasana",
     "invalid-ip-address": "Virheellinen IP-osoite",
+    "invalid-year-order": "Seuraavan vaiheen aloitusvuoden tulee olla suurempi kuin edellisen.",
     "no-selection": "Ei valintaa",
     "warning": {
       "min-number": "Tyypillisesti suurempi kuin {min}",
@@ -1520,7 +1521,8 @@
     "lahtotilanne": "Lähtötilanne",
     "messages": {
       "validation-error": "Perusparannuspassin lomakkeella virheitä, tarkista kentät:",
-      "validation-vaihe-gap-error": "Perusparannuspassin vaiheiden aloitusvuodet tulee täyttää järjestyksessä."
+      "validation-vaihe-gap-error": "Perusparannuspassin vaiheiden aloitusvuodet tulee täyttää järjestyksessä.",
+      "validation-vaihe-year-order-error": "Perusparannuspassin eri vaiheiden aloitusvuodet eivät voi olla samoja."
     },
     "passin-perustiedot": {
       "label-context": "$unused",
