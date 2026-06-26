@@ -113,3 +113,32 @@ export const pppVaiheGaps = perusparannuspassi => {
     R.range(0)
   )(lastFilledIndex);
 };
+
+/**
+ * Checks that each filled vaiheen-alku-pvm is at least one year greater
+ * than the previous filled vaiheen-alku-pvm.
+ * Returns the field paths of the fields that violate this rule.
+ */
+export const pppVaiheYearOrder = perusparannuspassi => {
+  const vaiheet = perusparannuspassi.vaiheet;
+  const filledYears = R.compose(
+    R.filter(({ year }) => year !== null),
+    R.addIndex(R.map)((vaihe, i) => ({
+      index: i,
+      year: EM.fold(null, R.identity, vaihe.tulokset['vaiheen-alku-pvm'])
+    }))
+  )(vaiheet);
+
+  if (filledYears.length < 2) return [];
+
+  const invalidFields = [];
+  for (let i = 1; i < filledYears.length; i++) {
+    if (filledYears[i].year <= filledYears[i - 1].year) {
+      invalidFields.push(
+        'vaiheet.' + filledYears[i].index + '.tulokset.vaiheen-alku-pvm'
+      );
+    }
+  }
+
+  return invalidFields;
+};

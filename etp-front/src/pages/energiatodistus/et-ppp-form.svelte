@@ -9,7 +9,11 @@
   import * as Validations from '@Utility/validation';
   import * as schemas from './schema';
   import { _ } from '@Language/i18n';
-  import { pppRequired, pppVaiheGaps } from './perusparannuspassi-utils.js';
+  import {
+    pppRequired,
+    pppVaiheGaps,
+    pppVaiheYearOrder
+  } from './perusparannuspassi-utils.js';
 
   import Signing from './signing/SigningDialog.svelte';
   import EtForm from './et-form.svelte';
@@ -244,6 +248,7 @@
   export const showError = (allMissingFields, allMissing) => {
     announceError(
       $_('energiatodistus.messages.validation-required-error') +
+        ' ' +
         allMissingFields
     );
     Inputs.scrollIntoView(document, allMissing[0]);
@@ -285,6 +290,11 @@
         if (!R.isEmpty(vaiheGaps)) {
           missingPPP.push(...vaiheGaps);
         }
+
+        const vaiheYearOrderErrors = pppVaiheYearOrder(perusparannuspassi);
+        if (!R.isEmpty(vaiheYearOrderErrors)) {
+          missingPPP.push(...vaiheYearOrderErrors);
+        }
       }
 
       const allMissing = [...missing, ...missingPPP];
@@ -304,13 +314,26 @@
 
         const allMissingFields = missingETFields + ', ' + missingPPPFields;
 
-        if (
-          perusparannuspassi &&
-          perusparannuspassi.valid &&
-          !R.isEmpty(pppVaiheGaps(perusparannuspassi))
-        ) {
+        const pppErrorMessages = [];
+
+        if (perusparannuspassi && perusparannuspassi.valid) {
+          if (!R.isEmpty(pppVaiheYearOrder(perusparannuspassi))) {
+            pppErrorMessages.push(
+              $_(
+                'perusparannuspassi.messages.validation-vaihe-year-order-error'
+              )
+            );
+          }
+          if (!R.isEmpty(pppVaiheGaps(perusparannuspassi))) {
+            pppErrorMessages.push(
+              $_('perusparannuspassi.messages.validation-vaihe-gap-error')
+            );
+          }
+        }
+
+        if (!R.isEmpty(pppErrorMessages)) {
           announceError(
-            $_('perusparannuspassi.messages.validation-vaihe-gap-error') +
+            pppErrorMessages.join(' ') +
               ' ' +
               $_('energiatodistus.messages.validation-required-error') +
               ' ' +
