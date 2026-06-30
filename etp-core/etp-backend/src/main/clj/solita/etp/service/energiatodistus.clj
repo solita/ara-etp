@@ -596,7 +596,7 @@
          (not (contains? toimenpide-ehdotukset-hidden-e-luokat e-luokka))
          (not has-valid-ppp?))))
 
-(defn- reset-signing-time-sensitive-fields! [db energiatodistus]
+(defn- reset-unused-fields [db energiatodistus]
   (when (and (= 2026 (:versio energiatodistus))
              (not (toimenpide-pages-visible? energiatodistus)))
     (energiatodistus-db/reset-toimenpide-ehdotukset-and-suositukset!
@@ -687,7 +687,7 @@
                                             :allekirjoitusaika           allekirjoitusaika
                                             :voimassaolo-paattymisaika   (java.sql.Timestamp/from voimassaolo)})]
                               (if (= result 1)
-                                (let [_ (reset-signing-time-sensitive-fields! db energiatodistus)
+                                (let [_ (reset-unused-fields db energiatodistus)
                                       energiatodistus (find-energiatodistus db id)]
                                   (when-not skip-pdf-signed-assert?
                                     (assert-energiatodistus-pdf-signed! aws-s3-client energiatodistus))
