@@ -306,6 +306,11 @@ const runTests = () => {
     // -------------------------------------------------------------------
 
     it('fills all fields, saves, and signs the energiatodistus', () => {
+      const resetCandidateKeskeiset =
+        'Nollattava suositus ennen allekirjoitusta';
+      const resetCandidateHuomiot =
+        'Nollattava huomiot.suositukset ennen allekirjoitusta';
+
       // Reload for a clean form.
       cy.visit(etUrl);
       cy.get('[data-cy="save-button"]').should('be.visible');
@@ -321,6 +326,18 @@ const runTests = () => {
       ).as('save');
 
       ALL_FIELDS.forEach(fillField);
+
+      // Fill reset-sensitive fields with explicit values and then switch
+      // laatimisvaihe to a state where the recommendation pages are excluded.
+      cy.get('[data-cy="perustiedot.keskeiset-suositukset"]')
+        .clear()
+        .type(resetCandidateKeskeiset)
+        .blur();
+      cy.get('[data-cy="huomiot.suositukset"]')
+        .clear()
+        .type(resetCandidateHuomiot)
+        .blur();
+      selectById('perustiedot.laatimisvaihe', 'Rakennuslupa');
 
       // Laskutustiedot (billing info) must be set before signing.
       cy.selectInSelect('laskutusosoite-id', 'Henkilökohtaiset tiedot');
@@ -352,15 +369,34 @@ const runTests = () => {
 
       cy.wait('@system-sign');
 
-      // After signing, a link to the signed PDF should be visible and
-      // downloadable.
-      cy.get('[data-cy^="energiatodistus-"][data-cy$="-fi.pdf"]', {
-        timeout: 30000
-      })
-        .should('be.visible')
-        .should('have.attr', 'href')
-        .then(href => cy.request({ url: href, headers: FIXTURES.headers }))
+      cy.intercept(
+        {
+          method: 'GET',
+          pathname: /\/api\/private\/energiatodistukset\/2026\/\d+$/
+        },
+        req => {
+          req.headers = { ...req.headers, ...FIXTURES.headers };
+        }
+      ).as('getEtAfterSign');
+
+      cy.get('[data-cy="signing-close-button"]').click();
+      cy.visit(etUrl);
+
+      cy.wait('@getEtAfterSign')
+        .its('response.body')
+        .then(et => {
+          expect(et['tila-id']).to.eq(2);
+          expect(et.perustiedot['keskeiset-suositukset-fi']).to.be.null;
+          expect(et.perustiedot['keskeiset-suositukset-sv']).to.be.null;
+          expect(et.huomiot['suositukset-fi']).to.be.null;
+          expect(et.huomiot['suositukset-sv']).to.be.null;
+          return cy.request({
+            url: `/api/private/energiatodistukset/2026/${et.id}/pdf/fi/energiatodistus-${et.id}-fi.pdf`,
+            headers: FIXTURES.headers
+          });
+        })
         .then(res => {
+          // After signing, the signed Finnish PDF is downloadable.
           expect(res.status).to.eq(200);
         });
     });

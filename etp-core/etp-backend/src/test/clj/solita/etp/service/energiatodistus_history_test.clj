@@ -410,8 +410,9 @@
     ;; Then: correct number of audit rows with expected tila-id progression
     (let [audit-rows (service/find-audit-rows ts/*db* energiatodistus-id-1)]
       ;; insert(0) + update(0) + start-signing(1) + end-signing(2)
-      (t/is (= 4 (count audit-rows)))
-      (t/is (= [0 0 1 2] (map :tila-id audit-rows))))))
+      ;; + post-sign reset of hidden 2026 fields (2)
+      (t/is (= 5 (count audit-rows)))
+      (t/is (= [0 0 1 2 2] (map :tila-id audit-rows))))))
 
 ;; ---- ET2026 Tests: find-history ----
 

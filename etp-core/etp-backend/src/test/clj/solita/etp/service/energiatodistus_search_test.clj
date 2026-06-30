@@ -456,8 +456,14 @@
                                      (cycle laatija-ids)
                                      (take 2 energiatodistus-ids))
                                    (partition 2)))
+    ;; Re-fetch from DB so the reference data reflects the post-signing state.
+    ;; Signing a 2026 ET may reset certain fields (e.g. suositukset) via
+    ;; reset-signing-time-sensitive-fields!, causing the stored adds to diverge
+    ;; from the actual DB values that search results are compared against.
     {:laatijat           laatijat
-     :energiatodistukset (zipmap energiatodistus-ids energiatodistus-adds)}))
+     :energiatodistukset (into {} (map (fn [id]
+                                         [id (energiatodistus-service/find-energiatodistus ts/*db* id)])
+                                       energiatodistus-ids))}))
 
 (t/deftest search-by-sahko-painotettu-neliovuosikulutus-2026-test
   (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)

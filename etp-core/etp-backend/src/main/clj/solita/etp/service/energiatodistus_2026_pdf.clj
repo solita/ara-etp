@@ -2,6 +2,7 @@
   (:require [hiccup.core :as hiccup]
             [clojure.java.io :as io]
             [solita.etp.config :as config]
+            [solita.etp.service.energiatodistus-2026 :as energiatodistus-2026]
             [solita.etp.service.pdf :as pdf-service]
             [solita.etp.service.localization :as loc]
             [solita.etp.service.watermark-pdf :as watermark-pdf]
@@ -70,20 +71,12 @@
      [:body
       pages-html]]))
 
-(defn- show-toimenpide-pages? [energiatodistus]
-  (let [e-luokka (-> energiatodistus :tulokset :e-luokka)
-        has-valid-ppp? (-> energiatodistus :perusparannuspassi-valid)
-        laatimsvaihe (-> energiatodistus :perustiedot :laatimisvaihe)]
-    (and (= 2 laatimsvaihe)
-         (not (contains? #{"A" "A0" "A+"} e-luokka))
-         (not has-valid-ppp?))))
-
 (defn generate-energiatodistus-hiccup
   "Generate hiccup data of HTML, representing the ET2026 part of a PDF document
   containing both ET2026 and possibly a PPP."
   [{:keys [energiatodistus kieli] :as params}]
   (let [l (kieli loc/et-pdf-localization)
-        show-toimenpide? (show-toimenpide-pages? energiatodistus)
+        show-toimenpide? (energiatodistus-2026/show-toimenpide-pages? energiatodistus)
         show-ilmastoselvitys? (ilmastoselvitys/has-ilmastoselvitys? energiatodistus)
         pages (concat
                 [{:page-border? true
