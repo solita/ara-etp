@@ -18,6 +18,7 @@
     "invalid-verkkolaskuosoite": "Felaktig nätfakturaadress",
     "invalid-verkkolaskuoperaattori": "Felaktig nätfakturaoperatör",
     "invalid-api-key": "Felaktigt lösenord för dataöverföring",
+    "invalid-year-order": "Seuraavan vaiheen aloitusvuoden tulee olla suurempi kuin edellisen. (sv)",
     "no-selection": "Inget val",
     "warning": {
       "min-number": "Vanligtvis större än {min}",
@@ -1490,7 +1491,8 @@
     "lahtotilanne": "Utgångsläge",
     "messages": {
       "validation-error": "Det finns fel i formuläret för renoveringspasset, kontrollera fälten:",
-      "validation-vaihe-gap-error": "Perusparannuspassin vaiheiden aloitusvuodet tulee täyttää järjestyksessä (sv)."
+      "validation-vaihe-gap-error": "Perusparannuspassin vaiheiden aloitusvuodet tulee täyttää järjestyksessä (sv).",
+      "validation-vaihe-year-order-error": "Perusparannuspassin eri vaiheiden aloitusvuodet eivät voi olla samoja. (sv)"
     },
     "passin-perustiedot": {
       "label-context": "$unused",
