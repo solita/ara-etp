@@ -19,6 +19,7 @@
             [solita.etp.schema.geo :as geo-schema]
             [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
+            [solita.etp.service.energiatodistus-2026 :as energiatodistus-2026]
             [solita.etp.service.energiatodistus-validation :as validation]
             [solita.etp.service.file :as file-service]
             [solita.etp.service.json :as json]
@@ -586,19 +587,9 @@
 (def swedish-language-id 1)
 (def multilingual-language-id 2)
 
-(def ^:private toimenpide-ehdotukset-hidden-e-luokat #{"A" "A0" "A+"})
-
-(defn- toimenpide-pages-visible? [energiatodistus]
-  (let [e-luokka (-> energiatodistus :tulokset :e-luokka)
-        has-valid-ppp? (-> energiatodistus :perusparannuspassi-valid)
-        laatimisvaihe (-> energiatodistus :perustiedot :laatimisvaihe)]
-    (and (= 2 laatimisvaihe)
-         (not (contains? toimenpide-ehdotukset-hidden-e-luokat e-luokka))
-         (not has-valid-ppp?))))
-
 (defn- reset-unused-fields [db energiatodistus]
   (when (and (= 2026 (:versio energiatodistus))
-             (not (toimenpide-pages-visible? energiatodistus)))
+             (not (energiatodistus-2026/show-toimenpide-pages? energiatodistus)))
     (energiatodistus-db/reset-toimenpide-ehdotukset-and-suositukset!
       db
       {:id (:id energiatodistus)}))
