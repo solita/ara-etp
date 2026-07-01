@@ -3,25 +3,15 @@
             [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.localization :as loc]))
 
-(defn dark?
-  "Determines if a color is dark based on relative luminance.
-   Uses the standard luminance formula: 0.299*R + 0.587*G + 0.114*B
-   Returns true if the color's luminance is below the threshold."
+(defn- arrow-text-color
+  "Returns the PPP arrow text color matching the energiatodistus energy class palette."
   [color]
-  (let [;; Remove # prefix if present
-        hex (if (.startsWith color "#") (subs color 1) color)
-        ;; Parse RGB components (0-255)
-        r (Integer/parseInt (subs hex 0 2) 16)
-        g (Integer/parseInt (subs hex 2 4) 16)
-        b (Integer/parseInt (subs hex 4 6) 16)
-        ;; Calculate relative luminance (0-255 scale)
-        luminance (+ (* 0.299 r) (* 0.587 g) (* 0.114 b))]
-    ;; Threshold tuned so #7dae35 (luminance ~154) is dark
-    ;; but #cad344 (luminance ~200) is not
-    (< luminance 180)))
+  (if (#{"#e50104" "#e40202"} color)
+    "#ffffff"
+    "#000000"))
 
 (defn arrow [color x text1 text2]
-  (let [text-fill (if (dark? color) "white" "#2c5234")
+  (let [text-fill (arrow-text-color color)
         path-d (str/join " "
                          ["M -5.6958636,-5.9998443"
                           "V -51.85213"
@@ -55,11 +45,15 @@
       text2]]))
 
 (def colors-by-e-luokka
-  {"A" "#449841"
-   "B" "#7dae35"
-   "C" "#cad344"
-   "D" "#fced4f"
-   "E" "#e8b63e"})
+  {"A+" "#009641"
+   "A0" "#52ae32"
+   "A"  "#c8d302"
+   "B"  "#ffed00"
+   "C"  "#fbb900"
+   "D"  "#ec6608"
+   "E"  "#e50104"
+   "F"  "#e40202"
+   "G"  "#e40202"})
 
 (defn- arrow-alt [vaiheet kieli]
   (let [l (kieli loc/ppp-pdf-localization)]
@@ -81,7 +75,7 @@
         arrows (map-indexed
                  (fn [idx vaihe]
                    (let [{:keys [e-luku e-luokka]} vaihe
-                         color (get colors-by-e-luokka e-luokka "#e8b63e")
+                         color (get colors-by-e-luokka e-luokka (colors-by-e-luokka "G"))
                          x-position (get arrow-positions idx 0)
                          vaihe-title (if (zero? idx)
                                        (l :lahtotilanne)
@@ -264,10 +258,7 @@
        [:div {:class "kohdistuminen-box"}
         (kohdistuminen-svg kohdistuminen kieli)])
      [:h3 (l :rakennus-toimenpiteiden-jalkeen)]
-     (let [;; Get the final vaihe's results (last in the list)
-           final-vaihe (last (:vaiheet perusparannuspassi))
-           final-tulokset (:tulokset final-vaihe)
-           ;; Check if requirements are met based on the final vaihe
+     (let [;; Check if requirements are met based on the PPP basic information
            tayttaa-a0 (-> perusparannuspassi :passin-perustiedot :tayttaa-a0-vaatimukset)
            tayttaa-a-plus (-> perusparannuspassi :passin-perustiedot :tayttaa-aplus-vaatimukset)]
        [:dl {:class "tayttaa-vaatimukset-list"}

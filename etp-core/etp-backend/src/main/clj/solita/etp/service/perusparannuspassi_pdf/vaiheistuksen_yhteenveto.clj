@@ -2,8 +2,7 @@
   (:require
     [clojure.string :as str]
     [clojure.pprint :as pp]
-    [solita.etp.service.localization :as loc]
-    [solita.etp.service.uusiutuva-energia :as uusiutuva-energia])
+    [solita.etp.service.localization :as loc])
   (:import
     [java.text DecimalFormat DecimalFormatSymbols]))
 
@@ -33,6 +32,13 @@
   (when (and old-value new-value)
     (when-let [ratio (safe-divide (- new-value old-value) old-value)]
       (long (Math/round (* 100.0 (double ratio)))))))
+
+(defn- e-luokka-class [luokka]
+  (when luokka
+    (str "energialuokka-"
+         (-> (str luokka)
+             str/lower-case
+             (str/replace "+" "plus")))))
 
 (defn- build-vaihe-data
   "Build a vec of lahtotilanne (shaped like a vaihe) and valid PPP vaiheet.
@@ -98,12 +104,7 @@
         ;; Calculate changes between consecutive vaiheet
         changes (mapv vaihe-difference
                       padded-vaiheet
-                      (rest padded-vaiheet))
-
-        ;; Helper to get class for E-luokka
-        e-luokka-class (fn [luokka]
-                         (when luokka
-                           (str "energialuokka-" (str/lower-case luokka))))]
+                      (rest padded-vaiheet))]
 
     [:div {:class "vaiheistuksen-yhteenveto"}
      [:table

@@ -155,7 +155,7 @@
                      [:span (first parts) [:br] (clojure.string/join "" (rest parts))]
                      title-text)]
                   [:td {:class "ppp-vaihe-title-right"}
-                   (let [color (get tv/colors-by-e-luokka e-luokka "#e8b63e")
+                   (let [color (get tv/colors-by-e-luokka e-luokka (tv/colors-by-e-luokka "G"))
                          vaihe-title (str (l :vaihe) " " vaihe-nro)
                          perf-label (str e-luokka " - " e-luku)]
                      [:svg {:xmlns "http://www.w3.org/2000/svg"
