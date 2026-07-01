@@ -3,7 +3,7 @@
     [clojure.string :as str]
     [clojure.pprint :as pp]
     [solita.etp.service.localization :as loc]
-    [solita.etp.service.uusiutuva-energia :as uusiutuva-energia])
+    [solita.etp.service.pdf-colors-2026 :as pdf-colors-2026])
   (:import
     [java.text DecimalFormat DecimalFormatSymbols]))
 
@@ -98,12 +98,7 @@
         ;; Calculate changes between consecutive vaiheet
         changes (mapv vaihe-difference
                       padded-vaiheet
-                      (rest padded-vaiheet))
-
-        ;; Helper to get class for E-luokka
-        e-luokka-class (fn [luokka]
-                         (when luokka
-                           (str "energialuokka-" (str/lower-case luokka))))]
+                      (rest padded-vaiheet))]
 
     [:div {:class "vaiheistuksen-yhteenveto"}
      [:table
@@ -130,7 +125,7 @@
         (row-header-th (l :laskennallinen-kokonaisenergiankulutus-e-luku))
         (for [vaihe padded-vaiheet]
           (if-let [e-luku (get-in vaihe [:tulokset :e-luku])]
-            [:td {:class (e-luokka-class (get-in vaihe [:tulokset :e-luokka]))} (Math/round (double e-luku))]
+             [:td {:class (pdf-colors-2026/e-luokka-css-class (get-in vaihe [:tulokset :e-luokka]))} (Math/round (double e-luku))]
             [:td]))]
 
        ;; E-luokka row
@@ -138,7 +133,7 @@
         (row-header-th (l :energiatehokkuusluokka))
         (for [vaihe padded-vaiheet]
           (if-let [e-luokka (get-in vaihe [:tulokset :e-luokka])]
-            [:td {:class (e-luokka-class e-luokka)} e-luokka]
+             [:td {:class (pdf-colors-2026/e-luokka-css-class e-luokka)} e-luokka]
             [:td]))]
 
        ;; Vakioidun ostoenergian muutokset

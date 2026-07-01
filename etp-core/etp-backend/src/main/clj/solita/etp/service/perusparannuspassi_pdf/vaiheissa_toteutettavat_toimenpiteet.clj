@@ -3,6 +3,7 @@
             [hiccup.core :refer [h]]
             [solita.etp.service.localization :as loc]
             [solita.etp.service.e-luokka :as e-luokka-service]
+            [solita.etp.service.pdf-colors-2026 :as pdf-colors-2026]
             [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :as tv]
             [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]))
 
@@ -155,7 +156,7 @@
                      [:span (first parts) [:br] (clojure.string/join "" (rest parts))]
                      title-text)]
                   [:td {:class "ppp-vaihe-title-right"}
-                   (let [color (get tv/colors-by-e-luokka e-luokka "#e8b63e")
+                   (let [color (pdf-colors-2026/e-luokka-color e-luokka)
                          vaihe-title (str (l :vaihe) " " vaihe-nro)
                          perf-label (str e-luokka " - " e-luku)]
                      [:svg {:xmlns "http://www.w3.org/2000/svg"

@@ -1,7 +1,8 @@
 (ns solita.etp.service.energiatodistus-pdf.etusivu-grafiikka
   (:require
     [solita.etp.service.localization :as loc]
-    [solita.etp.service.e-luokka :as e-luokka]))
+    [solita.etp.service.e-luokka :as e-luokka]
+    [solita.etp.service.pdf-colors-2026 :as pdf-colors-2026]))
 
 (defn arrow
   [{:keys [x y height body-width tip-width color letter numbers text-color]}]
@@ -44,15 +45,12 @@
       numbers]]))
 
 (def arrows
-  [{:letter "A+" :color "#009641" :luokka "A+"}
-   {:letter "A0" :color "#52ae32" :luokka "A0"}
-   {:letter "A" :color "#c8d302" :luokka "A"}
-   {:letter "B" :color "#ffed00" :luokka "B"}
-   {:letter "C" :color "#fbb900" :luokka "C"}
-   {:letter "D" :color "#ec6608" :luokka "D"}
-   {:letter "E" :color "#e50104" :text-color "#ffffff" :luokka "E"}
-   {:letter "F" :color "#e40202" :text-color "#ffffff" :luokka "F"}
-   {:letter "G" :color "#e40202" :text-color "#ffffff" :luokka "G"}])
+  (mapv (fn [e-luokka]
+          {:letter     e-luokka
+           :color      (pdf-colors-2026/e-luokka-color e-luokka)
+           :text-color (pdf-colors-2026/e-luokka-text-color e-luokka)
+           :luokka     e-luokka})
+        pdf-colors-2026/e-luokat))
 
 (defn build-ranges [raja-asteikko]
   (into {}

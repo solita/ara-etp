@@ -1,27 +1,12 @@
 (ns solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset
   (:require [clojure.string :as str]
             [solita.etp.service.e-luokka :as e-luokka-service]
-            [solita.etp.service.localization :as loc]))
-
-(defn dark?
-  "Determines if a color is dark based on relative luminance.
-   Uses the standard luminance formula: 0.299*R + 0.587*G + 0.114*B
-   Returns true if the color's luminance is below the threshold."
-  [color]
-  (let [;; Remove # prefix if present
-        hex (if (.startsWith color "#") (subs color 1) color)
-        ;; Parse RGB components (0-255)
-        r (Integer/parseInt (subs hex 0 2) 16)
-        g (Integer/parseInt (subs hex 2 4) 16)
-        b (Integer/parseInt (subs hex 4 6) 16)
-        ;; Calculate relative luminance (0-255 scale)
-        luminance (+ (* 0.299 r) (* 0.587 g) (* 0.114 b))]
-    ;; Threshold tuned so #7dae35 (luminance ~154) is dark
-    ;; but #cad344 (luminance ~200) is not
-    (< luminance 180)))
+            [solita.etp.service.localization :as loc]
+            [solita.etp.service.pdf-colors-2026 :as pdf-colors-2026]))
 
 (defn arrow [color x text1 text2]
-  (let [text-fill (if (dark? color) "white" "#2c5234")
+  (let [text-fill (pdf-colors-2026/text-color-for-background-color color)
+        text-fill-style (str "fill: " text-fill ";")
         path-d (str/join " "
                          ["M -5.6958636,-5.9998443"
                           "V -51.85213"
@@ -44,6 +29,7 @@
              :font-size   "11"
              :font-weight "bold"
              :fill        text-fill
+              :style       text-fill-style
              :text-anchor "middle"}
       text1]
      [:text {:x           "35"
@@ -51,15 +37,9 @@
              :font-family "roboto"
              :font-size   "11"
              :fill        text-fill
+              :style       text-fill-style
              :text-anchor "middle"}
       text2]]))
-
-(def colors-by-e-luokka
-  {"A" "#449841"
-   "B" "#7dae35"
-   "C" "#cad344"
-   "D" "#fced4f"
-   "E" "#e8b63e"})
 
 (defn- arrow-alt [vaiheet kieli]
   (let [l (kieli loc/ppp-pdf-localization)]
@@ -81,7 +61,7 @@
         arrows (map-indexed
                  (fn [idx vaihe]
                    (let [{:keys [e-luku e-luokka]} vaihe
-                         color (get colors-by-e-luokka e-luokka "#e8b63e")
+                         color (pdf-colors-2026/e-luokka-color e-luokka)
                          x-position (get arrow-positions idx 0)
                          vaihe-title (if (zero? idx)
                                        (l :lahtotilanne)
@@ -264,10 +244,7 @@
        [:div {:class "kohdistuminen-box"}
         (kohdistuminen-svg kohdistuminen kieli)])
      [:h3 (l :rakennus-toimenpiteiden-jalkeen)]
-     (let [;; Get the final vaihe's results (last in the list)
-           final-vaihe (last (:vaiheet perusparannuspassi))
-           final-tulokset (:tulokset final-vaihe)
-           ;; Check if requirements are met based on the final vaihe
+     (let [;; Check if requirements are met based on the PPP basic information
            tayttaa-a0 (-> perusparannuspassi :passin-perustiedot :tayttaa-a0-vaatimukset)
            tayttaa-a-plus (-> perusparannuspassi :passin-perustiedot :tayttaa-aplus-vaatimukset)]
        [:dl {:class "tayttaa-vaatimukset-list"}

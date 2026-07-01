@@ -6,6 +6,7 @@
     [solita.etp.service.localization :as loc]
     [solita.etp.service.luokittelu :as luokittelu-service]
     [solita.etp.service.pdf :as pdf-service]
+    [solita.etp.service.pdf-colors-2026 :as pdf-colors-2026]
     [solita.etp.service.complete-perusparannuspassi :as complete-ppp]
     [solita.etp.service.energiatodistus :as energiatodistus-service]
     [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
@@ -28,7 +29,9 @@
                                      "sv" "TEST"})
 
 (defn- styles []
-  (slurp (io/resource "perusparannuspassi.css")))
+  (str (slurp (io/resource "perusparannuspassi.css"))
+       "\n"
+       (pdf-colors-2026/e-luokka-css)))
 
 (defn- page-header [title title-class]
   [:div {:class "page-header"}
