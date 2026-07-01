@@ -1,17 +1,12 @@
 (ns solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset
   (:require [clojure.string :as str]
             [solita.etp.service.e-luokka :as e-luokka-service]
-            [solita.etp.service.localization :as loc]))
-
-(defn- arrow-text-color
-  "Returns the PPP arrow text color matching the energiatodistus energy class palette."
-  [color]
-  (if (#{"#e50104" "#e40202"} color)
-    "#ffffff"
-    "#000000"))
+            [solita.etp.service.localization :as loc]
+            [solita.etp.service.pdf-colors-2026 :as pdf-colors-2026]))
 
 (defn arrow [color x text1 text2]
-  (let [text-fill (arrow-text-color color)
+  (let [text-fill (pdf-colors-2026/text-color-for-background-color color)
+        text-fill-style (str "fill: " text-fill ";")
         path-d (str/join " "
                          ["M -5.6958636,-5.9998443"
                           "V -51.85213"
@@ -34,6 +29,7 @@
              :font-size   "11"
              :font-weight "bold"
              :fill        text-fill
+              :style       text-fill-style
              :text-anchor "middle"}
       text1]
      [:text {:x           "35"
@@ -41,19 +37,9 @@
              :font-family "roboto"
              :font-size   "11"
              :fill        text-fill
+              :style       text-fill-style
              :text-anchor "middle"}
       text2]]))
-
-(def colors-by-e-luokka
-  {"A+" "#009641"
-   "A0" "#52ae32"
-   "A"  "#c8d302"
-   "B"  "#ffed00"
-   "C"  "#fbb900"
-   "D"  "#ec6608"
-   "E"  "#e50104"
-   "F"  "#e40202"
-   "G"  "#e40202"})
 
 (defn- arrow-alt [vaiheet kieli]
   (let [l (kieli loc/ppp-pdf-localization)]
@@ -75,7 +61,7 @@
         arrows (map-indexed
                  (fn [idx vaihe]
                    (let [{:keys [e-luku e-luokka]} vaihe
-                         color (get colors-by-e-luokka e-luokka (colors-by-e-luokka "G"))
+                         color (pdf-colors-2026/e-luokka-color e-luokka)
                          x-position (get arrow-positions idx 0)
                          vaihe-title (if (zero? idx)
                                        (l :lahtotilanne)

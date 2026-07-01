@@ -2,7 +2,8 @@
   (:require
     [clojure.string :as str]
     [clojure.pprint :as pp]
-    [solita.etp.service.localization :as loc])
+    [solita.etp.service.localization :as loc]
+    [solita.etp.service.pdf-colors-2026 :as pdf-colors-2026])
   (:import
     [java.text DecimalFormat DecimalFormatSymbols]))
 
@@ -32,13 +33,6 @@
   (when (and old-value new-value)
     (when-let [ratio (safe-divide (- new-value old-value) old-value)]
       (long (Math/round (* 100.0 (double ratio)))))))
-
-(defn- e-luokka-class [luokka]
-  (when luokka
-    (str "energialuokka-"
-         (-> (str luokka)
-             str/lower-case
-             (str/replace "+" "plus")))))
 
 (defn- build-vaihe-data
   "Build a vec of lahtotilanne (shaped like a vaihe) and valid PPP vaiheet.
@@ -131,7 +125,7 @@
         (row-header-th (l :laskennallinen-kokonaisenergiankulutus-e-luku))
         (for [vaihe padded-vaiheet]
           (if-let [e-luku (get-in vaihe [:tulokset :e-luku])]
-            [:td {:class (e-luokka-class (get-in vaihe [:tulokset :e-luokka]))} (Math/round (double e-luku))]
+             [:td {:class (pdf-colors-2026/e-luokka-css-class (get-in vaihe [:tulokset :e-luokka]))} (Math/round (double e-luku))]
             [:td]))]
 
        ;; E-luokka row
@@ -139,7 +133,7 @@
         (row-header-th (l :energiatehokkuusluokka))
         (for [vaihe padded-vaiheet]
           (if-let [e-luokka (get-in vaihe [:tulokset :e-luokka])]
-            [:td {:class (e-luokka-class e-luokka)} e-luokka]
+             [:td {:class (pdf-colors-2026/e-luokka-css-class e-luokka)} e-luokka]
             [:td]))]
 
        ;; Vakioidun ostoenergian muutokset

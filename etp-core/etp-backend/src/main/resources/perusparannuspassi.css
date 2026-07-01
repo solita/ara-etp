@@ -80,44 +80,6 @@ body {
     color: #2c5234;
 }
 
-.energialuokka-aplus {
-    background-color: #009641;
-}
-
-.energialuokka-a0 {
-    background-color: #52ae32;
-}
-
-.energialuokka-a {
-    background-color: #c8d302;
-}
-
-.energialuokka-b {
-    background-color: #ffed00;
-}
-
-.energialuokka-c {
-    background-color: #fbb900;
-}
-
-.energialuokka-d {
-    background-color: #ec6608;
-}
-
-.energialuokka-e {
-    background-color: #e50104;
-    color: #ffffff;
-}
-
-.energialuokka-f {
-    background-color: #e40202;
-    color: #ffffff;
-}
-
-.energialuokka-g {
-    background-color: #e40202;
-    color: #ffffff;
-}
 
 h1 {
     font-size: 30pt;
