@@ -3,23 +3,6 @@
             [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.localization :as loc]))
 
-(defn dark?
-  "Determines if a color is dark based on relative luminance.
-   Uses the standard luminance formula: 0.299*R + 0.587*G + 0.114*B
-   Returns true if the color's luminance is below the threshold."
-  [color]
-  (let [;; Remove # prefix if present
-        hex (if (.startsWith color "#") (subs color 1) color)
-        ;; Parse RGB components (0-255)
-        r (Integer/parseInt (subs hex 0 2) 16)
-        g (Integer/parseInt (subs hex 2 4) 16)
-        b (Integer/parseInt (subs hex 4 6) 16)
-        ;; Calculate relative luminance (0-255 scale)
-        luminance (+ (* 0.299 r) (* 0.587 g) (* 0.114 b))]
-    ;; Threshold tuned so #7dae35 (luminance ~154) is dark
-    ;; but #cad344 (luminance ~200) is not
-    (< luminance 180)))
-
 (defn arrow [color text-color x text1 text2]
   (let [text-fill text-color
         path-d (str/join " "
