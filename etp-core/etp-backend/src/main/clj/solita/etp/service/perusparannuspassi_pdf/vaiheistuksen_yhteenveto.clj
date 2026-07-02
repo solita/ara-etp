@@ -103,7 +103,9 @@
         ;; Helper to get class for E-luokka
         e-luokka-class (fn [luokka]
                          (when luokka
-                           (str "energialuokka-" (str/lower-case luokka))))]
+                           (str "energialuokka-" (-> luokka
+                                                     str/lower-case
+                                                     (str/replace "+" "plus")))))]
 
     [:div {:class "vaiheistuksen-yhteenveto"}
      [:table
