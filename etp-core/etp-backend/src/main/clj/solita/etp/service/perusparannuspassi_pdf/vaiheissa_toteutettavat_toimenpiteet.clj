@@ -156,6 +156,7 @@
                      title-text)]
                   [:td {:class "ppp-vaihe-title-right"}
                    (let [color (get tv/colors-by-e-luokka e-luokka "#e8b63e")
+                         text-color (get tv/text-colors-by-e-luokka e-luokka "#000000")
                          vaihe-title (str (l :vaihe) " " vaihe-nro)
                          perf-label (str e-luokka " - " e-luku)]
                      [:svg {:xmlns "http://www.w3.org/2000/svg"
@@ -163,7 +164,7 @@
                             :width "38.2mm"
                             :alt (format (l :vaihe-arrow-alt-text) vaihe e-luokka vaihe e-luku)
                             :height "20.5mm"}
-                      (tv/arrow color 0 vaihe-title perf-label)])]]]
+                      (tv/arrow color text-color 0 vaihe-title perf-label)])]]]
          :title-class "vaihe-title"
         :content [:div {:class "ppp-vaihe-no-top-margin"}
                    (render-toimenpide-ehdotukset vaihe (:seuraava-vaihe vaihe-data) kieli l toimenpide-ehdotukset)
