@@ -3,25 +3,8 @@
             [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.localization :as loc]))
 
-(defn dark?
-  "Determines if a color is dark based on relative luminance.
-   Uses the standard luminance formula: 0.299*R + 0.587*G + 0.114*B
-   Returns true if the color's luminance is below the threshold."
-  [color]
-  (let [;; Remove # prefix if present
-        hex (if (.startsWith color "#") (subs color 1) color)
-        ;; Parse RGB components (0-255)
-        r (Integer/parseInt (subs hex 0 2) 16)
-        g (Integer/parseInt (subs hex 2 4) 16)
-        b (Integer/parseInt (subs hex 4 6) 16)
-        ;; Calculate relative luminance (0-255 scale)
-        luminance (+ (* 0.299 r) (* 0.587 g) (* 0.114 b))]
-    ;; Threshold tuned so #7dae35 (luminance ~154) is dark
-    ;; but #cad344 (luminance ~200) is not
-    (< luminance 180)))
-
-(defn arrow [color x text1 text2]
-  (let [text-fill (if (dark? color) "white" "#2c5234")
+(defn arrow [color text-color x text1 text2]
+  (let [text-fill text-color
         path-d (str/join " "
                          ["M -5.6958636,-5.9998443"
                           "V -51.85213"
@@ -55,11 +38,26 @@
       text2]]))
 
 (def colors-by-e-luokka
-  {"A" "#449841"
-   "B" "#7dae35"
-   "C" "#cad344"
-   "D" "#fced4f"
-   "E" "#e8b63e"})
+ {"A+" "#009641"
+  "A0" "#52ae32"
+  "A"  "#c8d302"
+  "B"  "#ffed00"
+  "C"  "#fbb900"
+  "D"  "#ec6608"
+  "E"  "#e50104"
+  "F"  "#e40202"
+  "G"  "#e40202"})
+
+(def text-colors-by-e-luokka
+  {"A+" "#000000"
+   "A0" "#000000"
+   "A"  "#000000"
+   "B"  "#000000"
+   "C"  "#000000"
+   "D"  "#000000"
+   "E"  "#ffffff"
+   "F"  "#ffffff"
+   "G"  "#ffffff"})
 
 (defn- arrow-alt [vaiheet kieli]
   (let [l (kieli loc/ppp-pdf-localization)]
@@ -82,12 +80,13 @@
                  (fn [idx vaihe]
                    (let [{:keys [e-luku e-luokka]} vaihe
                          color (get colors-by-e-luokka e-luokka "#e8b63e")
+                         text-color (get text-colors-by-e-luokka e-luokka "#000000")
                          x-position (get arrow-positions idx 0)
                          vaihe-title (if (zero? idx)
                                        (l :lahtotilanne)
                                        (str (l :vaihe) " " idx))
                          perf-label (str e-luokka " - " e-luku)]
-                     (arrow color x-position vaihe-title perf-label)))
+                     (arrow color text-color x-position vaihe-title perf-label)))
                  vaiheet)
         ;; Generate accessibility description from vaiheet data
         alt-text (arrow-alt vaiheet kieli)]
