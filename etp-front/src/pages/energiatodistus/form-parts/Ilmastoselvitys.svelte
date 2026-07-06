@@ -155,7 +155,7 @@
       <thead class="et-table--thead">
         <tr class="et-table--tr">
           <th
-            class="et-table--th et-table--th__twocells et-table--th-left-aligned  w-1/4">
+            class="et-table--th et-table--th__twocells et-table--th-left-aligned w-1/4">
             {$_('energiatodistus.ilmastoselvitys.hiilijalanjalki.header')}
           </th>
           {#each jalanjalkiFields as field}
@@ -230,7 +230,7 @@
       <thead class="et-table--thead">
         <tr class="et-table--tr">
           <th
-            class="et-table--th et-table--th__twocells et-table--th-left-aligned  w-1/4">
+            class="et-table--th et-table--th__twocells et-table--th-left-aligned w-1/4">
             {$_('energiatodistus.ilmastoselvitys.hiilikadenjalki.header')}
           </th>
           {#each kadenjalkiFields as field}
