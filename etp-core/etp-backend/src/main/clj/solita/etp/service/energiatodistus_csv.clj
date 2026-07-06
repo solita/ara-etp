@@ -214,7 +214,7 @@
                 :rakennustuotteiden-vaihdot :energiankaytto :purkuvaihe :yhteensa]]
      [:ilmastoselvitys :hiilijalanjalki parent child])
     (for [parent [:rakennus :rakennuspaikka]
-         child [:uudelleenkaytto :kierratys :ylimaarainen-uusiutuvaenergia
+         child [:uudelleenkaytto :kierratys :hyodyntaminen-energiana :ylimaarainen-uusiutuvaenergia
                 :hiilivarastovaikutus :karbonatisoituminen]]
      [:ilmastoselvitys :hiilikadenjalki parent child])
     [[:tulokset :uusiutuvan-energian-osuus]]))

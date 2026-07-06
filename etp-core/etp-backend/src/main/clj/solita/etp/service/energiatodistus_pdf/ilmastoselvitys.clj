@@ -117,6 +117,7 @@
         rakennuspaikka (:rakennuspaikka hiilikadenjalki)
         col-defs [[:is-uudelleenkaytto :uudelleenkaytto]
                   [:is-kierratys :kierratys]
+                  [:is-hyodyntaminen-energiana :hyodyntaminen-energiana]
                   [:is-ylimaarainen-uusiutuvaenergia :ylimaarainen-uusiutuvaenergia]
                   [:is-hiilivarastovaikutus :hiilivarastovaikutus]
                   [:is-karbonatisoituminen :karbonatisoituminen]]

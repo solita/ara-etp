@@ -418,6 +418,7 @@ export const v2026 = R.compose(
         rakennus: {
           uudelleenkaytto: AnyFloat,
           kierratys: AnyFloat,
+          'hyodyntaminen-energiana': AnyFloat,
           'ylimaarainen-uusiutuvaenergia': AnyFloat,
           hiilivarastovaikutus: AnyFloat,
           karbonatisoituminen: AnyFloat
@@ -425,6 +426,7 @@ export const v2026 = R.compose(
         rakennuspaikka: {
           uudelleenkaytto: AnyFloat,
           kierratys: AnyFloat,
+          'hyodyntaminen-energiana': AnyFloat,
           'ylimaarainen-uusiutuvaenergia': AnyFloat,
           hiilivarastovaikutus: AnyFloat,
           karbonatisoituminen: AnyFloat

@@ -388,6 +388,7 @@ export const energiatodistus2026 = _ =>
           rakennus: {
             uudelleenkaytto: ValidNone(),
             kierratys: ValidNone(),
+            'hyodyntaminen-energiana': ValidNone(),
             'ylimaarainen-uusiutuvaenergia': ValidNone(),
             hiilivarastovaikutus: ValidNone(),
             karbonatisoituminen: ValidNone()
@@ -395,6 +396,7 @@ export const energiatodistus2026 = _ =>
           rakennuspaikka: {
             uudelleenkaytto: ValidNone(),
             kierratys: ValidNone(),
+            'hyodyntaminen-energiana': ValidNone(),
             'ylimaarainen-uusiutuvaenergia': ValidNone(),
             hiilivarastovaikutus: ValidNone(),
             karbonatisoituminen: ValidNone()
