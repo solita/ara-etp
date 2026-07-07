@@ -613,10 +613,12 @@
     {:rakennus       {:uudelleenkaytto              8
                       :kierratys                    15
                       :ylimaarainen-uusiutuvaenergia 3
+                      :hyodyntaminen-energiana      5
                       :hiilivarastovaikutus         12
                       :karbonatisoituminen          2}
      :rakennuspaikka {:uudelleenkaytto              0.5
                       :kierratys                    1.5
+                      :hyodyntaminen-energiana      5
                       :ylimaarainen-uusiutuvaenergia 0.3
                       :hiilivarastovaikutus         0.8
                       :karbonatisoituminen          0.3}}}
