@@ -214,7 +214,7 @@
                 :rakennustuotteiden-vaihdot :energiankaytto :purkuvaihe :yhteensa]]
      [:ilmastoselvitys :hiilijalanjalki parent child])
     (for [parent [:rakennus :rakennuspaikka]
-         child [:uudelleenkaytto :kierratys :ylimaarainen-uusiutuvaenergia
+         child [:uudelleenkaytto :kierratys :hyodyntaminen-energiana :ylimaarainen-uusiutuvaenergia
                 :hiilivarastovaikutus :karbonatisoituminen]]
      [:ilmastoselvitys :hiilikadenjalki parent child])
     [[:tulokset :uusiutuvan-energian-osuus]]))
@@ -545,11 +545,13 @@
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :yhteensa]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :uudelleenkaytto]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :kierratys]
+    [:ilmastoselvitys :hiilikadenjalki :rakennus :hyodyntaminen-energiana]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :ylimaarainen-uusiutuvaenergia]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :hiilivarastovaikutus]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :karbonatisoituminen]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :uudelleenkaytto]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]
+    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hyodyntaminen-energiana]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]
@@ -785,11 +787,13 @@
     [:ilmastoselvitys :hiilijalanjalki :rakennuspaikka :yhteensa]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :uudelleenkaytto]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :kierratys]
+    [:ilmastoselvitys :hiilikadenjalki :rakennus :hyodyntaminen-energiana]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :ylimaarainen-uusiutuvaenergia]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :hiilivarastovaikutus]
     [:ilmastoselvitys :hiilikadenjalki :rakennus :karbonatisoituminen]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :uudelleenkaytto]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :kierratys]
+    [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hyodyntaminen-energiana]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :ylimaarainen-uusiutuvaenergia]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :hiilivarastovaikutus]
     [:ilmastoselvitys :hiilikadenjalki :rakennuspaikka :karbonatisoituminen]

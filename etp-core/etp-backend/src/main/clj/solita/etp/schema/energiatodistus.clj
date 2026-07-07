@@ -329,6 +329,7 @@
 (def Hiilikadenjalkirakennus
   {:uudelleenkaytto                 schema/Num
    :kierratys                       schema/Num
+   :hyodyntaminen-energiana         schema/Num
    :ylimaarainen-uusiutuvaenergia   schema/Num
    :hiilivarastovaikutus            schema/Num
    :karbonatisoituminen             schema/Num})
@@ -336,6 +337,7 @@
 (def Hiilikadenjalkirakennuspaikka
   {:uudelleenkaytto                 schema/Num
    :kierratys                       schema/Num
+   :hyodyntaminen-energiana         schema/Num
    :ylimaarainen-uusiutuvaenergia   schema/Num
    :hiilivarastovaikutus            schema/Num
    :karbonatisoituminen             schema/Num})
