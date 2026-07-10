@@ -71,6 +71,7 @@
       s => s.replace(/\+/g, '%2B'),
       params => qs.stringify(params, { encode: false }),
       R.dissoc('offset'),
+      R.dissoc('page'),
       R.when(R.has('id'), R.dissoc('where')),
       R.when(R.propEq('', 'keyword'), R.dissoc('keyword')),
       R.when(R.propEq('', 'id'), R.dissoc('id')),
