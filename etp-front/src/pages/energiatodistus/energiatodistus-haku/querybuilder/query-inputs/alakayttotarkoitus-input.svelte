@@ -3,6 +3,7 @@
 
   import VersioLuokkaInput from './versioluokka-input';
 
+  export let config;
   export let values;
   export let nameprefix;
   export let luokittelut;
@@ -43,6 +44,7 @@
 <input bind:this={input} class="hidden" name={`${nameprefix}_value_1`} />
 
 <VersioLuokkaInput
+  {config}
   bind:versio
   bind:luokittelu
   {values}
