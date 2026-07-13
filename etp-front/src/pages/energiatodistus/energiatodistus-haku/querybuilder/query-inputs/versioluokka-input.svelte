@@ -7,11 +7,15 @@
 
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import * as LocaleUtils from '@Language/locale-utils';
+  import { isEtp2026Enabled } from '@Utility/config_utils.js';
 
+  export let config;
   export let luokittelut;
   export let key = 'alakayttotarkoitusluokat';
   export let versio;
   export let luokittelu;
+
+  const versiot = isEtp2026Enabled(config) ? [2026, 2018, 2013] : [2018, 2013];
 
   let currentluokittelut = Maybe.None();
 
@@ -38,7 +42,7 @@
     <Select
       allowNone={false}
       bind:model={versio}
-      items={[2018, 2013]}
+      items={versiot}
       lens={R.identity} />
   </div>
 
