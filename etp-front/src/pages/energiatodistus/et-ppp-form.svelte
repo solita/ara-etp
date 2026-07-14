@@ -97,7 +97,7 @@
       )
     ),
     schema =>
-      perusparannuspassi['bypass-validation-limits']
+      energiatodistus['bypass-validation-limits']
         ? schema
         : R.reduce(
             schemas.redefineNumericValidation,
@@ -223,6 +223,7 @@
         submit(
           energiatodistus,
           perusparannuspassi,
+          whoami,
           ({ newPerusparannuspassiId }) => {
             setPppIdIfItChanged(newPerusparannuspassiId);
             dirty = false;

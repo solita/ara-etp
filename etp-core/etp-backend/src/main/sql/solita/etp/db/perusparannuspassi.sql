@@ -2,7 +2,8 @@
 select
     energiatodistus.laatija_id,
     energiatodistus.tila_id,
-    energiatodistus.versio
+    energiatodistus.versio,
+    energiatodistus.bypass_validation_limits
 from energiatodistus
 where id = :energiatodistus-id;
 

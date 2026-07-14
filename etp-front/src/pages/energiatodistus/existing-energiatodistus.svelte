@@ -6,6 +6,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import * as empty from '@Pages/energiatodistus/empty';
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
@@ -41,6 +42,7 @@
   const submit = (
     energiatodistus,
     perusparannuspassi,
+    whoami,
     onSuccessfulSave,
     onUnsuccessfulSave
   ) => {
@@ -70,9 +72,8 @@
             params.id
           )(energiatodistus),
           newPerusparannuspassiId: R.propEq(
-            et.tila.draft,
-            'tila-id',
-            energiatodistus
+            R.propEq(et.tila.draft, 'tila-id', energiatodistus) &&
+              !Kayttajat.isPaakayttaja(whoami)
           )
             ? R.cond([
                 [
