@@ -6,6 +6,7 @@
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
   import * as Response from '@Utility/response';
+  import * as Kayttajat from '@Utility/kayttajat';
 
   import * as empty from '@Pages/energiatodistus/empty';
   import * as et from '@Pages/energiatodistus/energiatodistus-utils';
@@ -41,6 +42,7 @@
   const submit = (
     energiatodistus,
     perusparannuspassi,
+    whoami,
     onSuccessfulSave,
     onUnsuccessfulSave
   ) => {
@@ -69,42 +71,40 @@
             params.version,
             params.id
           )(energiatodistus),
-          newPerusparannuspassiId: R.propEq(
-            et.tila.draft,
-            'tila-id',
-            energiatodistus
-          )
-            ? R.cond([
-                [
-                  /* PPP has an ID so it has been submitted at least once */
-                  R.always(perusparannuspassi?.id),
+          newPerusparannuspassiId:
+            R.propEq(et.tila.draft, 'tila-id', energiatodistus) &&
+            !Kayttajat.isPaakayttaja(whoami)
+              ? R.cond([
+                  [
+                    /* PPP has an ID so it has been submitted at least once */
+                    R.always(perusparannuspassi?.id),
 
-                  /* Always keep PPP state in sync with the local
-                   * (could well have no effect for a PPP that has valid: false) */
-                  () =>
-                    R.map(
-                      R.always(Maybe.None()),
-                      pppApi.putPerusparannuspassi(
-                        fetch,
-                        perusparannuspassi.id,
-                        perusparannuspassi
+                    /* Always keep PPP state in sync with the local
+                     * (could well have no effect for a PPP that has valid: false) */
+                    () =>
+                      R.map(
+                        R.always(Maybe.None()),
+                        pppApi.putPerusparannuspassi(
+                          fetch,
+                          perusparannuspassi.id,
+                          perusparannuspassi
+                        )
                       )
-                    )
-                ],
-                [
-                  /* PPP has no ID but is marked as valid, so we are likely making a first save
-                   * for a newly added PPP */
-                  R.always(perusparannuspassi?.valid),
-                  () => {
-                    return R.map(
-                      ppp => Maybe.Some(ppp.id),
-                      pppApi.postPerusparannuspassi(fetch, perusparannuspassi)
-                    );
-                  }
-                ],
-                [R.T, () => Future.resolve(Maybe.None())]
-              ])()
-            : Future.resolve(Maybe.None())
+                  ],
+                  [
+                    /* PPP has no ID but is marked as valid, so we are likely making a first save
+                     * for a newly added PPP */
+                    R.always(perusparannuspassi?.valid),
+                    () => {
+                      return R.map(
+                        ppp => Maybe.Some(ppp.id),
+                        pppApi.postPerusparannuspassi(fetch, perusparannuspassi)
+                      );
+                    }
+                  ],
+                  [R.T, () => Future.resolve(Maybe.None())]
+                ])()
+              : Future.resolve(Maybe.None())
         })
       )
     );

@@ -261,14 +261,12 @@
 (defn- assert-update-requirements! [whoami current-ppp new-ppp {:keys [tila-id laatija-id]}]
   ;; This is first, to avoid leaking information about the existence of the ET.
   ;; A nil laatija-id produces the same forbidden error as a wrong laatija-id.
-  (when-not (rooli-service/paakayttaja? whoami)
-    (assert-correct-et-owner! whoami laatija-id))
+  (assert-correct-et-owner! whoami laatija-id)
   (assert-same-energiatodistus-id! current-ppp new-ppp)
   (assert-draft! tila-id))
 
 (defn update-perusparannuspassi! [db whoami id ppp]
-  (when-not (rooli-service/paakayttaja? whoami)
-    (assert-patevyystaso! whoami))
+  (assert-patevyystaso! whoami)
   (jdbc/with-db-transaction
     [tx db]
     (if-let [current-ppp (find-perusparannuspassi tx whoami id)]

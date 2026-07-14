@@ -223,6 +223,7 @@
         submit(
           energiatodistus,
           perusparannuspassi,
+          whoami,
           ({ newPerusparannuspassiId }) => {
             setPppIdIfItChanged(newPerusparannuspassiId);
             dirty = false;
