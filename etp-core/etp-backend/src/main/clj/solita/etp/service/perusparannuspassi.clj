@@ -219,14 +219,16 @@
   (assert-patevyystaso! whoami)
   (jdbc/with-db-transaction
     [tx db]
-    (let [{:keys [versio tila-id laatija-id]}
+    (let [{:keys [versio tila-id laatija-id bypass-validation-limits]}
           (perusparannuspassi-db/select-for-ppp-add-requirements tx ppp)]
       (assert-insert-requirements! whoami ppp versio tila-id laatija-id)
       (let [ppp-db-row (-> ppp (dissoc :vaiheet) ppp->db-row)
-            warnings (validate-ppp-db-row! tx ppp-db-row versio)
-            vaihe-warnings (reduce concat
-                                   (for [vaihe-db-row (->> ppp :vaiheet (map ->vaihe-update-db-row))]
-                                     (validate-ppp-vaihe-db-row! tx vaihe-db-row versio)))
+            warnings (when-not bypass-validation-limits
+                       (validate-ppp-db-row! tx ppp-db-row versio))
+            vaihe-warnings (when-not bypass-validation-limits
+                             (reduce concat
+                                     (for [vaihe-db-row (->> ppp :vaiheet (map ->vaihe-update-db-row))]
+                                       (validate-ppp-vaihe-db-row! tx vaihe-db-row versio))))
             {:keys [id]} (db/with-db-exception-translation
                            jdbc/insert! tx :perusparannuspassi (dissoc ppp-db-row :vaiheet)
                            db/default-opts)]
@@ -256,63 +258,67 @@
         {:id       id
          :warnings (concat warnings vaihe-warnings)}))))
 
-(defn assert-update-requirements! [db whoami current-ppp new-ppp]
-  (let [{:keys [tila-id laatija-id]}
-        (perusparannuspassi-db/select-for-ppp-add-requirements db current-ppp)]
-    ;; This is first, to avoid leaking information about the existence of the ET.
-    ;; A nil laatija-id produces the same forbidden error as a wrong laatija-id.
-    (assert-correct-et-owner! whoami laatija-id)
-    (assert-same-energiatodistus-id! current-ppp new-ppp)
-    (assert-draft! tila-id)))
+(defn- assert-update-requirements! [whoami current-ppp new-ppp {:keys [tila-id laatija-id]}]
+  ;; This is first, to avoid leaking information about the existence of the ET.
+  ;; A nil laatija-id produces the same forbidden error as a wrong laatija-id.
+  (when-not (rooli-service/paakayttaja? whoami)
+    (assert-correct-et-owner! whoami laatija-id))
+  (assert-same-energiatodistus-id! current-ppp new-ppp)
+  (assert-draft! tila-id))
 
 (defn update-perusparannuspassi! [db whoami id ppp]
-  (assert-patevyystaso! whoami)
+  (when-not (rooli-service/paakayttaja? whoami)
+    (assert-patevyystaso! whoami))
   (jdbc/with-db-transaction
     [tx db]
     (if-let [current-ppp (find-perusparannuspassi tx whoami id)]
-      (do
-        (assert-update-requirements! tx whoami current-ppp ppp)
+      (let [{:keys [bypass-validation-limits] :as et-requirements}
+            (perusparannuspassi-db/select-for-ppp-add-requirements tx current-ppp)
 
-        (let [ppp-db-row (-> ppp
-                             (dissoc :energiatodistus-id :vaiheet)
-                             ppp->db-row)
-              ;; Validate PPP main row numeric values (errors throw, warnings collected)
-              warnings (validate-ppp-db-row! tx ppp-db-row 2026)
-              vaihe-warnings (reduce concat
+            _ (assert-update-requirements! whoami current-ppp ppp et-requirements)
+
+            ppp-db-row (-> ppp
+                           (dissoc :energiatodistus-id :vaiheet)
+                           ppp->db-row)
+            ;; Validate PPP main row numeric values (errors throw, warnings collected)
+            warnings (when-not bypass-validation-limits
+                       (validate-ppp-db-row! tx ppp-db-row 2026))
+            vaihe-warnings (when-not bypass-validation-limits
+                             (reduce concat
                                      (for [vaihe-db-row (->> ppp :vaiheet (map ->vaihe-update-db-row))]
-                                       (validate-ppp-vaihe-db-row! tx vaihe-db-row 2026)))]
+                                       (validate-ppp-vaihe-db-row! tx vaihe-db-row 2026))))]
 
-          ;; Update the main PPP row
-          (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi
-                                            ppp-db-row
-                                            ["id = ?" id]
+        ;; Update the main PPP row
+        (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi
+                                          ppp-db-row
+                                          ["id = ?" id]
+                                          db/default-opts)
+
+        ;; Update the vaihe rows
+        (doseq [vaihe (:vaiheet ppp)]
+          (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi-vaihe
+                                            (->vaihe-update-db-row vaihe)
+                                            ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
                                             db/default-opts)
-
-          ;; Update the vaihe rows
-          (doseq [vaihe (:vaiheet ppp)]
-            (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi-vaihe
-                                              (->vaihe-update-db-row vaihe)
-                                              ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
-                                              db/default-opts)
-            (jdbc/delete! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
-                          ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
-                          db/default-opts)
-            (doseq [[ordinal toimenpide-ehdotus-id]
-                    (map vector (range) (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id)))]
-              (db/with-db-exception-translation
-                jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
-                {:perusparannuspassi_id id
-                 :vaihe_nro             (:vaihe-nro vaihe)
-                 :toimenpide_ehdotus_id toimenpide-ehdotus-id
-                 :ordinal               ordinal}
-                db/default-opts)))
-          (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
-            (jdbc/update! tx :perusparannuspassi-vaihe
-                          {:valid false}
-                          ["perusparannuspassi_id = ? and vaihe_nro = ?" id vaihe-nro]
-                          db/default-opts))
-          {:id       id
-           :warnings (concat warnings vaihe-warnings)}))
+          (jdbc/delete! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
+                        ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
+                        db/default-opts)
+          (doseq [[ordinal toimenpide-ehdotus-id]
+                  (map vector (range) (->> vaihe :toimenpiteet :toimenpide-ehdotukset (map :id)))]
+            (db/with-db-exception-translation
+              jdbc/insert! tx :perusparannuspassi_vaihe_toimenpide_ehdotus
+              {:perusparannuspassi_id id
+               :vaihe_nro             (:vaihe-nro vaihe)
+               :toimenpide_ehdotus_id toimenpide-ehdotus-id
+               :ordinal               ordinal}
+              db/default-opts)))
+        (doseq [vaihe-nro (clojure.set/difference #{1 2 3 4} (->> ppp :vaiheet (map :vaihe-nro)))]
+          (jdbc/update! tx :perusparannuspassi-vaihe
+                        {:valid false}
+                        ["perusparannuspassi_id = ? and vaihe_nro = ?" id vaihe-nro]
+                        db/default-opts))
+        {:id       id
+         :warnings (concat warnings vaihe-warnings)})
       (exception/throw-ex-info!
         :not-found
         (str "Perusparannuspassi " id " does not exist.")))))

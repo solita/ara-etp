@@ -97,7 +97,7 @@
       )
     ),
     schema =>
-      perusparannuspassi['bypass-validation-limits']
+      energiatodistus['bypass-validation-limits']
         ? schema
         : R.reduce(
             schemas.redefineNumericValidation,

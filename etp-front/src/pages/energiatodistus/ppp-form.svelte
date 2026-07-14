@@ -45,14 +45,14 @@
   };
 
   const required = perusparannuspassi =>
-    perusparannuspassi['bypass-validation-limits']
+    energiatodistus['bypass-validation-limits']
       ? pppValidation.requiredBypass
       : pppValidation.requiredAll;
 
   const saveSchema = R.compose(
     R.reduce(schemas.assocRequired, R.__, required(perusparannuspassi)),
     schema =>
-      perusparannuspassi['bypass-validation-limits']
+      energiatodistus['bypass-validation-limits']
         ? schema
         : R.reduce(
             schemas.redefineNumericValidation,

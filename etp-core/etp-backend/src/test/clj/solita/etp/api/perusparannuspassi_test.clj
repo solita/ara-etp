@@ -371,7 +371,7 @@
         ;; Then: access is denied
         (assert-status post-res 403 "Pääkäyttäjä should not be able to POST perusparannuspassi")))
 
-    (t/testing "Pääkäyttäjä cannot PUT perusparannuspassi"
+    (t/testing "Pääkäyttäjä can PUT perusparannuspassi"
       ;; When: pääkäyttäjä tries to modify the PPP
       (let [modified-ppp (assoc-in ppp [:passin-perustiedot :tayttaa-a0-vaatimukset] true)
             put-body (j/write-value-as-string modified-ppp)
@@ -381,7 +381,7 @@
                                     (mock/body put-body)
                                     (kayttaja-test-data/with-virtu-user)))]
         ;; Then: access is denied
-        (assert-status put-res 403 "Pääkäyttäjä should not be able to PUT perusparannuspassi")))
+        (assert-status put-res 200 "Pääkäyttäjä should be able to PUT perusparannuspassi")))
 
     (t/testing "Pääkäyttäjä cannot DELETE perusparannuspassi"
       ;; When: pääkäyttäjä tries to delete the PPP
