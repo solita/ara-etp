@@ -79,6 +79,7 @@ const FloatNonNegative = Float(0.0, 9999999999);
 const Float1 = Float(0.0, 1.0);
 const AnyFloat = Float(-9999999999, 9999999999);
 const IntegerNonNegative = Integer(0.0, 9999999999);
+const IntegerPositive = Integer(1.0, 9999999999);
 
 const Rakennusvaippa = {
   ala: FloatNonNegative,
