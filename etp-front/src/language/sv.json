@@ -1545,11 +1545,11 @@
           "header": "Objektets anslutningsbarhet",
           "label": "Möjlighet till anslutning",
           "kuvaus": "Uppge här möjligheten att ansluta byggnaden till energieffektiv fjärrvärme eller fjärrkyla."
-        },
-        "korjausrakentamisen-vahimmaisvaatimustaso": {
-          "header": "Minikravnivå för ombyggnad",
-          "kuvaus": "Minimikravnivå för ombyggnad enligt MM:s förordningar 4/13"
         }
+      },
+      "e-luvun-vahimmaistavoitetaso": "Korjausrakentamisen säädösten mukainen E-luvun vähimmäistavoitetaso (sv)",
+      "korjausrakentamisen-vahimmaisvaatimustaso": {
+        "header": "Korjausrakentamisen vähimmäisvaatimustaso (sv)"
       }
     },
     "tulokset": {

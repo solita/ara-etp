@@ -509,6 +509,7 @@ export const perusparannuspassi = {
     'alapohja-ehdotettu-taso': FloatNonNegative,
     'ikkunat-ehdotettu-taso': FloatNonNegative,
     'ulkoovet-ehdotettu-taso': FloatNonNegative,
+    'e-luvun-vahimmaistavoitetaso': IntegerPositive,
     lisatietoja: String(2, 80)
   },
   tulokset: {

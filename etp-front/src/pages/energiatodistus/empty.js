@@ -427,6 +427,7 @@ const emptyPerusparannusRakennuksenPerustiedot = _ => ({
   'uusiutuva-energia-ehdotettu-taso': Maybe.None(),
   'jaahdytys-ehdotettu-taso': Maybe.None(),
   'mahdollisuus-liittya-energiatehokkaaseen': Maybe.None(),
+  'e-luvun-vahimmaistavoitetaso': ValidNone(),
   'lisatietoja-fi': Maybe.None(),
   'lisatietoja-sv': Maybe.None()
 });

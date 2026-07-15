@@ -5,9 +5,11 @@
   import { locale } from '@Language/i18n.js';
   import H4 from '@Component/H/H4.svelte';
   import Textarea from '@Pages/energiatodistus/Textarea.svelte';
+  import Input from '@Pages/energiatodistus/Input';
   import Select from '@Component/Select/Select.svelte';
   import * as LocaleUtils from '@Language/locale-utils.js';
   import * as et from '@Pages/energiatodistus/energiatodistus-utils.js';
+  import ELukuUnit from '@Pages/energiatodistus/form-parts/units/e-luku';
 
   export let schema;
   export let perusparannuspassi;
@@ -150,17 +152,6 @@
     <div class="py-4">
       <H4
         text={$_(
-          'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.korjausrakentamisen-vahimmaisvaatimustaso.header'
-        )} />
-    </div>
-    {$_(
-      'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.korjausrakentamisen-vahimmaisvaatimustaso.kuvaus'
-    )}
-  </div>
-  <div class="w-full py-4">
-    <div class="py-4">
-      <H4
-        text={$_(
           'perusparannuspassi.rakennuksen-perustiedot.energiajarjestelmat.kohteen-liitettavyys.header'
         )} />
     </div>
@@ -182,6 +173,25 @@
         format={energiajarjestelmatConfig.mahdollisuusliittya.format}
         parse={Maybe.Some}
         required={true} />
+    </div>
+  </div>
+  <div class="w-full py-4">
+    <div class="py-4">
+      <H4
+        text={$_(
+          'perusparannuspassi.rakennuksen-perustiedot.korjausrakentamisen-vahimmaisvaatimustaso.header'
+        )} />
+    </div>
+    <div class="mb-12 flex flex-row items-end py-4">
+      <Input
+        {disabled}
+        bind:model={perusparannuspassi}
+        i18nRoot="perusparannuspassi"
+        required={true}
+        center={false}
+        unit={ELukuUnit}
+        path={['rakennuksen-perustiedot', 'e-luvun-vahimmaistavoitetaso']}
+        {schema} />
     </div>
   </div>
 </div>
