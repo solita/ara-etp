@@ -24,6 +24,7 @@
    :uusiutuva-energia-ehdotettu-taso         common-schema/Key
    :jaahdytys-ehdotettu-taso                 common-schema/Key
    :mahdollisuus-liittya-energiatehokkaaseen common-schema/Key
+   :e-luvun-vahimmaistavoitetaso             common-schema/IntPositive
    :lisatietoja-fi         common-schema/String1500
    :lisatietoja-sv         common-schema/String1500})
 
