@@ -15,13 +15,14 @@ values
 (2026, 'rpt$uusiutuva_energia_ehdotettu_taso', 9, false),
 (2026, 'rpt$jaahdytys_ehdotettu_taso', 10, false),
 (2026, 'rpt$mahdollisuus_liittya_energiatehokkaaseen', 11, false),
+(2026, 'rpt$e_luvun_vahimmaistavoitetaso', 12, false),
 
 -- Tulokset / Energian hinnat (kaikki hinnat)
-(2026, 't$kaukolampo_hinta', 12, false),
-(2026, 't$sahko_hinta', 13, false),
-(2026, 't$uusiutuvat_pat_hinta', 14, false),
-(2026, 't$fossiiliset_pat_hinta', 15, false),
-(2026, 't$kaukojaahdytys_hinta', 16, false)
+(2026, 't$kaukolampo_hinta', 13, false),
+(2026, 't$sahko_hinta', 14, false),
+(2026, 't$uusiutuvat_pat_hinta', 15, false),
+(2026, 't$fossiiliset_pat_hinta', 16, false),
+(2026, 't$kaukojaahdytys_hinta', 17, false)
 
 on conflict (column_name, versio) do update set
   ordinal = excluded.ordinal,

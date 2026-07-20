@@ -168,11 +168,11 @@
                                                      :sv :lisatietoja-sv)])
                  h)]}])))
 
-(defn- lt-vahimmaisvaatimustaso [{:keys [kieli]}]
+(defn- lt-vahimmaisvaatimustaso [{:keys [kieli perusparannuspassi]}]
   (let [l (kieli loc/ppp-pdf-localization)]
     [:dl {:class "lt-vahimmaisvaatimustaso"}
       [:dt (l :vahimmaisvaatimustaso)]
-      [:dd {:class "e-luku"} (str "154")]
+      [:dd {:class "e-luku"} (get-in perusparannuspassi [:rakennuksen-perustiedot :e-luvun-vahimmaistavoitetaso])]
       [:dd {:class "yksikko"} (str (l :yksikko))]]))
 
 (defn- lt-korjausrakentamisen-saadokset [{:keys [kieli]}]

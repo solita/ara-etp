@@ -1575,11 +1575,11 @@
           "header": "Kohteen liitettävyys",
           "label": "Mahdollisuus liittyä",
           "kuvaus": "Ilmoita tässä kohteen mahdollisuudesta liittyä energiatehokkaaseen kaukolämpöön tai kaukojäähdytykseen."
-        },
-        "korjausrakentamisen-vahimmaisvaatimustaso": {
-          "header": "Korjausrakentamisen vähimmäisvaatimustaso",
-          "kuvaus": "YM:n asetusten 4/13 mukainen korjausrakentamisen vähimmäisvaatimustaso"
         }
+      },
+      "e-luvun-vahimmaistavoitetaso": "Korjausrakentamisen säädösten mukainen E-luvun vähimmäistavoitetaso",
+      "korjausrakentamisen-vahimmaisvaatimustaso": {
+        "header": "Korjausrakentamisen vähimmäisvaatimustaso"
       }
     },
     "tulokset": {
