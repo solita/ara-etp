@@ -2,12 +2,14 @@
   (:require [clojure.string :as str]
             [clojure.tools.logging :as log]
             [ring.util.response :as r]
+            [schema-tools.core :as st]
             [solita.common.maybe :as maybe]
             [solita.common.time :as common-time]
             [solita.etp.api.response :as response]
             [solita.etp.basic-auth :as basic-auth]
             [solita.etp.exception :as exception]
             [solita.etp.jwt :as jwt]
+            [solita.etp.schema.kayttaja :as kayttaja-schema]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.whoami :as whoami-service])
   (:import (java.time Duration Instant)
@@ -42,13 +44,13 @@
           whoami-opts {:henkilotunnus (:custom:FI_nationalIN data)
                        :virtu         {:localid      (:custom:VIRTU_localID data)
                                        :organisaatio (:custom:VIRTU_localOrg data)}}
-          whoami (whoami-service/find-whoami db whoami-opts)]
+          whoami (whoami-service/find-whoami-including-internal-fields db whoami-opts)]
       (if whoami
-        (->> (cond-> whoami
-                     (some? cognitoid)
-                     (assoc :cognitoid cognitoid))
-             (assoc req :whoami)
-             handler)
+        (-> req
+          (assoc :whoami (cond-> (st/select-schema whoami kayttaja-schema/Whoami)
+                                 (some? cognitoid) (assoc :cognitoid cognitoid))
+                 :logged-out-at (:logged-out-at whoami))
+          handler)
         (do
           (log/error "Unable to find active kayttaja using the following opts data JWT: "
                      (update whoami-opts :henkilotunnus log-safe-henkilotunnus))
@@ -123,6 +125,27 @@
       (if (session-fresh? auth-time time-limit)
         (handler req)
         response/unauthorized))))
+
+(defn logged-out?
+  "Given the user's `auth_time` from JWT and their `logged_out_at`
+   timestamp, returns whether the session should be treated as revoked."
+  [auth-time logged-out-at]
+  (if (some? logged-out-at)
+    ;; Logged out at some point, but relevant only if it's after the
+    ;; authentication time of the current session.
+    (let [logged-out-at-seconds (.truncatedTo logged-out-at java.time.temporal.ChronoUnit/SECONDS)
+          ;; Account for Cognito flooring this to one-second precision
+          latest-possible-auth-time (.plusSeconds auth-time 1)]
+      (.isBefore latest-possible-auth-time logged-out-at-seconds))
+    ;; Never logged out
+    false))
+
+(defn wrap-reject-if-logged-out [handler]
+  (fn [{:keys [jwt-payloads logged-out-at] :as req}]
+    (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))]
+      (if (logged-out? auth-time logged-out-at)
+        response/unauthorized
+        (handler req)))))
 
 (defn- sanitized-path [path]
   (cond

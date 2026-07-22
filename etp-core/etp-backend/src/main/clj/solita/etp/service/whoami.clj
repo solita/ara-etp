@@ -19,7 +19,8 @@
 (def db-row->whoami
   (kayttaja-service/db-row->kayttaja
     (assoc kayttaja-schema/Whoami
-      :api-key-hash (schema/maybe schema/Str))))
+      :api-key-hash (schema/maybe schema/Str)
+      :logged-out-at (schema/maybe java.time.Instant))))
 
 (defn- only-first! [query users]
   (when-not (empty? (rest users))
@@ -29,7 +30,13 @@
                                :query query}))
   (first users))
 
-(defn- find-whoami-with-api-key-hash [db query]
+(defn find-whoami-including-internal-fields
+  "Internal whoami lookup that (unlike find-whoami/
+   find-whoami-by-email-and-api-key) is not narrowed down to the
+   response-facing Whoami schema. Used by the AE-2821 revocation-check
+   middleware (which needs :logged-out-at) and, in tests, to verify
+   internal-only state such as :logged-out-at directly."
+  [db query]
   (some->> (merge {:email nil
                    :henkilotunnus nil
                    :virtu {:localid nil
@@ -41,11 +48,11 @@
            db-row->whoami))
 
 (defn find-whoami [db query]
-  (some-> (find-whoami-with-api-key-hash db query)
+  (some-> (find-whoami-including-internal-fields db query)
           (st/select-schema kayttaja-schema/Whoami)))
 
 (defn find-whoami-by-email-and-api-key [db email api-key]
-  (let [whoami (find-whoami-with-api-key-hash db {:email email})]
+  (let [whoami (find-whoami-including-internal-fields db {:email email})]
     (when (verified-api-key? api-key (:api-key-hash whoami))
       (st/select-schema whoami kayttaja-schema/Whoami))))
 

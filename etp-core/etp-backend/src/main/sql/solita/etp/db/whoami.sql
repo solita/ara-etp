@@ -4,6 +4,7 @@ SELECT k.id id, k.etunimi etunimi, k.sukunimi sukunimi, k.email email, k.puhelin
        k.virtu$organisaatio, k.henkilotunnus henkilotunnus,
        k.organisaatio,
        k.api_key_hash api_key_hash, k.verifytime,
+       k.logged_out_at logged_out_at,
        coalesce(l.partner, false) as partner,
        l.patevyystaso,
        k.titteli_fi, k.titteli_sv
