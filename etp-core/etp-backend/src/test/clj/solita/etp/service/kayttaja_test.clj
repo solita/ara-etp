@@ -2,9 +2,11 @@
   (:require [clojure.test :as t]
             [schema.core :as schema]
             [solita.common.map :as map]
+            [solita.common.time :as time]
             [solita.etp.test-system :as ts]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.service.kayttaja :as service]
+            [solita.etp.service.whoami :as whoami-service]
             [solita.etp.service.rooli :as rooli-service]
             [solita.etp.schema.kayttaja :as kayttaja-schema]
             [solita.etp.schema.laatija :as laatija-schema]
@@ -68,3 +70,51 @@
                          kayttaja-test-data/laskuttaja])
               id
               update))))))
+
+(defn- logged-out-at-of [email]
+  (-> (whoami-service/find-whoami-including-internal-fields ts/*db* {:email email})
+      :logged-out-at))
+
+(t/deftest stamp-logout!-test
+  (let [{:keys [kayttajat]} (test-data-set)
+        [id other-id] (-> kayttajat keys sort)
+        email (:email (get kayttajat id))
+        other-email (:email (get kayttajat other-id))]
+
+    (t/testing "stamping sets logged_out_at to a non-nil, now()-ish timestamp"
+      (let [before (time/now)
+            _ (service/stamp-logout! ts/*db* id)
+            after (time/now)
+            logged-out-at (logged-out-at-of email)]
+        (t/is (some? logged-out-at))
+        (t/is (true? (and (some? logged-out-at)
+                          (not (.isBefore logged-out-at before))
+                          (not (.isAfter logged-out-at after)))))))
+
+    (t/testing "stamping a second time (double logout) advances logged_out_at rather than being a no-op"
+      (let [first-stamp (logged-out-at-of email)]
+        (Thread/sleep 5)
+        (service/stamp-logout! ts/*db* id)
+        (let [second-stamp (logged-out-at-of email)]
+          (t/is (some? second-stamp))
+          (t/is (true? (and (some? first-stamp)
+                            (some? second-stamp)
+                            (.isAfter second-stamp first-stamp)))))))
+
+    (t/testing "stamping for an id that does not exist does not throw and does not affect other users"
+      (let [other-before (logged-out-at-of other-email)]
+        (t/is (nil? (service/stamp-logout! ts/*db* -1)))
+        (t/is (= other-before (logged-out-at-of other-email)))))
+
+    (t/testing "only the targeted kayttaja row is updated, other users are left untouched"
+      (t/is (nil? (logged-out-at-of other-email))))
+
+    (t/testing "stamping logout does not clear/modify login or cognito_id set by update-kayttaja-with-whoami!"
+      (let [cognitoid (str "cognitoid-" (rand-int 1000000))
+            _ (whoami-service/update-kayttaja-with-whoami! ts/*db* {:id other-id :cognitoid cognitoid})
+            found-before (service/find-kayttaja ts/*db* other-id)
+            _ (service/stamp-logout! ts/*db* other-id)
+            found-after (service/find-kayttaja ts/*db* other-id)]
+        (t/is (some? (logged-out-at-of other-email)))
+        (t/is (= (:login found-before) (:login found-after)))
+        (t/is (= cognitoid (:cognitoid found-after)))))))

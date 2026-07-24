@@ -106,3 +106,11 @@
    :presigned     -4
    :aineisto      -5
    :expiration    -6})
+
+(defn stamp-logout!
+  "Sets kayttaja.logged_out_at = now() for the given id, revoking all of
+   that user's existing sessions. Degrades gracefully (no-op, no
+   exception) when id does not resolve to an existing kayttaja."
+  [db id]
+  (kayttaja-db/stamp-logout! db {:id id})
+  nil)

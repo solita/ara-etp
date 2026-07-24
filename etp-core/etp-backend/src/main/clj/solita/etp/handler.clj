@@ -38,7 +38,9 @@
             [solita.etp.exception :as exception]
             [solita.etp.header-middleware :as header-middleware]
             [solita.etp.jwt :as jwt]
-            [solita.etp.security :as security])
+            [solita.etp.security :as security]
+            [solita.etp.service.kayttaja :as kayttaja-service]
+            [solita.etp.service.whoami :as whoami-service])
   (:import (java.net URLEncoder)
            (java.nio.charset StandardCharsets)))
 
@@ -79,6 +81,24 @@
                "&post_logout_redirect_uri=" (URLEncoder/encode config/cognito-logout-url StandardCharsets/UTF_8)))
         (str config/index-url "/uloskirjauduttu")))))
 
+(defn stamp-logout-if-identifiable!
+  "Resolves the kayttaja identified by the request's JWT (if any) and sets
+   their logged_out_at to now(), revoking all of that user's sessions.
+   No-ops (does not throw) when the request has no verifiable JWT or the
+   JWT does not resolve to an existing kayttaja, so /logout's redirect
+   and cookie-clearing behavior always succeeds regardless."
+  [db req]
+  (try
+    (when-let [{:keys [data]} (req->jwt req)]
+      (let [whoami-opts {:henkilotunnus (:custom:FI_nationalIN data)
+                         :virtu         {:localid      (:custom:VIRTU_localID data)
+                                         :organisaatio (:custom:VIRTU_localOrg data)}}
+            whoami (whoami-service/find-whoami db whoami-opts)]
+        (when-let [id (:id whoami)]
+          (kayttaja-service/stamp-logout! db id))))
+    (catch Throwable t
+      (log/warn t "Failed to stamp logged_out_at on logout"))))
+
 (def empty-cookie {:value     ""
                    :path      "/"
                    :max-age   0
@@ -115,8 +135,10 @@
            :parameters {:query
                         {(s/optional-key :redirect-location) String}}
            :tags       #{"System"}
-           :middleware [[cookies/wrap-cookies]]
-           :handler    (fn [req]
+           :middleware [[cookies/wrap-cookies]
+                        [security/wrap-db-application-name]]
+           :handler    (fn [{:keys [db] :as req}]
+                         (stamp-logout-if-identifiable! db req)
                          {:status  302
                           :headers {"Location" (logout-location req)}
                           :cookies {"AWSELBAuthSessionCookie-0" empty-cookie
@@ -144,6 +166,7 @@
     ["/private" {:middleware [[header-middleware/wrap-disable-cache]
                               [security/wrap-jwt-payloads]
                               [security/wrap-whoami-from-jwt-payloads]
+                              [security/wrap-reject-if-logged-out]
                               [security/wrap-access]
                               [security/wrap-db-application-name]]}
      (concat (tag "Käyttäjä API" kayttaja-api/routes)
