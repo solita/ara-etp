@@ -8,6 +8,19 @@
 
 (t/use-fixtures :each ts/fixture)
 
+(t/deftest whoami-does-not-include-henkilotunnus-test
+  (test-kayttaja/insert-virtu-paakayttaja!
+    {:etunimi  "Asian"
+     :sukunimi "Tuntija"
+     :email    "testi@ara.fi"
+     :puhelin  "0504363675457"})
+  (let [response (ts/handler (-> (mock/request :get "/api/private/whoami")
+                                 (test-kayttaja/with-virtu-user)
+                                 (mock/header "Accept" "application/json")))
+        whoami (-> response :body (j/read-value j/keyword-keys-object-mapper))]
+    (t/is (= (:status response) 200))
+    (t/is (false? (contains? whoami :henkilotunnus)))))
+
 (t/deftest kayttaja-title-test
   (let [user-id (test-kayttaja/insert-virtu-paakayttaja!
                   {:etunimi  "Asian"
@@ -104,6 +117,10 @@
       (t/is (= (:status response) 200))
       (t/is (= (count users)
                200))
+
+      (t/testing "Users do not include henkilotunnus"
+        (doseq [kayttaja users]
+          (t/is (false? (contains? kayttaja :henkilotunnus)))))
 
       (t/testing "Users have title fields"
         (doseq [laatija users]

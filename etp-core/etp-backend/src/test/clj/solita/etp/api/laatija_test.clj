@@ -8,6 +8,17 @@
 
 (t/use-fixtures :each ts/fixture)
 
+(t/deftest get-laatijat-does-not-return-henkilotunnus-test
+  (test-data.kayttaja/insert-virtu-paakayttaja!)
+  (test-data.laatija/generate-and-insert!)
+  (let [response (ts/handler (-> (mock/request :get "/api/private/laatijat")
+                                 (test-data.kayttaja/with-virtu-user)
+                                 (mock/header "Accept" "application/json")))
+        body (-> response :body (j/read-value j/keyword-keys-object-mapper))]
+    (t/is (= (:status response) 200))
+    (t/is (seq body))
+    (t/is (every? #(not (contains? % :henkilotunnus)) body))))
+
 (t/deftest retrieve-change-history-test
   (test-data.kayttaja/insert-virtu-paakayttaja! {:etunimi  "Asian"
                                                  :sukunimi "Tuntija"

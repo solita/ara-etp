@@ -36,11 +36,9 @@
     (->> (laatija-db/select-laatijat db)
          (keep (fn [laatija]
                  (cond (or (rooli-service/paakayttaja? whoami)
-                           (rooli-service/laskuttaja? whoami))
+                            (rooli-service/laskuttaja? whoami)
+                            (rooli-service/patevyydentoteaja? whoami))
                        laatija
-
-                       (rooli-service/patevyydentoteaja? whoami)
-                       (update laatija :henkilotunnus #(subs % 0 6))
 
                        (rooli-service/public? whoami)
                        (public-laatija laatija)))))))
