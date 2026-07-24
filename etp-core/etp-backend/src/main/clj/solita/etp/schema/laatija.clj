@@ -98,11 +98,8 @@
   "A schema for find all existing laatija"
   (-> (st/merge Laatija kayttaja-schema/Kayttaja)
       (st/assoc :aktiivinen schema/Bool)
-      (st/assoc :henkilotunnus schema/Str)
       (st/assoc :yritys [common-schema/Key])
-      (st/dissoc :cognitoid :virtu :rooli)
-
-      ;; Pätevyydentoteajat do not see the last part of hetu
+      (st/dissoc :cognitoid :virtu :rooli :henkilotunnus)
       (st/optional-keys)
       (st/required-keys always-public-kayttaja-laatija-ks)))
 

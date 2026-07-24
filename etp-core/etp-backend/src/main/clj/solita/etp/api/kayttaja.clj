@@ -13,13 +13,16 @@
             [solita.etp.service.rooli :as rooli-service]
             [solita.etp.service.whoami :as whoami-service]))
 
+(defn- remove-henkilotunnus [kayttaja]
+  (dissoc kayttaja :henkilotunnus))
+
 (def routes
   [["/whoami"
     {:get {:summary   "Kirjautuneen käyttäjän tiedot"
-           :responses {200 {:body kayttaja-schema/Whoami}}
+           :responses {200 {:body kayttaja-schema/WhoamiResponse}}
            :handler   (fn [{:keys [whoami db]}]
                         (whoami-service/update-kayttaja-with-whoami! db whoami)
-                        (r/response whoami))}}]
+                        (r/response (remove-henkilotunnus whoami)))}}]
    ["/kayttajat"
     [""
      {:post {:summary    "Lisää muu käyttäjä kuin laatija."
@@ -32,9 +35,10 @@
 
       :get  {:summary   "Hae kaikki muut käyttäjät paitsi laatijat"
              :access    rooli-service/paakayttaja?
-             :responses {200 {:body [kayttaja-schema/Kayttaja]}}
+             :responses {200 {:body [kayttaja-schema/KayttajaListItem]}}
              :handler   (fn [{:keys [db]}]
-                          (r/response (kayttaja-service/find-kayttajat db)))}}]
+                           (r/response (mapv remove-henkilotunnus
+                                            (kayttaja-service/find-kayttajat db))))}}]
     ["/:id"
      [""
       {:get {:summary    "Hae minkä tahansa käyttäjän käyttäjätiedot"

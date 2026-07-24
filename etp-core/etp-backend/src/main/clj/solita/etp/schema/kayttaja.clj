@@ -63,6 +63,12 @@
                 (assoc :partner schema/Bool)
                 (assoc :patevyystaso (schema/maybe schema/Int))))
 
+(def WhoamiResponse
+  (dissoc Whoami :henkilotunnus))
+
+(def KayttajaListItem
+  (dissoc Kayttaja :henkilotunnus))
+
 (def KayttajaHistory
   (-> Kayttaja
       (merge audit-schema/Audit)

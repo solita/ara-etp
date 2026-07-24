@@ -1,6 +1,5 @@
 (ns solita.etp.service.laatija-test
-  (:require [clojure.string :as str]
-            [clojure.test :as t]
+  (:require [clojure.test :as t]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.laatija :as service]
             [solita.etp.service.viesti :as viesti-service]
@@ -60,13 +59,11 @@
   (t/is (every? #(not (nil? %)) found))
   (t/is (= (set (map :sukunimi laatija-adds))
            (set (map :sukunimi found))))
-  (t/is (every? #(-> % :aktiivinen nil? not) found)))
+  (t/is (every? #(-> % :aktiivinen nil? not) found))
+  (t/is (every? #(-> % (contains? :henkilotunnus) not) found)))
 
-(defn paakayttaja-and-laskuttaja-find-all-assertions [laatija-adds found]
-  (t/is (every? #(-> % :henkilotunnus count (= 11)) found))
-  (t/is (every? #(contains? % :postitoimipaikka) found))
-  (t/is (= (set (map :henkilotunnus laatija-adds))
-           (set (map :henkilotunnus found)))))
+(defn paakayttaja-and-laskuttaja-find-all-assertions [_laatija-adds found]
+  (t/is (every? #(contains? % :postitoimipaikka) found)))
 
 (t/deftest find-all-laatijat-as-paakayttaja-test
   (let [{:keys [laatijat]} (test-data-set true true)
@@ -86,8 +83,6 @@
                 ts/*db*
                 kayttaja-test-data/patevyyden-toteaja)]
     (common-find-all-assertions (vals laatijat) found)
-    (t/is (every? #(-> % :henkilotunnus count (= 6)) found))
-    (t/is (every? #(-> % :henkilotunnus (str/includes? "-") not) found))
     (t/is (every? #(contains? % :postitoimipaikka) found))))
 
 (t/deftest find-all-laatijat-as-public-test
@@ -98,7 +93,6 @@
                       (into {}))
         found (service/find-all-laatijat ts/*db* kayttaja-test-data/public)]
     (common-find-all-assertions (vals laatijat) found)
-    (t/is (every? #(-> % (contains? :henkilotunnus) not) found))
     (t/is (every? #(-> % (contains? :puhelin) not) found))
     (t/is (every? #(-> % (contains? :jakeluosoite) not) found))
     (t/is (every? #(-> % (contains? :postinumero) not) found))
