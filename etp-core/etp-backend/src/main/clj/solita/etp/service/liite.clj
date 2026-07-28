@@ -52,31 +52,57 @@
                         :filename :nimi})
       (update :nimi unescape-quoted-string)))
 
-(defn assert-not-executable!
-  "Detects the file's actual format from its content and rejects it if
-  the format is (or can directly contain) a runnable program. ETP does
-  not care much about the content of attachments, but executables are
-  rejected to mitigate the risk of users sending malicious executables
-  to each other.
+(defn- declared-content-type [file]
+  (or (:content-type file) (:contenttype file)))
+
+(defn resolve-content-type!
+  "Detects the file's actual format from its content and validates it
+  against the content-type declared by the uploader, rejecting the
+  attachment when they don't agree. ETP does not care much about the
+  content of attachments in general, but:
+
+  - files that are (or can directly contain) a runnable program are
+    always rejected, to mitigate the risk of users sending malicious
+    executables to each other.
+  - files whose content is recognized as a specific format are
+    rejected unless the declared content-type matches, so that the
+    uploader can't make ETP serve the file back later with an
+    arbitrary, possibly misleading, content-type.
+  - files whose content isn't recognized as any specific format are
+    always accepted, and are stored with content-type
+    application/octet-stream regardless of what the uploader
+    declared.
+
+  Returns the content-type that should be stored for the attachment.
 
   Shared by every attachment upload entry point (energiatodistus
-  liitteet as well as viestiketju liitteet)."
-  [tempfile]
-  (with-open [stream (io/input-stream tempfile)]
-    (when (:executable (file-type/detect stream))
+  liitteet, valvonta liitteet as well as viestiketju liitteet)."
+  [tempfile declared-content-type]
+  (let [{:keys [content-type executable]}
+        (with-open [stream (io/input-stream tempfile)]
+          (file-type/detect stream))]
+    (when executable
       (exception/throw-ex-info!
        :liite-executable
-       "Liitetiedosto on suoritettava ohjelma eikä sitä voi lisätä liitteeksi."))))
+       "Liitetiedosto on suoritettava ohjelma eikä sitä voi lisätä liitteeksi."))
+    (when (and (not= content-type "application/octet-stream")
+               (not= content-type declared-content-type))
+      (exception/throw-ex-info!
+       :liite-content-type-mismatch
+       "Liitetiedoston sisältö ei vastaa ilmoitettua tiedostotyyppiä."))
+    content-type))
 
 (defn add-liite-from-file! [db aws-s3-client energiatodistus-id file]
-  (assert-not-executable! (:tempfile file))
-  (jdbc/with-db-transaction [db db]
-    (let [id (-> file
-                 temp-file->liite
-                 (assoc :energiatodistus-id energiatodistus-id)
-                 (insert-liite! db))]
-      (-> id file-key (insert-file! aws-s3-client (:tempfile file)))
-      id)))
+  (let [content-type (resolve-content-type!
+                       (:tempfile file) (declared-content-type file))]
+    (jdbc/with-db-transaction [db db]
+      (let [id (-> file
+                   temp-file->liite
+                   (assoc :contenttype content-type)
+                   (assoc :energiatodistus-id energiatodistus-id)
+                   (insert-liite! db))]
+        (-> id file-key (insert-file! aws-s3-client (:tempfile file)))
+        id))))
 
 (defn add-liitteet-from-files! [db aws-s3-client whoami energiatodistus-id files]
   (jdbc/with-db-transaction [db db]

@@ -115,7 +115,8 @@
                                          db aws-s3-client id
                                          (if (vector? files) files [files]))
                                       [{:constraint :viesti-liite-viestiketju-id-fkey :response 404}
-                                       {:type :liite-executable :response 400}]))}}]
+                                       {:type :liite-executable :response 400}
+                                       {:type :liite-content-type-mismatch :response 400}]))}}]
       ["/link"
        {:conflicting true
         :post        {:summary    "Liite-linkin lisäys viestiketjuun."

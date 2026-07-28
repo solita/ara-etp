@@ -207,9 +207,11 @@
 
 (defn add-liitteet-from-files! [db aws-s3-client viestiketju-id liitteet]
   (doseq [liite liitteet]
-    (liite-service/assert-not-executable! (:tempfile liite))
-    (let [liite-id (insert-liite! db (-> liite
+    (let [content-type (liite-service/resolve-content-type!
+                         (:tempfile liite) (:content-type liite))
+          liite-id (insert-liite! db (-> liite
                                          liite-service/temp-file->liite
+                                         (assoc :contenttype content-type)
                                          (assoc :viestiketju-id viestiketju-id)))]
       (file-service/upsert-file-from-file
         aws-s3-client
