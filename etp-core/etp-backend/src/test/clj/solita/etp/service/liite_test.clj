@@ -1,5 +1,6 @@
 (ns solita.etp.service.liite-test
   (:require [clojure.test :as t]
+            [clojure.java.io :as io]
             [solita.etp.test-system :as ts]
             [solita.etp.test :as etp-test]
             [solita.etp.test-data.laatija :as laatija-test-data]
@@ -117,6 +118,34 @@
                    ts/*db*
                    original-laatija-whoami
                    energiatodistus-id)))))))
+
+(t/deftest add-liitteet-with-unusual-filenames-test
+  (t/testing "Attachments with an empty filename or a filename containing a quote are accepted as-is"
+    (let [laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          energiatodistukset (energiatodistus-test-data/generate-and-insert!
+                              1 2013 true laatija-id)
+          energiatodistus-id (-> energiatodistukset keys sort first)
+          whoami {:id laatija-id :rooli 0}
+          file-adds [{:size        100
+                      :tempfile    (io/file "deps.edn")
+                      :contenttype "application/octet-stream"
+                      :nimi        ""}
+                     {:size        100
+                      :tempfile    (io/file "Dockerfile")
+                      :contenttype "application/octet-stream"
+                      :nimi        "quote\"file.txt"}]
+          ids (service/add-liitteet-from-files! (ts/db-user laatija-id)
+                                                ts/*aws-s3-client*
+                                                whoami
+                                                energiatodistus-id
+                                                file-adds)
+          found (service/find-energiatodistus-liitteet
+                 ts/*db* whoami energiatodistus-id)
+          nimi-by-id (into {} (map (juxt :id :nimi) found))
+          [empty-nimi-id quote-nimi-id] ids]
+      (t/is (= "" (get nimi-by-id empty-nimi-id)))
+      (t/is (= "quote\"file.txt" (get nimi-by-id quote-nimi-id))))))
 
 (t/deftest find-liite-other-user
   (let [{:keys [laatijat energiatodistukset

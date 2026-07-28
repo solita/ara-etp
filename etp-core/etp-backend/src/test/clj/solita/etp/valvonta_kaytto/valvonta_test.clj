@@ -37,8 +37,8 @@
                                                       "Vi uppmanar dig att besvara begäran om information senast den 10.11.2024.")
                                                  (:body message)))
                                         (deliver suomifi-message-sent true))]
-      (with-redefs [suomifi-viestit-rest/validate-config (fn [_] nil)
-                    suomifi-viestit-rest/send-suomifi-viesti-with-pdf-attachment! assert-suomifi-message-sent]
+      (binding [suomifi-viestit-rest/validate-config (fn [_] nil)
+                suomifi-viestit-rest/send-suomifi-viesti-with-pdf-attachment! assert-suomifi-message-sent]
         (let [kayttaja-id (test-kayttajat/insert-virtu-paakayttaja!)
               valvonta-id (valvonta-service/add-valvonta! ts/*db*
                                                           (-> {} (generators/complete valvonta-schema/ValvontaSave)

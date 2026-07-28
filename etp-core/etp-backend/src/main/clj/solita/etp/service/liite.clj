@@ -7,7 +7,8 @@
             [solita.etp.exception :as exception]
             [schema.coerce :as coerce]
             [clojure.java.jdbc :as jdbc]
-            [clojure.set :as set]))
+            [clojure.set :as set]
+            [clojure.string :as string]))
 
 ; *** Require sql functions ***
 (db/require-queries 'liite)
@@ -31,11 +32,23 @@
               db whoami energiatodistus-id)
     (exception/throw-forbidden!)))
 
+(defn- unescape-quoted-string
+  "Multipart filenames are transmitted inside a quoted-string
+  (RFC 2616 section 2.2), where a backslash escapes the character that
+  follows it - for example, a literal quote character is sent as a
+  backslash followed by a quote. Ring's multipart parsing does not undo
+  this escaping, so any backslash followed by a character in the filename
+  needs to be unescaped back to that character before it is stored."
+  [s]
+  (when s
+    (string/replace s #"\\(.)" "$1")))
+
 (defn temp-file->liite [temp-file]
   (-> temp-file
       (dissoc :tempfile :size)
       (set/rename-keys {:content-type :contenttype
-                        :filename :nimi})))
+                        :filename :nimi})
+      (update :nimi unescape-quoted-string)))
 
 (defn add-liite-from-file! [db aws-s3-client energiatodistus-id file]
   (jdbc/with-db-transaction [db db]

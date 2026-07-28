@@ -114,10 +114,7 @@
                        :status  (:status response)
                        :response (:body response)})))))
 
-(defn send-suomifi-viesti-with-pdf-attachment!
-  [{:keys [external-id]
-    :as   message-info}
-   config]
+(defn ^:dynamic send-suomifi-viesti-with-pdf-attachment!
   "Sends a Suomi.fi-viesti that has the `pdf-file` as an attachment.
 
   The function expects a map containing the following keys:
@@ -135,7 +132,12 @@
   - :street-address string       - The recipient's street address.
   - :zip-code       string       - The recipient's zip code.
 
+  Marked ^:dynamic so tests can rebind this with a thread-local `binding`
+
   Returns: response"
+  [{:keys [external-id]
+    :as   message-info}
+   config]
   (log/info "Sending suomifi viesti with external-id: " external-id)
   (try
     (let [access-token (get-access-token! config)
@@ -157,13 +159,15 @@
                              :external-id external-id}
                         e))))))
 
-(defn validate-config [{:keys [rest-base-url
-                               palvelutunnus
-                               rest-password
-                               viranomaistunnus
-                               yhteyshenkilo-email
-                               laskutus-tunniste
-                               laskutus-salasana]}]
+(defn ^:dynamic validate-config
+  "Marked ^:dynamic so tests can rebind this with a thread-local `binding`"
+  [{:keys [rest-base-url
+           palvelutunnus
+           rest-password
+           viranomaistunnus
+           yhteyshenkilo-email
+           laskutus-tunniste
+           laskutus-salasana]}]
   (flatten
     [(if (str/blank? rest-base-url)
        ["rest-base-url is missing"]
