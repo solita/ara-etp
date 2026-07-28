@@ -3,9 +3,11 @@
             [solita.etp.schema.liite :as liite-schema]
             [solita.etp.service.json :as json]
             [solita.etp.service.file :as file-service]
+            [solita.etp.service.file-type :as file-type]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.exception :as exception]
             [schema.coerce :as coerce]
+            [clojure.java.io :as io]
             [clojure.java.jdbc :as jdbc]
             [clojure.set :as set]
             [clojure.string :as string]))
@@ -50,7 +52,24 @@
                         :filename :nimi})
       (update :nimi unescape-quoted-string)))
 
+(defn assert-not-executable!
+  "Detects the file's actual format from its content and rejects it if
+  the format is (or can directly contain) a runnable program. ETP does
+  not care much about the content of attachments, but executables are
+  rejected to mitigate the risk of users sending malicious executables
+  to each other.
+
+  Shared by every attachment upload entry point (energiatodistus
+  liitteet as well as viestiketju liitteet)."
+  [tempfile]
+  (with-open [stream (io/input-stream tempfile)]
+    (when (:executable (file-type/detect stream))
+      (exception/throw-ex-info!
+       :liite-executable
+       "Liitetiedosto on suoritettava ohjelma eikä sitä voi lisätä liitteeksi."))))
+
 (defn add-liite-from-file! [db aws-s3-client energiatodistus-id file]
+  (assert-not-executable! (:tempfile file))
   (jdbc/with-db-transaction [db db]
     (let [id (-> file
                  temp-file->liite

@@ -147,6 +147,34 @@
       (t/is (= "" (get nimi-by-id empty-nimi-id)))
       (t/is (= "quote\"file.txt" (get nimi-by-id quote-nimi-id))))))
 
+(t/deftest add-liite-rejects-executable-test
+  (let [laatijat (laatija-test-data/generate-and-insert! 1)
+        laatija-id (-> laatijat keys sort first)
+        energiatodistukset (energiatodistus-test-data/generate-and-insert!
+                            1 2013 true laatija-id)
+        energiatodistus-id (-> energiatodistukset keys sort first)
+        whoami {:id laatija-id :rooli 0}
+        executable-file (doto (java.io.File/createTempFile "liite-test" ".exe")
+                          .deleteOnExit)
+        _ (io/copy (byte-array (map unchecked-byte [0x4D 0x5A 0x00 0x00]))
+                    executable-file)]
+    (t/is (= :liite-executable
+             (:type
+              (etp-test/catch-ex-data
+               #(service/add-liitteet-from-files!
+                 (ts/db-user laatija-id)
+                 ts/*aws-s3-client*
+                 whoami
+                 energiatodistus-id
+                 [{:size        4
+                   :tempfile    executable-file
+                   :contenttype "application/octet-stream"
+                   :nimi        "virus.exe"}]))))
+             "Executable attachment is rejected")
+    (t/is (empty? (service/find-energiatodistus-liitteet
+                    ts/*db* whoami energiatodistus-id))
+          "No liite was persisted for the rejected executable")))
+
 (t/deftest find-liite-other-user
   (let [{:keys [laatijat energiatodistukset
                 file-liitteet link-liitteet]} (test-data-set)

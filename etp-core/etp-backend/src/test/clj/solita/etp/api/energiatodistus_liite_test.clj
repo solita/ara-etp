@@ -66,6 +66,30 @@
       (t/is (some #(= "" (:nimi %)) liitteet)
             "Empty filename is stored as-is"))))
 
+(t/deftest add-liite-rejects-executable-test
+  (let [{:keys [energiatodistus-id]} (setup-energiatodistus-visible-to-paakayttaja!)
+        executable-file (doto (java.io.File/createTempFile "liite-api-test" ".exe")
+                          .deleteOnExit)
+        _ (io/copy (byte-array (map unchecked-byte [0x4D 0x5A 0x00 0x00]))
+                    executable-file)
+        post-request (-> (mock/request :post (str "/api/private/energiatodistukset/2013/"
+                                                energiatodistus-id "/liitteet/files"))
+                        (kayttaja-test-data/with-virtu-user)
+                        (mock/header "Accept" "application/json")
+                        (mock/multipart-body
+                         {:files {:value        executable-file
+                                  :filename     "virus.exe"
+                                  :content-type "application/octet-stream"}})
+                        (fix-multipart-charset))
+        post-response (ts/handler post-request)]
+    (t/is (= 400 (:status post-response))
+          "Executable attachment upload is rejected with 400 Bad Request")
+    (let [liitteet (-> (get-liitteet energiatodistus-id)
+                       :body
+                       (j/read-value j/keyword-keys-object-mapper))]
+      (t/is (empty? liitteet)
+            "No liite was persisted for the rejected executable"))))
+
 (defn bais->str
   "Reads all bytes from a ByteArrayInputStream, decodes as UTF-8,
    resets the stream, and returns the string."

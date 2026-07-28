@@ -34,7 +34,8 @@
                               id
                               (if (vector? files) files [files]))
                              nil)
-                         [{:constraint :liite-energiatodistus-id-fkey :response 404}]))}}]
+                         [{:constraint :liite-energiatodistus-id-fkey :response 404}
+                          {:type :liite-executable :response 400}]))}}]
 
    ["/link"
     {:conflicting true

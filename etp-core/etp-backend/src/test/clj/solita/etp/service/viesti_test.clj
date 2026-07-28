@@ -1,5 +1,6 @@
 (ns solita.etp.service.viesti-test
   (:require [clojure.test :as t]
+            [clojure.java.io :as io]
             [schema.core :as schema]
             [solita.etp.test-data.generators :as generators]
             [solita.etp.service.viesti :as service]
@@ -68,6 +69,35 @@
                  (dissoc :reason))
              {:type :forbidden})
           "An other laatija must not see the ketju")))
+
+(t/deftest add-liitteet-from-files!-rejects-executable-test
+  (let [{:keys [laatijat paakayttajat]} (test-data-set)
+        [[paakayttaja-id _]] (take 1 paakayttajat)
+        [[laatija-1-id _]] (take 1 laatijat)
+        ketju-id (service/add-ketju! (ts/db-user paakayttaja-id)
+                                     (paakayttaja-whoami paakayttaja-id)
+                                     (complete-ketju-add
+                                       {:vastaanottajat        [laatija-1-id]
+                                        :vastaanottajaryhma-id nil
+                                        :energiatodistus-id    nil}))
+        executable-file (doto (java.io.File/createTempFile "viesti-liite-test" ".exe")
+                          .deleteOnExit)
+        _ (io/copy (byte-array (map unchecked-byte [0x4D 0x5A 0x00 0x00]))
+                    executable-file)]
+    (t/is (= :liite-executable
+             (:type
+              (etp-test/catch-ex-data
+               #(service/add-liitteet-from-files!
+                 ts/*db* ts/*aws-s3-client* ketju-id
+                 [{:size        4
+                   :tempfile    executable-file
+                   :contenttype "application/octet-stream"
+                   :nimi        "virus.exe"}]))))
+             "Executable attachment is rejected")
+    (t/is (empty? (service/find-liitteet ts/*db*
+                                         (paakayttaja-whoami paakayttaja-id)
+                                         ketju-id))
+          "No liite was persisted for the rejected executable")))
 
 (t/deftest paakayttaja-individual-visibility-test
   (let [{:keys [laatijat paakayttajat]} (test-data-set)
