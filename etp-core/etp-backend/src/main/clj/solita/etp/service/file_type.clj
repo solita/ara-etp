@@ -117,8 +117,7 @@
 ;; container formats without having to actually parse the zip
 ;; structure.
 (def ^:private zip-subtype-markers
-  [{:contains "mimetype" :content-type-of-mimetype-entry true}
-   {:contains     "word/document.xml"
+  [{:contains     "word/document.xml"
     :content-type "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     :extensions   ["docx"] :executable false}
    {:contains     "xl/workbook.xml"
@@ -151,7 +150,7 @@
 
 (defn- openxml-subtype [^String s]
   (some (fn [{:keys [contains content-type extensions executable]}]
-          (when (and (not= contains "mimetype") (string/includes? s contains))
+          (when (string/includes? s contains)
             {:content-type content-type :extensions extensions :executable executable}))
         zip-subtype-markers))
 
