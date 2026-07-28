@@ -208,7 +208,7 @@
 (defn add-liitteet-from-files! [db aws-s3-client viestiketju-id liitteet]
   (doseq [liite liitteet]
     (let [content-type (liite-service/resolve-content-type!
-                         (:tempfile liite) (:content-type liite))
+                         (:tempfile liite) (:content-type liite) (:filename liite))
           liite-id (insert-liite! db (-> liite
                                          liite-service/temp-file->liite
                                          (assoc :contenttype content-type)

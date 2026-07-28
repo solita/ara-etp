@@ -55,11 +55,23 @@
 (defn- declared-content-type [file]
   (or (:content-type file) (:contenttype file)))
 
+(defn- declared-filename [file]
+  (or (:filename file) (:nimi file)))
+
+(defn- file-extension
+  "Returns the lowercase file extension (without the leading dot) of
+  `filename`, or nil if the filename has no extension."
+  [filename]
+  (when filename
+    (let [dot (string/last-index-of filename ".")]
+      (when (and dot (pos? dot) (< (inc dot) (count filename)))
+        (string/lower-case (subs filename (inc dot)))))))
+
 (defn resolve-content-type!
   "Detects the file's actual format from its content and validates it
-  against the content-type declared by the uploader, rejecting the
-  attachment when they don't agree. ETP does not care much about the
-  content of attachments in general, but:
+  against the content-type and filename declared by the uploader,
+  rejecting the attachment when they don't agree. ETP does not care
+  much about the content of attachments in general, but:
 
   - files that are (or can directly contain) a runnable program are
     always rejected, to mitigate the risk of users sending malicious
@@ -68,33 +80,42 @@
     rejected unless the declared content-type matches, so that the
     uploader can't make ETP serve the file back later with an
     arbitrary, possibly misleading, content-type.
+  - files whose content is recognized as a specific format are also
+    rejected unless the filename's extension is one of the extensions
+    conventionally used for that format.
   - files whose content isn't recognized as any specific format are
-    always accepted, and are stored with content-type
-    application/octet-stream regardless of what the uploader
-    declared.
+    always accepted regardless of their declared content-type or
+    filename extension, and are stored with content-type
+    application/octet-stream.
 
   Returns the content-type that should be stored for the attachment.
 
   Shared by every attachment upload entry point (energiatodistus
   liitteet, valvonta liitteet as well as viestiketju liitteet)."
-  [tempfile declared-content-type]
-  (let [{:keys [content-type executable]}
+  [tempfile declared-content-type filename]
+  (let [{:keys [content-type extensions executable]}
         (with-open [stream (io/input-stream tempfile)]
           (file-type/detect stream))]
     (when executable
       (exception/throw-ex-info!
        :liite-executable
        "Liitetiedosto on suoritettava ohjelma eikä sitä voi lisätä liitteeksi."))
-    (when (and (not= content-type "application/octet-stream")
-               (not= content-type declared-content-type))
-      (exception/throw-ex-info!
-       :liite-content-type-mismatch
-       "Liitetiedoston sisältö ei vastaa ilmoitettua tiedostotyyppiä."))
+    (when (not= content-type "application/octet-stream")
+      (when (not= content-type declared-content-type)
+        (exception/throw-ex-info!
+         :liite-content-type-mismatch
+         "Liitetiedoston sisältö ei vastaa ilmoitettua tiedostotyyppiä."))
+      (when-not (contains? (set extensions) (file-extension filename))
+        (exception/throw-ex-info!
+         :liite-extension-mismatch
+         "Liitetiedoston tiedostopääte ei vastaa tiedoston sisältöä.")))
     content-type))
 
 (defn add-liite-from-file! [db aws-s3-client energiatodistus-id file]
   (let [content-type (resolve-content-type!
-                       (:tempfile file) (declared-content-type file))]
+                       (:tempfile file)
+                       (declared-content-type file)
+                       (declared-filename file))]
     (jdbc/with-db-transaction [db db]
       (let [id (-> file
                    temp-file->liite

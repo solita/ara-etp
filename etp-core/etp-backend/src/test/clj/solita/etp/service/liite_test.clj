@@ -204,6 +204,51 @@
                     ts/*db* whoami energiatodistus-id))
           "No liite was persisted for the rejected attachment")))
 
+(t/deftest add-liite-rejects-extension-mismatch-test
+  (let [laatijat (laatija-test-data/generate-and-insert! 1)
+        laatija-id (-> laatijat keys sort first)
+        energiatodistukset (energiatodistus-test-data/generate-and-insert!
+                            1 2013 true laatija-id)
+        energiatodistus-id (-> energiatodistukset keys sort first)
+        whoami {:id laatija-id :rooli 0}
+        pdf-file (doto (java.io.File/createTempFile "liite-test" ".pdf")
+                   .deleteOnExit)
+        _ (io/copy (byte-array (map unchecked-byte
+                                     (concat [0x25 0x50 0x44 0x46] (repeat 20 0))))
+                    pdf-file)]
+    (t/testing "Filename extension not matching the recognized content is rejected"
+      (t/is (= :liite-extension-mismatch
+               (:type
+                (etp-test/catch-ex-data
+                 #(service/add-liitteet-from-files!
+                   (ts/db-user laatija-id)
+                   ts/*aws-s3-client*
+                   whoami
+                   energiatodistus-id
+                   [{:size        24
+                     :tempfile    pdf-file
+                     :contenttype "application/pdf"
+                     :nimi        "document.txt"}])))))
+      (t/is (empty? (service/find-energiatodistus-liitteet
+                      ts/*db* whoami energiatodistus-id))
+            "No liite was persisted for the rejected attachment"))
+    (t/testing "Missing filename extension on recognized content is rejected"
+      (t/is (= :liite-extension-mismatch
+               (:type
+                (etp-test/catch-ex-data
+                 #(service/add-liitteet-from-files!
+                   (ts/db-user laatija-id)
+                   ts/*aws-s3-client*
+                   whoami
+                   energiatodistus-id
+                   [{:size        24
+                     :tempfile    pdf-file
+                     :contenttype "application/pdf"
+                     :nimi        "document"}])))))
+      (t/is (empty? (service/find-energiatodistus-liitteet
+                      ts/*db* whoami energiatodistus-id))
+            "No liite was persisted for the rejected attachment"))))
+
 (t/deftest add-liite-stores-detected-content-type-test
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
         laatija-id (-> laatijat keys sort first)
