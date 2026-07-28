@@ -120,32 +120,126 @@
                    energiatodistus-id)))))))
 
 (t/deftest add-liitteet-with-unusual-filenames-test
-  (t/testing "Attachments with an empty filename or a filename containing a quote are accepted as-is"
+  (t/testing "An empty filename is rejected"
     (let [laatijat (laatija-test-data/generate-and-insert! 1)
           laatija-id (-> laatijat keys sort first)
           energiatodistukset (energiatodistus-test-data/generate-and-insert!
                               1 2013 true laatija-id)
           energiatodistus-id (-> energiatodistukset keys sort first)
-          whoami {:id laatija-id :rooli 0}
-          file-adds [{:size        100
-                      :tempfile    (io/file "deps.edn")
-                      :contenttype "application/octet-stream"
-                      :nimi        ""}
-                     {:size        100
-                      :tempfile    (io/file "Dockerfile")
-                      :contenttype "application/octet-stream"
-                      :nimi        "quote\"file.txt"}]
-          ids (service/add-liitteet-from-files! (ts/db-user laatija-id)
-                                                ts/*aws-s3-client*
-                                                whoami
-                                                energiatodistus-id
-                                                file-adds)
-          found (service/find-energiatodistus-liitteet
-                 ts/*db* whoami energiatodistus-id)
-          nimi-by-id (into {} (map (juxt :id :nimi) found))
-          [empty-nimi-id quote-nimi-id] ids]
-      (t/is (= "" (get nimi-by-id empty-nimi-id)))
-      (t/is (= "quote\"file.txt" (get nimi-by-id quote-nimi-id))))))
+          whoami {:id laatija-id :rooli 0}]
+      (t/is (= :liite-invalid-filename
+               (:type
+                (etp-test/catch-ex-data
+                 #(service/add-liitteet-from-files!
+                   (ts/db-user laatija-id)
+                   ts/*aws-s3-client*
+                   whoami
+                   energiatodistus-id
+                   [{:size        100
+                     :tempfile    (io/file "deps.edn")
+                     :contenttype "application/octet-stream"
+                     :nimi        ""}]))))
+            "Empty filename is rejected")
+      (t/is (empty? (service/find-energiatodistus-liitteet
+                      ts/*db* whoami energiatodistus-id)))))
+
+  (t/testing "A filename containing a quote is rejected"
+    (let [laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          energiatodistukset (energiatodistus-test-data/generate-and-insert!
+                              1 2013 true laatija-id)
+          energiatodistus-id (-> energiatodistukset keys sort first)
+          whoami {:id laatija-id :rooli 0}]
+      (t/is (= :liite-invalid-filename
+               (:type
+                (etp-test/catch-ex-data
+                 #(service/add-liitteet-from-files!
+                   (ts/db-user laatija-id)
+                   ts/*aws-s3-client*
+                   whoami
+                   energiatodistus-id
+                   [{:size        100
+                     :tempfile    (io/file "Dockerfile")
+                     :contenttype "application/octet-stream"
+                     :nimi        "quote\"file.txt"}]))))
+            "Filename with a quote character is rejected")
+      (t/is (empty? (service/find-energiatodistus-liitteet
+                      ts/*db* whoami energiatodistus-id)))))
+
+  (t/testing "A filename starting or ending with a dot or space is rejected"
+    (let [laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          energiatodistukset (energiatodistus-test-data/generate-and-insert!
+                              1 2013 true laatija-id)
+          energiatodistus-id (-> energiatodistukset keys sort first)
+          whoami {:id laatija-id :rooli 0}]
+      (doseq [nimi [".hidden.txt" "trailing-dot.txt." " leading-space.txt" "trailing-space.txt "]]
+        (t/is (= :liite-invalid-filename
+                 (:type
+                  (etp-test/catch-ex-data
+                   #(service/add-liitteet-from-files!
+                     (ts/db-user laatija-id)
+                     ts/*aws-s3-client*
+                     whoami
+                     energiatodistus-id
+                     [{:size        100
+                       :tempfile    (io/file "deps.edn")
+                       :contenttype "application/octet-stream"
+                       :nimi        nimi}]))))
+              (str "Filename " (pr-str nimi) " is rejected")))
+      (t/is (empty? (service/find-energiatodistus-liitteet
+                      ts/*db* whoami energiatodistus-id)))))
+
+  (t/testing "An overly long filename or a path traversal attempt is rejected"
+    (let [laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          energiatodistukset (energiatodistus-test-data/generate-and-insert!
+                              1 2013 true laatija-id)
+          energiatodistus-id (-> energiatodistukset keys sort first)
+          whoami {:id laatija-id :rooli 0}]
+      (doseq [nimi [(apply str (repeat 101 "a")) "../../../../etc/passwd"]]
+        (t/is (= :liite-invalid-filename
+                 (:type
+                  (etp-test/catch-ex-data
+                   #(service/add-liitteet-from-files!
+                     (ts/db-user laatija-id)
+                     ts/*aws-s3-client*
+                     whoami
+                     energiatodistus-id
+                     [{:size        100
+                       :tempfile    (io/file "deps.edn")
+                       :contenttype "application/octet-stream"
+                       :nimi        nimi}]))))
+              (str "Filename " (pr-str nimi) " is rejected")))
+      (t/is (empty? (service/find-energiatodistus-liitteet
+                      ts/*db* whoami energiatodistus-id))))))
+
+(t/deftest add-liite-rejects-forbidden-extension-test
+  (let [laatijat (laatija-test-data/generate-and-insert! 1)
+        laatija-id (-> laatijat keys sort first)
+        energiatodistukset (energiatodistus-test-data/generate-and-insert!
+                            1 2013 true laatija-id)
+        energiatodistus-id (-> energiatodistukset keys sort first)
+        whoami {:id laatija-id :rooli 0}]
+    ;; deps.edn's content is not recognized as any specific format, so
+    ;; this shows that the extension is blocked purely based on the
+    ;; filename, regardless of what the content looks like.
+    (t/is (= :liite-forbidden-extension
+             (:type
+              (etp-test/catch-ex-data
+               #(service/add-liitteet-from-files!
+                 (ts/db-user laatija-id)
+                 ts/*aws-s3-client*
+                 whoami
+                 energiatodistus-id
+                 [{:size        100
+                   :tempfile    (io/file "deps.edn")
+                   :contenttype "application/octet-stream"
+                   :nimi        "innocent-looking.exe"}]))))
+             "Attachment with a forbidden executable extension is rejected")
+    (t/is (empty? (service/find-energiatodistus-liitteet
+                    ts/*db* whoami energiatodistus-id))
+          "No liite was persisted for the rejected attachment")))
 
 (t/deftest add-liite-rejects-executable-test
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
@@ -154,7 +248,7 @@
                             1 2013 true laatija-id)
         energiatodistus-id (-> energiatodistukset keys sort first)
         whoami {:id laatija-id :rooli 0}
-        executable-file (doto (java.io.File/createTempFile "liite-test" ".exe")
+        executable-file (doto (java.io.File/createTempFile "liite-test" ".dat")
                           .deleteOnExit)
         _ (io/copy (byte-array (map unchecked-byte [0x4D 0x5A 0x00 0x00]))
                     executable-file)]
@@ -169,8 +263,8 @@
                  [{:size        4
                    :tempfile    executable-file
                    :contenttype "application/octet-stream"
-                   :nimi        "virus.exe"}]))))
-             "Executable attachment is rejected")
+                   :nimi        "virus.dat"}]))))
+             "Executable attachment is rejected based on its content even with a non-blocklisted extension")
     (t/is (empty? (service/find-energiatodistus-liitteet
                     ts/*db* whoami energiatodistus-id))
           "No liite was persisted for the rejected executable")))

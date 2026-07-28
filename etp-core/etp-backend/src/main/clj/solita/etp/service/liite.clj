@@ -52,12 +52,6 @@
                         :filename :nimi})
       (update :nimi unescape-quoted-string)))
 
-(defn- declared-content-type [file]
-  (or (:content-type file) (:contenttype file)))
-
-(defn- declared-filename [file]
-  (or (:filename file) (:nimi file)))
-
 (defn- file-extension
   "Returns the lowercase file extension (without the leading dot) of
   `filename`, or nil if the filename has no extension."
@@ -66,6 +60,66 @@
     (let [dot (string/last-index-of filename ".")]
       (when (and dot (pos? dot) (< (inc dot) (count filename)))
         (string/lower-case (subs filename (inc dot)))))))
+
+;; Allows ASCII letters/digits, the Finnish/Swedish vowels, and a
+;; handful of punctuation characters that commonly occur in file
+;; names. Notably excludes path separators, quotes and control
+;; characters, so that a filename can never be used to break out of
+;; the content-disposition header it is later served in, or to smuggle
+;; a path when (mis)interpreted by a downstream program.
+(def ^:private filename-pattern
+  #"[a-zA-Z0-9åäöÅÄÖ._() -]{2,100}")
+
+(defn- filename-boundary-character? [ch]
+  (contains? #{\. \space} ch))
+
+(defn- valid-filename? [filename]
+  (boolean
+   (and filename
+        (re-matches filename-pattern filename)
+        (not (filename-boundary-character? (first filename)))
+        (not (filename-boundary-character? (last filename))))))
+
+(defn assert-valid-filename!
+  "Rejects filenames that aren't 2-100 characters long, contain
+  characters outside a small, safe allowlist, or start/end with a dot
+  or space. This prevents attachment filenames from being used to
+  inject unexpected content into the content-disposition header the
+  filename is later served in.
+
+  Shared by every attachment upload entry point (energiatodistus
+  liitteet, valvonta liitteet as well as viestiketju liitteet)."
+  [filename]
+  (when-not (valid-filename? filename)
+    (exception/throw-ex-info!
+     :liite-invalid-filename
+     "Liitetiedoston nimi ei ole sallitussa muodossa.")))
+
+;; File extensions that are conventionally used for directly runnable
+;; programs or scripts on common operating systems. Attachments with
+;; one of these extensions are rejected regardless of what their
+;; actual content looks like, as a defence-in-depth measure on top of
+;; the content-based executable detection in resolve-content-type!
+;; (which only catches formats it recognizes from their content, such
+;; as a shebang line - a plain-text script without one would not be
+;; flagged as executable by content alone).
+(def ^:private forbidden-executable-extensions
+  #{"exe" "com" "bat" "cmd" "sh" "bash" "zsh" "command" "msi" "msp"
+    "ps1" "ps1xml" "psc1" "psm1" "vbs" "vbe" "js" "jse" "wsf" "wsh"
+    "scr" "pif" "gadget" "application" "hta" "cpl" "msc" "jar" "apk"
+    "app" "workflow" "action" "run" "bin" "out" "elf" "dylib" "so"})
+
+(defn assert-extension-not-forbidden!
+  "Rejects filenames whose extension is conventionally used for
+  directly runnable programs or scripts.
+
+  Shared by every attachment upload entry point (energiatodistus
+  liitteet, valvonta liitteet as well as viestiketju liitteet)."
+  [filename]
+  (when (contains? forbidden-executable-extensions (file-extension filename))
+    (exception/throw-ex-info!
+     :liite-forbidden-extension
+     "Liitetiedoston tiedostopääte ei ole sallittu.")))
 
 (defn resolve-content-type!
   "Detects the file's actual format from its content and validates it
@@ -112,18 +166,18 @@
     content-type))
 
 (defn add-liite-from-file! [db aws-s3-client energiatodistus-id file]
-  (let [content-type (resolve-content-type!
-                       (:tempfile file)
-                       (declared-content-type file)
-                       (declared-filename file))]
-    (jdbc/with-db-transaction [db db]
-      (let [id (-> file
-                   temp-file->liite
-                   (assoc :contenttype content-type)
-                   (assoc :energiatodistus-id energiatodistus-id)
-                   (insert-liite! db))]
-        (-> id file-key (insert-file! aws-s3-client (:tempfile file)))
-        id))))
+  (let [liite (temp-file->liite file)]
+    (assert-valid-filename! (:nimi liite))
+    (assert-extension-not-forbidden! (:nimi liite))
+    (let [content-type (resolve-content-type!
+                         (:tempfile file) (:contenttype liite) (:nimi liite))]
+      (jdbc/with-db-transaction [db db]
+        (let [id (-> liite
+                     (assoc :contenttype content-type)
+                     (assoc :energiatodistus-id energiatodistus-id)
+                     (insert-liite! db))]
+          (-> id file-key (insert-file! aws-s3-client (:tempfile file)))
+          id)))))
 
 (defn add-liitteet-from-files! [db aws-s3-client whoami energiatodistus-id files]
   (jdbc/with-db-transaction [db db]

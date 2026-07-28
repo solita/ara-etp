@@ -80,7 +80,7 @@
                                        {:vastaanottajat        [laatija-1-id]
                                         :vastaanottajaryhma-id nil
                                         :energiatodistus-id    nil}))
-        executable-file (doto (java.io.File/createTempFile "viesti-liite-test" ".exe")
+        executable-file (doto (java.io.File/createTempFile "viesti-liite-test" ".dat")
                           .deleteOnExit)
         _ (io/copy (byte-array (map unchecked-byte [0x4D 0x5A 0x00 0x00]))
                     executable-file)]
@@ -92,7 +92,7 @@
                  [{:size        4
                    :tempfile    executable-file
                    :contenttype "application/octet-stream"
-                   :nimi        "virus.exe"}]))))
+                   :nimi        "virus.dat"}]))))
              "Executable attachment is rejected")
     (t/is (empty? (service/find-liitteet ts/*db*
                                          (paakayttaja-whoami paakayttaja-id)

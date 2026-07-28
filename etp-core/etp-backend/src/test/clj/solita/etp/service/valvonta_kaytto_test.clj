@@ -584,7 +584,7 @@
   (let [valvonta-id (valvonta-kaytto/add-valvonta!
                      ts/*db*
                      {:katuosoite "Testikatu"})
-        executable-file (doto (java.io.File/createTempFile "valvonta-kaytto-liite-test" ".exe")
+        executable-file (doto (java.io.File/createTempFile "valvonta-kaytto-liite-test" ".dat")
                           .deleteOnExit)
         _ (io/copy (byte-array (map unchecked-byte [0x4D 0x5A 0x00 0x00]))
                     executable-file)]
@@ -596,7 +596,7 @@
                  [{:size        4
                    :tempfile    executable-file
                    :contenttype "application/octet-stream"
-                   :nimi        "virus.exe"}]))))
+                   :nimi        "virus.dat"}]))))
              "Executable attachment is rejected")
     (t/is (empty? (valvonta-kaytto/find-liitteet ts/*db* valvonta-id))
           "No liite was persisted for the rejected executable")))
