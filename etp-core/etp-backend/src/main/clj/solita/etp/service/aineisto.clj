@@ -21,7 +21,7 @@
 
 (def find-aineistot luokittelu-service/find-aineistot)
 
-(defn set-access! [db kayttaja-id {:keys [aineisto-id valid-until ip-address]}]
+(defn ^:dynamic set-access! [db kayttaja-id {:keys [aineisto-id valid-until ip-address]}]
   (aineisto-db/insert-kayttaja-aineisto! db {:aineisto-id aineisto-id
                                              :kayttaja-id kayttaja-id
                                              :valid-until valid-until
