@@ -76,7 +76,7 @@ const createNewValvonta = () => {
   // (#/valvonta/kaytto/<id>/henkilo/<henkiloId>) to actually complete before
   // moving on. Otherwise the async push() from the POST success handler can
   // race with navigation done in follow-up steps.
-  cy.location('hash').should('match', /\/henkilo\/(?!new$)[^/]+$/);
+  cy.location('hash').should('match', /\/henkilo\/\d+$/);
 };
 
 const startValvonta = () => {
