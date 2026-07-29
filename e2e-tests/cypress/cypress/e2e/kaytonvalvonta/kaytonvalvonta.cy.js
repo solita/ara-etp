@@ -72,6 +72,11 @@ const createNewValvonta = () => {
     .should('have.value', 'Esimerkki');
   cy.selectInSelect('henkilo.rooli-id', 'Omistaja');
   cy.get('[data-cy="-submit"]').click();
+  // Wait for the redirect to the newly created henkilö's own detail page
+  // (#/valvonta/kaytto/<id>/henkilo/<henkiloId>) to actually complete before
+  // moving on. Otherwise the async push() from the POST success handler can
+  // race with navigation done in follow-up steps.
+  cy.location('hash').should('match', /\/henkilo\/\d+$/);
 };
 
 const startValvonta = () => {
