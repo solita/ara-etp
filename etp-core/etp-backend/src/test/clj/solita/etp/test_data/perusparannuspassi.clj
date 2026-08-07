@@ -77,6 +77,7 @@
                                :uusiutuva-energia-ehdotettu-taso         1
                                :jaahdytys-ehdotettu-taso                 1
                                :mahdollisuus-liittya-energiatehokkaaseen 1
+                               :e-luvun-vahimmaistavoitetaso             1
                                :lisatietoja-fi         nil
                                :lisatietoja-sv         nil}
      :tulokset                {:kaukolampo-hinta      5
