@@ -87,7 +87,7 @@
                                                                :sv :lammitysmuoto-label-sv})])
                        (str/split #", "))
                    (map (fn [lammitysjarjestelma-label]
-                          [:div lammitysjarjestelma-label])))]]
+                          [:div (h lammitysjarjestelma-label)])))]]
         [:div
          [:dt (str (l :lammonjako) ":")]
          [:dd (-> energiatodistus
