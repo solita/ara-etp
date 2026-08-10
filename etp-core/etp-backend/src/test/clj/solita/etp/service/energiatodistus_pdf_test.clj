@@ -67,11 +67,15 @@
       (io/delete-file path))))
 
 (t/deftest xlsx->pdf-test
-  (let [file-path (service/xlsx->pdf (str "src/main/resources/"
-                                          "energiatodistus-2018-fi.xlsx"))]
-    (t/is (str/ends-with? file-path ".pdf"))
-    (t/is (-> file-path io/as-file .exists true?))
-    (io/delete-file file-path)))
+  (let [source-path (str "src/main/resources/" "energiatodistus-2018-fi.xlsx")
+        temp-xlsx (java.io.File/createTempFile "energiatodistus-2018-fi" ".xlsx")
+        temp-path (.getAbsolutePath temp-xlsx)]
+    (io/copy (io/file source-path) temp-xlsx)
+    (let [file-path (service/xlsx->pdf temp-path)]
+      (t/is (str/ends-with? file-path ".pdf"))
+      (t/is (-> file-path io/as-file .exists true?))
+      (io/delete-file file-path)
+      (io/delete-file temp-xlsx))))
 
 (t/deftest generate-pdf-as-file-test
   (let [{:keys [energiatodistukset]} (test-data-set)
