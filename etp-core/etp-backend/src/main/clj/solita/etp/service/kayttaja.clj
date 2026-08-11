@@ -26,6 +26,25 @@
     (coerce-kayttaja schema)
     (partial flat/flat->tree #"\$")))
 
+(defn- mask-henkilotunnus
+  "Returns kayttaja with :henkilotunnus removed (set to nil) unless whoami is
+   allowed to see it: whoami is the same user as kayttaja, whoami is a
+   paakayttaja, whoami is a patevyydentoteaja and kayttaja is a laatija, or
+   whoami is a laskuttaja and kayttaja is a laatija.
+
+   The access controls for using find-kayttaja are essentially the same, so
+   at the moment this serves simply as a defensive extra layer to limit access
+   to hetu."
+  [whoami kayttaja]
+  (if (or (= (:id kayttaja) (:id whoami))
+          (rooli-service/paakayttaja? whoami)
+          (and (rooli-service/patevyydentoteaja? whoami)
+               (rooli-service/laatija? kayttaja))
+          (and (rooli-service/laskuttaja? whoami)
+               (rooli-service/laatija? kayttaja)))
+    kayttaja
+    (assoc kayttaja :henkilotunnus nil)))
+
 (defn find-kayttaja
   ([db id]
    (->> {:id id}
@@ -36,10 +55,11 @@
    (when-let [kayttaja (find-kayttaja db id)]
      (if (or (= id (:id whoami))
              (rooli-service/paakayttaja? whoami)
-             (rooli-service/laskuttaja? whoami)
+             (and (rooli-service/laskuttaja? whoami)
+                  (rooli-service/laatija? kayttaja))
              (and (rooli-service/patevyydentoteaja? whoami)
                   (rooli-service/laatija? kayttaja)))
-       kayttaja
+       (mask-henkilotunnus whoami kayttaja)
        (exception/throw-forbidden!)))))
 
 (defn find-kayttajat [db]
