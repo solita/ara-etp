@@ -26,21 +26,52 @@
     (coerce-kayttaja schema)
     (partial flat/flat->tree #"\$")))
 
+(defn- mask-henkilotunnus
+  "Returns kayttaja with :henkilotunnus removed (set to nil) unless whoami is
+   allowed to see it: whoami is the same user as kayttaja, whoami is a
+   paakayttaja, whoami is a patevyydentoteaja and kayttaja is a laatija, or
+   whoami is a laskuttaja and kayttaja is a laatija.
+
+   The access controls for using find-kayttaja-for are essentially the same, so
+   at the moment this serves simply as a defensive extra layer to limit access
+   to hetu."
+  [whoami kayttaja]
+  (if (or (= (:id kayttaja) (:id whoami))
+          (rooli-service/paakayttaja? whoami)
+          (and (rooli-service/patevyydentoteaja? whoami)
+               (rooli-service/laatija? kayttaja))
+          (and (rooli-service/laskuttaja? whoami)
+               (rooli-service/laatija? kayttaja)))
+    kayttaja
+    (assoc kayttaja :henkilotunnus nil)))
+
 (defn find-kayttaja
-  ([db id]
-   (->> {:id id}
-        (kayttaja-db/select-kayttaja db)
-        (map (db-row->kayttaja kayttaja-schema/Kayttaja))
-        first))
-  ([db whoami id]
-   (when-let [kayttaja (find-kayttaja db id)]
-     (if (or (= id (:id whoami))
-             (rooli-service/paakayttaja? whoami)
-             (rooli-service/laskuttaja? whoami)
-             (and (rooli-service/patevyydentoteaja? whoami)
-                  (rooli-service/laatija? kayttaja)))
-       kayttaja
-       (exception/throw-forbidden!)))))
+  "Finds the kayttaja with the given id, or returns nil when no kayttaja is found."
+  [db id]
+  (->> {:id id}
+       (kayttaja-db/select-kayttaja db)
+       (map (db-row->kayttaja kayttaja-schema/Kayttaja))
+       first))
+
+(defn find-kayttaja-for
+  "Finds the kayttaja with the given id, with access controls.
+
+   Access is allowed for the kayttaja themselves, paakayttaja users, and
+   laskuttaja or patevyydentoteaja users when the kayttaja is a laatija.
+   Returns nil when no kayttaja is found and throws forbidden when access is
+   denied.
+
+   The :henkilotunnus is masked unless whoami is allowed to see it."
+  [db whoami id]
+  (when-let [kayttaja (find-kayttaja db id)]
+    (if (or (= id (:id whoami))
+            (rooli-service/paakayttaja? whoami)
+            (and (rooli-service/laskuttaja? whoami)
+                 (rooli-service/laatija? kayttaja))
+            (and (rooli-service/patevyydentoteaja? whoami)
+                 (rooli-service/laatija? kayttaja)))
+      (mask-henkilotunnus whoami kayttaja)
+      (exception/throw-forbidden!))))
 
 (defn find-kayttajat [db]
   (map (db-row->kayttaja kayttaja-schema/Kayttaja)

@@ -5,6 +5,7 @@
             [solita.common.time :as time]
             [solita.etp.test-system :as ts]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
+            [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.service.kayttaja :as service]
             [solita.etp.service.whoami :as whoami-service]
             [solita.etp.service.rooli :as rooli-service]
@@ -21,9 +22,8 @@
   (let [{:keys [kayttajat]} (test-data-set)]
     (doseq [[id kayttaja] kayttajat
             :let [whoami (rand-nth [kayttaja-test-data/paakayttaja
-                                    kayttaja-test-data/laskuttaja
                                     {:id id}])
-                  found (service/find-kayttaja ts/*db* whoami id)]]
+                  found (service/find-kayttaja-for ts/*db* whoami id)]]
       (schema/validate kayttaja-schema/Kayttaja found)
       (t/is (map/submap? (dissoc kayttaja :api-key) found)))))
 
@@ -31,12 +31,30 @@
   (let [{:keys [kayttajat]} (test-data-set)]
     (doseq [[id _] kayttajat]
       (t/is (thrown-with-msg?
-             clojure.lang.ExceptionInfo
-             #"Forbidden"
-             (service/find-kayttaja ts/*db*
-                                    (rand-nth [kayttaja-test-data/laatija
-                                               kayttaja-test-data/patevyyden-toteaja])
-                                    id))))))
+              clojure.lang.ExceptionInfo
+              #"Forbidden"
+              (service/find-kayttaja-for ts/*db*
+                                         (rand-nth [kayttaja-test-data/laatija
+                                                    kayttaja-test-data/patevyyden-toteaja
+                                                    kayttaja-test-data/laskuttaja])
+                                         id))))))
+
+(t/deftest find-kayttaja-laskuttaja-and-patevyydentoteaja-access-test
+  (let [{:keys [kayttajat]} (test-data-set)
+        [non-laatija-id _] (first kayttajat)
+        [laatija-id laatija] (laatija-test-data/generate-and-insert!)]
+    (doseq [whoami [kayttaja-test-data/laskuttaja
+                    kayttaja-test-data/patevyyden-toteaja]]
+      (t/testing (str whoami " sees a laatija-kohde and its henkilotunnus")
+        (let [found (service/find-kayttaja-for ts/*db* whoami laatija-id)]
+          (schema/validate kayttaja-schema/Kayttaja found)
+          (t/is (some? (:henkilotunnus found)))
+          (t/is (= (:henkilotunnus laatija) (:henkilotunnus found)))))
+      (t/testing (str whoami " has no access to a non-laatija-kohde")
+        (t/is (thrown-with-msg?
+               clojure.lang.ExceptionInfo
+               #"Forbidden"
+               (service/find-kayttaja-for ts/*db* whoami non-laatija-id)))))))
 
 (t/deftest update-and-find-test
   (let [{:keys [kayttajat]} (test-data-set)
@@ -47,10 +65,9 @@
                                 kayttaja-test-data/paakayttaja
                                 id
                                 update)
-      (let [found (service/find-kayttaja
+      (let [found (service/find-kayttaja-for
                    ts/*db*
-                   (rand-nth [kayttaja-test-data/paakayttaja
-                              kayttaja-test-data/laskuttaja])
+                   kayttaja-test-data/paakayttaja
                    id)]
         (schema/validate kayttaja-schema/Kayttaja found)
         (t/is (map/submap? (dissoc update :api-key) found))))))
