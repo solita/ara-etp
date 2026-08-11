@@ -28,7 +28,7 @@
 (t/deftest update-kayttaja-with-whoami!-test
   (let [{:keys [kayttajat]} (test-data-set)]
     (doseq [id (-> kayttajat keys sort)
-            :let [found-before (kayttaja-service/find-kayttaja
+            :let [found-before (kayttaja-service/find-kayttaja-for
                                 ts/*db*
                                 kayttaja-test-data/paakayttaja
                                 id)
@@ -38,7 +38,7 @@
                   _ (service/update-kayttaja-with-whoami! ts/*db*
                                                           {:id id
                                                            :cognitoid cognitoid})
-                  found-after (kayttaja-service/find-kayttaja
+                  found-after (kayttaja-service/find-kayttaja-for
                                ts/*db*
                                kayttaja-test-data/paakayttaja
                                id)]]

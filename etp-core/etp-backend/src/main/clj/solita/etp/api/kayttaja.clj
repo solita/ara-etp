@@ -46,7 +46,7 @@
              :responses  {200 {:body kayttaja-schema/Kayttaja}
                           404 {:body schema/Str}}
              :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db whoami]}]
-                           (-> (kayttaja-service/find-kayttaja db whoami id)
+                           (-> (kayttaja-service/find-kayttaja-for db whoami id)
                                (api-response/get-response
                                  (str "Käyttäjä " id " does not exist."))))}
 

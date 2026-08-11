@@ -27,7 +27,7 @@
     (doseq [[id kayttaja] kayttajat
             :let [whoami (rand-nth [kayttaja-test-data/paakayttaja
                                     {:id id}])
-                  found (service/find-kayttaja ts/*db* whoami id)]]
+                  found (service/find-kayttaja-for ts/*db* whoami id)]]
       (schema/validate kayttaja-schema/Kayttaja found)
       (t/is (map/submap? (dissoc kayttaja :api-key) found)))))
 
@@ -35,13 +35,13 @@
   (let [{:keys [kayttajat]} (test-data-set)]
     (doseq [[id _] kayttajat]
       (t/is (thrown-with-msg?
-             clojure.lang.ExceptionInfo
-             #"Forbidden"
-             (service/find-kayttaja ts/*db*
-                                    (rand-nth [kayttaja-test-data/laatija
-                                               kayttaja-test-data/patevyyden-toteaja
-                                               kayttaja-test-data/laskuttaja])
-                                    id))))))
+              clojure.lang.ExceptionInfo
+              #"Forbidden"
+              (service/find-kayttaja-for ts/*db*
+                                         (rand-nth [kayttaja-test-data/laatija
+                                                    kayttaja-test-data/patevyyden-toteaja
+                                                    kayttaja-test-data/laskuttaja])
+                                         id))))))
 
 (t/deftest find-kayttaja-laskuttaja-and-patevyydentoteaja-access-test
   (let [{:keys [kayttajat]} (test-data-set)
@@ -50,7 +50,7 @@
     (doseq [whoami [kayttaja-test-data/laskuttaja
                     kayttaja-test-data/patevyyden-toteaja]]
       (t/testing (str whoami " sees a laatija-kohde and its henkilotunnus")
-        (let [found (service/find-kayttaja ts/*db* whoami laatija-id)]
+        (let [found (service/find-kayttaja-for ts/*db* whoami laatija-id)]
           (schema/validate kayttaja-schema/Kayttaja found)
           (t/is (some? (:henkilotunnus found)))
           (t/is (= (:henkilotunnus laatija) (:henkilotunnus found)))))
@@ -58,7 +58,7 @@
         (t/is (thrown-with-msg?
                clojure.lang.ExceptionInfo
                #"Forbidden"
-               (service/find-kayttaja ts/*db* whoami non-laatija-id)))))))
+               (service/find-kayttaja-for ts/*db* whoami non-laatija-id)))))))
 
 (t/deftest update-and-find-test
   (let [{:keys [kayttajat]} (test-data-set)
@@ -69,7 +69,7 @@
                                 kayttaja-test-data/paakayttaja
                                 id
                                 update)
-      (let [found (service/find-kayttaja
+      (let [found (service/find-kayttaja-for
                    ts/*db*
                    kayttaja-test-data/paakayttaja
                    id)]
