@@ -22,12 +22,14 @@
     path={['huomiot', 'suositukset']} />
 </div>
 
-<H3 text={$_('energiatodistus.huomiot.lisatietoja-header')} />
-<div class="mb-4 w-full py-4">
-  <Textarea
-    {disabled}
-    {schema}
-    bind:model={energiatodistus}
-    inputLanguage={Maybe.Some(inputLanguage)}
-    path={['huomiot', 'lisatietoja']} />
-</div>
+{#if versio <= 2018}
+  <H3 text={$_('energiatodistus.huomiot.lisatietoja-header')} />
+  <div class="mb-4 w-full py-4">
+    <Textarea
+      {disabled}
+      {schema}
+      bind:model={energiatodistus}
+      inputLanguage={Maybe.Some(inputLanguage)}
+      path={['huomiot', 'lisatietoja']} />
+  </div>
+{/if}
