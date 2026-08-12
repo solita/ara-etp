@@ -93,6 +93,13 @@
              eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.1.1"}
              eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.1.1"}
              eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1.1"}
+
+             ;; Pinned: CVE-2026-64607. dss-service depends on
+             ;; httpclient5 version 5.3.1, which is
+             ;; vulnerable. Remove when something pulls in
+             ;; httpclient5 >= 5.6.3.
+             org.apache.httpcomponents.client5/httpclient5       {:mvn/version "5.6.3"}
+
              ;; dss-utils-apache-commons, wss4j-ws-security-common and poi-ooxml contain vulnerable versions
              ;; that is now excluded in them since they can not be updated.
              org.apache.commons/commons-lang3                    {:mvn/version "3.18.0"}}
