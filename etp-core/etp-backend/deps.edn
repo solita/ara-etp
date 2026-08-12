@@ -25,7 +25,7 @@
              metosin/reitit-schema                               {:mvn/version "0.7.2"}
              fi.metosin/reitit-openapi                           {:mvn/version "0.7.2"}
              metosin/muuntaja                                    {:mvn/version "0.6.11"}
-             metosin/jsonista                                    {:mvn/version "0.3.13"}
+             metosin/jsonista                                    {:mvn/version "1.0.0"}
              metosin/schema-tools                                {:mvn/version "0.13.1"}
              webjure/jeesql                                      {:mvn/version "0.4.7"}
              clj-http/clj-http                                   {:mvn/version "3.13.1"}
@@ -102,7 +102,10 @@
 
              ;; dss-utils-apache-commons, wss4j-ws-security-common and poi-ooxml contain vulnerable versions
              ;; that is now excluded in them since they can not be updated.
-             org.apache.commons/commons-lang3                    {:mvn/version "3.18.0"}}
+             org.apache.commons/commons-lang3                    {:mvn/version "3.18.0"}
+
+             ;; Pinned: CVE-2026-54513 CVE-2026-54515
+             com.fasterxml.jackson.core/jackson-databind          {:mvn/version "2.21.5"}}
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
                                       "src/dev/clj"]
