@@ -205,6 +205,15 @@
         <cve>CVE-2026-23907</cve>
     </suppress>
 
+    <!-- CVE-2026-33929 affects example code shipped in PDFBox, which we do not use. -->
+    <suppress>
+        <notes><![CDATA[
+   file name: pdfbox-2.0.32.jar, xmpbox-2.0.24.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
+        <cve>CVE-2026-33929</cve>
+    </suppress>
+
     <!-- commons-io CPU DoS in XmlStreamReader affects versions < 2.14.0.
          Our direct dependency is commons-io 2.20.0 (not vulnerable).
          This is flagged from the embedded pom.xml inside velocity-engine-core-2.3.jar. -->
@@ -225,5 +234,21 @@
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.eclipse\.angus/angus\-activation@.*$</packageUrl>
         <cve>CVE-2025-7962</cve>
+    </suppress>
+
+    <!-- These CVEs affect similarly named Python and Ruby packages, not Maven msgpack. -->
+    <suppress>
+        <notes><![CDATA[
+   file name: msgpack-0.6.12.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.msgpack/msgpack@.*$</packageUrl>
+        <cve>CVE-2026-57585</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: msgpack-0.6.12.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.msgpack/msgpack@.*$</packageUrl>
+        <cve>CVE-2026-54522</cve>
     </suppress>
 </suppressions>
