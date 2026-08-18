@@ -74,7 +74,7 @@
           (try
             ;; In at least some versions of org.apache.http the
             ;; org.apache.http.impl.io.ContentLengthInputStream.close() method
-            ;; attempts to drain more data from the underlying input stream,
+            ;; attempts to drain more data from the underlying input stream using read(),
             ;; which can then throw ConnectionClosedException again
             (.close in)
             (catch ConnectionClosedException _ nil))))
