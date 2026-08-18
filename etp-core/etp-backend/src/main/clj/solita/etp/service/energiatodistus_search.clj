@@ -264,8 +264,8 @@
   (when (-> keyword str/blank? not)
     (concat
       ["postinumero.id::text = ltrim(?, '0') OR
-       postinumero.label_fi = ? OR
-       postinumero.label_sv = ? OR
+       postinumero.label_fi = upper(?) OR
+       postinumero.label_sv = upper(?) OR
        kunta.label_fi ILIKE ? OR
        kunta.label_sv ILIKE ? OR
        toimintaalue.label_fi ILIKE ? OR

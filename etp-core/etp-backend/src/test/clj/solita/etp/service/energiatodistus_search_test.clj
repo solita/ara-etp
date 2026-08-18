@@ -920,6 +920,11 @@
       (let [results (search kayttaja-test-data/paakayttaja nil "HIRVAS" nil nil)]
         (t/is (= (count results) 2))
         (doseq [et results]
+          (t/is (= (get-in et [:perustiedot :postinumero]) "97130")))))
+    (t/testing "Keyword search finds energiatodistus by postitoimipaikka name (lower case)"
+      (let [results (search kayttaja-test-data/paakayttaja nil "hirvas" nil nil)]
+        (t/is (= (count results) 2))
+        (doseq [et results]
           (t/is (= (get-in et [:perustiedot :postinumero]) "97130")))))))
 
 (t/deftest search-by-nimi-both-languages-test
