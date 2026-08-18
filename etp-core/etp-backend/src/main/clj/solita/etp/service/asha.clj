@@ -70,7 +70,14 @@
                               (str " (expected " expected-length
                                    " bytes, received " (.size out) ")"))
                             "; using the partially received body.")))
-        (finally (.close in)))
+        (finally
+          (try
+            ;; In at least some versions of org.apache.http the
+            ;; org.apache.http.impl.io.ContentLengthInputStream.close() method
+            ;; attempts to drain more data from the underlying input stream,
+            ;; which can then throw ConnectionClosedException again
+            (.close in)
+            (catch ConnectionClosedException _ nil))))
       (String. (.toByteArray out) StandardCharsets/UTF_8))))
 
 (defn- ^:dynamic post! [request]
