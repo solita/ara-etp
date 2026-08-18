@@ -263,12 +263,16 @@
 (defn keyword->sql [keyword]
   (when (-> keyword str/blank? not)
     (concat
-      ["postinumero.id::text = ltrim(?, '0') OR kunta.label_fi ILIKE ? OR
-       kunta.label_sv ILIKE ? OR toimintaalue.label_fi ILIKE ? OR
+      ["postinumero.id::text = ltrim(?, '0') OR
+       postinumero.label_fi = ? OR
+       postinumero.label_sv = ? OR
+       kunta.label_fi ILIKE ? OR
+       kunta.label_sv ILIKE ? OR
+       toimintaalue.label_fi ILIKE ? OR
        toimintaalue.label_sv ILIKE ? OR
        energiatodistus.pt$katuosoite_fi ILIKE ? OR
        energiatodistus.pt$katuosoite_sv ILIKE ?"]
-      [keyword]
+      [keyword keyword keyword]
       (repeat 6 (str keyword "%")))))
 
 (defn whoami->sql [{:keys [id] :as whoami}]

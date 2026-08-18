@@ -898,6 +898,30 @@
         (doseq [et results]
           (t/is (= (get-in et [:perustiedot :postinumero]) "49270")))))))
 
+(t/deftest search-by-keyword-postitoimipaikka-test
+  (let [[laatija-id laatija] (-> (laatija-test-data/generate-and-insert! 1) first)
+        energiatodistus-adds (concat
+                               ;; Hirvas, kunta Rovaniemi - postitoimipaikka name
+                               ;; differs from the kunta name, so this can only
+                               ;; be found via postinumero.label, not via
+                               ;; kunta.label
+                               (map #(assoc-in % [:perustiedot :postinumero] "97130")
+                                    (energiatodistus-test-data/generate-adds 2 2018 true))
+                               ;; Tampere - control group with a different
+                               ;; postinumero
+                               (map #(assoc-in % [:perustiedot :postinumero] "33100")
+                                    (energiatodistus-test-data/generate-adds 2 2018 true)))
+        energiatodistus-ids (energiatodistus-test-data/insert!
+                              energiatodistus-adds
+                              laatija-id)]
+    (sign-energiatodistukset! (map #(vec [laatija-id %]) energiatodistus-ids))
+
+    (t/testing "Keyword search finds energiatodistus by postitoimipaikka name"
+      (let [results (search kayttaja-test-data/paakayttaja nil "HIRVAS" nil nil)]
+        (t/is (= (count results) 2))
+        (doseq [et results]
+          (t/is (= (get-in et [:perustiedot :postinumero]) "97130")))))))
+
 (t/deftest search-by-nimi-both-languages-test
   (let [[laatija-id _] (-> (laatija-test-data/generate-and-insert! 1) first)
         energiatodistus-adds (concat
