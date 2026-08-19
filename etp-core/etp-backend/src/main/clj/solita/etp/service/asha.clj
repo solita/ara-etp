@@ -1,16 +1,18 @@
 (ns solita.etp.service.asha
-  (:require [clostache.parser :as clostache]
+  (:require [clj-http.client :as http]
             [clj-http.conn-mgr :as conn-mgr]
-            [solita.etp.schema.asha :as asha-schema]
-            [clj-http.client :as http]
-            [solita.common.xml :as xml]
-            [schema-tools.coerce :as sc]
+            [clojure.string :as str]
             [clojure.tools.logging :as log]
+            [clostache.parser :as clostache]
+            [schema-tools.coerce :as sc]
+            [solita.common.xml :as xml]
             [solita.etp.config :as config]
-            [clojure.string :as str])
-  (:import (java.nio.charset StandardCharsets)
+            [solita.etp.schema.asha :as asha-schema])
+  (:import (java.io ByteArrayOutputStream InputStream)
+           (java.nio.charset StandardCharsets)
            (java.time Instant)
-           (java.util Base64)))
+           (java.util Base64)
+           (org.apache.http ConnectionClosedException)))
 
 (def toplevel-processing-actions
   "Asha päätoimenpiteet etp is using. Not all of these are created by etp,
@@ -44,16 +46,53 @@
 (defn response->xml [response]
   (-> response xml/string->xml xml/without-soap-envelope first xml/with-kebab-case-tags))
 
+(defn- read-body-leniently
+  "Reads an InputStream fully into a UTF-8 string. ASHA (or something in
+   front of it) occasionally closes the connection a handful of bytes short
+   of the Content-Length it declared, which makes clj-http/Apache HttpClient
+   blow up with a ConnectionClosedException even though the body we did
+   receive is otherwise complete and usable. Instead of failing the whole
+   request in that case, log a warning and return whatever bytes were
+   actually received."
+  [^InputStream in expected-length]
+  (when-not (nil? in)
+    (let [buffer (byte-array 4096)
+          out (ByteArrayOutputStream.)]
+      (try
+        (loop []
+          (let [n (.read in buffer)]
+            (when (pos? n)
+              (.write out buffer 0 n)
+              (recur))))
+        (catch ConnectionClosedException e
+          (log/warn e (str "ASHA response body ended prematurely"
+                            (when expected-length
+                              (str " (expected " expected-length
+                                   " bytes, received " (.size out) ")"))
+                            "; using the partially received body.")))
+        (finally
+          (try
+            ;; In at least some versions of org.apache.http the
+            ;; org.apache.http.impl.io.ContentLengthInputStream.close() method
+            ;; attempts to drain more data from the underlying input stream using read(),
+            ;; which can then throw ConnectionClosedException again
+            (.close in)
+            (catch ConnectionClosedException _ nil))))
+      (String. (.toByteArray out) StandardCharsets/UTF_8))))
+
 (defn- ^:dynamic post! [request]
   (log/debug request)
   (if config/asha-endpoint-url
-    (http/post config/asha-endpoint-url
-               (cond-> {:content-type     "application/xop+xml;charset=\"UTF-8\"; type=\"text/xml\""
-                        :throw-exceptions false
-                        :body             request}
-                       config/asha-proxy? (assoc
-                                            :connection-manager
-                                            (conn-mgr/make-socks-proxied-conn-manager "localhost" 1080))))
+    (let [response (http/post config/asha-endpoint-url
+                              (cond-> {:content-type     "application/xop+xml;charset=\"UTF-8\"; type=\"text/xml\""
+                                       :throw-exceptions false
+                                       :as               :stream
+                                       :body             request}
+                                      config/asha-proxy? (assoc
+                                                           :connection-manager
+                                                           (conn-mgr/make-socks-proxied-conn-manager "localhost" 1080))))
+          expected-length (some-> response :headers (get "content-length") parse-long)]
+      (update response :body read-body-leniently expected-length))
     (do
       (log/info "Missing asha endpoint url. Skip request to asha...")
       {:status 200})))
