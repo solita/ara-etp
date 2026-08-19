@@ -4,11 +4,11 @@
  :mvn/repos {"shibboleth" {:url "https://build.shibboleth.net/maven/releases/"}}
  :deps      {org.clojure/clojure                                 {:mvn/version "1.12.0-alpha9"}
              ch.qos.logback/logback-classic                      {:mvn/version "1.5.20"}
-             org.slf4j/log4j-over-slf4j                          {:mvn/version "2.0.16"}
+             org.slf4j/log4j-over-slf4j                          {:mvn/version "2.0.18"}
              flathead/flathead                                   {:mvn/version "0.0.6"}
              integrant/integrant                                 {:mvn/version "0.13.1"}
              hikari-cp/hikari-cp                                 {:mvn/version "3.1.0"}
-             org.postgresql/postgresql                           {:mvn/version "42.7.7"}
+             org.postgresql/postgresql                           {:mvn/version "42.7.13"}
              org.clojure/java.jdbc                               {:mvn/version "0.7.12"}
              org.clojure/data.csv                                {:mvn/version "1.1.0"}
              http-kit/http-kit                                   {:mvn/version "2.8.1"}
@@ -25,7 +25,7 @@
              metosin/reitit-schema                               {:mvn/version "0.7.2"}
              fi.metosin/reitit-openapi                           {:mvn/version "0.7.2"}
              metosin/muuntaja                                    {:mvn/version "0.6.11"}
-             metosin/jsonista                                    {:mvn/version "0.3.13"}
+             metosin/jsonista                                    {:mvn/version "1.0.0"}
              metosin/schema-tools                                {:mvn/version "0.13.1"}
              webjure/jeesql                                      {:mvn/version "0.4.7"}
              clj-http/clj-http                                   {:mvn/version "3.13.1"}
@@ -37,8 +37,10 @@
              org.apache.poi/poi-ooxml                            {:mvn/version "5.4.1"
                                                                   :exclusions  [org.apache.commons/commons-lang3]}
 
-             org.bouncycastle/bcprov-jdk18on                     {:mvn/version "1.79"}
-             org.bouncycastle/bcmail-jdk18on                     {:mvn/version "1.79"}
+             org.bouncycastle/bcprov-jdk18on                     {:mvn/version "1.80.2"}
+             org.bouncycastle/bcpkix-jdk18on                     {:mvn/version "1.80.2"}
+             org.bouncycastle/bcutil-jdk18on                     {:mvn/version "1.80.2"}
+             org.bouncycastle/bcmail-jdk18on                     {:mvn/version "1.80.2"}
              org.apache.pdfbox/pdfbox                            {:mvn/version "2.0.32"}
              org.clojure/core.match                              {:mvn/version "1.1.0"}
              com.cognitect.aws/api                               {:mvn/version "0.8.774"}
@@ -82,20 +84,30 @@
              com.sun.xml.ws/webservices-rt                       {:mvn/version "2.0.1"}
              kovacnica/clojure.network.ip                        {:mvn/version "0.1.5"
                                                                   :exclusions  [org.clojure/clojurescript]}
-             eu.europa.ec.joinup.sd-dss/dss-enumerations         {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-model                {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-service              {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-pades                {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons {:mvn/version "6.1"
-                                                                  :exclusions  [org.apache.commons/commons-lang3]}
-             eu.europa.ec.joinup.sd-dss/dss-utils                {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.1"}
-             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1"}
+             eu.europa.ec.joinup.sd-dss/dss-enumerations         {:mvn/version "6.1.1"}
+             eu.europa.ec.joinup.sd-dss/dss-model                {:mvn/version "6.1.1"}
+             eu.europa.ec.joinup.sd-dss/dss-service              {:mvn/version "6.1.1"}
+             eu.europa.ec.joinup.sd-dss/dss-pades                {:mvn/version "6.1.1"}
+             eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons {:mvn/version "6.1.1"}
+             eu.europa.ec.joinup.sd-dss/dss-utils                {:mvn/version "6.1.1"}
+             eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.1.1"}
+             eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.1.1"}
+             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1.1"}
+
+             ;; Pinned: CVE-2026-64607. dss-service depends on
+             ;; httpclient5 version 5.3.1, which is
+             ;; vulnerable. Remove when something pulls in
+             ;; httpclient5 >= 5.6.3.
+             org.apache.httpcomponents.client5/httpclient5       {:mvn/version "5.6.3"}
 
              ;; dss-utils-apache-commons, wss4j-ws-security-common and poi-ooxml contain vulnerable versions
              ;; that is now excluded in them since they can not be updated.
-             org.apache.commons/commons-lang3                    {:mvn/version "3.18.0"}}
+             org.apache.commons/commons-lang3                    {:mvn/version "3.18.0"}
+
+             ;; Pinned: CVE-2026-54513 CVE-2026-54515
+             com.fasterxml.jackson.core/jackson-databind          {:mvn/version "2.21.5"}
+             ;; Pinned: CVE-2026-34479 CVE-2026-49844 CVE-2026-34477
+             org.apache.logging.log4j/log4j-api                   {:mvn/version "2.25.5"}}
  :aliases   {:dev      {:extra-paths ["src/test/clj"
                                       "src/test/resources"
                                       "src/dev/clj"]
