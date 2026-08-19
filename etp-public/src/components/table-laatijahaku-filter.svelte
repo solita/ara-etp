@@ -2,7 +2,7 @@
   import { _, locale, labelLocale } from '@Localization/localization';
 
   export let patevyydet;
-  export let showPatevyydet = '1,2';
+  export let showPatevyydet = '1,2,3,4';
 </script>
 
 <style>
@@ -95,7 +95,7 @@
           id="kaikkitasot"
           type="radio"
           bind:group={showPatevyydet}
-          value={'1,2'}
+          value={'1,2,3,4'}
           on:change />
         <span class="radio-visual" />
         {$_('LHAKU_FILTER_KAIKKI')}
@@ -120,12 +120,12 @@
           id="perustaso"
           type="radio"
           bind:group={showPatevyydet}
-          value={'1'}
+          value={'1,3'}
           on:change />
         <span class="radio-visual" />
         {labelLocale(
           $locale,
-          patevyydet.find(p => p.id === 1)
+          patevyydet.find(p => p.id === 1 || p.id === 3)
         )}
       </label>
       <div
@@ -149,12 +149,12 @@
           id="ylempitaso"
           type="radio"
           bind:group={showPatevyydet}
-          value={'2'}
+          value={'2,4'}
           on:change />
         <span class="radio-visual" />
         {labelLocale(
           $locale,
-          patevyydet.find(p => p.id === 2)
+          patevyydet.find(p => p.id === 2 || p.id === 4)
         )}
       </label>
       <div

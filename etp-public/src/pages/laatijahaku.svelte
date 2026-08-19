@@ -22,7 +22,6 @@
   import InfoBlock from '@Component/info-block';
   import TableLaatijahaku from '@Component/table-laatijahaku';
   import TableLaatijahakuFilter from '@Component/table-laatijahaku-filter';
-  import TableLaatijahakuFilter2026 from '@Component/table-laatijahaku-filter-2026';
   import Container, { styles as containerStyles } from '@Component/container';
   import Spinner from '@Component/spinner';
   import Pagination from '@Component/pagination';
@@ -32,9 +31,6 @@
   export let aluehaku = '';
   export let page = 0;
   export let filterPatevyydet = '1,2,3,4';
-  let isEtp2026 = '';
-
-  const configPromise = fetch('config.json').then(response => response.json());
 
   announceAssertively($_('NAVBAR_LAATIJAHAKU'));
 
@@ -91,9 +87,8 @@
       })
   );
 
-  const commitSearch = async (nimihaku, aluehaku) => {
-    const config = await configPromise;
-    filterPatevyydet = config?.isEtp2026 ? '1,2,3,4' : '1,2';
+  const commitSearch = (nimihaku, aluehaku) => {
+    filterPatevyydet = '1,2,3,4';
     const qs = [
       ...(nimihaku ? [['nimihaku', nimihaku].join('=')] : []),
       ...(aluehaku ? [['aluehaku', aluehaku].join('=')] : []),
@@ -109,16 +104,12 @@
     ]).then(([...args]) => GeoUtils.findToimintaalueIds(...args));
   };
 
-  onMount(async () => {
+  onMount(() => {
     window.scrollTo({
       top: 0,
       left: 0,
       behavior: 'smooth'
     });
-
-    // Initialize ETP 2026 flag
-    const config = await configPromise;
-    isEtp2026 = config?.isEtp2026 || false;
   });
 
   const handleFilterChange = newFilter => {
@@ -190,23 +181,17 @@
 </Container>
 
 <Container {...containerStyles.white}>
-  {#await Promise.all([configPromise, $patevyydet])}
+  {#await $patevyydet}
     <div class="px-3 lg:px-8 xl:px-16 pb-8">
       <div class="flex justify-center">
         <Spinner />
       </div>
     </div>
-  {:then [config, resolvedPatevyydet]}
-    {#if config?.isEtp2026}
-      <TableLaatijahakuFilter2026
-        on:change={evt => handleFilterChange(evt.detail)}
-        showPatevyydet={filterPatevyydet} />
-    {:else}
-      <TableLaatijahakuFilter
-        on:change={evt => handleFilterChange(evt.target.value)}
-        showPatevyydet={filterPatevyydet}
-        patevyydet={resolvedPatevyydet} />
-    {/if}
+  {:then resolvedPatevyydet}
+    <TableLaatijahakuFilter
+      on:change={evt => handleFilterChange(evt.target.value)}
+      showPatevyydet={filterPatevyydet}
+      patevyydet={resolvedPatevyydet} />
   {/await}
 
   <div
