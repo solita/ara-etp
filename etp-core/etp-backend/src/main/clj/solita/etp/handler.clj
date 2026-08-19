@@ -99,12 +99,6 @@
     (catch Throwable t
       (log/warn t "Failed to stamp logged_out_at on logout"))))
 
-(def empty-cookie {:value     ""
-                   :path      "/"
-                   :max-age   0
-                   :http-only true
-                   :secure    true})
-
 (def system-routes
   [["/openapi.json"
     {:get {:no-doc  true
@@ -141,8 +135,7 @@
                          (stamp-logout-if-identifiable! db req)
                          {:status  302
                           :headers {"Location" (logout-location req)}
-                          :cookies {"AWSELBAuthSessionCookie-0" empty-cookie
-                                    "AWSELBAuthSessionCookie-1" empty-cookie}})}}]
+                          :cookies security/clear-elb-cookies})}}]
    ;; TODO Temporary endpoint for seeing headers added by load balancer
    ["/headers"
     {:get {:summary "Endpoint for seeing request headers"
@@ -164,6 +157,7 @@
              (tag "Tilastointi Public API"
                   statistics-api/routes))]
     ["/private" {:middleware [[header-middleware/wrap-disable-cache]
+                              [cookies/wrap-cookies]
                               [security/wrap-jwt-payloads]
                               [security/wrap-whoami-from-jwt-payloads]
                               [security/wrap-reject-if-logged-out]
