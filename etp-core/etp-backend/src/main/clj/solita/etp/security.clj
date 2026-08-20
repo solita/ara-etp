@@ -23,14 +23,9 @@
                  (str "Invalid JWT in service request: " (exception/service-name request) ".")
                  (maybe/fold "" #(format "Exception: %s." %) (dissoc (ex-data t) :message))))))
 
-(def empty-cookie {:value     ""
-                   :path      "/"
-                   :max-age   0
-                   :http-only true
-                   :secure    true})
-
-(def clear-elb-cookies {"AWSELBAuthSessionCookie-0" empty-cookie
-                        "AWSELBAuthSessionCookie-1" empty-cookie})
+(def clear-elb-cookies-headers
+  {"Set-Cookie" ["AWSELBAuthSessionCookie-0=; Path=/; Max-Age=0; HttpOnly; Secure"
+                 "AWSELBAuthSessionCookie-1=; Path=/; Max-Age=0; HttpOnly; Secure"]})
 
 (defn wrap-jwt-payloads [handler]
   (fn [req]
@@ -153,7 +148,7 @@
   (fn [{:keys [jwt-payloads logged-out-at] :as req}]
     (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))]
       (if (logged-out? auth-time logged-out-at)
-        (assoc response/unauthorized :cookies clear-elb-cookies)
+        (assoc response/unauthorized :headers clear-elb-cookies-headers)
         (handler req)))))
 
 (defn- sanitized-path [path]

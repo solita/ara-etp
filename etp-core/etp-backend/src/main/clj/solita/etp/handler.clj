@@ -14,7 +14,6 @@
             [reitit.ring.middleware.parameters :as parameters]
             [reitit.spec :as rs]
             [reitit.swagger-ui :as swagger-ui]
-            [ring.middleware.cookies :as cookies]
             [schema.coerce]
             [schema.core]
             [solita.etp.api.public-csv :as public-csv-api]
@@ -129,13 +128,12 @@
            :parameters {:query
                         {(s/optional-key :redirect-location) String}}
            :tags       #{"System"}
-           :middleware [[cookies/wrap-cookies]
-                        [security/wrap-db-application-name]]
+           :middleware [[security/wrap-db-application-name]]
            :handler    (fn [{:keys [db] :as req}]
                          (stamp-logout-if-identifiable! db req)
                          {:status  302
-                          :headers {"Location" (logout-location req)}
-                          :cookies security/clear-elb-cookies})}}]
+                          :headers (merge {"Location" (logout-location req)}
+                                          security/clear-elb-cookies-headers)})}}]
    ;; TODO Temporary endpoint for seeing headers added by load balancer
    ["/headers"
     {:get {:summary "Endpoint for seeing request headers"
@@ -157,7 +155,6 @@
              (tag "Tilastointi Public API"
                   statistics-api/routes))]
     ["/private" {:middleware [[header-middleware/wrap-disable-cache]
-                              [cookies/wrap-cookies]
                               [security/wrap-jwt-payloads]
                               [security/wrap-whoami-from-jwt-payloads]
                               [security/wrap-reject-if-logged-out]
