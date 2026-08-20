@@ -77,6 +77,13 @@
                              ^List (doto (ArrayList.) (.add (:certificate tsp-key-and-cert))))
     (.setTsaPolicy "1.2.3.4")))
 
+;; The DVV test service responds with Content-Encoding: binary, which HttpClient 5.6 rejects.
+(defn- data-loader-with-disabled-content-compression []
+  (proxy [CommonsDataLoader] []
+    (getHttpClientBuilder [url]
+      (doto (proxy-super getHttpClientBuilder url)
+        (.disableContentCompression)))))
+
 ;; We add the root certificate as trusted in order to trust the timestamping service's SSL certificate.
 (defn get-data-loader-for-https []
   (let [cert-token (pem->CertificateToken config/dvv-timestamp-service-root-cert)
@@ -87,7 +94,7 @@
         key-store-document (with-open [baos (ByteArrayOutputStream.)]
                              (-> key-store (.store baos password))
                              (InMemoryDocument. (ByteArrayInputStream. (.toByteArray baos))))]
-    (doto (CommonsDataLoader.)
+    (doto (data-loader-with-disabled-content-compression)
       (.setSslTruststorePassword password)
       (.setSslTruststore key-store-document))))
 
@@ -282,4 +289,3 @@
         cms-signature (-> system-signature-cms-service
                           (.signMessageDigest dss-digest signature-parameters signature-value))]
     (.getBytes cms-signature)))
-
