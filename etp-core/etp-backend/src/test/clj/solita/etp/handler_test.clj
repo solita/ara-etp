@@ -55,8 +55,10 @@
     (let [response (ts/handler (logout-request))]
       (t/is (= 302 (:status response)))))
 
-  (t/testing "replaying the same (now revoked) JWT against a private endpoint is rejected with 401"
-    (t/is (= 401 (:status (ts/handler (whoami-request)))))))
+  (t/testing "replaying the same (now revoked) JWT is rejected with 401 and clears ALB session cookies"
+    (let [response (ts/handler (whoami-request))]
+      (t/is (= 401 (:status response)))
+      (t/is (true? (cleared-session-cookies? response))))))
 
 (t/deftest public-routes-are-unaffected-by-logout-test
   (let [response (ts/handler (mock/request :get "/api/public/kunnat"))]

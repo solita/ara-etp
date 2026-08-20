@@ -101,7 +101,7 @@
             req {:jwt-payloads {:access {:auth_time (.getEpochSecond auth-time)}}
                  :logged-out-at logged-out-at}
             response ((security/wrap-reject-if-logged-out spy-handler) req)]
-        (t/is (= response/unauthorized response))
+        (t/is (= 401 (-> response :status)))
         (t/is (false? @called?))))
 
     (t/testing "does not throw for well-formed requests where whoami-derived pieces are otherwise minimal"

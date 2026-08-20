@@ -14,7 +14,6 @@
             [reitit.ring.middleware.parameters :as parameters]
             [reitit.spec :as rs]
             [reitit.swagger-ui :as swagger-ui]
-            [ring.middleware.cookies :as cookies]
             [schema.coerce]
             [schema.core]
             [solita.etp.api.public-csv :as public-csv-api]
@@ -99,12 +98,6 @@
     (catch Throwable t
       (log/warn t "Failed to stamp logged_out_at on logout"))))
 
-(def empty-cookie {:value     ""
-                   :path      "/"
-                   :max-age   0
-                   :http-only true
-                   :secure    true})
-
 (def system-routes
   [["/openapi.json"
     {:get {:no-doc  true
@@ -135,14 +128,12 @@
            :parameters {:query
                         {(s/optional-key :redirect-location) String}}
            :tags       #{"System"}
-           :middleware [[cookies/wrap-cookies]
-                        [security/wrap-db-application-name]]
+           :middleware [[security/wrap-db-application-name]]
            :handler    (fn [{:keys [db] :as req}]
                          (stamp-logout-if-identifiable! db req)
                          {:status  302
-                          :headers {"Location" (logout-location req)}
-                          :cookies {"AWSELBAuthSessionCookie-0" empty-cookie
-                                    "AWSELBAuthSessionCookie-1" empty-cookie}})}}]
+                          :headers (merge {"Location" (logout-location req)}
+                                          security/clear-elb-cookies-headers)})}}]
    ;; TODO Temporary endpoint for seeing headers added by load balancer
    ["/headers"
     {:get {:summary "Endpoint for seeing request headers"
