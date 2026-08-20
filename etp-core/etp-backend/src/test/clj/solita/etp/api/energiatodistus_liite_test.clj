@@ -4,7 +4,6 @@
             [clojure.string :as string]
             [jsonista.core :as j]
             [ring.mock.request :as mock]
-            [solita.etp.service.liite :as liite-service]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
@@ -55,16 +54,40 @@
     {:energiatodistus-id (first (energiatodistus-test-data/insert! [add] laatija-id))
      :laatija-id laatija-id}))
 
-(t/deftest add-liite-with-empty-filename-test
+(t/deftest add-liite-rejects-empty-filename-test
   (let [{:keys [energiatodistus-id]} (setup-energiatodistus-visible-to-paakayttaja!)
         post-response (ts/handler (post-liite-file energiatodistus-id ""))]
-    (t/is (= 201 (:status post-response))
-          "Attachment upload is accepted even with an empty filename")
+    (t/is (= 400 (:status post-response))
+          "Attachment upload with an empty filename is rejected")
     (let [liitteet (-> (get-liitteet energiatodistus-id)
                        :body
                        (j/read-value j/keyword-keys-object-mapper))]
-      (t/is (some #(= "" (:nimi %)) liitteet)
-            "Empty filename is stored as-is"))))
+      (t/is (empty? liitteet)
+            "No liite was persisted for the rejected attachment"))))
+
+(t/deftest add-liite-rejects-executable-test
+  (let [{:keys [energiatodistus-id]} (setup-energiatodistus-visible-to-paakayttaja!)
+        executable-file (doto (java.io.File/createTempFile "liite-api-test" ".exe")
+                          .deleteOnExit)
+        _ (io/copy (byte-array (map unchecked-byte [0x4D 0x5A 0x00 0x00]))
+                    executable-file)
+        post-request (-> (mock/request :post (str "/api/private/energiatodistukset/2013/"
+                                                energiatodistus-id "/liitteet/files"))
+                        (kayttaja-test-data/with-virtu-user)
+                        (mock/header "Accept" "application/json")
+                        (mock/multipart-body
+                         {:files {:value        executable-file
+                                  :filename     "virus.exe"
+                                  :content-type "application/octet-stream"}})
+                        (fix-multipart-charset))
+        post-response (ts/handler post-request)]
+    (t/is (= 400 (:status post-response))
+          "Executable attachment upload is rejected with 400 Bad Request")
+    (let [liitteet (-> (get-liitteet energiatodistus-id)
+                       :body
+                       (j/read-value j/keyword-keys-object-mapper))]
+      (t/is (empty? liitteet)
+            "No liite was persisted for the rejected executable"))))
 
 (defn bais->str
   "Reads all bytes from a ByteArrayInputStream, decodes as UTF-8,
@@ -75,29 +98,23 @@
     (.reset bais)
     (String. bytes StandardCharsets/UTF_8)))
 
-(t/deftest add-liite-with-quote-in-filename-test
-  (let [{:keys [energiatodistus-id laatija-id]} (setup-energiatodistus-visible-to-paakayttaja!)
+(t/deftest add-liite-rejects-quote-in-filename-test
+  (let [{:keys [energiatodistus-id]} (setup-energiatodistus-visible-to-paakayttaja!)
         filename "quote\"file.txt"
         escaped-filename "quote\\\"file.txt"
         post-request (post-liite-file energiatodistus-id filename)
         post-response (ts/handler post-request)]
-    (t/is (= 201 (:status post-response))
-          "Attachment upload is accepted even with a quote in the filename")
-
     (t/is (string/includes?
             (-> post-request :body bais->str)
             escaped-filename)
           "Expecting the quote to be escaped in the multipart request")
 
-    (let [liitteet-in-db (liite-service/find-energiatodistus-liitteet ts/*db*
-                                                                      {:id laatija-id :rooli 0}
-                                                                      energiatodistus-id)]
-      (t/is (= filename (-> liitteet-in-db first :nimi))
-            "Expecting the database to have filename in original form"))
+    (t/is (= 400 (:status post-response))
+          "Attachment upload with a quote in the filename is rejected")
 
     (let [liitteet (-> (get-liitteet energiatodistus-id)
                        :body
                        (j/read-value j/keyword-keys-object-mapper))]
-      (t/is (some #(= filename (:nimi %)) liitteet)
-            "Expecting deserialized filename to not be escaped"))))
+      (t/is (empty? liitteet)
+            "No liite was persisted for the rejected attachment"))))
 

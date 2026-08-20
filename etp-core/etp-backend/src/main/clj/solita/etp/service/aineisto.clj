@@ -3,12 +3,10 @@
    [clojure.java.jdbc :as jdbc]
    [clojure.network.ip :as ip]
    [clojure.tools.logging :as log]
-   [solita.etp.service.file :as file]
    [solita.etp.service.energiatodistus-csv :as energiatodistus-csv]
    [solita.etp.db :as db]
    [solita.etp.service.luokittelu :as luokittelu-service])
   (:import (java.time Instant)
-           (java.nio.charset StandardCharsets)
            (java.nio ByteBuffer)))
 
 (db/require-queries 'aineisto)

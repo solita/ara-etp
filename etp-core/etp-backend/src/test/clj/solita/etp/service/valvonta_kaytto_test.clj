@@ -1,9 +1,11 @@
 (ns solita.etp.service.valvonta-kaytto-test
-  (:require [clojure.java.jdbc :as jdbc]
+  (:require [clojure.java.io :as io]
+            [clojure.java.jdbc :as jdbc]
             [clojure.test :as t]
             [schema.core :as schema]
             [solita.etp.schema.valvonta-kaytto :as valvonta-kaytto-schema]
             [solita.etp.service.valvonta-kaytto :as valvonta-kaytto]
+            [solita.etp.test :as etp-test]
             [solita.etp.test-data.kayttaja :as test-kayttajat]
             [solita.etp.test-system :as ts])
   (:import (java.time LocalDate ZoneId)))
@@ -577,3 +579,24 @@
       (t/testing "count-valvonnat matches the actual count"
         (t/is (= (:count (valvonta-kaytto/count-valvonnat ts/*db* query))
                  1))))))
+
+(t/deftest add-liitteet-from-files!-rejects-executable-test
+  (let [valvonta-id (valvonta-kaytto/add-valvonta!
+                     ts/*db*
+                     {:katuosoite "Testikatu"})
+        executable-file (doto (java.io.File/createTempFile "valvonta-kaytto-liite-test" ".dat")
+                          .deleteOnExit)
+        _ (io/copy (byte-array (map unchecked-byte [0x4D 0x5A 0x00 0x00]))
+                    executable-file)]
+    (t/is (= :liite-executable
+             (:type
+              (etp-test/catch-ex-data
+               #(valvonta-kaytto/add-liitteet-from-files!
+                 ts/*db* ts/*aws-s3-client* valvonta-id
+                 [{:size        4
+                   :tempfile    executable-file
+                   :contenttype "application/octet-stream"
+                   :nimi        "virus.dat"}]))))
+             "Executable attachment is rejected")
+    (t/is (empty? (valvonta-kaytto/find-liitteet ts/*db* valvonta-id))
+          "No liite was persisted for the rejected executable")))

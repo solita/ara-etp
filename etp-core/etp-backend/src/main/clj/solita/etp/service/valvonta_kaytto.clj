@@ -170,9 +170,14 @@
       :id))
 
 (defn add-liitteet-from-files! [db aws-s3-client valvonta-id liitteet]
-  (doseq [liite liitteet]
-    (let [liite-id (insert-liite! db (-> liite
-                                         liite-service/temp-file->liite
+  (doseq [liite liitteet
+          :let [normalized (liite-service/temp-file->liite liite)]]
+    (liite-service/assert-valid-filename! (:nimi normalized))
+    (liite-service/assert-extension-not-forbidden! (:nimi normalized))
+    (let [content-type (liite-service/resolve-content-type!
+                         (:tempfile liite) (:contenttype normalized) (:nimi normalized))
+          liite-id (insert-liite! db (-> normalized
+                                         (assoc :contenttype content-type)
                                          (assoc :valvonta-id valvonta-id)))]
       (file-service/upsert-file-from-file
         aws-s3-client
