@@ -600,7 +600,12 @@
       {:energiatodistus-id (:id energiatodistus)})
     (perusparannuspassi-db/invalidate-perusparannuspassi-vaiheet-by-energiatodistus-id!
       db
-      {:energiatodistus-id (:id energiatodistus)})))
+      {:energiatodistus-id (:id energiatodistus)}))
+  (when (and (= 2026 (:versio energiatodistus))
+             (not (energiatodistus-2026/has-ilmastoselvitys? energiatodistus)))
+    (energiatodistus-db/reset-ilmastoselvitys!
+      db
+      {:id (:id energiatodistus)})))
 
 (defn language-id->codes [language]
   (get {finnish-language-id      ["fi"]

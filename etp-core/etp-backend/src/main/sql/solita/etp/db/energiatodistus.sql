@@ -147,3 +147,36 @@ having
     (2018, 'KREP')
   )
 order by pt$postinumero;
+
+-- name: reset-ilmastoselvitys!
+update energiatodistus
+set
+    is$laatija = null,
+    is$yritys = null,
+    is$yritys_osoite = null,
+    is$yritys_postinumero = null,
+    is$yritys_postitoimipaikka = null,
+    is$laadintaperuste = null,
+    is$hiilijalanjalki$rakennus$rakennustuotteiden_valmistus = null,
+    is$hiilijalanjalki$rakennus$kuljetukset_tyomaavaihe = null,
+    is$hiilijalanjalki$rakennus$rakennustuotteiden_vaihdot  = null,
+    is$hiilijalanjalki$rakennus$energiankaytto = null,
+    is$hiilijalanjalki$rakennus$purkuvaihe = null,
+    is$hiilijalanjalki$rakennuspaikka$rakennustuotteiden_valmistus = null,
+    is$hiilijalanjalki$rakennuspaikka$kuljetukset_tyomaavaihe = null,
+    is$hiilijalanjalki$rakennuspaikka$rakennustuotteiden_vaihdot = null,
+    is$hiilijalanjalki$rakennuspaikka$energiankaytto = null,
+    is$hiilijalanjalki$rakennuspaikka$purkuvaihe = null,
+    is$hiilikadenjalki$rakennus$uudelleenkaytto = null,
+    is$hiilikadenjalki$rakennus$kierratys = null,
+    is$hiilikadenjalki$rakennus$ylimaarainen_uusiutuvaenergia = null,
+    is$hiilikadenjalki$rakennus$hiilivarastovaikutus = null,
+    is$hiilikadenjalki$rakennus$karbonatisoituminen = null,
+    is$hiilikadenjalki$rakennuspaikka$uudelleenkaytto = null,
+    is$hiilikadenjalki$rakennuspaikka$kierratys = null,
+    is$hiilikadenjalki$rakennuspaikka$ylimaarainen_uusiutuvaenergia = null,
+    is$hiilikadenjalki$rakennuspaikka$hiilivarastovaikutus = null,
+    is$hiilikadenjalki$rakennuspaikka$karbonatisoituminen = null,
+    is$hiilikadenjalki$rakennus$hyodyntaminen_energiana = null,
+    is$hiilikadenjalki$rakennuspaikka$hyodyntaminen_energiana = null
+where id = :id;
