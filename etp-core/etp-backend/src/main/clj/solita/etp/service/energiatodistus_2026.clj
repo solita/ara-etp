@@ -9,3 +9,7 @@
     (and (= 2 laatimisvaihe)
          (not (contains? toimenpide-ehdotukset-hidden-e-luokat e-luokka))
          (not has-valid-ppp?))))
+
+(defn has-ilmastoselvitys? [energiatodistus]
+  (let [ilmastoselvitys-laatimisajankohta (-> energiatodistus :ilmastoselvitys :laatimisajankohta)]
+    (some? ilmastoselvitys-laatimisajankohta)))
