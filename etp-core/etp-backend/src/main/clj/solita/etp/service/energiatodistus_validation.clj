@@ -7,12 +7,11 @@
             [solita.common.logic :as logic]
             [flathead.deep :as deep]))
 
-(def ^:private huomiot-ymparys-teksti-condition
-  (every-pred
-    laatimisvaihe/olemassaoleva-rakennus?
-    (complement (fn [energiatodistus]
-                  (and (= 2026 (:versio energiatodistus))
-                       (true? (:perusparannuspassi-valid energiatodistus)))))))
+(defn unless-2026-and-ppp-valid [condition]
+  (logic/if* (every-pred (logic/pred = :versio 2026)
+                         (logic/pred = :perusparannuspassi-valid true))
+             (constantly false)
+             condition))
 
 (def required-condition
   {"perustiedot.rakennustunnus" (logic/if* (logic/pred = :versio 2013)
@@ -20,8 +19,8 @@
                                            (complement laatimisvaihe/rakennuslupa?))
 
    "perustiedot.havainnointikaynti" laatimisvaihe/olemassaoleva-rakennus?
-   "perustiedot.keskeiset-suositukset-fi" laatimisvaihe/olemassaoleva-rakennus?
-   "perustiedot.keskeiset-suositukset-sv" laatimisvaihe/olemassaoleva-rakennus?
+   "perustiedot.keskeiset-suositukset-fi" (unless-2026-and-ppp-valid laatimisvaihe/olemassaoleva-rakennus?)
+   "perustiedot.keskeiset-suositukset-sv" (unless-2026-and-ppp-valid laatimisvaihe/olemassaoleva-rakennus?)
 
    "lahtotiedot.ilmanvaihto.kuvaus-fi" luokittelu/ilmanvaihto-kuvaus-required?
    "lahtotiedot.ilmanvaihto.kuvaus-sv" luokittelu/ilmanvaihto-kuvaus-required?
@@ -35,8 +34,8 @@
    "lahtotiedot.lammitys.lammonjako.kuvaus-fi" luokittelu/lammonjako-kuvaus-required?
    "lahtotiedot.lammitys.lammonjako.kuvaus-sv" luokittelu/lammonjako-kuvaus-required?
 
-   "huomiot.ymparys.teksti-fi" huomiot-ymparys-teksti-condition
-   "huomiot.ymparys.teksti-sv" huomiot-ymparys-teksti-condition
+   "huomiot.ymparys.teksti-fi" (unless-2026-and-ppp-valid laatimisvaihe/olemassaoleva-rakennus?)
+   "huomiot.ymparys.teksti-sv" (unless-2026-and-ppp-valid laatimisvaihe/olemassaoleva-rakennus?)
 
    "toteutunut-ostoenergiankulutus.tietojen-alkuperavuosi"
    (complement (some-fn laatimisvaihe/rakennuslupa? laatimisvaihe/kayttoonotto?))

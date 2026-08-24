@@ -40,6 +40,11 @@ const if2026Else = (on2026, onFalse) =>
 
 const isPppNotValid = R.compose(R.not, Maybe.orSome(false), R.prop('perusparannuspassi-valid'));
 
+const unless2026AndPppValid = condition => if2026Else(
+    R.both(condition, isPppNotValid),
+    condition
+)
+
 const requiredCondition = {
   'perustiedot.havainnointikaynti': if2026Else(
     laatimisvaiheet.isHavainnointikayntiRequired,
@@ -50,9 +55,9 @@ const requiredCondition = {
     if2013Else(R.T, R.complement(laatimisvaiheet.isRakennuslupa))
   ),
   'perustiedot.keskeiset-suositukset-fi':
-    laatimisvaiheet.isOlemassaOlevaRakennus,
+    unless2026AndPppValid(laatimisvaiheet.isOlemassaOlevaRakennus),
   'perustiedot.keskeiset-suositukset-sv':
-    laatimisvaiheet.isOlemassaOlevaRakennus,
+    unless2026AndPppValid(laatimisvaiheet.isOlemassaOlevaRakennus),
 
   'lahtotiedot.ilmanvaihto.kuvaus-fi': isIlmanvaihtoKuvausRequired,
   'lahtotiedot.ilmanvaihto.kuvaus-sv': isIlmanvaihtoKuvausRequired,
@@ -70,15 +75,8 @@ const requiredCondition = {
   'lahtotiedot.lammitys.lammonjako.kuvaus-fi': isLammonjakoKuvausRequired,
   'lahtotiedot.lammitys.lammonjako.kuvaus-sv': isLammonjakoKuvausRequired,
 
-  'huomiot.ymparys.teksti-fi': if2026Else(
-    R.both(laatimisvaiheet.isOlemassaOlevaRakennus, isPppNotValid),
-    laatimisvaiheet.isOlemassaOlevaRakennus
-  ),
-
-  'huomiot.ymparys.teksti-sv': if2026Else(
-    R.both(laatimisvaiheet.isOlemassaOlevaRakennus, isPppNotValid),
-    laatimisvaiheet.isOlemassaOlevaRakennus
-  ),
+  'huomiot.ymparys.teksti-fi': unless2026AndPppValid(laatimisvaiheet.isOlemassaOlevaRakennus),
+  'huomiot.ymparys.teksti-sv': unless2026AndPppValid(laatimisvaiheet.isOlemassaOlevaRakennus),
 
   'ilmastoselvitys.laatimisajankohta': if2026Else(
     R.both(
