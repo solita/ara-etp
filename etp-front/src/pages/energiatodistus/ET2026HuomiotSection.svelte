@@ -4,15 +4,14 @@
 </script>
 
 {#if hasPpp}
-  <p class="ml-1 mt-2 flex text-sm">
+  <p>
     <span class="mr-1 font-icon">info</span>
     {$_('energiatodistus.huomiot.ppp-kaytossa-info')}
   </p>
-  <div class="bg-grey m-8">
   <details>
+    <summary class="mt-2">{$_('energiatodistus.huomiot.tarkastele-disabloituja-huomioita')}</summary>
       <slot />
   </details>
-  </div>
 {:else}
   <slot />
 {/if}

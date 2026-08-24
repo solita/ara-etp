@@ -1180,7 +1180,8 @@
         "2018": "Åtgärdsförslag för att förbättra e-talet",
         "2026": "Åtgärdsförslag för att förbättra e-talet"
       },
-      "ppp-kaytossa-info": "Perusparannuspassi korvaa toimenpide-ehdotukset. Jos haluat toimenpide-ehdotukset takaisin käyttöön, poista perusparannuspassi käytöstä. (sv)",
+      "ppp-kaytossa-info": "Toimenpide-ehotukset -osiota ei tule energiatodistukselle, kun energiatodistukseen on lisättynä perusparannuspassi. Voit palauttaa toimenpide-ehdotukset käyttöön poistamalla perusparannuspassin käytöstä. (sv)",
+      "tarkastele-disabloituja-huomioita": "Tarkastele käytöstä poistettuja huomioita (sv)",
       "label-context": "$unused",
       "table-header": "Åtgärdsförslag",
       "toimenpide-table": {
