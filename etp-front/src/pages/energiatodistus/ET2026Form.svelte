@@ -228,7 +228,7 @@
 </div>
 <ToimenpideEhdotukset
   versio={'2026'}
-  {disabled}
+  disabled={huomiotDisabled}
   {inputLanguage}
   {schema}
   bind:energiatodistus />
