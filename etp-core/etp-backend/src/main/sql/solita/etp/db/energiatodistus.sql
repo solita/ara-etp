@@ -68,7 +68,8 @@ set
   h$ymparys$teksti_sv = null,
   h$ymparys$toimenpide = null,
   h$suositukset_fi = null,
-  h$suositukset_sv = null
+  h$suositukset_sv = null,
+  h$lammitys$kayttoikaa_jaljella_arvio_vuosina = null
 where id = :id;
 
 -- name: update-energiatodistus-korvattu!
