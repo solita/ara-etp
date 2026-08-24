@@ -7,6 +7,13 @@
             [solita.common.logic :as logic]
             [flathead.deep :as deep]))
 
+(def ^:private huomiot-ymparys-teksti-condition
+  (every-pred
+    laatimisvaihe/olemassaoleva-rakennus?
+    (complement (fn [energiatodistus]
+                  (and (= 2026 (:versio energiatodistus))
+                       (true? (:perusparannuspassi-valid energiatodistus)))))))
+
 (def required-condition
   {"perustiedot.rakennustunnus" (logic/if* (logic/pred = :versio 2013)
                                            (constantly true)
@@ -28,8 +35,8 @@
    "lahtotiedot.lammitys.lammonjako.kuvaus-fi" luokittelu/lammonjako-kuvaus-required?
    "lahtotiedot.lammitys.lammonjako.kuvaus-sv" luokittelu/lammonjako-kuvaus-required?
 
-   "huomiot.ymparys.teksti-fi" laatimisvaihe/olemassaoleva-rakennus?
-   "huomiot.ymparys.teksti-sv" laatimisvaihe/olemassaoleva-rakennus?
+   "huomiot.ymparys.teksti-fi" huomiot-ymparys-teksti-condition
+   "huomiot.ymparys.teksti-sv" huomiot-ymparys-teksti-condition
 
    "toteutunut-ostoenergiankulutus.tietojen-alkuperavuosi"
    (complement (some-fn laatimisvaihe/rakennuslupa? laatimisvaihe/kayttoonotto?))
