@@ -589,7 +589,7 @@
 
 (defn- reset-unused-fields [db energiatodistus]
   (when (and (= 2026 (:versio energiatodistus))
-             (not (energiatodistus-2026/show-toimenpide-pages? energiatodistus)))
+             (not (energiatodistus-2026/show-toimenpide-ehdotukset-pages? energiatodistus)))
     (energiatodistus-db/reset-toimenpide-ehdotukset-and-suositukset!
       db
       {:id (:id energiatodistus)}))

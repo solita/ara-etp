@@ -76,7 +76,7 @@
   containing both ET2026 and possibly a PPP."
   [{:keys [energiatodistus kieli] :as params}]
   (let [l (kieli loc/et-pdf-localization)
-        show-toimenpide? (energiatodistus-2026/show-toimenpide-pages? energiatodistus)
+        show-toimenpide? (energiatodistus-2026/show-toimenpide-ehdotukset-pages? energiatodistus)
         show-ilmastoselvitys? (ilmastoselvitys/has-ilmastoselvitys? energiatodistus)
         pages (concat
                 [{:page-border? true

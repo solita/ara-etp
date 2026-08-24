@@ -2,7 +2,7 @@
 
 (def toimenpide-ehdotukset-hidden-e-luokat #{"A" "A0" "A+"})
 
-(defn show-toimenpide-pages? [energiatodistus]
+(defn show-toimenpide-ehdotukset-pages? [energiatodistus]
   (let [e-luokka (-> energiatodistus :tulokset :e-luokka)
         has-valid-ppp? (-> energiatodistus :perusparannuspassi-valid)
         laatimisvaihe (-> energiatodistus :perustiedot :laatimisvaihe)]
