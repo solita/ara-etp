@@ -1208,6 +1208,7 @@
         "2018": "Toimenpide-ehdotukset e-luvun parantamiseksi",
         "2013": "Toimenpide-ehdotukset energiatehokkuuden parantamiseksi"
       },
+      "ppp-kaytossa-info": "Perusparannuspassi korvaa toimenpide-ehdotukset. Jos haluat toimenpide-ehdotukset takaisin käyttöön, poista perusparannuspassi käytöstä.",
       "label-context": "$unused",
       "table-header": "Toimenpide-ehdotus",
       "toimenpide-table": {

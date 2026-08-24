@@ -401,6 +401,7 @@
           {disabled}
           {disabledForPaakayttaja}
           {inputLanguage}
+          {perusparannuspassi}
           bind:energiatodistus
           bind:eTehokkuus
           bind:dirty

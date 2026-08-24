@@ -1180,6 +1180,7 @@
         "2018": "Åtgärdsförslag för att förbättra e-talet",
         "2026": "Åtgärdsförslag för att förbättra e-talet"
       },
+      "ppp-kaytossa-info": "Perusparannuspassi korvaa toimenpide-ehdotukset. Jos haluat toimenpide-ehdotukset takaisin käyttöön, poista perusparannuspassi käytöstä. (sv)",
       "label-context": "$unused",
       "table-header": "Åtgärdsförslag",
       "toimenpide-table": {
