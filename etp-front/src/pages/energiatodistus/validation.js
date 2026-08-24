@@ -38,12 +38,14 @@ const if2013Else = (on2013, onFalse) =>
 const if2026Else = (on2026, onFalse) =>
   R.ifElse(R.propEq(2026, 'versio'), on2026, onFalse);
 
-const isPppNotValid = R.compose(R.not, Maybe.orSome(false), R.prop('perusparannuspassi-valid'));
+const isPppNotValid = R.compose(
+  R.not,
+  Maybe.orSome(false),
+  R.prop('perusparannuspassi-valid')
+);
 
-const unless2026AndPppValid = condition => if2026Else(
-    R.both(condition, isPppNotValid),
-    condition
-)
+const unless2026AndPppValid = condition =>
+  if2026Else(R.both(condition, isPppNotValid), condition);
 
 const requiredCondition = {
   'perustiedot.havainnointikaynti': if2026Else(
@@ -54,10 +56,12 @@ const requiredCondition = {
     R.complement(laatimisvaiheet.isRakennuslupa),
     if2013Else(R.T, R.complement(laatimisvaiheet.isRakennuslupa))
   ),
-  'perustiedot.keskeiset-suositukset-fi':
-    unless2026AndPppValid(laatimisvaiheet.isOlemassaOlevaRakennus),
-  'perustiedot.keskeiset-suositukset-sv':
-    unless2026AndPppValid(laatimisvaiheet.isOlemassaOlevaRakennus),
+  'perustiedot.keskeiset-suositukset-fi': unless2026AndPppValid(
+    laatimisvaiheet.isOlemassaOlevaRakennus
+  ),
+  'perustiedot.keskeiset-suositukset-sv': unless2026AndPppValid(
+    laatimisvaiheet.isOlemassaOlevaRakennus
+  ),
 
   'lahtotiedot.ilmanvaihto.kuvaus-fi': isIlmanvaihtoKuvausRequired,
   'lahtotiedot.ilmanvaihto.kuvaus-sv': isIlmanvaihtoKuvausRequired,
@@ -75,8 +79,12 @@ const requiredCondition = {
   'lahtotiedot.lammitys.lammonjako.kuvaus-fi': isLammonjakoKuvausRequired,
   'lahtotiedot.lammitys.lammonjako.kuvaus-sv': isLammonjakoKuvausRequired,
 
-  'huomiot.ymparys.teksti-fi': unless2026AndPppValid(laatimisvaiheet.isOlemassaOlevaRakennus),
-  'huomiot.ymparys.teksti-sv': unless2026AndPppValid(laatimisvaiheet.isOlemassaOlevaRakennus),
+  'huomiot.ymparys.teksti-fi': unless2026AndPppValid(
+    laatimisvaiheet.isOlemassaOlevaRakennus
+  ),
+  'huomiot.ymparys.teksti-sv': unless2026AndPppValid(
+    laatimisvaiheet.isOlemassaOlevaRakennus
+  ),
 
   'ilmastoselvitys.laatimisajankohta': if2026Else(
     R.both(
