@@ -48,6 +48,7 @@
   import Ilmastoselvitys from './form-parts/Ilmastoselvitys';
 
   export let energiatodistus;
+  export let perusparannuspassi;
   export let inputLanguage;
   export let luokittelut;
   export let schema;
@@ -55,7 +56,6 @@
   export let validation;
   export let eTehokkuus = Maybe.None();
   export let whoami;
-  export let perusparannuspassi = Maybe.None();
 
   $: labelLocale = LocaleUtils.label($locale);
   $: hasPppAdded = perusparannuspassi && perusparannuspassi.valid;
@@ -68,7 +68,7 @@
     'perusparannuspassi-valid',
     R.__,
     energiatodistus
-  )(Maybe.of(perusparannuspassi.valid));
+  )(Maybe.of(R.propOr(false, 'valid', perusparannuspassi)));
 </script>
 
 <style>
