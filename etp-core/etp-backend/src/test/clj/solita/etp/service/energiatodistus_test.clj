@@ -337,14 +337,15 @@
       (t/is (nil? (get-in signed [:huomiot :ymparys :teksti-fi])))
       (t/is (nil? (get-in signed [:huomiot :ymparys :teksti-sv]))))))
 
-(t/deftest signing-resets-unesed-ilmastoselvitys
+(t/deftest signing-resets-unused-ilmastoselvitys
   (let [{:keys [laatijat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         whoami {:id laatija-id :rooli 0}
         db (ts/db-user laatija-id)
-        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)
-                  keys
-                  first)
+        ;; Set the tayttaa-aplus-vaatimukset to false, so that the ilmastoselvitys will not be required.
+        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+                   (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] false))
+        [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)
         update (-> (energiatodistus-test-data/generate-add 2026 true)
                  (assoc-in [:ilmastoselvitys :laatimisajankohta] nil)
                  (assoc-in [:ilmastoselvitys :yritys] "Testi Oy")
