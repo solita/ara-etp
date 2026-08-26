@@ -398,7 +398,8 @@
       (dissoc :kommentti
               :draft-visible-to-paakayttaja
               :bypass-validation-limits
-              :bypass-validation-limits-reason)
+              :bypass-validation-limits-reason
+              :yksinkertaistettu-paivitysmenettely)
       (assoc-in [:perustiedot :nimi] (schema/maybe common-schema/String75))
       xschema/optional-key-for-maybe))
 

@@ -148,7 +148,7 @@
         "lampohavio-lammittamaton-tila": 10,
         "lampopumppu-tuotto-osuus": 0.1,
         "tuoton-hyotysuhde": 1,
-        "jaon-hyotysuhde": 2,
+        "jaon-hyotysuhde": 0.7,
         "lampokerroin": 2.24,
         "apulaitteet": 1.23
       },
@@ -156,7 +156,7 @@
         "lampohavio-lammittamaton-tila": 10,
         "lampopumppu-tuotto-osuus": 0.1,
         "tuoton-hyotysuhde": 1,
-        "jaon-hyotysuhde": 2,
+        "jaon-hyotysuhde": 0.7,
         "lampokerroin": 3,
         "apulaitteet": 3
       },
