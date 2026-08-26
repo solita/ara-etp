@@ -1,5 +1,6 @@
 (ns user
   (:require [integrant.repl :refer [clear go halt prep init reset reset-all]]
+            [clojure.java.jdbc :as jdbc]
             [clojure.test :as t]
             [solita.common.schema :as xschema]
             [clojure.walk :as walk]
@@ -73,3 +74,6 @@
   (require 'solita.etp.service.csv-to-s3)
   ((resolve 'solita.etp.service.csv-to-s3/update-aineisto-in-s3!)
    (db 2) {:id -5 :rooli -1} (aws-s3-client) aineisto-id))
+
+(defn clear-all-logouts! []
+  (jdbc/execute! (db 2) ["UPDATE kayttaja SET logged_out_at = NULL WHERE logged_out_at IS NOT NULL"]))
