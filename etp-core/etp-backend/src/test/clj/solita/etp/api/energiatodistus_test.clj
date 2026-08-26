@@ -1,5 +1,7 @@
 (ns solita.etp.api.energiatodistus-test
   (:require
+    [clojure.java.io :as io]
+    [clojure.java.jdbc :as jdbc]
     [clojure.test :as t]
     [jsonista.core :as j]
     [schema.utils :as s-utils]
@@ -7,9 +9,11 @@
     [schema-tools.coerce :as stc]
     [ring.mock.request :as mock]
     [solita.etp.schema.energiatodistus :as et-schema]
+    [solita.etp.service.kayttaja :as kayttaja-service]
     [solita.etp.test-data.energiatodistus :as et-test-data]
     [solita.etp.test-data.laatija :as laatija-test-data]
-    [solita.etp.test-system :as ts]))
+    [solita.etp.test-system :as ts])
+  (:import (java.util Base64)))
 
 (t/use-fixtures :each ts/fixture)
 
@@ -36,6 +40,77 @@
 
 (defn- response-body [response]
   (-> response :body (j/read-value object-mapper)))
+
+(defn- basic-auth-header [email password]
+  (str "Basic " (->> (str email ":" password)
+                     .getBytes
+                     (.encode (Base64/getEncoder))
+                     (String.))))
+
+(defn- set-laatija-api-key! [id api-key]
+  ;; The KayttajaAdd schema (used when a laatija is inserted) intentionally
+  ;; drops :api-key, so the api-key-hash has to be set separately here to
+  ;; exercise Basic Auth on the external API.
+  (jdbc/execute! ts/*db*
+    ["update kayttaja set api_key_hash = ? where id = ?"
+     (:api-key-hash (kayttaja-service/api-key-hash {:api-key api-key}))
+     id]))
+
+(defn- insert-external-api-laatija! []
+  (let [id (laatija-test-data/insert-suomifi-laatija!
+             (-> (laatija-test-data/generate-adds 1)
+                 first
+                 (merge {:patevyystaso 4})))]
+    (set-laatija-api-key! id "password")
+    id))
+
+(defn- resource->str [path]
+  (slurp (io/resource path)))
+
+(defn- post-external-et! [versio resource-path]
+  (ts/handler (-> (mock/request :post (str "/api/external/energiatodistukset/" versio))
+                  (mock/header "Accept" "application/json")
+                  (mock/header "Content-Type" "application/json")
+                  (mock/header "Authorization" (basic-auth-header "laatija@solita.fi" "password"))
+                  (mock/body (resource->str (str "external-api/" resource-path))))))
+
+(defn- post-external-xml-et! [versio resource-path]
+  (ts/handler (-> (mock/request :post (str "/api/external/energiatodistukset/legacy/" versio))
+                  (mock/header "Accept" "application/xml")
+                  (mock/header "Content-Type" "application/xml")
+                  (mock/header "Authorization" (basic-auth-header "laatija@solita.fi" "password"))
+                  (mock/body (resource->str (str "legacy-api/" resource-path))))))
+
+(t/deftest external-api-post-json-test
+  (insert-external-api-laatija!)
+
+  (t/testing "POST /api/external/energiatodistukset/2013 with a reference payload creates an ET"
+    (let [response (post-external-et! 2013 "complete-2013.json")]
+      (t/is (= 201 (:status response)))
+      (t/is (integer? (:id (response-body response))))))
+
+  (t/testing "POST /api/external/energiatodistukset/2018 with a reference payload creates an ET"
+    (let [response (post-external-et! 2018 "complete-2018.json")]
+      (t/is (= 201 (:status response)))
+      (t/is (integer? (:id (response-body response))))))
+
+  (t/testing "POST /api/external/energiatodistukset/2018 with a minimal reference payload creates an ET"
+    (let [response (post-external-et! 2018 "minimal-2018.json")]
+      (t/is (= 201 (:status response)))
+      (t/is (integer? (:id (response-body response))))))
+
+  (t/testing "POST /api/external/energiatodistukset/2018 with an invalid reference payload is rejected"
+    (let [response (post-external-et! 2018 "minimal-2018-invalid-value.json")]
+      (t/is (= 400 (:status response))))))
+
+(t/deftest external-api-post-legacy-xml-test
+  (insert-external-api-laatija!)
+
+  (t/testing "POST /api/external/energiatodistukset/legacy/2018 with the reference XML payload creates an ET"
+    (let [response (post-external-xml-et! 2018 "esimerkki-2018.xml")]
+      (t/is (= 200 (:status response)))
+      (t/is (some? (re-matches #"(?s).*<b:TodistusTunnus>(\d+)</b:TodistusTunnus>.*"
+                               (:body response)))))))
 
 (t/deftest energiatodistukset-empty
   (laatija-test-data/insert-suomifi-laatija!)
