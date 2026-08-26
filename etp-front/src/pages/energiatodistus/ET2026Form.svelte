@@ -60,15 +60,6 @@
   $: labelLocale = LocaleUtils.label($locale);
   $: hasPppAdded = perusparannuspassi && perusparannuspassi.valid;
   $: huomiotDisabled = hasPppAdded;
-
-  // Energiatodistus has perusparannuspassi-valid property that is set based on the perusparannuspassi.valid value.
-  // This needs to update optimistically when perusparannuspassi.valid changes, so that the e.g. required properties
-  // can react to it.
-  $: energiatodistus = R.assoc(
-    'perusparannuspassi-valid',
-    R.__,
-    energiatodistus
-  )(Maybe.of(R.propOr(false, 'valid', perusparannuspassi)));
 </script>
 
 <style>
