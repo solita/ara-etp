@@ -41,7 +41,7 @@ const if2026Else = (on2026, onFalse) =>
 const isPppNotValid = R.compose(
   R.not,
   Maybe.orSome(false),
-  R.prop('perusparannuspassi-valid')
+  R.propOr(Maybe.of(false), 'perusparannuspassi-valid')
 );
 
 const unless2026AndPppValid = condition =>
