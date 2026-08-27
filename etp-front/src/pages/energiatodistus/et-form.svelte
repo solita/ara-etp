@@ -66,6 +66,8 @@
 
   export let ETForm;
 
+  export let perusparannuspassi;
+
   export let disabled;
   export let disabledForPaakayttaja;
 </script>
@@ -153,5 +155,6 @@
     {schema}
     {luokittelut}
     {validation}
-    {whoami} />
+    {whoami}
+    {perusparannuspassi} />
 </div>

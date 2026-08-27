@@ -255,13 +255,32 @@
     Inputs.scrollIntoView(document, allMissing[0]);
   };
 
+  const updatePppDepndentFieldsInEnergiatodistus = (
+    energiatodistus,
+    perusparannuspassi
+  ) => {
+    if (version === '2026') {
+      return R.assoc(
+        'perusparannuspassi-valid',
+        R.__,
+        energiatodistus
+      )(Maybe.of(R.propOr(false, 'valid', perusparannuspassi)));
+    } else {
+      // There is nothing to update for other versions, so just return the original energiatodistus
+      return energiatodistus;
+    }
+  };
+
   let etFormElement;
   const validateCompleteAndSubmit =
     (onSuccessfulSave, onUnsuccessfulSave = () => {}) =>
     () => {
       const missing = EtValidations.missingProperties(
         required(energiatodistus),
-        energiatodistus
+        updatePppDepndentFieldsInEnergiatodistus(
+          energiatodistus,
+          perusparannuspassi
+        )
       );
 
       const missingPPP = [];
@@ -401,6 +420,7 @@
           {disabled}
           {disabledForPaakayttaja}
           {inputLanguage}
+          {perusparannuspassi}
           bind:energiatodistus
           bind:eTehokkuus
           bind:dirty

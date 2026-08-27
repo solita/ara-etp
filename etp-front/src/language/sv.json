@@ -612,7 +612,7 @@
         },
         "2026": {
           "h2": "Åtgärdsförslag för att förbättra E-talet",
-          "h3": "De viktigaste rekommendationerna för att förbättra byggnadens E-tal (gäller inte nya byggnader)"
+          "h3": "De viktigaste rekommendationerna för att förbättra byggnadens E-tal (gäller inte nya byggnader eller energicertifikat med grundrenoveringspass)"
         }
       },
       "yritys": {
@@ -1180,6 +1180,8 @@
         "2018": "Åtgärdsförslag för att förbättra e-talet",
         "2026": "Åtgärdsförslag för att förbättra e-talet"
       },
+      "ppp-kaytossa-info": "Toimenpide-ehotukset -osiota ei tule energiatodistukselle, kun energiatodistukseen on lisättynä perusparannuspassi. Voit palauttaa toimenpide-ehdotukset käyttöön poistamalla perusparannuspassin käytöstä. (sv)",
+      "tarkastele-disabloituja-huomioita": "Tarkastele käytöstä poistettuja huomioita (sv)",
       "label-context": "$unused",
       "table-header": "Åtgärdsförslag",
       "toimenpide-table": {
