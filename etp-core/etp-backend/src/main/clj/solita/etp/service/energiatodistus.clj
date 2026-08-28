@@ -587,25 +587,46 @@
 (def swedish-language-id 1)
 (def multilingual-language-id 2)
 
-(defn- reset-unused-fields [db energiatodistus]
-  (when (and (= 2026 (:versio energiatodistus))
-             (not (energiatodistus-2026/show-toimenpide-ehdotukset-pages? energiatodistus)))
-    (energiatodistus-db/reset-toimenpide-ehdotukset-and-suositukset!
-      db
-      {:id (:id energiatodistus)}))
-  (when (and (= 2026 (:versio energiatodistus))
-             (not (true? (:perusparannuspassi-valid energiatodistus))))
-    (perusparannuspassi-db/invalidate-perusparannuspassit-by-energiatodistus-id!
-      db
-      {:energiatodistus-id (:id energiatodistus)})
-    (perusparannuspassi-db/invalidate-perusparannuspassi-vaiheet-by-energiatodistus-id!
-      db
-      {:energiatodistus-id (:id energiatodistus)}))
-  (when (and (= 2026 (:versio energiatodistus))
-             (not (energiatodistus-2026/has-ilmastoselvitys? energiatodistus)))
-    (energiatodistus-db/reset-ilmastoselvitys!
-      db
-      {:id (:id energiatodistus)})))
+(defn- reset-unused-fields [db id]
+  (let [energiatodistus (find-energiatodistus db id)]
+    (when (and (= 2026 (:versio energiatodistus))
+            (not (energiatodistus-2026/show-toimenpide-ehdotukset-pages? energiatodistus)))
+      (energiatodistus-db/reset-toimenpide-ehdotukset-and-suositukset!
+        db
+        {:id (:id energiatodistus)}))
+    (when (and (= 2026 (:versio energiatodistus))
+            (not (true? (:perusparannuspassi-valid energiatodistus))))
+      (perusparannuspassi-db/invalidate-perusparannuspassit-by-energiatodistus-id!
+        db
+        {:energiatodistus-id (:id energiatodistus)})
+      (perusparannuspassi-db/invalidate-perusparannuspassi-vaiheet-by-energiatodistus-id!
+        db
+        {:energiatodistus-id (:id energiatodistus)}))
+    (when (and (= 2026 (:versio energiatodistus))
+            (not (energiatodistus-2026/has-ilmastoselvitys? energiatodistus)))
+      (energiatodistus-db/reset-ilmastoselvitys!
+        db
+        {:id (:id energiatodistus)}))
+    (when (= 2026 (:versio energiatodistus))
+      (let [language (-> energiatodistus :perustiedot :kieli)
+            et-id (:id energiatodistus)
+            ppp-valid? (:perusparannuspassi-valid energiatodistus)]
+        (if (= language swedish-language-id)
+          (do
+            (energiatodistus-db/reset-finnish-fields! db {:id et-id})
+            (when ppp-valid?
+              (perusparannuspassi-db/reset-perusparannuspassi-finnish-fields!
+                db {:energiatodistus-id et-id})
+              (perusparannuspassi-db/reset-perusparannuspassi-vaihe-finnish-fields!
+                db {:energiatodistus-id et-id})))
+          (do
+            (energiatodistus-db/reset-swedish-fields! db {:id et-id})
+            (when ppp-valid?
+              (perusparannuspassi-db/reset-perusparannuspassi-swedish-fields!
+                db {:energiatodistus-id et-id})
+              (perusparannuspassi-db/reset-perusparannuspassi-vaihe-swedish-fields!
+                db {:energiatodistus-id et-id}))))))))
+
 
 (defn language-id->codes [language]
   (get {finnish-language-id      ["fi"]
@@ -683,7 +704,7 @@
                                             :allekirjoitusaika           allekirjoitusaika
                                             :voimassaolo-paattymisaika   (java.sql.Timestamp/from voimassaolo)})]
                               (if (= result 1)
-                                (let [_ (reset-unused-fields db energiatodistus)
+                                (let [_ (reset-unused-fields db id)
                                       energiatodistus (find-energiatodistus db id)]
                                   (when-not skip-pdf-signed-assert?
                                     (assert-energiatodistus-pdf-signed! aws-s3-client energiatodistus))

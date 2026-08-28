@@ -181,3 +181,103 @@ set
     is$hiilikadenjalki$rakennus$hyodyntaminen_energiana = null,
     is$hiilikadenjalki$rakennuspaikka$hyodyntaminen_energiana = null
 where id = :id;
+
+-- name: reset-finnish-fields!
+update energiatodistus
+set
+    pt$katuosoite_fi = null,
+    pt$keskeiset_suositukset_fi = null,
+    lt$ilmanvaihto$kuvaus_fi = null,
+    lt$lammitys$lammitysmuoto_1$kuvaus_fi = null,
+    lt$lammitys$lammitysmuoto_2$kuvaus_fi = null,
+    lt$lammitys$lammonjako$kuvaus_fi = null,
+    h$alapohja_ylapohja$teksti_fi = null,
+    h$iv_ilmastointi$teksti_fi = null,
+    h$lammitys$teksti_fi = null,
+    h$valaistus_muut$teksti_fi = null,
+    h$ymparys$teksti_fi = null,
+    h$suositukset_fi = null,
+    lisamerkintoja_fi = null,
+    pt$nimi_fi = null,
+    to$lisatietoja_fi = null,
+    h$alapohja_ylapohja$toimenpide = (
+        SELECT ARRAY(
+                   SELECT ROW(NULL, (elem).nimi_sv, (elem).lampo, (elem).sahko, (elem).jaahdytys, (elem).eluvun_muutos, (elem).kasvihuonepaastojen_muutos)::toimenpide
+            FROM unnest(h$alapohja_ylapohja$toimenpide) AS elem
+        )
+    ),
+    h$iv_ilmastointi$toimenpide = (
+        SELECT ARRAY(
+                   SELECT ROW(NULL, (elem).nimi_sv, (elem).lampo, (elem).sahko, (elem).jaahdytys, (elem).eluvun_muutos, (elem).kasvihuonepaastojen_muutos)::toimenpide
+            FROM unnest(h$iv_ilmastointi$toimenpide) AS elem
+        )
+    ),
+    h$lammitys$toimenpide = (
+        SELECT ARRAY(
+                   SELECT ROW(NULL, (elem).nimi_sv, (elem).lampo, (elem).sahko, (elem).jaahdytys, (elem).eluvun_muutos, (elem).kasvihuonepaastojen_muutos)::toimenpide
+            FROM unnest(h$lammitys$toimenpide) AS elem
+        )
+    ),
+    h$valaistus_muut$toimenpide = (
+        SELECT ARRAY(
+                   SELECT ROW(NULL, (elem).nimi_sv, (elem).lampo, (elem).sahko, (elem).jaahdytys, (elem).eluvun_muutos, (elem).kasvihuonepaastojen_muutos)::toimenpide
+            FROM unnest(h$valaistus_muut$toimenpide) AS elem
+        )
+    ),
+    h$ymparys$toimenpide = (
+        SELECT ARRAY(
+                   SELECT ROW(NULL, (elem).nimi_sv, (elem).lampo, (elem).sahko, (elem).jaahdytys, (elem).eluvun_muutos, (elem).kasvihuonepaastojen_muutos)::toimenpide
+            FROM unnest(h$ymparys$toimenpide) AS elem
+        )
+    )
+where id = :id;
+
+-- name: reset-swedish-fields!
+update energiatodistus
+set
+    pt$katuosoite_sv = null,
+    pt$keskeiset_suositukset_sv = null,
+    lt$ilmanvaihto$kuvaus_sv = null,
+    lt$lammitys$lammitysmuoto_1$kuvaus_sv = null,
+    lt$lammitys$lammitysmuoto_2$kuvaus_sv = null,
+    lt$lammitys$lammonjako$kuvaus_sv = null,
+    h$alapohja_ylapohja$teksti_sv = null,
+    h$iv_ilmastointi$teksti_sv = null,
+    h$lammitys$teksti_sv = null,
+    h$valaistus_muut$teksti_sv = null,
+    h$ymparys$teksti_sv = null,
+    h$suositukset_sv = null,
+    lisamerkintoja_sv = null,
+    pt$nimi_sv = null,
+    to$lisatietoja_sv = null,
+    h$alapohja_ylapohja$toimenpide = (
+        SELECT ARRAY(
+                   SELECT ROW((elem).nimi_fi, NULL, (elem).lampo, (elem).sahko, (elem).jaahdytys, (elem).eluvun_muutos, (elem).kasvihuonepaastojen_muutos)::toimenpide
+            FROM unnest(h$alapohja_ylapohja$toimenpide) AS elem
+        )
+    ),
+    h$iv_ilmastointi$toimenpide = (
+        SELECT ARRAY(
+                   SELECT ROW((elem).nimi_fi, NULL, (elem).lampo, (elem).sahko, (elem).jaahdytys, (elem).eluvun_muutos, (elem).kasvihuonepaastojen_muutos)::toimenpide
+            FROM unnest(h$iv_ilmastointi$toimenpide) AS elem
+        )
+    ),
+    h$lammitys$toimenpide = (
+        SELECT ARRAY(
+                   SELECT ROW((elem).nimi_fi, NULL, (elem).lampo, (elem).sahko, (elem).jaahdytys, (elem).eluvun_muutos, (elem).kasvihuonepaastojen_muutos)::toimenpide
+            FROM unnest(h$lammitys$toimenpide) AS elem
+        )
+    ),
+    h$valaistus_muut$toimenpide = (
+        SELECT ARRAY(
+                   SELECT ROW((elem).nimi_fi, NULL, (elem).lampo, (elem).sahko, (elem).jaahdytys, (elem).eluvun_muutos, (elem).kasvihuonepaastojen_muutos)::toimenpide
+            FROM unnest(h$valaistus_muut$toimenpide) AS elem
+        )
+    ),
+    h$ymparys$toimenpide = (
+        SELECT ARRAY(
+                   SELECT ROW((elem).nimi_fi, NULL, (elem).lampo, (elem).sahko, (elem).jaahdytys, (elem).eluvun_muutos, (elem).kasvihuonepaastojen_muutos)::toimenpide
+            FROM unnest(h$ymparys$toimenpide) AS elem
+        )
+    )
+where id = :id;
