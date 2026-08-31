@@ -611,21 +611,23 @@
       (let [language (-> energiatodistus :perustiedot :kieli)
             et-id (:id energiatodistus)
             ppp-valid? (:perusparannuspassi-valid energiatodistus)]
-        (if (= language swedish-language-id)
-          (do
-            (energiatodistus-db/reset-finnish-fields! db {:id et-id})
-            (when ppp-valid?
-              (perusparannuspassi-db/reset-perusparannuspassi-finnish-fields!
-                db {:energiatodistus-id et-id})
-              (perusparannuspassi-db/reset-perusparannuspassi-vaihe-finnish-fields!
-                db {:energiatodistus-id et-id})))
+        (case language
+          0
           (do
             (energiatodistus-db/reset-swedish-fields! db {:id et-id})
             (when ppp-valid?
-              (perusparannuspassi-db/reset-perusparannuspassi-swedish-fields!
-                db {:energiatodistus-id et-id})
-              (perusparannuspassi-db/reset-perusparannuspassi-vaihe-swedish-fields!
-                db {:energiatodistus-id et-id}))))))))
+              (perusparannuspassi-db/reset-perusparannuspassi-swedish-fields! db {:energiatodistus-id et-id})
+              (perusparannuspassi-db/reset-perusparannuspassi-vaihe-swedish-fields! db {:energiatodistus-id et-id})
+              ))
+          1
+          (do
+            (energiatodistus-db/reset-finnish-fields! db {:id et-id})
+            (when ppp-valid?
+              (perusparannuspassi-db/reset-perusparannuspassi-finnish-fields! db {:energiatodistus-id et-id})
+              (perusparannuspassi-db/reset-perusparannuspassi-vaihe-finnish-fields! db {:energiatodistus-id et-id}))
+            )
+          2
+          nil)))))
 
 
 (defn language-id->codes [language]
