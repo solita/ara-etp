@@ -47,23 +47,21 @@ $$
 
 <p>
   Valtion tukeman asuntorakentamisen keskuksen (Varke) tehtävänä on valvoa energiatodistusten käyttämistä myynti-
-  ja vuokraustilanteissa. Varke on lähettänyt teille kehotuksen liittyen rakennuksen/asunnon markkinointiin
-  ilman energiatodistusta. <b>Varke antaa Teille varoituksen.</b> Mikäli kohteen julkista markkinointia
-  jatketaan tai se myydään, <b>Varke pyytää esittämään energiatodistuksen {{määräpäivä}} mennessä sähköpostitse
-  osoitteeseen <span class="email-address">energiatodistus.varke@gov.fi</span> tai postitse.</b>
+  ja vuokraustilanteissa. Valvontamme perusteella rakennustanne/asuntoanne markkinoidaan edelleen julkisesti ilman
+  energiatodistusta aiemmin lähetetystä kehotuksesta huolimatta. Tämän vuoksi Varke antaa Teille varoituksen. <b>Mikäli
+  kohteen julkista markkinointia jatketaan tai kohde myydään, tulee energiatodistus hankkia {{määräpäivä}} mennessä.</b>
 </p>
 
 <p>
-  Rakennusta, huoneistoa tai niiden hallintaoikeutta myytäessä tai vuokrattaessa täytyy olla
-  energiatodistus. Energiatodistus on annettava joko alkuperäisenä tai jäljennöksenä ostajalle tai
-  vuokralaiselle. Myynti- tai vuokrausilmoituksessa on oltava myytävän kohteen
-  energiatehokkuusluokka. Rakennuksen omistaja tai haltija vastaa siitä, että rakennuksen energiatodistus
-  hankitaan ja sitä käytetään laissa säädetyissä tilanteissa.
+  Rakennuksen omistajan on huolehdittava, että rakennuksen energiatodistus hankitaan ja sitä käytetään laissa
+  säädetyissä tilanteissa. Rakennusta, huoneistoa tai niiden hallintaoikeutta myytäessä tai vuokrattaessa täytyy olla
+  energiatodistus.  Energiatodistus on hankittava ennen kohteen julkista markkinointia, koska myynti- ja
+  vuokrailmoituksessa on ilmoitettava energiatehokkuutta koskevat tiedot.
 </p>
 
 <p>
-  Jos energiatodistusta ei hankita ja esitetä Varkelle tässä varoituksessa asetetussa määräajassa, Varke antaa
-  tilanteen mukaisen käskypäätöksen. Käskypäätöstä tehostetaan uhkasakolla.
+  Jos energiatodistusta ei hankita tässä varoituksessa asetettuun määräaikaan mennessä, Varke antaa tilanteen mukaisen
+  käskypäätöksen. Käskypäätöstä voidaan tehostaa uhkasakolla.
 </p>
 
 <div class="sivunvaihto"></div>
@@ -71,24 +69,27 @@ $$
 <h1>Varning från tillsyn av energicertifikat</h1>
 
 <p>
-  Centralen för statligt stött bostadsbyggande (Varke) har till uppgift att övervaka användningen av
-  energicertifikat vid försäljning och uthyrning. Varke har skickat er uppmaning angående marknadsföring av en
-  byggnad/bostad utan energicertifikat. <b>Varke tilldelar er en varning.</b> Om den offentliga marknadsföringen
-  av objektet fortsätter eller om det säljs <b>ber Varke er att skicka in ett energicertifikat senast
-  {{määräpäivä}} per e-post till <span class="email-address">energiatodistus.varke@gov.fi</span> eller per post.</b>
+  Centralen för statligt stött bostadsbyggande (Varke) har till uppgift att övervaka användningen av energicertifikat
+  vid försäljning och uthyrning. Vi har i vår övervakning noterat att ni fortsättningsvis marknadsför er byggnad/bostad
+  utan energicertifikat, trots uppmaningen vi tidigare har skickat er. Till följd av detta tilldelar vi er en varning.
+  <b>Om den offentliga marknadsföringen av objektet fortsätter eller om objektet säljs, ska ett energicertifikat skaffas
+  senast den {{määräpäivä}}.</b>
 </p>
 
 <p>
-  Vid försäljning eller uthyrning av en byggnad eller lägenhet eller besittningsrätten till dem måste det
-  finnas ett energicertifikat. Energicertifikatet ska överlämnas till köparen eller hyrestagaren antingen i
-  original eller som kopia. Meddelandet om försäljning eller uthyrning ska innehålla objektets
-  energieffektivitetsklass. Byggnadens ägare eller innehavare ansvarar för att byggnadens energicertifikat
-  skaffas och används i de situationer som regleras i lagen.
+  Byggnadens ägare ansvarar för att byggnadens energicertifikat skaffas och används i de situationer som regleras i
+  lagen. Vid försäljning eller uthyrning av en byggnad eller lägenhet eller besittningsrätten till dem måste det finnas
+  ett energicertifikat.  Ett energicertifikat ska skaffas innan objektet börjar marknadsföras offentligt, eftersom
+  uppgifter om objektets energieffektivitet ska anges i försäljnings- och hyresannonser.
 </p>
 
 <p>
-  Om energicertifikat inte skaffas och framvisas till Varke inom tidsfristen i denna varning tilldelar Varke ett
-  lämpligt beslut om föreläggande. Beslutet om föreläggande kan förenas med ett vite.
+  Om energicertifikatet inte skaffas inom tidsfristen i denna varning tilldelar Varke ett beslut om föreläggande.
+  Beslutet om föreläggande kan förenas med ett vite.
+</p>
+
+<p>
+  Lisätietoja/Mer information: energiatodistus.varke@gov.fi
 </p>
 
 <p>
