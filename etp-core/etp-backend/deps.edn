@@ -98,7 +98,7 @@
              ;; httpclient5 version 5.3.1, which is
              ;; vulnerable. Remove when something pulls in
              ;; httpclient5 >= 5.6.3.
-             org.apache.httpcomponents.client5/httpclient5       {:mvn/version "5.6.3"}
+             org.apache.httpcomponents.client5/httpclient5       {:mvn/version "5.6.4"}
 
              ;; dss-utils-apache-commons, wss4j-ws-security-common and poi-ooxml contain vulnerable versions
              ;; that is now excluded in them since they can not be updated.
