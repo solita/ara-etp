@@ -583,6 +583,70 @@
     (catch Exception _e
       false)))
 
+(defn localized-field?
+  [key]
+  (and (keyword? key)
+    (let [field-name (name key)]
+      (or (.endsWith field-name "-fi")
+        (.endsWith field-name "-sv")))))
+
+(defn localized-field-paths
+  [data]
+  (letfn [(walk [value path]
+            (cond
+              (map? value)
+              (mapcat (fn [[key value]]
+                        (if (localized-field? key)
+                          [(conj path key)]
+                          (walk value (conj path key))))
+                value)
+              (sequential? value)
+              (mapcat
+                (fn [[index value]]
+                  (walk value (conj path index)))
+                (map-indexed vector value))
+              :else []))]
+    (walk data [])))
+
+(defn unused-language-suffix
+  [language]
+  (case language
+    0 "-sv"
+    1 "-fi"
+    nil))
+
+(defn reset-localized-fields
+  [energiatodistus]
+  (let [language (-> energiatodistus :perustiedot :kieli)
+        suffix (unused-language-suffix language)
+        paths (localized-field-paths energiatodistus)]
+    (if suffix
+      (reduce (fn [data path]
+                (if (.endsWith (name (last path)) suffix)
+                  (assoc-in data path nil)
+                  data))
+        energiatodistus
+        paths)
+      energiatodistus)))
+
+#_(defn- reset-unused-localized-fields
+  [db whoami id]
+  (let [energiatodistus (find-energiatodistus db id)
+        language (-> energiatodistus :perustiedot :kieli)
+        et-id (:id energiatodistus)
+        ppp-valid? (:perusparannuspassi-valid energiatodistus)
+        laatija-id (:laatija-id energiatodistus)
+        collected (collect-localized-fields energiatodistus)]
+    (println "Collected localized fields:" collected)
+    #_(when (= 2026 (:versio energiatodistus))
+      (let [updated-energiatodistus (reset-localized-fields energiatodistus)
+            update-data (select-keys updated-energiatodistus
+                                     [:perustiedot :lahtotiedot :tulokset
+                                      :toteutunut-ostoenergiankulutus :huomiot
+                                      :lisamerkintoja-fi :lisamerkintoja-sv])])
+      (when ppp-valid?))))
+
+
 (def finnish-language-id 0)
 (def swedish-language-id 1)
 (def multilingual-language-id 2)
@@ -699,6 +763,7 @@
                                   _ (when-not voimassaolo
                                       (throw (ex-info "resolve-voimassaolo-paattymisaika must not return nil"
                                                       {:energiatodistus-id id})))
+                                  _ (reset-unused-fields db id)
                                   result (energiatodistus-db/update-energiatodistus-allekirjoitettu!
                                            db
                                            {:id                          id
@@ -706,8 +771,7 @@
                                             :allekirjoitusaika           allekirjoitusaika
                                             :voimassaolo-paattymisaika   (java.sql.Timestamp/from voimassaolo)})]
                               (if (= result 1)
-                                (let [_ (reset-unused-fields db id)
-                                      energiatodistus (find-energiatodistus db id)]
+                                (let [energiatodistus (find-energiatodistus db id)]
                                   (when-not skip-pdf-signed-assert?
                                     (assert-energiatodistus-pdf-signed! aws-s3-client energiatodistus))
                                   (mark-energiatodistus-korvattu! db (:korvattu-energiatodistus-id energiatodistus))

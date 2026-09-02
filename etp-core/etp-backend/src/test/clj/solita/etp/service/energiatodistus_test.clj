@@ -1386,3 +1386,17 @@
             "voimassaolo-paattymisaika must be non-nil after signing (simplified update)")
       (t/is (= korvattava-validity (:voimassaolo-paattymisaika korvaava-et))
             "Simplified update must inherit replaced ET's validity (Clojure-provided, not SQL fallback)"))))
+
+(t/deftest test-localized-field-paths
+  ;;Given energiatodistus, check that localized fields are correctly identified to have -sv or -fi endings in the field paths
+  (let [et-add (first (energiatodistus-test-data/generate-adds 1 2026 true))
+        localized-fields (service/localized-field-paths et-add)]
+    (t/is (some #(= % [:perustiedot :katuosoite-fi]) localized-fields))
+    (t/is (some #(= % [:perustiedot :katuosoite-sv]) localized-fields))
+    (t/is (some #(= % [:perustiedot :nimi-fi]) localized-fields))
+    (t/is (some #(= % [:perustiedot :nimi-sv]) localized-fields))
+    (t/is (some #(= % [:perustiedot :keskeiset-suositukset-fi]) localized-fields))
+    (t/is (some #(= % [:perustiedot :keskeiset-suositukset-sv]) localized-fields))
+    (t/is (not (some #(= % [:perustiedot :voimassaolo-paattymisaika]) localized-fields)))
+    (t/is (not (some #(= % [:perustiedot :kiinteistotunnuse]) localized-fields)))
+    ))
