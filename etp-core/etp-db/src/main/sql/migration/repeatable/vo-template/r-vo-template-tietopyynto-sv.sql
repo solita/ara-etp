@@ -60,8 +60,9 @@ values (7, 'Tietopyyntö (sv)', 'Begäran om inlämning (sv)', 2, 3, 'sv',
 <p>
     {{#valvoja}}
     {{etunimi}} {{sukunimi}}
-    {{/valvoja}}<br/>
-    energiexpert
+    <br/>
+    {{titteli-sv}}
+    {{/valvoja}}
 </p>
 
 <table class="sarake max-width">
