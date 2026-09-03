@@ -167,7 +167,7 @@
 
 (defn sign-at-time! [energiatodistus-id laatija-id skip-pdf? now]
   (let [db (ts/db-user laatija-id)
-        whoami {:id laatija-id}]
+        whoami {:id laatija-id :rooli 0 :patevyystaso 4}]
     (energiatodistus-service/start-energiatodistus-signing! db
                                                             whoami
                                                             energiatodistus-id)

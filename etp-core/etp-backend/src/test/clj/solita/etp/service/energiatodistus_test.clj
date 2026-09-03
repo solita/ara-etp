@@ -268,7 +268,7 @@
 (t/deftest start-energiatodistus-signing!-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
-        whoami {:id laatija-id :rooli 0}
+        whoami {:id laatija-id :rooli 0 :patevyystaso 4}
         ids (keys energiatodistukset)
         db (ts/db-user laatija-id)]
     (doseq [id ids]
@@ -313,7 +313,7 @@
 (t/deftest signing-resets-toimenpide-ehdotukset-and-suositukset-when-not-included
   (let [{:keys [laatijat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
-        whoami {:id laatija-id :rooli 0}
+        whoami {:id laatija-id :rooli 0 :patevyystaso 4}
         db (ts/db-user laatija-id)
         et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)
                   keys
