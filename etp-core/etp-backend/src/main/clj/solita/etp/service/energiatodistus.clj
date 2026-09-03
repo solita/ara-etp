@@ -396,6 +396,14 @@
                                              [:kommentti
                                               :bypass-validation-limits
                                               :bypass-validation-limits-reason])
+    [:in-signing :laatija false] (dissoc energiatodistus-update
+                                         :perusparannuspassi-valid
+                                         :korvaava-energiatodistus-id
+                                         :perusparannuspassi-id
+                                         :laatija-fullname
+                                         :kommentti
+                                         :bypass-validation-limits
+                                         :bypass-validation-limits-reason)
     [:signed :laatija false] (select-keys energiatodistus-update
                                           [:laskutettava-yritys-id
                                            :laskuriviviite
@@ -616,42 +624,51 @@
     nil))
 
 (defn reset-localized-fields
-  [energiatodistus]
-  (let [language (-> energiatodistus :perustiedot :kieli)
-        suffix (unused-language-suffix language)
-        paths (localized-field-paths energiatodistus)]
+  [data language]
+  (let [suffix (unused-language-suffix language)
+        paths (localized-field-paths data)]
     (if suffix
       (reduce (fn [data path]
                 (if (.endsWith (name (last path)) suffix)
                   (assoc-in data path nil)
                   data))
-        energiatodistus
+        data
         paths)
-      energiatodistus)))
+      data)))
 
-#_(defn- reset-unused-localized-fields
-  [db whoami id]
+(defn- reset-unused-localized-fields
+  [db id whoami]
   (let [energiatodistus (find-energiatodistus db id)
         language (-> energiatodistus :perustiedot :kieli)
         et-id (:id energiatodistus)
         ppp-valid? (:perusparannuspassi-valid energiatodistus)
         laatija-id (:laatija-id energiatodistus)
-        collected (collect-localized-fields energiatodistus)]
-    (println "Collected localized fields:" collected)
-    #_(when (= 2026 (:versio energiatodistus))
-      (let [updated-energiatodistus (reset-localized-fields energiatodistus)
-            update-data (select-keys updated-energiatodistus
-                                     [:perustiedot :lahtotiedot :tulokset
-                                      :toteutunut-ostoenergiankulutus :huomiot
-                                      :lisamerkintoja-fi :lisamerkintoja-sv])])
-      (when ppp-valid?))))
+        updated-energiatodistus (reset-localized-fields energiatodistus language)]
+    (db-update-energiatodistus! db id
+      (dissoc energiatodistus :laatija-fullname)
+      (dissoc updated-energiatodistus :laatija-fullname
+        :perusparannuspassi-id
+        :perusparannuspassi-valid
+        :korvaava-energiatodistus-id)
+      (-> whoami :rooli rooli-service/rooli-key))
+    (when ppp-valid?
+      (when-let [ppp (first (perusparannuspassi-db/find-by-energiatodistus-id db {:energiatodistus-id et-id
+                                                                                  :laatija-id laatija-id}))]
+        (let [ppp-vaiheet-db (perusparannuspassi-db/select-perusparannuspassi-vaiheet db {:perusparannuspassi-id (:id ppp)})
+              ppp-vaiheet-objects (mapv perusparannuspassi-service/db-row->ppp-vaihe ppp-vaiheet-db)
+              updated-ppp (reset-localized-fields ppp language)
+              updated-vaiheet (mapv #(reset-localized-fields % language) ppp-vaiheet-objects)
+              updated-ppp-with-vaiheet (assoc (dissoc updated-ppp :laatija-id :tila-id) :vaiheet updated-vaiheet)]
+          (perusparannuspassi-service/update-perusparannuspassi!
+            db whoami (:id ppp)
+            updated-ppp-with-vaiheet))))))
 
 
 (def finnish-language-id 0)
 (def swedish-language-id 1)
 (def multilingual-language-id 2)
 
-(defn- reset-unused-fields [db id]
+(defn- reset-unused-fields [db id whoami]
   (let [energiatodistus (find-energiatodistus db id)]
     (when (and (= 2026 (:versio energiatodistus))
             (not (energiatodistus-2026/show-toimenpide-ehdotukset-pages? energiatodistus)))
@@ -671,28 +688,8 @@
       (energiatodistus-db/reset-ilmastoselvitys!
         db
         {:id (:id energiatodistus)}))
-    (when (= 2026 (:versio energiatodistus))
-      (let [language (-> energiatodistus :perustiedot :kieli)
-            et-id (:id energiatodistus)
-            ppp-valid? (:perusparannuspassi-valid energiatodistus)]
-        (case language
-          0
-          (do
-            (energiatodistus-db/reset-swedish-fields! db {:id et-id})
-            (when ppp-valid?
-              (perusparannuspassi-db/reset-perusparannuspassi-swedish-fields! db {:energiatodistus-id et-id})
-              (perusparannuspassi-db/reset-perusparannuspassi-vaihe-swedish-fields! db {:energiatodistus-id et-id})
-              ))
-          1
-          (do
-            (energiatodistus-db/reset-finnish-fields! db {:id et-id})
-            (when ppp-valid?
-              (perusparannuspassi-db/reset-perusparannuspassi-finnish-fields! db {:energiatodistus-id et-id})
-              (perusparannuspassi-db/reset-perusparannuspassi-vaihe-finnish-fields! db {:energiatodistus-id et-id}))
-            )
-          2
-          nil)))))
-
+    (when (and (= 2026 (:versio energiatodistus))
+            (reset-unused-localized-fields db id whoami)))))
 
 (defn language-id->codes [language]
   (get {finnish-language-id      ["fi"]
@@ -763,7 +760,7 @@
                                   _ (when-not voimassaolo
                                       (throw (ex-info "resolve-voimassaolo-paattymisaika must not return nil"
                                                       {:energiatodistus-id id})))
-                                  _ (reset-unused-fields db id)
+                                  _ (reset-unused-fields db id whoami)
                                   result (energiatodistus-db/update-energiatodistus-allekirjoitettu!
                                            db
                                            {:id                          id

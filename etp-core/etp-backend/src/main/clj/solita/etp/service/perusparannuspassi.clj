@@ -76,10 +76,11 @@
         "Perusparannuspassi can only be added to energiatodistus version 2026."))))
 
 (defn assert-draft! [tila-id]
-  (when (not= :draft (energiatodistus-tila/tila-key tila-id))
-    (db/with-db-exception-translation
-      (exception/throw-forbidden!
-        "Perusparannuspassi can only be added or modified to draft energiatodistus."))))
+  (let [tila (energiatodistus-tila/tila-key tila-id)]
+    (when-not (#{:draft :in-signing} tila)
+      (db/with-db-exception-translation
+        (exception/throw-forbidden!
+          "Perusparannuspassi can only be added or modified to draft or in-signing energiatodistus.")))))
 
 (defn assert-correct-et-owner! [{:keys [id]} et-laatija-id]
   (when (not= et-laatija-id id)

@@ -156,39 +156,3 @@ select column_name
 from ppp_vaihe_validation_required_column
 where versio = :versio and valid and not (bypass_allowed and :bypass-validation)
 order by ordinal asc;
-
--- name: reset-perusparannuspassi-finnish-fields!
-update perusparannuspassi
-set
-    t$lisatietoja_fi = null,
-    ppt$lisatietoja_fi = null,
-    rpt$lisatietoja_fi = null
-where energiatodistus_id = :energiatodistus-id;
-
--- name: reset-perusparannuspassi-swedish-fields!
-update perusparannuspassi
-set
-    t$lisatietoja_sv = null,
-    ppt$lisatietoja_sv = null,
-    rpt$lisatietoja_sv = null
-where energiatodistus_id = :energiatodistus-id;
-
--- name: reset-perusparannuspassi-vaihe-finnish-fields!
-
-update perusparannuspassi_vaihe vaihe
-set
-    tp$toimenpideseloste_fi = null
-from perusparannuspassi ppp
-where vaihe.perusparannuspassi_id = ppp.id
-  and ppp.energiatodistus_id = :energiatodistus-id;
-
--- name: reset-perusparannuspassi-vaihe-swedish-fields!
-
-update perusparannuspassi_vaihe vaihe
-set
-    tp$toimenpideseloste_sv = null
-from perusparannuspassi ppp
-where vaihe.perusparannuspassi_id = ppp.id
-  and ppp.energiatodistus_id = :energiatodistus-id;
-
-
