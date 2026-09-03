@@ -1,16 +1,36 @@
 (ns solita.etp.service.valvonta-oikeellisuus-test
-  (:require [clojure.test :as t]
+  (:require [clostache.parser :as clostache]
+            [clojure.test :as t]
             [solita.etp.test-system :as ts]
             [solita.etp.whoami :as test-whoami]
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.service.valvonta-oikeellisuus :as service]
+            [solita.etp.service.valvonta-oikeellisuus.asha :as asha]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test :as etp-test]
             [solita.common.map :as map])
   (:import (java.time LocalDate)))
 
 (t/use-fixtures :each ts/fixture)
+
+(t/deftest document-template-data-includes-validator-titles
+  (let [data (#'asha/template-data
+              {:etunimi "Asian"
+               :sukunimi "Tuntija"
+               :email "testi@varke.fi"
+               :titteli-fi "Finnish title"
+               :titteli-sv "Svensk titel"}
+              {} {} {} {} {:language "fi"})]
+    (t/is (= {:etunimi "Asian"
+              :sukunimi "Tuntija"
+              :email "testi@varke.fi"
+              :titteli-fi "Finnish title"
+              :titteli-sv "Svensk titel"}
+             (:valvoja data)))
+    (t/is (= "Finnish title / Svensk titel"
+             (clostache/render "{{#valvoja}}{{titteli-fi}} / {{titteli-sv}}{{/valvoja}}"
+                               data)))))
 
 (t/deftest find-valvonta
   (let [paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)

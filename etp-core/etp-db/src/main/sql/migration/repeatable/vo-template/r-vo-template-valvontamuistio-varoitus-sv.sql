@@ -55,8 +55,9 @@ $$
 <p>
     {{#valvoja}}
     {{etunimi}} {{sukunimi}}
-    {{/valvoja}}<br />
-    energiexpert
+    <br />
+    {{titteli-sv}}
+    {{/valvoja}}
 </p>
 
 <table class="sarake max-width">
