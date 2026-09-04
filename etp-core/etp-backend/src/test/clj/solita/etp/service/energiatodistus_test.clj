@@ -346,7 +346,7 @@
         et-add (-> (energiatodistus-test-data/generate-add 2026 true)
                    (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] false))
         [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)
-        update (-> (energiatodistus-test-data/generate-add 2026 true)
+        update (-> et-add
                  (assoc-in [:ilmastoselvitys :laatimisajankohta] nil)
                  (assoc-in [:ilmastoselvitys :yritys] "Testi Oy")
                  (assoc-in [:ilmastoselvitys :yritys-osoite] "testi-osoitekatu 2")

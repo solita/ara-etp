@@ -56,8 +56,9 @@ $$
 <p>
     {{#valvoja}}
     {{etunimi}} {{sukunimi}}
-    {{/valvoja}}<br/>
-    energia-asiantuntija
+    <br/>
+    {{titteli-fi}}
+    {{/valvoja}}
 </p>
 
 <table class="sarake max-width">
