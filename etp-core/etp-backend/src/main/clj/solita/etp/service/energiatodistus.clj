@@ -482,6 +482,24 @@
            " update conflicts with other concurrent update."))
     result))
 
+(defn- update-localized-fields [db id current-energiatodistus energiatodistus]
+  (jdbc/with-db-transaction [db db]
+    (let [versio (:versio current-energiatodistus)
+          energiatodistus-db-row (-> (dissoc energiatodistus
+                                             :laatija-fullname
+                                             :perusparannuspassi-id
+                                             :perusparannuspassi-valid
+                                             :korvaava-energiatodistus-id)
+                                   energiatodistus->db-row)]
+      (first (db/with-db-exception-translation jdbc/update!
+                                               db
+                                               :energiatodistus
+                                               energiatodistus-db-row
+                                               ["id = ? and versio = ?"
+                                                id
+                                                versio]
+                                               db/default-opts)))))
+
 (defn find-required-properties [db versio bypass-validation]
   (cons
     "laskutusosoite-id"
@@ -583,29 +601,96 @@
     (catch Exception _e
       false)))
 
+(defn localized-field?
+  [key]
+  (and (keyword? key)
+    (let [field-name (name key)]
+      (or (.endsWith field-name "-fi")
+        (.endsWith field-name "-sv")))))
+
+(defn localized-field-paths
+  [data]
+  (letfn [(walk [value path]
+            (cond
+              (map? value)
+              (mapcat (fn [[key value]]
+                        (if (localized-field? key)
+                          [(conj path key)]
+                          (walk value (conj path key))))
+                value)
+              (sequential? value)
+              (mapcat
+                (fn [[index value]]
+                  (walk value (conj path index)))
+                (map-indexed vector value))
+              :else []))]
+    (walk data [])))
+
+(defn unused-language-suffix
+  [language]
+  (case language
+    0 "-sv"
+    1 "-fi"
+    nil))
+
+(defn reset-localized-fields
+  [data language]
+  (let [suffix (unused-language-suffix language)
+        paths (localized-field-paths data)]
+    (if suffix
+      (reduce (fn [data path]
+                (if (.endsWith (name (last path)) suffix)
+                  (assoc-in data path nil)
+                  data))
+        data
+        paths)
+      data)))
+
+(defn- reset-unused-localized-fields
+  [db id]
+  (let [energiatodistus (find-energiatodistus db id)
+        language (-> energiatodistus :perustiedot :kieli)
+        et-id (:id energiatodistus)
+        ppp-valid? (:perusparannuspassi-valid energiatodistus)
+        laatija-id (:laatija-id energiatodistus)
+        updated-energiatodistus (reset-localized-fields energiatodistus language)]
+    (update-localized-fields db id energiatodistus updated-energiatodistus)
+    (when ppp-valid?
+      (when-let [ppp (first (perusparannuspassi-db/find-by-energiatodistus-id db {:energiatodistus-id et-id
+                                                                                  :laatija-id laatija-id}))]
+        (let [ppp-vaiheet-db (perusparannuspassi-db/select-perusparannuspassi-vaiheet db {:perusparannuspassi-id (:id ppp)})
+              ppp-vaiheet-objects (mapv perusparannuspassi-service/db-row->ppp-vaihe ppp-vaiheet-db)
+              updated-ppp (reset-localized-fields ppp language)
+              updated-vaiheet (mapv #(reset-localized-fields % language) ppp-vaiheet-objects)
+              updated-ppp-with-vaiheet (assoc updated-ppp :vaiheet updated-vaiheet)]
+          (perusparannuspassi-service/update-perusparannuspassi-localized-fields db (:id ppp) updated-ppp-with-vaiheet))))))
+
 (def finnish-language-id 0)
 (def swedish-language-id 1)
 (def multilingual-language-id 2)
 
-(defn- reset-unused-fields [db energiatodistus]
-  (when (and (= 2026 (:versio energiatodistus))
-             (not (energiatodistus-2026/show-toimenpide-ehdotukset-pages? energiatodistus)))
-    (energiatodistus-db/reset-toimenpide-ehdotukset-and-suositukset!
-      db
-      {:id (:id energiatodistus)}))
-  (when (and (= 2026 (:versio energiatodistus))
-             (not (true? (:perusparannuspassi-valid energiatodistus))))
-    (perusparannuspassi-db/invalidate-perusparannuspassit-by-energiatodistus-id!
-      db
-      {:energiatodistus-id (:id energiatodistus)})
-    (perusparannuspassi-db/invalidate-perusparannuspassi-vaiheet-by-energiatodistus-id!
-      db
-      {:energiatodistus-id (:id energiatodistus)}))
-  (when (and (= 2026 (:versio energiatodistus))
-             (not (energiatodistus-2026/has-ilmastoselvitys? energiatodistus)))
-    (energiatodistus-db/reset-ilmastoselvitys!
-      db
-      {:id (:id energiatodistus)})))
+(defn- reset-unused-fields [db id]
+  (let [energiatodistus (find-energiatodistus db id)]
+    (when (and (= 2026 (:versio energiatodistus))
+            (not (energiatodistus-2026/show-toimenpide-ehdotukset-pages? energiatodistus)))
+      (energiatodistus-db/reset-toimenpide-ehdotukset-and-suositukset!
+        db
+        {:id (:id energiatodistus)}))
+    (when (and (= 2026 (:versio energiatodistus))
+            (not (true? (:perusparannuspassi-valid energiatodistus))))
+      (perusparannuspassi-db/invalidate-perusparannuspassit-by-energiatodistus-id!
+        db
+        {:energiatodistus-id (:id energiatodistus)})
+      (perusparannuspassi-db/invalidate-perusparannuspassi-vaiheet-by-energiatodistus-id!
+        db
+        {:energiatodistus-id (:id energiatodistus)}))
+    (when (and (= 2026 (:versio energiatodistus))
+            (not (energiatodistus-2026/has-ilmastoselvitys? energiatodistus)))
+      (energiatodistus-db/reset-ilmastoselvitys!
+        db
+        {:id (:id energiatodistus)}))
+    (when (and (= 2026 (:versio energiatodistus))
+            (reset-unused-localized-fields db id)))))
 
 (defn language-id->codes [language]
   (get {finnish-language-id      ["fi"]
@@ -683,7 +768,7 @@
                                             :allekirjoitusaika           allekirjoitusaika
                                             :voimassaolo-paattymisaika   (java.sql.Timestamp/from voimassaolo)})]
                               (if (= result 1)
-                                (let [_ (reset-unused-fields db energiatodistus)
+                                (let [_(reset-unused-fields db id)
                                       energiatodistus (find-energiatodistus db id)]
                                   (when-not skip-pdf-signed-assert?
                                     (assert-energiatodistus-pdf-signed! aws-s3-client energiatodistus))

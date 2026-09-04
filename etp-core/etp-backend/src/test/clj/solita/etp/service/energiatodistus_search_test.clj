@@ -40,12 +40,12 @@
   (doseq [[laatija-id energiatodistus-id] laatija-id-et-id-pairs]
     (energiatodistus-service/start-energiatodistus-signing!
       ts/*db*
-      {:id laatija-id}
+      {:id laatija-id :rooli 0 :patevyystaso 4}
       energiatodistus-id)
     (energiatodistus-service/end-energiatodistus-signing!
       ts/*db*
       ts/*aws-s3-client*
-      {:id laatija-id}
+      {:id laatija-id :rooli 0 :patevyystaso 4}
       energiatodistus-id
       {:skip-pdf-signed-assert? true
        :allekirjoitusaika       (time/now)})))
