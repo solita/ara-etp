@@ -412,7 +412,7 @@
       ;; insert(0) + update(0) + start-signing(1) + end-signing(2)
       ;; + post-sign reset of ilmastoselvitys (2) + reset of swedish fields (2)
       (t/is (= 6 (count audit-rows)))
-      (t/is (= [0 0 1 1 1 2] (map :tila-id audit-rows))))))
+      (t/is (= [0 0 1 2 2 2] (map :tila-id audit-rows))))))
 
 ;; ---- ET2026 Tests: find-history ----
 

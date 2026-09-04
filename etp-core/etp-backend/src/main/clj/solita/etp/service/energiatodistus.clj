@@ -761,7 +761,6 @@
                                   _ (when-not voimassaolo
                                       (throw (ex-info "resolve-voimassaolo-paattymisaika must not return nil"
                                                       {:energiatodistus-id id})))
-                                  _ (reset-unused-fields db id)
                                   result (energiatodistus-db/update-energiatodistus-allekirjoitettu!
                                            db
                                            {:id                          id
@@ -769,7 +768,8 @@
                                             :allekirjoitusaika           allekirjoitusaika
                                             :voimassaolo-paattymisaika   (java.sql.Timestamp/from voimassaolo)})]
                               (if (= result 1)
-                                (let [energiatodistus (find-energiatodistus db id)]
+                                (let [_(reset-unused-fields db id)
+                                      energiatodistus (find-energiatodistus db id)]
                                   (when-not skip-pdf-signed-assert?
                                     (assert-energiatodistus-pdf-signed! aws-s3-client energiatodistus))
                                   (mark-energiatodistus-korvattu! db (:korvattu-energiatodistus-id energiatodistus))
