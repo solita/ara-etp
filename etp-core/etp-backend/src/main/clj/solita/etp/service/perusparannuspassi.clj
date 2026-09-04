@@ -76,11 +76,10 @@
         "Perusparannuspassi can only be added to energiatodistus version 2026."))))
 
 (defn assert-draft! [tila-id]
-  (let [tila (energiatodistus-tila/tila-key tila-id)]
-    (when-not (#{:draft :in-signing} tila)
-      (db/with-db-exception-translation
-        (exception/throw-forbidden!
-          "Perusparannuspassi can only be added or modified to draft or in-signing energiatodistus.")))))
+  (when (not= :draft (energiatodistus-tila/tila-key tila-id))
+    (db/with-db-exception-translation
+      (exception/throw-forbidden!
+        "Perusparannuspassi can only be added or modified to draft energiatodistus."))))
 
 (defn assert-correct-et-owner! [{:keys [id]} et-laatija-id]
   (when (not= et-laatija-id id)
@@ -321,6 +320,26 @@
       (exception/throw-ex-info!
         :not-found
         (str "Perusparannuspassi " id " does not exist.")))))
+
+(defn update-perusparannuspassi-localized-fields [db id ppp]
+  (jdbc/with-db-transaction [db db]
+    (let [ppp-db-row (-> ppp
+                        (dissoc :energiatodistus-id
+                                :vaiheet
+                                :laatija-id
+                                :tila-id)
+                       ppp->db-row)]
+      (db/with-db-exception-translation jdbc/update! db :perusparannuspassi
+        ppp-db-row
+        ["id = ?" id]
+        db/default-opts)
+      (doseq [vaihe (:vaiheet ppp)]
+        (db/with-db-exception-translation jdbc/update! db :perusparannuspassi-vaihe
+          (->vaihe-update-db-row vaihe)
+          ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
+          db/default-opts)
+        ))))
+
 
 (defn delete-perusparannuspassi! [db whoami perusparannuspassi-id]
   (jdbc/with-db-transaction [db db]

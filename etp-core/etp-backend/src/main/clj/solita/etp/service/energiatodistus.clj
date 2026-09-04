@@ -396,14 +396,6 @@
                                              [:kommentti
                                               :bypass-validation-limits
                                               :bypass-validation-limits-reason])
-    [:in-signing :laatija false] (dissoc energiatodistus-update
-                                         :perusparannuspassi-valid
-                                         :korvaava-energiatodistus-id
-                                         :perusparannuspassi-id
-                                         :laatija-fullname
-                                         :kommentti
-                                         :bypass-validation-limits
-                                         :bypass-validation-limits-reason)
     [:signed :laatija false] (select-keys energiatodistus-update
                                           [:laskutettava-yritys-id
                                            :laskuriviviite
@@ -489,6 +481,24 @@
       (str "Energiatodistus " id
            " update conflicts with other concurrent update."))
     result))
+
+(defn- update-localized-fields [db id current-energiatodistus energiatodistus]
+  (jdbc/with-db-transaction [db db]
+    (let [versio (:versio current-energiatodistus)
+          energiatodistus-db-row (-> (dissoc energiatodistus
+                                             :laatija-fullname
+                                             :perusparannuspassi-id
+                                             :perusparannuspassi-valid
+                                             :korvaava-energiatodistus-id)
+                                   energiatodistus->db-row)]
+      (first (db/with-db-exception-translation jdbc/update!
+                                               db
+                                               :energiatodistus
+                                               energiatodistus-db-row
+                                               ["id = ? and versio = ?"
+                                                id
+                                                versio]
+                                               db/default-opts)))))
 
 (defn find-required-properties [db versio bypass-validation]
   (cons
@@ -637,20 +647,14 @@
       data)))
 
 (defn- reset-unused-localized-fields
-  [db id whoami]
+  [db id]
   (let [energiatodistus (find-energiatodistus db id)
         language (-> energiatodistus :perustiedot :kieli)
         et-id (:id energiatodistus)
         ppp-valid? (:perusparannuspassi-valid energiatodistus)
         laatija-id (:laatija-id energiatodistus)
         updated-energiatodistus (reset-localized-fields energiatodistus language)]
-    (db-update-energiatodistus! db id
-      (dissoc energiatodistus :laatija-fullname)
-      (dissoc updated-energiatodistus :laatija-fullname
-        :perusparannuspassi-id
-        :perusparannuspassi-valid
-        :korvaava-energiatodistus-id)
-      (-> whoami :rooli rooli-service/rooli-key))
+    (update-localized-fields db id energiatodistus updated-energiatodistus)
     (when ppp-valid?
       (when-let [ppp (first (perusparannuspassi-db/find-by-energiatodistus-id db {:energiatodistus-id et-id
                                                                                   :laatija-id laatija-id}))]
@@ -658,17 +662,14 @@
               ppp-vaiheet-objects (mapv perusparannuspassi-service/db-row->ppp-vaihe ppp-vaiheet-db)
               updated-ppp (reset-localized-fields ppp language)
               updated-vaiheet (mapv #(reset-localized-fields % language) ppp-vaiheet-objects)
-              updated-ppp-with-vaiheet (assoc (dissoc updated-ppp :laatija-id :tila-id) :vaiheet updated-vaiheet)]
-          (perusparannuspassi-service/update-perusparannuspassi!
-            db whoami (:id ppp)
-            updated-ppp-with-vaiheet))))))
-
+              updated-ppp-with-vaiheet (assoc updated-ppp :vaiheet updated-vaiheet)]
+          (perusparannuspassi-service/update-perusparannuspassi-localized-fields db (:id ppp) updated-ppp-with-vaiheet))))))
 
 (def finnish-language-id 0)
 (def swedish-language-id 1)
 (def multilingual-language-id 2)
 
-(defn- reset-unused-fields [db id whoami]
+(defn- reset-unused-fields [db id]
   (let [energiatodistus (find-energiatodistus db id)]
     (when (and (= 2026 (:versio energiatodistus))
             (not (energiatodistus-2026/show-toimenpide-ehdotukset-pages? energiatodistus)))
@@ -689,7 +690,7 @@
         db
         {:id (:id energiatodistus)}))
     (when (and (= 2026 (:versio energiatodistus))
-            (reset-unused-localized-fields db id whoami)))))
+            (reset-unused-localized-fields db id)))))
 
 (defn language-id->codes [language]
   (get {finnish-language-id      ["fi"]
@@ -760,7 +761,7 @@
                                   _ (when-not voimassaolo
                                       (throw (ex-info "resolve-voimassaolo-paattymisaika must not return nil"
                                                       {:energiatodistus-id id})))
-                                  _ (reset-unused-fields db id whoami)
+                                  _ (reset-unused-fields db id)
                                   result (energiatodistus-db/update-energiatodistus-allekirjoitettu!
                                            db
                                            {:id                          id
