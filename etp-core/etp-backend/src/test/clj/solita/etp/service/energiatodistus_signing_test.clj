@@ -73,7 +73,7 @@
         laatija-id (-> laatijat keys sort first)
         db (ts/db-user laatija-id)
         ids (keys energiatodistukset)
-        whoami {:id laatija-id}
+        whoami {:id laatija-id :rooli 0}
         now (time/now)]
     (doseq [id ids]
       (t/is (= (service/find-energiatodistus-digest db whoami ts/*aws-s3-client* id "fi" "allekirjoitus-id" now)
@@ -180,7 +180,7 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
             laatija-id (-> laatijat keys sort first)
             db (ts/db-user laatija-id)
             ids (keys energiatodistukset)
-            whoami {:id laatija-id}]
+            whoami {:id laatija-id :rooli 0}]
         (doseq [id ids]
           (t/testing "Signing a pdf should succeed"
             (t/is (= (service/sign-with-system {:db             db

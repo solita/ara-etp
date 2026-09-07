@@ -321,6 +321,26 @@
         :not-found
         (str "Perusparannuspassi " id " does not exist.")))))
 
+(defn update-perusparannuspassi-localized-fields [db id ppp]
+  (jdbc/with-db-transaction [db db]
+    (let [ppp-db-row (-> ppp
+                        (dissoc :energiatodistus-id
+                                :vaiheet
+                                :laatija-id
+                                :tila-id)
+                       ppp->db-row)]
+      (db/with-db-exception-translation jdbc/update! db :perusparannuspassi
+        ppp-db-row
+        ["id = ?" id]
+        db/default-opts)
+      (doseq [vaihe (:vaiheet ppp)]
+        (db/with-db-exception-translation jdbc/update! db :perusparannuspassi-vaihe
+          (->vaihe-update-db-row vaihe)
+          ["perusparannuspassi_id = ? and vaihe_nro = ?" id (:vaihe-nro vaihe)]
+          db/default-opts)
+        ))))
+
+
 (defn delete-perusparannuspassi! [db whoami perusparannuspassi-id]
   (jdbc/with-db-transaction [db db]
                             (let [ppp (first (perusparannuspassi-db/select-perusparannuspassi
