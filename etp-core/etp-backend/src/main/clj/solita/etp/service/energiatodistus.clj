@@ -647,6 +647,7 @@
       data)))
 
 (defn- reset-unused-localized-fields
+  "Resets localized fields to nil for the unused language if multilingual is not selected."
   [db id]
   (let [energiatodistus (find-energiatodistus db id)
         language (-> energiatodistus :perustiedot :kieli)
