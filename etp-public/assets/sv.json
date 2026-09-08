@@ -196,6 +196,7 @@
   "LISATIETOA_PERUSPARANNUSPASSI_INFO_2026": "Perusparannuspassi voidaan laatia energiatodistuksen yhteydessä. Se sisältää suunnitelman rakennuksen energiatehokkuuden vaiheittaisesta parantamisesta tulevien korjausten yhteydessä. (sv)",
   "FOOTER_LAKI": "Energicertifikaten och deras användning grundar sig på lag och den övervakas",
   "FOOTER_VARKE_VIRANOMAINEN": "Centralen för statligt stött bostadsbyggande (Varke) är en statlig myndighet som övervakar användningen av energicertifikaten och att de är korrekta. Vi ansvarar också för underhållet av denna tjänst. Tjänsten och övervakningen sköts av våra skickliga energiproffs. Vänligen kontakta oss om du har frågor!",
+  "FOOTER_VARKE_VIRANOMAINEN_2026": "Valtion tukeman asuntorakentamisen keskus (Varke) on valtion viranomainen, joka valvoo energiatodistusten käyttöä ja oikeellisuutta sekä vastaa energiatodistusten tietopalvelusta. Palvelua ja valvontaa hoitavat rautaiset energia-ammattilaisemme. Jos sinulla on kysyttävää, otathan yhteyttä! (sv)",
   "FOOTER_VARKE_LINKKI": "Gå till webbplatsen för Centralen för statligt stött bostadsbyggande (Varke)",
   "FOOTER_VARKE_LOGO_ALT": "Centarlen föt statligt stött bostadsbyggandes (Varke) logo",
   "FOOTER_OSOITE_1": "Centralen för statligt stött bostadsbyggande",
