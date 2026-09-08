@@ -45,6 +45,12 @@
       behavior: 'smooth'
     });
   });
+
+  const configPromise = fetch('config.json').then(response => response.json());
+  let isEtp2026 = false;
+  configPromise.then(config => {
+    isEtp2026 = config?.isEtp2026 ?? false;
+  });
 </script>
 
 <style>
