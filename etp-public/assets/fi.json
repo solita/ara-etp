@@ -40,6 +40,7 @@
   "ETHAKU_TH_VOIMASSA": "Voimassaoloaika",
   "ETHAKU_INFO_TITLE": "Tarvitset energiatodistuksen myydessä, vuokratessa ja rakennuslupaa hakiessa",
   "ETHAKU_INFO_TEXT": "Energiatodistus tarvitaan lähes aina myytäessä asuntoa tai rakennusta. Se on hyvä hankkia jo ennen myyntiin laittoa. Lain mukaan energiatehokkuusluokan pitää näkyä myynti-ilmoituksessa ja energiatodistuksen olla nähtävillä asunnon tai talon esittelyssä. Energiatodistus tarvitaan myös lähes aina haettaessa rakennuslupaa ja päivitettävä, kun rakennus otetaan käyttöön.",
+  "ETHAKU_INFO_TEXT_2026": "Energiatodistus tarvitaan lähes aina asuntoa tai rakennusta myytäessä. Se kannattaa hankkia jo ennen myynnin aloittamista. Energiatehokkuusluokan ja E-luvun on lain mukaan oltava esillä myynti-ilmoituksessa, ja energiatodistuksen on oltava nähtävillä asunnon tai rakennuksen esittelyssä. Energiatodistus tarvitaan yleensä myös rakennuslupaa haettaessa, ja se päivitetään rakennuksen käyttöönoton yhteydessä.",
   "ETHAKU_HAE_TUNNUKSELLA": "Hae todistustunnuksella",
   "ETHAKU_HAE_ALUEELLA": "Hae alueella",
   "ETHAKU_HAE_ASIDE": "Voit hakea maakunnalla, kunnalla, postinumerolla, toimipaikalla tai katuosoitteella",

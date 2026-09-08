@@ -40,6 +40,7 @@
   "ETHAKU_TH_VOIMASSA": "Giltighetstid",
   "ETHAKU_INFO_TITLE": "Du behöver ett energicertifikat när du säljer, hyr eller ansöker om bygglov",
   "ETHAKU_INFO_TEXT": "Energicertifikat behövs nästan alltid då en bostad eller byggnad säljs. Det är bra att skaffa certifikatet innan försäljningen inleds. Enligt lagen ska energieffektivitetsklassen och energicertifikatet finnas till hands vid presentationen av bostäder eller hus. Energicertifikat behövs också alltid när man ansöker om bygglov och ska uppdateras när byggnaden tas i bruk.",
+  "ETHAKU_INFO_TEXT_2026": "Energiatodistus tarvitaan lähes aina asuntoa tai rakennusta myytäessä. Se kannattaa hankkia jo ennen myynnin aloittamista. Energiatehokkuusluokan ja E-luvun on lain mukaan oltava esillä myynti-ilmoituksessa, ja energiatodistuksen on oltava nähtävillä asunnon tai rakennuksen esittelyssä. Energiatodistus tarvitaan yleensä myös rakennuslupaa haettaessa, ja se päivitetään rakennuksen käyttöönoton yhteydessä. (sv)",
   "ETHAKU_HAE_TUNNUKSELLA": "Sök med certifikatkod",
   "ETHAKU_HAE_ALUEELLA": "Sök med område",
   "ETHAKU_HAE_ASIDE": "Du kan söka på landskap, kommun, postnummer eller postanstalt.",
