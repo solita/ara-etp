@@ -242,6 +242,7 @@
   "TILASTOT_HAE_ASIDE": "Voit hakea maakunnalla, kunnalla, postinumerolla tai -toimipaikalla.",
   "TILASTOT_HAE_ALUEELLA": "Hae alueella",
   "TILASTOT_ASIDE": "Haku näyttää energiatehokkuusluokat vuoden 2018 ja 2013 energiatodistuksista erikseen, koska eri määräysten mukaan tehdyt energiatodistukset eivät ole vertailukelpoisia. Osa hakutuloksista näytetään kaikista, haun mukaisista energiatodistuksista ja osa tiedoista näytetään vain vuoden 2018 määräysten mukaisista energiatodistuksista.",
+  "TILASTOT_ASIDE_2026": "Eri määräysten mukaan laaditut energiatodistukset eivät ole keskenään vertailukelpoisia. Tämän vuoksi hakutuloksissa osa tiedoista esitetään erikseen energiatodistuksen määräysversion mukaan. Tarkemmat tiedot löytyvät infopalloista.",
   "TILASTOT_LAATIMISVAIHE": "Laatimisvaihe",
   "TILASTOT_LAATIMISVAIHE_TOOLTIP": "Laatimisvaihe kertoo, missä vaiheessa rakennuksen elinkaarta energiatodistus on luotu.",
   "TILASTOT_LAATIMISVAIHE_KAIKKI": "Kaikki",
