@@ -192,6 +192,8 @@
   "LISATIETOA_TILASTOT": "Statistik över energicertifikat för byggnader",
   "LISATIETOA_VARKEN_JULKAISUT": "På sin webbplats publicerar Varke statistik över energicertifikat för byggnader med olika användningsändamål. Utöver olika bostadsbyggnader statistikförs också bland annat skolor och daghem samt kontorsbyggnader.",
   "LISATIETOA_TILASTOT_LINKKI": "Bekanta dig med Varkes energicertifikatstatistik",
+  "LISATIETOA_PERUSPARANNUSPASSI_2026": "Mikä on perusparannuspassi? (sv)",
+  "LISATIETOA_PERUSPARANNUSPASSI_INFO_2026": "Perusparannuspassi voidaan laatia energiatodistuksen yhteydessä. Se sisältää suunnitelman rakennuksen energiatehokkuuden vaiheittaisesta parantamisesta tulevien korjausten yhteydessä. (sv)",
   "FOOTER_LAKI": "Energicertifikaten och deras användning grundar sig på lag och den övervakas",
   "FOOTER_VARKE_VIRANOMAINEN": "Centralen för statligt stött bostadsbyggande (Varke) är en statlig myndighet som övervakar användningen av energicertifikaten och att de är korrekta. Vi ansvarar också för underhållet av denna tjänst. Tjänsten och övervakningen sköts av våra skickliga energiproffs. Vänligen kontakta oss om du har frågor!",
   "FOOTER_VARKE_LINKKI": "Gå till webbplatsen för Centralen för statligt stött bostadsbyggande (Varke)",
