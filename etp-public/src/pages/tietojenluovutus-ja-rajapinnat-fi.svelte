@@ -13,6 +13,12 @@
   onMount(() => {
     component?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
+
+  const configPromise = fetch('config.json').then(response => response.json());
+  let isEtp2026 = false;
+  configPromise.then(config => {
+    isEtp2026 = config?.isEtp2026 ?? false;
+  });
 </script>
 
 <style>
@@ -29,11 +35,18 @@
 <Container {...containerStyles.beige}>
   <div bind:this={component}>
     <InfoBlock {title} showIcon={false}>
-      <p>
-        Organisaatiot voivat saada Valtion tukeman asuntorakentamisen keskuksen
-        (Varke) ylläpitämästä energiatodistusrekisteristä energiatodistustietoa
-        kolmella eri tavalla.
-      </p>
+      {#if isEtp2026}
+        <p>
+          Valtion tukeman asuntorakentamisen keskus (Varke) tarjoaa
+          organisaatioille energiatodistustietoa kolmella eri tavalla.
+        </p>
+      {:else}
+        <p>
+          Organisaatiot voivat saada Valtion tukeman asuntorakentamisen
+          keskuksen (Varke) ylläpitämästä energiatodistusrekisteristä
+          energiatodistustietoa kolmella eri tavalla.
+        </p>
+      {/if}
       <ol class="ml-6">
         <li>
           <Link href="/energiatodistusrekisterin-aineistopalvelu"
@@ -46,13 +59,24 @@
           mahdollistaa yksittäisten energiatodistusten tietojen haun Suomi.fi-palveluväylän
           avulla
         </li>
-        <li>
-          Käsittelemme ilman rajapintaa toteutettavat tietopyynnöt
-          tapauskohtaisesti ja veloitamme niistä tuntihinnastomme mukaisesti. <br />
-          Lisätietoja:
-          <Link href="mailto:energiatodistus.varke@gov.fi"
-            >energiatodistus.varke@gov.fi</Link>
-        </li>
+        {#if isEtp2026}
+          <li>
+            Ilman rajapintaa toteutettavat tietopyynnöt käsitellään
+            tapauskohtaisesti. Tietopyynnöistä voidaan periä maksu voimassa
+            olevan tuntihinnaston mukaisesti. <br />
+            Lisätietoja:
+            <Link href="mailto:energiatodistus.varke@gov.fi"
+              >energiatodistus.varke@gov.fi</Link>
+          </li>
+        {:else}
+          <li>
+            Käsittelemme ilman rajapintaa toteutettavat tietopyynnöt
+            tapauskohtaisesti ja veloitamme niistä tuntihinnastomme mukaisesti. <br />
+            Lisätietoja:
+            <Link href="mailto:energiatodistus.varke@gov.fi"
+              >energiatodistus.varke@gov.fi</Link>
+          </li>
+        {/if}
       </ol>
     </InfoBlock>
   </div>
