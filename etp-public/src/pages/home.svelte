@@ -6,7 +6,8 @@
 
   import EtHakuImage from '@Asset/ethaku.jpg';
   import LaatijaHakuImage from '@Asset/laatijahaku.jpg';
-  import ETMalli from '@Asset/energiatodistusmalli_2018.pdf';
+  import ETMalli2018 from '@Asset/energiatodistusmalli_2018.pdf';
+  import ETMalli2026 from '@Asset/energiatodistusmalli_2026.pdf';
 
   import BorderImage from '@Component/border-image';
   import Hero from '@Component/hero';
@@ -193,14 +194,44 @@
       class="text-white bg-ashblue lg:w-1/3 py-4 sm:py-16 px-2 sm:px-16 lg:pr-8">
       <!-- <span class="font-icon text-6xl">info</span> -->
       <h2 class="mb-4 text-lg text-white">{$_('INFO_TITLE')}</h2>
-      <p>{$_('INFO_KUVAUS')}</p>
-      <div class="mt-4">
-        <ButtonLink {...buttonStyles.white} href={ETMalli} target="_blank">
-          <span class="material-icons" aria-hidden="true">picture_as_pdf</span>
-          <span>{$_('INFO_ENERGIATODISTUSMALLI')}</span>
-          <span class="sr-only">(pdf)</span>
-        </ButtonLink>
-      </div>
+      {#if isEtp2026}
+        <p>{$_('INFO_KUVAUS_P1_2026')}</p>
+        <br />
+        <p>{$_('INFO_KUVAUS_P2_2026')}</p>
+        <div class="mt-4">
+          <ButtonLink
+            {...buttonStyles.white}
+            href={ETMalli2026}
+            target="_blank">
+            <span class="material-icons" aria-hidden="true"
+              >picture_as_pdf</span>
+            <span>{$_('INFO_ENERGIATODISTUSMALLI_V2026_2026')}</span>
+            <span class="sr-only">(pdf)</span>
+          </ButtonLink>
+          <ButtonLink
+            {...buttonStyles.white}
+            href={ETMalli2018}
+            target="_blank">
+            <span class="material-icons" aria-hidden="true"
+              >picture_as_pdf</span>
+            <span>{$_('INFO_ENERGIATODISTUSMALLI_V2018_2026')}</span>
+            <span class="sr-only">(pdf)</span>
+          </ButtonLink>
+        </div>
+      {:else}
+        <p>{$_('INFO_KUVAUS')}</p>
+        <div class="mt-4">
+          <ButtonLink
+            {...buttonStyles.white}
+            href={ETMalli2018}
+            target="_blank">
+            <span class="material-icons" aria-hidden="true"
+              >picture_as_pdf</span>
+            <span>{$_('INFO_ENERGIATODISTUSMALLI')}</span>
+            <span class="sr-only">(pdf)</span>
+          </ButtonLink>
+        </div>
+      {/if}
     </section>
     <section class="bg-white lg:w-2/3 lg:pl-8 px-2 sm:px-16 py-4 sm:py-16">
       <h2 class="mb-4 text-ashblue text-lg">{$_('LISATIETOA_TITLE')}</h2>
