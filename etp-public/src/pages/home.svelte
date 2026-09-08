@@ -245,6 +245,9 @@
                 <li>{$_('LISATIETOA_ENERGIATODISTUS')}</li>
                 <li>{$_('LISATIETOA_LUKEMINEN')}</li>
                 <li>{$_('LISATIETOA_TARVE')}</li>
+                {#if isEtp2026}
+                  <li>{$_('LISATIETOA_PERUSPARANNUSPASSI_2026')}</li>
+                {/if}
                 <li>{$_('LISATIETOA_FAQ')}</li>
               </ul>
             </div>
