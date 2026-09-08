@@ -79,7 +79,11 @@
         </div>
         <div>
           <h2 class="mb-4">{$_('HOME_ENERGIATODISTUSHAKU')}</h2>
-          <p>{$_('HOME_ENERGIATODISTUSHAKU_KUVAUS')}</p>
+          {#if isEtp2026}
+            <p>{$_('HOME_ENERGIATODISTUSHAKU_KUVAUS_2026')}</p>
+          {:else}
+            <p>{$_('HOME_ENERGIATODISTUSHAKU_KUVAUS')}</p>
+          {/if}
         </div>
         <div class="flex flex-col items-start">
           <form

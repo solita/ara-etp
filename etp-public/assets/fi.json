@@ -62,6 +62,7 @@
   "KAIKKI": "Kaikki",
   "HOME_ENERGIATODISTUSHAKU": "Hae rakennuksen energiatodistus",
   "HOME_ENERGIATODISTUSHAKU_KUVAUS": "Palvelusta pystyt nopeasti tarkistamaan onko rakennukselle laadittu energiatodistus. Rekisteristä löydät 1.5.2015 alkaen laaditut todistukset.",
+  "HOME_ENERGIATODISTUSHAKU_KUVAUS_2026": "Palvelusta pystyt nopeasti tarkistamaan onko rakennukselle laadittu energiatodistus. Rekisteristä löydät voimassa olevat energiatodistukset lukuun ottamatta omakoti- ja paritalojen todistuksia.",
   "HOME_ENERGIATODISTUSHAKU_TITLE": "Hae energiatodistusta",
   "HOME_ENERGIATODISTUSHAKU_TODISTUSTUNNUKSELLA": "Hae todistustunnuksella",
   "HOME_ENERGIATODISTUSHAKU_ASIDE": "Voit hakea maakunnalla, kunnalla, postinumerolla, toimipaikalla tai katuosoitteella",

@@ -61,6 +61,7 @@
   "KAIKKI": "Alla",
   "HOME_ENERGIATODISTUSHAKU": "Sök byggnadens energicertifikat",
   "HOME_ENERGIATODISTUSHAKU_KUVAUS": "I tjänsten kan du snabbt kontrollera om det finns ett energicertifikat för byggnaden. I registret hittar du energicertifikat som upprättats från och med den 1 maj 2015.",
+  "HOME_ENERGIATODISTUSHAKU_KUVAUS_2026": "Palvelusta pystyt nopeasti tarkistamaan onko rakennukselle laadittu energiatodistus. Rekisteristä löydät voimassa olevat energiatodistukset lukuun ottamatta omakoti- ja paritalojen todistuksia. (sv)",
   "HOME_ENERGIATODISTUSHAKU_TITLE": "Sök energicertifikat",
   "HOME_ENERGIATODISTUSHAKU_TODISTUSTUNNUKSELLA": "Sök med certifikatkod",
   "HOME_ENERGIATODISTUSHAKU_ASIDE": "Du kan söka på förvaltningsområde, kommun, postnummer, verksamhetsställe eller gatuadress",
