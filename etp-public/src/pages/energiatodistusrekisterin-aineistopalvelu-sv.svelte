@@ -19,6 +19,12 @@
   onMount(() => {
     component?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
+
+  const configPromise = fetch('config.json').then(response => response.json());
+  let isEtp2026 = false;
+  configPromise.then(config => {
+    isEtp2026 = config?.isEtp2026 ?? false;
+  });
 </script>
 
 <style>
@@ -71,10 +77,14 @@
 
     <H3>Begränsat material som innehåller personuppgifter</H3>
     <ul class="ml-6">
-      <li>
-        uppgifter om gällande energicertifikat i energicertifikatregistret från
-        och med maj 2015.
-      </li>
+      {#if isEtp2026}
+        <li>voimassa olevien energiatodistusten tiedot (sv)</li>
+      {:else}
+        <li>
+          uppgifter om gällande energicertifikat i energicertifikatregistret
+          från och med maj 2015.
+        </li>
+      {/if}
       <li>
         uppgifter som specificerar energicertifikatet, såsom adress och
         permanent byggnadsbeteckning
@@ -88,10 +98,14 @@
     </p>
     <H3>Omfattande material som innehåller personuppgifter</H3>
     <ul class="ml-6">
-      <li>
-        uppgifter om energicertifikat i energicertifikatregistret från och med
-        maj 2015.
-      </li>
+      {#if isEtp2026}
+        <li>voimassa olevien energiatodistusten tiedot (sv)</li>
+      {:else}
+        <li>
+          uppgifter om energicertifikat i energicertifikatregistret från och med
+          maj 2015.
+        </li>
+      {/if}
       <li>
         uppgifter som specificerar energicertifikatet, såsom adress och
         permanent byggnadsbeteckning
@@ -108,10 +122,14 @@
     </p>
     <H3>Omfattande material som inte innehåller personuppgifter</H3>
     <ul class="ml-6">
-      <li>
-        uppgifter om energicertifikat i energicertifikatregistret från och med
-        maj 2015.
-      </li>
+      {#if isEtp2026}
+        <li>voimassa olevien energiatodistusten tiedot (sv)</li>
+      {:else}
+        <li>
+          uppgifter om energicertifikat i energicertifikatregistret från och med
+          maj 2015.
+        </li>
+      {/if}
       <li>
         en stor del av de byggnadsuppgifter och de beräkningsresultat som
         används vid energicertifikatberäkningen.
