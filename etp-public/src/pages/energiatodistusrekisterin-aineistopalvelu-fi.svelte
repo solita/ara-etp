@@ -19,6 +19,12 @@
   onMount(() => {
     component?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
+
+  const configPromise = fetch('config.json').then(response => response.json());
+  let isEtp2026 = false;
+  configPromise.then(config => {
+    isEtp2026 = config?.isEtp2026 ?? false;
+  });
 </script>
 
 <style>
@@ -71,10 +77,14 @@
 
     <H3>Suppea henkilötietoja sisältävä aineisto</H3>
     <ul class="ml-6">
-      <li>
-        voimassa olevien energiatodistusten tietoja energiatodistusrekisteristä
-        toukokuusta 2015 lähtien
-      </li>
+      {#if isEtp2026}
+        <li>voimassa olevien energiatodistusten tiedot</li>
+      {:else}
+        <li>
+          voimassa olevien energiatodistusten tietoja
+          energiatodistusrekisteristä toukokuusta 2015 lähtien
+        </li>
+      {/if}
       <li>
         energiatodistuksen yksilöiviä tietoja, kuten osoite ja pysyvä
         rakennustunnus
@@ -88,10 +98,14 @@
     </p>
     <H3>Laaja, henkilötietoja sisältävä aineisto</H3>
     <ul class="ml-6">
-      <li>
-        energiatodistusten tietoja energiatodistusrekisteristä toukokuusta 2015
-        lähtien
-      </li>
+      {#if isEtp2026}
+        <li>voimassa olevien energiatodistusten tiedot</li>
+      {:else}
+        <li>
+          energiatodistusten tietoja energiatodistusrekisteristä toukokuusta
+          2015 lähtien
+        </li>
+      {/if}
       <li>
         energiatodistuksen yksilöiviä tietoja, kuten osoite ja pysyvä
         rakennustunnus
@@ -108,10 +122,14 @@
     </p>
     <H3>Laaja, ei henkilötietoja sisältävä aineisto</H3>
     <ul class="ml-6">
-      <li>
-        energiatodistusten tietoja energiatodistusrekisteristä toukokuusta 2015
-        lähtien
-      </li>
+      {#if isEtp2026}
+        <li>voimassa olevien energiatodistusten tiedot</li>
+      {:else}
+        <li>
+          energiatodistusten tietoja energiatodistusrekisteristä toukokuusta
+          2015 lähtien
+        </li>
+      {/if}
       <li>
         laajasti energiatodistuslaskennassa käytettäviä rakennuksen tietoja ja
         laskentatuloksia

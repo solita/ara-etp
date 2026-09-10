@@ -6,7 +6,8 @@
 
   import EtHakuImage from '@Asset/ethaku.jpg';
   import LaatijaHakuImage from '@Asset/laatijahaku.jpg';
-  import ETMalli from '@Asset/energiatodistusmalli_2018.pdf';
+  import ETMalli2018 from '@Asset/energiatodistusmalli_2018.pdf';
+  import ETMalli2026 from '@Asset/energiatodistusmalli_2026.pdf';
 
   import BorderImage from '@Component/border-image';
   import Hero from '@Component/hero';
@@ -45,6 +46,12 @@
       behavior: 'smooth'
     });
   });
+
+  const configPromise = fetch('config.json').then(response => response.json());
+  let isEtp2026 = false;
+  configPromise.then(config => {
+    isEtp2026 = config?.isEtp2026 ?? false;
+  });
 </script>
 
 <style>
@@ -73,7 +80,11 @@
         </div>
         <div>
           <h2 class="mb-4">{$_('HOME_ENERGIATODISTUSHAKU')}</h2>
-          <p>{$_('HOME_ENERGIATODISTUSHAKU_KUVAUS')}</p>
+          {#if isEtp2026}
+            <p>{$_('HOME_ENERGIATODISTUSHAKU_KUVAUS_2026')}</p>
+          {:else}
+            <p>{$_('HOME_ENERGIATODISTUSHAKU_KUVAUS')}</p>
+          {/if}
         </div>
         <div class="flex flex-col items-start">
           <form
@@ -183,14 +194,44 @@
       class="text-white bg-ashblue lg:w-1/3 py-4 sm:py-16 px-2 sm:px-16 lg:pr-8">
       <!-- <span class="font-icon text-6xl">info</span> -->
       <h2 class="mb-4 text-lg text-white">{$_('INFO_TITLE')}</h2>
-      <p>{$_('INFO_KUVAUS')}</p>
-      <div class="mt-4">
-        <ButtonLink {...buttonStyles.white} href={ETMalli} target="_blank">
-          <span class="material-icons" aria-hidden="true">picture_as_pdf</span>
-          <span>{$_('INFO_ENERGIATODISTUSMALLI')}</span>
-          <span class="sr-only">(pdf)</span>
-        </ButtonLink>
-      </div>
+      {#if isEtp2026}
+        <p>{$_('INFO_KUVAUS_P1_2026')}</p>
+        <br />
+        <p>{$_('INFO_KUVAUS_P2_2026')}</p>
+        <div class="mt-4">
+          <ButtonLink
+            {...buttonStyles.white}
+            href={ETMalli2026}
+            target="_blank">
+            <span class="material-icons" aria-hidden="true"
+              >picture_as_pdf</span>
+            <span>{$_('INFO_ENERGIATODISTUSMALLI_V2026_2026')}</span>
+            <span class="sr-only">(pdf)</span>
+          </ButtonLink>
+          <ButtonLink
+            {...buttonStyles.white}
+            href={ETMalli2018}
+            target="_blank">
+            <span class="material-icons" aria-hidden="true"
+              >picture_as_pdf</span>
+            <span>{$_('INFO_ENERGIATODISTUSMALLI_V2018_2026')}</span>
+            <span class="sr-only">(pdf)</span>
+          </ButtonLink>
+        </div>
+      {:else}
+        <p>{$_('INFO_KUVAUS')}</p>
+        <div class="mt-4">
+          <ButtonLink
+            {...buttonStyles.white}
+            href={ETMalli2018}
+            target="_blank">
+            <span class="material-icons" aria-hidden="true"
+              >picture_as_pdf</span>
+            <span>{$_('INFO_ENERGIATODISTUSMALLI')}</span>
+            <span class="sr-only">(pdf)</span>
+          </ButtonLink>
+        </div>
+      {/if}
     </section>
     <section class="bg-white lg:w-2/3 lg:pl-8 px-2 sm:px-16 py-4 sm:py-16">
       <h2 class="mb-4 text-ashblue text-lg">{$_('LISATIETOA_TITLE')}</h2>
@@ -204,6 +245,9 @@
                 <li>{$_('LISATIETOA_ENERGIATODISTUS')}</li>
                 <li>{$_('LISATIETOA_LUKEMINEN')}</li>
                 <li>{$_('LISATIETOA_TARVE')}</li>
+                {#if isEtp2026}
+                  <li>{$_('LISATIETOA_PERUSPARANNUSPASSI_2026')}</li>
+                {/if}
                 <li>{$_('LISATIETOA_FAQ')}</li>
               </ul>
             </div>
@@ -245,6 +289,18 @@
           </div>
         </section>
       </div>
+      {#if isEtp2026}
+        <section class="md:w-1/2 py-8">
+          <h3 class="mb-4">
+            {$_('LISATIETOA_PERUSPARANNUSPASSI_SECTION_2026')}
+          </h3>
+          <div class="flex flex-col space-y-2">
+            <p class="block py-2">
+              {$_('LISATIETOA_PERUSPARANNUSPASSI_INFO_2026')}
+            </p>
+          </div>
+        </section>
+      {/if}
     </section>
   </article>
 </Container>

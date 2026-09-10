@@ -303,7 +303,11 @@
 
 <Container {...containerStyles.beige}>
   <InfoBlock title={$_('ETHAKU_INFO_TITLE')}>
-    {$_('ETHAKU_INFO_TEXT')}
+    {#if isEtp2026}
+      {$_('ETHAKU_INFO_TEXT_2026')}
+    {:else}
+      {$_('ETHAKU_INFO_TEXT')}
+    {/if}
   </InfoBlock>
 </Container>
 <Container {...containerStyles.white}>

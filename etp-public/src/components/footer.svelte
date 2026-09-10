@@ -15,6 +15,8 @@
   import { _, locale } from '@Localization/localization';
 
   export let config;
+  let isEtp2026 = false;
+  isEtp2026 = config?.isEtp2026 ?? false;
 
   $: logo = $locale === 'fi' ? ImgFooterLogoFi : ImgFooterLogoSv;
   $: logoSmall = $locale === 'fi' ? ImgFooterLogoSmallFi : ImgFooterLogoSmallSv;
@@ -38,7 +40,11 @@
     <article class="flex flex-col md:flex-row md:my-0 md:space-x-10">
       <section class="md:w-1/3 py-4 md:py-0">
         <h2 class="mb-4">{$_('FOOTER_LAKI')}</h2>
-        <p>{$_('FOOTER_VARKE_VIRANOMAINEN')}</p>
+        {#if isEtp2026}
+          <p>{$_('FOOTER_VARKE_VIRANOMAINEN_2026')}</p>
+        {:else}
+          <p>{$_('FOOTER_VARKE_VIRANOMAINEN')}</p>
+        {/if}
         <br />
         <Link href="https://www.varke.fi">{$_('FOOTER_VARKE_LINKKI')}</Link>
       </section>

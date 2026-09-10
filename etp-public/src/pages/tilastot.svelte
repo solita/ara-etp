@@ -349,7 +349,11 @@
 
               <aside
                 class="w-full mt-4 lg:mt-0 lg:w-5/12 lg:pl-4 lg:border-l-8 border-ashblue text-ashblue italic text-sm">
-                {$_('TILASTOT_ASIDE')}
+                {#if isEtp2026}
+                  {$_('TILASTOT_ASIDE_2026')}
+                {:else}
+                  {$_('TILASTOT_ASIDE')}
+                {/if}
               </aside>
             </div>
             <!-- TARKENNETTU HAKU -->

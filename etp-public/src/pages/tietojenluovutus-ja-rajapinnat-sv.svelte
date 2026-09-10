@@ -13,6 +13,12 @@
   onMount(() => {
     component?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
+
+  const configPromise = fetch('config.json').then(response => response.json());
+  let isEtp2026 = false;
+  configPromise.then(config => {
+    isEtp2026 = config?.isEtp2026 ?? false;
+  });
 </script>
 
 <style>
@@ -29,11 +35,18 @@
 <Container {...containerStyles.beige}>
   <div bind:this={component}>
     <InfoBlock {title} showIcon={false}>
-      <p>
-        Organisationerna kan få uppgifter om energicertifikat på tre olika sätt
-        från det energicertifikatregister som Centralen för statligt stött
-        bostadsbyggande (Varke) upprätthåller.
-      </p>
+      {#if isEtp2026}
+        <p>
+          Valtion tukeman asuntorakentamisen keskus (Varke) tarjoaa
+          organisaatioille energiatodistustietoa kolmella eri tavalla. (sv)
+        </p>
+      {:else}
+        <p>
+          Organisationerna kan få uppgifter om energicertifikat på tre olika
+          sätt från det energicertifikatregister som Centralen för statligt
+          stött bostadsbyggande (Varke) upprätthåller.
+        </p>
+      {/if}
       <ol class="ml-6">
         <li>
           <Link href="/energiatodistusrekisterin-aineistopalvelu"
@@ -47,13 +60,23 @@
           gör det möjligt att söka uppgifter om enskilda energicertifikat med hjälp
           av Suomi.fi-informationsleden.
         </li>
-        <li>
-          Vi behandlar begäran om information som genomförs utan gränssnitt från
-          fall till fall och debiterar för dem enligt vår timprislista.
-          <br />
-          Mer information: <Link href="mailto:energiatodistus.varke@gov.fi"
-            >energiatodistus.varke@gov.fi</Link>
-        </li>
+        {#if isEtp2026}
+          <li>
+            Ilman rajapintaa toteutettavat tietopyynnöt käsitellään
+            tapauskohtaisesti. Tietopyynnöistä voidaan periä maksu voimassa
+            olevan tuntihinnaston mukaisesti. (sv) <br />
+            Mer information: <Link href="mailto:energiatodistus.varke@gov.fi"
+              >energiatodistus.varke@gov.fi</Link>
+          </li>
+        {:else}
+          <li>
+            Vi behandlar begäran om information som genomförs utan gränssnitt
+            från fall till fall och debiterar för dem enligt vår timprislista.
+            <br />
+            Mer information: <Link href="mailto:energiatodistus.varke@gov.fi"
+              >energiatodistus.varke@gov.fi</Link>
+          </li>
+        {/if}
       </ol>
     </InfoBlock>
   </div>
