@@ -291,7 +291,9 @@
       </div>
       {#if isEtp2026}
         <section class="md:w-1/2 py-8">
-          <h3 class="mb-4">{$_('LISATIETOA_PERUSPARANNUSPASSI_2026')}</h3>
+          <h3 class="mb-4">
+            {$_('LISATIETOA_PERUSPARANNUSPASSI_SECTION_2026')}
+          </h3>
           <div class="flex flex-col space-y-2">
             <p class="block py-2">
               {$_('LISATIETOA_PERUSPARANNUSPASSI_INFO_2026')}
