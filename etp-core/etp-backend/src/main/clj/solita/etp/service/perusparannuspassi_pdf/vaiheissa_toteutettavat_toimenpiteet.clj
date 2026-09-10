@@ -4,7 +4,8 @@
             [solita.etp.service.localization :as loc]
             [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset :as tv]
-            [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]))
+            [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]
+            [solita.common.formats :as formats]))
 
 (defn- dot->comma [s]
   (when s
@@ -123,6 +124,11 @@
   (when-let [d (parse-double-safe v)]
     (.replace (format "%.2f" d) "." ",")))
 
+(defn- fmt
+  "Format a number with the requested number of decimal places."
+  [value decimals]
+  (or (formats/format-number value decimals false) ""))
+
 (defn- render-energiankulutus-kustannukset-ja-co2-paastot [vaihe l]
   (let [tulokset (:tulokset vaihe)]
     [:div {:class "ppp-vaihe-section ppp-vaihe-energiankulutus-kustannukset-ja-co2-paastot"}
@@ -130,7 +136,7 @@
      [:table {:class "ppp-vaihe-kustannukset-table" :role "presentation"}
       (for [[label value unit] [[(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen) (-> tulokset (get :ostoenergia) dot->comma) (l :kwh-vuosi)]
                                 [(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus) (-> tulokset (get :toteutunut-ostoenergia) dot->comma) (l :kwh-vuosi)]
-                                [(l :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio) (-> tulokset :toteutunut-energia-kustannukset format-2dp) (l :euroa-vuosi)]
+                                [(l :toteutuneen-ostoenergian-vuotuinen-energiakustannus-arvio) (-> tulokset :toteutunut-energia-kustannukset (fmt 0)) (l :euroa-vuosi)]
                                 [(l :energiankaytosta-aiheutuvat-hiilidioksidipaastot-laskennallinen) (-> tulokset :co2-paastot format-2dp) (l :tco2ekv-vuosi)]]]
         [:tr
          [:th {:class "ppp-vaihe-row-header" :scope "row"} label]

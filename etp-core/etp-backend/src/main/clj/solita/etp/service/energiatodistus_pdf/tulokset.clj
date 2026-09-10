@@ -55,7 +55,7 @@
         [:th {:class "tulokset-th-sub"} (l :kwh-vuosi)]
         [:th {:class "tulokset-th-sub"} (l :kwh-m2-vuosi)]
         [:th {:class "tulokset-th-sub"} (l :kwh-vuosi)]
-        [:th {:class "tulokset-th-sub"} (l :kwh-m2-vuosi)]]]
+        [:th {:class "tulokset-th-sub"} (l :kwhE-m2-vuosi)]]]
       [:tbody
        (ostoenergia-row (l :kaukolampo-table) energiamuoto "kaukolampo")
        (ostoenergia-row (l :sahko-table) energiamuoto "sahko")
@@ -149,7 +149,7 @@
          [:br]
          [:span {:class "tulokset-th-unit"} (l :kwh-m2-vuosi)]]
         [:th {:class "tulokset-th"}
-         [:span (l :kaukojaahdytys-table)]
+         [:span (l :kaukojaahdytys-table-tulokset)]
          [:br]
          [:span {:class "tulokset-th-unit"}
           (l :kwh-m2-vuosi)]]]]
@@ -263,7 +263,7 @@
      [:h3
       (l :eluku-otsikko)
       [:span {:class "tulokset-eluku-value"} (fmt e-luku)]
-      [:span {:class "tulokset-eluku-unit"} (l :kwh-m2-vuosi)]]]))
+      [:span {:class "tulokset-eluku-unit"} (l :kwhE-m2-vuosi)]]]))
 
 (defn tulokset-page-content
   [{:keys [energiatodistus kieli]}]
