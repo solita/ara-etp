@@ -17,7 +17,7 @@
 
 (defn lisatietoja [{:keys [kieli]}]
   (let [l (kieli loc/et-pdf-localization)]
-    [:div {:class "lisamerkintoja"}
+    [:div {:class "lisatietoja"}
      [:h3 (l :lisatietoja-otsikko)]
      [:p (l :lisatietoja-ehto)]
      [:p (l :lisatietoja-energia-tiedot) [:br] "https://www.motiva.fi/motivan-energianeuvonta/"]
@@ -25,6 +25,6 @@
      ]))
 
 (defn generate-lisamerkintoja [params]
-  (into [:div]
+  (into [:div {:class "lisamerkintoja-page"}]
         [(lisamerkintoja params)
          (lisatietoja params)]))

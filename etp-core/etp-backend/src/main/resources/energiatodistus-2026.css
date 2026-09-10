@@ -358,7 +358,7 @@ table.common-table td:last-child {
 }
 
 .etusivu-yleistiedot {
-    height: 54mm;
+    height: 57mm;
 }
 
 .etusivu-yleistiedot dl {
@@ -406,7 +406,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 }
 
 .etusivu-grafiikka-eluku-section {
-    height: 125.5mm;
+    height: 123.5mm;
 }
 
 .etusivu-ostoenergia-section {
@@ -569,7 +569,7 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 }
 
 .koontisivu #koontisivu-lammitetty-nettoala {
-    margin-right: 10mm;
+    margin-right: 22mm;
 }
 
 .koontisivu #koontisivu-ilmatilavuus {
@@ -895,6 +895,16 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
     margin-top: 0.2em;
 }
 
+.lisamerkintoja-page {
+    position: relative;
+    min-height: 257mm;
+}
+
+.lisatietoja {
+    position: absolute;
+    bottom: 0;
+}
+
 /* =====================================================
    Tulokset (E-luvun laskennan tulokset) page styles
    ===================================================== */
@@ -1120,12 +1130,13 @@ span.tulokset-th-unit {
     border-right: 1px solid #ced4dd;
     font-weight: bold;
     text-align: left;
-    width: 18%;
+    width: 17%;
 }
 
 .ilmastoselvitys th:last-child,
 .ilmastoselvitys td:last-child {
     border-right: none;
+    width: 13%;
 }
 
 .ilmastoselvitys th.empty,
