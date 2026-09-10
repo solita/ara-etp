@@ -612,7 +612,7 @@
         :te-lampo-muutos                            "Lämpö,\nostoenergian\nmuutos (sv)"
         :te-sahko-muutos                            "Sähkö,\nostoenergian\nmuutos (sv)"
         :te-jaahdytyden-muutos                      "Jäähdytys,\nostoenergian\nmuutos (sv)"
-        :eluvun-muutos                              "E-luvun \nmuuutos"
+        :eluvun-muutos                              "E-luvun \nmuuutos (sv)"
         :kasvihuonepaastojen-muutos                 "Energiankäytön\nkasvihuonekaasu-\npäästöjen muutos (sv)"
         :huomiot-pohjat-otsikko                     "Huomiot – ylä- ja alapohja"
 
@@ -659,7 +659,7 @@
         :uusiutuva-polttoaine-table                 "Uusiutuva polttoaine (sv)"
         :fossiilinen-polttoaine-table               "Fossiilinen polttoaine (sv)"
         :kaukojaahdytys-table                       "Kauko-\njäähdytys (sv)"
-        :kaukojaahdytys-table-tulokset              "Kaukojäähdytys"
+        :kaukojaahdytys-table-tulokset              "Kaukojäähdytys (sv)"
         :uusiutuva-energia-table                    "Uusiutuva energia (sv)"
         :kwh-vuosi                                  "kWh/vuosi (sv)"
         :kwh-m2-vuosi                               "kWh/m²/vuosi (sv)"
