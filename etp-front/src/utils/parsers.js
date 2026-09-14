@@ -79,6 +79,13 @@ export const parseDayCount = R.compose(
 /**
  * @sig string -> Either [(Translate -> string),Date]
  */
+const normalizeShortDateYear = R.replace(
+  /^(\d{1,2}\.\d{1,2}\.)(\d{2})$/,
+  // First capture group is the day and month, second capture group is the two digit year.
+  // This then becomes (first capture group)20(second capture group)
+  '$120$2'
+);
+
 export const parseDate = R.compose(
   R.ifElse(
     dfns.isValid,
@@ -86,6 +93,7 @@ export const parseDate = R.compose(
     R.always(Either.Left(R.applyTo('parsing.invalid-date')))
   ),
   date => dfns.parse(date, Validation.DATE_FORMAT, 0),
+  normalizeShortDateYear,
   R.trim
 );
 
