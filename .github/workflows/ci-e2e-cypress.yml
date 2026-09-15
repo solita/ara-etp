@@ -65,6 +65,30 @@ jobs:
           cache-from: type=gha,scope=smtp
           cache-to: type=gha,mode=max,scope=smtp
           load: true
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+      - name: Cache npm packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ runner.arch }}-${{ matrix.suite }}-${{ hashFiles('e2e-tests/cypress/package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-${{ runner.arch }}-${{ matrix.suite }}-
+      - name: Cache Cypress binary
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ runner.arch }}-${{ matrix.suite }}-${{ hashFiles('e2e-tests/cypress/package-lock.json') }}
+      - name: Install Cypress dependencies
+        working-directory: e2e-tests/cypress
+        run: npm ci
+      - name: Install and verify Cypress binary
+        working-directory: e2e-tests/cypress
+        run: |
+          npx cypress install
+          npx cypress verify
       - name: Setup e2e-env
         working-directory: e2e-tests/cypress
         run: |
@@ -78,9 +102,9 @@ jobs:
         uses: cypress-io/github-action@v7
         with:
           working-directory: e2e-tests/cypress
+          install: false
           wait-on: 'https://localhost:3009'
           spec: ${{ matrix.spec }}
-          cache-key: npm-${{ runner.os }}-${{ runner.arch }}-${{ matrix.suite }}-${{ hashFiles('e2e-tests/cypress/package-lock.json') }}
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
           CYPRESS_ETP_2026: "${{ matrix.etp2026 }}"
