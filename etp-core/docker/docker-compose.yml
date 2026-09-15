@@ -63,19 +63,44 @@ services:
       MINIO_SECRET_KEY: minio123
 
   minio_create_default_bucket:
-    image: minio/mc:latest
+    image: amazon/aws-cli
     depends_on:
       minio:
         condition: service_started
     networks:
       - minio
-    entrypoint: >
-      /bin/sh -c "
-      sleep 5;
-      /usr/bin/mc alias set local http://minio:9000 minio minio123 --api S3v4;
-      /usr/bin/mc mb local/files --region=eu-central-1;
-      /usr/bin/mc policy set public local/files;
-      "
+    environment:
+      AWS_ACCESS_KEY_ID: minio
+      AWS_SECRET_ACCESS_KEY: minio123
+      AWS_DEFAULT_REGION: eu-central-1
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        until aws --endpoint-url=http://minio:9000 s3api list-buckets >/dev/null 2>&1; do
+          echo "Waiting for MinIO..."
+          sleep 2
+        done
+
+        aws --endpoint-url=http://minio:9000 s3api create-bucket \
+          --bucket files \
+          --create-bucket-configuration LocationConstraint=eu-central-1 \
+          || true
+
+        aws --endpoint-url=http://minio:9000 s3api put-bucket-policy \
+          --bucket files \
+          --policy '{
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": ["s3:GetObject"],
+                "Resource": ["arn:aws:s3:::files/*"]
+              }
+            ]
+          }'
+
   sftp:
     build: ./sftp
     ports:
