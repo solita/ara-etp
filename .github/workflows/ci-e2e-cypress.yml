@@ -80,6 +80,7 @@ jobs:
           working-directory: e2e-tests/cypress
           wait-on: 'https://localhost:3009'
           spec: ${{ matrix.spec }}
+          cache-key: npm-${{ runner.os }}-${{ runner.arch }}-${{ matrix.suite }}-${{ hashFiles('e2e-tests/cypress/package-lock.json') }}
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
           CYPRESS_ETP_2026: "${{ matrix.etp2026 }}"
