@@ -1,5 +1,6 @@
 (ns solita.etp.service.csv-to-s3
   (:require [clojure.tools.logging :as log]
+            [clojure.java.jdbc :as jdbc]
             [solita.etp.service.energiatodistus-csv :as energiatodistus-csv]
             [solita.etp.service.file :as file]
             [solita.etp.service.aineisto :as aineisto-service])
@@ -38,20 +39,22 @@
     (log/info log-end)))
 
 (defn update-aineisto-in-s3! [db whoami aws-s3-client aineisto-id]
-  (let [csv-query (aineisto-service/aineisto-reducible-query db whoami aineisto-id)
-        key (aineisto-key aineisto-id)
+  (let [key (aineisto-key aineisto-id)
         start-msg (str "Starting updating of aineisto (id: " aineisto-id ").")
         end-msg (str "Updating of aineisto (id: " aineisto-id ") finished.")]
-    (process-csv-to-s3! aws-s3-client key csv-query start-msg end-msg)))
+    (jdbc/with-db-transaction [db db]
+      (let [csv-query (aineisto-service/aineisto-reducible-query db whoami aineisto-id)]
+        (process-csv-to-s3! aws-s3-client key csv-query start-msg end-msg)))))
 
 (defn update-public-csv-in-s3! [db whoami aws-s3-client query]
-  (let [csv-query (energiatodistus-csv/energiatodistukset-public-csv db whoami query)]
-    (process-csv-to-s3!
-     aws-s3-client
-     public-csv-key
-     csv-query
-     "Starting updating of public energiatodistus."
-     "Updating of public energiatodistus finished.")))
+  (jdbc/with-db-transaction [db db]
+    (let [csv-query (energiatodistus-csv/energiatodistukset-public-csv db whoami query)]
+      (process-csv-to-s3!
+       aws-s3-client
+       public-csv-key
+       csv-query
+       "Starting updating of public energiatodistus."
+       "Updating of public energiatodistus finished."))))
 
 (defn update-aineistot-in-s3! [db whoami aws-s3-client]
   (doseq [id [1 2 3]]
