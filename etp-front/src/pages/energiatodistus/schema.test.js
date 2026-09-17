@@ -298,6 +298,24 @@ describe('Ilmastoselvitys schema numeric types', () => {
       expect(typeof laatimisajankohta.parse).toBe('function');
       expect(typeof laatimisajankohta.format).toBe('function');
     });
+
+    it('given the laatimisajankohta field, when parsing a date with a two-digit year, then maps it to the 2000s', () => {
+      // given
+      const laatimisajankohta = schema.v2026.ilmastoselvitys.laatimisajankohta;
+
+      // when
+      const result = laatimisajankohta.parse('12.12.12');
+
+      // then
+      expect(Either.isRight(result)).toBe(true);
+
+      const parsedDate = Either.right(result);
+      const date = Maybe.get(parsedDate);
+      expect(date.getFullYear()).toBe(2012);
+      expect(date.getMonth()).toBe(11);
+      expect(date.getDate()).toBe(12);
+      expect(laatimisajankohta.format(parsedDate)).toBe('12.12.2012');
+    });
   });
 });
 
