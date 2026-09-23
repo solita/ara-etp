@@ -112,7 +112,7 @@
     (html
       (heading "Tietopyyntö (tiedoksi)")
       (paragraph
-        "Sähköpostin liitteenä on tiedoksi energiatodistuvalvontaan liittyvä tietopyyntö rakennuksesta: {valvonta.rakennustunnus}"
+        "Sähköpostin liitteenä on tiedoksi energiatodistusvalvontaan liittyvä tietopyyntö rakennuksesta: {valvonta.rakennustunnus}"
         address-fi)
       (paragraph "Valvonta kohdistuu rakennuksen omistajaan ja tämä on vain teille tiedoksi.")
       (paragraph "Tarvittaessa lisätietoja voi kysyä osoitteesta "
@@ -134,7 +134,7 @@
     (html
       (heading "Energiatodistusvalvonnan kehotus (tiedoksi)")
       (paragraph
-        "Sähköpostin liitteenä on tiedoksi energiatodistuvalvontaan liittyvä kehotus rakennuksesta: {valvonta.rakennustunnus}"
+        "Sähköpostin liitteenä on tiedoksi energiatodistusvalvontaan liittyvä kehotus rakennuksesta: {valvonta.rakennustunnus}"
         address-fi)
       (paragraph "Valvonta kohdistuu rakennuksen omistajaan ja tämä on vain teille tiedoksi.")
       (paragraph "Tarvittaessa lisätietoja voi kysyä osoitteesta "
