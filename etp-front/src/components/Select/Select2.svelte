@@ -170,7 +170,7 @@
   }
 
   .validation-label {
-    @apply absolute top-auto z-10;
+    @apply absolute top-auto;
     font-size: smaller;
   }
 </style>
