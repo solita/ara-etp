@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as EM from '@Utility/either-maybe';
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
   import * as formats from '@Utility/formats';
@@ -14,6 +15,27 @@
   export let disabled;
   export let schema;
   export let energiatodistus;
+
+  const hasValue = R.allPass([R.isNotNil, R.isNotEmpty]);
+
+  const hasDefaultPolttoaineValue = polttoaine =>
+    R.compose(
+      EM.exists(hasValue),
+      R.path([
+        'toteutunut-ostoenergiankulutus',
+        'ostetut-polttoaineet',
+        polttoaine
+      ])
+    );
+  const showDefaultPolttoaineRow = polttoaine =>
+    R.anyPass([EtUtils.isDraft, hasDefaultPolttoaineValue(polttoaine)]);
+
+  const hasMuuPolttoaineValue = R.anyPass([
+    R.compose(Maybe.exists(hasValue), R.prop('nimi')),
+    R.compose(Maybe.exists(hasValue), R.prop('yksikko')),
+    R.compose(EM.exists(hasValue), R.prop('muunnoskerroin')),
+    R.compose(EM.exists(hasValue), R.prop('maara-vuodessa'))
+  ]);
 
   const muunnoskertoimet = {
     'kevyt-polttooljy': Maybe.Some(10),
@@ -81,133 +103,137 @@
     </thead>
     <tbody class="et-table--tbody">
       {#each ['kevyt-polttooljy', 'pilkkeet-havu-sekapuu', 'pilkkeet-koivu', 'puupelletit'] as polttoaine}
-        <tr class="et-table--tr">
-          <td class="et-table--td">
-            {$_(
-              `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}`
-            )}
-          </td>
-          <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={[
-                'toteutunut-ostoenergiankulutus',
-                'ostetut-polttoaineet',
-                polttoaine
-              ]} />
-          </td>
-          <td class="et-table--td-left-aligned et-table--td">
-            {$_(
-              `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-yksikko`
-            )}
-          </td>
-          <td class="et-table--td">
-            {R.compose(
-              formats.numberFormat,
-              Maybe.get,
-              R.prop(polttoaine)
-            )(muunnoskertoimet)}
-          </td>
-          <td
-            class="et-table--td"
-            title={$_(
-              `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-vuosikulutus`
-            )}>
-            {R.compose(
-              Maybe.orSome(''),
-              R.map(R.compose(formats.numberFormat, fxmath.round(0))),
-              R.prop(polttoaine)
-            )(muunnoskerrotutPolttoaineet)}
-          </td>
-          <td
-            class="et-table--td"
-            title={$_(
-              `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-neliovuosikulutus`
-            )}>
-            {R.compose(
-              Maybe.orSome(''),
-              R.map(R.compose(formats.numberFormat, fxmath.round(0))),
-              R.prop(polttoaine)
-            )(muunnoskerrotutPolttoaineetPerLammitettyNettoala)}
-          </td>
-        </tr>
+        {#if showDefaultPolttoaineRow(polttoaine)(energiatodistus)}
+          <tr class="et-table--tr">
+            <td class="et-table--td">
+              {$_(
+                `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}`
+              )}
+            </td>
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={[
+                  'toteutunut-ostoenergiankulutus',
+                  'ostetut-polttoaineet',
+                  polttoaine
+                ]} />
+            </td>
+            <td class="et-table--td-left-aligned et-table--td">
+              {$_(
+                `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-yksikko`
+              )}
+            </td>
+            <td class="et-table--td">
+              {R.compose(
+                formats.numberFormat,
+                Maybe.get,
+                R.prop(polttoaine)
+              )(muunnoskertoimet)}
+            </td>
+            <td
+              class="et-table--td"
+              title={$_(
+                `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-vuosikulutus`
+              )}>
+              {R.compose(
+                Maybe.orSome(''),
+                R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+                R.prop(polttoaine)
+              )(muunnoskerrotutPolttoaineet)}
+            </td>
+            <td
+              class="et-table--td"
+              title={$_(
+                `energiatodistus.toteutunut-ostoenergiankulutus.ostetut-polttoaineet.${polttoaine}-neliovuosikulutus`
+              )}>
+              {R.compose(
+                Maybe.orSome(''),
+                R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+                R.prop(polttoaine)
+              )(muunnoskerrotutPolttoaineetPerLammitettyNettoala)}
+            </td>
+          </tr>
+        {/if}
       {/each}
       {#each R.path(['toteutunut-ostoenergiankulutus', 'ostetut-polttoaineet', 'muu'], energiatodistus) as muu, index}
-        <tr class="et-table--tr">
-          <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={[
-                'toteutunut-ostoenergiankulutus',
-                'ostetut-polttoaineet',
-                'muu',
-                index,
-                'nimi'
-              ]} />
-          </td>
-          <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={[
-                'toteutunut-ostoenergiankulutus',
-                'ostetut-polttoaineet',
-                'muu',
-                index,
-                'maara-vuodessa'
-              ]} />
-          </td>
-          <td class="et-table--td et-table--td-left-aligned">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={[
-                'toteutunut-ostoenergiankulutus',
-                'ostetut-polttoaineet',
-                'muu',
-                index,
-                'yksikko'
-              ]} />
-          </td>
-          <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={[
-                'toteutunut-ostoenergiankulutus',
-                'ostetut-polttoaineet',
-                'muu',
-                index,
-                'muunnoskerroin'
-              ]} />
-          </td>
-          <td class="et-table--td">
-            {R.compose(
-              Maybe.orSome(''),
-              R.map(R.compose(formats.numberFormat, fxmath.round(0))),
-              R.nth(index)
-            )(muunnoskerrotutVapaatPolttoaineet)}
-          </td>
-          <td class="et-table--td">
-            {R.compose(
-              Maybe.orSome(''),
-              R.map(R.compose(formats.numberFormat, fxmath.round(0))),
-              R.nth(index)
-            )(muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala)}
-          </td>
-        </tr>
+        {#if hasMuuPolttoaineValue(muu) || EtUtils.isDraft(energiatodistus)}
+          <tr class="et-table--tr">
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={[
+                  'toteutunut-ostoenergiankulutus',
+                  'ostetut-polttoaineet',
+                  'muu',
+                  index,
+                  'nimi'
+                ]} />
+            </td>
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={[
+                  'toteutunut-ostoenergiankulutus',
+                  'ostetut-polttoaineet',
+                  'muu',
+                  index,
+                  'maara-vuodessa'
+                ]} />
+            </td>
+            <td class="et-table--td et-table--td-left-aligned">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={[
+                  'toteutunut-ostoenergiankulutus',
+                  'ostetut-polttoaineet',
+                  'muu',
+                  index,
+                  'yksikko'
+                ]} />
+            </td>
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={[
+                  'toteutunut-ostoenergiankulutus',
+                  'ostetut-polttoaineet',
+                  'muu',
+                  index,
+                  'muunnoskerroin'
+                ]} />
+            </td>
+            <td class="et-table--td">
+              {R.compose(
+                Maybe.orSome(''),
+                R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+                R.nth(index)
+              )(muunnoskerrotutVapaatPolttoaineet)}
+            </td>
+            <td class="et-table--td">
+              {R.compose(
+                Maybe.orSome(''),
+                R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+                R.nth(index)
+              )(muunnoskerrotutVapaatPolttoaineetPerLammitettyNettoala)}
+            </td>
+          </tr>
+        {/if}
       {/each}
     </tbody>
   </table>
