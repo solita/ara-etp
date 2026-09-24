@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as EM from '@Utility/either-maybe';
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
   import * as formats from '@Utility/formats';
@@ -16,6 +17,48 @@
   export let energiatodistus;
   export let versio;
   export let inputLanguage;
+
+  const hasValue = R.allPass([R.isNotNil, R.isNotEmpty]);
+
+  const hasDefaultEnergiamuotoValue = energiamuoto =>
+    R.compose(
+      EM.exists(hasValue),
+      R.path([
+        'toteutunut-ostoenergiankulutus',
+        'ostettu-energia',
+        `${energiamuoto}-vuosikulutus`
+      ])
+    );
+  const showDefaultEnergiamuotoRow = energiamuoto =>
+    R.anyPass([EtUtils.isDraft, hasDefaultEnergiamuotoValue(energiamuoto)]);
+
+  const muuEnergiamuotoPath = index => [
+    'toteutunut-ostoenergiankulutus',
+    'ostettu-energia',
+    'muu',
+    index
+  ];
+  const hasMuuEnergiamuotoValue = index =>
+    R.anyPass([
+      R.compose(
+        Maybe.exists(hasValue),
+        R.path([...muuEnergiamuotoPath(index), 'nimi'])
+      ),
+      R.compose(
+        Maybe.exists(hasValue),
+        R.path([...muuEnergiamuotoPath(index), 'nimi-fi'])
+      ),
+      R.compose(
+        Maybe.exists(hasValue),
+        R.path([...muuEnergiamuotoPath(index), 'nimi-sv'])
+      ),
+      R.compose(
+        EM.exists(hasValue),
+        R.path([...muuEnergiamuotoPath(index), 'vuosikulutus'])
+      )
+    ]);
+  const showMuuEnergiamuotoRow = index =>
+    R.anyPass([EtUtils.isDraft, hasMuuEnergiamuotoValue(index)]);
 </script>
 
 <style type="text/postcss">
@@ -48,92 +91,96 @@
     </thead>
     <tbody class="et-table--tbody">
       {#each ['kaukolampo', 'kokonaissahko', 'kiinteistosahko', 'kayttajasahko', 'kaukojaahdytys'] as energiamuoto}
-        <tr class="et-table--tr">
-          <td class="et-table--td">
-            <div
-              class:indent={R.includes(energiamuoto, [
-                'kiinteistosahko',
-                'kayttajasahko'
-              ])}>
-              {$_(
-                `energiatodistus.toteutunut-ostoenergiankulutus.ostettu-energia.labels.${energiamuoto}`
-              )}
-            </div>
-          </td>
-          <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={[
-                'toteutunut-ostoenergiankulutus',
-                'ostettu-energia',
-                `${energiamuoto}-vuosikulutus`
-              ]} />
-          </td>
-          <td
-            class="et-table--td"
-            title={$_(
-              `energiatodistus.toteutunut-ostoenergiankulutus.ostettu-energia.${energiamuoto}-neliovuosikulutus`
-            )}>
-            {R.compose(
-              formats.optionalNumber,
-              R.map(fxmath.round(0)),
-              EtUtils.energiaPerLammitettyNettoala([
-                'toteutunut-ostoenergiankulutus',
-                'ostettu-energia',
-                `${energiamuoto}-vuosikulutus`
-              ])
-            )(energiatodistus)}
-          </td>
-        </tr>
+        {#if showDefaultEnergiamuotoRow(energiamuoto)(energiatodistus)}
+          <tr class="et-table--tr">
+            <td class="et-table--td">
+              <div
+                class:indent={R.includes(energiamuoto, [
+                  'kiinteistosahko',
+                  'kayttajasahko'
+                ])}>
+                {$_(
+                  `energiatodistus.toteutunut-ostoenergiankulutus.ostettu-energia.labels.${energiamuoto}`
+                )}
+              </div>
+            </td>
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={[
+                  'toteutunut-ostoenergiankulutus',
+                  'ostettu-energia',
+                  `${energiamuoto}-vuosikulutus`
+                ]} />
+            </td>
+            <td
+              class="et-table--td"
+              title={$_(
+                `energiatodistus.toteutunut-ostoenergiankulutus.ostettu-energia.${energiamuoto}-neliovuosikulutus`
+              )}>
+              {R.compose(
+                formats.optionalNumber,
+                R.map(fxmath.round(0)),
+                EtUtils.energiaPerLammitettyNettoala([
+                  'toteutunut-ostoenergiankulutus',
+                  'ostettu-energia',
+                  `${energiamuoto}-vuosikulutus`
+                ])
+              )(energiatodistus)}
+            </td>
+          </tr>
+        {/if}
       {/each}
       {#each R.defaultTo([], energiatodistus['toteutunut-ostoenergiankulutus']['ostettu-energia'].muu) as _, index}
-        <tr class="et-table--tr">
-          <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              inputLanguage={Maybe.Some(inputLanguage)}
-              path={[
-                'toteutunut-ostoenergiankulutus',
-                'ostettu-energia',
-                'muu',
-                index,
-                'nimi'
-              ]} />
-          </td>
-          <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={[
-                'toteutunut-ostoenergiankulutus',
-                'ostettu-energia',
-                'muu',
-                index,
-                'vuosikulutus'
-              ]} />
-          </td>
-          <td class="et-table--td">
-            {R.compose(
-              formats.optionalNumber,
-              R.map(fxmath.round(0)),
-              EtUtils.energiaPerLammitettyNettoala([
-                'toteutunut-ostoenergiankulutus',
-                'ostettu-energia',
-                'muu',
-                index,
-                'vuosikulutus'
-              ])
-            )(energiatodistus)}
-          </td>
-        </tr>
+        {#if showMuuEnergiamuotoRow(index)(energiatodistus)}
+          <tr class="et-table--tr">
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                inputLanguage={Maybe.Some(inputLanguage)}
+                path={[
+                  'toteutunut-ostoenergiankulutus',
+                  'ostettu-energia',
+                  'muu',
+                  index,
+                  'nimi'
+                ]} />
+            </td>
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={[
+                  'toteutunut-ostoenergiankulutus',
+                  'ostettu-energia',
+                  'muu',
+                  index,
+                  'vuosikulutus'
+                ]} />
+            </td>
+            <td class="et-table--td">
+              {R.compose(
+                formats.optionalNumber,
+                R.map(fxmath.round(0)),
+                EtUtils.energiaPerLammitettyNettoala([
+                  'toteutunut-ostoenergiankulutus',
+                  'ostettu-energia',
+                  'muu',
+                  index,
+                  'vuosikulutus'
+                ])
+              )(energiatodistus)}
+            </td>
+          </tr>
+        {/if}
       {/each}
     </tbody>
   </table>

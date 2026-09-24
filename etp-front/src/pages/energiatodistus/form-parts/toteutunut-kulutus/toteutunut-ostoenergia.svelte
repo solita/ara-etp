@@ -1,6 +1,7 @@
 <script>
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
+  import * as EM from '@Utility/either-maybe';
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
   import * as formats from '@Utility/formats';
@@ -17,6 +18,17 @@
   export let energiatodistus;
   export let inputLanguage;
   export let versio = 2018;
+
+  const hasValue = R.allPass([R.isNotNil, R.isNotEmpty]);
+
+  const hasToteutunutOstoenergiaValue = energiamuoto =>
+    R.compose(
+      EM.exists(hasValue),
+      R.path(['toteutunut-ostoenergiankulutus', energiamuoto])
+    );
+
+  const showToteutunutOstoenergiaRow = energiamuoto =>
+    R.anyPass([EtUtils.isDraft, hasToteutunutOstoenergiaValue(energiamuoto)]);
 
   $: ostoenergiat = EtUtils.toteutuneetOstoenergiat(versio)(energiatodistus);
 
@@ -68,29 +80,31 @@
     </thead>
     <tbody class="et-table--tbody">
       {#each EtUtils.fieldsWithToteutunutOstoenergia[versio] as energiamuoto}
-        <tr class="et-table--tr">
-          <td class="et-table--td">
-            {$_(
-              `energiatodistus.toteutunut-ostoenergiankulutus.labels.${energiamuoto}`
-            )}
-          </td>
+        {#if showToteutunutOstoenergiaRow(energiamuoto)(energiatodistus)}
+          <tr class="et-table--tr">
+            <td class="et-table--td">
+              {$_(
+                `energiatodistus.toteutunut-ostoenergiankulutus.labels.${energiamuoto}`
+              )}
+            </td>
 
-          <td class="et-table--td">
-            <Input
-              {disabled}
-              {schema}
-              compact={true}
-              bind:model={energiatodistus}
-              path={['toteutunut-ostoenergiankulutus', energiamuoto]} />
-          </td>
-          <td class="et-table--td">
-            {R.compose(
-              Maybe.orSome(''),
-              R.map(R.compose(formats.numberFormat, fxmath.round(0))),
-              R.prop(energiamuoto)
-            )(toteutuneetOstoenergiatPerLammitettyNettoala)}
-          </td>
-        </tr>
+            <td class="et-table--td">
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                path={['toteutunut-ostoenergiankulutus', energiamuoto]} />
+            </td>
+            <td class="et-table--td">
+              {R.compose(
+                Maybe.orSome(''),
+                R.map(R.compose(formats.numberFormat, fxmath.round(0))),
+                R.prop(energiamuoto)
+              )(toteutuneetOstoenergiatPerLammitettyNettoala)}
+            </td>
+          </tr>
+        {/if}
       {/each}
     </tbody>
   </table>
