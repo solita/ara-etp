@@ -1,3 +1,7 @@
+#
+# This script is here to document how to call an ocsp responder with `openssl` manually. 
+#
+
 # OCSP Request
 openssl ocsp -CAfile pki/ca.crt \
     -issuer pki/ca.crt \
