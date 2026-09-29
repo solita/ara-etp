@@ -49,33 +49,34 @@ services:
       PGADMIN_DEFAULT_EMAIL: etp@solita.fi
 
   minio:
-    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    image: chrislusf/seaweedfs:latest
     ports:
       - 127.0.0.1:9002:9000
-      - 127.0.0.1:9001:9001
+      - 127.0.0.1:9001:8888
     networks:
       - minio
     volumes:
       - data:/files
-    command: server /files --console-address ":9001"
-    environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio123
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        printf '%s\n' '{"identities":[{"name":"local","credentials":[{"accessKey":"minio","secretKey":"minio123"}],"actions":["Admin","Read","List","Tagging","Write"]}]}' > /tmp/s3.json
+        exec weed server -dir=/files -master.port=9333 -volume.port=8080 -filer.port=8888 -s3 -s3.port=9000 -s3.config=/tmp/s3.json
 
   minio_create_default_bucket:
-    image: quay.io/minio/mc:RELEASE.2025-08-13T08-35-41Z
+    image: chrislusf/seaweedfs:latest
     depends_on:
       minio:
         condition: service_started
     networks:
       - minio
-    entrypoint: >
-      /bin/sh -c "
-      sleep 5;
-      /usr/bin/mc alias set local http://minio:9000 minio minio123 --api S3v4;
-      /usr/bin/mc mb local/files --region=eu-central-1;
-      /usr/bin/mc policy set public local/files;
-      "
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        sleep 5
+        echo "s3.bucket.create -name files" | weed shell -master=minio:9333 -filer=minio:8888 || true
   sftp:
     build: ./sftp
     ports:
