@@ -62,7 +62,7 @@ services:
       - -c
       - |
         printf '%s\n' '{"identities":[{"name":"local","credentials":[{"accessKey":"minio","secretKey":"minio123"}],"actions":["Admin","Read","List","Tagging","Write"]}]}' > /tmp/s3.json
-        exec weed server -dir=/files -master.port=9333 -volume.port=8080 -filer.port=8888 -s3 -s3.port=9000 -s3.config=/tmp/s3.json
+        exec weed server -dir=/files -master.port=9333 -volume.port=8080 -volume.max=1000 -filer.port=8888 -s3 -s3.port=9000 -s3.config=/tmp/s3.json
 
   minio_create_default_bucket:
     image: chrislusf/seaweedfs:latest
