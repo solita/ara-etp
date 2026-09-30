@@ -57,6 +57,7 @@ services:
       - minio
     volumes:
       - data:/files
+      - data:/data
     entrypoint:
       - /bin/sh
       - -c

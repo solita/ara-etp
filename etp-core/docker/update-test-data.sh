@@ -8,8 +8,7 @@ set -euo pipefail
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd "$SCRIPT_DIR" || exit 1
 
-rm -rf minio/files
-docker compose cp -a minio:/files/files minio/files/
+./persist-seaweedfs-bucket.sh
 
 # Need to insert in replica mode so that audit data is not generated
 echo "set session_replication_role = 'replica';" > ../etp-db/src/test/sql/migration/repeatable/r-x-01-test-data.sql
