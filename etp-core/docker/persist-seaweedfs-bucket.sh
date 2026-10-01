@@ -31,9 +31,9 @@ mkdir -p "$output_parent"
 rm -rf "$tmp_dir"
 mkdir -p "$tmp_dir"
 
-minio_container_id=$(docker_or_podman compose ps -q minio)
-if [ -z "$minio_container_id" ]; then
-  echo "Could not find a running minio container." >&2
+seaweedfs_container_id=$(docker_or_podman compose ps -q seaweedfs)
+if [ -z "$seaweedfs_container_id" ]; then
+  echo "Could not find a running seaweedfs container." >&2
   exit 1
 fi
 
@@ -47,10 +47,10 @@ fi
 echo "Persisting s3://$bucket_name to $output_dir using $aws_cli_image..."
 docker_or_podman run \
   --rm \
-  --network "container:$minio_container_id" \
+  --network "container:$seaweedfs_container_id" \
   "${container_user_args[@]}" \
-  -e AWS_ACCESS_KEY_ID=minio \
-  -e AWS_SECRET_ACCESS_KEY=minio123 \
+  -e AWS_ACCESS_KEY_ID=seaweedfs \
+  -e AWS_SECRET_ACCESS_KEY=seaweedfs123 \
   -e AWS_DEFAULT_REGION=us-east-1 \
   -e HOME=/tmp \
   -v "$tmp_dir_abs:/seaweedfs/files" \

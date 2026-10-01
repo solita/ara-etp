@@ -71,8 +71,8 @@
                 :region "eu-central-1"}
                (when use-local-env-credentials?
                  {:credentials-provider (credentials/basic-credentials-provider
-                                          {:access-key-id     "minio"
-                                           :secret-access-key "minio123"})
+                                          {:access-key-id     "seaweedfs"
+                                           :secret-access-key "seaweedfs123"})
                   :endpoint-override    {:protocol :http
                                          :hostname (env "S3_HOST" "localhost")
                                          :port     (Integer/parseInt (env "S3_PORT" "9002"))}})

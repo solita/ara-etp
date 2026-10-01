@@ -14,16 +14,16 @@ restore_seaweedfs_volume() {
   echo "Restoring SeaweedFS bucket data..."
   mkdir -p seaweedfs/files
 
-  docker_or_podman compose wait minio_create_default_bucket || true
+  docker_or_podman compose wait seaweedfs_create_default_bucket || true
 
-  minio_container_id=$(docker_or_podman compose ps -q minio)
+  seaweedfs_container_id=$(docker_or_podman compose ps -q seaweedfs)
   seaweedfs_files_dir=$(cd seaweedfs/files && pwd)
 
   docker_or_podman run \
     --rm \
-    --network "container:$minio_container_id" \
-    -e AWS_ACCESS_KEY_ID=minio \
-    -e AWS_SECRET_ACCESS_KEY=minio123 \
+    --network "container:$seaweedfs_container_id" \
+    -e AWS_ACCESS_KEY_ID=seaweedfs \
+    -e AWS_SECRET_ACCESS_KEY=seaweedfs123 \
     -e AWS_DEFAULT_REGION=us-east-1 \
     -e HOME=/tmp \
     -v "$seaweedfs_files_dir:/seaweedfs/files:ro" \

@@ -48,13 +48,13 @@ services:
       PGADMIN_DEFAULT_PASSWORD: etp
       PGADMIN_DEFAULT_EMAIL: etp@solita.fi
 
-  minio:
+  seaweedfs:
     image: chrislusf/seaweedfs:latest
     ports:
       - 127.0.0.1:9002:9000
       - 127.0.0.1:9001:8888
     networks:
-      - minio
+      - seaweedfs
     volumes:
       - data:/files
       - data:/data
@@ -62,22 +62,22 @@ services:
       - /bin/sh
       - -c
       - |
-        printf '%s\n' '{"identities":[{"name":"local","credentials":[{"accessKey":"minio","secretKey":"minio123"}],"actions":["Admin","Read","List","Tagging","Write"]}]}' > /tmp/s3.json
+        printf '%s\n' '{"identities":[{"name":"local","credentials":[{"accessKey":"seaweedfs","secretKey":"seaweedfs123"}],"actions":["Admin","Read","List","Tagging","Write"]}]}' > /tmp/s3.json
         exec weed server -dir=/files -master.port=9333 -volume.port=8080 -volume.max=1000 -filer.port=8888 -s3 -s3.port=9000 -s3.config=/tmp/s3.json
 
-  minio_create_default_bucket:
+  seaweedfs_create_default_bucket:
     image: chrislusf/seaweedfs:latest
     depends_on:
-      minio:
+      seaweedfs:
         condition: service_started
     networks:
-      - minio
+      - seaweedfs
     entrypoint:
       - /bin/sh
       - -c
       - |
         sleep 5
-        echo "s3.bucket.create -name files" | weed shell -master=minio:9333 -filer=minio:8888 || true
+        echo "s3.bucket.create -name files" | weed shell -master=seaweedfs:9333 -filer=seaweedfs:8888 || true
   sftp:
     build: ./sftp
     ports:
@@ -126,4 +126,4 @@ volumes:
   data:
 
 networks:
-  minio:
+  seaweedfs:

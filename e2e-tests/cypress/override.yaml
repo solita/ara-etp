@@ -9,11 +9,11 @@ services:
       - pgAdmin # Run only when this profile is used.
     ports: !reset []
 
-  minio:
+  seaweedfs:
     ports: !reset []
     networks: !reset []
 
-  minio_create_default_bucket:
+  seaweedfs_create_default_bucket:
     networks: !reset []
 
   sftp:
