@@ -10,6 +10,28 @@ docker_or_podman() {
   fi
 }
 
+restore_seaweedfs_volume() {
+  echo "Restoring SeaweedFS bucket data..."
+  mkdir -p seaweedfs/files
+
+  docker_or_podman compose wait seaweedfs_create_default_bucket || true
+
+  seaweedfs_container_id=$(docker_or_podman compose ps -q seaweedfs)
+  seaweedfs_files_dir=$(cd seaweedfs/files && pwd)
+
+  docker_or_podman run \
+    --rm \
+    --network "container:$seaweedfs_container_id" \
+    -e AWS_ACCESS_KEY_ID=seaweedfs \
+    -e AWS_SECRET_ACCESS_KEY=seaweedfs123 \
+    -e AWS_DEFAULT_REGION=us-east-1 \
+    -e HOME=/tmp \
+    -v "$seaweedfs_files_dir:/seaweedfs/files:ro" \
+    amazon/aws-cli:2.37.6 \
+    --endpoint-url http://127.0.0.1:9000 \
+    s3 sync /seaweedfs/files s3://files --delete
+}
+
 if [ "$1" == "--podman" ]; then
   use_podman=true
 fi
@@ -31,9 +53,17 @@ else
   echo "Database migrations have not changed, keeping possible existing etp-db containers and image"
 fi
 
+is_first_seaweedfs_start=false
+
+if ! docker_or_podman volume inspect etp_data > /dev/null 2>&1; then
+  is_first_seaweedfs_start=true
+fi
+
 docker_or_podman compose up -d
 
-docker_or_podman compose cp minio/files minio:/files
+if [ "$is_first_seaweedfs_start" = true ]; then
+  restore_seaweedfs_volume
+fi
 
 echo "Waiting for etp-db-for-etp_dev to run database migrations..."
 docker_or_podman compose wait etp-db-for-etp_dev || true

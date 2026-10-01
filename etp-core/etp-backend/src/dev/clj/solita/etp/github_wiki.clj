@@ -684,7 +684,7 @@
 ;; ---------------------------------------------------------------------------
 
 (defn- download-aineisto-from-s3
-  "Download an aineisto CSV from S3 (MinIO) and return it as a string."
+  "Download an aineisto CSV from S3 (SeaweedFS) and return it as a string."
   [{:keys [client bucket]} aineisto-id]
   (let [key    (str "api/signed/aineistot/" aineisto-id "/energiatodistukset.csv")
         result (aws/invoke client {:op      :GetObject
@@ -741,7 +741,7 @@
          set)))
 
 (defn update-aineistot!
-  "Regenerate all three aineisto CSV files into S3 (MinIO), then download
+  "Regenerate all three aineisto CSV files into S3 (SeaweedFS), then download
    them back and save as esimerkki_energiatodistukset-{1,2,3}.csv under
    the github_wiki directory.
    When `ids` map is provided, filters CSVs to keep only those rows."
@@ -774,7 +774,7 @@
                  filename    (str resource-dir "esimerkki_energiatodistukset-" id ".csv")]
              (spit filename csv-content)
              (println (str "Downloaded and wrote " filename)))))
-       (println "All three aineistot downloaded from MinIO and saved locally.")))))
+       (println "All three aineistot downloaded from SeaweedFS and saved locally.")))))
 
 ;; ---------------------------------------------------------------------------
 ;; All-in-one: insert, sign, and generate aineistot
