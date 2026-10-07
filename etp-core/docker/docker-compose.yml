@@ -48,34 +48,34 @@ services:
       PGADMIN_DEFAULT_PASSWORD: etp
       PGADMIN_DEFAULT_EMAIL: etp@solita.fi
 
-  minio:
-    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+  seaweedfs:
+    image: chrislusf/seaweedfs:latest
     ports:
       - 127.0.0.1:9002:9000
-      - 127.0.0.1:9001:9001
+      - 127.0.0.1:9001:8888
     networks:
-      - minio
+      - seaweedfs
     volumes:
       - data:/files
-    command: server /files --console-address ":9001"
-    environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio123
-
-  minio_create_default_bucket:
-    image: quay.io/minio/mc:RELEASE.2025-08-13T08-35-41Z
-    depends_on:
-      minio:
-        condition: service_started
-    networks:
-      - minio
-    entrypoint: >
-      /bin/sh -c "
-      sleep 5;
-      /usr/bin/mc alias set local http://minio:9000 minio minio123 --api S3v4;
-      /usr/bin/mc mb local/files --region=eu-central-1;
-      /usr/bin/mc policy set public local/files;
-      "
+      - data:/data
+      - type: bind
+        source: ./seaweedfs/entrypoint.sh
+        target: /entrypoint.sh
+        read_only: true
+      - type: bind
+        source: ./seaweedfs/s3.json
+        target: /etc/seaweedfs/s3.json
+        read_only: true
+    entrypoint:
+      - /bin/sh
+      - /entrypoint.sh
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - test -f /tmp/seaweedfs-ready && kill -0 "$(cat /tmp/weed.pid)"
+      interval: 1s
+      timeout: 5s
+      retries: 30
   sftp:
     build: ./sftp
     ports:
@@ -124,4 +124,4 @@ volumes:
   data:
 
 networks:
-  minio:
+  seaweedfs:

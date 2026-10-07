@@ -125,11 +125,11 @@ Documentation
 When the server is running, the API documentation can be found at
 http://localhost:8080/api/documentation/index.html
 
-MinIO
+SeaweedFS
 ---
-[MinIO](https://github.com/minio/minio) is used as a replacement for S3 in
-local development environment. MinIO Console can be accessed through
-http://localhost:9001/ (user: minio pw: minio123).
+[SeaweedFS](https://github.com/seaweedfs/seaweedfs) is used as a replacement for S3 in
+local development environment. You can check the state of SeaweedFS from
+http://localhost:9001/ .
 
 
 About database usage
@@ -169,7 +169,7 @@ For example, to generate 2000 energiatodistus you can run:
 ```
 
 #### Adding test data to default database
-`update-test-data.sh` script can be used to add current state of the database and minio (S3) files into test dataset that is initialised when the service is started.
+`update-test-data.sh` script can be used to add current state of the database and seaweedfs (S3) files into test dataset that is initialised when the service is started.
 
 The script copies all user data (i.e. data that's not from migrations or from audit tables) and select audit data that has functionality tied to it.
 

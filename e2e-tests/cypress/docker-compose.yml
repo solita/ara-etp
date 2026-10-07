@@ -18,7 +18,7 @@ services:
       SMTP_PORT: 25
       LASKUTUS_SFTP_HOST: sftp
       LASKUTUS_SFTP_PORT: 22
-      S3_HOST: minio
+      S3_HOST: seaweedfs
       S3_PORT: 9000
       SYSTEM_SIGNATURE_SESSION_TIMEOUT_MINUTES: 52560000
       KMS_PORT: 8080
@@ -38,14 +38,12 @@ services:
         condition: service_started
       kms:
         condition: service_started
-      minio:
-        condition: service_started
+      seaweedfs:
+        condition: service_healthy
       ocsp-responder-int:
         condition: service_started
       ocsp-responder-root:
         condition: service_started
-      minio_create_default_bucket:
-        condition: service_completed_successfully
       etp-db-for-etp_dev:
         condition: service_completed_successfully
     entrypoint: >
