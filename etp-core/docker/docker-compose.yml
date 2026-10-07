@@ -58,26 +58,24 @@ services:
     volumes:
       - data:/files
       - data:/data
+      - type: bind
+        source: ./seaweedfs/entrypoint.sh
+        target: /entrypoint.sh
+        read_only: true
+      - type: bind
+        source: ./seaweedfs/s3.json
+        target: /etc/seaweedfs/s3.json
+        read_only: true
     entrypoint:
       - /bin/sh
-      - -c
-      - |
-        printf '%s\n' '{"identities":[{"name":"local","credentials":[{"accessKey":"seaweedfs","secretKey":"seaweedfs123"}],"actions":["Admin","Read","List","Tagging","Write"]}]}' > /tmp/s3.json
-        exec weed server -dir=/files -master.port=9333 -volume.port=8080 -volume.max=1000 -filer.port=8888 -s3 -s3.port=9000 -s3.config=/tmp/s3.json
-
-  seaweedfs_create_default_bucket:
-    image: chrislusf/seaweedfs:latest
-    depends_on:
-      seaweedfs:
-        condition: service_started
-    networks:
-      - seaweedfs
-    entrypoint:
-      - /bin/sh
-      - -c
-      - |
-        sleep 5
-        echo "s3.bucket.create -name files" | weed shell -master=seaweedfs:9333 -filer=seaweedfs:8888 || true
+      - /entrypoint.sh
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - test -f /tmp/seaweedfs-ready && kill -0 "$(cat /tmp/weed.pid)"
+      interval: 1s
+      timeout: 5s
+      retries: 30
   sftp:
     build: ./sftp
     ports:

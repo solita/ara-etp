@@ -39,13 +39,11 @@ services:
       kms:
         condition: service_started
       seaweedfs:
-        condition: service_started
+        condition: service_healthy
       ocsp-responder-int:
         condition: service_started
       ocsp-responder-root:
         condition: service_started
-      seaweedfs_create_default_bucket:
-        condition: service_completed_successfully
       etp-db-for-etp_dev:
         condition: service_completed_successfully
     entrypoint: >

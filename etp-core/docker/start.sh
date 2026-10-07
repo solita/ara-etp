@@ -10,11 +10,43 @@ docker_or_podman() {
   fi
 }
 
+wait_for_service_health() {
+  service_name="$1"
+  timeout_seconds="${2:-60}"
+  start_time=$(date +%s)
+
+  while true; do
+    container_id=$(docker_or_podman compose ps -q "$service_name")
+
+    if [ -n "$container_id" ]; then
+      health_status=$(docker_or_podman inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "$container_id")
+
+      if [ "$health_status" = "healthy" ]; then
+        return 0
+      fi
+
+      if [ "$health_status" = "exited" ] || [ "$health_status" = "dead" ]; then
+        echo "$service_name stopped before becoming healthy" >&2
+        docker_or_podman compose logs --tail=50 "$service_name" >&2 || true
+        return 1
+      fi
+    fi
+
+    if [ $(( $(date +%s) - start_time )) -ge "$timeout_seconds" ]; then
+      echo "Timed out waiting for $service_name to become healthy" >&2
+      docker_or_podman compose logs --tail=50 "$service_name" >&2 || true
+      return 1
+    fi
+
+    sleep 1
+  done
+}
+
 restore_seaweedfs_volume() {
   echo "Restoring SeaweedFS bucket data..."
   mkdir -p seaweedfs/files
 
-  docker_or_podman compose wait seaweedfs_create_default_bucket || true
+  wait_for_service_health seaweedfs
 
   seaweedfs_container_id=$(docker_or_podman compose ps -q seaweedfs)
   seaweedfs_files_dir=$(cd seaweedfs/files && pwd)

@@ -13,8 +13,6 @@ services:
     ports: !reset []
     networks: !reset []
 
-  seaweedfs_create_default_bucket:
-    networks: !reset []
 
   sftp:
     ports: !reset []
