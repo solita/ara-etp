@@ -44,7 +44,7 @@ if [ "$use_podman" = false ]; then
   container_user_args=(--user "$(id -u):$(id -g)")
 fi
 
-echo "Persisting s3://$bucket_name to $output_dir using $aws_cli_image..."
+echo "Exporting s3://$bucket_name to $output_dir using $aws_cli_image..."
 docker_or_podman run \
   --rm \
   --network "container:$seaweedfs_container_id" \
