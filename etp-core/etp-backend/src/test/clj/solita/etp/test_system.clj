@@ -2,9 +2,10 @@
   (:require [clojure.java.jdbc :as jdbc]
             [clojure.string :as str]
             [integrant.core :as ig]
+            [solita.common.aws.s3 :as s3]
             [solita.common.aws.utils :as aws.utils]
-            [solita.etp.aws-s3-client]
             [solita.etp.aws-kms-client]
+            [solita.etp.aws-s3-client]
             [solita.etp.config :as config]
             [solita.etp.db]
             [solita.etp.handler :as handler]))
@@ -57,17 +58,45 @@
                                                    :VersioningConfiguration
                                                    {:Status "Enabled"}}))
 
-(defn drop-bucket! [{:keys [client bucket]}]
-  (let [versions (->> (#'aws.utils/invoke client :ListObjectVersions {:Bucket bucket})
-                  :Versions
-                  (map #(select-keys % [:Key :VersionId])))
-        delete-markers (->> (#'aws.utils/invoke client :ListObjectVersions {:Bucket bucket})
-                            :DeleteMarkers
-                            (map #(select-keys % [:Key :VersionId])))
+
+
+(defn drop-bucket! [{:keys [client bucket] :as aws-s3-client}]
+  (let [versions (loop [next-key-marker nil
+                        next-version-id-marker nil
+                        acc []]
+                   (let [{:keys [Versions IsTruncated NextKeyMarker NextVersionIdMarker]}
+                         (s3/list-object-versions aws-s3-client
+                                                  {:next-key-marker        next-key-marker
+                                                   :next-version-id-marker next-version-id-marker})]
+                     (let [acc' (into acc (->> Versions
+                                               (map #(select-keys % [:Key :VersionId]))))]
+                       (if IsTruncated
+                         (recur NextKeyMarker NextVersionIdMarker acc')
+                         acc'))))
+
+        delete-markers (loop [next-key-marker nil
+                              next-version-id-marker nil
+                              acc []]
+                         (let [{:keys [DeleteMarkers IsTruncated NextKeyMarker NextVersionIdMarker]}
+                               (s3/list-object-versions aws-s3-client
+                                                        {:next-key-marker        next-key-marker
+                                                         :next-version-id-marker next-version-id-marker})]
+                           (let [acc' (into acc (->> DeleteMarkers
+                                                     (map #(select-keys % [:Key :VersionId]))))]
+                             (if IsTruncated
+                               (recur NextKeyMarker NextVersionIdMarker acc')
+                               acc'))))
         objects (concat versions delete-markers)]
-    (when (-> objects empty? not)
-      (#'aws.utils/invoke client :DeleteObjects {:Delete {:Objects objects}
-                                                 :Bucket bucket}))
+    (->> objects
+     (partition-all 1000)
+     (mapv (fn [batch]
+             (let [resp (#'aws.utils/invoke client :DeleteObjects
+                                            {:Bucket bucket
+                                             :Delete {:Objects (vec batch)
+                                                      :Quiet true}})]
+               (when (seq (:Errors resp))
+                 (throw (ex-info "DeleteObjects errors" {:errors (:Errors resp)})))
+               resp))))
     (#'aws.utils/invoke client :DeleteBucket {:Bucket bucket})))
 
 (defn- config-plain-db [config]
