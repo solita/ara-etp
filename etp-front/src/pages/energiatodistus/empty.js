@@ -120,7 +120,6 @@ export const energiatodistus2018 = _ => ({
     postinumero: Maybe.None(),
     valmistumisvuosi: ValidNone(),
     'julkinen-rakennus': false,
-    tilaaja: Maybe.None(),
     yritys: {
       nimi: Maybe.None(),
       katuosoite: Maybe.None(),

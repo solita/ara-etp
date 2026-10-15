@@ -29,7 +29,6 @@
    :laatimisvaihe            common-schema/Key
    :kiinteistotunnus         common-schema/String75
    :yritys                   Yritys
-   :tilaaja                  common-schema/String200
    :rakennusosa              common-schema/String100
    :kieli                    common-schema/Key
    :nimi-fi                  common-schema/String75
@@ -403,11 +402,20 @@
       (assoc-in [:perustiedot :nimi] (schema/maybe common-schema/String75))
       xschema/optional-key-for-maybe))
 
+(defn- ->EnergiatodistusSaveExternalLegacy [schema]
+  (-> schema
+      ;; Deprecated: accepted for backwards compatibility but ignored (AE-2898)
+      (assoc-in [:perustiedot :tilaaja] (schema/maybe common-schema/String200))
+      ->EnergiatodistusSaveExternal))
+
+(defn dissoc-deprecated-external-fields [energiatodistus]
+  (update energiatodistus :perustiedot dissoc :tilaaja))
+
 (def EnergiatodistusSave2013External
-  (->EnergiatodistusSaveExternal EnergiatodistusSave2013))
+  (->EnergiatodistusSaveExternalLegacy EnergiatodistusSave2013))
 
 (def EnergiatodistusSave2018External
-  (->EnergiatodistusSaveExternal EnergiatodistusSave2018))
+  (->EnergiatodistusSaveExternalLegacy EnergiatodistusSave2018))
 
 (def PerusparannuspassiSaveExternal
   "PPP schema for external API - energiatodistus-id is omitted

@@ -278,8 +278,12 @@
 
 (def external-routes
   [["/energiatodistukset"
-    ["/2013" (crud-api/post 2013 energiatodistus-schema/EnergiatodistusSave2013External)]
-    ["/2018" (crud-api/post 2018 energiatodistus-schema/EnergiatodistusSave2018External)]
+    ["/2013" (crud-api/post 2013 energiatodistus-schema/EnergiatodistusSave2013External
+                            energiatodistus-schema/dissoc-deprecated-external-fields
+                            rooli-service/laatija?)]
+    ["/2018" (crud-api/post 2018 energiatodistus-schema/EnergiatodistusSave2018External
+                            energiatodistus-schema/dissoc-deprecated-external-fields
+                            rooli-service/laatija?)]
     ["/2026-ppp"
      {:post
       {:summary    "Lisää 2026 energiatodistus ja optionaalisesti perusparannuspassi"

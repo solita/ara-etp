@@ -181,7 +181,6 @@ export const v2018 = {
       ...Integer(100, new Date().getFullYear()),
       format: formats.optionalYear
     },
-    tilaaja: String(2, 200),
     yritys: Yritys,
     havainnointikaynti: DateValue(),
     'keskeiset-suositukset': String(2, 2500)

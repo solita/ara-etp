@@ -777,6 +777,12 @@
                                                      "energiatodistus.perustiedot.tilaaja"
                                                      "test"]]]))))
     (t/is (= {:type    :unknown-field
+              :field   "energiatodistus.perustiedot.tilaaja"
+              :message "Unknown field: energiatodistus.perustiedot.tilaaja"}
+             (etp-test/catch-ex-data #(search pk [[["="
+                                                    "energiatodistus.perustiedot.tilaaja"
+                                                    "test"]]]))))
+    (t/is (= {:type    :unknown-field
               :field   "asdf"
               :message "Unknown field: asdf"}
              (etp-test/catch-ex-data #(search pk [[["=" "asdf" "test"]]]))))))

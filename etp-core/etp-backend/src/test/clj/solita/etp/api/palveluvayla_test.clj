@@ -64,21 +64,24 @@
               body (j/read-value (:body response) j/keyword-keys-object-mapper)]
           (t/is (= 200 (:status response)))
           (t/is (= todistus-2013-fi-id (:id body)))
-          (schema-tools.coerce/coerce body schema.energiatodistus/Energiatodistus2013 schema-tools.coerce/json-coercion-matcher)))
+          (schema-tools.coerce/coerce body schema.energiatodistus/Energiatodistus2013 schema-tools.coerce/json-coercion-matcher)
+          (t/is (not (contains? (:perustiedot body) :tilaaja)))))
 
       (t/testing "when fetching 2018"
         (let [response (ts/handler (-> (mock/request :get (str palveluvayla-basepath (format "/json/2018/%s" todistus-2018-fi-id)))))
               body (j/read-value (:body response) j/keyword-keys-object-mapper)]
           (t/is (= 200 (:status response)))
           (t/is (= todistus-2018-fi-id (:id body)))
-          (schema-tools.coerce/coerce body schema.energiatodistus/Energiatodistus2018 schema-tools.coerce/json-coercion-matcher)))
+          (schema-tools.coerce/coerce body schema.energiatodistus/Energiatodistus2018 schema-tools.coerce/json-coercion-matcher)
+          (t/is (not (contains? (:perustiedot body) :tilaaja)))))
 
       (t/testing "when fetching 2026"
         (let [response (ts/handler (-> (mock/request :get (str palveluvayla-basepath (format "/json/2026/%s" todistus-2026-fi-id)))))
               body (j/read-value (:body response) j/keyword-keys-object-mapper)]
           (t/is (= 200 (:status response)))
           (t/is (= todistus-2026-fi-id (:id body)))
-          (schema-tools.coerce/coerce body schema.energiatodistus/Energiatodistus2026 schema-tools.coerce/json-coercion-matcher))))
+          (schema-tools.coerce/coerce body schema.energiatodistus/Energiatodistus2026 schema-tools.coerce/json-coercion-matcher)
+          (t/is (not (contains? (:perustiedot body) :tilaaja))))))
 
     (t/testing "Fetching wrong version by id returns 404"
       (t/testing "for 2013"

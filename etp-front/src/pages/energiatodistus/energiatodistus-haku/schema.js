@@ -439,7 +439,6 @@ const perustiedot = {
   postinumero: [...numberComparisons],
   laatimisvaihe: [luokitteluEquals(OPERATOR_TYPES.LAATIMISVAIHE)],
   valmistumisvuosi: [...unformattedNumberComparisons],
-  tilaaja: [...stringComparisons],
   kayttotarkoitus: [versioluokkaSome],
   alakayttotarkoitusluokka: [versioluokkaEquals],
   yritys: {

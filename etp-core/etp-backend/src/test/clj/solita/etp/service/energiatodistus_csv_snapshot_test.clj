@@ -1672,3 +1672,11 @@
     (t/is (= expected-anonymized-columns (vec csv/anonymized-columns))))
   (t/testing "Tilastokeskus columns are what we expect"
     (t/is (= expected-tilastokeskus-columns (vec csv/tilastokeskus-columns)))))
+
+(t/deftest private-csv-has-tilaaja-column-test
+  (t/is (some #{[:perustiedot :tilaaja]} csv/private-columns)))
+
+(t/deftest csv-line-renders-missing-tilaaja-as-empty-cell-test
+  (let [columns [[:id] [:perustiedot :tilaaja] [:versio]]]
+    (t/is (= "1;;2018\n"
+             (csv/energiatodistus->csv-line columns {:id 1 :versio 2018})))))
