@@ -103,6 +103,48 @@
     (let [response (post-external-et! 2018 "minimal-2018-invalid-value.json")]
       (t/is (= 400 (:status response))))))
 
+(defn- stored-tilaaja [id]
+  (-> (jdbc/query ts/*db* ["select pt$tilaaja as tilaaja from energiatodistus where id = ?" id])
+      first
+      :tilaaja))
+
+(defn- post-external-2026-ppp! [et]
+  (ts/handler (-> (mock/request :post "/api/external/energiatodistukset/2026-ppp")
+                  (mock/header "Accept" "application/json")
+                  (mock/header "Content-Type" "application/json")
+                  (mock/header "Authorization" (basic-auth-header "laatija@solita.fi" "password"))
+                  (mock/body (j/write-value-as-string et)))))
+
+(t/deftest external-api-tilaaja-is-accepted-and-discarded-test
+  (insert-external-api-laatija!)
+
+  (t/testing "JSON 2013 and 2018 accept tilaaja but do not store it"
+    (doseq [[versio resource] [[2013 "complete-2013.json"] [2018 "complete-2018.json"]]]
+      (let [response (post-external-et! versio resource)]
+        (t/is (= 201 (:status response)))
+        (t/is (nil? (stored-tilaaja (:id (response-body response))))))))
+
+  (t/testing "JSON 2026-ppp no longer has tilaaja"
+    (let [et (-> (et-test-data/generate-add 2026 false)
+                 (dissoc :kommentti :draft-visible-to-paakayttaja
+                         :bypass-validation-limits :bypass-validation-limits-reason
+                         :yksinkertaistettu-paivitysmenettely))
+          response (post-external-2026-ppp! et)]
+      (t/is (= 201 (:status response)))
+      (t/is (nil? (stored-tilaaja (:id (response-body response)))))
+      (t/is (= 400 (:status (post-external-2026-ppp!
+                              (assoc-in et [:perustiedot :tilaaja] "tilaaja")))))))
+
+  (t/testing "Legacy XML accepts Tilaaja but does not store it"
+    (let [response (post-external-xml-et! 2018 "esimerkki-2018.xml")
+          id (some->> (:body response)
+                      (re-find #"<b:TodistusTunnus>(\d+)</b:TodistusTunnus>")
+                      second
+                      Long/parseLong)]
+      (t/is (= 200 (:status response)))
+      (t/is (some? id))
+      (t/is (nil? (stored-tilaaja id))))))
+
 (t/deftest external-api-post-legacy-xml-test
   (insert-external-api-laatija!)
 

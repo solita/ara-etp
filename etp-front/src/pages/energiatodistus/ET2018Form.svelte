@@ -95,15 +95,6 @@
         bind:model={energiatodistus}
         path={['perustiedot', 'yritys', 'nimi']} />
     </div>
-
-    <div class="w-full py-4 lg:w-1/2">
-      <Input
-        {disabled}
-        {schema}
-        center={false}
-        bind:model={energiatodistus}
-        path={['perustiedot', 'tilaaja']} />
-    </div>
   </div>
 
   <div class="flex flex-col gap-x-8">

@@ -21,7 +21,6 @@ pt$yritys$nimi,perustiedot.yritys.nimi,input,false,Testiyritys Oy,,,,,true,Perus
 pt$yritys$katuosoite,perustiedot.yritys.katuosoite,input,false,Testikatu 1,,,,,false,Perustiedot,Not rendered on ET2026 form (only yritys.nimi is shown),40
 pt$yritys$postinumero,perustiedot.yritys.postinumero,input,false,100,,,,,false,Perustiedot,Not rendered on ET2026 form (only yritys.nimi is shown),8
 pt$yritys$postitoimipaikka,perustiedot.yritys.postitoimipaikka,input,false,Helsinki,,,,,false,Perustiedot,Not rendered on ET2026 form (only yritys.nimi is shown),30
-pt$tilaaja,perustiedot.tilaaja,input,false,Tilaaja Oy,,,,,true,Perustiedot,Who ordered the certificate,200
 pt$kieli,perustiedot.kieli,select,true,Suomi,,,,,true,Perustiedot,Certificate language,
 pt$laatimisvaihe,perustiedot.laatimisvaihe,select,true,Olemassa oleva rakennus,,,,,true,Perustiedot,Drafting phase (controls conditional fields),
 pt$havainnointikaynti,perustiedot.havainnointikaynti,input,true,15.3.2026,,,,,true,Perustiedot,"Observation visit date; shown only for ""Olemassa oleva rakennus""",

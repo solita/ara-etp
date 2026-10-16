@@ -74,7 +74,6 @@
                                :katuosoite       "Esimerkkikatu 1"
                                :postinumero      "33100"
                                :postitoimipaikka  "Tampere"}
-    :tilaaja                  "Tilaaja Oy"
     :rakennusosa              "Prakennus"
     :kieli                    2
     :nimi-fi                  "Rakennuksen nimi"
@@ -242,7 +241,6 @@
                                :katuosoite       "Yrityskatu 1"
                                :postinumero      "33100"
                                :postitoimipaikka  "Tampere"}
-    :tilaaja                  "Tilaaja Oy"
     :rakennusosa              "Prakennus"
     :kieli                    2
     :nimi-fi                  "Paras rakennus"
@@ -439,7 +437,6 @@
                                :katuosoite       "Energiakatu 3"
                                :postinumero      "00100"
                                :postitoimipaikka  "Helsinki"}
-    :tilaaja                  "Esimkerkki Tilaaja Oy"
     :rakennusosa              "Päärakennus"
     :kieli                    0
     :nimi-fi                  "Esimerkkitalo 2026"
