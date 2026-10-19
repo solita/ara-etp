@@ -63,6 +63,32 @@
                            " is not allowed to access laatija: " laatija-id
                            " valvonta information.")}))))
 
+(t/deftest find-valvonnat-laatija-includes-et2026-fields
+  (let [paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
+        [laatija-id _] (laatija-test-data/generate-and-insert!)
+        [id _] (energiatodistus-test-data/generate-and-insert!
+                 2026 true laatija-id)
+        whoami (test-whoami/laatija laatija-id)]
+    (service/add-toimenpide! (ts/db-user paakayttaja-id)
+                              ts/*aws-s3-client*
+                              (test-whoami/paakayttaja paakayttaja-id)
+                              id
+                              {:type-id       4
+                               :deadline-date nil
+                               :template-id   nil
+                               :description   "Test toimenpide"
+                               :virheet       []
+                               :severity-id   nil
+                               :tiedoksi      []})
+    (let [energiatodistus (-> (service/find-valvonnat (ts/db-user laatija-id)
+                                                     whoami
+                                                     {})
+                              first
+                              :energiatodistus)]
+      (t/is (= id (:id energiatodistus)))
+      (t/is (contains? energiatodistus :perusparannuspassi-id))
+      (t/is (contains? energiatodistus :perusparannuspassi-valid)))))
+
 (t/deftest update-toimenpide-laatija
   (let [[laatija-id _] (laatija-test-data/generate-and-insert!)
         [id _] (energiatodistus-test-data/generate-and-insert!

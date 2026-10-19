@@ -12,6 +12,34 @@
 
 (t/use-fixtures :each ts/fixture)
 
+(defn- assert-laatija-valvonnat [expected-ids]
+  (let [response (ts/handler
+                   (-> (mock/request :get "/api/private/valvonta/oikeellisuus")
+                       (mock/header "Accept" "application/json")
+                       (laatija-test-data/with-suomifi-laatija)))]
+    (when (t/is (= 200 (:status response))
+                (str "Expected status 200, got " (:status response)
+                     " with body: " (:body response)))
+      (t/is (= expected-ids
+               (->> (j/read-value (:body response)
+                                  j/keyword-keys-object-mapper)
+                    (map :id)
+                    set))))))
+
+(defn- begin-valvonta! [paakayttaja-id energiatodistus-id]
+  (valvonta-service/add-toimenpide!
+    (ts/db-user paakayttaja-id)
+    ts/*aws-s3-client*
+    (test-whoami/paakayttaja paakayttaja-id)
+    energiatodistus-id
+    {:type-id       4
+     :deadline-date nil
+     :template-id   nil
+     :description   "Test toimenpide"
+     :virheet       []
+     :severity-id   nil
+     :tiedoksi      []}))
+
 (defn- setup-valvonta-cases!
   "Creates laatija, energiatodistukset and starts valvonta cases for testing.
    Returns a map with :paakayttaja-id, :laatija-id, and :energiatodistus-ids"
@@ -42,6 +70,21 @@
     {:paakayttaja-id      paakayttaja-id
      :laatija-id          laatija-id
      :energiatodistus-ids [et-2013-id et-2018-id et-2026-id]}))
+
+(t/deftest laatija-lists-et2018-and-et2026-valvonta-cases
+  (let [paakayttaja-id (test-kayttajat/insert-paakayttaja!)
+        laatija-id (laatija-test-data/insert-suomifi-laatija!)
+        [et-2018-id _] (energiatodistus-test-data/generate-and-insert!
+                         2018 true laatija-id)
+        [et-2026-id _] (energiatodistus-test-data/generate-and-insert!
+                         2026 true laatija-id)]
+    (assert-laatija-valvonnat #{})
+
+    (begin-valvonta! paakayttaja-id et-2018-id)
+    (assert-laatija-valvonnat #{et-2018-id})
+
+    (begin-valvonta! paakayttaja-id et-2026-id)
+    (assert-laatija-valvonnat #{et-2018-id et-2026-id})))
 
 (t/deftest valvonta-oikeellisuus-list-endpoint
   (t/testing "Pääkäyttäjä can call the valvonta oikeellisuus list endpoint without getting a 500 error"
