@@ -71,6 +71,8 @@ limit :limit offset :offset;
 -- name: select-valvonnat-laatija
 select
   energiatodistus.*,
+  perusparannuspassi.id as perusparannuspassi_id,
+  perusparannuspassi.valid as perusparannuspassi_valid,
   fullname(kayttaja) "laatija-fullname",
   korvaava_energiatodistus.id as korvaava_energiatodistus_id,
   coalesce(last_toimenpide.ongoing, false) valvonta$ongoing,
@@ -89,6 +91,7 @@ from energiatodistus
   inner join kayttaja on kayttaja.id = energiatodistus.laatija_id
   left join energiatodistus korvaava_energiatodistus on korvaava_energiatodistus.korvattu_energiatodistus_id = energiatodistus.id
   left join vo_last_toimenpide_v1 last_toimenpide on last_toimenpide.energiatodistus_id = energiatodistus.id
+  left join perusparannuspassi on energiatodistus.id = perusparannuspassi.energiatodistus_id
 where energiatodistus.laatija_id = :whoami-id and
       last_toimenpide.visible_laatija
 order by coalesce(last_toimenpide.publish_time, last_toimenpide.create_time) desc
