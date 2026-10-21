@@ -8,16 +8,42 @@
 </script>
 
 <script>
+  import { tick } from 'svelte';
   import InfoIcon from '@Asset/icons/info_green.svg';
   import InfoIconHover from '@Asset/icons/info_green_hover.svg';
 
   export let anchor = AnchorPosition.bottomLeft;
   export let title = '';
   export let tooltip = '';
+  export let ariaLabel = '';
 
   let open = false;
+  let popup;
+  let shiftX = 0;
 
   $: [vertical, horizontal] = anchor.split('-');
+
+  async function showTooltip() {
+    open = true;
+    await tick();
+    adjustPosition();
+  }
+
+  function hideTooltip() {
+    open = false;
+    shiftX = 0;
+  }
+
+  function adjustPosition() {
+    if (!open || !popup) return;
+
+    const margin = 32;
+    const bounds = popup.getBoundingClientRect();
+    shiftX = Math.max(
+      margin - bounds.left,
+      Math.min(0, window.innerWidth - margin - bounds.right)
+    );
+  }
 </script>
 
 <style>
@@ -25,6 +51,7 @@
     display: none;
     max-width: 36em;
     min-width: 24em;
+    transform: translateX(var(--tooltip-shift-x, 0px));
   }
 
   .info-container:hover .info-popup,
@@ -73,10 +100,10 @@
     bottom: -10px;
   }
   .left::after {
-    left: 1rem;
+    left: calc(1rem - var(--tooltip-shift-x, 0px));
   }
   .right::after {
-    right: 1rem;
+    right: calc(1rem + var(--tooltip-shift-x, 0px));
   }
 
   @media print {
@@ -86,6 +113,8 @@
   }
 </style>
 
+<svelte:window on:resize={adjustPosition} />
+
 <div class="flex items-center space-x-1">
   <slot />
   {#if tooltip.length}
@@ -94,14 +123,21 @@
       role="button"
       tabindex="0"
       aria-haspopup="true"
-      on:mouseover={() => (open = true)}
-      on:mouseout={() => (open = false)}
-      on:focus={() => (open = true)}
-      on:blur={() => (open = false)}>
+      aria-label={ariaLabel || `${title} - ${tooltip}`}
+      on:mouseenter={showTooltip}
+      on:mouseleave={hideTooltip}
+      on:focus={showTooltip}
+      on:blur={hideTooltip}>
       <span class="relative inline-block md:block">
-        <img alt="" class="w-5 h-5" src={open ? InfoIconHover : InfoIcon} />
+        <slot name="icon">
+          <img alt="" class="w-5 h-5" src={open ? InfoIconHover : InfoIcon} />
+        </slot>
       </span>
-      <div class="info-popup {vertical} {horizontal}" role="tooltip">
+      <div
+        bind:this={popup}
+        class="info-popup {vertical} {horizontal}"
+        role="tooltip"
+        style={`--tooltip-shift-x: ${shiftX}px`}>
         <strong>{title}</strong>
         {#each tooltip.split('\n') as paragraph}
           <p>{paragraph}</p>

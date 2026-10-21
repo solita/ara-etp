@@ -1,45 +1,12 @@
 <script>
   import { _, locale, labelLocale } from '@Localization/localization';
+  import InfoTooltip from '@Component/info-tooltip';
 
   export let patevyydet;
   export let showPatevyydet = '1,2,3,4';
 </script>
 
 <style>
-  .info-popup {
-    display: none;
-  }
-
-  .icon-container {
-    @apply relative;
-  }
-
-  .icon-container:hover .info-popup,
-  .icon-container:focus .info-popup {
-    bottom: 135%;
-    left: -1rem;
-    @apply block absolute z-10 bg-white text-black border border-black rounded-lg p-2 whitespace-pre;
-  }
-
-  .info-popup::after {
-    content: '';
-    position: absolute;
-    border-style: solid;
-    border-width: 10px 10px 0;
-    border-color: black transparent;
-    display: block;
-    width: 0;
-    z-index: 1;
-    bottom: -10px;
-    left: 1rem;
-  }
-
-  @supports (-moz-appearance: none) {
-    .info-popup::after {
-      bottom: -35px;
-    }
-  }
-
   .radio-container {
     padding-left: 25px;
     @apply select-none block relative;
@@ -101,18 +68,12 @@
         {$_('LHAKU_FILTER_KAIKKI')}
       </label>
 
-      <div
-        class="icon-container hidden md:block"
-        role="button"
-        tabindex="0"
-        aria-label="{$_('LHAKU_KAIKKI_TITLE')} - {$_('LHAKU_KAIKKI_TEXT')}">
-        <span class="material-icons text-green" aria-hidden="true"
+      <InfoTooltip
+        title={$_('LHAKU_KAIKKI_TITLE')}
+        tooltip={$_('LHAKU_KAIKKI_TEXT')}>
+        <span slot="icon" class="material-icons text-green" aria-hidden="true"
           >error_outline</span>
-        <div class="info-popup" role="tooltip">
-          <strong>{$_('LHAKU_KAIKKI_TITLE')}</strong>
-          <p>{$_('LHAKU_KAIKKI_TEXT')}</p>
-        </div>
-      </div>
+      </InfoTooltip>
     </div>
     <div class="flex items-start space-x-1 py-3 md:py-0 mr-3">
       <label class="radio-container">
@@ -128,20 +89,12 @@
           patevyydet.find(p => p.id === 1 || p.id === 3)
         )}
       </label>
-      <div
-        class="icon-container hidden md:block"
-        role="button"
-        tabindex="0"
-        aria-label="{$_('LHAKU_PERUSTASO_TITLE')} - {$_(
-          'LHAKU_PERUSTASO_TEXT'
-        )}">
-        <span class="material-icons text-green" aria-hidden="true"
+      <InfoTooltip
+        title={$_('LHAKU_PERUSTASO_TITLE')}
+        tooltip={$_('LHAKU_PERUSTASO_TEXT')}>
+        <span slot="icon" class="material-icons text-green" aria-hidden="true"
           >error_outline</span>
-        <div class="info-popup" role="tooltip">
-          <strong>{$_('LHAKU_PERUSTASO_TITLE')}</strong>
-          <p>{$_('LHAKU_PERUSTASO_TEXT')}</p>
-        </div>
-      </div>
+      </InfoTooltip>
     </div>
     <div class="flex items-start space-x-1 py-3 md:py-0">
       <label class="radio-container">
@@ -157,20 +110,12 @@
           patevyydet.find(p => p.id === 2 || p.id === 4)
         )}
       </label>
-      <div
-        class="icon-container hidden md:block"
-        role="button"
-        tabindex="0"
-        aria-label="{$_('LHAKU_YLEMPITASO_TITLE')} - {$_(
-          'LHAKU_YLEMPITASO_TEXT'
-        )}">
-        <span class="material-icons text-green" aria-hidden="true"
+      <InfoTooltip
+        title={$_('LHAKU_YLEMPITASO_TITLE')}
+        tooltip={$_('LHAKU_YLEMPITASO_TEXT')}>
+        <span slot="icon" class="material-icons text-green" aria-hidden="true"
           >error_outline</span>
-        <div class="info-popup" role="tooltip">
-          <strong>{$_('LHAKU_YLEMPITASO_TITLE')}</strong>
-          <p>{$_('LHAKU_YLEMPITASO_TEXT')}</p>
-        </div>
-      </div>
+      </InfoTooltip>
     </div>
   </fieldset>
 </div>
