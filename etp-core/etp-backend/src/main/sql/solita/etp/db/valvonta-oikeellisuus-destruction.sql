@@ -12,10 +12,16 @@ from toimenpiteet_with_latest_publish_time
 where latest_publish_time < (
     (now() at time zone 'Europe/Helsinki')::date - interval '2 years');
 
--- name: select-linked-liitteet-ids
-select liite.id
-from vo_toimenpide inner join liite on liite.vo_toimenpide_id = vo_toimenpide.id
-where vo_toimenpide.id = :vo_toimenpide_id;
+-- name: select-linked-liite-ids
+select id as "liite-id", contenttype
+from liite
+where vo_toimenpide_id = :vo-toimenpide-id;
 
 -- name: destroy-vo-virhe-table-data!
 delete from vo_virhe where toimenpide_id = :vo-toimenpide-id;
+
+-- name: destroy-liite-table-data!
+delete from liite where vo_toimenpide_id = :vo-toimenpide-id;
+
+-- name: destroy-audit-liite-table-data!
+delete from audit.liite where vo_toimenpide_id = :vo-toimenpide-id;

@@ -4,6 +4,8 @@
             [clojure.test :as t]
             [solita.etp.service.valvonta-oikeellisuus :as valvonta-oikeellisuus-service]
             [solita.etp.service.viesti :as viesti-service]
+            [solita.etp.service.file :as file-service]
+            [solita.etp.service.liite :as liite-service]
             [solita.etp.service.valvonta-oikeellisuus-destruction :as service]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.service.kayttaja :as kayttaja-service]
@@ -24,6 +26,7 @@
     {:inhibit-email? true}))
 
 (def system-vo-expiration-user {:id (kayttaja-service/system-kayttaja :expiration-vo-valvonnat) :rooli -1})
+(def destruction-tag {:Key "ValvontaOikeellisuusDestruction" :Value "True"})
 
 (def test-report {:type-id       7
                   :deadline-date nil
@@ -143,17 +146,107 @@
 (t/deftest handle-vo-virhe-table!-test
   (let [{:keys [valvonta-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
-        not-expired-valvonta-id (nth valvonta-ids 2)]
+        non-expired-valvonta-id (nth valvonta-ids 2)]
     (run! make-valvonta-expired! expired-valvonta-ids)
 
     (t/testing "There are linked vo_virhe before running the destruction"
       (t/is (> (->> expired-valvonta-ids (mapv find-linked-vo-virhe) ->result-count) 0))
-      (t/is (> (->> not-expired-valvonta-id (find-linked-vo-virhe) count) 0)))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-virhe) count) 0)))
 
     (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client*)
 
     (t/testing "There are no linked vo_virhe after running the destruction in the expired valvontas"
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-vo-virhe) ->result-count) 0)))
     (t/testing "There are linked vo_virhe in the valvonta that is not expired"
-      (t/is (> (->> not-expired-valvonta-id (find-linked-vo-virhe) count) 0)))))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-virhe) count) 0)))))
 
+(defn- find-liite-audit [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id as \"liite-id\"
+      FROM liite
+      WHERE vo_toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(t/deftest handle-liite-table!-test
+  (let [{:keys [valvonta-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-ids [(nth valvonta-ids 2)]]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+    (let [expired-linked-liitteet (->> expired-valvonta-ids
+                                      (mapcat (partial service/find-linked-liite-ids ts/*db*)))
+          non-expired-linked-liitteet (->> non-expired-valvonta-ids
+                                           (mapcat (partial service/find-linked-liite-ids ts/*db*)))
+          expired-audit (->> expired-valvonta-ids
+                                      (mapcat find-liite-audit))
+          non-expired-audit (->> non-expired-valvonta-ids
+                             (mapcat find-liite-audit))]
+
+      (t/testing "There are liitteet in database"
+        (t/is (> (count expired-linked-liitteet) 0))
+        (t/is (> (count expired-audit) 0))
+        (t/is (> (count non-expired-linked-liitteet) 0))
+        (t/is (> (count non-expired-audit) 0)))
+
+      (t/testing "Expired liitteet are in object store before destruction"
+        (doseq [liite-result expired-linked-liitteet]
+          (when (= (:contenttype liite-result) "application/octet-stream")
+            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result))))))))
+
+      (t/testing "Non-expired liitteet are in object store before destruction"
+        (doseq [liite-result non-expired-linked-liitteet]
+          (when (= (:contenttype liite-result) "application/octet-stream")
+            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result))))))))
+
+      (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client*)
+
+      (t/testing "All the version of the expired files have the destruction tag"
+        (let [
+              all-the-deleted-keys (mapv #(liite-service/file-key (:liite-id %)) expired-linked-liitteet)
+              key-and-version-ids (mapv
+                                    (fn [file-key] {:file-key file-key
+                                                    :version-ids (file-service/key->version-ids ts/*aws-s3-client* file-key)})
+                                    all-the-deleted-keys)]
+          (doseq [key-and-version-id key-and-version-ids]
+            (println key-and-version-id)
+            (doseq [version-id (:version-ids key-and-version-id)]
+              (t/is
+                (= destruction-tag
+                   (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id)))))))
+
+      (t/testing "All the version of the non-expired files should not have the destruction tag"
+        (let [all-the-deleted-keys (mapv #(liite-service/file-key (:liite-id %)) non-expired-linked-liitteet)
+              key-and-version-ids (mapv
+                                    (fn [file-key] {:file-key file-key
+                                                    :version-ids (file-service/key->version-ids ts/*aws-s3-client* file-key)})
+                                    all-the-deleted-keys)]
+          (doseq [key-and-version-id key-and-version-ids]
+            (println key-and-version-id)
+            (doseq [version-id (:version-ids key-and-version-id)]
+              (t/is
+                (= nil
+                   (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id))))))))
+
+    (let [expired-linked-liitteet (->> expired-valvonta-ids
+                                      (mapcat (partial service/find-linked-liite-ids ts/*db*)))
+          non-expired-linked-liitteet (->> non-expired-valvonta-ids
+                                           (mapcat (partial service/find-linked-liite-ids ts/*db*)))
+          expired-audit (->> expired-valvonta-ids
+                             (mapcat find-liite-audit))
+          non-expired-audit (->> non-expired-valvonta-ids
+                                 (mapcat find-liite-audit))]
+
+      (t/testing "Expired liitteet should not exist"
+        (t/is (= (count expired-linked-liitteet) 0))
+        (t/is (= (count expired-audit) 0))
+        (t/is (> (count non-expired-linked-liitteet) 0))
+        (t/is (> (count non-expired-audit) 0)))
+
+      (t/testing "Expired liitteet do not exist in object store after destruction"
+        (doseq [liite-result expired-linked-liitteet]
+            (t/is (false? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result)))))))
+
+      (t/testing "Non-expired liitteet are still in object store after destruction"
+        (doseq [liite-result non-expired-linked-liitteet]
+          (when (= (:contenttype liite-result) "application/octet-stream")
+            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result)))))))))))
