@@ -42,10 +42,6 @@
     R.anyPass([
       R.compose(
         Maybe.exists(hasValue),
-        R.path([...muuEnergiamuotoPath(index), 'nimi'])
-      ),
-      R.compose(
-        Maybe.exists(hasValue),
         R.path([...muuEnergiamuotoPath(index), 'nimi-fi'])
       ),
       R.compose(
