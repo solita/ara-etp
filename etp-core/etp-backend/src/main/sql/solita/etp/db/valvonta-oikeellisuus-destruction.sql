@@ -25,3 +25,6 @@ delete from liite where vo_toimenpide_id = :vo-toimenpide-id;
 
 -- name: destroy-audit-liite-table-data!
 delete from audit.liite where vo_toimenpide_id = :vo-toimenpide-id;
+
+-- name: destroy-vo-tiedoksi-table-data!
+delete from vo_tiedoksi where toimenpide_id = :vo-toimenpide-id;
