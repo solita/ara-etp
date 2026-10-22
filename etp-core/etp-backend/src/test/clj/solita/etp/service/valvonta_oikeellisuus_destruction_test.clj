@@ -250,3 +250,28 @@
         (doseq [liite-result non-expired-linked-liitteet]
           (when (= (:contenttype liite-result) "application/octet-stream")
             (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result)))))))))))
+
+(defn- find-linked-vo-tiedoksi [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT toimenpide_id as \"vo-toimenpide-id\"
+      FROM vo_tiedoksi
+      WHERE toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(t/deftest handle-vo-tiedoksi-table!-test
+  (let [{:keys [valvonta-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-id (nth valvonta-ids 2)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (t/testing "There are linked vo_tiedoksi before running the destruction"
+      (t/is (> (->> expired-valvonta-ids (mapv find-linked-vo-tiedoksi) ->result-count ) 0))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-tiedoksi) count) 0)))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client*)
+
+    (t/testing "There are no linked vo_tiedoksi after running the destruction in the expired valvontas"
+      (t/is (= (->> expired-valvonta-ids (mapv find-linked-vo-tiedoksi ) ->result-count) 0)))
+    (t/testing "There are linked vo_tiedoksi in the valvonta that is not expired"
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-tiedoksi) count) 0)))))
