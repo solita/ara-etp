@@ -30,6 +30,12 @@ context('Laatija', () => {
       );
     });
 
+    it('should view a valid ET2013', () => {
+      cy.visit('/#/energiatodistus/2013/1');
+
+      cy.contains('Energiatodistus 2013/1 - Voimassa').should('exist');
+    });
+
     it.skip('should change laskutettava yritys', () => {
       cy.intercept(
         /\/api\/private\/laatijat\/2\/yritykset$/,
