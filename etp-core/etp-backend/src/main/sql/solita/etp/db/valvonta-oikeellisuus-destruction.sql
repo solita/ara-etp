@@ -78,3 +78,9 @@ where viestiketju_id in (
     from viestiketju
     where vo_toimenpide_id = :vo-toimenpide-id
 );
+
+-- name: destroy-viestiketju-table-data!
+delete from viestiketju where vo_toimenpide_id = :vo-toimenpide-id;
+
+-- name: destroy-audit-viestiketju-table-data!
+delete from audit.viestiketju where vo_toimenpide_id = :vo-toimenpide-id;
