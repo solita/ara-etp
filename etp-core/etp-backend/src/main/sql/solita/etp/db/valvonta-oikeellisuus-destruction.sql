@@ -17,6 +17,12 @@ select id as "liite-id", contenttype
 from liite
 where vo_toimenpide_id = :vo-toimenpide-id;
 
+-- name: select-linked-viesti-liite-ids
+select viesti_liite.id as "viesti-liite-id", viesti_liite.contenttype, viestiketju.id as "viestiketju-id"
+from viesti_liite
+    inner join viestiketju on viesti_liite.viestiketju_id = viestiketju.id
+where viestiketju.vo_toimenpide_id = :vo-toimenpide-id;
+
 -- name: destroy-vo-virhe-table-data!
 delete from vo_virhe where toimenpide_id = :vo-toimenpide-id;
 
@@ -51,6 +57,22 @@ where viesti_id in (
 
 -- name: destroy-viesti-table-data!
 delete from viesti
+where viestiketju_id in (
+    select id
+    from viestiketju
+    where vo_toimenpide_id = :vo-toimenpide-id
+);
+
+-- name: destroy-viesti-liite-table-data!
+delete from viesti_liite
+where viestiketju_id in (
+    select id
+    from viestiketju
+    where vo_toimenpide_id = :vo-toimenpide-id
+);
+
+-- name: destroy-audit-viesti-liite-table-data!
+delete from audit.viesti_liite
 where viestiketju_id in (
     select id
     from viestiketju

@@ -52,16 +52,26 @@
     (test-whoami/paakayttaja paakayttaja-id)
     energiatodistus-id
     valvonta-id
-    {:nimi (str "Testiliite-" valvonta-id ".pdf") :url (str "https://example.com/testiliite-" valvonta-id ".pdf")})
-  (viesti-service/add-ketju!
-    ts/*db*
-    (test-whoami/paakayttaja paakayttaja-id)
-    {:vastaanottajat        [laatija-id]
-     :vastaanottajaryhma-id nil
-     :energiatodistus-id    energiatodistus-id
-     :vo-toimenpide-id      valvonta-id
-     :subject               (str "Testiviestiketju-" valvonta-id)
-     :body                  (str "Testiviesti-" valvonta-id)}))
+    {:nimi (str "Testiliite-" valvonta-id ".pdf")
+     :url (str "https://example.com/testiliite-" valvonta-id ".pdf")})
+  (let [viestiketju-id
+        (viesti-service/add-ketju!
+          ts/*db*
+          (test-whoami/paakayttaja paakayttaja-id)
+          {:vastaanottajat        [laatija-id]
+           :vastaanottajaryhma-id nil
+           :energiatodistus-id    energiatodistus-id
+           :vo-toimenpide-id      valvonta-id
+           :subject               (str "Testiviestiketju-" valvonta-id)
+           :body                  (str "Testiviesti-" valvonta-id)})]
+
+    (viesti-service/add-liitteet-from-files!
+      ts/*db*
+      ts/*aws-s3-client*
+      viestiketju-id
+      [{:nimi        (str "Testiviesti-liite-" valvonta-id ".txt")
+        :tempfile    (io/file "deps.edn")
+        :contenttype "application/octet-stream"}])))
 
 (defn test-data-set []
   (let [;; Add some relevant test data to the database
@@ -381,3 +391,95 @@
 
     (t/testing "Audit table does not exist for viesti"
       (t/is (not (audit-table-exists? "viesti"))))))
+
+(defn- find-viesti-liite-audit [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT viesti_liite.id as \"viesti-liite-id\"
+      FROM viesti_liite INNER JOIN viestiketju ON viesti_liite.viestiketju_id = viestiketju.id
+      WHERE viestiketju.vo_toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(t/deftest handle-viesti-liite-table!-test
+  (let [{:keys [valvonta-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-ids [(nth valvonta-ids 2)]]
+
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (let [expired-linked-viesti-liitteet (->> expired-valvonta-ids
+                                       (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
+          non-expired-linked-viesti-liitteet (->> non-expired-valvonta-ids
+                                           (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
+          expired-audit (->> expired-valvonta-ids
+                             (mapcat find-viesti-liite-audit))
+          non-expired-audit (->> non-expired-valvonta-ids
+                                 (mapcat find-viesti-liite-audit))]
+
+      (t/testing "There are viesti-liitteet in database"
+        (t/is (> (count expired-linked-viesti-liitteet) 0))
+        (t/is (> (count expired-audit) 0))
+        (t/is (> (count non-expired-linked-viesti-liitteet) 0))
+        (t/is (> (count non-expired-audit) 0)))
+
+      (t/testing "Expired viesti-liitteet are in object store before destruction"
+        (doseq [viesti-liite-result expired-linked-viesti-liitteet]
+          (when (= (:contenttype viesti-liite-result) "application/octet-stream")
+            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (viesti-service/file-path (:viestiketju-id viesti-liite-result) (:viesti-liite-id viesti-liite-result))))))))
+
+      (t/testing "Non-expired viesti-liitteet are in object store before destruction"
+        (doseq [viesti-liite-result non-expired-linked-viesti-liitteet]
+          (when (= (:contenttype viesti-liite-result) "application/octet-stream")
+            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (viesti-service/file-path (:viestiketju-id viesti-liite-result) (:viesti-liite-id viesti-liite-result))))))))
+
+      (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client*)
+
+      (t/testing "All the version of the expired files have the destruction tag"
+        (let [
+              all-the-deleted-keys (mapv #(viesti-service/file-path (:viestiketju-id %) (:viesti-liite-id %)) expired-linked-viesti-liitteet)
+              key-and-version-ids (mapv
+                                    (fn [file-key] {:file-key file-key
+                                                    :version-ids (file-service/key->version-ids ts/*aws-s3-client* file-key)})
+                                    all-the-deleted-keys)]
+          (doseq [key-and-version-id key-and-version-ids]
+            (println key-and-version-id)
+            (doseq [version-id (:version-ids key-and-version-id)]
+              (t/is
+                (= destruction-tag
+                   (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id)))))))
+
+      (t/testing "All the version of the non-expired files should not have the destruction tag"
+        (let [all-the-deleted-keys (mapv #(viesti-service/file-path (:viestiketju-id %) (:viesti-liite-id %)) non-expired-linked-viesti-liitteet)
+              key-and-version-ids (mapv
+                                    (fn [file-key] {:file-key file-key
+                                                    :version-ids (file-service/key->version-ids ts/*aws-s3-client* file-key)})
+                                    all-the-deleted-keys)]
+          (doseq [key-and-version-id key-and-version-ids]
+            (println key-and-version-id)
+            (doseq [version-id (:version-ids key-and-version-id)]
+              (t/is
+                (= nil
+                   (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id)))))))
+      (t/testing "Expired viesti-liitteet do not exist in object store after destruction"
+        (doseq [viesti-liite-result expired-linked-viesti-liitteet]
+          (t/is (false? (file-service/file-exists? ts/*aws-s3-client* (viesti-service/file-path (:viestiketju-id viesti-liite-result) (:viesti-liite-id viesti-liite-result)))))))
+
+      (t/testing "Non-expired viesti-liitteet are still in object store after destruction"
+        (doseq [viesti-liite-result non-expired-linked-viesti-liitteet]
+          (when (= (:contenttype viesti-liite-result) "application/octet-stream")
+            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (viesti-service/file-path (:viestiketju-id viesti-liite-result) (:viesti-liite-id viesti-liite-result)))))))))
+
+    (let [expired-linked-viesti-liitteet (->> expired-valvonta-ids
+                                       (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
+          non-expired-linked-viesti-liitteet (->> non-expired-valvonta-ids
+                                           (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
+          expired-audit (->> expired-valvonta-ids
+                             (mapcat find-viesti-liite-audit))
+          non-expired-audit (->> non-expired-valvonta-ids
+                                 (mapcat find-viesti-liite-audit))]
+
+      (t/testing "Expired viesti-liitteet should not exist"
+        (t/is (= (count expired-linked-viesti-liitteet) 0))
+        (t/is (= (count expired-audit) 0))
+        (t/is (> (count non-expired-linked-viesti-liitteet) 0))
+        (t/is (> (count non-expired-audit) 0))))))
