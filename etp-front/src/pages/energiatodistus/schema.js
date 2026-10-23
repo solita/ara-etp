@@ -300,7 +300,7 @@ export const v2018 = {
       'pilkkeet-havu-sekapuu': FloatNonNegative,
       'pilkkeet-koivu': FloatNonNegative,
       puupelletit: FloatNonNegative,
-      muu: R.repeat(MuuPolttoaine, 4)
+      muu: R.repeat(MuuPolttoaine, 10)
     },
     'sahko-vuosikulutus-yhteensa': AnyFloat,
     'kaukolampo-vuosikulutus-yhteensa': FloatNonNegative,
@@ -343,7 +343,7 @@ export const v2013 = R.compose(
   ),
   R.assocPath(
     ['toteutunut-ostoenergiankulutus', 'ostettu-energia', 'muu'],
-    R.repeat(MuuEnergia, 5)
+    R.repeat(MuuEnergia, 6)
   ),
   R.dissocPath(['perustiedot', 'laatimisvaihe'])
 )(v2018);
