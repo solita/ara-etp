@@ -43,13 +43,21 @@
 
     const margin = 32;
     const bounds = popup.getBoundingClientRect();
-    const left = bounds.left - shiftX;
-    const right = bounds.right - shiftX;
+    const viewportLeft = margin;
+    const viewportRight = window.innerWidth - margin;
 
-    shiftX = Math.max(
-      margin - left,
-      Math.min(0, window.innerWidth - margin - right)
-    );
+    // Remove the current shift to measure the popup at its natural position.
+    const popupLeft = bounds.left - shiftX;
+    const popupRight = bounds.right - shiftX;
+
+    // Move only as far as needed to keep the popup inside the viewport margins.
+    if (popupLeft < viewportLeft) {
+      shiftX = viewportLeft - popupLeft;
+    } else if (popupRight > viewportRight) {
+      shiftX = viewportRight - popupRight;
+    } else {
+      shiftX = 0;
+    }
   }
 </script>
 
