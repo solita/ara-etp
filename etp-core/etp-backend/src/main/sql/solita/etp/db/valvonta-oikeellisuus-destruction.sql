@@ -28,3 +28,11 @@ delete from audit.liite where vo_toimenpide_id = :vo-toimenpide-id;
 
 -- name: destroy-vo-tiedoksi-table-data!
 delete from vo_tiedoksi where toimenpide_id = :vo-toimenpide-id;
+
+-- name: destroy-vastaanottaja-table-data!
+delete from vastaanottaja
+where viestiketju_id in (
+    select id
+    from viestiketju
+    where vo_toimenpide_id = :vo-toimenpide-id
+);
