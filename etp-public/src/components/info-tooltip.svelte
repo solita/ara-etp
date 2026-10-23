@@ -29,7 +29,11 @@
     adjustPosition();
   }
 
-  function hideTooltip() {
+  function hideTooltip(event) {
+    if (event.currentTarget.matches(':hover, :focus, :active')) {
+      return;
+    }
+
     open = false;
     shiftX = 0;
   }
@@ -39,9 +43,12 @@
 
     const margin = 32;
     const bounds = popup.getBoundingClientRect();
+    const left = bounds.left - shiftX;
+    const right = bounds.right - shiftX;
+
     shiftX = Math.max(
-      margin - bounds.left,
-      Math.min(0, window.innerWidth - margin - bounds.right)
+      margin - left,
+      Math.min(0, window.innerWidth - margin - right)
     );
   }
 </script>
