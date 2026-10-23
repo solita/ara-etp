@@ -122,6 +122,17 @@
       WHERE id = ?"
      valvonta-id]))
 
+(defn- audit-table-exists? [table-name]
+  (boolean
+    (seq
+      (jdbc/query
+        ts/*db*
+        ["SELECT 1
+          FROM information_schema.tables
+          WHERE table_schema = 'audit'
+            AND table_name = ?"
+         table-name]))))
+
 (t/deftest find-expired-oikeellisuuden-valvonta-ids-test
   (let [{:keys [valvonta-ids]} (test-data-set)
         expired-valvonta-id (first valvonta-ids)]
@@ -300,3 +311,47 @@
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-vastaanottaja ) ->result-count) 0)))
     (t/testing "There are linked vastaanottaja in the valvonta that is not expired"
       (t/is (> (->> non-expired-valvonta-id (find-linked-vastaanottaja) count) 0)))))
+
+(defn- find-linked-viesti-reader [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT viesti_id, reader_id
+      FROM viesti_reader INNER JOIN viesti ON viesti_reader.viesti_id = viesti.id
+                         INNER JOIN viestiketju ON viesti.viestiketju_id = viestiketju.id
+      WHERE viestiketju.vo_toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(defn- find-linked-viestiketju [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id
+      FROM viestiketju
+      WHERE vo_toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(t/deftest handle-viesti-reader-table!-test
+  (let [{:keys [valvonta-ids laatija-id]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-id (nth valvonta-ids 2)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    ;; Laatija reads all ketjus
+    (run! (partial viesti-service/read-ketju! (ts/db-user laatija-id) (test-whoami/laatija laatija-id))
+          (->> (cons non-expired-valvonta-id expired-valvonta-ids)
+               (mapcat find-linked-viestiketju)
+               (mapv :id)
+               (tap println)))
+
+    (t/testing "There are linked viesti-reader before running the destruction"
+      (t/is (> (->> expired-valvonta-ids (mapv find-linked-viesti-reader) ->result-count ) 0))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-viesti-reader) count) 0)))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client*)
+
+    (t/testing "There are no linked viesti-reader after running the destruction in the expired valvontas"
+      (t/is (= (->> expired-valvonta-ids (mapv find-linked-viesti-reader ) ->result-count) 0)))
+    (t/testing "There are linked viesti-reader in the valvonta that is not expired"
+      (t/is (> (->> non-expired-valvonta-id (find-linked-viesti-reader) count) 0)))
+
+    (t/testing "Audit table does not exist for viesti-reader"
+      (t/is (not (audit-table-exists? "viesti_reader"))))))

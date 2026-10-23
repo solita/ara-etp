@@ -36,3 +36,15 @@ where viestiketju_id in (
     from viestiketju
     where vo_toimenpide_id = :vo-toimenpide-id
 );
+
+-- name: destroy-viesti-reader-table-data!
+delete from viesti_reader
+where viesti_id in (
+    select id
+    from viesti
+    where viestiketju_id in (
+        select id
+        from viestiketju
+        where vo_toimenpide_id = :vo-toimenpide-id
+    )
+);
