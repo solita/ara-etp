@@ -57,6 +57,9 @@
 (defn handle-vo-tiedoksi-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
   (valvonta-oikeellisuus-destruction-db/destroy-vo-tiedoksi-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
 
+(defn handle-vastaanottaja-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
+  (valvonta-oikeellisuus-destruction-db/destroy-vastaanottaja-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+
 ;; ------------------------------
 
 (defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client]
@@ -65,7 +68,8 @@
         handlers-in-order
         [handle-vo-virhe-table!
          handle-liite-table!
-         handle-vo-tiedoksi-table!]]
+         handle-vo-tiedoksi-table!
+         handle-vastaanottaja-table!]]
     (doseq [vo-toimenpide-id expired-vo-toimenpide-ids]
       (jdbc/with-db-transaction [db db]
         (doseq [handler handlers-in-order]
