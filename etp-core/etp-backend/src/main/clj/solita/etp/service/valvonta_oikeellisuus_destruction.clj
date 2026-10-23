@@ -3,6 +3,7 @@
             [clojure.tools.logging :as log]
             [solita.etp.db :as db]
             [solita.etp.service.liite :as liite-service]
+            [solita.etp.service.viesti :as viesti-service]
             [solita.etp.service.file :as file]))
 
 (db/require-queries 'valvonta-oikeellisuus-destruction)
@@ -34,6 +35,11 @@
     ;; Some liitteet are only links and do not have files.
     (delete-from-s3 aws-s3-client file-key {:log-when-file-missing? false})))
 
+(defn- delete-viesti-liite-s3 [aws-s3-client {:keys [viesti-liite-id viestiketju-id]}]
+  (let [file-key (viesti-service/file-path viestiketju-id viesti-liite-id)]
+    ;; Some liitteet are only links and do not have files.
+    (delete-from-s3 aws-s3-client file-key {:log-when-file-missing? false})))
+
 ;; ------------------------------
 
 (defn find-expired-oikeellisuuden-valvonta-ids [db]
@@ -41,6 +47,9 @@
 
 (defn find-linked-liite-ids [db vo-toimenpide-id]
   (valvonta-oikeellisuus-destruction-db/select-linked-liite-ids db {:vo-toimenpide-id vo-toimenpide-id}))
+
+(defn find-linked-viesti-liite-ids [db vo-toimenpide-id]
+  (valvonta-oikeellisuus-destruction-db/select-linked-viesti-liite-ids db {:vo-toimenpide-id vo-toimenpide-id}))
 
 ;; ------------------------------
 
@@ -66,6 +75,12 @@
 (defn handle-viesti-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
   (valvonta-oikeellisuus-destruction-db/destroy-viesti-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
 
+(defn handle-viesti-liite-table! [{:keys [db aws-s3-client]} {:keys [vo-toimenpide-id]}]
+  (let [linked-liite-ids (find-linked-viesti-liite-ids db vo-toimenpide-id)]
+    (run! (partial delete-viesti-liite-s3 aws-s3-client) linked-liite-ids))
+  (valvonta-oikeellisuus-destruction-db/destroy-viesti-liite-table-data! db {:vo-toimenpide-id vo-toimenpide-id})
+  (valvonta-oikeellisuus-destruction-db/destroy-audit-viesti-liite-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+
 #_(defn handle-vo-note-table! [{:keys [db]} {:keys [vo-toimenpide-id]}])
 
 #_(defn handle-viesti-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
@@ -89,7 +104,8 @@
          handle-vo-tiedoksi-table!
          handle-vastaanottaja-table!
          handle-viesti-reader-table!
-         handle-viesti-table!]]
+         handle-viesti-table!
+         handle-viesti-liite-table!]]
     (doseq [vo-toimenpide-id expired-vo-toimenpide-ids]
       (jdbc/with-db-transaction [db db]
         (doseq [handler handlers-in-order]
