@@ -223,7 +223,15 @@
             (doseq [version-id (:version-ids key-and-version-id)]
               (t/is
                 (= destruction-tag
-                   (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id)))))))
+                   (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id))))))
+        (t/testing "Expired liitteet do not exist in object store after destruction"
+          (doseq [liite-result expired-linked-liitteet]
+            (t/is (false? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result)))))))
+
+        (t/testing "Non-expired liitteet are still in object store after destruction"
+          (doseq [liite-result non-expired-linked-liitteet]
+            (when (= (:contenttype liite-result) "application/octet-stream")
+              (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result)))))))))
 
       (t/testing "All the version of the non-expired files should not have the destruction tag"
         (let [all-the-deleted-keys (mapv #(liite-service/file-key (:liite-id %)) non-expired-linked-liitteet)
@@ -251,16 +259,7 @@
         (t/is (= (count expired-linked-liitteet) 0))
         (t/is (= (count expired-audit) 0))
         (t/is (> (count non-expired-linked-liitteet) 0))
-        (t/is (> (count non-expired-audit) 0)))
-
-      (t/testing "Expired liitteet do not exist in object store after destruction"
-        (doseq [liite-result expired-linked-liitteet]
-            (t/is (false? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result)))))))
-
-      (t/testing "Non-expired liitteet are still in object store after destruction"
-        (doseq [liite-result non-expired-linked-liitteet]
-          (when (= (:contenttype liite-result) "application/octet-stream")
-            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result)))))))))))
+        (t/is (> (count non-expired-audit) 0))))))
 
 (defn- find-linked-vo-tiedoksi [vo-toimenpide-id]
   (jdbc/query
@@ -339,8 +338,7 @@
     (run! (partial viesti-service/read-ketju! (ts/db-user laatija-id) (test-whoami/laatija laatija-id))
           (->> (cons non-expired-valvonta-id expired-valvonta-ids)
                (mapcat find-linked-viestiketju)
-               (mapv :id)
-               (tap println)))
+               (mapv :id)))
 
     (t/testing "There are linked viesti-reader before running the destruction"
       (t/is (> (->> expired-valvonta-ids (mapv find-linked-viesti-reader) ->result-count ) 0))
