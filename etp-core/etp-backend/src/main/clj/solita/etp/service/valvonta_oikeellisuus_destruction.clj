@@ -63,6 +63,21 @@
 (defn handle-viesti-reader-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
   (valvonta-oikeellisuus-destruction-db/destroy-viesti-reader-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
 
+(defn handle-viesti-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
+  (valvonta-oikeellisuus-destruction-db/destroy-viesti-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+
+#_(defn handle-vo-note-table! [{:keys [db]} {:keys [vo-toimenpide-id]}])
+
+#_(defn handle-viesti-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
+    (handle-viesti-reader-table!))
+
+
+(defn handle-viestiketju-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
+  #_(handle-vastaanottaja-table!)
+  #_(handle-viesti-liite-table!)
+  #_(handle-viesti-table!)
+  )
+
 ;; ------------------------------
 
 (defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client]
@@ -73,7 +88,8 @@
          handle-liite-table!
          handle-vo-tiedoksi-table!
          handle-vastaanottaja-table!
-         handle-viesti-reader-table!]]
+         handle-viesti-reader-table!
+         handle-viesti-table!]]
     (doseq [vo-toimenpide-id expired-vo-toimenpide-ids]
       (jdbc/with-db-transaction [db db]
         (doseq [handler handlers-in-order]
