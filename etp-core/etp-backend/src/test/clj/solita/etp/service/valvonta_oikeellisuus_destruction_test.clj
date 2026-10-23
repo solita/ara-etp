@@ -338,6 +338,14 @@
       WHERE vo_toimenpide_id = ?"
      vo-toimenpide-id]))
 
+(defn- find-linked-viestiketju-audit [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id
+      FROM audit.viestiketju
+      WHERE vo_toimenpide_id = ?"
+     vo-toimenpide-id]))
+
 (t/deftest handle-viesti-reader-table!-test
   (let [{:keys [valvonta-ids laatija-id]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
@@ -482,4 +490,37 @@
         (t/is (= (count expired-linked-viesti-liitteet) 0))
         (t/is (= (count expired-audit) 0))
         (t/is (> (count non-expired-linked-viesti-liitteet) 0))
+        (t/is (> (count non-expired-audit) 0))))))
+
+(t/deftest handle-viestiketju-table!-test
+  (let [{:keys [valvonta-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-id (nth valvonta-ids 2)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (t/testing "There are linked viestiketju before running the destruction"
+      (t/is (> (->> expired-valvonta-ids (mapv find-linked-viestiketju) ->result-count ) 0))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-viestiketju) count) 0)))
+
+    (t/testing "Viestiketju audit before destruction"
+      (let [expired-audit (->> expired-valvonta-ids
+                               (mapcat find-linked-viestiketju-audit))
+            non-expired-audit (->> [non-expired-valvonta-id]
+                                   (mapcat find-linked-viestiketju-audit))]
+        (t/is (> (count expired-audit) 0))
+        (t/is (> (count non-expired-audit) 0))))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client*)
+
+    (t/testing "There are no linked viestiketju after running the destruction in the expired valvontas"
+      (t/is (= (->> expired-valvonta-ids (mapv find-linked-viestiketju ) ->result-count) 0)))
+    (t/testing "There are linked viestiketju in the valvonta that is not expired"
+      (t/is (> (->> non-expired-valvonta-id (find-linked-viestiketju) count) 0)))
+
+    (t/testing "Viestiketju audit after destruction"
+      (let [expired-audit (->> expired-valvonta-ids
+                               (mapcat find-linked-viestiketju-audit))
+            non-expired-audit (->> [non-expired-valvonta-id]
+                                   (mapcat find-linked-viestiketju-audit))]
+        (t/is (= (count expired-audit) 0))
         (t/is (> (count non-expired-audit) 0))))))
