@@ -604,7 +604,6 @@
                   {#if isEtp2026}
                     <TilastotEtVersion
                       {printing}
-                      tooltipAnchorPosition={AnchorPosition.bottomRight}
                       version="2026"
                       count={total2026}
                       eLukuData={results?.['e-luku-statistics']?.['2026']}
