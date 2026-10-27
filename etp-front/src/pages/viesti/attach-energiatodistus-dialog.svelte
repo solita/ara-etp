@@ -21,7 +21,7 @@
   $: etIdModel = Either.Right(energiatodistusId);
 
   // Initially just assumed, but on updates, the input will expose it here
-  let etIdParsedFromInput = etIdModel;
+  let etIdParsedFromInput = Either.Right(energiatodistusId);
 
   const i18n = $_;
   const i18nRoot = 'viesti.ketju.existing.attach-to-et';
