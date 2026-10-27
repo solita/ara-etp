@@ -2,12 +2,13 @@
 with toimenpiteet_with_latest_publish_time as (
     select
         id,
+        energiatodistus_id,
         max(publish_time) over (
             partition by energiatodistus_id, diaarinumero
         ) as latest_publish_time
     from vo_toimenpide
 )
-select id as "vo-toimenpide-id"
+select id as "vo-toimenpide-id", energiatodistus_id as "energiatodistus-id"
 from toimenpiteet_with_latest_publish_time
 where latest_publish_time < (
     (now() at time zone 'Europe/Helsinki')::date - interval '2 years');
@@ -84,3 +85,23 @@ delete from viestiketju where vo_toimenpide_id = :vo-toimenpide-id;
 
 -- name: destroy-audit-viestiketju-table-data!
 delete from audit.viestiketju where vo_toimenpide_id = :vo-toimenpide-id;
+
+-- name: destroy-audit-vo-toimenpide-table-data!
+delete from audit.vo_toimenpide where id = :vo-toimenpide-id;
+
+-- name: anonymize-vo-toimenpide-table-data!
+update vo_toimenpide
+set
+    -- id = null,
+    -- type_id = null,
+    -- author_id = null,
+    -- energiatodistus_id = null,
+    -- create_time = null,
+    publish_time = null,
+    deadline_date = null,
+    template_id = null,
+    -- diaarinumero = null,
+    description = null,
+    severity_id = null,
+    deleted = true
+where id = :vo-toimenpide-id;

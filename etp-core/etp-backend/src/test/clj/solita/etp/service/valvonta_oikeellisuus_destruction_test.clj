@@ -7,6 +7,7 @@
             [solita.etp.service.file :as file-service]
             [solita.etp.service.liite :as liite-service]
             [solita.etp.service.valvonta-oikeellisuus-destruction :as service]
+            [solita.etp.service.valvonta-oikeellisuus.asha :as vo-asha-service]
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
@@ -144,11 +145,17 @@
          table-name]))))
 
 (t/deftest find-expired-oikeellisuuden-valvonta-ids-test
-  (let [{:keys [valvonta-ids]} (test-data-set)
-        expired-valvonta-id (first valvonta-ids)]
-    (make-valvonta-expired! expired-valvonta-id)
-    (let [expired-valvonta-ids (service/find-expired-oikeellisuuden-valvonta-ids ts/*db*)]
-      (t/is (= #{{:vo-toimenpide-id expired-valvonta-id}} (set expired-valvonta-ids))
+  (let [{:keys [valvonta-ids energiatodistus-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        expired-energiatodistus-ids (take 2 energiatodistus-ids)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+    (let [expired-valvonta-rows (service/find-expired-oikeellisuuden-valvonta-ids ts/*db*)]
+      (t/is (= (set (map (fn [vo-toimenpide-id energiatodistus-id]
+                           {:vo-toimenpide-id vo-toimenpide-id
+                            :energiatodistus-id energiatodistus-id})
+                         expired-valvonta-ids
+                         expired-energiatodistus-ids))
+               (set expired-valvonta-rows))
             "find-expired-oikeellisuuden-valvonta-ids returns the correct expired valvonta ids"))))
 
 (defn- find-linked-vo-virhe [vo-toimenpide-id]
@@ -522,5 +529,119 @@
                                (mapcat find-linked-viestiketju-audit))
             non-expired-audit (->> [non-expired-valvonta-id]
                                    (mapcat find-linked-viestiketju-audit))]
+        (t/is (= (count expired-audit) 0))
+        (t/is (> (count non-expired-audit) 0))))))
+
+(defn- find-vo-toimenpide [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT *
+      FROM vo_toimenpide
+      WHERE id = ?"
+     vo-toimenpide-id]))
+
+(defn- find-vo-toimenpide-audit [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT *
+      FROM audit.vo_toimenpide
+      WHERE id = ?"
+     vo-toimenpide-id]))
+
+(defn- is-vo-toimenpide-anonymized? [vo-toimenpide-id]
+  (let [vo-toimenpide (first (find-vo-toimenpide vo-toimenpide-id))]
+    (boolean
+      (and vo-toimenpide
+           (nil? (:publish_time vo-toimenpide))
+           (nil? (:deadline_date vo-toimenpide))
+           (nil? (:template_id vo-toimenpide))
+           (nil? (:description vo-toimenpide))
+           (nil? (:severity_id vo-toimenpide))
+           (true? (:deleted vo-toimenpide))))))
+
+(defn- all-file-versions-have-destruction-tag? [file-key]
+  (let [version-ids (file-service/key->version-ids
+                      ts/*aws-s3-client*
+                      file-key)]
+    (and (seq version-ids)
+         (every?
+           #(= destruction-tag
+               (file-service/get-file-tag
+                 ts/*aws-s3-client*
+                 file-key
+                 (:Key destruction-tag)
+                 %))
+           version-ids))))
+
+(t/deftest handle-vo-toimenpide-table!-test
+  (let [{:keys [valvonta-ids energiatodistus-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        expired-energiatodistus-ids (take 2 energiatodistus-ids)
+        non-expired-valvonta-id (nth valvonta-ids 2)
+        non-expired-energiatodistus-id (nth energiatodistus-ids 2)
+        expired-document-keys
+        (mapv vo-asha-service/file-path
+              expired-energiatodistus-ids
+              expired-valvonta-ids)
+        non-expired-document-key
+        (vo-asha-service/file-path
+          non-expired-energiatodistus-id
+          non-expired-valvonta-id)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (t/testing "Valvonta documents exist in S3 before destruction"
+      (doseq [file-key expired-document-keys]
+        (t/is (true?
+                (file-service/file-exists?
+                  ts/*aws-s3-client*
+                  file-key))))
+
+      (t/is (true?
+              (file-service/file-exists?
+                ts/*aws-s3-client*
+                non-expired-document-key))))
+
+    (t/testing "There are linked vo-toimenpide before running the destruction"
+      (t/is (> (->> expired-valvonta-ids (mapv find-vo-toimenpide) (tap println) ->result-count ) 0))
+      (t/is (> (->> non-expired-valvonta-id (find-vo-toimenpide) count) 0)))
+
+    (t/testing "Table vo_toimenpide audit before destruction"
+      (let [expired-audit (->> expired-valvonta-ids
+                               (mapcat find-vo-toimenpide-audit))
+            non-expired-audit (->> [non-expired-valvonta-id]
+                                   (mapcat find-vo-toimenpide-audit))]
+        (t/is (> (count expired-audit) 0))
+        (t/is (> (count non-expired-audit) 0))))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client*)
+    (t/testing "All versions of expired valvonta documents have the destruction tag"
+      (doseq [file-key expired-document-keys]
+        (t/is (all-file-versions-have-destruction-tag? file-key))))
+
+    (t/testing "Non-expired valvonta document does not have the destruction tag"
+      (let [version-ids
+            (file-service/key->version-ids
+              ts/*aws-s3-client*
+              non-expired-document-key)]
+        (t/is
+          (every?
+            #(nil?
+               (file-service/get-file-tag
+                 ts/*aws-s3-client*
+                 non-expired-document-key
+                 (:Key destruction-tag)
+                 %))
+            version-ids))))
+
+    (t/testing "The vo-toimenpide entries are anonymized in the expired valvontas"
+      (t/is (->> expired-valvonta-ids (mapv is-vo-toimenpide-anonymized?) (every? true?))))
+    (t/testing "There are linked vo-toimenpide in the valvonta that is not expired"
+      (t/is (> (->> non-expired-valvonta-id (find-vo-toimenpide) count) 0)))
+
+    (t/testing "Table vo_toimenpide audit after destruction"
+      (let [expired-audit (->> expired-valvonta-ids
+                               (mapcat find-vo-toimenpide-audit))
+            non-expired-audit (->> [non-expired-valvonta-id]
+                                   (mapcat find-vo-toimenpide-audit))]
         (t/is (= (count expired-audit) 0))
         (t/is (> (count non-expired-audit) 0))))))

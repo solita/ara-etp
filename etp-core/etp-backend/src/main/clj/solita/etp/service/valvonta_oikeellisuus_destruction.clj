@@ -2,6 +2,7 @@
   (:require [clojure.java.jdbc :as jdbc]
             [clojure.tools.logging :as log]
             [solita.etp.db :as db]
+            [solita.etp.service.valvonta-oikeellisuus.asha :as vo-asha-service]
             [solita.etp.service.liite :as liite-service]
             [solita.etp.service.viesti :as viesti-service]
             [solita.etp.service.file :as file]))
@@ -85,6 +86,16 @@
   (valvonta-oikeellisuus-destruction-db/destroy-viestiketju-table-data! db {:vo-toimenpide-id vo-toimenpide-id})
   (valvonta-oikeellisuus-destruction-db/destroy-audit-viestiketju-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
 
+(defn- delete-vo-toimenpide-s3! [aws-s3-client energiatodistus-id vo-toimenpide-id]
+  (let [file-key (vo-asha-service/file-path energiatodistus-id vo-toimenpide-id)]
+    ;; All the toimenpiteet do not create documents
+    (delete-from-s3 aws-s3-client file-key {:log-when-file-missing? false})))
+
+(defn handle-vo-toimenpide-table! [{:keys [db aws-s3-client]} {:keys [vo-toimenpide-id energiatodistus-id]}]
+  (delete-vo-toimenpide-s3! aws-s3-client energiatodistus-id vo-toimenpide-id)
+  (valvonta-oikeellisuus-destruction-db/anonymize-vo-toimenpide-table-data! db {:vo-toimenpide-id vo-toimenpide-id})
+  (valvonta-oikeellisuus-destruction-db/destroy-audit-vo-toimenpide-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+
 ;; ------------------------------
 
 (defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client]
@@ -98,7 +109,8 @@
          handle-viesti-reader-table!
          handle-viesti-table!
          handle-viesti-liite-table!
-         handle-viestiketju-table!]]
+         handle-viestiketju-table!
+         handle-vo-toimenpide-table!]]
     (doseq [vo-toimenpide-id expired-vo-toimenpide-ids]
       (jdbc/with-db-transaction [db db]
         (doseq [handler handlers-in-order]
