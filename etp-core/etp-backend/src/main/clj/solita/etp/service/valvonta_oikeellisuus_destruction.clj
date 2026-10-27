@@ -52,7 +52,16 @@
 (defn find-linked-viesti-liite-ids [db vo-toimenpide-id]
   (valvonta-oikeellisuus-destruction-db/select-linked-viesti-liite-ids db {:vo-toimenpide-id vo-toimenpide-id}))
 
+(defn find-linked-vo-note-ids [db energiatodistus-id]
+  (valvonta-oikeellisuus-destruction-db/select-linked-vo-note-ids db {:energiatodistus-id energiatodistus-id}))
+
 ;; ------------------------------
+
+(defn handle-vo-note-table! [{:keys [db]} {:keys [energiatodistus-id]}]
+  (let [linked-vo-note-ids (find-linked-vo-note-ids db energiatodistus-id)]
+    (doseq [{vo-note-id :vo-note-id} linked-vo-note-ids]
+      (valvonta-oikeellisuus-destruction-db/destroy-vo-note-table-data! db {:vo-note-id vo-note-id})
+      (valvonta-oikeellisuus-destruction-db/destroy-audit-vo-note-table-data! db {:vo-note-id vo-note-id}))))
 
 (defn handle-vo-virhe-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
   ;; No audit table for vo_virhe
@@ -102,7 +111,8 @@
   (let [expired-vo-toimenpide-ids (find-expired-oikeellisuuden-valvonta-ids db)
         ;; Note that order of these is important
         handlers-in-order
-        [handle-vo-virhe-table!
+        [handle-vo-note-table!
+         handle-vo-virhe-table!
          handle-liite-table!
          handle-vo-tiedoksi-table!
          handle-vastaanottaja-table!
@@ -111,11 +121,11 @@
          handle-viesti-liite-table!
          handle-viestiketju-table!
          handle-vo-toimenpide-table!]]
-    (doseq [vo-toimenpide-id expired-vo-toimenpide-ids]
+    (doseq [expired-vo-toimenpide-id expired-vo-toimenpide-ids]
       (jdbc/with-db-transaction [db db]
         (doseq [handler handlers-in-order]
-          (handler {:db db :aws-s3-client aws-s3-client} vo-toimenpide-id)))
+          (handler {:db db :aws-s3-client aws-s3-client} expired-vo-toimenpide-id)))
       ;; TODO: Log info?
-      (log/debug "Valvonta oikeellisuus destruction for " vo-toimenpide-id " finished."))))
+      (log/debug "Valvonta oikeellisuus destruction for " (:vo-toimenpide-id expired-vo-toimenpide-id) " finished."))))
 
 
