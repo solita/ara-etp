@@ -166,6 +166,22 @@
       WHERE toimenpide_id = ?"
      vo-toimenpide-id]))
 
+(defn- find-linked-vo-note [energiatodistus-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id
+      FROM vo_note
+      WHERE energiatodistus_id = ?"
+     energiatodistus-id]))
+
+(defn- find-linked-vo-note-audit [energiatodistus-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id
+      FROM audit.vo_note
+      WHERE energiatodistus_id = ?"
+     energiatodistus-id]))
+
 (defn- ->result-count [query-results]
   (reduce (fn [acc res] (+ acc (count res))) 0 query-results))
 
@@ -187,6 +203,46 @@
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-vo-virhe) ->result-count) 0)))
     (t/testing "There are linked vo_virhe in the valvonta that is not expired"
       (t/is (> (->> non-expired-valvonta-id (find-linked-vo-virhe) count) 0)))))
+
+(t/deftest handle-vo-note-table!-test
+  (let [{:keys [valvonta-ids energiatodistus-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        expired-energiatodistus-ids (take 2 energiatodistus-ids)
+        non-expired-energiatodistus-id (nth energiatodistus-ids 2)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (t/testing "There are linked vo_note rows before running the destruction"
+      (t/is (> (->> expired-energiatodistus-ids
+                    (mapv find-linked-vo-note)
+                    ->result-count)
+               0))
+      (t/is (> (count (find-linked-vo-note non-expired-energiatodistus-id)) 0)))
+
+    (t/testing "There are linked vo_note audit rows before running the destruction"
+      (t/is (> (->> expired-energiatodistus-ids
+                    (mapv find-linked-vo-note-audit)
+                    ->result-count)
+               0))
+      (t/is (> (count (find-linked-vo-note-audit non-expired-energiatodistus-id)) 0)))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data
+      ts/*db*
+      ts/*aws-s3-client*)
+
+    (t/testing "There are no vo_note rows for expired valvontas"
+      (t/is (= 0
+               (->> expired-energiatodistus-ids
+                    (mapv find-linked-vo-note)
+                    ->result-count))))
+    (t/testing "There are no vo_note audit rows for expired valvontas"
+      (t/is (= 0
+               (->> expired-energiatodistus-ids
+                    (mapv find-linked-vo-note-audit)
+                    ->result-count))))
+
+    (t/testing "vo_note rows for the non-expired valvonta remain"
+      (t/is (> (count (find-linked-vo-note non-expired-energiatodistus-id)) 0))
+      (t/is (> (count (find-linked-vo-note-audit non-expired-energiatodistus-id)) 0)))))
 
 (defn- find-liite-audit [vo-toimenpide-id]
   (jdbc/query

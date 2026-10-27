@@ -24,6 +24,18 @@ from viesti_liite
     inner join viestiketju on viesti_liite.viestiketju_id = viestiketju.id
 where viestiketju.vo_toimenpide_id = :vo-toimenpide-id;
 
+-- name: select-linked-vo-note-ids
+select id as "vo-note-id"
+from vo_note
+where energiatodistus_id = :energiatodistus-id
+  and deleted = false;
+
+-- name: destroy-vo-note-table-data!
+delete from vo_note where id = :vo-note-id;
+
+-- name: destroy-audit-vo-note-table-data!
+delete from audit.vo_note where id = :vo-note-id;
+
 -- name: destroy-vo-virhe-table-data!
 delete from vo_virhe where toimenpide_id = :vo-toimenpide-id;
 
@@ -105,3 +117,5 @@ set
     severity_id = null,
     deleted = true
 where id = :vo-toimenpide-id;
+
+
