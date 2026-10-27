@@ -16,7 +16,12 @@
   export let close;
   export let ketjuId;
   export let energiatodistusId;
-  $: inputEtId = Either.Right(energiatodistusId);
+
+  // Id of the attached ET in the model
+  $: etIdModel = Either.Right(energiatodistusId);
+
+  // Initially just assumed, but on updates, the input will expose it here
+  let etIdParsedFromInput = Either.Right(energiatodistusId);
 
   const i18n = $_;
   const i18nRoot = 'viesti.ketju.existing.attach-to-et';
@@ -60,14 +65,14 @@
   );
 
   const attach = () => {
-    if (Maybe.isNone(EM.toMaybe(inputEtId))) {
+    if (Maybe.isNone(EM.toMaybe(etIdParsedFromInput))) {
       error = Maybe.Some(i18n(`${i18nRoot}.messages.validation-error`));
     } else {
       error = Maybe.None();
       showAttachSpinner = true;
 
       updateKetju({
-        'energiatodistus-id': EM.orSome(null, inputEtId)
+        'energiatodistus-id': EM.orSome(null, etIdParsedFromInput)
       });
     }
   };
@@ -117,7 +122,8 @@
       label={i18n(i18nRoot + '.input-label')}
       compact={false}
       required={true}
-      bind:model={inputEtId}
+      bind:model={etIdModel}
+      bind:currentValue={etIdParsedFromInput}
       format={Maybe.orSome('')}
       parse={Parsers.optionalParser(Parsers.parseInteger)}
       validators={[Validation.isSome]}
