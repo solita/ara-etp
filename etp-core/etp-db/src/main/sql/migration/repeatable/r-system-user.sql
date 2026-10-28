@@ -7,7 +7,8 @@ values
 (-3, -1, 'communication', 'etp', 'communication@energiatodistusrekisteri.fi', '0501234567'),
 (-4, -1, 'presigned', 'etp', 'presigned@energiatodistusrekisteri.fi', '0501234567'),
 (-5, -1, 'aineisto', 'etp', 'aineisto@energiatodistusrekisteri.fi', '0501234567'),
-(-6, -1, 'expiration', 'etp', 'expiration@energiatodistusrekisteri.fi', '0501234567')
+(-6, -1, 'expiration', 'etp', 'expiration@energiatodistusrekisteri.fi', '0501234567'),
+(-7, -1, 'valvonta-oikeellisuus-expiration', 'etp', 'vo-expiration@energiatodistusrekisteri.fi', '0501234567')
 
 on conflict (id) do update set
   etunimi = excluded.etunimi,

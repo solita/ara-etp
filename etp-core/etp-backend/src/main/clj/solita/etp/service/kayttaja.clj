@@ -132,11 +132,12 @@
     (exception/throw-forbidden!)))
 
 (def system-kayttaja
-  {:communication -3
-   :laskutus      -2
-   :presigned     -4
-   :aineisto      -5
-   :expiration    -6})
+  {:communication                    -3
+   :laskutus                         -2
+   :presigned                        -4
+   :aineisto                         -5
+   :expiration                       -6
+   :valvonta-oikeellisuus-expiration -7})
 
 (defn stamp-logout!
   "Sets kayttaja.logged_out_at = now() for the given id, revoking all of

@@ -2,6 +2,9 @@
   (:require [clojure.java.jdbc :as jdbc]
             [clojure.tools.logging :as log]
             [solita.etp.db :as db]
+            [solita.etp.exception :as exception]
+            [solita.etp.service.rooli :as rooli-service]
+            [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.valvonta-oikeellisuus.asha :as vo-asha-service]
             [solita.etp.service.liite :as liite-service]
             [solita.etp.service.viesti :as viesti-service]
@@ -107,7 +110,13 @@
 
 ;; ------------------------------
 
-(defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client]
+(defn- check-whoami [whoami]
+  (when-not (and (rooli-service/system? whoami)
+                 (= (:id whoami) (kayttaja-service/system-kayttaja :valvonta-oikeellisuus-expiration)))
+    (exception/throw-forbidden! (str "Can not run destruction of expired oikeellisuuden valvonta as whoami (id: " (:id whoami) ") (rooli: " (:rooli whoami) ")"))))
+
+(defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client whoami]
+  (check-whoami whoami)
   (let [expired-vo-toimenpide-ids (find-expired-oikeellisuuden-valvonta-ids db)
         ;; Note that order of these is important
         handlers-in-order
@@ -127,5 +136,3 @@
           (handler {:db db :aws-s3-client aws-s3-client} expired-vo-toimenpide-id)))
       ;; TODO: Log info?
       (log/debug "Valvonta oikeellisuus destruction for " (:vo-toimenpide-id expired-vo-toimenpide-id) " finished."))))
-
-
