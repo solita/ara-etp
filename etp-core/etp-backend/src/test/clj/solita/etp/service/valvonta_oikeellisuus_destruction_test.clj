@@ -185,8 +185,6 @@
 (defn- ->result-count [query-results]
   (reduce (fn [acc res] (+ acc (count res))) 0 query-results))
 
-(defn tap [f x] (f x) x)
-
 (t/deftest destroy-vo-virhe-table!-test
   (let [{:keys [valvonta-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
@@ -659,7 +657,7 @@
                 non-expired-document-key))))
 
     (t/testing "There are linked vo-toimenpide before running the destruction"
-      (t/is (> (->> expired-valvonta-ids (mapv find-vo-toimenpide) (tap println) ->result-count ) 0))
+      (t/is (> (->> expired-valvonta-ids (mapv find-vo-toimenpide) ->result-count ) 0))
       (t/is (> (->> non-expired-valvonta-id (find-vo-toimenpide) count) 0)))
 
     (t/testing "Table vo_toimenpide audit before destruction"
