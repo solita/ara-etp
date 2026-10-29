@@ -198,7 +198,9 @@
   (let [expired-vo-toimenpide-ids (find-expired-oikeellisuuden-valvonta-ids db)
         ;; Note that order of these is important
         handlers-in-order
-        [destroy-vo-note-table!
+        [;; Note that destruction of vo-note is the only one that uses energiatodistus-id and will be called multiple
+         ;; times with the same id but that is not a problem.
+         destroy-vo-note-table!
          destroy-vo-virhe-table!
          destroy-liite-table!
          destroy-vo-tiedoksi-table!
