@@ -187,7 +187,7 @@
 
 (defn tap [f x] (f x) x)
 
-(t/deftest handle-vo-virhe-table!-test
+(t/deftest destroy-vo-virhe-table!-test
   (let [{:keys [valvonta-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
         non-expired-valvonta-id (nth valvonta-ids 2)]
@@ -204,7 +204,7 @@
     (t/testing "There are linked vo_virhe in the valvonta that is not expired"
       (t/is (> (->> non-expired-valvonta-id (find-linked-vo-virhe) count) 0)))))
 
-(t/deftest handle-vo-note-table!-test
+(t/deftest destroy-vo-note-table!-test
   (let [{:keys [valvonta-ids energiatodistus-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
         expired-energiatodistus-ids (take 2 energiatodistus-ids)
@@ -253,7 +253,7 @@
       WHERE vo_toimenpide_id = ?"
      vo-toimenpide-id]))
 
-(t/deftest handle-liite-table!-test
+(t/deftest destroy-liite-table!-test
   (let [{:keys [valvonta-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
         non-expired-valvonta-ids [(nth valvonta-ids 2)]]
@@ -343,7 +343,7 @@
       WHERE toimenpide_id = ?"
      vo-toimenpide-id]))
 
-(t/deftest handle-vo-tiedoksi-table!-test
+(t/deftest destroy-vo-tiedoksi-table!-test
   (let [{:keys [valvonta-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
         non-expired-valvonta-id (nth valvonta-ids 2)]
@@ -368,7 +368,7 @@
       WHERE viestiketju.vo_toimenpide_id = ?"
      vo-toimenpide-id]))
 
-(t/deftest handle-vastaanottaja-table!-test
+(t/deftest destroy-vastaanottaja-table!-test
   (let [{:keys [valvonta-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
         non-expired-valvonta-id (nth valvonta-ids 2)]
@@ -410,7 +410,7 @@
       WHERE vo_toimenpide_id = ?"
      vo-toimenpide-id]))
 
-(t/deftest handle-viesti-reader-table!-test
+(t/deftest destroy-viesti-reader-table!-test
   (let [{:keys [valvonta-ids laatija-id]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
         non-expired-valvonta-id (nth valvonta-ids 2)]
@@ -444,7 +444,7 @@
       WHERE viestiketju.vo_toimenpide_id = ?"
      vo-toimenpide-id]))
 
-(t/deftest handle-viesti-table!-test
+(t/deftest destroy-viesti-table!-test
   (let [{:keys [valvonta-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
         non-expired-valvonta-id (nth valvonta-ids 2)]
@@ -472,7 +472,7 @@
       WHERE viestiketju.vo_toimenpide_id = ?"
      vo-toimenpide-id]))
 
-(t/deftest handle-viesti-liite-table!-test
+(t/deftest destroy-viesti-liite-table!-test
   (let [{:keys [valvonta-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
         non-expired-valvonta-ids [(nth valvonta-ids 2)]]
@@ -556,7 +556,7 @@
         (t/is (> (count non-expired-linked-viesti-liitteet) 0))
         (t/is (> (count non-expired-audit) 0))))))
 
-(t/deftest handle-viestiketju-table!-test
+(t/deftest destroy-viestiketju-table!-test
   (let [{:keys [valvonta-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
         non-expired-valvonta-id (nth valvonta-ids 2)]
@@ -630,7 +630,7 @@
                  %))
            version-ids))))
 
-(t/deftest handle-vo-toimenpide-table!-test
+(t/deftest anonymize-and-destroy-vo-toimenpide-table!-test
   (let [{:keys [valvonta-ids energiatodistus-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
         expired-energiatodistus-ids (take 2 energiatodistus-ids)
