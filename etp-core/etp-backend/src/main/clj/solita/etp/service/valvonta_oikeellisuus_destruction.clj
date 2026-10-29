@@ -64,48 +64,127 @@
 
 ;; ------------------------------
 
+(defn- affected-row-count [result]
+  (cond
+    (number? result) result
+    (and (sequential? result)
+         (= 1 (count result))
+         (number? (first result)))
+    (first result)
+    :else
+    (throw (ex-info "Unexpected database update result"
+                    {:result result}))))
+
+(defn- add-counts [total counts]
+  (merge-with + total counts))
+
+(def empty-destruction-counts
+  {:vo-toimenpide-anonymized 0
+   :vo-note                  0
+   :vo-virhe                 0
+   :liite                    0
+   :vo-tiedoksi              0
+   :vastaanottaja            0
+   :viesti-reader            0
+   :viesti                   0
+   :viesti-liite             0
+   :viestiketju              0})
+
 (defn destroy-vo-note-table! [{:keys [db]} {:keys [energiatodistus-id]}]
   (let [linked-vo-note-ids (find-linked-vo-note-ids db energiatodistus-id)]
-    (doseq [{vo-note-id :vo-note-id} linked-vo-note-ids]
-      (valvonta-oikeellisuus-destruction-db/destroy-vo-note-table-data! db {:vo-note-id vo-note-id})
-      (valvonta-oikeellisuus-destruction-db/destroy-audit-vo-note-table-data! db {:vo-note-id vo-note-id}))))
+    {:vo-note
+     (reduce
+       +
+       (for [{vo-note-id :vo-note-id} linked-vo-note-ids]
+         (let [result
+               (valvonta-oikeellisuus-destruction-db/destroy-vo-note-table-data!
+                 db
+                 {:vo-note-id vo-note-id})]
+           (valvonta-oikeellisuus-destruction-db/destroy-audit-vo-note-table-data!
+             db
+             {:vo-note-id vo-note-id})
+           (affected-row-count result))))}))
 
 (defn destroy-vo-virhe-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
   ;; No audit table for vo_virhe
-  (valvonta-oikeellisuus-destruction-db/destroy-vo-virhe-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+  {:vo-virhe
+   (affected-row-count
+     (valvonta-oikeellisuus-destruction-db/destroy-vo-virhe-table-data!
+       db
+       {:vo-toimenpide-id vo-toimenpide-id}))})
 
 (defn destroy-liite-table! [{:keys [db aws-s3-client]} {:keys [vo-toimenpide-id]}]
   (let [linked-liite-ids (find-linked-liite-ids db vo-toimenpide-id)]
-    (run! (partial delete-liite-s3! aws-s3-client) linked-liite-ids))
-  (valvonta-oikeellisuus-destruction-db/destroy-liite-table-data! db {:vo-toimenpide-id vo-toimenpide-id})
-  (valvonta-oikeellisuus-destruction-db/destroy-audit-liite-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+    (run! (partial delete-liite-s3! aws-s3-client) linked-liite-ids)
+    (let [result
+          (valvonta-oikeellisuus-destruction-db/destroy-liite-table-data!
+            db
+            {:vo-toimenpide-id vo-toimenpide-id})]
+      (valvonta-oikeellisuus-destruction-db/destroy-audit-liite-table-data!
+        db
+        {:vo-toimenpide-id vo-toimenpide-id})
+      {:liite (affected-row-count result)})))
 
 (defn destroy-vo-tiedoksi-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
-  (valvonta-oikeellisuus-destruction-db/destroy-vo-tiedoksi-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+  {:vo-tiedoksi
+   (affected-row-count
+     (valvonta-oikeellisuus-destruction-db/destroy-vo-tiedoksi-table-data!
+       db
+       {:vo-toimenpide-id vo-toimenpide-id}))})
 
 (defn destroy-vastaanottaja-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
-  (valvonta-oikeellisuus-destruction-db/destroy-vastaanottaja-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+  {:vastaanottaja
+   (affected-row-count
+     (valvonta-oikeellisuus-destruction-db/destroy-vastaanottaja-table-data!
+       db
+       {:vo-toimenpide-id vo-toimenpide-id}))})
 
 (defn destroy-viesti-reader-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
-  (valvonta-oikeellisuus-destruction-db/destroy-viesti-reader-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+  {:viesti-reader
+   (affected-row-count
+     (valvonta-oikeellisuus-destruction-db/destroy-viesti-reader-table-data!
+       db
+       {:vo-toimenpide-id vo-toimenpide-id}))})
 
 (defn destroy-viesti-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
-  (valvonta-oikeellisuus-destruction-db/destroy-viesti-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+  {:viesti
+   (affected-row-count
+     (valvonta-oikeellisuus-destruction-db/destroy-viesti-table-data!
+       db
+       {:vo-toimenpide-id vo-toimenpide-id}))})
 
 (defn destroy-viesti-liite-table! [{:keys [db aws-s3-client]} {:keys [vo-toimenpide-id]}]
   (let [linked-liite-ids (find-linked-viesti-liite-ids db vo-toimenpide-id)]
-    (run! (partial delete-viesti-liite-s3! aws-s3-client) linked-liite-ids))
-  (valvonta-oikeellisuus-destruction-db/destroy-viesti-liite-table-data! db {:vo-toimenpide-id vo-toimenpide-id})
-  (valvonta-oikeellisuus-destruction-db/destroy-audit-viesti-liite-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+    (run! (partial delete-viesti-liite-s3! aws-s3-client) linked-liite-ids)
+    (let [result
+          (valvonta-oikeellisuus-destruction-db/destroy-viesti-liite-table-data!
+            db
+            {:vo-toimenpide-id vo-toimenpide-id})]
+      (valvonta-oikeellisuus-destruction-db/destroy-audit-viesti-liite-table-data!
+        db
+        {:vo-toimenpide-id vo-toimenpide-id})
+      {:viesti-liite (affected-row-count result)})))
 
 (defn destroy-viestiketju-table! [{:keys [db]} {:keys [vo-toimenpide-id]}]
-  (valvonta-oikeellisuus-destruction-db/destroy-viestiketju-table-data! db {:vo-toimenpide-id vo-toimenpide-id})
-  (valvonta-oikeellisuus-destruction-db/destroy-audit-viestiketju-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+  (let [result
+        (valvonta-oikeellisuus-destruction-db/destroy-viestiketju-table-data!
+          db
+          {:vo-toimenpide-id vo-toimenpide-id})]
+    (valvonta-oikeellisuus-destruction-db/destroy-audit-viestiketju-table-data!
+      db
+      {:vo-toimenpide-id vo-toimenpide-id})
+    {:viestiketju (affected-row-count result)}))
 
 (defn anonymize-and-destroy-vo-toimenpide-table! [{:keys [db aws-s3-client]} {:keys [vo-toimenpide-id energiatodistus-id]}]
   (delete-vo-toimenpide-s3! aws-s3-client energiatodistus-id vo-toimenpide-id)
-  (valvonta-oikeellisuus-destruction-db/anonymize-vo-toimenpide-table-data! db {:vo-toimenpide-id vo-toimenpide-id})
-  (valvonta-oikeellisuus-destruction-db/destroy-audit-vo-toimenpide-table-data! db {:vo-toimenpide-id vo-toimenpide-id}))
+  (let [result
+        (valvonta-oikeellisuus-destruction-db/anonymize-vo-toimenpide-table-data!
+          db
+          {:vo-toimenpide-id vo-toimenpide-id})]
+    (valvonta-oikeellisuus-destruction-db/destroy-audit-vo-toimenpide-table-data!
+      db
+      {:vo-toimenpide-id vo-toimenpide-id})
+    {:vo-toimenpide-anonymized (affected-row-count result)}))
 
 ;; ------------------------------
 
@@ -128,10 +207,22 @@
          destroy-viesti-table!
          destroy-viesti-liite-table!
          destroy-viestiketju-table!
-         anonymize-and-destroy-vo-toimenpide-table!]]
-    (doseq [expired-vo-toimenpide-id expired-vo-toimenpide-ids]
-      (jdbc/with-db-transaction [db db]
-        (doseq [handler handlers-in-order]
-          (handler {:db db :aws-s3-client aws-s3-client} expired-vo-toimenpide-id)))
-      ;; TODO: Log info?
-      (log/debug "Valvonta oikeellisuus destruction for " (:vo-toimenpide-id expired-vo-toimenpide-id) " finished."))))
+         anonymize-and-destroy-vo-toimenpide-table!]
+        destruction-counts
+        (reduce
+          (fn [total expired-vo-toimenpide-id]
+            (add-counts
+              total
+              (jdbc/with-db-transaction [db db]
+                (reduce
+                  (fn [counts handler]
+                    (add-counts
+                      counts
+                      (handler {:db db :aws-s3-client aws-s3-client}
+                               expired-vo-toimenpide-id)))
+                  empty-destruction-counts
+                  handlers-in-order))))
+          empty-destruction-counts
+          expired-vo-toimenpide-ids)]
+    (log/info "Valvonta oikeellisuus destruction finished. Affected resources: " destruction-counts)
+    destruction-counts))
