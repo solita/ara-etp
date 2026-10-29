@@ -4,7 +4,7 @@ with toimenpiteet_with_latest_publish_time as (
         id,
         energiatodistus_id,
         max(publish_time) over (
-            partition by energiatodistus_id, diaarinumero
+            partition by energiatodistus_id
         ) as latest_publish_time
     from vo_toimenpide
 )
