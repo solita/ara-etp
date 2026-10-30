@@ -183,6 +183,7 @@
              (tag "Laatija Internal API" laatija-api/internal-routes)
              (tag "Energiatodistus Internal API" energiatodistus-api/internal-routes)
              (tag "Aineisto Internal API" aineisto-api/internal-routes)
+             (tag "Valvonta Oikeellisuus Internal API" valvonta-oikeellisuus-api/internal-routes)
              (tag "Public csv Internal API" public-csv-api/internal-routes))]]
    (when config/allow-palveluvayla-api
      ["/palveluvayla" ["/openapi.json" {:get {:no-doc  true :openapi {:info {:title "Energiatodistuspalvelu API" :description "Hae energiatodistuksia pdf tai json muodoissa"}

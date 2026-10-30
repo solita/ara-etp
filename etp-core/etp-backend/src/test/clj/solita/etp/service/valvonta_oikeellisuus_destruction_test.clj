@@ -1,0 +1,795 @@
+(ns solita.etp.service.valvonta-oikeellisuus-destruction-test
+  (:require [clojure.java.jdbc :as jdbc]
+            [clojure.java.io :as io]
+            [clojure.test :as t]
+            [solita.etp.service.valvonta-oikeellisuus :as valvonta-oikeellisuus-service]
+            [solita.etp.service.viesti :as viesti-service]
+            [solita.etp.service.file :as file-service]
+            [solita.etp.service.liite :as liite-service]
+            [solita.etp.service.valvonta-oikeellisuus-destruction :as service]
+            [solita.etp.service.valvonta-oikeellisuus.asha :as vo-asha-service]
+            [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
+            [solita.etp.service.kayttaja :as kayttaja-service]
+            [solita.etp.test-data.kayttaja :as kayttaja-test-data]
+            [solita.etp.test-data.laatija :as laatija-test-data]
+            [solita.etp.test-system :as ts]
+            [solita.etp.whoami :as test-whoami]))
+
+(t/use-fixtures :each ts/fixture)
+
+(defn- publish-valvonta! [paakayttaja-id energiatodistus-id valvonta-id]
+  (valvonta-oikeellisuus-service/publish-toimenpide!
+    ts/*db*
+    ts/*aws-s3-client*
+    (test-whoami/paakayttaja paakayttaja-id)
+    energiatodistus-id
+    valvonta-id
+    {:inhibit-email? true}))
+
+(def system-vo-expiration-user {:id (kayttaja-service/system-kayttaja :valvonta-oikeellisuus-expiration) :rooli -1})
+(def destruction-tag {:Key "ValvontaOikeellisuusDestruction" :Value "True"})
+
+(def test-report {:type-id       7
+                  :deadline-date nil
+                  :template-id   1
+                  :description   "Test"
+                  :virheet       []
+                  :severity-id   nil
+                  :tiedoksi      [{:name "Testihenkilö" :email "test@example.com"}]})
+
+(defn- add-child-data! [paakayttaja-id laatija-id energiatodistus-id valvonta-id]
+  (valvonta-oikeellisuus-service/add-note! ts/*db* energiatodistus-id (str "Testimuistio for " energiatodistus-id))
+  (valvonta-oikeellisuus-service/add-liitteet-from-files!
+    ts/*db*
+    ts/*aws-s3-client*
+    (test-whoami/paakayttaja paakayttaja-id)
+    energiatodistus-id
+    valvonta-id
+    [{:nimi        (str "Testitiedosto-" valvonta-id ".txt")
+      :tempfile    (io/file "deps.edn")
+      :contenttype "application/octet-stream"}])
+  (valvonta-oikeellisuus-service/add-liite-from-link!
+    ts/*db*
+    (test-whoami/paakayttaja paakayttaja-id)
+    energiatodistus-id
+    valvonta-id
+    {:nimi (str "Testiliite-" valvonta-id ".pdf")
+     :url (str "https://example.com/testiliite-" valvonta-id ".pdf")})
+  (let [viestiketju-id
+        (viesti-service/add-ketju!
+          ts/*db*
+          (test-whoami/paakayttaja paakayttaja-id)
+          {:vastaanottajat        [laatija-id]
+           :vastaanottajaryhma-id nil
+           :energiatodistus-id    energiatodistus-id
+           :vo-toimenpide-id      valvonta-id
+           :subject               (str "Testiviestiketju-" valvonta-id)
+           :body                  (str "Testiviesti-" valvonta-id)})]
+
+    (viesti-service/add-liitteet-from-files!
+      ts/*db*
+      ts/*aws-s3-client*
+      viestiketju-id
+      [{:nimi        (str "Testiviesti-liite-" valvonta-id ".txt")
+        :tempfile    (io/file "deps.edn")
+        :contenttype "application/octet-stream"}])))
+
+(defn test-data-set []
+  (let [;; Add some relevant test data to the database
+        paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
+        {virhetype-1-id :id} (valvonta-oikeellisuus-service/add-virhetype!
+                             (ts/db-user paakayttaja-id)
+                             {:label-fi       "Testivirhe"
+                              :label-sv       "Testfel"
+                              :ordinal        0
+                              :valid          true
+                              :description-fi "Testivirhe"
+                              :description-sv "Testfel"})
+        {virhetype-2-id :id} (valvonta-oikeellisuus-service/add-virhetype!
+                               (ts/db-user paakayttaja-id)
+                               {:label-fi       "Testivirhe2"
+                                :label-sv       "Testfel2"
+                                :ordinal        0
+                                :valid          true
+                                :description-fi "Testivirhe2"
+                                :description-sv "Testfel2"})
+        test-report (assoc test-report
+                      :virheet [{:type-id virhetype-1-id
+                                 :description "Testivirhe"}
+                                {:type-id virhetype-2-id
+                                 :description "Testivirhe2"}
+                                ])
+        laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
+        energiatodistus-add (energiatodistus-test-data/generate-add 2026 true)
+        energiatodistus-ids (energiatodistus-test-data/insert!
+                              (vec (repeat 3 energiatodistus-add))
+                              laatija-id)
+
+        ;; Add toimenpide to energiatodistukset
+        valvonta-ids (mapv (fn [energiatodistus-id]
+                             (:id (valvonta-oikeellisuus-service/add-toimenpide!
+                                    (ts/db-user paakayttaja-id)
+                                    ts/*aws-s3-client*
+                                    (test-whoami/paakayttaja paakayttaja-id)
+                                    energiatodistus-id
+                                    test-report)))
+                           energiatodistus-ids)]
+    (doseq [[energiatodistus-id valvonta-id]
+            (map vector energiatodistus-ids valvonta-ids)]
+      (publish-valvonta! paakayttaja-id energiatodistus-id valvonta-id))
+    (doseq [[energiatodistus-id valvonta-id]
+            (map vector energiatodistus-ids valvonta-ids)]
+      (add-child-data! paakayttaja-id laatija-id energiatodistus-id valvonta-id))
+    {:energiatodistus-ids energiatodistus-ids
+     :valvonta-ids        valvonta-ids
+     :paakayttaja-id      paakayttaja-id
+     :laatija-id          laatija-id}))
+
+(defn- make-valvonta-expired! [valvonta-id]
+  (jdbc/execute!
+    ts/*db*
+    ["UPDATE vo_toimenpide
+      SET create_time = now() - interval '2 years' - interval '2 days',
+          publish_time = now() - interval '2 years' - interval '2 days'
+      WHERE id = ?"
+     valvonta-id]))
+
+(defn- audit-table-exists? [table-name]
+  (boolean
+    (seq
+      (jdbc/query
+        ts/*db*
+        ["SELECT 1
+          FROM information_schema.tables
+          WHERE table_schema = 'audit'
+            AND table_name = ?"
+         table-name]))))
+
+(t/deftest find-expired-oikeellisuuden-valvonta-ids-test
+  (let [{:keys [valvonta-ids energiatodistus-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        expired-energiatodistus-ids (take 2 energiatodistus-ids)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+    (let [expired-valvonta-rows (service/find-expired-oikeellisuuden-valvonta-ids ts/*db*)]
+      (t/is (= (set (map (fn [vo-toimenpide-id energiatodistus-id]
+                           {:vo-toimenpide-id vo-toimenpide-id
+                            :energiatodistus-id energiatodistus-id})
+                         expired-valvonta-ids
+                         expired-energiatodistus-ids))
+               (set expired-valvonta-rows))
+            "find-expired-oikeellisuuden-valvonta-ids returns the correct expired valvonta ids"))))
+
+      (t/deftest find-expired-oikeellisuuden-valvonta-ids-with-recent-draft-test
+        (let [{[published-valvonta-id] :valvonta-ids
+               [energiatodistus-id] :energiatodistus-ids
+               paakayttaja-id :paakayttaja-id} (test-data-set)
+              {draft-valvonta-id :id} (valvonta-oikeellisuus-service/add-toimenpide!
+                                        ts/*db*
+                                        ts/*aws-s3-client*
+                                        (test-whoami/paakayttaja paakayttaja-id)
+                                        energiatodistus-id
+                                        test-report)]
+          (make-valvonta-expired! published-valvonta-id)
+          (t/is (empty? (service/find-expired-oikeellisuuden-valvonta-ids ts/*db*))
+                (str "Neither the old published report nor the recent draft "
+                     "should be selected for destruction (draft id " draft-valvonta-id ")"))))
+
+(defn- find-linked-vo-virhe [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT toimenpide_id as \"vo-toimenpide-id\"
+      FROM vo_virhe
+      WHERE toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(defn- find-linked-vo-note [energiatodistus-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id
+      FROM vo_note
+      WHERE energiatodistus_id = ?"
+     energiatodistus-id]))
+
+(defn- find-linked-vo-note-audit [energiatodistus-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id
+      FROM audit.vo_note
+      WHERE energiatodistus_id = ?"
+     energiatodistus-id]))
+
+(defn- ->result-count [query-results]
+  (reduce (fn [acc res] (+ acc (count res))) 0 query-results))
+
+(t/deftest destroy-vo-virhe-table!-test
+  (let [{:keys [valvonta-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-id (nth valvonta-ids 2)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (t/testing "There are linked vo_virhe before running the destruction"
+      (t/is (> (->> expired-valvonta-ids (mapv find-linked-vo-virhe) ->result-count) 0))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-virhe) count) 0)))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+
+    (t/testing "There are no linked vo_virhe after running the destruction in the expired valvontas"
+      (t/is (= (->> expired-valvonta-ids (mapv find-linked-vo-virhe) ->result-count) 0)))
+    (t/testing "There are linked vo_virhe in the valvonta that is not expired"
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-virhe) count) 0)))
+
+    (t/testing "Audit table does not exist for vo_virhe"
+      (t/is (not (audit-table-exists? "vo_virhe"))))))
+
+(t/deftest destroy-vo-note-table!-test
+  (let [{:keys [valvonta-ids energiatodistus-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        expired-energiatodistus-ids (take 2 energiatodistus-ids)
+        non-expired-energiatodistus-id (nth energiatodistus-ids 2)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (t/testing "There are linked vo_note rows before running the destruction"
+      (t/is (> (->> expired-energiatodistus-ids
+                    (mapv find-linked-vo-note)
+                    ->result-count)
+               0))
+      (t/is (> (count (find-linked-vo-note non-expired-energiatodistus-id)) 0)))
+
+    (t/testing "There are linked vo_note audit rows before running the destruction"
+      (t/is (> (->> expired-energiatodistus-ids
+                    (mapv find-linked-vo-note-audit)
+                    ->result-count)
+               0))
+      (t/is (> (count (find-linked-vo-note-audit non-expired-energiatodistus-id)) 0)))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data
+      ts/*db*
+      ts/*aws-s3-client*
+      system-vo-expiration-user)
+
+    (t/testing "There are no vo_note rows for expired valvontas"
+      (t/is (= 0
+               (->> expired-energiatodistus-ids
+                    (mapv find-linked-vo-note)
+                    ->result-count))))
+    (t/testing "There are no vo_note audit rows for expired valvontas"
+      (t/is (= 0
+               (->> expired-energiatodistus-ids
+                    (mapv find-linked-vo-note-audit)
+                    ->result-count))))
+
+    (t/testing "vo_note rows for the non-expired valvonta remain"
+      (t/is (> (count (find-linked-vo-note non-expired-energiatodistus-id)) 0))
+      (t/is (> (count (find-linked-vo-note-audit non-expired-energiatodistus-id)) 0)))))
+
+(defn- find-liite-audit [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id as \"liite-id\"
+      FROM audit.liite
+      WHERE vo_toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(t/deftest destroy-liite-table!-test
+  (let [{:keys [valvonta-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-ids [(nth valvonta-ids 2)]]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+    (let [expired-linked-liitteet (->> expired-valvonta-ids
+                                      (mapcat (partial service/find-linked-liite-ids ts/*db*)))
+          non-expired-linked-liitteet (->> non-expired-valvonta-ids
+                                           (mapcat (partial service/find-linked-liite-ids ts/*db*)))
+          expired-audit (->> expired-valvonta-ids
+                                      (mapcat find-liite-audit))
+          non-expired-audit (->> non-expired-valvonta-ids
+                             (mapcat find-liite-audit))]
+
+      (t/testing "There are liitteet in database"
+        (t/is (> (count expired-linked-liitteet) 0))
+        (t/is (> (count expired-audit) 0))
+        (t/is (> (count non-expired-linked-liitteet) 0))
+        (t/is (> (count non-expired-audit) 0)))
+
+      (t/testing "Expired liitteet are in object store before destruction"
+        (doseq [liite-result expired-linked-liitteet]
+          (when (= (:contenttype liite-result) "application/octet-stream")
+            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result))))))))
+
+      (t/testing "Non-expired liitteet are in object store before destruction"
+        (doseq [liite-result non-expired-linked-liitteet]
+          (when (= (:contenttype liite-result) "application/octet-stream")
+            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result))))))))
+
+      (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+
+      (t/testing "All the version of the expired files have the destruction tag"
+        (let [
+              all-the-deleted-keys (mapv #(liite-service/file-key (:liite-id %)) expired-linked-liitteet)
+              key-and-version-ids (mapv
+                                    (fn [file-key] {:file-key file-key
+                                                    :version-ids (file-service/key->version-ids ts/*aws-s3-client* file-key)})
+                                    all-the-deleted-keys)]
+          (doseq [key-and-version-id key-and-version-ids]
+            (println key-and-version-id)
+            (doseq [version-id (:version-ids key-and-version-id)]
+              (t/is
+                (= destruction-tag
+                   (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id))))))
+        (t/testing "Expired liitteet do not exist in object store after destruction"
+          (doseq [liite-result expired-linked-liitteet]
+            (t/is (false? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result)))))))
+
+        (t/testing "Non-expired liitteet are still in object store after destruction"
+          (doseq [liite-result non-expired-linked-liitteet]
+            (when (= (:contenttype liite-result) "application/octet-stream")
+              (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result)))))))))
+
+      (t/testing "All the version of the non-expired files should not have the destruction tag"
+        (let [all-the-deleted-keys (mapv #(liite-service/file-key (:liite-id %)) non-expired-linked-liitteet)
+              key-and-version-ids (mapv
+                                    (fn [file-key] {:file-key file-key
+                                                    :version-ids (file-service/key->version-ids ts/*aws-s3-client* file-key)})
+                                    all-the-deleted-keys)]
+          (doseq [key-and-version-id key-and-version-ids]
+            (println key-and-version-id)
+            (doseq [version-id (:version-ids key-and-version-id)]
+              (t/is
+                (= nil
+                   (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id))))))))
+    (let [expired-linked-liitteet (->> expired-valvonta-ids
+                                       (mapcat (partial service/find-linked-liite-ids ts/*db*)))
+          non-expired-linked-liitteet (->> non-expired-valvonta-ids
+                                           (mapcat (partial service/find-linked-liite-ids ts/*db*)))
+          expired-audit (->> expired-valvonta-ids
+                             (mapcat find-liite-audit))
+          non-expired-audit (->> non-expired-valvonta-ids
+                                 (mapcat find-liite-audit))]
+
+      (t/testing "Expired liitteet should not exist"
+        (t/is (= (count expired-linked-liitteet) 0))
+        (t/is (= (count expired-audit) 0))
+        (t/is (> (count non-expired-linked-liitteet) 0))
+        (t/is (> (count non-expired-audit) 0))))))
+
+(defn- find-linked-vo-tiedoksi [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT toimenpide_id as \"vo-toimenpide-id\"
+      FROM vo_tiedoksi
+      WHERE toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(t/deftest destroy-vo-tiedoksi-table!-test
+  (let [{:keys [valvonta-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-id (nth valvonta-ids 2)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (t/testing "There are linked vo_tiedoksi before running the destruction"
+      (t/is (> (->> expired-valvonta-ids (mapv find-linked-vo-tiedoksi) ->result-count ) 0))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-tiedoksi) count) 0)))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+
+    (t/testing "There are no linked vo_tiedoksi after running the destruction in the expired valvontas"
+      (t/is (= (->> expired-valvonta-ids (mapv find-linked-vo-tiedoksi ) ->result-count) 0)))
+    (t/testing "There are linked vo_tiedoksi in the valvonta that is not expired"
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-tiedoksi) count) 0)))
+
+    (t/testing "Audit table does not exist for vo_tiedoksi"
+      (t/is (not (audit-table-exists? "vo_tiedoksi"))))))
+
+(defn- find-linked-vastaanottaja [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT vastaanottaja_id
+      FROM vastaanottaja INNER JOIN viestiketju ON vastaanottaja.viestiketju_id = viestiketju.id
+      WHERE viestiketju.vo_toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(t/deftest destroy-vastaanottaja-table!-test
+  (let [{:keys [valvonta-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-id (nth valvonta-ids 2)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (t/testing "There are linked vastaanottaja before running the destruction"
+      (t/is (> (->> expired-valvonta-ids (mapv find-linked-vastaanottaja) ->result-count ) 0))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vastaanottaja) count) 0)))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+
+    (t/testing "There are no linked vastaanottaja after running the destruction in the expired valvontas"
+      (t/is (= (->> expired-valvonta-ids (mapv find-linked-vastaanottaja ) ->result-count) 0)))
+    (t/testing "There are linked vastaanottaja in the valvonta that is not expired"
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vastaanottaja) count) 0)))
+
+    (t/testing "Audit table does not exist for vastaanottaja"
+      (t/is (not (audit-table-exists? "vastaanottaja"))))))
+
+(defn- find-linked-viesti-reader [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT viesti_id, reader_id
+      FROM viesti_reader INNER JOIN viesti ON viesti_reader.viesti_id = viesti.id
+                         INNER JOIN viestiketju ON viesti.viestiketju_id = viestiketju.id
+      WHERE viestiketju.vo_toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(defn- find-linked-viestiketju [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id
+      FROM viestiketju
+      WHERE vo_toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(defn- find-linked-viestiketju-audit [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id
+      FROM audit.viestiketju
+      WHERE vo_toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(t/deftest destroy-viesti-reader-table!-test
+  (let [{:keys [valvonta-ids laatija-id]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-id (nth valvonta-ids 2)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    ;; Laatija reads all ketjus
+    (run! (partial viesti-service/read-ketju! (ts/db-user laatija-id) (test-whoami/laatija laatija-id))
+          (->> (cons non-expired-valvonta-id expired-valvonta-ids)
+               (mapcat find-linked-viestiketju)
+               (mapv :id)))
+
+    (t/testing "There are linked viesti-reader before running the destruction"
+      (t/is (> (->> expired-valvonta-ids (mapv find-linked-viesti-reader) ->result-count ) 0))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-viesti-reader) count) 0)))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+
+    (t/testing "There are no linked viesti-reader after running the destruction in the expired valvontas"
+      (t/is (= (->> expired-valvonta-ids (mapv find-linked-viesti-reader ) ->result-count) 0)))
+    (t/testing "There are linked viesti-reader in the valvonta that is not expired"
+      (t/is (> (->> non-expired-valvonta-id (find-linked-viesti-reader) count) 0)))
+
+    (t/testing "Audit table does not exist for viesti-reader"
+      (t/is (not (audit-table-exists? "viesti_reader"))))))
+
+(defn- find-linked-viesti [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT viesti.id as \"viesti-id\"
+      FROM viesti INNER JOIN viestiketju ON viesti.viestiketju_id = viestiketju.id
+      WHERE viestiketju.vo_toimenpide_id = ?"
+     vo-toimenpide-id]))
+
+(t/deftest destroy-viesti-table!-test
+  (let [{:keys [valvonta-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-id (nth valvonta-ids 2)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (t/testing "There are linked viesti before running the destruction"
+      (t/is (> (->> expired-valvonta-ids (mapv find-linked-viesti) ->result-count ) 0))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-viesti) count) 0)))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+
+    (t/testing "There are no linked viesti after running the destruction in the expired valvontas"
+      (t/is (= (->> expired-valvonta-ids (mapv find-linked-viesti ) ->result-count) 0)))
+    (t/testing "There are linked viesti in the valvonta that is not expired"
+      (t/is (> (->> non-expired-valvonta-id (find-linked-viesti) count) 0)))
+
+    (t/testing "Audit table does not exist for viesti"
+      (t/is (not (audit-table-exists? "viesti"))))))
+
+(defn- find-viesti-liite-audit
+  "Queries audit.viesti_liite directly by viesti_liite id. The ids must be
+  captured before destruction, because the live viestiketju rows are deleted."
+  [viesti-liite-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id as \"viesti-liite-id\"
+      FROM audit.viesti_liite
+      WHERE id = ?"
+     viesti-liite-id]))
+
+(t/deftest destroy-viesti-liite-table!-test
+  (let [{:keys [valvonta-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-ids [(nth valvonta-ids 2)]
+        ;; Capture ids before destruction; live rows are gone afterwards
+        expired-viesti-liite-ids (->> expired-valvonta-ids
+                                      (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*))
+                                      (mapv :viesti-liite-id))
+        non-expired-viesti-liite-ids (->> non-expired-valvonta-ids
+                                          (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*))
+                                          (mapv :viesti-liite-id))]
+
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (let [expired-linked-viesti-liitteet (->> expired-valvonta-ids
+                                       (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
+          non-expired-linked-viesti-liitteet (->> non-expired-valvonta-ids
+                                           (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
+          expired-audit (->> expired-viesti-liite-ids
+                             (mapcat find-viesti-liite-audit))
+          non-expired-audit (->> non-expired-viesti-liite-ids
+                                 (mapcat find-viesti-liite-audit))]
+
+      (t/testing "There are viesti-liitteet in database"
+        (t/is (> (count expired-linked-viesti-liitteet) 0))
+        (t/is (> (count expired-audit) 0))
+        (t/is (> (count non-expired-linked-viesti-liitteet) 0))
+        (t/is (> (count non-expired-audit) 0)))
+
+      (t/testing "Expired viesti-liitteet are in object store before destruction"
+        (doseq [viesti-liite-result expired-linked-viesti-liitteet]
+          (when (= (:contenttype viesti-liite-result) "application/octet-stream")
+            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (viesti-service/file-path (:viestiketju-id viesti-liite-result) (:viesti-liite-id viesti-liite-result))))))))
+
+      (t/testing "Non-expired viesti-liitteet are in object store before destruction"
+        (doseq [viesti-liite-result non-expired-linked-viesti-liitteet]
+          (when (= (:contenttype viesti-liite-result) "application/octet-stream")
+            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (viesti-service/file-path (:viestiketju-id viesti-liite-result) (:viesti-liite-id viesti-liite-result))))))))
+
+      (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+
+      (t/testing "All the version of the expired files have the destruction tag"
+        (let [
+              all-the-deleted-keys (mapv #(viesti-service/file-path (:viestiketju-id %) (:viesti-liite-id %)) expired-linked-viesti-liitteet)
+              key-and-version-ids (mapv
+                                    (fn [file-key] {:file-key file-key
+                                                    :version-ids (file-service/key->version-ids ts/*aws-s3-client* file-key)})
+                                    all-the-deleted-keys)]
+          (doseq [key-and-version-id key-and-version-ids]
+            (println key-and-version-id)
+            (doseq [version-id (:version-ids key-and-version-id)]
+              (t/is
+                (= destruction-tag
+                   (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id)))))))
+
+      (t/testing "All the version of the non-expired files should not have the destruction tag"
+        (let [all-the-deleted-keys (mapv #(viesti-service/file-path (:viestiketju-id %) (:viesti-liite-id %)) non-expired-linked-viesti-liitteet)
+              key-and-version-ids (mapv
+                                    (fn [file-key] {:file-key file-key
+                                                    :version-ids (file-service/key->version-ids ts/*aws-s3-client* file-key)})
+                                    all-the-deleted-keys)]
+          (doseq [key-and-version-id key-and-version-ids]
+            (println key-and-version-id)
+            (doseq [version-id (:version-ids key-and-version-id)]
+              (t/is
+                (= nil
+                   (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id)))))))
+
+      (t/testing "Expired viesti-liitteet do not exist in object store after destruction"
+        (doseq [viesti-liite-result expired-linked-viesti-liitteet]
+          (t/is (false? (file-service/file-exists? ts/*aws-s3-client* (viesti-service/file-path (:viestiketju-id viesti-liite-result) (:viesti-liite-id viesti-liite-result)))))))
+
+      (t/testing "Non-expired viesti-liitteet are still in object store after destruction"
+        (doseq [viesti-liite-result non-expired-linked-viesti-liitteet]
+          (when (= (:contenttype viesti-liite-result) "application/octet-stream")
+            (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (viesti-service/file-path (:viestiketju-id viesti-liite-result) (:viesti-liite-id viesti-liite-result)))))))))
+
+    (let [expired-linked-viesti-liitteet (->> expired-valvonta-ids
+                                       (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
+          non-expired-linked-viesti-liitteet (->> non-expired-valvonta-ids
+                                           (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
+          expired-audit (->> expired-viesti-liite-ids
+                             (mapcat find-viesti-liite-audit))
+          non-expired-audit (->> non-expired-viesti-liite-ids
+                                 (mapcat find-viesti-liite-audit))]
+
+      (t/testing "Expired viesti-liitteet should not exist"
+        (t/is (= (count expired-linked-viesti-liitteet) 0))
+        (t/is (= (count expired-audit) 0))
+        (t/is (> (count non-expired-linked-viesti-liitteet) 0))
+        (t/is (> (count non-expired-audit) 0))))))
+
+(t/deftest destroy-viestiketju-table!-test
+  (let [{:keys [valvonta-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        non-expired-valvonta-id (nth valvonta-ids 2)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (t/testing "There are linked viestiketju before running the destruction"
+      (t/is (> (->> expired-valvonta-ids (mapv find-linked-viestiketju) ->result-count ) 0))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-viestiketju) count) 0)))
+
+    (t/testing "Viestiketju audit before destruction"
+      (let [expired-audit (->> expired-valvonta-ids
+                               (mapcat find-linked-viestiketju-audit))
+            non-expired-audit (->> [non-expired-valvonta-id]
+                                   (mapcat find-linked-viestiketju-audit))]
+        (t/is (> (count expired-audit) 0))
+        (t/is (> (count non-expired-audit) 0))))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+
+    (t/testing "There are no linked viestiketju after running the destruction in the expired valvontas"
+      (t/is (= (->> expired-valvonta-ids (mapv find-linked-viestiketju ) ->result-count) 0)))
+    (t/testing "There are linked viestiketju in the valvonta that is not expired"
+      (t/is (> (->> non-expired-valvonta-id (find-linked-viestiketju) count) 0)))
+
+    (t/testing "Viestiketju audit after destruction"
+      (let [expired-audit (->> expired-valvonta-ids
+                               (mapcat find-linked-viestiketju-audit))
+            non-expired-audit (->> [non-expired-valvonta-id]
+                                   (mapcat find-linked-viestiketju-audit))]
+        (t/is (= (count expired-audit) 0))
+        (t/is (> (count non-expired-audit) 0))))))
+
+(defn- find-vo-toimenpide [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT *
+      FROM vo_toimenpide
+      WHERE id = ?"
+     vo-toimenpide-id]))
+
+(defn- find-vo-toimenpide-audit [vo-toimenpide-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT *
+      FROM audit.vo_toimenpide
+      WHERE id = ?"
+     vo-toimenpide-id]))
+
+(defn- find-vo-toimenpiteet-for-energiatodistus [energiatodistus-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id
+      FROM vo_toimenpide
+      WHERE energiatodistus_id = ?"
+     energiatodistus-id]))
+
+(defn- is-vo-toimenpide-anonymized? [vo-toimenpide-id]
+  (let [vo-toimenpide (first (find-vo-toimenpide vo-toimenpide-id))]
+    (boolean
+      (and vo-toimenpide
+           (nil? (:publish_time vo-toimenpide))
+           (nil? (:deadline_date vo-toimenpide))
+           (nil? (:template_id vo-toimenpide))
+           (nil? (:description vo-toimenpide))
+           (nil? (:severity_id vo-toimenpide))
+           (true? (:deleted vo-toimenpide))
+           (true? (:anonymized vo-toimenpide))))))
+
+(t/deftest destroy-only-expired-valvontas-from-mixed-data-test
+  (let [{paakayttaja-id :paakayttaja-id} (test-data-set)
+        laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
+        energiatodistus-add (energiatodistus-test-data/generate-add 2026 true)
+        additional-energiatodistus-ids
+        (energiatodistus-test-data/insert!
+          (vec (repeat 30 energiatodistus-add))
+          laatija-id)
+        [expired-energiatodistus-ids
+         unexpired-energiatodistus-ids
+         without-valvonta-energiatodistus-ids]
+        (partition 10 additional-energiatodistus-ids)
+        valvonta-ids
+        (mapv
+          (fn [energiatodistus-id]
+            (:id
+              (valvonta-oikeellisuus-service/add-toimenpide!
+                (ts/db-user paakayttaja-id)
+                ts/*aws-s3-client*
+                (test-whoami/paakayttaja paakayttaja-id)
+                energiatodistus-id
+                test-report)))
+          (concat expired-energiatodistus-ids unexpired-energiatodistus-ids))
+        [expired-valvonta-ids unexpired-valvonta-ids]
+        (partition 10 valvonta-ids)]
+    (doseq [[energiatodistus-id valvonta-id]
+            (map vector
+                 (concat expired-energiatodistus-ids unexpired-energiatodistus-ids)
+                 valvonta-ids)]
+      (publish-valvonta! paakayttaja-id energiatodistus-id valvonta-id))
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data
+      ts/*db*
+      ts/*aws-s3-client*
+      system-vo-expiration-user)
+
+    (t/testing "Expired valvontas are anonymized"
+      (t/is (every? is-vo-toimenpide-anonymized? expired-valvonta-ids)))
+    (t/testing "Already anonymized valvontas are not selected again"
+      (t/is (empty? (service/find-expired-oikeellisuuden-valvonta-ids ts/*db*))))
+    (t/testing "Unexpired valvontas are not touched"
+      (t/is (every? (complement is-vo-toimenpide-anonymized?) unexpired-valvonta-ids)))
+    (t/testing "Certificates without valvonta still have no valvonta"
+      (t/is
+        (every?
+          (comp empty? find-vo-toimenpiteet-for-energiatodistus)
+          without-valvonta-energiatodistus-ids)))))
+
+(defn- all-file-versions-have-destruction-tag? [file-key]
+  (let [version-ids (file-service/key->version-ids
+                      ts/*aws-s3-client*
+                      file-key)]
+    (and (seq version-ids)
+         (every?
+           #(= destruction-tag
+               (file-service/get-file-tag
+                 ts/*aws-s3-client*
+                 file-key
+                 (:Key destruction-tag)
+                 %))
+           version-ids))))
+
+(t/deftest anonymize-and-destroy-vo-toimenpide-table!-test
+  (let [{:keys [valvonta-ids energiatodistus-ids]} (test-data-set)
+        expired-valvonta-ids (take 2 valvonta-ids)
+        expired-energiatodistus-ids (take 2 energiatodistus-ids)
+        non-expired-valvonta-id (nth valvonta-ids 2)
+        non-expired-energiatodistus-id (nth energiatodistus-ids 2)
+        expired-document-keys
+        (mapv vo-asha-service/file-path
+              expired-energiatodistus-ids
+              expired-valvonta-ids)
+        non-expired-document-key
+        (vo-asha-service/file-path
+          non-expired-energiatodistus-id
+          non-expired-valvonta-id)]
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (t/testing "Valvonta documents exist in S3 before destruction"
+      (doseq [file-key expired-document-keys]
+        (t/is (true?
+                (file-service/file-exists?
+                  ts/*aws-s3-client*
+                  file-key))))
+
+      (t/is (true?
+              (file-service/file-exists?
+                ts/*aws-s3-client*
+                non-expired-document-key))))
+
+    (t/testing "There are linked vo-toimenpide before running the destruction"
+      (t/is (> (->> expired-valvonta-ids (mapv find-vo-toimenpide) ->result-count ) 0))
+      (t/is (> (->> non-expired-valvonta-id (find-vo-toimenpide) count) 0)))
+
+    (t/testing "Table vo_toimenpide audit before destruction"
+      (let [expired-audit (->> expired-valvonta-ids
+                               (mapcat find-vo-toimenpide-audit))
+            non-expired-audit (->> [non-expired-valvonta-id]
+                                   (mapcat find-vo-toimenpide-audit))]
+        (t/is (> (count expired-audit) 0))
+        (t/is (> (count non-expired-audit) 0))))
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+    (t/testing "All versions of expired valvonta documents have the destruction tag"
+      (doseq [file-key expired-document-keys]
+        (t/is (all-file-versions-have-destruction-tag? file-key))))
+
+    (t/testing "Non-expired valvonta document does not have the destruction tag"
+      (let [version-ids
+            (file-service/key->version-ids
+              ts/*aws-s3-client*
+              non-expired-document-key)]
+        (t/is
+          (every?
+            #(nil?
+               (file-service/get-file-tag
+                 ts/*aws-s3-client*
+                 non-expired-document-key
+                 (:Key destruction-tag)
+                 %))
+            version-ids))))
+
+    (t/testing "The vo-toimenpide entries are anonymized in the expired valvontas"
+      (t/is (->> expired-valvonta-ids (mapv is-vo-toimenpide-anonymized?) (every? true?))))
+    (t/testing "There are linked vo-toimenpide in the valvonta that is not expired"
+      (t/is (> (->> non-expired-valvonta-id (find-vo-toimenpide) count) 0)))
+
+    (t/testing "Table vo_toimenpide audit after destruction"
+      (let [expired-audit (->> expired-valvonta-ids
+                               (mapcat find-vo-toimenpide-audit))
+            non-expired-audit (->> [non-expired-valvonta-id]
+                                   (mapcat find-vo-toimenpide-audit))]
+        (t/is (= (count expired-audit) 0))
+        (t/is (> (count non-expired-audit) 0))))))
