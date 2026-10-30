@@ -20,6 +20,19 @@ where (latest_create_time < (
            (now() at time zone 'Europe/Helsinki')::date - interval '2 years')
        or latest_publish_time is null);
 
+-- name: lock-energiatodistus-and-vo-toimenpiteet!
+with locked_energiatodistus as (
+    select id
+    from energiatodistus
+    where id = :energiatodistus-id
+    for update
+)
+select vo_toimenpide.id
+from vo_toimenpide
+inner join locked_energiatodistus on true
+where vo_toimenpide.energiatodistus_id = :energiatodistus-id
+for update;
+
 -- name: select-linked-liite-ids
 select id as "liite-id", contenttype
 from liite
