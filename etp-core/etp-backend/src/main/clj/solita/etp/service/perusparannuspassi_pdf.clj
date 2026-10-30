@@ -49,8 +49,8 @@
       content]
      (page-footer ppp-tunnus page-num total-pages)]))
 
-(defn- generate-document-html
-  "Generate complete HTML document for perusparannuspassi PDF.
+(defn- generate-document-hiccup
+  "Generate hiccup for the complete perusparannuspassi document.
 
    Parameters:
    - pages: A sequence of page data maps, each containing:
@@ -59,25 +59,26 @@
      - :content - Hiccup data for the page body
    - ppp-tunnus: The perusparannuspassi identifier (e.g., \"1234567\")
 
-   Returns: HTML string ready for PDF conversion."
+   Returns: hiccup data for the complete HTML document."
   [pages ppp-tunnus l]
   (let [total-pages (count pages)
         pages-html (map-indexed
                      (fn [idx page-data]
                        (render-page page-data (inc idx) total-pages ppp-tunnus))
                      pages)]
-    (hiccup/html
-      [:html
-       [:head
-        [:meta {:charset "UTF-8"}]
-        [:meta {:name "subject" :content (l :perusparannuspassi)}]
-        [:meta {:name "description" :content (l :perusparannuspassi)}]
-        [:title (l :perusparannuspassi)]
-        [:style (styles)]]
-       [:body
-        pages-html]])))
+    [:html
+     [:head
+      [:meta {:charset "UTF-8"}]
+      [:meta {:name "subject" :content (l :perusparannuspassi)}]
+      [:meta {:name "description" :content (l :perusparannuspassi)}]
+      [:title (l :perusparannuspassi)]
+      [:style (styles)]]
+     [:body
+      pages-html]]))
 
-(defn- generate-perusparannuspassi-html [{:keys [perusparannuspassi kieli] :as params}]
+(defn generate-perusparannuspassi-hiccup
+  "Generate hiccup data for a complete perusparannuspassi document."
+  [{:keys [perusparannuspassi kieli] :as params}]
   (let [l (kieli loc/ppp-pdf-localization)
         ;; Generate vaihe pages, filtering out nil (vaiheet without data)
         vaihe-pages (->> (range 1 5)
@@ -107,7 +108,10 @@
                  :content
                  [:div
                   (lisatietoja/lisatietoja params)]}])]
-    (generate-document-html pages (:id perusparannuspassi) l)))
+    (generate-document-hiccup pages (:id perusparannuspassi) l)))
+
+(defn- generate-perusparannuspassi-html [params]
+  (hiccup/html (generate-perusparannuspassi-hiccup params)))
 
 (defn- generate-perusparannuspassi-ohtp-pdf
   "Use OpenHTMLToPDF to generate a PPP PDF, return as a byte array"
