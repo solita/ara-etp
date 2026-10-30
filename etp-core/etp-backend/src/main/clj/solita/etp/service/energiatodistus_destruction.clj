@@ -178,7 +178,7 @@
 (defn destroy-expired-energiatodistukset! [db aws-s3-client whoami]
   (check-whoami whoami)
   (log/info (str "Starting destruction of expired energiatodistukset."))
-  (let [expired-todistukset-without-valvonta-ids (set (get-currently-expired-todistus-ids db {:check-vavonta? true}))
+  (let [expired-todistukset-without-valvonta-ids (set (get-currently-expired-todistus-ids db {:check-valvonta? true}))
         all-expired-todistukset-ids (set (get-currently-expired-todistus-ids db {:check-valvonta? false}))
         expired-todistukset-with-valvonta-ids (set/difference all-expired-todistukset-ids expired-todistukset-without-valvonta-ids)]
     (run! #(make-energiatodistus-vanhentunut db %) expired-todistukset-with-valvonta-ids)
