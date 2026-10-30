@@ -655,7 +655,8 @@
            (nil? (:template_id vo-toimenpide))
            (nil? (:description vo-toimenpide))
            (nil? (:severity_id vo-toimenpide))
-           (true? (:deleted vo-toimenpide))))))
+           (true? (:deleted vo-toimenpide))
+           (true? (:anonymized vo-toimenpide))))))
 
 (t/deftest destroy-only-expired-valvontas-from-mixed-data-test
   (let [{paakayttaja-id :paakayttaja-id} (test-data-set)
@@ -696,6 +697,8 @@
 
     (t/testing "Expired valvontas are anonymized"
       (t/is (every? is-vo-toimenpide-anonymized? expired-valvonta-ids)))
+    (t/testing "Already anonymized valvontas are not selected again"
+      (t/is (empty? (service/find-expired-oikeellisuuden-valvonta-ids ts/*db*))))
     (t/testing "Unexpired valvontas are not touched"
       (t/is (every? (complement is-vo-toimenpide-anonymized?) unexpired-valvonta-ids)))
     (t/testing "Certificates without valvonta still have no valvonta"
