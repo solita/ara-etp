@@ -135,7 +135,18 @@ h2 {
 }
 
 h3 {
+    font-size: 13pt;
+    color: #2c5234;
+    line-height: 1.07;
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+}
+
+.etusivu-h3 {
     font-size: 12pt;
+    color: black;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
 }
 
 p {

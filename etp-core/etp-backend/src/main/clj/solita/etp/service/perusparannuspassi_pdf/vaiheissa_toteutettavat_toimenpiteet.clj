@@ -84,7 +84,7 @@
                                (or item "\u00A0")]])
                            items))])]
     [:div {:class "ppp-vaihe-no-top-margin"}
-     [:h2 {:class "ppp-vaihe-no-top-margin"} title-text]
+     [:h3 {:class "ppp-vaihe-subsection-title ppp-vaihe-no-top-margin"} title-text]
      [:div {:class "ppp-vaihe-ehdotukset-columns"}
       (render-column col1 1 "ppp-vaihe-ehdotukset-column ppp-vaihe-ehdotukset-column-left")
       (render-column col2 4 "ppp-vaihe-ehdotukset-column ppp-vaihe-ehdotukset-column-right")]]))
@@ -93,14 +93,14 @@
   (let [seloste-key (if (= kieli :sv) :toimenpideseloste-sv :toimenpideseloste-fi)
         seloste (get-in vaihe [:toimenpiteet seloste-key])]
     [:div {:class "ppp-vaihe-section"}
-     [:h2 (l :toimenpideseloste)]
+     [:h3 {:class "ppp-vaihe-subsection-title"} (l :toimenpideseloste)]
       [:p {:class "ppp-vaihe-toimenpideseloste"}
        (h (or seloste ""))]]))
 
 (defn- render-energiankulutuksen-muutos [vaihe l]
   (let [tulokset (:tulokset vaihe)]
     [:div {:class "ppp-vaihe-section"}
-     [:h2 (l :energiankulutus-vaiheen-jalkeen)]
+     [:h3 {:class "ppp-vaihe-subsection-title"} (l :energiankulutus-vaiheen-jalkeen)]
      (into
        [:dl {:class "ppp-vaihe-energiankulutuksen-list" :role "presentation"}]
        (for [key [:kaukolampo :sahko :uusiutuvat-pat :fossiiliset-pat :kaukojaahdytys]]
@@ -132,7 +132,7 @@
 (defn- render-energiankulutus-kustannukset-ja-co2-paastot [vaihe l]
   (let [tulokset (:tulokset vaihe)]
     [:div {:class "ppp-vaihe-section ppp-vaihe-energiankulutus-kustannukset-ja-co2-paastot"}
-       [:h2 (l :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen)]
+       [:h3 {:class "ppp-vaihe-subsection-title"} (l :energiankulutus-kustannukset-ja-co2-paastot-vaiheen-jalkeen)]
      [:table {:class "ppp-vaihe-kustannukset-table" :role "presentation"}
       (for [[label value unit] [[(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-laskennallinen) (-> tulokset (get :ostoenergia) dot->comma) (l :kwh-vuosi)]
                                 [(l :ostoenergian-kokonaistarve-vaiheen-jalkeen-toteutunut-kulutus) (-> tulokset (get :toteutunut-ostoenergia) dot->comma) (l :kwh-vuosi)]
@@ -171,6 +171,7 @@
                             :alt (format (l :vaihe-arrow-alt-text) vaihe e-luokka vaihe e-luku)
                             :height "20.5mm"}
                       (tv/arrow color text-color 0 vaihe-title perf-label)])]]]
+         :title-level :h2
          :title-class "vaihe-title"
         :content [:div {:class "ppp-vaihe-no-top-margin"}
                    (render-toimenpide-ehdotukset vaihe (:seuraava-vaihe vaihe-data) kieli l toimenpide-ehdotukset)
