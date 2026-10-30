@@ -10,6 +10,7 @@ with toimenpiteet_with_latest_times as (
             partition by energiatodistus_id
         ) as latest_publish_time
     from vo_toimenpide
+    where anonymized = false
 )
 select id as "vo-toimenpide-id", energiatodistus_id as "energiatodistus-id"
 from toimenpiteet_with_latest_times
@@ -135,7 +136,8 @@ set
     -- diaarinumero = null,
     description = null,
     severity_id = null,
-    deleted = true
+    deleted = true,
+    anonymized = true
 where id = :vo-toimenpide-id;
 
 
