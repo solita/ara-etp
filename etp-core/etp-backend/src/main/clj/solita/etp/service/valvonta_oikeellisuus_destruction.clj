@@ -193,38 +193,62 @@
                  (= (:id whoami) (kayttaja-service/system-kayttaja :valvonta-oikeellisuus-expiration)))
     (exception/throw-forbidden! (str "Can not run destruction of expired oikeellisuuden valvonta as whoami (id: " (:id whoami) ") (rooli: " (:rooli whoami) ")"))))
 
-(defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client whoami]
-  (check-whoami whoami)
-  (let [expired-vo-toimenpide-ids (find-expired-oikeellisuuden-valvonta-ids db)
-        ;; Note that order of these is important
-        handlers-in-order
-        [;; Note that destruction of vo-note is the only one that uses energiatodistus-id and will be called multiple
-         ;; times with the same id but that is not a problem.
-         destroy-vo-note-table!
-         destroy-vo-virhe-table!
-         destroy-liite-table!
-         destroy-vo-tiedoksi-table!
-         destroy-vastaanottaja-table!
-         destroy-viesti-reader-table!
-         destroy-viesti-table!
-         destroy-viesti-liite-table!
-         destroy-viestiketju-table!
-         anonymize-and-destroy-vo-toimenpide-table!]
-        destruction-counts
-        (reduce
-          (fn [total expired-vo-toimenpide-id]
-            (add-counts
-              total
-              (jdbc/with-db-transaction [db db]
+(defn- destroy-expired-vo-toimenpiteet!
+  [db aws-s3-client vo-toimenpide-rows]
+  (let [energiatodistus-id (:energiatodistus-id (first vo-toimenpide-rows))
+        expired-vo-toimenpide-rows
+        (filter
+          #(= energiatodistus-id (:energiatodistus-id %))
+          (find-expired-oikeellisuuden-valvonta-ids db))]
+    (if (seq expired-vo-toimenpide-rows)
+      (let [handlers-in-order
+            [destroy-vo-virhe-table!
+             destroy-liite-table!
+             destroy-vo-tiedoksi-table!
+             destroy-vastaanottaja-table!
+             destroy-viesti-reader-table!
+             destroy-viesti-table!
+             destroy-viesti-liite-table!
+             destroy-viestiketju-table!
+             anonymize-and-destroy-vo-toimenpide-table!]]
+        (add-counts
+          (destroy-vo-note-table!
+            {:db db}
+            {:energiatodistus-id energiatodistus-id})
+          (reduce
+            (fn [counts {:keys [vo-toimenpide-id]}]
+              (add-counts
+                counts
                 (reduce
                   (fn [counts handler]
                     (add-counts
                       counts
                       (handler {:db db :aws-s3-client aws-s3-client}
-                               expired-vo-toimenpide-id)))
+                               {:vo-toimenpide-id vo-toimenpide-id
+                                :energiatodistus-id energiatodistus-id})))
                   empty-destruction-counts
-                  handlers-in-order))))
+                  handlers-in-order)))
+            empty-destruction-counts
+            expired-vo-toimenpide-rows)))
+      empty-destruction-counts)))
+
+(defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client whoami]
+  (check-whoami whoami)
+  (let [expired-vo-toimenpide-rows (find-expired-oikeellisuuden-valvonta-ids db)
+        expired-vo-toimenpiteet-by-energiatodistus
+        (group-by :energiatodistus-id expired-vo-toimenpide-rows)
+        _ (println expired-vo-toimenpiteet-by-energiatodistus)
+        destruction-counts
+        (reduce
+          (fn [total [_ vo-toimenpide-rows]]
+            (add-counts
+              total
+              (jdbc/with-db-transaction [db db]
+                (destroy-expired-vo-toimenpiteet!
+                  db
+                  aws-s3-client
+                  vo-toimenpide-rows))))
           empty-destruction-counts
-          expired-vo-toimenpide-ids)]
+          expired-vo-toimenpiteet-by-energiatodistus)]
     (log/info "Valvonta oikeellisuus destruction finished. Affected resources: " destruction-counts)
     destruction-counts))
