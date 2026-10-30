@@ -200,7 +200,10 @@
     (t/testing "There are no linked vo_virhe after running the destruction in the expired valvontas"
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-vo-virhe) ->result-count) 0)))
     (t/testing "There are linked vo_virhe in the valvonta that is not expired"
-      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-virhe) count) 0)))))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-virhe) count) 0)))
+
+    (t/testing "Audit table does not exist for vo_virhe"
+      (t/is (not (audit-table-exists? "vo_virhe"))))))
 
 (t/deftest destroy-vo-note-table!-test
   (let [{:keys [valvonta-ids energiatodistus-ids]} (test-data-set)
@@ -247,7 +250,7 @@
   (jdbc/query
     ts/*db*
     ["SELECT id as \"liite-id\"
-      FROM liite
+      FROM audit.liite
       WHERE vo_toimenpide_id = ?"
      vo-toimenpide-id]))
 
@@ -317,9 +320,8 @@
               (t/is
                 (= nil
                    (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id))))))))
-
     (let [expired-linked-liitteet (->> expired-valvonta-ids
-                                      (mapcat (partial service/find-linked-liite-ids ts/*db*)))
+                                       (mapcat (partial service/find-linked-liite-ids ts/*db*)))
           non-expired-linked-liitteet (->> non-expired-valvonta-ids
                                            (mapcat (partial service/find-linked-liite-ids ts/*db*)))
           expired-audit (->> expired-valvonta-ids
@@ -356,7 +358,10 @@
     (t/testing "There are no linked vo_tiedoksi after running the destruction in the expired valvontas"
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-vo-tiedoksi ) ->result-count) 0)))
     (t/testing "There are linked vo_tiedoksi in the valvonta that is not expired"
-      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-tiedoksi) count) 0)))))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vo-tiedoksi) count) 0)))
+
+    (t/testing "Audit table does not exist for vo_tiedoksi"
+      (t/is (not (audit-table-exists? "vo_tiedoksi"))))))
 
 (defn- find-linked-vastaanottaja [vo-toimenpide-id]
   (jdbc/query
@@ -381,7 +386,10 @@
     (t/testing "There are no linked vastaanottaja after running the destruction in the expired valvontas"
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-vastaanottaja ) ->result-count) 0)))
     (t/testing "There are linked vastaanottaja in the valvonta that is not expired"
-      (t/is (> (->> non-expired-valvonta-id (find-linked-vastaanottaja) count) 0)))))
+      (t/is (> (->> non-expired-valvonta-id (find-linked-vastaanottaja) count) 0)))
+
+    (t/testing "Audit table does not exist for vastaanottaja"
+      (t/is (not (audit-table-exists? "vastaanottaja"))))))
 
 (defn- find-linked-viesti-reader [vo-toimenpide-id]
   (jdbc/query
@@ -462,18 +470,28 @@
     (t/testing "Audit table does not exist for viesti"
       (t/is (not (audit-table-exists? "viesti"))))))
 
-(defn- find-viesti-liite-audit [vo-toimenpide-id]
+(defn- find-viesti-liite-audit
+  "Queries audit.viesti_liite directly by viesti_liite id. The ids must be
+  captured before destruction, because the live viestiketju rows are deleted."
+  [viesti-liite-id]
   (jdbc/query
     ts/*db*
-    ["SELECT viesti_liite.id as \"viesti-liite-id\"
-      FROM viesti_liite INNER JOIN viestiketju ON viesti_liite.viestiketju_id = viestiketju.id
-      WHERE viestiketju.vo_toimenpide_id = ?"
-     vo-toimenpide-id]))
+    ["SELECT id as \"viesti-liite-id\"
+      FROM audit.viesti_liite
+      WHERE id = ?"
+     viesti-liite-id]))
 
 (t/deftest destroy-viesti-liite-table!-test
   (let [{:keys [valvonta-ids]} (test-data-set)
         expired-valvonta-ids (take 2 valvonta-ids)
-        non-expired-valvonta-ids [(nth valvonta-ids 2)]]
+        non-expired-valvonta-ids [(nth valvonta-ids 2)]
+        ;; Capture ids before destruction; live rows are gone afterwards
+        expired-viesti-liite-ids (->> expired-valvonta-ids
+                                      (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*))
+                                      (mapv :viesti-liite-id))
+        non-expired-viesti-liite-ids (->> non-expired-valvonta-ids
+                                          (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*))
+                                          (mapv :viesti-liite-id))]
 
     (run! make-valvonta-expired! expired-valvonta-ids)
 
@@ -481,9 +499,9 @@
                                        (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
           non-expired-linked-viesti-liitteet (->> non-expired-valvonta-ids
                                            (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
-          expired-audit (->> expired-valvonta-ids
+          expired-audit (->> expired-viesti-liite-ids
                              (mapcat find-viesti-liite-audit))
-          non-expired-audit (->> non-expired-valvonta-ids
+          non-expired-audit (->> non-expired-viesti-liite-ids
                                  (mapcat find-viesti-liite-audit))]
 
       (t/testing "There are viesti-liitteet in database"
@@ -530,6 +548,7 @@
               (t/is
                 (= nil
                    (file-service/get-file-tag ts/*aws-s3-client* (:file-key key-and-version-id) (:Key destruction-tag) version-id)))))))
+
       (t/testing "Expired viesti-liitteet do not exist in object store after destruction"
         (doseq [viesti-liite-result expired-linked-viesti-liitteet]
           (t/is (false? (file-service/file-exists? ts/*aws-s3-client* (viesti-service/file-path (:viestiketju-id viesti-liite-result) (:viesti-liite-id viesti-liite-result)))))))
@@ -543,9 +562,9 @@
                                        (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
           non-expired-linked-viesti-liitteet (->> non-expired-valvonta-ids
                                            (mapcat (partial service/find-linked-viesti-liite-ids ts/*db*)))
-          expired-audit (->> expired-valvonta-ids
+          expired-audit (->> expired-viesti-liite-ids
                              (mapcat find-viesti-liite-audit))
-          non-expired-audit (->> non-expired-valvonta-ids
+          non-expired-audit (->> non-expired-viesti-liite-ids
                                  (mapcat find-viesti-liite-audit))]
 
       (t/testing "Expired viesti-liitteet should not exist"
