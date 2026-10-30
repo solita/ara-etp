@@ -154,25 +154,23 @@
       (let [{:keys [vaihe e-luku e-luokka]} vaihe-data
             title-text (format (l :vaiheessa-n-toteutettavat-toimenpiteet) vaihe-nro)
             parts (str/split title-text (re-pattern (str "(?<=" vaihe-nro ")")))]
-        {:title [:table {:class "ppp-vaihe-title-table"}
-                 [:tr
-                  [:td {:class "ppp-vaihe-top-align"}
+        {:header [:div {:class "page-header ppp-vaihe-page-header"}
+                  [:h2 {:class "page-title vaihe-title ppp-vaihe-page-title"}
                    (if (> (count parts) 1)
-                     [:span (first parts) [:br] (clojure.string/join "" (rest parts))]
+                     [:span {:class "ppp-vaihe-page-title-text"}
+                      (first parts) [:br] (clojure.string/join "" (rest parts))]
                      title-text)]
-                  [:td {:class "ppp-vaihe-title-right"}
-                   (let [color (get tv/colors-by-e-luokka e-luokka "#e8b63e")
-                         text-color (get tv/text-colors-by-e-luokka e-luokka "#000000")
-                         vaihe-title (str (l :vaihe) " " vaihe-nro)
-                         perf-label (str e-luokka " - " e-luku)]
-                     [:svg {:xmlns "http://www.w3.org/2000/svg"
-                            :viewBox "-6 -60 120 65"
-                            :width "38.2mm"
-                            :alt (format (l :vaihe-arrow-alt-text) vaihe e-luokka vaihe e-luku)
-                            :height "20.5mm"}
-                      (tv/arrow color text-color 0 vaihe-title perf-label)])]]]
-         :title-level :h2
-         :title-class "vaihe-title"
+                  (let [color (get tv/colors-by-e-luokka e-luokka "#e8b63e")
+                        text-color (get tv/text-colors-by-e-luokka e-luokka "#000000")
+                        vaihe-title (str (l :vaihe) " " vaihe-nro)
+                        perf-label (str e-luokka " - " e-luku)]
+                    [:svg {:class "ppp-vaihe-title-arrow"
+                           :xmlns "http://www.w3.org/2000/svg"
+                           :viewBox "-6 -60 120 65"
+                           :width "38.2mm"
+                           :alt (format (l :vaihe-arrow-alt-text) vaihe e-luokka vaihe e-luku)
+                           :height "20.5mm"}
+                     (tv/arrow color text-color 0 vaihe-title perf-label)])]
         :content [:div {:class "ppp-vaihe-no-top-margin"}
                    (render-toimenpide-ehdotukset vaihe (:seuraava-vaihe vaihe-data) kieli l toimenpide-ehdotukset)
                    (render-toimenpideseloste vaihe kieli l)
