@@ -48,8 +48,7 @@ where viestiketju.vo_toimenpide_id = :vo-toimenpide-id;
 -- name: select-linked-vo-note-ids
 select id as "vo-note-id"
 from vo_note
-where energiatodistus_id = :energiatodistus-id
-  and deleted = false;
+where energiatodistus_id = :energiatodistus-id;
 
 -- name: destroy-vo-note-table-data!
 delete from vo_note where id = :vo-note-id;
