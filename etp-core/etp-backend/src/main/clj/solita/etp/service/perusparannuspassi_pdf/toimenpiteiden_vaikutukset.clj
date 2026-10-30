@@ -235,9 +235,9 @@
                                    :e-luokka e-luokka}))))
         all-vaiheet (cons lahtotilanne ppp-vaiheet)]
     [:div {:class "vaikutukset-box"}
-     [:h3 (l :energiatehokkuusluokan-muutos)]
+     [:h3 {:class "etusivu-h3"} (l :energiatehokkuusluokan-muutos)]
      (arrow-svg all-vaiheet kieli)
-     [:h3 (l :toimenpiteiden-kohdistuminen)]
+     [:h3 {:class "etusivu-h3"} (l :toimenpiteiden-kohdistuminen)]
      (let [;; Collect all toimenpide-ehdotukset from all vaiheet
            all-ehdotukset (mapcat #(get-in % [:toimenpiteet :toimenpide-ehdotukset])
                                   (:vaiheet perusparannuspassi))
@@ -262,7 +262,7 @@
                                  all-ehdotukset)]
        [:div {:class "kohdistuminen-box"}
         (kohdistuminen-svg kohdistuminen kieli)])
-     [:h3 (l :rakennus-toimenpiteiden-jalkeen)]
+     [:h3 {:class "etusivu-h3"} (l :rakennus-toimenpiteiden-jalkeen)]
      (let [;; Get the final vaihe's results (last in the list)
            final-vaihe (last (:vaiheet perusparannuspassi))
            final-tulokset (:tulokset final-vaihe)

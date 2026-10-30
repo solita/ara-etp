@@ -30,10 +30,11 @@
 (defn- styles []
   (slurp (io/resource "perusparannuspassi.css")))
 
-(defn- page-header [title title-class]
+(defn- page-header [title title-class title-level]
   [:div {:class "page-header"}
-   [:h1 (cond-> {:class "page-title"}
-          title-class (update :class str " " title-class))
+   [title-level
+    (cond-> {:class "page-title"}
+      title-class (update :class str " " title-class))
     title]])
 
 (defn- page-footer [ppp-tunnus page-num total-pages]
@@ -41,9 +42,9 @@
    (str "Perusparannuspassin tunnus: " ppp-tunnus " | " page-num "/" total-pages)])
 
 (defn- render-page [page-data page-num total-pages ppp-tunnus]
-  (let [{:keys [title content header title-class content-class]} page-data]
+  (let [{:keys [title content header title-class title-level content-class]} page-data]
     [:div {:class "page"}
-     (or header (page-header title title-class))
+     (or header (page-header title title-class (or title-level :h1)))
      [:div (cond-> {:class "page-content"}
              content-class (update :class str " " content-class))
       content]
@@ -55,7 +56,8 @@
    Parameters:
    - pages: A sequence of page data maps, each containing:
      - :title - The title to display in the header
-     - :title-class - Optional additional CSS class for the page title h1
+     - :title-class - Optional additional CSS class for the page title
+     :title-level - Optional heading level for the page title, defaults to h1
      - :content - Hiccup data for the page body
    - ppp-tunnus: The perusparannuspassi identifier (e.g., \"1234567\")
 
@@ -96,14 +98,17 @@
                   (etusivu-laatija/etusivu-laatija params)]}]
                vaihe-pages
                [{:title (l :vaiheistuksen-yhteenveto)
+                 :title-level :h2
                  :title-class "vaiheistuksen-yhteenveto-title"
                  :content (vaiheistuksen-yhteenveto params)}
                 {:title (l :laskennan-taustatiedot-otsikko)
+                 :title-level :h2
                  :title-class "laskennan-taustatiedot-title"
                  :content
                  (into [:div]
                        (vals (laskennan-taustatiedot/generate-all-laskennan-taustatiedot params)))}
                 {:title "Lisätietoja"
+                 :title-level :h2
                  :title-class "lisatietoja-title"
                  :content
                  [:div
