@@ -638,6 +638,14 @@
       WHERE id = ?"
      vo-toimenpide-id]))
 
+(defn- find-vo-toimenpiteet-for-energiatodistus [energiatodistus-id]
+  (jdbc/query
+    ts/*db*
+    ["SELECT id
+      FROM vo_toimenpide
+      WHERE energiatodistus_id = ?"
+     energiatodistus-id]))
+
 (defn- is-vo-toimenpide-anonymized? [vo-toimenpide-id]
   (let [vo-toimenpide (first (find-vo-toimenpide vo-toimenpide-id))]
     (boolean
@@ -648,6 +656,53 @@
            (nil? (:description vo-toimenpide))
            (nil? (:severity_id vo-toimenpide))
            (true? (:deleted vo-toimenpide))))))
+
+(t/deftest destroy-only-expired-valvontas-from-mixed-data-test
+  (let [{paakayttaja-id :paakayttaja-id} (test-data-set)
+        laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
+        energiatodistus-add (energiatodistus-test-data/generate-add 2026 true)
+        additional-energiatodistus-ids
+        (energiatodistus-test-data/insert!
+          (vec (repeat 30 energiatodistus-add))
+          laatija-id)
+        [expired-energiatodistus-ids
+         unexpired-energiatodistus-ids
+         without-valvonta-energiatodistus-ids]
+        (partition 10 additional-energiatodistus-ids)
+        valvonta-ids
+        (mapv
+          (fn [energiatodistus-id]
+            (:id
+              (valvonta-oikeellisuus-service/add-toimenpide!
+                (ts/db-user paakayttaja-id)
+                ts/*aws-s3-client*
+                (test-whoami/paakayttaja paakayttaja-id)
+                energiatodistus-id
+                test-report)))
+          (concat expired-energiatodistus-ids unexpired-energiatodistus-ids))
+        [expired-valvonta-ids unexpired-valvonta-ids]
+        (partition 10 valvonta-ids)]
+    (doseq [[energiatodistus-id valvonta-id]
+            (map vector
+                 (concat expired-energiatodistus-ids unexpired-energiatodistus-ids)
+                 valvonta-ids)]
+      (publish-valvonta! paakayttaja-id energiatodistus-id valvonta-id))
+    (run! make-valvonta-expired! expired-valvonta-ids)
+
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data
+      ts/*db*
+      ts/*aws-s3-client*
+      system-vo-expiration-user)
+
+    (t/testing "Expired valvontas are anonymized"
+      (t/is (every? is-vo-toimenpide-anonymized? expired-valvonta-ids)))
+    (t/testing "Unexpired valvontas are not touched"
+      (t/is (every? (complement is-vo-toimenpide-anonymized?) unexpired-valvonta-ids)))
+    (t/testing "Certificates without valvonta still have no valvonta"
+      (t/is
+        (every?
+          (comp empty? find-vo-toimenpiteet-for-energiatodistus)
+          without-valvonta-energiatodistus-ids)))))
 
 (defn- all-file-versions-have-destruction-tag? [file-key]
   (let [version-ids (file-service/key->version-ids
