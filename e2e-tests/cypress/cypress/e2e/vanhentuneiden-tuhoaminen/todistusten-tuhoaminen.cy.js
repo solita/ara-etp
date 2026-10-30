@@ -9,6 +9,30 @@ const expiredEtWithoutValvontaId = 6;
 const signedEtThatWillNotBeTouched1 = 1;
 const signedEtThatWillNotBeTouchedId2 = 4;
 
+// The seed data's valvonta of energiatodistus 7 ages over time and would
+// eventually pass the two year limit after which the todistus is destroyed
+// instead of being marked as vanhentunut. Create a fresh toimenpide as
+// paakayttaja so that the valvonta is always recent.
+const createRecentValvontaToimenpide = () => {
+  cy.request({
+    method: 'POST',
+    url: `${backendUrl}/api/private/valvonta/oikeellisuus/${expiredEtWithValvontaId}/toimenpiteet`,
+    headers: paakayttajaHeaders,
+    body: {
+      // 4 = rfi-reply: a draft toimenpide, which does not call ASHA or send email
+      'type-id': 4,
+      'deadline-date': null,
+      'template-id': null,
+      description: 'Recent toimenpide created by the e2e test',
+      virheet: [],
+      'severity-id': null,
+      tiedoksi: []
+    }
+  }).then(response => {
+    expect(response.status).to.eq(201);
+  });
+};
+
 const runExpirationOfTodistukset = () => {
   cy.request(
     'POST',
@@ -23,6 +47,7 @@ const runExpirationOfTodistukset = () => {
 context('Laatija', () => {
   beforeEach(() => {
     cy.resetDb();
+    createRecentValvontaToimenpide();
     cy.intercept(/\/api\/private/, req => {
       req.headers = { ...req.headers, ...FIXTURES.headers };
     });
@@ -96,6 +121,7 @@ context('Laatija', () => {
 context('Paakayttaja', () => {
   beforeEach(() => {
     cy.resetDb();
+    createRecentValvontaToimenpide();
     cy.intercept(/\/api\/private/, req => {
       req.headers = { ...req.headers, ...paakayttajaHeaders };
     });
@@ -166,6 +192,7 @@ context('Paakayttaja', () => {
 context('Public', () => {
   beforeEach(() => {
     cy.resetDb();
+    createRecentValvontaToimenpide();
   });
 
   describe('when destroying expired energiatodistukset', () => {
