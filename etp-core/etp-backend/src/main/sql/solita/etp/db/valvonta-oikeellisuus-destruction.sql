@@ -1,17 +1,24 @@
 -- name: select-expired-oikeellisuuden-valvonta-ids
-with toimenpiteet_with_latest_publish_time as (
+with toimenpiteet_with_latest_times as (
     select
         id,
         energiatodistus_id,
+        max(create_time) over (
+            partition by energiatodistus_id
+        ) as latest_create_time,
         max(publish_time) over (
             partition by energiatodistus_id
         ) as latest_publish_time
     from vo_toimenpide
 )
 select id as "vo-toimenpide-id", energiatodistus_id as "energiatodistus-id"
-from toimenpiteet_with_latest_publish_time
-where latest_publish_time < (
-    (now() at time zone 'Europe/Helsinki')::date - interval '2 years');
+from toimenpiteet_with_latest_times
+where (latest_create_time < (
+           (now() at time zone 'Europe/Helsinki')::date - interval '2 years')
+       or latest_create_time is null)
+  and (latest_publish_time < (
+           (now() at time zone 'Europe/Helsinki')::date - interval '2 years')
+       or latest_publish_time is null);
 
 -- name: select-linked-liite-ids
 select id as "liite-id", contenttype
@@ -117,5 +124,7 @@ set
     severity_id = null,
     deleted = true
 where id = :vo-toimenpide-id;
+
+
 
 

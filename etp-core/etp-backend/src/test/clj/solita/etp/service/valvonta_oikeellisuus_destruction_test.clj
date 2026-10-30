@@ -129,7 +129,8 @@
   (jdbc/execute!
     ts/*db*
     ["UPDATE vo_toimenpide
-      SET publish_time = now() - interval '2 years' - interval '2 days'
+      SET create_time = now() - interval '2 years' - interval '2 days',
+          publish_time = now() - interval '2 years' - interval '2 days'
       WHERE id = ?"
      valvonta-id]))
 
@@ -157,6 +158,21 @@
                          expired-energiatodistus-ids))
                (set expired-valvonta-rows))
             "find-expired-oikeellisuuden-valvonta-ids returns the correct expired valvonta ids"))))
+
+      (t/deftest find-expired-oikeellisuuden-valvonta-ids-with-recent-draft-test
+        (let [{[published-valvonta-id] :valvonta-ids
+               [energiatodistus-id] :energiatodistus-ids
+               paakayttaja-id :paakayttaja-id} (test-data-set)
+              {draft-valvonta-id :id} (valvonta-oikeellisuus-service/add-toimenpide!
+                                        ts/*db*
+                                        ts/*aws-s3-client*
+                                        (test-whoami/paakayttaja paakayttaja-id)
+                                        energiatodistus-id
+                                        test-report)]
+          (make-valvonta-expired! published-valvonta-id)
+          (t/is (empty? (service/find-expired-oikeellisuuden-valvonta-ids ts/*db*))
+                (str "Neither the old published report nor the recent draft "
+                     "should be selected for destruction (draft id " draft-valvonta-id ")"))))
 
 (defn- find-linked-vo-virhe [vo-toimenpide-id]
   (jdbc/query
