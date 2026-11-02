@@ -195,45 +195,42 @@
 
 (defn- destroy-expired-vo-toimenpiteet!
   [db aws-s3-client vo-toimenpide-rows]
-  (let [energiatodistus-id (:energiatodistus-id (first vo-toimenpide-rows))]
-    (valvonta-oikeellisuus-destruction-db/lock-energiatodistus-and-vo-toimenpiteet!
-      db
-      {:energiatodistus-id energiatodistus-id})
-    (let [expired-vo-toimenpide-rows
-          (filter
-            #(= energiatodistus-id (:energiatodistus-id %))
-            (find-expired-oikeellisuuden-valvonta-ids db))]
-      (if (seq expired-vo-toimenpide-rows)
-        (let [handlers-in-order
-              [destroy-vo-virhe-table!
-               destroy-liite-table!
-               destroy-vo-tiedoksi-table!
-               destroy-vastaanottaja-table!
-               destroy-viesti-reader-table!
-               destroy-viesti-table!
-               destroy-viesti-liite-table!
-               destroy-viestiketju-table!
-               anonymize-and-destroy-vo-toimenpide-table!]]
-          (add-counts
-            (destroy-vo-note-table!
-              {:db db}
-              {:energiatodistus-id energiatodistus-id})
-            (reduce
-              (fn [counts {:keys [vo-toimenpide-id]}]
-                (add-counts
-                  counts
-                  (reduce
-                    (fn [counts handler]
-                      (add-counts
-                        counts
-                        (handler {:db db :aws-s3-client aws-s3-client}
-                                 {:vo-toimenpide-id vo-toimenpide-id
-                                  :energiatodistus-id energiatodistus-id})))
-                    empty-destruction-counts
-                    handlers-in-order)))
-              empty-destruction-counts
-              expired-vo-toimenpide-rows)))
-        empty-destruction-counts))))
+  (let [energiatodistus-id (:energiatodistus-id (first vo-toimenpide-rows))
+        expired-vo-toimenpide-rows
+        (filter
+          #(= energiatodistus-id (:energiatodistus-id %))
+          (find-expired-oikeellisuuden-valvonta-ids db))]
+    (if (seq expired-vo-toimenpide-rows)
+      (let [handlers-in-order
+            [destroy-vo-virhe-table!
+             destroy-liite-table!
+             destroy-vo-tiedoksi-table!
+             destroy-vastaanottaja-table!
+             destroy-viesti-reader-table!
+             destroy-viesti-table!
+             destroy-viesti-liite-table!
+             destroy-viestiketju-table!
+             anonymize-and-destroy-vo-toimenpide-table!]]
+        (add-counts
+          (destroy-vo-note-table!
+            {:db db}
+            {:energiatodistus-id energiatodistus-id})
+          (reduce
+            (fn [counts {:keys [vo-toimenpide-id]}]
+              (add-counts
+                counts
+                (reduce
+                  (fn [counts handler]
+                    (add-counts
+                      counts
+                      (handler {:db db :aws-s3-client aws-s3-client}
+                               {:vo-toimenpide-id vo-toimenpide-id
+                                :energiatodistus-id energiatodistus-id})))
+                  empty-destruction-counts
+                  handlers-in-order)))
+            empty-destruction-counts
+            expired-vo-toimenpide-rows)))
+      empty-destruction-counts)))
 
 (defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client whoami]
   (check-whoami whoami)
