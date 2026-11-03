@@ -23,6 +23,7 @@ services:
       SYSTEM_SIGNATURE_SESSION_TIMEOUT_MINUTES: 52560000
       KMS_PORT: 8080
       KMS_HOST: kms
+      RELAXED_REVOCATION_VERIFICATION: true
     env_file:
       - ./backend.env
     ports:
