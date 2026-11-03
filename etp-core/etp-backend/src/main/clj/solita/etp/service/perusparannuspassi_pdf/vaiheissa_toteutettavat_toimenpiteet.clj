@@ -154,7 +154,7 @@
       (let [{:keys [vaihe e-luku e-luokka]} vaihe-data
             title-text (format (l :vaiheessa-n-toteutettavat-toimenpiteet) vaihe-nro)
             parts (str/split title-text (re-pattern (str "(?<=" vaihe-nro ")")))]
-        {:header [:div {:class "page-header"}
+        {:header [:div {:class "page-header ppp-vaihe-page-header"}
                   [:h2 {:class "page-title vaihe-title ppp-vaihe-page-title"}
                    (if (> (count parts) 1)
                      (first parts)
