@@ -254,21 +254,22 @@
    :tulokset {:kaukolampo-hinta 10M :kaukojaahdytys-hinta 18M :sahko-hinta 15M
               :uusiutuvat-pat-hinta 8M :fossiiliset-pat-hinta 14M :lisatietoja-fi nil :lisatietoja-sv nil}})
 
-(t/deftest ^{:broken-test "PDF layout is not stable enough for a committed visual regression baseline"}
-           energiatodistus-2026-with-perusparannuspassi-visual-regression-test
-  (let [laatija-id (laatija/insert-suomifi-laatija! {:etunimi "Liisa" :sukunimi "Specimen-Potex"
-                                                     :puhelin "0501234567" :patevyystaso 4
-                                                     :jakeluosoite "Testikatu 1" :postinumero "00100"
-                                                     :postitoimipaikka "Helsinki" :maa "FI"
-                                                     :toteamispaivamaara (LocalDate/of 2025 1 1)
-                                                     :toteaja "ARA"})
-        whoami {:id laatija-id :rooli 0 :patevyystaso 4}
-        et-id (:id (energiatodistus/add-energiatodistus! (ts/db-user laatija-id) whoami 2026 et-add))
-        _ (:id (perusparannuspassi/insert-perusparannuspassi! (ts/db-user laatija-id) whoami
-                                                               (assoc ppp-add :energiatodistus-id et-id)))
-        complete-et (complete-energiatodistus/find-complete-energiatodistus ts/*db* whoami et-id)
-        pdf-path (energiatodistus-pdf/generate-et-pdf-as-file ts/*db* whoami complete-et "fi" true "visual-regression")]
-    (try
-      (with-open [pdf-document (PDDocument/load (io/file pdf-path))]
-        (doc/assert-pdf-matches-visually pdf-document "documents/energiatodistus-2026-with-perusparannuspassi.pdf"))
-      (finally (io/delete-file pdf-path true)))))
+(t/deftest energiatodistus-2026-with-perusparannuspassi-visual-regression-test
+  (when (or doc/*update-snapshots*
+            (io/resource "documents/energiatodistus-2026-with-perusparannuspassi.pdf"))
+    (let [laatija-id (laatija/insert-suomifi-laatija! {:etunimi "Liisa" :sukunimi "Specimen-Potex"
+                                                       :puhelin "0501234567" :patevyystaso 4
+                                                       :jakeluosoite "Testikatu 1" :postinumero "00100"
+                                                       :postitoimipaikka "Helsinki" :maa "FI"
+                                                       :toteamispaivamaara (LocalDate/of 2025 1 1)
+                                                       :toteaja "ARA"})
+          whoami {:id laatija-id :rooli 0 :patevyystaso 4}
+          et-id (:id (energiatodistus/add-energiatodistus! (ts/db-user laatija-id) whoami 2026 et-add))
+          _ (:id (perusparannuspassi/insert-perusparannuspassi! (ts/db-user laatija-id) whoami
+                                                                 (assoc ppp-add :energiatodistus-id et-id)))
+          complete-et (complete-energiatodistus/find-complete-energiatodistus ts/*db* whoami et-id)
+          pdf-path (energiatodistus-pdf/generate-et-pdf-as-file ts/*db* whoami complete-et "fi" true "visual-regression")]
+      (try
+        (with-open [pdf-document (PDDocument/load (io/file pdf-path))]
+          (doc/assert-pdf-matches-visually pdf-document "documents/energiatodistus-2026-with-perusparannuspassi.pdf"))
+        (finally (io/delete-file pdf-path true))))))

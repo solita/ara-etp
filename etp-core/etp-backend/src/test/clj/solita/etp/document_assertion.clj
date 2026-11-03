@@ -11,6 +11,9 @@
 
 (def original-html->pdf pdf/html->pdf)
 (def html-base-template-path "documents/base-template.html")
+;; Run tests with `clojure -J-DUPDATE_PDF_SNAPSHOTS=true ...` to regenerate visual regression baselines.
+(def ^:dynamic *update-snapshots*
+  (Boolean/getBoolean "UPDATE_PDF_SNAPSHOTS"))
 
 (defn html->pdf-with-update
   "Wraps solita.etp.service.pdf/html->pdf so that the rendered html document is written to a
@@ -62,8 +65,10 @@
     (.save pdf-doc target-path)))
 
 (defn assert-pdf-matches-visually
-  "Checks that the given pdf document object matches visually to the baseline-pdf at the given resource path"
+  "Checks that the given PDF matches visually to the baseline, optionally updating it first."
   [^PDDocument pdf-under-testing baseline-pdf-resource-path]
+  (when *update-snapshots*
+    (save-new-snapshot pdf-under-testing baseline-pdf-resource-path))
   (let [baseline-pdf (-> baseline-pdf-resource-path
                          io/resource
                          io/input-stream
@@ -98,4 +103,3 @@
         (io/make-parents debug-image-path)
         (with-open [output (FileOutputStream. debug-image-path)]
           (.write output rendered-image))))))
-
