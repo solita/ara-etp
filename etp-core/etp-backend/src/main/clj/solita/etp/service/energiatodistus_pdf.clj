@@ -23,6 +23,8 @@
            (java.time Clock LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
            (java.util Calendar GregorianCalendar)
+           (org.apache.pdfbox Loader)
+           (org.apache.pdfbox.pdfwriter.compress CompressParameters)
            (org.apache.pdfbox.pdmodel PDDocument
                                       PDPageContentStream
                                       PDPageContentStream$AppendMode)
@@ -639,22 +641,32 @@
     (io/copy is xout)
     (.toByteArray xout)))
 
+(defn- modify-pdf-file!
+  "Load the PDF at pdf-path, apply (f document) and write the result back to
+  the same path. PDFBox 3 reads the source file lazily, so saving over it while
+  the document is open corrupts the output. Instead save to memory and write
+  the file after the document has been closed."
+  [pdf-path f]
+  (let [baos (ByteArrayOutputStream.)]
+    (with-open [doc (Loader/loadPDF (File. ^String pdf-path))]
+      (f doc)
+      (.save doc baos CompressParameters/NO_COMPRESSION))
+    (with-open [out (io/output-stream pdf-path)]
+      (.write out (.toByteArray baos)))))
+
 (defn add-image [pdf-path image-path page
                  ^Float x ^Float y
                  ^Float width ^Float height]
-  (with-open
-   [doc (PDDocument/load (io/file pdf-path))
-    contents (PDPageContentStream. doc
-                                   (.getPage doc page)
-                                   PDPageContentStream$AppendMode/APPEND
-                                   true)]
-    (let
-     [image-bytes (-> image-path io/resource io/input-stream input-stream->bytes)
-      image (PDImageXObject/createFromByteArray doc image-bytes image-path)]
-
-      (.drawImage contents ^PDImageXObject image x y width height)
-      (.close contents)
-      (.save doc pdf-path))))
+  (modify-pdf-file!
+    pdf-path
+    (fn [doc]
+      (with-open [contents (PDPageContentStream. doc
+                                                 (.getPage doc page)
+                                                 PDPageContentStream$AppendMode/APPEND
+                                                 true)]
+        (let [image-bytes (-> image-path io/resource io/input-stream input-stream->bytes)
+              image (PDImageXObject/createFromByteArray doc image-bytes image-path)]
+          (.drawImage contents ^PDImageXObject image x y width height))))))
 
 (def e-luokka-y-coords-2013 (zipmap ["A" "B" "C" "D" "E" "F" "G"] (iterate #(- % 21) 487)))
 (def e-luokka-y-coords-2018 (zipmap ["A" "B" "C" "D" "E" "F" "G"] (iterate #(- % 21) 457)))
@@ -678,7 +690,7 @@
     ;; The XMP metadata can contain multiple schemas, each with its own properties.
     ;; We need items in three different schemas, so below we are creating
     ;; and filling each of those separately.
-    (doto (.createAndAddPFAIdentificationSchema xmp-metadata)
+    (doto (.createAndAddPDFAIdentificationSchema xmp-metadata)
       ;; Mark as PDF/A-2B conformant
       ;; 2 refers to a version of the PDF/A specification. LibreOffice
       ;; produces files that claim to conform to part 2, so we retain
@@ -708,26 +720,26 @@
   (-> clock ZonedDateTime/now GregorianCalendar/from))
 
 (defn- set-metadata [^String pdf-path ^String author laatija-allekirjoitus-id ^String title]
-  (with-open [document (PDDocument/load (File. pdf-path))]
-    (let [creation-date (clock->calendar common-time/clock)
-          metadata (PDMetadata. document)
-          catalog (.getDocumentCatalog document)
-          xmp-metadata-bytes (-> (make-xmp-metadata author title creation-date) xmp-metadata->bytearray)]
-      (.importXMPMetadata metadata xmp-metadata-bytes)
-      (.setMetadata catalog metadata)
+  (modify-pdf-file!
+    pdf-path
+    (fn [document]
+      (let [creation-date (clock->calendar common-time/clock)
+            metadata (PDMetadata. document)
+            catalog (.getDocumentCatalog document)
+            xmp-metadata-bytes (-> (make-xmp-metadata author title creation-date) xmp-metadata->bytearray)]
+        (.importXMPMetadata metadata xmp-metadata-bytes)
+        (.setMetadata catalog metadata)
 
-      (doto (.getDocumentInformation document)
-        (.setTitle title)
-        (.setAuthor author)
-        (.setCustomMetadataValue "laatija-allekirjoitus-id", laatija-allekirjoitus-id)
-        (.setSubject nil)
-        (.setKeywords nil)
-        (.setCreator nil)
-        (.setProducer nil)
-        (.setCreationDate creation-date)
-        (.setModificationDate creation-date)))
-
-    (.save document pdf-path)))
+        (doto (.getDocumentInformation document)
+          (.setTitle title)
+          (.setAuthor author)
+          (.setCustomMetadataValue "laatija-allekirjoitus-id", laatija-allekirjoitus-id)
+          (.setSubject nil)
+          (.setKeywords nil)
+          (.setCreator nil)
+          (.setProducer nil)
+          (.setCreationDate creation-date)
+          (.setModificationDate creation-date))))))
 
 ;; Set as dynamic so that it can be mocked in tests.
 (defn ^:dynamic generate-et-2013-2018-pdf-as-file [complete-energiatodistus kieli draft? laatija-allekirjoitus-id]

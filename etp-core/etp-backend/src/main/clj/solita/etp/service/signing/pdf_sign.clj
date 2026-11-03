@@ -16,7 +16,7 @@
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
            (eu.europa.esig.dss.service.tsp OnlineTSPSource)
            (eu.europa.esig.dss.spi DSSUtils)
-           (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
+           (eu.europa.esig.dss.spi.validation CommonCertificateVerifier RevocationDataVerifier)
            (eu.europa.esig.dss.spi.x509 CertificateSource CommonCertificateSource CommonTrustedCertificateSource)
            (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
            (java.io ByteArrayInputStream ByteArrayOutputStream File InputStream ObjectInputStream ObjectOutputStream)
@@ -222,6 +222,29 @@
         signed-pdf-t-level (-> service (.extendDocument signed-pdf-b-level extend-parameters))]
     (.openStream signed-pdf-t-level)))
 
+(def ^:private ocsp-signing-eku-oid "1.3.6.1.5.5.7.3.9")
+(defn- ocsp-signing-certificate? [^CertificateToken cert]
+  (try
+    (boolean (some #{ocsp-signing-eku-oid}
+                   (.getExtendedKeyUsage (.getCertificate cert))))
+    (catch Exception _ false)))
+(defn- lenient-revocation-data-verifier
+  "DSS 6.2 started to require that OCSP responder certificates have revocation
+  data of their own (or the ocsp-nocheck extension). DSS 6.1 did not, so to keep
+  the behaviour we accept certificates with the OCSP signing extended key usage
+  without further revocation checks. Everything else is delegated to DSS and
+  configured with DSS defaults."
+  []
+  (let [default (RevocationDataVerifier/createDefaultRevocationDataVerifier)
+        verifier (proxy [RevocationDataVerifier] []
+                   (isCertificateValid [cert control-time]
+                     (or (ocsp-signing-certificate? cert)
+                         (proxy-super isCertificateValid cert control-time))))]
+    (doseq [^java.lang.reflect.Field field (.getDeclaredFields RevocationDataVerifier)
+            :when (not (java.lang.reflect.Modifier/isStatic (.getModifiers field)))]
+      (.setAccessible field true)
+      (.set field verifier (.get field default)))
+    verifier))
 (defn t-level->lt-level
   "Given a pdf signed to PAdES_BASELINE_T level augments it to PAdES-BASELINE_LT level.
 
@@ -239,6 +262,7 @@
         cert-verifier (get-certificate-verifier-with-tsp-issuer)
         service (doto (PAdESService. (doto cert-verifier
                                        (.setOcspSource ocsp-source)
+                                       (.setRevocationDataVerifier (lenient-revocation-data-verifier))
                                        ;; We could trust DVV's root cert explicitly instead of this.
                                        ;; Like this, this is the same behaviour as before though (can sign with any cert).
                                        (.setCheckRevocationForUntrustedChains true)))

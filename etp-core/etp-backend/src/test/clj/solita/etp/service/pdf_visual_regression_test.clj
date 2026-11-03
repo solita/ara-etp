@@ -9,6 +9,7 @@
             [solita.etp.test-data.laatija :as laatija]
             [solita.etp.test-system :as ts])
   (:import (java.time LocalDate)
+           (org.apache.pdfbox Loader)
            (org.apache.pdfbox.pdmodel PDDocument)))
 
 (t/use-fixtures :each ts/fixture)
@@ -270,6 +271,6 @@
           complete-et (complete-energiatodistus/find-complete-energiatodistus ts/*db* whoami et-id)
           pdf-path (energiatodistus-pdf/generate-et-pdf-as-file ts/*db* whoami complete-et "fi" true "visual-regression")]
       (try
-        (with-open [pdf-document (PDDocument/load (io/file pdf-path))]
+        (with-open [pdf-document (Loader/loadPDF (io/file pdf-path))]
           (doc/assert-pdf-matches-visually pdf-document "documents/energiatodistus-2026-with-perusparannuspassi.pdf"))
         (finally (io/delete-file pdf-path true))))))

@@ -16,6 +16,8 @@
     [solita.etp.test-system :as ts])
   (:import (java.io InputStream)
            (java.time Instant ZoneId)
+           (org.apache.pdfbox Loader)
+           (org.apache.pdfbox.io RandomAccessReadBuffer)
            (org.apache.pdfbox.pdmodel PDDocument)))
 
 (t/use-fixtures :each ts/fixture)
@@ -249,7 +251,7 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
                                        :now            (time/now)
                                        :id             id})
             (with-open [^InputStream pdf-is (pdf-service/find-energiatodistus-pdf db ts/*aws-s3-client* whoami id language-code)
-                        pdf (PDDocument/load pdf-is)]
+                        pdf (Loader/loadPDF (RandomAccessReadBuffer. pdf-is))]
               (let [signatures (.getSignatureDictionaries pdf)]
                 (t/is (not (nil? signatures)))))))))))
 

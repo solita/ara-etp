@@ -5,6 +5,7 @@
             [solita.etp.service.pdf :as pdf])
   (:import (java.io ByteArrayInputStream ByteArrayOutputStream)
            (java.nio.file Files)
+           (org.apache.pdfbox Loader)
            (org.apache.pdfbox.pdmodel PDDocument)
            (org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure
             PDStructureElement
@@ -100,8 +101,7 @@
     (pdf/html->pdf html output-stream)
     (with-open [file-output (io/output-stream output-file)]
       (.write file-output (.toByteArray output-stream)))
-    (with-open [document (PDDocument/load
-                           (ByteArrayInputStream. (.toByteArray output-stream)))]
+    (with-open [document (Loader/loadPDF (.toByteArray output-stream))]
       (let [root (.getStructureTreeRoot (.getDocumentCatalog document))
             elements (when root (structure-elements root))]
         {:html-file (.getPath html-file)
@@ -142,9 +142,9 @@
       (doseq [[variant expected-heading-types]
               [[:current             ["H1" "H2" "H3" "H3"]]
                [:without-svg         ["H1" "H2" "H3" "H3"]]
-               [:without-positioning ["H1" "H2" "H3" "H3" "H2"]]
+               [:without-positioning ["H1" "H2" "H3" "H2" "H3"]]
                [:without-line-break   ["H1" "H2" "H3" "H3"]]
-               [:generic-header      ["H1" "H2" "H3" "H3" "H2"]]]]
+               [:generic-header      ["H1" "H2" "H3" "H2" "H3"]]]]
         (let [result (render-case! output-directory variant)]
           (println (pr-str (assoc result :variant variant)))
           (t/is (:tagged? result))
@@ -161,5 +161,5 @@
         (t/is (= ["H1" "H2" "H3" "H3"]
                  (:heading-types current)))
         ;; This is the control case: removing position: relative restores the H2.
-        (t/is (= ["H1" "H2" "H3" "H3" "H2"]
+        (t/is (= ["H1" "H2" "H3" "H2" "H3"]
                  (:heading-types without-positioning)))))))
