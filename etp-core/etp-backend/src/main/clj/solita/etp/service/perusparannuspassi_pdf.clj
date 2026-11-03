@@ -57,8 +57,10 @@
    - pages: A sequence of page data maps, each containing:
      - :title - The title to display in the header
      - :title-class - Optional additional CSS class for the page title
-     :title-level - Optional heading level for the page title, defaults to h1
+     - :title-level - Optional heading level for the page title, defaults to h1
+     - :header - Optional custom Hiccup data for the page header
      - :content - Hiccup data for the page body
+     - :content-class - Optional additional CSS class for the page content
    - ppp-tunnus: The perusparannuspassi identifier (e.g., \"1234567\")
 
    Returns: hiccup data for the complete HTML document."
