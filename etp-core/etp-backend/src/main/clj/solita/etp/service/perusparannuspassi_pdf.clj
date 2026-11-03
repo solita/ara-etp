@@ -30,10 +30,11 @@
 (defn- styles []
   (slurp (io/resource "perusparannuspassi.css")))
 
-(defn- page-header [title title-class]
+(defn- page-header [title title-class title-level]
   [:div {:class "page-header"}
-   [:h1 (cond-> {:class "page-title"}
-          title-class (update :class str " " title-class))
+   [title-level
+    (cond-> {:class "page-title"}
+      title-class (update :class str " " title-class))
     title]])
 
 (defn- page-footer [ppp-tunnus page-num total-pages]
@@ -41,43 +42,47 @@
    (str "Perusparannuspassin tunnus: " ppp-tunnus " | " page-num "/" total-pages)])
 
 (defn- render-page [page-data page-num total-pages ppp-tunnus]
-  (let [{:keys [title content header title-class content-class]} page-data]
+  (let [{:keys [title content header title-class title-level content-class]} page-data]
     [:div {:class "page"}
-     (or header (page-header title title-class))
+     (or header (page-header title title-class (or title-level :h1)))
      [:div (cond-> {:class "page-content"}
              content-class (update :class str " " content-class))
       content]
      (page-footer ppp-tunnus page-num total-pages)]))
 
-(defn- generate-document-html
-  "Generate complete HTML document for perusparannuspassi PDF.
+(defn- generate-document-hiccup
+  "Generate hiccup for the complete perusparannuspassi document.
 
    Parameters:
    - pages: A sequence of page data maps, each containing:
      - :title - The title to display in the header
-     - :title-class - Optional additional CSS class for the page title h1
+     - :title-class - Optional additional CSS class for the page title
+     - :title-level - Optional heading level for the page title, defaults to h1
+     - :header - Optional custom Hiccup data for the page header
      - :content - Hiccup data for the page body
+     - :content-class - Optional additional CSS class for the page content
    - ppp-tunnus: The perusparannuspassi identifier (e.g., \"1234567\")
 
-   Returns: HTML string ready for PDF conversion."
+   Returns: hiccup data for the complete HTML document."
   [pages ppp-tunnus l]
   (let [total-pages (count pages)
         pages-html (map-indexed
                      (fn [idx page-data]
                        (render-page page-data (inc idx) total-pages ppp-tunnus))
                      pages)]
-    (hiccup/html
-      [:html
-       [:head
-        [:meta {:charset "UTF-8"}]
-        [:meta {:name "subject" :content (l :perusparannuspassi)}]
-        [:meta {:name "description" :content (l :perusparannuspassi)}]
-        [:title (l :perusparannuspassi)]
-        [:style (styles)]]
-       [:body
-        pages-html]])))
+    [:html
+     [:head
+      [:meta {:charset "UTF-8"}]
+      [:meta {:name "subject" :content (l :perusparannuspassi)}]
+      [:meta {:name "description" :content (l :perusparannuspassi)}]
+      [:title (l :perusparannuspassi)]
+      [:style (styles)]]
+     [:body
+      pages-html]]))
 
-(defn- generate-perusparannuspassi-html [{:keys [perusparannuspassi kieli] :as params}]
+(defn generate-perusparannuspassi-hiccup
+  "Generate hiccup data for a complete perusparannuspassi document."
+  [{:keys [perusparannuspassi kieli] :as params}]
   (let [l (kieli loc/ppp-pdf-localization)
         ;; Generate vaihe pages, filtering out nil (vaiheet without data)
         vaihe-pages (->> (range 1 5)
@@ -95,19 +100,25 @@
                   (etusivu-laatija/etusivu-laatija params)]}]
                vaihe-pages
                [{:title (l :vaiheistuksen-yhteenveto)
+                 :title-level :h2
                  :title-class "vaiheistuksen-yhteenveto-title"
                  :content (vaiheistuksen-yhteenveto params)}
                 {:title (l :laskennan-taustatiedot-otsikko)
+                 :title-level :h2
                  :title-class "laskennan-taustatiedot-title"
                  :content
                  (into [:div]
                        (vals (laskennan-taustatiedot/generate-all-laskennan-taustatiedot params)))}
                 {:title "Lisätietoja"
+                 :title-level :h2
                  :title-class "lisatietoja-title"
                  :content
                  [:div
                   (lisatietoja/lisatietoja params)]}])]
-    (generate-document-html pages (:id perusparannuspassi) l)))
+    (generate-document-hiccup pages (:id perusparannuspassi) l)))
+
+(defn- generate-perusparannuspassi-html [params]
+  (hiccup/html (generate-perusparannuspassi-hiccup params)))
 
 (defn- generate-perusparannuspassi-ohtp-pdf
   "Use OpenHTMLToPDF to generate a PPP PDF, return as a byte array"

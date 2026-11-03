@@ -135,7 +135,18 @@ h2 {
 }
 
 h3 {
+    font-size: 13pt;
+    color: #2c5234;
+    line-height: 1.07;
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+}
+
+.etusivu-h3 {
     font-size: 12pt;
+    color: black;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
 }
 
 p {
@@ -492,10 +503,19 @@ dl.ppp-vaihe-energiankulutuksen-list dd.ppp-vaihe-energiankulutuksen-value {
     margin-top: -1px;
 }
 
-.ppp-vaihe-title-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: -10px;
+.ppp-vaihe-page-header {
+    position: relative;
+}
+
+.ppp-vaihe-page-title {
+    width: 152.7mm;
+    padding-left: 15.45mm;
+}
+
+.ppp-vaihe-title-arrow {
+    position: absolute;
+    top: 7mm;
+    left: 156mm;
 }
 
 .ppp-vaihe-cell {
@@ -556,16 +576,6 @@ dl.ppp-vaihe-energiankulutuksen-list dd.ppp-vaihe-energiankulutuksen-value {
     height: 97mm;
     white-space: pre-line;
     margin-top: -12px;
-}
-
-.ppp-vaihe-top-align {
-    vertical-align: top;
-}
-
-.ppp-vaihe-title-right {
-    padding-left: 20mm;
-    text-align: right;
-    vertical-align: middle;
 }
 
 .ppp-vaihe-bottom-align {
