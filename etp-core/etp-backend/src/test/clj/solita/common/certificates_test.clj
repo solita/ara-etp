@@ -18,7 +18,7 @@
              (certificates/with-begin-and-end test-cert-str-with-begin-and-end)))))
 
 (t/deftest pem-str->certificate
-  (t/is (thrown? org.bouncycastle.util.encoders.DecoderException
+  (t/is (thrown? java.io.IOException
                  (certificates/pem-str->certificate "nothing meaningful")))
   (t/is (instance? org.bouncycastle.cert.X509CertificateHolder test-cert)))
 

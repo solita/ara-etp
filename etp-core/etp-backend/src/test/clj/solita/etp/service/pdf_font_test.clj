@@ -13,6 +13,7 @@
             [solita.etp.test-system :as ts])
   (:import (java.io ByteArrayInputStream InputStream)
            (java.time LocalDate)
+           (org.apache.pdfbox Loader)
            (org.apache.pdfbox.pdmodel PDDocument PDResources)
            (org.apache.pdfbox.pdmodel.font PDFont)
            (org.apache.pdfbox.pdmodel.graphics.form PDFormXObject)))
@@ -80,8 +81,7 @@
       (into direct-fonts nested-fonts))))
 
 (defn- pdf-font-names [pdf-bytes]
-  (with-open [pdf-stream (ByteArrayInputStream. pdf-bytes)
-              document (PDDocument/load pdf-stream)]
+  (with-open [document (Loader/loadPDF pdf-bytes)]
     (->> (iterator-seq (.iterator (.getPages document)))
          (mapcat (fn [page]
                    (font-names-in-resources (.getResources page))))

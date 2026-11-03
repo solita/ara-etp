@@ -18,6 +18,7 @@
            (java.io InputStream)
            (java.time LocalDate)
            (java.util.regex Pattern)
+           (org.apache.pdfbox Loader)
            (org.apache.pdfbox.pdmodel PDDocument)
            (org.slf4j LoggerFactory)))
 
@@ -143,7 +144,7 @@
                (try
                  (with-open [^InputStream pdf-stream (io/input-stream pdf-path)]
                    (let [pdf-bytes (.readAllBytes pdf-stream)
-                         pdf-document (PDDocument/load pdf-bytes)]
+                         pdf-document (Loader/loadPDF pdf-bytes)]
                      (try
                        {:byte-count (alength pdf-bytes)
                         :page-count (.getNumberOfPages pdf-document)}
@@ -166,7 +167,7 @@
                          (ppp-pdf-service/find-perusparannuspassi-pdf ts/*db* whoami ppp-id "fi")]
                (t/is (some? pdf-stream) "Perusparannuspassi PDF stream should be returned")
                (let [pdf-bytes (.readAllBytes pdf-stream)
-                     pdf-document (PDDocument/load pdf-bytes)]
+                     pdf-document (Loader/loadPDF pdf-bytes)]
                  (try
                    {:byte-count (alength pdf-bytes)
                     :page-count (.getNumberOfPages pdf-document)}

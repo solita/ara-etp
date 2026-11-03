@@ -8,6 +8,7 @@
             [solita.etp.test-system :as ts])
   (:import (java.io InputStream)
            (java.time LocalDate)
+           (org.apache.pdfbox Loader)
            (org.apache.pdfbox.pdmodel PDDocument)))
 
 (t/use-fixtures :each ts/fixture)
@@ -59,7 +60,7 @@
               "PDF generation should return an InputStream")
         ;; Then: InputStream contains valid PDF data that PDDocument can load
         (let [pdf-bytes (.readAllBytes result)
-              document (PDDocument/load pdf-bytes)]
+              document (Loader/loadPDF pdf-bytes)]
           (try
             (t/is (pos? (.getNumberOfPages document))
                   "Generated PDF should have at least one page")
@@ -76,7 +77,7 @@
         (t/is (some? result)
               "PDF generation should succeed with both tayttaa-*-vaatimukset true")
         (let [pdf-bytes (.readAllBytes result)
-              document (PDDocument/load pdf-bytes)]
+              document (Loader/loadPDF pdf-bytes)]
           (try
             (t/is (pos? (.getNumberOfPages document))
                   "Generated PDF should have pages")
@@ -93,7 +94,7 @@
         (t/is (some? result)
               "PDF generation should succeed even with downgrade")
         (let [pdf-bytes (.readAllBytes result)
-              document (PDDocument/load pdf-bytes)]
+              document (Loader/loadPDF pdf-bytes)]
           (try
             (t/is (pos? (.getNumberOfPages document))
                   "Downgraded PDF should still have pages")
@@ -126,7 +127,7 @@
         (t/is (some? result)
               "Multi-vaihe PPP-PDF generation should succeed")
         (let [pdf-bytes (.readAllBytes result)
-              document (PDDocument/load pdf-bytes)]
+              document (Loader/loadPDF pdf-bytes)]
           (try
             (t/is (>= (.getNumberOfPages document) 4)
                   "Multi-vaihe PDF should have at least etusivu + 3 vaihesivut")

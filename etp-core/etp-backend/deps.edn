@@ -37,11 +37,11 @@
              org.apache.poi/poi-ooxml                            {:mvn/version "5.4.1"
                                                                   :exclusions  [org.apache.commons/commons-lang3]}
 
-             org.bouncycastle/bcprov-jdk18on                     {:mvn/version "1.80.2"}
-             org.bouncycastle/bcpkix-jdk18on                     {:mvn/version "1.80.2"}
-             org.bouncycastle/bcutil-jdk18on                     {:mvn/version "1.80.2"}
-             org.bouncycastle/bcmail-jdk18on                     {:mvn/version "1.80.2"}
-             org.apache.pdfbox/pdfbox                            {:mvn/version "2.0.32"}
+             org.bouncycastle/bcprov-jdk18on                     {:mvn/version "1.86"}
+             org.bouncycastle/bcpkix-jdk18on                     {:mvn/version "1.86"}
+             org.bouncycastle/bcutil-jdk18on                     {:mvn/version "1.86"}
+             org.bouncycastle/bcmail-jdk18on                     {:mvn/version "1.86"}
+             org.apache.pdfbox/pdfbox                            {:mvn/version "3.0.8"}
              org.clojure/core.match                              {:mvn/version "1.1.0"}
              com.cognitect.aws/api                               {:mvn/version "0.8.774"}
              com.cognitect.aws/endpoints                         {:mvn/version "1.1.12.772"}
@@ -51,13 +51,13 @@
              commonmark-hiccup/commonmark-hiccup                 {:mvn/version "0.3.0"}
              hiccup/hiccup                                       {:mvn/version "1.0.5"}
 
-             com.openhtmltopdf/openhtmltopdf-pdfbox              {:mvn/version "1.0.10"}
-             com.openhtmltopdf/openhtmltopdf-slf4j               {:mvn/version "1.0.10"}
+             io.github.openhtmltopdf/openhtmltopdf-pdfbox       {:mvn/version "1.1.105"}
+             io.github.openhtmltopdf/openhtmltopdf-slf4j        {:mvn/version "1.1.105"}
 
              ;; Contains vulnerable version of batik-* libraries, exclude those
              ;; and add direct dependency to newer versions
-             com.openhtmltopdf/openhtmltopdf-svg-support
-             {:mvn/version "1.0.10"
+             io.github.openhtmltopdf/openhtmltopdf-svg-support
+             {:mvn/version "1.1.105"
               :exclusions  [org.apache.xmlgraphics/batik-transcoder
                             org.apache.xmlgraphics/batik-codec
                             org.apache.xmlgraphics/batik-ext]}
@@ -84,15 +84,17 @@
              com.sun.xml.ws/webservices-rt                       {:mvn/version "2.0.1"}
              kovacnica/clojure.network.ip                        {:mvn/version "0.1.5"
                                                                   :exclusions  [org.clojure/clojurescript]}
-             eu.europa.ec.joinup.sd-dss/dss-enumerations         {:mvn/version "6.1.1"}
-             eu.europa.ec.joinup.sd-dss/dss-model                {:mvn/version "6.1.1"}
-             eu.europa.ec.joinup.sd-dss/dss-service              {:mvn/version "6.1.1"}
-             eu.europa.ec.joinup.sd-dss/dss-pades                {:mvn/version "6.1.1"}
-             eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons {:mvn/version "6.1.1"}
-             eu.europa.ec.joinup.sd-dss/dss-utils                {:mvn/version "6.1.1"}
-             eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.1.1"}
-             eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.1.1"}
-             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.1.1"}
+             eu.europa.ec.joinup.sd-dss/dss-enumerations         {:mvn/version "6.5.1"}
+             eu.europa.ec.joinup.sd-dss/dss-model                {:mvn/version "6.5.1"}
+             eu.europa.ec.joinup.sd-dss/dss-service              {:mvn/version "6.5.1"}
+             eu.europa.ec.joinup.sd-dss/dss-pades                {:mvn/version "6.5.1"}
+             eu.europa.ec.joinup.sd-dss/dss-utils-apache-commons {:mvn/version "6.5.1"}
+             eu.europa.ec.joinup.sd-dss/dss-utils                {:mvn/version "6.5.1"}
+             eu.europa.ec.joinup.sd-dss/dss-validation           {:mvn/version "6.5.1"}
+             eu.europa.ec.joinup.sd-dss/dss-spi                  {:mvn/version "6.5.1"}
+             eu.europa.ec.joinup.sd-dss/dss-pades-pdfbox         {:mvn/version "6.5.1"}
+             eu.europa.ec.joinup.sd-dss/dss-cms-object           {:mvn/version "6.5.1"}
+             eu.europa.ec.joinup.sd-dss/dss-policy-jaxb          {:mvn/version "6.5.1"}
 
              ;; Pinned: CVE-2026-64607. dss-service depends on
              ;; httpclient5 version 5.3.1, which is
@@ -116,7 +118,7 @@
                                       prismatic/schema-generators    {:mvn/version "0.1.5"}
                                       ring/ring-mock                 {:mvn/version "0.6.2"}
                                       org.xmlunit/xmlunit-core       {:mvn/version "2.10.0"}
-                                      org.apache.pdfbox/pdfbox-tools {:mvn/version "2.0.32"}}
+                                      org.apache.pdfbox/pdfbox-tools {:mvn/version "3.0.8"}}
                         :jvm-opts    ["-Djava.awt.headless=true" "-DALLOW_PALVELUVAYLA_API=true" "-DSYSTEM_SIGNATURE_SESSION_TIMEOUT_MINUTES=52560000"]}
              :test     {:main-opts ["-m" "solita.etp.test-runner"]}
              :test-ci  {:main-opts ["-e" "(require 'solita.etp.test-runner) (solita.etp.test-runner/run-tests-with-junit-reporter-and-exit!)"]}
