@@ -1,9 +1,11 @@
 (ns solita.etp.service.watermark-pdf
   (:require [clojure.java.io :as io])
   (:import (java.util HashMap)
+           (java.nio.file Files Path)
+           (org.apache.pdfbox Loader)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            [org.apache.pdfbox.pdmodel PDDocument PDPage PDPageContentStream]
-           [org.apache.pdfbox.pdmodel.font PDType1Font]
+           [org.apache.pdfbox.pdmodel.font PDType1Font Standard14Fonts$FontName]
            [org.apache.pdfbox.pdmodel.common PDRectangle]
            [org.apache.pdfbox.pdmodel.graphics.state PDExtendedGraphicsState]
            [org.apache.pdfbox.util Matrix]
@@ -21,7 +23,7 @@
         media-box (.getMediaBox page)
         width (.getWidth media-box)
         height (.getHeight media-box)
-        font PDType1Font/HELVETICA_BOLD
+        font (PDType1Font. Standard14Fonts$FontName/HELVETICA_BOLD)
         opacity 0.23
         font-size 120]
 
@@ -84,9 +86,10 @@
     document))
 
 (defn add-watermark [pdf-path text]
-  (with-open [watermark (generate-watermark text)
+  (with-open [input (Loader/loadPDF (Files/readAllBytes (Path/of pdf-path (make-array String 0))))
+              watermark (generate-watermark text)
               overlay (doto (Overlay.)
-                        (.setInputFile pdf-path)
+                        (.setInputPDF input)
                         (.setDefaultOverlayPDF watermark)
                         (.setOverlayPosition Overlay$Position/FOREGROUND))
               result (.overlay overlay (HashMap.))]

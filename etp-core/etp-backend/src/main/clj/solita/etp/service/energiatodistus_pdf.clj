@@ -20,9 +20,11 @@
             [solita.etp.service.complete-perusparannuspassi :as complete-ppp-service]
             [solita.etp.service.toimenpide-ehdotus :as toimenpide-ehdotus-service])
   (:import (java.io ByteArrayOutputStream File)
+           (java.nio.file Files)
            (java.time Clock LocalDate ZoneId ZonedDateTime)
            (java.time.format DateTimeFormatter)
            (java.util Calendar GregorianCalendar)
+           (org.apache.pdfbox Loader)
            (org.apache.pdfbox.pdmodel PDDocument
                                       PDPageContentStream
                                       PDPageContentStream$AppendMode)
@@ -643,7 +645,7 @@
                  ^Float x ^Float y
                  ^Float width ^Float height]
   (with-open
-   [doc (PDDocument/load (io/file pdf-path))
+   [doc (Loader/loadPDF (Files/readAllBytes (.toPath (io/file pdf-path))))
     contents (PDPageContentStream. doc
                                    (.getPage doc page)
                                    PDPageContentStream$AppendMode/APPEND
@@ -678,7 +680,7 @@
     ;; The XMP metadata can contain multiple schemas, each with its own properties.
     ;; We need items in three different schemas, so below we are creating
     ;; and filling each of those separately.
-    (doto (.createAndAddPFAIdentificationSchema xmp-metadata)
+    (doto (.createAndAddPDFAIdentificationSchema xmp-metadata)
       ;; Mark as PDF/A-2B conformant
       ;; 2 refers to a version of the PDF/A specification. LibreOffice
       ;; produces files that claim to conform to part 2, so we retain
@@ -708,7 +710,7 @@
   (-> clock ZonedDateTime/now GregorianCalendar/from))
 
 (defn- set-metadata [^String pdf-path ^String author laatija-allekirjoitus-id ^String title]
-  (with-open [document (PDDocument/load (File. pdf-path))]
+  (with-open [document (Loader/loadPDF (Files/readAllBytes (.toPath (File. pdf-path))))]
     (let [creation-date (clock->calendar common-time/clock)
           metadata (PDMetadata. document)
           catalog (.getDocumentCatalog document)

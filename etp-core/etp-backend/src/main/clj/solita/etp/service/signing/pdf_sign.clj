@@ -5,7 +5,7 @@
     [solita.common.time :as time]
     [solita.etp.config :as config])
   (:import (eu.europa.esig.dss.alert ExceptionOnStatusAlert)
-           (eu.europa.esig.dss.cades.signature CMSSignedDocument)
+           (eu.europa.esig.dss.cms CMSSignedDocument)
            (eu.europa.esig.dss.enumerations DigestAlgorithm MimeType SignatureAlgorithm SignatureLevel)
            (eu.europa.esig.dss.model DSSMessageDigest FileDocument InMemoryDocument SignatureValue)
            (eu.europa.esig.dss.model.x509 CertificateToken)
@@ -16,7 +16,7 @@
            (eu.europa.esig.dss.service.ocsp OnlineOCSPSource)
            (eu.europa.esig.dss.service.tsp OnlineTSPSource)
            (eu.europa.esig.dss.spi DSSUtils)
-           (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
+           (eu.europa.esig.dss.spi.validation CommonCertificateVerifier RevocationDataVerifier)
            (eu.europa.esig.dss.spi.x509 CertificateSource CommonCertificateSource CommonTrustedCertificateSource)
            (eu.europa.esig.dss.spi.x509.tsp KeyEntityTSPSource)
            (java.io ByteArrayInputStream ByteArrayOutputStream File InputStream ObjectInputStream ObjectOutputStream)
@@ -175,6 +175,12 @@
      ;; might as well save the whole SignatureParameters object.
      :stateful-parameters (object->input-stream signature-parameters)}))
 
+(defn ^:dynamic get-revocation-data-verifier
+  "Overridden in tests: the test OCSP responder certificates lack the ocsp-nocheck extension,
+  which DSS >= 6.2 requires for responders that have their own revocation access points."
+  []
+  (RevocationDataVerifier/createDefaultRevocationDataVerifier))
+
 (defn get-certificate-verifier-with-tsp-issuer []
   (let [cert-verifier (CommonCertificateVerifier.)
         issuer-cert-pem config/dvv-timestamp-service-issuer-cert
@@ -241,7 +247,8 @@
                                        (.setOcspSource ocsp-source)
                                        ;; We could trust DVV's root cert explicitly instead of this.
                                        ;; Like this, this is the same behaviour as before though (can sign with any cert).
-                                       (.setCheckRevocationForUntrustedChains true)))
+                                       (.setCheckRevocationForUntrustedChains true)
+                                       (.setRevocationDataVerifier (get-revocation-data-verifier))))
                   (.setTspSource tsp-source))
         lt-level-document (-> service (.extendDocument signed-t-level-pdf parameters))]
     (.openStream lt-level-document)))

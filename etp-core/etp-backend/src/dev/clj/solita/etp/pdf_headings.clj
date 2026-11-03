@@ -1,7 +1,8 @@
 (ns solita.etp.pdf-headings
   "Development utility for inspecting the heading structure of tagged PDFs."
   (:require [clojure.java.io :as io])
-  (:import [org.apache.pdfbox.pdmodel PDDocument]
+  (:import [org.apache.pdfbox Loader]
+           [org.apache.pdfbox.pdmodel PDDocument]
            [org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure
             PDMarkedContentReference
             PDStructureElement
@@ -132,7 +133,7 @@
    page and matched to heading levels using the rendered font sizes. The
    content references are retained as the structural provenance."
   [pdf]
-  (with-open [document (PDDocument/load (io/file pdf))]
+  (with-open [document (Loader/loadPDF (io/file pdf))]
     (let [root (.getStructureTreeRoot (.getDocumentCatalog document))
           headings (->> (structure-elements root)
                         (filter heading?)

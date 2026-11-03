@@ -8,6 +8,7 @@
     [solita.common.time :as time]
     [solita.etp.config :as config]
     [solita.etp.service.energiatodistus :as energiatodistus-service]
+    [solita.etp.service.signing.pdf-sign :as pdf-sign]
     [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]
     [solita.etp.test-data.laatija :as test-data.laatija]
     [solita.etp.test-timeserver :as test-timeserver]
@@ -16,7 +17,9 @@
            (eu.europa.esig.dss.model InMemoryDocument)
            (eu.europa.esig.dss.pades PAdESSignatureParameters)
            (eu.europa.esig.dss.pades.validation PDFDocumentValidator)
+           (eu.europa.esig.dss.spi DSSUtils)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
+           (eu.europa.esig.dss.spi.x509 CertificateSource CommonTrustedCertificateSource)
            (eu.europa.esig.dss.validation SignedDocumentValidator)
            (java.io BufferedInputStream File FileInputStream ObjectInputStream)
            (java.time Clock Duration ZoneId)))
@@ -294,7 +297,12 @@
 
 (defn lt-level? [^BufferedInputStream document-stream]
   (let [document (InMemoryDocument. document-stream)
-        cert-verifier (CommonCertificateVerifier.)
+        test-root-cert (-> (slurp "../docker/ocsp-test-pki/pki-root/ca.crt") DSSUtils/convertToDER DSSUtils/loadCertificate)
+        cert-verifier (doto (CommonCertificateVerifier.)
+                        (.setRevocationDataVerifier (pdf-sign/get-revocation-data-verifier))
+                        (.addTrustedCertSources (into-array CertificateSource
+                                                            [(doto (CommonTrustedCertificateSource.)
+                                                               (.addCertificate test-root-cert))])))
         document-validator (doto (PDFDocumentValidator/fromDocument document)
                              (.setCertificateVerifier cert-verifier))
         reports (-> document-validator .validateDocument)
