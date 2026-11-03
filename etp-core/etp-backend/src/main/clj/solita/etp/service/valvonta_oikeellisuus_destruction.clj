@@ -188,7 +188,7 @@
 
 ;; ------------------------------
 
-(defn- check-whoami [whoami]
+(defn- assert-whoami! [whoami]
   (when-not (and (rooli-service/system? whoami)
                  (= (:id whoami) (kayttaja-service/system-kayttaja :valvonta-oikeellisuus-expiration)))
     (exception/throw-forbidden! (str "Can not run destruction of expired oikeellisuuden valvonta as whoami (id: " (:id whoami) ") (rooli: " (:rooli whoami) ")"))))
@@ -233,7 +233,7 @@
       empty-destruction-counts)))
 
 (defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client whoami]
-  (check-whoami whoami)
+  (assert-whoami! whoami)
   (let [expired-vo-toimenpide-rows (find-expired-oikeellisuuden-valvonta-ids db)
         expired-vo-toimenpiteet-by-energiatodistus
         (group-by :energiatodistus-id expired-vo-toimenpide-rows)
