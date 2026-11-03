@@ -1,9 +1,10 @@
 (ns solita.etp.service.watermark-pdf
   (:require [clojure.java.io :as io])
   (:import (java.util HashMap)
+           (org.apache.pdfbox.pdfwriter.compress CompressParameters)
            (org.apache.pdfbox.multipdf Overlay Overlay$Position)
            [org.apache.pdfbox.pdmodel PDDocument PDPage PDPageContentStream]
-           [org.apache.pdfbox.pdmodel.font PDType1Font]
+           [org.apache.pdfbox.pdmodel.font PDType1Font Standard14Fonts$FontName]
            [org.apache.pdfbox.pdmodel.common PDRectangle]
            [org.apache.pdfbox.pdmodel.graphics.state PDExtendedGraphicsState]
            [org.apache.pdfbox.util Matrix]
@@ -21,7 +22,7 @@
         media-box (.getMediaBox page)
         width (.getWidth media-box)
         height (.getHeight media-box)
-        font PDType1Font/HELVETICA_BOLD
+        font (PDType1Font. Standard14Fonts$FontName/HELVETICA_BOLD)
         opacity 0.23
         font-size 120]
 
@@ -84,13 +85,19 @@
     document))
 
 (defn add-watermark [pdf-path text]
-  (with-open [watermark (generate-watermark text)
-              overlay (doto (Overlay.)
-                        (.setInputFile pdf-path)
-                        (.setDefaultOverlayPDF watermark)
-                        (.setOverlayPosition Overlay$Position/FOREGROUND))
-              result (.overlay overlay (HashMap.))]
-    (.save result ^String pdf-path)
+  ;; PDFBox 3 reads the input file lazily, so saving over it while it is still
+  ;; open corrupts the output. Save to memory first, write the file afterwards.
+  (let [baos (java.io.ByteArrayOutputStream.)]
+    (with-open [watermark (generate-watermark text)
+                overlay (doto (Overlay.)
+                          (.setInputFile pdf-path)
+                          (.setDefaultOverlayPDF watermark)
+                          (.setOverlayPosition Overlay$Position/FOREGROUND))
+                result (.overlay overlay (HashMap.))]
+      ;; No object streams: PDFBox 3 compresses by default, which PDF/A-1 forbids
+      (.save result baos CompressParameters/NO_COMPRESSION))
+    (with-open [out (io/output-stream pdf-path)]
+      (.write out (.toByteArray baos)))
     pdf-path))
 
 (defn apply-watermark-to-bytes

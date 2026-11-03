@@ -10,7 +10,8 @@
             [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-system :as ts])
-  (:import (org.apache.pdfbox.pdmodel PDDocument)
+  (:import (org.apache.pdfbox Loader)
+           (org.apache.pdfbox.pdmodel PDDocument)
            (org.apache.xmpbox.xml DomXmpParser)))
 
 (t/use-fixtures :each ts/fixture)
@@ -94,7 +95,7 @@
         (let [{:keys [etunimi sukunimi]} (kayttaja-service/find-kayttaja ts/*db* (:laatija-id energiatodistus))
               expected-author (str sukunimi ", " etunimi)
               expected-title (-> energiatodistus :perustiedot :nimi-sv)
-              document (-> file-path io/as-file PDDocument/load)
+              document (-> file-path io/as-file Loader/loadPDF)
               document-info (.getDocumentInformation document)
               xmp-metadata (->> document .getDocumentCatalog .getMetadata .exportXMPMetadata (.parse xmp-parser))]
           (t/testing "Test for author and title in the older-style metadata"
@@ -106,8 +107,8 @@
           (t/testing "Test for laatija-allekirjoitus-id in the XMP metadata"
             (t/is (= "allekirjoitus-id" (.getCustomMetadataValue document-info "laatija-allekirjoitus-id"))))
           (t/testing "Test that the document declaries itself as PDF/A compliant"
-            (t/is (= 2 (-> xmp-metadata .getPDFIdentificationSchema .getPart)))
-            (t/is (= "B" (-> xmp-metadata .getPDFIdentificationSchema .getConformance))))
+            (t/is (= 2 (-> xmp-metadata .getPDFAIdentificationSchema .getPart)))
+            (t/is (= "B" (-> xmp-metadata .getPDFAIdentificationSchema .getConformance))))
           (.close document)))
 
       (io/delete-file file-path))))
@@ -126,7 +127,7 @@
                                                                        "allekirjoitus-id")]]
       (t/testing "Test that the generation works even when building name is not set"
         (let [expected-title "Energiatodistus"
-              document (-> file-path io/as-file PDDocument/load)
+              document (-> file-path io/as-file Loader/loadPDF)
               document-info (.getDocumentInformation document)
               xmp-metadata (->> document .getDocumentCatalog .getMetadata .exportXMPMetadata (.parse xmp-parser))]
           (t/testing "Test for title in the older-style metadata"

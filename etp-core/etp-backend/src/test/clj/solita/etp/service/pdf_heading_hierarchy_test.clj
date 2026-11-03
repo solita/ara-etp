@@ -117,11 +117,11 @@
                   "H3" ; PPP: Energiatehokkuusluokan ja E-luvun muutos
                   "H3" ; PPP: Toimenpiteiden kohdistuminen rakennuksen osa-alueisiin
                   "H3" ; PPP: Rakennus ehdotettujen toimenpiteiden jälkeen
+                  "H2" ; PPP: Vaiheessa 1 toteutettavat toimenpiteet
                   "H3" ; PPP: Toimenpide-ehdotukset 2030–2050
                   "H3" ; PPP: Toimenpideseloste
                   "H3" ; PPP: Energiankulutus vaiheen jälkeen
                   "H3" ; PPP: Energiankulutus, kustannukset ja kasvihuonepäästöt vaiheen jälkeen
-                  "H2" ; PPP: Vaiheessa 1 toteutettavat toimenpiteet
                   "H2" ; PPP: Vaiheistuksen yhteenveto
                   "H2" ; PPP: Laskennan taustatiedot
                   "H2"] ; PPP: Lisätietoja

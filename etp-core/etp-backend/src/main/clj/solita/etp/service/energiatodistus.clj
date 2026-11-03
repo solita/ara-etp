@@ -31,6 +31,8 @@
             [solita.postgresql.composite :as pg-composite]
             [solita.etp.service.perusparannuspassi :as perusparannuspassi-service])
   (:import (java.time Instant ZoneId)
+           (org.apache.pdfbox Loader)
+           (org.apache.pdfbox.io RandomAccessReadBuffer)
            (org.apache.pdfbox.pdmodel PDDocument)))
 
 (def ^:private helsinki-timezone (ZoneId/of "Europe/Helsinki"))
@@ -590,7 +592,7 @@
 
 (defn- pdf-signed? [content]
   (with-open
-    [doc (PDDocument/load content)]
+    [doc (Loader/loadPDF (RandomAccessReadBuffer. ^java.io.InputStream content))]
     (-> (.getLastSignatureDictionary doc) nil? not)))
 
 (defn energiatodistus-pdf-signed? [aws-s3-client id language]
