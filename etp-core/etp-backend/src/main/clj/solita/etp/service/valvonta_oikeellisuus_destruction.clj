@@ -196,6 +196,8 @@
 (defn- destroy-expired-vo-toimenpiteet!
   [db aws-s3-client vo-toimenpide-rows]
   (let [energiatodistus-id (:energiatodistus-id (first vo-toimenpide-rows))
+        ;; Re-query for the rows to prevent the case where someone
+        ;; adds a toimenpide when the destruction is running.
         expired-vo-toimenpide-rows
         (filter
           #(= energiatodistus-id (:energiatodistus-id %))
@@ -235,6 +237,7 @@
 (defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client whoami]
   (assert-whoami! whoami)
   (let [expired-vo-toimenpide-rows (find-expired-oikeellisuuden-valvonta-ids db)
+        ;; Process each energiatodistus's toimenpiteet in a separate transaction
         expired-vo-toimenpiteet-by-energiatodistus
         (group-by :energiatodistus-id expired-vo-toimenpide-rows)
         destruction-counts
