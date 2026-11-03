@@ -179,7 +179,12 @@
   "Overridden in tests: the test OCSP responder certificates lack the ocsp-nocheck extension,
   which DSS >= 6.2 requires for responders that have their own revocation access points."
   []
-  (RevocationDataVerifier/createDefaultRevocationDataVerifier))
+  (let [verifier (RevocationDataVerifier/createDefaultRevocationDataVerifier)]
+    (when config/relaxed-revocation-verification?
+      (doto verifier
+        (.setRevocationSkipCertificateExtensions ["2.5.29.37"])
+        (.setAcceptTimestampCertificatesWithoutRevocation true)))
+    verifier))
 
 (defn get-certificate-verifier-with-tsp-issuer []
   (let [cert-verifier (CommonCertificateVerifier.)

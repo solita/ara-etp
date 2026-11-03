@@ -148,6 +148,9 @@
 ;; TSA (Time Stamping Authority)
 (def tsa-endpoint-url (env "TSA_DVV_ENDPOINT_URL" nil))
 
+;; Only for the local test PKI, whose OCSP responder certificates lack ocsp-nocheck.
+(def relaxed-revocation-verification? (edn/read-string (env "RELAXED_REVOCATION_VERIFICATION" "false")))
+
 ;; Suomifi / viestit
 
 (def suomifi-viestit-viranomaistunnus (env "SUOMIFI_VIESTIT_VIRANOMAISTUNNUS" nil))
