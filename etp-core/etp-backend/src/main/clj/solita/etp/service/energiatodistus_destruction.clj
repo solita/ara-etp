@@ -166,7 +166,7 @@
   (energiatodistus-destruction-db/make-energiatodistus-vanhentunut! db {:energiatodistus-id energiatodistus-id})
   (log/info (str "Set energiatodistus (id: " energiatodistus-id ") tila to vanhentunut.")))
 
-(defn- check-whoami [whoami]
+(defn- assert-whoami! [whoami]
   (when-not (and (rooli-service/system? whoami)
                  (= (:id whoami) (kayttaja-service/system-kayttaja :expiration)))
     (exception/throw-forbidden! (str "Can not run destruction of expired todistukset as whoami (id: " (:id whoami) ") (rooli: " (:rooli whoami) ")"))))
@@ -176,7 +176,7 @@
        (map :energiatodistus-id)))
 
 (defn destroy-expired-energiatodistukset! [db aws-s3-client whoami]
-  (check-whoami whoami)
+  (assert-whoami! whoami)
   (log/info (str "Starting destruction of expired energiatodistukset."))
   (let [expired-todistukset-without-valvonta-ids (set (get-currently-expired-todistus-ids db {:check-valvonta? true}))
         all-expired-todistukset-ids (set (get-currently-expired-todistus-ids db {:check-valvonta? false}))

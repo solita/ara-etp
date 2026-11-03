@@ -2,6 +2,10 @@
   (:require [solita.etp.service.rooli :as rooli-service]
             [solita.etp.service.valvonta-oikeellisuus :as valvonta-service]
             [solita.etp.schema.valvonta-oikeellisuus :as oikeellisuus-schema]
+            [solita.etp.service.kayttaja :as kayttaja-service]
+            [solita.etp.service.concurrent :as concurrent]
+            [solita.etp.service.valvonta-oikeellisuus-destruction :as vo-destruction-service]
+            [solita.etp.security :as security]
             [solita.etp.schema.valvonta :as valvonta-schema]
             [solita.etp.schema.common :as common-schema]
             [solita.etp.api.response :as api-response]
@@ -352,3 +356,19 @@
                              (api-response/ok|not-found
                                (valvonta-service/update-note! db note-id body)
                                (str "Muistiinpano " id "/" note-id " does not exists.")))}}]]]]]])
+(def internal-routes
+  [["/valvonta/oikeellisuus"
+    ["/anonymize-and-delete-expired"
+     {:post {:summary    "Anonymisoi vanhentuneet oikeellisuuden valvonnat ja poistaa niihin linkittyvät tiedot ja dokumentit."
+             :middleware [[security/wrap-db-application-name
+                            (kayttaja-service/system-kayttaja :valvonta-oikeellisuus-expiration)]
+                           [security/wrap-whoami-for-internal-valvonta-oikeellisuus-expiration-api]]
+             :responses  {200 {:body nil}}
+             :handler    (fn [{:keys [db aws-s3-client whoami]}]
+                           (r/response
+                             (concurrent/run-background
+                               #(vo-destruction-service/anonymize-expired-vo-valvontas-and-destroy-linked-data
+                                  db
+                                  aws-s3-client
+                                  whoami)
+                               "Expired valvonta oikeellisuus destruction failed")))}}]]])
