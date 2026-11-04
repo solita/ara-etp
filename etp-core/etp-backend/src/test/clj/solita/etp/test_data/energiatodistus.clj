@@ -16,17 +16,8 @@
             [solita.etp.test-system :as ts]
             [solita.etp.test-timeserver :as test-timeserver])
   (:import (eu.europa.esig.dss.pades PAdESSignatureParameters)
-           (eu.europa.esig.dss.spi.validation RevocationDataVerifier)
            (java.io FileInputStream ObjectInputStream)
            (java.time Instant)))
-
-;; The test OCSP responder certificates lack ocsp-nocheck. They are the only test certificates
-;; with the extendedKeyUsage extension, so skipping revocation checks for it skips them.
-(alter-var-root #'solita.etp.service.signing.pdf-sign/get-revocation-data-verifier
-                (constantly
-                  #(doto (RevocationDataVerifier/createDefaultRevocationDataVerifier)
-                     (.setRevocationSkipCertificateExtensions ["2.5.29.37"])
-                     (.setAcceptTimestampCertificatesWithoutRevocation true))))
 
 (def generators {schema/Str                   generators/postgresql-safe-string-generator
                  schema/Num                   (g/always 1.0M)

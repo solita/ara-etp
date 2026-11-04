@@ -97,8 +97,11 @@
            #'*admin-db*       (config-plain-db (:solita.etp/db (config-for-in-test-management db-name)))
            #'*aws-s3-client*  (:solita.etp/aws-s3-client test-system)
            #'*aws-kms-client* (:solita.etp/aws-kms-client test-system)}
-          (try (f)
-               (finally (ig/halt! test-system)))))
+          ;; The test OCSP responder certificates lack ocsp-nocheck,
+          ;; see pdf-sign/get-revocation-data-verifier.
+          (with-redefs [config/relaxed-revocation-verification? true]
+            (try (f)
+                 (finally (ig/halt! test-system))))))
       (finally
         (drop-db! management-db db-name)
         (drop-bucket! management-aws-s3-client)

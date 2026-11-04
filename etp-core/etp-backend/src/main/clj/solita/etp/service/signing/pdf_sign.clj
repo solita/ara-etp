@@ -175,9 +175,10 @@
      ;; might as well save the whole SignatureParameters object.
      :stateful-parameters (object->input-stream signature-parameters)}))
 
-(defn ^:dynamic get-revocation-data-verifier
-  "Overridden in tests: the test OCSP responder certificates lack the ocsp-nocheck extension,
-  which DSS >= 6.2 requires for responders that have their own revocation access points."
+(defn get-revocation-data-verifier
+  "Relaxed when config/relaxed-revocation-verification? is set (e2e and integration tests): the
+  test OCSP responder certificates lack the ocsp-nocheck extension, which DSS >= 6.2 requires
+  for responders that have their own revocation access points."
   []
   (let [verifier (RevocationDataVerifier/createDefaultRevocationDataVerifier)]
     (when config/relaxed-revocation-verification?
