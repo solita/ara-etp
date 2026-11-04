@@ -11,9 +11,10 @@
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-data.perusparannuspassi :as ppp-test-data]
             [solita.etp.test-system :as ts])
-  (:import (java.io ByteArrayInputStream InputStream)
+  (:import (java.io InputStream)
            (java.time LocalDate)
-           (org.apache.pdfbox.pdmodel PDDocument PDResources)
+           (org.apache.pdfbox Loader)
+           (org.apache.pdfbox.pdmodel PDResources)
            (org.apache.pdfbox.pdmodel.font PDFont)
            (org.apache.pdfbox.pdmodel.graphics.form PDFormXObject)))
 
@@ -80,8 +81,7 @@
       (into direct-fonts nested-fonts))))
 
 (defn- pdf-font-names [pdf-bytes]
-  (with-open [pdf-stream (ByteArrayInputStream. pdf-bytes)
-              document (PDDocument/load pdf-stream)]
+  (with-open [document (Loader/loadPDF pdf-bytes)]
     (->> (iterator-seq (.iterator (.getPages document)))
          (mapcat (fn [page]
                    (font-names-in-resources (.getResources page))))
@@ -171,6 +171,5 @@
     (t/testing "template-letter uses Roboto and does not use Carlito"
       (assert-font-family-present! "template-letter" (get document-fonts "template-letter") "roboto")
       (assert-font-family-absent! "template-letter" (get document-fonts "template-letter") "carlito"))))
-
 
 

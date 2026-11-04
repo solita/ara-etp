@@ -6,8 +6,7 @@
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.service.whoami :as service]
             [solita.etp.service.kayttaja :as kayttaja-service]
-            [solita.etp.schema.kayttaja :as kayttaja-schema]
-            [solita.etp.schema.laatija :as laatija-schema]))
+            [solita.etp.schema.kayttaja :as kayttaja-schema]))
 
 (t/use-fixtures :each ts/fixture)
 

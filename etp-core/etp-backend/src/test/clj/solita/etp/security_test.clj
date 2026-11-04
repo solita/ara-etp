@@ -1,7 +1,6 @@
 (ns solita.etp.security-test
   (:require [clojure.test :as t]
-            [solita.etp.security :as security]
-            [solita.etp.api.response :as response])
+            [solita.etp.security :as security])
   (:import (java.time Instant)))
 
 (t/deftest log-safe-henkilotunnus-test

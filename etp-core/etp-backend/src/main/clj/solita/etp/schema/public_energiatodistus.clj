@@ -1,8 +1,7 @@
 (ns solita.etp.schema.public-energiatodistus
   (:require [schema.core :as schema]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
-            [solita.common.schema :as xschema]
-            [solita.etp.schema.common :as common-schema]))
+            [solita.common.schema :as xschema]))
 
 (def Perustiedot
   (select-keys energiatodistus-schema/Perustiedot

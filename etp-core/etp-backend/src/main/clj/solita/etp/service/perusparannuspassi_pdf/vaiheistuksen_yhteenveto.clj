@@ -2,8 +2,7 @@
   (:require
     [clojure.string :as str]
     [clojure.pprint :as pp]
-    [solita.etp.service.localization :as loc]
-    [solita.etp.service.uusiutuva-energia :as uusiutuva-energia])
+    [solita.etp.service.localization :as loc])
   (:import
     [java.text DecimalFormat DecimalFormatSymbols]))
 

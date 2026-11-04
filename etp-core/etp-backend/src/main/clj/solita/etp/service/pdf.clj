@@ -9,7 +9,7 @@
     (java.io ByteArrayOutputStream InputStream)
     (com.openhtmltopdf.extend FSSupplier)
     (org.apache.pdfbox.multipdf PDFMergerUtility)
-    (org.apache.pdfbox.io MemoryUsageSetting)))
+    (org.apache.pdfbox.io IOUtils RandomAccessReadBuffer)))
 
 (defn- add-font [builder family font-resource font-weight font-style]
   (.useFont builder (reify FSSupplier
@@ -62,7 +62,7 @@
   (with-open [baos (ByteArrayOutputStream.)]
     (let [pmu (PDFMergerUtility.)]
       (doseq [pdf pdfs]
-        (.addSource pmu pdf))
+        (.addSource pmu (RandomAccessReadBuffer. ^InputStream pdf)))
       (.setDestinationStream pmu baos)
-      (.mergeDocuments pmu (MemoryUsageSetting/setupMainMemoryOnly)))
+      (.mergeDocuments pmu (IOUtils/createMemoryOnlyStreamCache)))
     (.toByteArray baos)))

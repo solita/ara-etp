@@ -4,7 +4,6 @@
             [clojure.walk :as walk]
             [clojure.core.match :as match]
             [clojure.data.xml :as xml]
-            [clojure.tools.logging :as log]
             [camel-snake-kebab.core :as csk])
   (:import (java.net URL)
            (java.io StringReader)
