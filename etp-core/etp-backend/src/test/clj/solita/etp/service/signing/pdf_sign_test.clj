@@ -2,7 +2,6 @@
   (:require [clojure.test :as t]
             [solita.etp.service.signing.pdf-sign :as pdf-sign])
   (:import (com.sun.net.httpserver HttpExchange HttpHandler HttpServer)
-           (eu.europa.esig.dss.service.http.commons CommonsDataLoader)
            (java.net InetSocketAddress)
            (java.nio.charset StandardCharsets)))
 

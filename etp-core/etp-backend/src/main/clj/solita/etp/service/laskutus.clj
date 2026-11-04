@@ -1,7 +1,6 @@
 (ns solita.etp.service.laskutus
   (:require [clojure.string :as str]
             [clojure.java.io :as io]
-            [clojure.java.jdbc :as jdbc]
             [clojure.core.match :as match]
             [clojure.tools.logging :as log]
             [solita.common.xml :as xml]

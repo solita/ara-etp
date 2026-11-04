@@ -3,7 +3,6 @@
             [clojure.java.jdbc :as jdbc]
             [clojure.set :as set]
             [clojure.string :as str]
-            [clojure.tools.logging :as log]
             [flathead.flatten :as flat]
             [schema-tools.coerce :as stc]
             [schema.coerce :as coerce]
@@ -31,8 +30,7 @@
             [solita.postgresql.composite :as pg-composite]
             [solita.etp.service.perusparannuspassi :as perusparannuspassi-service])
   (:import (java.time Instant ZoneId)
-           (org.apache.pdfbox Loader)
-           (org.apache.pdfbox.pdmodel PDDocument)))
+           (org.apache.pdfbox Loader)))
 
 (def ^:private helsinki-timezone (ZoneId/of "Europe/Helsinki"))
 

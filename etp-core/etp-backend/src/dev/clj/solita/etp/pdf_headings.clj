@@ -2,7 +2,6 @@
   "Development utility for inspecting the heading structure of tagged PDFs."
   (:require [clojure.java.io :as io])
   (:import [org.apache.pdfbox Loader]
-           [org.apache.pdfbox.pdmodel PDDocument]
            [org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure
             PDMarkedContentReference
             PDStructureElement

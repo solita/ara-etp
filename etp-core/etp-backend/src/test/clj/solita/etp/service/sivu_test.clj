@@ -1,7 +1,6 @@
 (ns solita.etp.service.sivu-test
   (:require [clojure.test :as t]
             [solita.common.map :as xmap]
-            [solita.etp.service.rooli :as rooli-service]
             [solita.etp.service.sivu :as service]
             [solita.etp.test-data.kayttaja :as kayttaja-test-data]
             [solita.etp.test-data.laatija :as laatija-test-data]

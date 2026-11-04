@@ -13,14 +13,13 @@
     [solita.etp.test-data.laatija :as test-data.laatija]
     [solita.etp.test-timeserver :as test-timeserver]
     [solita.etp.test-system :as ts])
-  (:import (eu.europa.esig.dss.enumerations SignatureLevel ValidationLevel)
+  (:import (eu.europa.esig.dss.enumerations SignatureLevel)
            (eu.europa.esig.dss.model InMemoryDocument)
            (eu.europa.esig.dss.pades PAdESSignatureParameters)
            (eu.europa.esig.dss.pades.validation PDFDocumentValidator)
            (eu.europa.esig.dss.spi DSSUtils)
            (eu.europa.esig.dss.spi.validation CommonCertificateVerifier)
            (eu.europa.esig.dss.spi.x509 CertificateSource CommonTrustedCertificateSource)
-           (eu.europa.esig.dss.validation SignedDocumentValidator)
            (java.io BufferedInputStream File FileInputStream ObjectInputStream)
            (java.time Clock Duration ZoneId)))
 

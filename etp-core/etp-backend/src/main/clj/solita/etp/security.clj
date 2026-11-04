@@ -1,7 +1,6 @@
 (ns solita.etp.security
   (:require [clojure.string :as str]
             [clojure.tools.logging :as log]
-            [ring.util.response :as r]
             [schema-tools.core :as st]
             [solita.common.maybe :as maybe]
             [solita.common.time :as common-time]

@@ -1,8 +1,7 @@
 (ns solita.etp.api.geo
   (:require [ring.util.response :as r]
             [solita.etp.schema.geo :as geo-schema]
-            [solita.etp.service.geo :as geo-service]
-            [solita.etp.schema.common :as common-schema]))
+            [solita.etp.service.geo :as geo-service]))
 
 (def routes
   [["/toimintaalueet/"

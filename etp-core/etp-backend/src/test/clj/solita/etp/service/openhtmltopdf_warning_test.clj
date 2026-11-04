@@ -19,7 +19,6 @@
            (java.time LocalDate)
            (java.util.regex Pattern)
            (org.apache.pdfbox Loader)
-           (org.apache.pdfbox.pdmodel PDDocument)
            (org.slf4j LoggerFactory)))
 
 (t/use-fixtures :each ts/fixture)
@@ -176,4 +175,3 @@
       (t/is (pos? (:byte-count result)) "Generated perusparannuspassi PDF should contain bytes")
       (t/is (pos? (:page-count result)) "Generated perusparannuspassi PDF should have at least one page")
       (assert-only-expected-openhtmltopdf-warnings! warnings expected-warnings))))
-
