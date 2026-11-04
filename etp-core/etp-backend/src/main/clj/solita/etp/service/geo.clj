@@ -1,8 +1,5 @@
 (ns solita.etp.service.geo
-  (:require [solita.etp.db :as db]
-            [solita.etp.service.json :as json]
-            [solita.etp.schema.geo :as geo-schema]
-            [schema.coerce :as coerce]))
+  (:require [solita.etp.db :as db]))
 
 ; *** Require sql functions ***
 (db/require-queries 'geo)

@@ -11,7 +11,6 @@
             [solita.etp.test-data.laatija :as laatija-test-data]
             [solita.etp.test-system :as ts])
   (:import (org.apache.pdfbox Loader)
-           (org.apache.pdfbox.pdmodel PDDocument)
            (org.apache.xmpbox.xml DomXmpParser)))
 
 (t/use-fixtures :each ts/fixture)
@@ -142,4 +141,3 @@
   (t/is (nil? (energiatodistus-service/file-key nil "fi")))
   (t/is (= (energiatodistus-service/file-key 12345 "fi")
            "energiatodistukset/energiatodistus-12345-fi")))
-

@@ -4,7 +4,6 @@
             [solita.etp.security :as security]
             [solita.etp.config :as config]
             [solita.etp.schema.common :as common-schema]
-            [solita.etp.schema.energiatodistus :as energiatodistus-schema]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-signing :as energiatodistus-signing-service]
             [solita.etp.service.laatija :as laatija-service]

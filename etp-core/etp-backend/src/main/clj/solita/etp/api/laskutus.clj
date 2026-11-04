@@ -1,6 +1,5 @@
 (ns solita.etp.api.laskutus
-  (:require [clojure.tools.logging :as log]
-            [ring.util.response :as r]
+  (:require [ring.util.response :as r]
             [schema.core :as schema]
             [solita.etp.security :as security]
             [solita.etp.service.kayttaja :as kayttaja-service]

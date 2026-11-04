@@ -8,8 +8,7 @@
             [solita.etp.test-system :as ts])
   (:import (java.io InputStream)
            (java.time LocalDate)
-           (org.apache.pdfbox Loader)
-           (org.apache.pdfbox.pdmodel PDDocument)))
+           (org.apache.pdfbox Loader)))
 
 (t/use-fixtures :each ts/fixture)
 

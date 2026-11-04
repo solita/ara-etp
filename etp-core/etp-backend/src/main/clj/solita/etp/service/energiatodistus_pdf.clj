@@ -25,8 +25,7 @@
            (java.time.format DateTimeFormatter)
            (java.util Calendar GregorianCalendar)
            (org.apache.pdfbox Loader)
-           (org.apache.pdfbox.pdmodel PDDocument
-                                      PDPageContentStream
+           (org.apache.pdfbox.pdmodel PDPageContentStream
                                       PDPageContentStream$AppendMode)
            (org.apache.pdfbox.pdmodel.common PDMetadata)
            (org.apache.pdfbox.pdmodel.graphics.image PDImageXObject)

@@ -3,10 +3,9 @@
             [clojure.test :as t]
             [hiccup.core :as hiccup]
             [solita.etp.service.pdf :as pdf])
-  (:import (java.io ByteArrayInputStream ByteArrayOutputStream)
+  (:import (java.io ByteArrayOutputStream)
            (java.nio.file Files)
            (org.apache.pdfbox Loader)
-           (org.apache.pdfbox.pdmodel PDDocument)
            (org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure
             PDStructureElement
             PDStructureNode)))

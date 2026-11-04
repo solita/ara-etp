@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [clojure.java.io :as io]
             [clojure.tools.logging :as log])
-  (:import (com.jcraft.jsch JSch ChannelSftp SftpException)))
+  (:import (com.jcraft.jsch JSch)))
 
 (def default-port 22)
 (def timeout (* 1000 60 10))

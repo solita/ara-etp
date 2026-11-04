@@ -3,7 +3,6 @@
             [clojure.java.jdbc :as jdbc]
             [solita.etp.db :as db]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
-            [solita.etp.service.energiatodistus-test :as energiatodistus-test]
             [solita.etp.test-system :as ts]))
 
 (t/use-fixtures :each ts/fixture)

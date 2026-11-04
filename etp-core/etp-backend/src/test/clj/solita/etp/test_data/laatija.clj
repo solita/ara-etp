@@ -1,6 +1,5 @@
 (ns solita.etp.test-data.laatija
   (:require [ring.mock.request :as mock]
-            [schema-tools.core :as st]
             [solita.etp.test-system :as ts]
             [solita.etp.test-data.generators :as generators]
             [solita.etp.schema.laatija :as laatija-schema]

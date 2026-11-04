@@ -6,7 +6,6 @@
     [clojure.string :as str]
     [clojure.tools.logging :as log]
     [solita.common.certificates :as certificates]
-    [solita.common.time :as time]
     [solita.etp.common.audit-log :as audit-log]
     [solita.etp.config :as config]
     [solita.etp.exception :as exception]
@@ -299,5 +298,4 @@
         (if (= (-> e ex-data :type) :sign-with-system-error)
           (-> e ex-data :result)
           (throw e))))))
-
 

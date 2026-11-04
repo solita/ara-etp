@@ -9,8 +9,7 @@
             [solita.etp.test-data.laatija :as laatija]
             [solita.etp.test-system :as ts])
   (:import (java.time LocalDate)
-           (org.apache.pdfbox Loader)
-           (org.apache.pdfbox.pdmodel PDDocument)))
+           (org.apache.pdfbox Loader)))
 
 (t/use-fixtures :each ts/fixture)
 (def et-add
