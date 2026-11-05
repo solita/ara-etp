@@ -25,6 +25,15 @@ const mockLuokittelut = {
       'label-fi': 'Perusparannus A+-luokkaan',
       'label-sv': 'Perusparannus A+-luokkaan(sv)'
     }
+  ],
+  postinumerot: [
+    {
+      id: 100,
+      'label-fi': 'Helsinki',
+      'label-sv': 'Helsingfors',
+      valid: true,
+      'type-id': 1
+    }
   ]
 };
 
@@ -65,8 +74,7 @@ test('given the ilmastoselvitys component, when rendered, then metadata input fi
     'ilmastoselvitys.laatija',
     'ilmastoselvitys.yritys',
     'ilmastoselvitys.yritys-osoite',
-    'ilmastoselvitys.yritys-postinumero',
-    'ilmastoselvitys.yritys-postitoimipaikka'
+    'ilmastoselvitys.yritys-postinumero'
   ];
 
   expectedIds.forEach(id => {
