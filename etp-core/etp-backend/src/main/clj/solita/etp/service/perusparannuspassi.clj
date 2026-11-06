@@ -66,14 +66,14 @@
       flat->tree
       (set/rename-keys (set/map-invert db-abbreviations))))
 
-(defn assert-2026! [versio]
-  (when (not= 2026 versio)
+(defn assert-2027! [versio]
+  (when (not= 2027 versio)
     (db/with-db-exception-translation
       (exception/throw-ex-info! {:type    :invalid-energiatodistus-versio
-                                 :message "Perusparannuspassi can only be added to energiatodistus versio 2026."
+                                 :message "Perusparannuspassi can only be added to energiatodistus versio 2027."
                                  :versio  versio})
       (exception/throw-forbidden!
-        "Perusparannuspassi can only be added to energiatodistus version 2026."))))
+        "Perusparannuspassi can only be added to energiatodistus version 2027."))))
 
 (defn assert-draft! [tila-id]
   (when (not= :draft (energiatodistus-tila/tila-key tila-id))
@@ -211,7 +211,7 @@
       (exception/throw-ex-info!
         {:type    :energiatodistus-not-found
          :message (str "Energiatodistus with id " (:energiatodistus-id ppp) " not found.")}))
-    (assert-2026! versio)
+    (assert-2027! versio)
     (assert-draft! tila-id))
 
 
@@ -280,11 +280,11 @@
                            ppp->db-row)
             ;; Validate PPP main row numeric values (errors throw, warnings collected)
             warnings (when-not bypass-validation-limits
-                       (validate-ppp-db-row! tx ppp-db-row 2026))
+                       (validate-ppp-db-row! tx ppp-db-row 2027))
             vaihe-warnings (when-not bypass-validation-limits
                              (reduce concat
                                      (for [vaihe-db-row (->> ppp :vaiheet (map ->vaihe-update-db-row))]
-                                       (validate-ppp-vaihe-db-row! tx vaihe-db-row 2026))))]
+                                       (validate-ppp-vaihe-db-row! tx vaihe-db-row 2027))))]
 
         ;; Update the main PPP row
         (db/with-db-exception-translation jdbc/update! tx :perusparannuspassi

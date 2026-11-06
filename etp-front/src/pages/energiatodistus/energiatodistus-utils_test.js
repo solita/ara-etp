@@ -692,15 +692,15 @@ describe('e-luku calculations', () => {
   });
 });
 
-// === AE-2614: ET2026 energiamuotokertoimet ===
+// === AE-2614: ET2027 energiamuotokertoimet ===
 
-describe('ET2026 energiamuotokertoimet', () => {
-  // 3.1 - Correct 2026 coefficient values
-  describe('energiamuotokertoimet returns correct 2026 values', () => {
-    it('should have the new 2026 coefficients', () => {
+describe('ET2027 energiamuotokertoimet', () => {
+  // 3.1 - Correct 2027 coefficient values
+  describe('energiamuotokertoimet returns correct 2027 values', () => {
+    it('should have the new 2027 coefficients', () => {
       // Given the energiamuotokertoimet function
-      // When we retrieve 2026 coefficients
-      const kertoimet = EtUtils.energiamuotokertoimet()[2026];
+      // When we retrieve 2027 coefficients
+      const kertoimet = EtUtils.energiamuotokertoimet()[2027];
 
       // Then all values match the new regulation
       expect(kertoimet['fossiilinen-polttoaine']).toEqual(Maybe.Some(1));
@@ -727,8 +727,8 @@ describe('ET2026 energiamuotokertoimet', () => {
     });
   });
 
-  // 3.3 - E-luku with 2026: fossiilinen-polttoaine only
-  describe('eluku calculation with 2026 coefficients', () => {
+  // 3.3 - E-luku with 2027: fossiilinen-polttoaine only
+  describe('eluku calculation with 2027 coefficients', () => {
     it('fossiilinen-polttoaine only produces correct result', () => {
       // Given only fossiilinen-polttoaine at 10000, nettoala=100
       const energiamuodot = {
@@ -739,9 +739,9 @@ describe('ET2026 energiamuotokertoimet', () => {
         'uusiutuva-polttoaine': Either.Right(Maybe.Some(0))
       };
 
-      // When E-luku is calculated with 2026 coefficients
+      // When E-luku is calculated with 2027 coefficients
       const e_luku = EtUtils.eluku(
-        2026,
+        2027,
         Either.Right(Maybe.Some(100)),
         energiamuodot
       );
@@ -750,8 +750,8 @@ describe('ET2026 energiamuotokertoimet', () => {
       expect(e_luku).toEqual(Maybe.Some(100));
     });
 
-    // 3.4 - E-luku with 2026: all energy forms
-    it('all energy forms produces the correct 2026 result (differs from 2018)', () => {
+    // 3.4 - E-luku with 2027: all energy forms
+    it('all energy forms produces the correct 2027 result (differs from 2018)', () => {
       // Given all energy forms at 10000, nettoala=100
       const energiamuodot = {
         'fossiilinen-polttoaine': Either.Right(Maybe.Some(10000)),
@@ -761,9 +761,9 @@ describe('ET2026 energiamuotokertoimet', () => {
         'uusiutuva-polttoaine': Either.Right(Maybe.Some(10000))
       };
 
-      // When E-luku is calculated with 2026 coefficients
+      // When E-luku is calculated with 2027 coefficients
       const e_luku = EtUtils.eluku(
-        2026,
+        2027,
         Either.Right(Maybe.Some(100)),
         energiamuodot
       );
@@ -773,7 +773,7 @@ describe('ET2026 energiamuotokertoimet', () => {
       expect(e_luku).toEqual(Maybe.Some(287));
     });
 
-    // 3.5 - E-luku with 2026: realistic nettoala
+    // 3.5 - E-luku with 2027: realistic nettoala
     it('realistic nettoala produces correct ceiling-rounded result', () => {
       // Given a pientalo: sahko=5000, kaukolampo=12000, nettoala=150
       const energiamuodot = {
@@ -784,9 +784,9 @@ describe('ET2026 energiamuotokertoimet', () => {
         'uusiutuva-polttoaine': Either.Right(Maybe.Some(0))
       };
 
-      // When E-luku is calculated with 2026 coefficients
+      // When E-luku is calculated with 2027 coefficients
       const e_luku = EtUtils.eluku(
-        2026,
+        2027,
         Either.Right(Maybe.Some(150)),
         energiamuodot
       );
@@ -797,7 +797,7 @@ describe('ET2026 energiamuotokertoimet', () => {
     });
 
     // 3.6 - None nettoala
-    it('None nettoala produces None with 2026 version', () => {
+    it('None nettoala produces None with 2027 version', () => {
       // Given valid energy forms but None nettoala
       const energiamuodot = {
         'fossiilinen-polttoaine': Either.Right(Maybe.Some(10000)),
@@ -809,7 +809,7 @@ describe('ET2026 energiamuotokertoimet', () => {
 
       // When E-luku is calculated
       const e_luku = EtUtils.eluku(
-        2026,
+        2027,
         Either.Right(Maybe.None()),
         energiamuodot
       );
@@ -819,7 +819,7 @@ describe('ET2026 energiamuotokertoimet', () => {
     });
 
     // 3.7 - None energy values
-    it('None energy values with 2026 version produces zero', () => {
+    it('None energy values with 2027 version produces zero', () => {
       // Given all energy forms are None, nettoala=100
       const energiamuodot = {
         'fossiilinen-polttoaine': Either.Right(Maybe.None()),
@@ -829,9 +829,9 @@ describe('ET2026 energiamuotokertoimet', () => {
         'uusiutuva-polttoaine': Either.Right(Maybe.None())
       };
 
-      // When E-luku is calculated with 2026 coefficients
+      // When E-luku is calculated with 2027 coefficients
       const e_luku = EtUtils.eluku(
-        2026,
+        2027,
         Either.Right(Maybe.Some(100)),
         energiamuodot
       );
@@ -941,8 +941,8 @@ describe('applyEluokkaDowngrade', () => {
 });
 
 describe('eluokkaFromRajaAsteikko + applyEluokkaDowngrade combined', () => {
-  // 2026 YAT raja-asteikko: A+ ≤ 78, A0 ≤ 98, A ≤ 98, B ≤ 106, C ≤ 130, D ≤ 181, E ≤ 265, F ≤ 310
-  const rajaAsteikko2026 = [
+  // 2027 YAT raja-asteikko: A+ ≤ 78, A0 ≤ 98, A ≤ 98, B ≤ 106, C ≤ 130, D ≤ 181, E ≤ 265, F ≤ 310
+  const rajaAsteikko2027 = [
     [78, 'A+'],
     [98, 'A0'],
     [98, 'A'],
@@ -956,14 +956,14 @@ describe('eluokkaFromRajaAsteikko + applyEluokkaDowngrade combined', () => {
   describe('e-luku 50 is in A+ range (≤ 78)', () => {
     describe('both vaatimukset are true', () => {
       it('produces A+', () => {
-        const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 50);
+        const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2027, 50);
         expect(EtUtils.applyEluokkaDowngrade(raw, true, true)).toBe('A+');
       });
     });
 
     describe('both vaatimukset are false', () => {
       it('downgrades to A', () => {
-        const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 50);
+        const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2027, 50);
         expect(EtUtils.applyEluokkaDowngrade(raw, false, false)).toBe('A');
       });
     });
@@ -972,7 +972,7 @@ describe('eluokkaFromRajaAsteikko + applyEluokkaDowngrade combined', () => {
   describe('e-luku 85 is in A0 range (> 78, ≤ 98)', () => {
     describe('a0=true', () => {
       it('produces A0', () => {
-        const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 85);
+        const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2027, 85);
         expect(EtUtils.applyEluokkaDowngrade(raw, false, true)).toBe('A0');
       });
     });
@@ -980,7 +980,7 @@ describe('eluokkaFromRajaAsteikko + applyEluokkaDowngrade combined', () => {
 
   describe('e-luku 100 is in B range (> 98, ≤ 106)', () => {
     it('produces B regardless of rastit', () => {
-      const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2026, 100);
+      const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2027, 100);
       expect(EtUtils.applyEluokkaDowngrade(raw, true, true)).toBe('B');
     });
   });

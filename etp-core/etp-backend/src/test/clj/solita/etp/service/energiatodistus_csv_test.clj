@@ -30,13 +30,13 @@
                                   2018
                                   true
                                   laatija-id)
-        energiatodistukset-2026 (energiatodistus-test-data/generate-and-insert!
+        energiatodistukset-2027 (energiatodistus-test-data/generate-and-insert!
                                   25
-                                  2026
+                                  2027
                                   true
                                   laatija-id)
-        energiatodistukset (concat energiatodistukset-2018 energiatodistukset-2026)
-        et-ids-to-add-ppps-for (->> energiatodistukset-2026 keys (take 10))
+        energiatodistukset (concat energiatodistukset-2018 energiatodistukset-2027)
+        et-ids-to-add-ppps-for (->> energiatodistukset-2027 keys (take 10))
         id-of-et-where-ppp-removed (first (take 1 et-ids-to-add-ppps-for))
         ids-of-ets-with-pps (into [] (remove (set [id-of-et-where-ppp-removed]) (set et-ids-to-add-ppps-for)))
         ids-of-ets-without-pps (into [] (remove (-> ids-of-ets-with-pps set) (-> energiatodistukset keys set)))
@@ -69,7 +69,7 @@
     ;; in configuration.
     (t/is (every? #(contains? (set service/private-columns) %)
                   (->> (concat (energiatodistus-test-data/generate-adds 50 2018 true)
-                                 (energiatodistus-test-data/generate-adds 50 2026 true))
+                                 (energiatodistus-test-data/generate-adds 50 2027 true))
                        (map #(complete-energiatodistus-service/complete-energiatodistus
                                %
                                luokittelut))

@@ -25,12 +25,12 @@ AND (:versio::int IS NULL OR e.versio = :versio)
 AND (:laatimisvaihe::int IS NULL
      OR (:laatimisvaihe = 1 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = true)
-           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+           OR (e.versio IN (2018, 2027) AND e.pt$laatimisvaihe IN (0, 1))
          ))
      OR (:laatimisvaihe = 2 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = false)
            OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
-           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+           OR (e.versio = 2027 AND e.pt$laatimisvaihe IN (2, 3, 4))
          ))
     )
 GROUP BY e.versio, e.t$e_luokka;
@@ -64,12 +64,12 @@ AND (:versio::int IS NULL OR e.versio = :versio)
 AND (:laatimisvaihe::int IS NULL
      OR (:laatimisvaihe = 1 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = true)
-           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+           OR (e.versio IN (2018, 2027) AND e.pt$laatimisvaihe IN (0, 1))
          ))
      OR (:laatimisvaihe = 2 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = false)
            OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
-           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+           OR (e.versio = 2027 AND e.pt$laatimisvaihe IN (2, 3, 4))
          ))
     )
 GROUP BY GROUPING SETS ((e.versio, e.lt$lammitys$lammitysmuoto_1$id), (e.versio, e.lt$ilmanvaihto$tyyppi_id));
@@ -102,12 +102,12 @@ AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :l
 AND (:laatimisvaihe::int IS NULL
      OR (:laatimisvaihe = 1 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = true)
-           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+           OR (e.versio IN (2018, 2027) AND e.pt$laatimisvaihe IN (0, 1))
          ))
      OR (:laatimisvaihe = 2 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = false)
            OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
-           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+           OR (e.versio = 2027 AND e.pt$laatimisvaihe IN (2, 3, 4))
          ))
     );
 
@@ -147,12 +147,12 @@ AND (:versio::int IS NULL OR e.versio = :versio)
 AND (:laatimisvaihe::int IS NULL
      OR (:laatimisvaihe = 1 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = true)
-           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+           OR (e.versio IN (2018, 2027) AND e.pt$laatimisvaihe IN (0, 1))
          ))
      OR (:laatimisvaihe = 2 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = false)
            OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
-           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+           OR (e.versio = 2027 AND e.pt$laatimisvaihe IN (2, 3, 4))
          ))
     );
 
@@ -186,12 +186,12 @@ AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :l
 AND (:laatimisvaihe::int IS NULL
      OR (:laatimisvaihe = 1 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = true)
-           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+           OR (e.versio IN (2018, 2027) AND e.pt$laatimisvaihe IN (0, 1))
          ))
      OR (:laatimisvaihe = 2 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = false)
            OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
-           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+           OR (e.versio = 2027 AND e.pt$laatimisvaihe IN (2, 3, 4))
          ))
     );
 
@@ -215,7 +215,7 @@ FROM energiatodistus e
 LEFT JOIN postinumero p ON e.pt$postinumero = p.id
 LEFT JOIN kunta k ON p.kunta_id = k.id
 LEFT JOIN toimintaalue t ON k.toimintaalue_id = t.id
-WHERE e.versio = 2026
+WHERE e.versio = 2027
 AND e.tila_id = 2
 AND e.voimassaolo_paattymisaika > now()
 AND e.is$laatimisajankohta IS NOT NULL
@@ -235,12 +235,12 @@ AND (:lammitetty-nettoala-max::numeric IS NULL OR e.lt$lammitetty_nettoala <= :l
 AND (:laatimisvaihe::int IS NULL
      OR (:laatimisvaihe = 1 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = true)
-           OR (e.versio IN (2018, 2026) AND e.pt$laatimisvaihe IN (0, 1))
+           OR (e.versio IN (2018, 2027) AND e.pt$laatimisvaihe IN (0, 1))
          ))
      OR (:laatimisvaihe = 2 AND (
            (e.versio = 2013 AND e.pt$uudisrakennus = false)
            OR (e.versio = 2018 AND e.pt$laatimisvaihe IN (2))
-           OR (e.versio = 2026 AND e.pt$laatimisvaihe IN (2, 3, 4))
+           OR (e.versio = 2027 AND e.pt$laatimisvaihe IN (2, 3, 4))
          ))
     );
 

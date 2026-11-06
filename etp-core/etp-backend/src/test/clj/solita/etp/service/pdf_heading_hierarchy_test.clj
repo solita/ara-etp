@@ -65,7 +65,7 @@
             (cons type (flatten-headings children)))
           headings))
 
-(t/deftest energiatodistus-2026-with-perusparannuspassi-heading-hierarchy-test
+(t/deftest energiatodistus-2027-with-perusparannuspassi-heading-hierarchy-test
   (let [laatija-id (laatija/insert-suomifi-laatija!
                      {:etunimi "Liisa"
                       :sukunimi "Specimen-Potex"
@@ -79,7 +79,7 @@
                      :toteaja "ARA"})
         whoami {:id laatija-id :rooli 0 :patevyystaso 4}
         et-id (first (energiatodistus-test-data/generate-and-insert!
-                       2026 true laatija-id))
+                       2027 true laatija-id))
         _ (perusparannuspassi/insert-perusparannuspassi!
             (ts/db-user laatija-id)
             whoami

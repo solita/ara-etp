@@ -14,9 +14,9 @@
   (some #(.contains ^String % substring) (flatten-hiccup-strings hiccup)))
 
 (t/deftest ostoenergia-tiedot-shows-dash-when-nil-test
-  ;; Given: a 2026 energiatodistus where the calculation cannot be performed
+  ;; Given: a 2027 energiatodistus where the calculation cannot be performed
   ;;        (e.g. E-luku = 0 and no utilized renewable → denominator = 0)
-  (let [energiatodistus {:versio 2026
+  (let [energiatodistus {:versio 2027
                          :lahtotiedot {:lammitetty-nettoala 200}
                          :tulokset {:e-luku 0
                                     :kaytettavat-energiamuodot {}

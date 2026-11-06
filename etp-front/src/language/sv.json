@@ -420,7 +420,7 @@
     "et-lisays": "Du kan lägga till ett nytt energicertifikat här:",
     "luo2018": "Skapa ett nytt EC 2018",
     "luo2013": "Skapa ett nytt EC 2013",
-    "luo2026": "Skapa ett nytt EC 2026",
+    "luo2027": "Skapa ett nytt EC 2027",
     "lataa-csv": "Ladda ner energicertifikat som CSV-fil",
     "allekirjoitusaika": "Datum för upprättande av certifikat",
     "voimassaolo-paattymisaika": "Slutdatum för certifikatets giltighetstid",
@@ -609,7 +609,7 @@
           "h2": "Åtgärdsförslag för att förbättra E-talet",
           "h3": "De viktigaste rekommendationerna för att förbättra byggnadens E-tal (gäller inte nya byggnader)"
         },
-        "2026": {
+        "2027": {
           "h2": "Åtgärdsförslag för att förbättra E-talet",
           "h3": "De viktigaste rekommendationerna för att förbättra byggnadens E-tal (gäller inte nya byggnader eller energicertifikat med grundrenoveringspass)"
         }
@@ -901,7 +901,7 @@
         "ostoenergia": {
           "2013": "Beräknad mängd energi",
           "2018": "Köpt energi beräknad vid standard\u00ADanvändning",
-          "2026": "Köpt energi beräknad vid standard\u00ADanvändning"
+          "2027": "Köpt energi beräknad vid standard\u00ADanvändning"
         },
         "energiamuodon-kerroin": "Energi\u00ADforms\u00ADfaktor",
         "kertoimella-painotettu-energiankulutus": "Energi\u00ADförbrukning viktad med energi\u00ADforms\u00ADfaktorn",
@@ -945,7 +945,7 @@
         "header": {
           "2013": "Utnyttjad andel av förnybar egenproducerad energi",
           "2018": "Energi som utvunnits från energi i byggnadens närmiljö, tillvaratagen andel (månatlig specifikation i tilläggsuppgifterna)",
-          "2026": "Förnybar energi som utnyttjas och produceras av byggnaden"
+          "2027": "Förnybar energi som utnyttjas och produceras av byggnaden"
         },
         "table-kokonaistuotto-header": "Totalproduktion",
         "table-rakennuksen-hyodyntama-osuus-header": "Andel som utnyttjas av byggnaden",
@@ -1074,7 +1074,7 @@
         "header": {
           "2013": "Köpt energi",
           "2018": "Energi köpt från energinät",
-          "2026": "Energi köpt från energinät"
+          "2027": "Energi köpt från energinät"
         },
         "labels": {
           "kaukolampo": "Fjärrvärme",
@@ -1142,7 +1142,7 @@
       "toteutuneet-yhteensa-header": {
         "2013": "Faktisk köpt energi",
         "2018": "Faktisk köpt energi",
-        "2026": "Realiserad förbrukning av köpt energi och producerad förnybar energi"
+        "2027": "Realiserad förbrukning av köpt energi och producerad förnybar energi"
       },
       "label-context": "Faktisk köpt energi",
       "toteutuneet-yhteensa-table-header": "Energikälla",
@@ -1177,7 +1177,7 @@
       "header": {
         "2013": "Förslag till åtgärder för att förbättra energiprestandan",
         "2018": "Åtgärdsförslag för att förbättra e-talet",
-        "2026": "Åtgärdsförslag för att förbättra e-talet"
+        "2027": "Åtgärdsförslag för att förbättra e-talet"
       },
       "ppp-kaytossa-info": "Toimenpide-ehotukset -osiota ei tule energiatodistukselle, kun energiatodistukseen on lisättynä perusparannuspassi. Voit palauttaa toimenpide-ehdotukset käyttöön poistamalla perusparannuspassin käytöstä. (sv)",
       "tarkastele-disabloituja-huomioita": "Tarkastele käytöstä poistettuja huomioita (sv)",
@@ -1194,7 +1194,7 @@
       "suositukset-header": {
         "2013": "Rekommendationer för byggnadens användning och underhåll",
         "2018": "Rekommendationer för användning och underhåll av byggnaden (påverkar inte E-talet)",
-        "2026": "Rekommendationer för användning och underhåll av byggnaden (påverkar inte E-talet)"
+        "2027": "Rekommendationer för användning och underhåll av byggnaden (påverkar inte E-talet)"
       },
       "suositukset": "Rekommenderade åtgärdsförslag",
       "lisatietoja-header": "Ytterligare uppgifter om energiprestanda",

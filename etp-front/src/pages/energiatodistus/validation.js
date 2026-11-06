@@ -35,8 +35,8 @@ export const isLammonjakoKuvausRequired = R.compose(
 const if2013Else = (on2013, onFalse) =>
   R.ifElse(R.propEq(2013, 'versio'), on2013, onFalse);
 
-const if2026Else = (on2026, onFalse) =>
-  R.ifElse(R.propEq(2026, 'versio'), on2026, onFalse);
+const if2027Else = (on2027, onFalse) =>
+  R.ifElse(R.propEq(2027, 'versio'), on2027, onFalse);
 
 const isPppNotValid = R.compose(
   R.not,
@@ -44,22 +44,22 @@ const isPppNotValid = R.compose(
   R.propOr(Maybe.of(false), 'perusparannuspassi-valid')
 );
 
-const unless2026AndPppValid = condition =>
-  if2026Else(R.both(condition, isPppNotValid), condition);
+const unless2027AndPppValid = condition =>
+  if2027Else(R.both(condition, isPppNotValid), condition);
 
 const requiredCondition = {
-  'perustiedot.havainnointikaynti': if2026Else(
+  'perustiedot.havainnointikaynti': if2027Else(
     laatimisvaiheet.isHavainnointikayntiRequired,
     laatimisvaiheet.isOlemassaOlevaRakennus
   ),
-  'perustiedot.rakennustunnus': if2026Else(
+  'perustiedot.rakennustunnus': if2027Else(
     R.complement(laatimisvaiheet.isRakennuslupa),
     if2013Else(R.T, R.complement(laatimisvaiheet.isRakennuslupa))
   ),
-  'perustiedot.keskeiset-suositukset-fi': unless2026AndPppValid(
+  'perustiedot.keskeiset-suositukset-fi': unless2027AndPppValid(
     laatimisvaiheet.isOlemassaOlevaRakennus
   ),
-  'perustiedot.keskeiset-suositukset-sv': unless2026AndPppValid(
+  'perustiedot.keskeiset-suositukset-sv': unless2027AndPppValid(
     laatimisvaiheet.isOlemassaOlevaRakennus
   ),
 
@@ -79,14 +79,14 @@ const requiredCondition = {
   'lahtotiedot.lammitys.lammonjako.kuvaus-fi': isLammonjakoKuvausRequired,
   'lahtotiedot.lammitys.lammonjako.kuvaus-sv': isLammonjakoKuvausRequired,
 
-  'huomiot.ymparys.teksti-fi': unless2026AndPppValid(
+  'huomiot.ymparys.teksti-fi': unless2027AndPppValid(
     laatimisvaiheet.isOlemassaOlevaRakennus
   ),
-  'huomiot.ymparys.teksti-sv': unless2026AndPppValid(
+  'huomiot.ymparys.teksti-sv': unless2027AndPppValid(
     laatimisvaiheet.isOlemassaOlevaRakennus
   ),
 
-  'ilmastoselvitys.laatimisajankohta': if2026Else(
+  'ilmastoselvitys.laatimisajankohta': if2027Else(
     R.both(
       R.pathEq(true, ['perustiedot', 'tayttaa-aplus-vaatimukset']),
       R.anyPass([

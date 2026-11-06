@@ -6,10 +6,10 @@ import { isEtp2026Enabled } from '../../support/featureFlags';
 Cypress.config('numTestsKeptInMemory', 0);
 
 /**
- * ET2026 form validation tests.
+ * ET2027 form validation tests.
  *
  * Field definitions (dataCy, type, limits, validValue, …) live in the
- * companion CSV file  `energiatodistus-2026-fields.csv`  so that adding
+ * companion CSV file  `energiatodistus-2027-fields.csv`  so that adding
  * or changing a field only requires editing one row in a spreadsheet-
  * friendly format.
  *
@@ -19,7 +19,7 @@ Cypress.config('numTestsKeptInMemory', 0);
  *   description
  *
  * The CSV is loaded at config time (see cypress.config.js) via
- * `Cypress.env('ET2026_FIELDS_CSV')` so that we can generate per-field
+ * `Cypress.env('ET2027_FIELDS_CSV')` so that we can generate per-field
  * describe/it blocks synchronously.
  */
 
@@ -71,7 +71,7 @@ const parseCsv = csv => {
 // Parse fields synchronously from env (loaded in cypress.config.js)
 // ---------------------------------------------------------------------------
 
-const csvString = Cypress.env('ET2026_FIELDS_CSV') || '';
+const csvString = Cypress.env('ET2027_FIELDS_CSV') || '';
 const ALL_ROWS = csvString ? parseCsv(csvString) : [];
 const ALL_FIELDS = ALL_ROWS.filter(f => f.testedInE2e);
 
@@ -151,7 +151,7 @@ const assertSaveSucceeds = () =>
 // ---------------------------------------------------------------------------
 
 const runTests = () => {
-  describe('ET2026 form validation', { testIsolation: false }, () => {
+  describe('ET2027 form validation', { testIsolation: false }, () => {
     let etUrl;
 
     beforeEach(() => {
@@ -165,11 +165,11 @@ const runTests = () => {
         req.headers = { ...req.headers, ...FIXTURES.headers };
       });
 
-      // Create a single ET2026 draft that all tests reuse
+      // Create a single ET2027 draft that all tests reuse
       cy.visit('/#/energiatodistus/all');
       cy.get('[data-cy="create-new-et26"]').click();
       clickSave();
-      cy.location('hash').should('match', /\/energiatodistus\/2026\/\d+/);
+      cy.location('hash').should('match', /\/energiatodistus\/2027\/\d+/);
       cy.location('hash').then(hash => {
         etUrl = '/' + hash;
       });
@@ -318,7 +318,7 @@ const runTests = () => {
       cy.intercept(
         {
           method: 'PUT',
-          pathname: /\/api\/private\/energiatodistukset\/2026\/*/
+          pathname: /\/api\/private\/energiatodistukset\/2027\/*/
         },
         req => {
           req.headers = { ...req.headers, ...FIXTURES.headers };
@@ -354,7 +354,7 @@ const runTests = () => {
         {
           method: 'POST',
           pathname:
-            /\/api\/private\/energiatodistukset\/2026\/\d+\/signature\/system-sign/
+            /\/api\/private\/energiatodistukset\/2027\/\d+\/signature\/system-sign/
         },
         req => {
           req.headers = { ...req.headers, ...FIXTURES.headers };
@@ -372,7 +372,7 @@ const runTests = () => {
       cy.intercept(
         {
           method: 'GET',
-          pathname: /\/api\/private\/energiatodistukset\/2026\/\d+$/
+          pathname: /\/api\/private\/energiatodistukset\/2027\/\d+$/
         },
         req => {
           req.headers = { ...req.headers, ...FIXTURES.headers };
@@ -391,7 +391,7 @@ const runTests = () => {
           expect(et.huomiot['suositukset-fi']).to.be.null;
           expect(et.huomiot['suositukset-sv']).to.be.null;
           return cy.request({
-            url: `/api/private/energiatodistukset/2026/${et.id}/pdf/fi/energiatodistus-${et.id}-fi.pdf`,
+            url: `/api/private/energiatodistukset/2027/${et.id}/pdf/fi/energiatodistus-${et.id}-fi.pdf`,
             headers: FIXTURES.headers
           });
         })
@@ -404,6 +404,6 @@ const runTests = () => {
 };
 
 (isEtp2026Enabled() ? runTests : describe.skip)(
-  'ET2026 validation (skipped — feature flag off)',
+  'ET2027 validation (skipped — feature flag off)',
   () => {}
 );

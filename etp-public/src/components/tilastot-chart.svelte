@@ -22,7 +22,7 @@
   export let printing;
   export let version = '2018';
   $: labels =
-    version === '2026'
+    version === '2027'
       ? ['A0', 'A+', 'A', 'B', 'C', 'D', 'E', 'F', 'G']
       : ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
   let labelsVisual = [];

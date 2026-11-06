@@ -274,14 +274,14 @@
                               whoami
                               energiatodistus-id-3))))))
 
-;; ---- ET2026 test helpers ----
+;; ---- ET2027 test helpers ----
 
-(defn test-data-set-2026 []
+(defn test-data-set-2027 []
   (let [laatijat (laatija-test-data/generate-and-insert! 2)
         laatija-ids (-> laatijat keys sort)
         [laatija-id-1 laatija-id-2] laatija-ids
-        energiatodistus-add-1 (energiatodistus-test-data/generate-add 2026 true)
-        energiatodistus-add-2 (energiatodistus-test-data/generate-add 2026 true)
+        energiatodistus-add-1 (energiatodistus-test-data/generate-add 2027 true)
+        energiatodistus-add-2 (energiatodistus-test-data/generate-add 2027 true)
         [energiatodistus-id-1] (energiatodistus-test-data/insert!
                                  [energiatodistus-add-1]
                                  laatija-id-1)
@@ -295,12 +295,12 @@
      :energiatodistus-add-1  energiatodistus-add-1
      :energiatodistus-add-2  energiatodistus-add-2}))
 
-;; ---- ET2026 Tests: audit-row->flat-energiatodistus ----
+;; ---- ET2027 Tests: audit-row->flat-energiatodistus ----
 
-(t/deftest audit-row->flat-energiatodistus-2026-test
-  ;; Given: an ET2026 energiatodistus is created and updated
+(t/deftest audit-row->flat-energiatodistus-2027-test
+  ;; Given: an ET2027 energiatodistus is created and updated
   (let [{:keys [energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
-        (test-data-set-2026)
+        (test-data-set-2027)
         laatija-id-1 (first laatija-ids)]
 
     ;; When: we update a shared field
@@ -310,22 +310,22 @@
                                        999.99)
                              laatija-id-1)
 
-    ;; Then: flattened audit rows contain shared and ET2026-specific keys
+    ;; Then: flattened audit rows contain shared and ET2027-specific keys
     (let [flats (->> (service/find-audit-rows ts/*db* energiatodistus-id-1)
                      (map service/audit-row->flat-energiatodistus))]
       (doseq [flat-et flats]
         ;; Shared fields
         (t/is (contains? flat-et :id))
         (t/is (contains? flat-et :lahtotiedot.lammitetty-nettoala))
-        ;; ET2026-specific fields
+        ;; ET2027-specific fields
         (t/is (contains? flat-et :perustiedot.havainnointikayntityyppi-id))
         (t/is (contains? flat-et :lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin))
         (t/is (contains? flat-et :lahtotiedot.lammitys.lammonjako-lampotilajousto))))))
 
-(t/deftest audit-row->flat-energiatodistus-2026-ilmastoselvitys-test
-  ;; Given: an ET2026 energiatodistus with ilmastoselvitys data
+(t/deftest audit-row->flat-energiatodistus-2027-ilmastoselvitys-test
+  ;; Given: an ET2027 energiatodistus with ilmastoselvitys data
   (let [{:keys [energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
-        (test-data-set-2026)
+        (test-data-set-2027)
         laatija-id-1 (first laatija-ids)]
 
     ;; When: we update the energiatodistus
@@ -343,10 +343,10 @@
         (t/is (contains? flat-et :ilmastoselvitys.hiilijalanjalki.rakennus.rakennustuotteiden-valmistus))
         (t/is (contains? flat-et :ilmastoselvitys.hiilikadenjalki.rakennus.uudelleenkaytto))))))
 
-(t/deftest audit-row->flat-energiatodistus-2026-kokonaistuotanto-test
-  ;; Given: an ET2026 energiatodistus
+(t/deftest audit-row->flat-energiatodistus-2027-kokonaistuotanto-test
+  ;; Given: an ET2027 energiatodistus
   (let [{:keys [energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
-        (test-data-set-2026)
+        (test-data-set-2027)
         laatija-id-1 (first laatija-ids)]
 
     ;; When: we update the energiatodistus
@@ -367,10 +367,10 @@
         (t/is (contains? flat-et :tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.muulampo))
         (t/is (contains? flat-et :tulokset.uusiutuvat-omavaraisenergiat-kokonaistuotanto.muusahko))))))
 
-(t/deftest audit-row->flat-energiatodistus-2026-toteutunut-test
-  ;; Given: an ET2026 energiatodistus
+(t/deftest audit-row->flat-energiatodistus-2027-toteutunut-test
+  ;; Given: an ET2027 energiatodistus
   (let [{:keys [energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
-        (test-data-set-2026)
+        (test-data-set-2027)
         laatija-id-1 (first laatija-ids)]
 
     ;; When: we update the energiatodistus
@@ -380,7 +380,7 @@
                                        333.33)
                              laatija-id-1)
 
-    ;; Then: flattened audit rows contain toteutunut-ostoenergiankulutus 2026-specific keys
+    ;; Then: flattened audit rows contain toteutunut-ostoenergiankulutus 2027-specific keys
     (let [flats (->> (service/find-audit-rows ts/*db* energiatodistus-id-1)
                      (map service/audit-row->flat-energiatodistus))]
       (doseq [flat-et flats]
@@ -391,12 +391,12 @@
         (t/is (contains? flat-et :toteutunut-ostoenergiankulutus.fossiiliset-polttoaineet-vuosikulutus-yhteensa))
         (t/is (contains? flat-et :toteutunut-ostoenergiankulutus.uusiutuva-energia-vuosituotto-yhteensa))))))
 
-;; ---- ET2026 Tests: find-audit-rows ----
+;; ---- ET2027 Tests: find-audit-rows ----
 
-(t/deftest find-audit-rows-2026-test
-  ;; Given: an ET2026 energiatodistus is created, updated, and signed
+(t/deftest find-audit-rows-2027-test
+  ;; Given: an ET2027 energiatodistus is created, updated, and signed
   (let [{:keys [energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
-        (test-data-set-2026)
+        (test-data-set-2027)
         laatija-id-1 (first laatija-ids)]
 
     ;; When: we update and sign
@@ -414,12 +414,12 @@
       (t/is (= 6 (count audit-rows)))
       (t/is (= [0 0 1 2 2 2] (map :tila-id audit-rows))))))
 
-;; ---- ET2026 Tests: find-history ----
+;; ---- ET2027 Tests: find-history ----
 
-(t/deftest find-history-2026-state-history-test
-  ;; Given: an ET2026 energiatodistus is created, updated, and signed
+(t/deftest find-history-2027-state-history-test
+  ;; Given: an ET2027 energiatodistus is created, updated, and signed
   (let [{:keys [laatijat energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
-        (test-data-set-2026)
+        (test-data-set-2027)
         laatija-id-1 (first laatija-ids)
         laatija-1-fullname (fullname laatijat laatija-id-1)]
 
@@ -460,10 +460,10 @@
                         (= 2 (:new-v %)))
                   (:state-history history))))))
 
-(t/deftest find-history-2026-form-history-shared-fields-test
-  ;; Given: an ET2026 energiatodistus
+(t/deftest find-history-2027-form-history-shared-fields-test
+  ;; Given: an ET2027 energiatodistus
   (let [{:keys [laatijat energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
-        (test-data-set-2026)
+        (test-data-set-2027)
         laatija-id-1 (first laatija-ids)
         laatija-1-fullname (fullname laatijat laatija-id-1)]
 
@@ -486,22 +486,22 @@
       (t/is (= 444.44M (:new-v nettoala-event)))
       (t/is (= laatija-1-fullname (:modifiedby-fullname nettoala-event))))))
 
-(t/deftest find-history-2026-form-history-et2026-specific-fields-test
-  ;; Given: an ET2026 energiatodistus
+(t/deftest find-history-2027-form-history-et2027-specific-fields-test
+  ;; Given: an ET2027 energiatodistus
   (let [{:keys [laatijat energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
-        (test-data-set-2026)
+        (test-data-set-2027)
         laatija-id-1 (first laatija-ids)
         original-value (get-in energiatodistus-add-1
                                [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin])]
 
-    ;; When: we toggle the ET2026-specific boolean field
+    ;; When: we toggle the ET2027-specific boolean field
     (update-energiatodistus! energiatodistus-id-1
                              (assoc-in energiatodistus-add-1
                                        [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
                                        (not original-value))
                              laatija-id-1)
 
-    ;; Then: form history contains the ET2026-specific field change
+    ;; Then: form history contains the ET2027-specific field change
     (let [history (service/find-history ts/*db*
                                         {:id laatija-id-1 :rooli 0}
                                         energiatodistus-id-1)
@@ -512,10 +512,10 @@
       (t/is (= :bool (:type valmius-event)))
       (t/is (= (not original-value) (:new-v valmius-event))))))
 
-(t/deftest find-history-2026-form-history-ilmastoselvitys-test
-  ;; Given: an ET2026 energiatodistus with ilmastoselvitys data
+(t/deftest find-history-2027-form-history-ilmastoselvitys-test
+  ;; Given: an ET2027 energiatodistus with ilmastoselvitys data
   (let [{:keys [energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
-        (test-data-set-2026)
+        (test-data-set-2027)
         laatija-id-1 (first laatija-ids)]
 
     ;; When: we update an ilmastoselvitys field
@@ -535,10 +535,10 @@
       (t/is (some? ilmasto-event))
       (t/is (= 99.9M (:new-v ilmasto-event))))))
 
-(t/deftest find-history-2026-reverted-field-test
-  ;; Given: an ET2026 energiatodistus
+(t/deftest find-history-2027-reverted-field-test
+  ;; Given: an ET2027 energiatodistus
   (let [{:keys [energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
-        (test-data-set-2026)
+        (test-data-set-2027)
         laatija-id-1 (first laatija-ids)]
 
     ;; When: we update a field and then revert it back
@@ -559,10 +559,10 @@
                                (filter #(= :lahtotiedot.lammitetty-nettoala (:k %))))]
       (t/is (empty? nettoala-events)))))
 
-(t/deftest find-history-2026-no-permissions-test
-  ;; Given: an ET2026 energiatodistus owned by laatija-id-2
+(t/deftest find-history-2027-no-permissions-test
+  ;; Given: an ET2027 energiatodistus owned by laatija-id-2
   (let [{:keys [laatijat energiatodistus-id-2 laatija-ids]}
-        (test-data-set-2026)
+        (test-data-set-2027)
         [laatija-id-1] laatija-ids]
 
     ;; Then: a different laatija cannot access the history

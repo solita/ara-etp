@@ -68,7 +68,7 @@
   (future (when pred (f))))
 
 (defn find-carbon-footprint
-  "Returns average kasvihuonepaasto values for rakennus and rakennuspaikka from versio 2026
+  "Returns average kasvihuonepaasto values for rakennus and rakennuspaikka from versio 2027
    energiatodistus records with ilmastoselvitys data. Returns nil if insufficient
    sample size (< 4 records)."
   [db query]
@@ -82,31 +82,31 @@
         lammitys-iv-counts (future-when #(find-lammitys-ilmanvaihto-counts db query) true)
         return-2013? (sufficient-sample-size? (get @e-luokka-counts 2013))
         return-2018? (sufficient-sample-size? (get @e-luokka-counts 2018))
-        return-2026? (sufficient-sample-size? (get @e-luokka-counts 2026))
+        return-2027? (sufficient-sample-size? (get @e-luokka-counts 2027))
         e-luku-statistics-2013 (future-when
                                 #(find-e-luku-statistics db query 2013)
                                 return-2013?)
         e-luku-statistics-2018 (future-when
                                 #(find-e-luku-statistics db query 2018)
                                 return-2018?)
-        e-luku-statistics-2026 (future-when
-                                #(find-e-luku-statistics db query 2026)
-                                return-2026?)
+        e-luku-statistics-2027 (future-when
+                                #(find-e-luku-statistics db query 2027)
+                                return-2027?)
         common-averages (future-when
                          #(find-common-averages db query)
-                         (or return-2013? return-2018? return-2026?))
+                         (or return-2013? return-2018? return-2027?))
         uusiutuvat-omavaraisenergiat-counts-2018
         (future-when
          #(find-uusiutuvat-omavaraisenergiat-counts db query 2018)
          return-2018?)
-        uusiutuvat-omavaraisenergiat-counts-2026
+        uusiutuvat-omavaraisenergiat-counts-2027
         (future-when
-         #(find-uusiutuvat-omavaraisenergiat-counts db query 2026)
-         return-2026?)
+         #(find-uusiutuvat-omavaraisenergiat-counts db query 2027)
+         return-2027?)
         elinkaaren-aikaiset-paastot
         (future-when
          #(find-carbon-footprint db query)
-         return-2026?)]
+         return-2027?)]
 
     (let [result {:counts                      {2013 (when return-2013?
                                 (merge (get @e-luokka-counts 2013)
@@ -114,16 +114,16 @@
                            2018 (when return-2018?
                                 (merge (get @e-luokka-counts 2018)
                                        (get @lammitys-iv-counts 2018)))
-                           2026 (when return-2026?
-                                (merge (get @e-luokka-counts 2026)
-                                       (get @lammitys-iv-counts 2026)))}
+                           2027 (when return-2027?
+                                (merge (get @e-luokka-counts 2027)
+                                       (get @lammitys-iv-counts 2027)))}
                   :e-luku-statistics {2013 @e-luku-statistics-2013
                                       2018 @e-luku-statistics-2018
-                                      2026 @e-luku-statistics-2026}
+                                      2027 @e-luku-statistics-2027}
                   :common-averages @common-averages
                   :uusiutuvat-omavaraisenergiat-counts
                   {2018 @uusiutuvat-omavaraisenergiat-counts-2018
-                   2026 @uusiutuvat-omavaraisenergiat-counts-2026}
+                   2027 @uusiutuvat-omavaraisenergiat-counts-2027}
                   :elinkaaren-aikaiset-paastot @elinkaaren-aikaiset-paastot}]
       result)))
 

@@ -559,8 +559,8 @@ describe('EtHakuSchema', () => {
     });
   });
 
-  describe('ET2026 feature flag gating', () => {
-    // AE-2590: When ET2026 is disabled, PPP and yksinkertaistettu fields should be omittable
+  describe('ET2027 feature flag gating', () => {
+    // AE-2590: When ET2027 is disabled, PPP and yksinkertaistettu fields should be omittable
     it('PPP and yksinkertaistettu-menettely fields can be omitted from schema', () => {
       // Given: the full paakayttajaSchema
       const fieldsToOmit = [
@@ -568,7 +568,7 @@ describe('EtHakuSchema', () => {
         'perusparannuspassi.valid',
         'energiatodistus.yksinkertaistettu-paivitysmenettely'
       ];
-      // When: omitting ET2026-specific fields (simulating isEtp2026Enabled = false)
+      // When: omitting ET2027-specific fields (simulating isEtp2026Enabled = false)
       const filteredSchema = R.omit(fieldsToOmit, Schema.paakayttajaSchema);
       // Then: the omitted fields are not present
       fieldsToOmit.forEach(field => {
@@ -580,20 +580,20 @@ describe('EtHakuSchema', () => {
     });
   });
 
-  describe('ET2026-only boolean fields version constraint', () => {
+  describe('ET2027-only boolean fields version constraint', () => {
     // These two boolean fields exist in all versions as NOT NULL DEFAULT false (migration v5.60),
     // so a bare `= false` query would incorrectly return ET2013/ET2018 certificates.
-    // The format function must inject `['=', 'energiatodistus.versio', 2026]` alongside the
-    // boolean condition so that searches are scoped to ET2026 only.
+    // The format function must inject `['=', 'energiatodistus.versio', 2027]` alongside the
+    // boolean condition so that searches are scoped to ET2027 only.
 
-    // Both ET2026-only boolean fields, tested with both true and false values
-    const et2026BooleanFields = [
+    // Both ET2027-only boolean fields, tested with both true and false values
+    const et2027BooleanFields = [
       'energiatodistus.lahtotiedot.energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin',
       'energiatodistus.lahtotiedot.lammitys.lammonjako-lampotilajousto'
     ];
 
-    it.each(et2026BooleanFields)(
-      '%s: format includes versio=2026 constraint for both true and false',
+    it.each(et2027BooleanFields)(
+      '%s: format includes versio=2027 constraint for both true and false',
       key => {
         const op = Schema.paakayttajaSchema[key][0];
 
@@ -603,7 +603,7 @@ describe('EtHakuSchema', () => {
             op.key,
             value
           );
-          expect(result).toContainEqual(['=', 'energiatodistus.versio', 2026]);
+          expect(result).toContainEqual(['=', 'energiatodistus.versio', 2027]);
         }
       }
     );

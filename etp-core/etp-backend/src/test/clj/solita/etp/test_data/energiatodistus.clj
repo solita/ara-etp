@@ -29,7 +29,7 @@
   (cond->> (cond
              (= versio 2013) energiatodistus-schema/EnergiatodistusSave2013
              (= versio 2018) energiatodistus-schema/EnergiatodistusSave2018
-             (= versio 2026) energiatodistus-schema/EnergiatodistusSave2026)
+             (= versio 2027) energiatodistus-schema/EnergiatodistusSave2027)
            ready-for-signing? (deep/map-values record?
                                                (logic/when* xschema/maybe? :schema))))
 
@@ -45,9 +45,9 @@
       {:perustiedot                     (merge
                                           {:kieli           (rand-int 2)
                                            :kayttotarkoitus "YAT"}
-                                          (when (contains? #{2018 2026} versio)
+                                          (when (contains? #{2018 2027} versio)
                                             {:laatimisvaihe (rand-int 2)})
-                                          (when (contains? #{2026} versio)
+                                          (when (contains? #{2027} versio)
                                             {:havainnointikayntityyppi-id (rand-int 2)}))
        :lahtotiedot                     {:ilmanvaihto {:tyyppi-id (rand-int 7)}
                                          :lammitys    {:lammitysmuoto-1 {:id (rand-int 10)}
@@ -61,7 +61,7 @@
        :draft-visible-to-paakayttaja            false
        :bypass-validation-limits        false
        :bypass-validation-limits-reason nil}
-      (when (contains? #{2026} versio)
+      (when (contains? #{2027} versio)
         {:ilmastoselvitys {:laadintaperuste (rand-int 2)}}))
     (schema-by-version-and-ready-for-signing versio
                                              ready-for-signing?)
@@ -90,7 +90,7 @@
   "Here we don't know what version the add is, but we deduce it from its structure."
   [add]
   (cond (-> add :perustiedot (contains? :uudisrakennus)) 2013
-        (-> add :perustiedot (contains? :havainnointikayntityyppi-id)) 2026
+        (-> add :perustiedot (contains? :havainnointikayntityyppi-id)) 2027
         :else 2018))
 
 (defn insert!
@@ -118,7 +118,7 @@
     (io/copy (io/file in) (io/file out))
     out))
 
-(defn generate-2026-pdf-as-file-mock [_ _ _ _ _ _]
+(defn generate-2027-pdf-as-file-mock [_ _ _ _ _ _]
   (let [in "src/test/resources/energiatodistukset/signing-process/generate-pdf-as-file.pdf"
         out (->> (java.util.UUID/randomUUID)
                  .toString
@@ -136,7 +136,7 @@
 (defn sign-pdf-at-time! [energiatodistus-id laatija-id now whoami]
   (with-bindings {#'solita.etp.service.signing.pdf-sign/get-signature-parameters             get-parameters-in-test
                   #'solita.etp.service.energiatodistus-pdf/generate-et-2013-2018-pdf-as-file generate-pdf-as-file-mock
-                  #'solita.etp.service.energiatodistus-pdf/generate-et-2026-pdf-as-file      generate-2026-pdf-as-file-mock
+                  #'solita.etp.service.energiatodistus-pdf/generate-et-2027-pdf-as-file      generate-2027-pdf-as-file-mock
                   #'solita.etp.service.signing.pdf-sign/get-tsp-source                       test-timeserver/get-tsp-source-in-test}
     (let [language (-> (energiatodistus-service/find-energiatodistus
                          ts/*db*

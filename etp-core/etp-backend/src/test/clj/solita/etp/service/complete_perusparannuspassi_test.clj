@@ -15,7 +15,7 @@
                          first
                          (merge {:patevyystaso 4})))
         whoami {:id laatija-id :rooli 0 :patevyystaso 4}
-        [et-id _] (energiatodistus-test-data/generate-and-insert! 2026 true laatija-id)
+        [et-id _] (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id)
         ;; Create minimal PPP manually instead of using the generator
         ppp-add {:energiatodistus-id et-id
                  :valid true
@@ -129,7 +129,7 @@
                          first
                          (merge {:patevyystaso 4})))
         whoami {:id laatija-id :rooli 0 :patevyystaso 4}
-        new-et-id! #(first (energiatodistus-test-data/generate-and-insert! 2026 true laatija-id))]
+        new-et-id! #(first (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id))]
 
     (t/testing "PPP with both tayttaa-*-vaatimukset true → e-luokka NOT downgraded"
       (let [ppp-add (make-ppp-add (new-et-id!)

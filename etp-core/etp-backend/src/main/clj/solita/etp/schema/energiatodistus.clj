@@ -225,7 +225,7 @@
                  :jaahdytys     schema/Num
                  :eluvun-muutos schema/Num}]})
 
-(def Huomio2026
+(def Huomio2027
   {:teksti-fi  common-schema/String1000
    :teksti-sv  common-schema/String1000,
    :toimenpide [{:nimi-fi                    common-schema/String100
@@ -282,7 +282,7 @@
   (-> schema2018
       (map/dissoc-in [:perustiedot :laatimisvaihe])))
 
-(defn dissoc-not-in-2026 [schema2018]
+(defn dissoc-not-in-2027 [schema2018]
   (-> schema2018
       (map/dissoc-in [:toteutunut-ostoenergiankulutus :polttoaineet-vuosikulutus-yhteensa])))
 
@@ -360,8 +360,8 @@
    :hiilijalanjalki         Hiilijalanjalki
    :hiilikadenjalki         Hiilikadenjalki})
 
-(def EnergiatodistusSave2026
-  (-> (dissoc-not-in-2026 EnergiatodistusSave2018)
+(def EnergiatodistusSave2027
+  (-> (dissoc-not-in-2027 EnergiatodistusSave2018)
       (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key
                                                          :tayttaa-aplus-vaatimukset   schema/Bool
                                                          :tayttaa-a0-vaatimukset      schema/Bool}
@@ -381,12 +381,12 @@
                                                           :lampopumppu  common-schema/NonNegative
                                                           :muulampo     common-schema/NonNegative
                                                           :muusahko     common-schema/NonNegative}}
-                        :huomiot                        {:iv-ilmastointi    Huomio2026
-                                                         :valaistus-muut    Huomio2026
-                                                         :lammitys          (assoc Huomio2026
+                        :huomiot                        {:iv-ilmastointi    Huomio2027
+                                                         :valaistus-muut    Huomio2027
+                                                         :lammitys          (assoc Huomio2027
                                                                               :kayttoikaa-jaljella-arvio-vuosina common-schema/IntNonNegative)
-                                                         :ymparys           Huomio2026
-                                                         :alapohja-ylapohja Huomio2026}
+                                                         :ymparys           Huomio2027
+                                                         :alapohja-ylapohja Huomio2027}
                         :lisamerkintoja-fi              common-schema/String4600
                         :lisamerkintoja-sv              common-schema/String4600
                         :ilmastoselvitys                Ilmastoselvitys})
@@ -422,8 +422,8 @@
   because the PPP is created alongside the energiatodistus."
   (dissoc ppp-schema/PerusparannuspassiSave :energiatodistus-id))
 
-(def EnergiatodistusSave2026External
-  (assoc (->EnergiatodistusSaveExternal EnergiatodistusSave2026)
+(def EnergiatodistusSave2027External
+  (assoc (->EnergiatodistusSaveExternal EnergiatodistusSave2027)
     (schema/optional-key :perusparannuspassi) (schema/maybe PerusparannuspassiSaveExternal)))
 
 (def Energiatehokkuus
@@ -458,9 +458,9 @@
   "Energiatodistus 2013"
   (energiatodistus-versio 2013 EnergiatodistusSave2013))
 
-(def Energiatodistus2026
-  "Energiatodistus 2026"
-  (assoc (energiatodistus-versio 2026 EnergiatodistusSave2026)
+(def Energiatodistus2027
+  "Energiatodistus 2027"
+  (assoc (energiatodistus-versio 2027 EnergiatodistusSave2027)
     :perusparannuspassi-id (schema/maybe common-schema/Key)
     :perusparannuspassi-valid (schema/maybe schema/Bool)))
 
@@ -470,7 +470,7 @@
   (schema/conditional
     (partial versio? 2018) Energiatodistus2018
     (partial versio? 2013) Energiatodistus2013
-    (partial versio? 2026) Energiatodistus2026))
+    (partial versio? 2027) Energiatodistus2027))
 
 (defn assoc-energiatodistus
   "Extend energiatodistus schema by associating new key value pairs."

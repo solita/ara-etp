@@ -100,19 +100,19 @@
                                             (api-response/get-response
                                               (service.palveluvayla/get-by-id id db 2018)
                                               (str "Energiatodistus " id " does not exists.")))}}]]
-              ["/2026"
-               ["" {:get {:summary    "Hae json-muotoisia energiatodistuksia, jotka on laadittu vuoden 2026 säännösten mukaan"
+              ["/2027"
+               ["" {:get {:summary    "Hae json-muotoisia energiatodistuksia, jotka on laadittu vuoden 2027 säännösten mukaan"
                           :parameters {:query {:rakennustunnus schema.common/Rakennustunnus}}
-                          :responses  {200 {:body [schema.energiatodistus/Energiatodistus2026]}}
+                          :responses  {200 {:body [schema.energiatodistus/Energiatodistus2027]}}
                           :handler    (fn [{{:keys [query]} :parameters :keys [db]}]
                                         (api-response/get-response
-                                          (service.palveluvayla/search-by-rakennustunnus (:rakennustunnus query) schema.energiatodistus/Energiatodistus2026 db 2026)
+                                          (service.palveluvayla/search-by-rakennustunnus (:rakennustunnus query) schema.energiatodistus/Energiatodistus2027 db 2027)
                                           (str "Virhe haussa")))}}]
-               ["/:id" {:get {:summary    "Hae yksittäinen vuoden 2026 säännösten mukainen energiatodistus todistuksen tunnuksen perusteella json-muodossa"
+               ["/:id" {:get {:summary    "Hae yksittäinen vuoden 2027 säännösten mukainen energiatodistus todistuksen tunnuksen perusteella json-muodossa"
                               :parameters {:path {:id schema.common/Key}}
-                              :responses  {200 {:body schema.energiatodistus/Energiatodistus2026}
+                              :responses  {200 {:body schema.energiatodistus/Energiatodistus2027}
                                            404 {:body s/Str}}
                               :handler    (fn [{{{:keys [id]} :path} :parameters :keys [db]}]
                                             (api-response/get-response
-                                              (service.palveluvayla/get-by-id id db 2026)
+                                              (service.palveluvayla/get-by-id id db 2027)
                                               (str "Energiatodistus " id " does not exists.")))}}]]]])

@@ -27,7 +27,7 @@
   import DirtyConfirmation from '@Component/Confirm/dirty.svelte';
 
   import { announcementsForModule } from '@Utility/announce';
-  import ET2026Form from './ET2026Form';
+  import ET2027Form from './ET2027Form';
   import ET2018Form from './ET2018Form';
   import ET2013Form from './ET2013Form';
 
@@ -53,7 +53,7 @@
   const forms = {
     '2018': ET2018Form,
     '2013': ET2013Form,
-    '2026': ET2026Form
+    '2027': ET2027Form
   };
   const ETForm = forms[version];
 
@@ -259,7 +259,7 @@
     energiatodistus,
     perusparannuspassi
   ) => {
-    if (version === '2026') {
+    if (version === '2027') {
       return R.assoc(
         'perusparannuspassi-valid',
         R.__,
@@ -425,7 +425,7 @@
           bind:eTehokkuus
           bind:dirty
           bind:korvausError />
-        {#if version === '2026'}
+        {#if version === '2027'}
           <PppForm
             {energiatodistus}
             {eTehokkuus}

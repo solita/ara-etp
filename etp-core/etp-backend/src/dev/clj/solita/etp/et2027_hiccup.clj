@@ -1,15 +1,15 @@
-(ns solita.etp.et2026-hiccup
+(ns solita.etp.et2027-hiccup
   (:require [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
             [solita.etp.service.luokittelu :as luokittelu-service]
             [solita.etp.service.toimenpide-ehdotus :as toimenpide-ehdotus-service]
-            [solita.etp.service.energiatodistus-2026-pdf :as etp2026-pdf]
+            [solita.etp.service.energiatodistus-2027-pdf :as et2027-pdf]
             [clojure.string :as str]))
 
-(defn find-energiatodistus-2026-hiccup [db energiatodistus-id kieli]
+(defn find-energiatodistus-2027-hiccup [db energiatodistus-id kieli]
   (let [complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db energiatodistus-id)
-        luokittelut {:alakayttotarkoitukset              (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
-                     :kayttotarkoitukset                 (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
+        luokittelut {:alakayttotarkoitukset              (kayttotarkoitus-service/find-alakayttotarkoitukset db 2027)
+                     :kayttotarkoitukset                 (kayttotarkoitus-service/find-kayttotarkoitukset db 2027)
                      :laatimisvaiheet                    (luokittelu-service/find-laatimisvaiheet db)
                      :mahdollisuus-liittya               (luokittelu-service/find-mahdollisuus-liittya db)
                      :uusiutuva-energia                  (luokittelu-service/find-uusiutuva-energia db)
@@ -18,7 +18,7 @@
                      :toimenpide-ehdotukset              (toimenpide-ehdotus-service/find-all db)
                      :ilmastoselvitys-laadintaperusteet  (luokittelu-service/find-ilmastoselvitys-laadintaperusteet db)}
         kieli-keyword (keyword kieli)]
-    (etp2026-pdf/generate-energiatodistus-hiccup
+    (et2027-pdf/generate-energiatodistus-hiccup
       {:energiatodistus                    complete-energiatodistus
        :alakayttotarkoitukset              (:alakayttotarkoitukset luokittelut)
        :laatimisvaiheet                    (:laatimisvaiheet luokittelut)

@@ -39,7 +39,7 @@
   import OstetutPolttoaineet from './form-parts/toteutunut-kulutus/ostetut-polttoaineet';
   import ToteutunutOstoenergia from './form-parts/toteutunut-kulutus/toteutunut-ostoenergia';
 
-  import ET2026HuomiotSection from './ET2026HuomiotSection.svelte';
+  import ET2027HuomiotSection from './ET2027HuomiotSection.svelte';
   import Huomio from './form-parts/huomiot/huomio';
   import Suositukset from './form-parts/huomiot/suositukset';
 
@@ -131,8 +131,8 @@
         bind:model={energiatodistus}
         lens={R.lensPath(['perustiedot', 'laatimisvaihe'])}
         parse={Maybe.Some}
-        format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet2026)}
-        items={R.pluck('id', luokittelut.laatimisvaiheet2026)} />
+        format={et.selectFormat(labelLocale, luokittelut.laatimisvaiheet2027)}
+        items={R.pluck('id', luokittelut.laatimisvaiheet2027)} />
     </div>
     {#if Laatimisvaiheet.isHavainnointikayntiRequired(energiatodistus)}
       <div class="w-full py-4 lg:w-1/2">
@@ -209,7 +209,7 @@
   </div>
 </div>
 <ToimenpideEhdotukset
-  versio={'2026'}
+  versio={'2027'}
   disabled={huomiotDisabled}
   {inputLanguage}
   {schema}
@@ -255,7 +255,7 @@
   {inputLanguage} />
 
 <Lammitysjarjestelma
-  versio={2026}
+  versio={2027}
   {disabled}
   {schema}
   bind:energiatodistus
@@ -287,12 +287,12 @@
   {disabled}
   {schema}
   bind:energiatodistus
-  versio={2026} />
+  versio={2027} />
 <UusiutuvatOmavaraisenergiat
   {disabled}
   {schema}
   bind:energiatodistus
-  versio={2026} />
+  versio={2027} />
 <TeknistenjarjestelmienEnergiankulutus
   {disabled}
   {schema}
@@ -305,7 +305,7 @@
   id="toteutunut-ostoenergiankulutus"
   text={$_('energiatodistus.toteutunut-ostoenergiankulutus.header')} />
 <EnergiaverkostaOstetut
-  versio={2026}
+  versio={2027}
   {disabled}
   {schema}
   {inputLanguage}
@@ -316,56 +316,56 @@
   {schema}
   bind:energiatodistus
   {inputLanguage}
-  versio={2026} />
+  versio={2027} />
 
 <HR />
 <H2
   id="toimenpide-ehdotukset"
-  text={$_('energiatodistus.huomiot.header.2026')} />
-<ET2026HuomiotSection hasPpp={hasPppAdded}>
+  text={$_('energiatodistus.huomiot.header.2027')} />
+<ET2027HuomiotSection hasPpp={hasPppAdded}>
   <Huomio
     disabled={huomiotDisabled}
     {schema}
     {inputLanguage}
-    versio={2026}
+    versio={2027}
     huomio={'ymparys'}
     bind:energiatodistus />
   <Huomio
     disabled={huomiotDisabled}
     {schema}
     {inputLanguage}
-    versio={2026}
+    versio={2027}
     huomio={'alapohja-ylapohja'}
     bind:energiatodistus />
   <Huomio
     disabled={huomiotDisabled}
     {schema}
     {inputLanguage}
-    versio={2026}
+    versio={2027}
     huomio={'lammitys'}
     bind:energiatodistus />
   <Huomio
     disabled={huomiotDisabled}
     {schema}
     {inputLanguage}
-    versio={2026}
+    versio={2027}
     huomio={'iv-ilmastointi'}
     bind:energiatodistus />
   <Huomio
     disabled={huomiotDisabled}
     {schema}
     {inputLanguage}
-    versio={2026}
+    versio={2027}
     huomio={'valaistus-muut'}
     bind:energiatodistus />
 
   <Suositukset
-    versio={2026}
+    versio={2027}
     disabled={huomiotDisabled}
     {schema}
     {inputLanguage}
     bind:energiatodistus />
-</ET2026HuomiotSection>
+</ET2027HuomiotSection>
 
 <HR />
 <H2 id="lisamerkintoja" text={$_('energiatodistus.lisamerkintoja')} />

@@ -41,7 +41,7 @@
     R.cond([
       [R.equals('2018'), () => empty.energiatodistus2018()],
       [R.equals('2013'), () => empty.energiatodistus2013()],
-      [R.equals('2026'), () => empty.energiatodistus2026()]
+      [R.equals('2027'), () => empty.energiatodistus2027()]
     ])(versio);
 
   const cleanEnergiatodistusCopy = R.compose(

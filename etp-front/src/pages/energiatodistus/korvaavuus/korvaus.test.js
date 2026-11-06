@@ -290,7 +290,7 @@ describe('korvaus.js', () => {
         Date.now() + 365 * 24 * 60 * 60 * 1000
       ).toISOString();
       const energiatodistus = {
-        versio: 2026,
+        versio: 2027,
         'tila-id': ET.tila.draft,
         'korvattu-energiatodistus-id': Maybe.Some(10)
       };
@@ -385,7 +385,7 @@ describe('korvaus.js', () => {
         Date.now() - 365 * 24 * 60 * 60 * 1000
       ).toISOString();
       const energiatodistus = {
-        versio: 2026,
+        versio: 2027,
         'tila-id': ET.tila.draft,
         'korvattu-energiatodistus-id': Maybe.Some(10)
       };

@@ -14,7 +14,7 @@
 (t/deftest perustaso-et-post-access
   (laatija-test-data/insert-suomifi-laatija!)
 
-  (t/testing "An usual laatija may POST energiatodistus versions 2013 and 2018, but not 2026"
+  (t/testing "An usual laatija may POST energiatodistus versions 2013 and 2018, but not 2027"
     (let [et (-> (et-test-data/generate-add 2013 true))
           et-body (-> et j/write-value-as-string)
           post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2013")
@@ -31,9 +31,9 @@
                                    (mock/body et-body)
                                    (laatija-test-data/with-suomifi-laatija)))]
       (t/is (= 201 (:status post-res)) "Expected status 201 from ET creation"))
-    (let [et (-> (et-test-data/generate-add 2026 true))
+    (let [et (-> (et-test-data/generate-add 2027 true))
           et-body (-> et j/write-value-as-string)
-          post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2026")
+          post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2027")
                                    (mock/header "Accept" "application/json")
                                    (mock/header "Content-Type" "application/json")
                                    (mock/body et-body)
@@ -61,9 +61,9 @@
                                    (mock/body et-body)
                                    (laatija-test-data/with-suomifi-laatija)))]
       (t/is (= 201 (:status post-res)) "Expected status 201 from ET creation"))
-    (let [et (-> (et-test-data/generate-add 2026 true))
+    (let [et (-> (et-test-data/generate-add 2027 true))
           et-body (-> et j/write-value-as-string)
-          post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2026")
+          post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2027")
                                    (mock/header "Accept" "application/json")
                                    (mock/header "Content-Type" "application/json")
                                    (mock/body et-body)
@@ -89,7 +89,7 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (= "1. Pienet asuinrakennukset" (:label-fi (some #(when (= 1 (:id %)) %) response-body))))
         (t/is (= 200 (:status get-res))))))
-  (let [endpoint "/api/public/energiatodistukset/kayttotarkoitusluokat/2026"]
+  (let [endpoint "/api/public/energiatodistukset/kayttotarkoitusluokat/2027"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")
@@ -115,7 +115,7 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (= "Yhden asunnon talot" (:label-fi (some #(when (= "YAT" (:id %)) %) response-body))))
         (t/is (= 200 (:status get-res))))))
-  (let [endpoint "/api/public/energiatodistukset/alakayttotarkoitusluokat/2026"]
+  (let [endpoint "/api/public/energiatodistukset/alakayttotarkoitusluokat/2027"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")
@@ -141,7 +141,7 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (= "Yhden asunnon talot" (:label-fi (some #(when (= "YAT" (:id %)) %) response-body))))
         (t/is (= 200 (:status get-res))))))
-  (let [endpoint "/api/public/energiatodistukset/alakayttotarkoitusluokat/2026"]
+  (let [endpoint "/api/public/energiatodistukset/alakayttotarkoitusluokat/2027"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")
@@ -167,8 +167,8 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (= "A" (:e-luokka response-body)))
         (t/is (= 200 (:status get-res))))))
-  ;; 2026 endpoint uses false, false downgrade params → A+ becomes A
-  (let [endpoint "/api/public/energiatodistukset/e-luokka/2026/YAT/100/25"]
+  ;; 2027 endpoint uses false, false downgrade params → A+ becomes A
+  (let [endpoint "/api/public/energiatodistukset/e-luokka/2027/YAT/100/25"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")
@@ -198,7 +198,7 @@
         (t/is (= {:min 50 :max 999999} (:warning (some #(when (= "lahtotiedot.lammitetty-nettoala" (:property %)) %) response-body))))
         (t/is (= 200 (:status get-res))))))
 
-  (let [endpoint "/api/private/validation/numeric/2026"]
+  (let [endpoint "/api/private/validation/numeric/2027"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")
@@ -228,7 +228,7 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (some? (some #{"laskutusosoite-id"} response-body)))
         (t/is (= 200 (:status get-res))))))
-  (let [endpoint "/api/private/validation/required/2026/bypass"]
+  (let [endpoint "/api/private/validation/required/2027/bypass"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")
@@ -258,7 +258,7 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (some? (some #{"laskutusosoite-id"} response-body)))
         (t/is (= 200 (:status get-res))))))
-  (let [endpoint "/api/private/validation/required/2026/all"]
+  (let [endpoint "/api/private/validation/required/2027/all"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")
@@ -288,7 +288,7 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (some? (some #{"laskutusosoite-id"} response-body)))
         (t/is (= 200 (:status get-res))))))
-  (let [endpoint "/api/private/validation/required/2026"]
+  (let [endpoint "/api/private/validation/required/2027"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")
@@ -318,7 +318,7 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (some #(contains? % :henkilot) response-body))
         (t/is (= 200 (:status get-res))))))
-  (let [endpoint "/api/private/validation/sisaiset-kuormat/2026"]
+  (let [endpoint "/api/private/validation/sisaiset-kuormat/2027"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")
@@ -348,7 +348,7 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (some (partial = {:valid true, :label-sv "1. Små bostadsbyggnader", :id 1, :label-fi "1. Pienet asuinrakennukset"}) response-body))
         (t/is (= 200 (:status get-res))))))
-  (let [endpoint "/api/private/kayttotarkoitusluokat/2026"]
+  (let [endpoint "/api/private/kayttotarkoitusluokat/2027"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")
@@ -379,7 +379,7 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (some (partial = {:valid true, :label-sv "Hus med en bostad", :kayttotarkoitusluokka-id 1, :id "YAT", :label-fi "Yhden asunnon talot"}) response-body))
         (t/is (= 200 (:status get-res))))))
-  (let [endpoint "/api/private/alakayttotarkoitusluokat/2026"]
+  (let [endpoint "/api/private/alakayttotarkoitusluokat/2027"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")
@@ -409,8 +409,8 @@
             response-body (-> get-res :body (j/read-value object-mapper))]
         (t/is (= "A" (:e-luokka response-body)))
         (t/is (= 200 (:status get-res))))))
-  ;; 2026 endpoint uses false, false downgrade params → A+ becomes A
-  (let [endpoint "/api/private/e-luokka/2026/YAT/100/25"]
+  ;; 2027 endpoint uses false, false downgrade params → A+ becomes A
+  (let [endpoint "/api/private/e-luokka/2027/YAT/100/25"]
     (t/testing endpoint
       (let [get-res (ts/handler (-> (mock/request :get endpoint)
                                     (mock/header "Accept" "application/json")

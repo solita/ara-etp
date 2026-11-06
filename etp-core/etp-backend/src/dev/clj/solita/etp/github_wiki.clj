@@ -408,7 +408,7 @@
    :lisamerkintoja-fi nil
    :lisamerkintoja-sv nil})
 
-(def energiatodistus-2026
+(def energiatodistus-2027
   {:korvattu-energiatodistus-id          nil
    :yksinkertaistettu-paivitysmenettely false
    :draft-visible-to-paakayttaja        false
@@ -439,8 +439,8 @@
                                :postitoimipaikka  "Helsinki"}
     :rakennusosa              "Päärakennus"
     :kieli                    0
-    :nimi-fi                  "Esimerkkitalo 2026"
-    :nimi-sv                  "Exempelhus 2026"
+    :nimi-fi                  "Esimerkkitalo 2027"
+    :nimi-sv                  "Exempelhus 2027"
     :kayttotarkoitus          "T"}
    :lahtotiedot
    {:lammitetty-nettoala 3000
@@ -629,20 +629,20 @@
 (defn insert-energiatodistukset!
   "Insert the energiatodistukset via the private API (POST).
    This exercises all API-level validations.
-   Returns a map {:et-2013-id <id> :et-2018-id <id> :et-2026-id <id>}."
+   Returns a map {:et-2013-id <id> :et-2018-id <id> :et-2027-id <id>}."
   []
   (let [resp-2013 (api-post! "/api/private/energiatodistukset/2013" energiatodistus-2013)
         id-2013   (:id resp-2013)
         resp-2018 (api-post! "/api/private/energiatodistukset/2018" energiatodistus-2018)
         id-2018   (:id resp-2018)
-        resp-2026 (api-post! "/api/private/energiatodistukset/2026" energiatodistus-2026)
-        id-2026   (:id resp-2026)]
+        resp-2027 (api-post! "/api/private/energiatodistukset/2027" energiatodistus-2027)
+        id-2027   (:id resp-2027)]
     (println (str "Inserted ET2013 id=" id-2013 " (warnings: " (:warnings resp-2013) ")"))
     (println (str "Inserted ET2018 id=" id-2018 " (warnings: " (:warnings resp-2018) ")"))
-    (println (str "Inserted ET2026 id=" id-2026 " (warnings: " (:warnings resp-2026) ")"))
+    (println (str "Inserted ET2027 id=" id-2027 " (warnings: " (:warnings resp-2027) ")"))
     {:et-2013-id id-2013
      :et-2018-id id-2018
-     :et-2026-id id-2026}))
+     :et-2027-id id-2027}))
 
 ;; ---------------------------------------------------------------------------
 ;; Sign energiatodistukset via API
@@ -651,10 +651,10 @@
 (defn sign-energiatodistukset!
   "Sign the energiatodistukset via the system-sign API endpoint.
    This exercises all signing validations (required fields, pätevyys, etc.).
-   `ids` is a map with :et-2013-id, :et-2018-id, and :et-2026-id."
-  [{:keys [et-2013-id et-2018-id et-2026-id]}]
-  (let [id->versio {et-2013-id 2013 et-2018-id 2018 et-2026-id 2026}]
-    (doseq [id [et-2013-id et-2018-id et-2026-id]
+   `ids` is a map with :et-2013-id, :et-2018-id, and :et-2027-id."
+  [{:keys [et-2013-id et-2018-id et-2027-id]}]
+  (let [id->versio {et-2013-id 2013 et-2018-id 2018 et-2027-id 2027}]
+    (doseq [id [et-2013-id et-2018-id et-2027-id]
             :let [versio (id->versio id)]]
       (let [resp (api-post! (str "/api/private/energiatodistukset/" versio "/" id "/signature/system-sign") nil false)]
         (println (str "Signed energiatodistus id=" id " -> " resp))))))
@@ -743,11 +743,11 @@
    the github_wiki directory.
    When `ids` map is provided, filters CSVs to keep only those rows."
   ([] (update-aineistot! nil))
-  ([{:keys [et-2013-id et-2018-id et-2026-id] :as ids}]
+  ([{:keys [et-2013-id et-2018-id et-2027-id] :as ids}]
    (let [db     (get-db)
          whoami {:id -5 :rooli -1}
          s3     (get-aws-s3-client)
-         id-set (when ids [et-2013-id et-2018-id et-2026-id])]
+         id-set (when ids [et-2013-id et-2018-id et-2027-id])]
      ;; Upload to S3
      (csv-to-s3-service/update-aineistot-in-s3! db whoami s3)
      (println "Aineistot updated in S3.")

@@ -205,7 +205,7 @@
      [:huomiot child])
     [[:lisamerkintoja-fi]
     [:lisamerkintoja-sv]]
-    ;; ET2026: Ilmastoselvitys
+    ;; ET2027: Ilmastoselvitys
     (for [child [:laatimisajankohta :laatija :yritys :yritys-osoite
                 :yritys-postinumero :yritys-postitoimipaikka :laadintaperuste]]
      [:ilmastoselvitys child])
@@ -239,7 +239,7 @@
         (or (contains? extra-columns column)
             (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2013 column)
             (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2018 column)
-            (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2026 column))
+            (schema-tools/get-in public-energiatodistus-schema/Energiatodistus2027 column))
         (not (contains? hidden-columns column))))
      private-columns)))
 

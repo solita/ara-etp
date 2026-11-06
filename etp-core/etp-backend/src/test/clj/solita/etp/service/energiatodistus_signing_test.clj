@@ -35,7 +35,7 @@
                                    laatija-id)
                                   (energiatodistus-test-data/generate-and-insert!
                                    1
-                                   2026
+                                   2027
                                    true
                                    laatija-id))]
     {:laatijat           laatijat
@@ -290,23 +290,23 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
                    #(energiatodistus-service/start-energiatodistus-signing! db whoami et-id))]
       (t/is (= (:type result) :invalid-laatimisvaihe)))))
 
-(t/deftest signing-allows-valid-laatimisvaihe-2026-id-3
-  (t/testing "given a 2026 energiatodistus with laatimisvaihe 3, when signing, then succeeds"
+(t/deftest signing-allows-valid-laatimisvaihe-2027-id-3
+  (t/testing "given a 2027 energiatodistus with laatimisvaihe 3, when signing, then succeeds"
     (let [laatijat (laatija-test-data/generate-and-insert! 1)
           laatija-id (-> laatijat keys sort first)
           db (ts/db-user laatija-id)
           whoami {:id laatija-id}
-          et-id (generate-and-insert-with-laatimisvaihe! 2026 3 laatija-id)]
+          et-id (generate-and-insert-with-laatimisvaihe! 2027 3 laatija-id)]
       (t/is (= (energiatodistus-service/start-energiatodistus-signing! db whoami et-id)
                :ok)))))
 
-(t/deftest signing-allows-valid-laatimisvaihe-2026-id-4
-  (t/testing "given a 2026 energiatodistus with laatimisvaihe 4, when signing, then succeeds"
+(t/deftest signing-allows-valid-laatimisvaihe-2027-id-4
+  (t/testing "given a 2027 energiatodistus with laatimisvaihe 4, when signing, then succeeds"
     (let [laatijat (laatija-test-data/generate-and-insert! 1)
           laatija-id (-> laatijat keys sort first)
           db (ts/db-user laatija-id)
           whoami {:id laatija-id}
-          et-id (generate-and-insert-with-laatimisvaihe! 2026 4 laatija-id)]
+          et-id (generate-and-insert-with-laatimisvaihe! 2027 4 laatija-id)]
       (t/is (= (energiatodistus-service/start-energiatodistus-signing! db whoami et-id)
                :ok)))))
 

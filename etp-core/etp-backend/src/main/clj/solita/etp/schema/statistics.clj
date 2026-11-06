@@ -14,7 +14,7 @@
     :lammitetty-nettoala-min common-schema/NonNegative
     :lammitetty-nettoala-max common-schema/NonNegative}))
 
-(def Versio (schema/enum 2013 2018 2026))
+(def Versio (schema/enum 2013 2018 2027))
 
 (def StatisticsResponse
   (schema/maybe

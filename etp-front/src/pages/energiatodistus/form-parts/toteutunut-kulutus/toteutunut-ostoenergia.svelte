@@ -42,7 +42,7 @@
       versio
   )} />
 
-{#if R.equals(versio, 2026)}
+{#if R.equals(versio, 2027)}
   <div class="w-full flex-col">
     <div class="w-1/3">
       <Input

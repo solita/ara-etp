@@ -30,7 +30,7 @@
 
 <div class="border-right-0 min-w-full overflow-x-auto md:overflow-x-hidden">
   <table class="et-table mb-12">
-    {#if R.equals(versio, 2026)}
+    {#if R.equals(versio, 2027)}
       <colgroup>
         <col class="w-1/4" />
         <col class="w-1/4" />
@@ -129,7 +129,7 @@
               R.prop(energiamuoto)
             )(omavaraisenergiatPerLammitettyNettoala)}
           </td>
-          {#if R.equals(versio, 2026)}
+          {#if R.equals(versio, 2027)}
             <td class="et-table--td">
               <Input
                 {disabled}

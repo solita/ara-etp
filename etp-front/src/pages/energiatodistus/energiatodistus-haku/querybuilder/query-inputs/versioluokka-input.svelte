@@ -15,7 +15,7 @@
   export let versio;
   export let luokittelu;
 
-  const versiot = isEtp2026Enabled(config) ? [2026, 2018, 2013] : [2018, 2013];
+  const versiot = isEtp2026Enabled(config) ? [2027, 2018, 2013] : [2018, 2013];
 
   let currentluokittelut = Maybe.None();
 

@@ -63,11 +63,11 @@
                            " is not allowed to access laatija: " laatija-id
                            " valvonta information.")}))))
 
-(t/deftest find-valvonnat-laatija-includes-et2026-fields
+(t/deftest find-valvonnat-laatija-includes-et2027-fields
   (let [paakayttaja-id (kayttaja-test-data/insert-paakayttaja!)
         [laatija-id _] (laatija-test-data/generate-and-insert!)
         [id _] (energiatodistus-test-data/generate-and-insert!
-                 2026 true laatija-id)
+                 2027 true laatija-id)
         whoami (test-whoami/laatija laatija-id)]
     (service/add-toimenpide! (ts/db-user paakayttaja-id)
                               ts/*aws-s3-client*

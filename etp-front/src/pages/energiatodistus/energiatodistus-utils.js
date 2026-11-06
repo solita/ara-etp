@@ -140,7 +140,7 @@ export const sumEtValues = R.compose(
 export const partOfSum = R.curry((sum, value) => R.lift(R.divide)(value, sum));
 
 export const energiamuotokertoimet = () => ({
-  2026: {
+  2027: {
     'fossiilinen-polttoaine': Maybe.Some(1),
     kaukojaahdytys: Maybe.Some(0.21),
     kaukolampo: Maybe.Some(0.38),
@@ -345,7 +345,7 @@ const energiamuodotUntil2018 = [
   'kaukojaahdytys-vuosikulutus-yhteensa'
 ];
 
-const energiamuodot2026 = [
+const energiamuodot2027 = [
   'kaukolampo-vuosikulutus-yhteensa',
   'sahko-vuosikulutus-yhteensa',
   'uusiutuvat-polttoaineet-vuosikulutus-yhteensa',
@@ -357,7 +357,7 @@ const energiamuodot2026 = [
 export const fieldsWithToteutunutOstoenergia = {
   2013: energiamuodotUntil2018,
   2018: energiamuodotUntil2018,
-  2026: energiamuodot2026
+  2027: energiamuodot2027
 };
 
 const toteutunutOstoenergia = R.path(['toteutunut-ostoenergiankulutus']);
@@ -438,7 +438,7 @@ export const isLaskutettu = R.propSatisfies(Maybe.isSome, 'laskutusaika');
 /**
  * Coefficients for renewable energy share calculation.
  * These are defined independently in the spec and happen to coincide with
- * energiamuotokerroin 2026 values but are separate concepts.
+ * energiamuotokerroin 2027 values but are separate concepts.
  */
 const uusiutuvaKerroin = {
   aurinkosahko: 0.9,

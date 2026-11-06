@@ -267,8 +267,8 @@
           {#if isEtp2026Enabled(config)}
             <div class="my-auto flex flex-row">
               <Link
-                text={i18n('energiatodistus.luo2026')}
-                href="#/energiatodistus/2026/new"
+                text={i18n('energiatodistus.luo2027')}
+                href="#/energiatodistus/2027/new"
                 icon={Maybe.Some('add_circle_outline')}
                 dataCy="create-new-et26" />
             </div>

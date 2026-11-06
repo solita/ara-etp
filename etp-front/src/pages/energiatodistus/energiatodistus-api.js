@@ -57,9 +57,9 @@ const versions = {
     deserializer: transformationFromSchema('deserialize')(schema.v2013),
     serializer: transformationFromSchema('serialize')(schema.v2013)
   },
-  2026: {
-    deserializer: transformationFromSchema('deserialize')(schema.v2026),
-    serializer: transformationFromSchema('serialize')(schema.v2026)
+  2027: {
+    deserializer: transformationFromSchema('deserialize')(schema.v2027),
+    serializer: transformationFromSchema('serialize')(schema.v2027)
   }
 };
 
@@ -78,14 +78,14 @@ export const deserialize = R.compose(
   R.cond([
     [R.propEq(2018, 'versio'), mergeEmpty(empty.energiatodistus2018())],
     [R.propEq(2013, 'versio'), mergeEmpty(empty.energiatodistus2013())],
-    [R.propEq(2026, 'versio'), mergeEmpty(empty.energiatodistus2026())]
+    [R.propEq(2027, 'versio'), mergeEmpty(empty.energiatodistus2027())]
   ]),
   evolveForVersion('deserializer'),
   R.tap(assertVersion),
   R.evolve(deserializer),
   deep.map(R.F, Maybe.fromNull),
   // A better place to do this would be the backend but tests are coupled to this behaviour.
-  // perusparannuspassi-id is only returned for 2026 version and in other versions it is added here as null.
+  // perusparannuspassi-id is only returned for 2027 version and in other versions it is added here as null.
   R.when(
     R.complement(R.has('perusparannuspassi-id')),
     R.assoc('perusparannuspassi-id', null)
@@ -385,8 +385,8 @@ export const luokittelutForVersion = version =>
       Laatimisvaiheet.filterByVersion(2018),
       luokittelut.laatimisvaiheet
     ),
-    laatimisvaiheet2026: R.map(
-      Laatimisvaiheet.filterByVersion(2026),
+    laatimisvaiheet2027: R.map(
+      Laatimisvaiheet.filterByVersion(2027),
       luokittelut.laatimisvaiheet
     ),
     ...kayttotarkoitusluokittelut(version)
@@ -396,7 +396,7 @@ export const luokittelutAllVersions = Future.parallelObject(13, {
   ...luokittelut,
   2018: Future.parallelObject(2, kayttotarkoitusluokittelut(2018)),
   2013: Future.parallelObject(2, kayttotarkoitusluokittelut(2013)),
-  2026: Future.parallelObject(2, kayttotarkoitusluokittelut(2026))
+  2027: Future.parallelObject(2, kayttotarkoitusluokittelut(2027))
 });
 
 export const replaceable = R.curry((fetch, id) =>

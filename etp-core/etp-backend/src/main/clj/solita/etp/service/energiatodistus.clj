@@ -18,7 +18,7 @@
             [solita.etp.schema.geo :as geo-schema]
             [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.energiatodistus-tila :as energiatodistus-tila]
-            [solita.etp.service.energiatodistus-2026 :as energiatodistus-2026]
+            [solita.etp.service.energiatodistus-2027 :as energiatodistus-2027]
             [solita.etp.service.energiatodistus-validation :as validation]
             [solita.etp.service.file :as file-service]
             [solita.etp.service.json :as json]
@@ -671,12 +671,12 @@
 
 (defn- reset-unused-fields [db id]
   (let [energiatodistus (find-energiatodistus db id)]
-    (when (and (= 2026 (:versio energiatodistus))
-            (not (energiatodistus-2026/show-toimenpide-ehdotukset-pages? energiatodistus)))
+    (when (and (= 2027 (:versio energiatodistus))
+            (not (energiatodistus-2027/show-toimenpide-ehdotukset-pages? energiatodistus)))
       (energiatodistus-db/reset-toimenpide-ehdotukset-and-suositukset!
         db
         {:id (:id energiatodistus)}))
-    (when (and (= 2026 (:versio energiatodistus))
+    (when (and (= 2027 (:versio energiatodistus))
             (not (true? (:perusparannuspassi-valid energiatodistus))))
       (perusparannuspassi-db/invalidate-perusparannuspassit-by-energiatodistus-id!
         db
@@ -684,12 +684,12 @@
       (perusparannuspassi-db/invalidate-perusparannuspassi-vaiheet-by-energiatodistus-id!
         db
         {:energiatodistus-id (:id energiatodistus)}))
-    (when (and (= 2026 (:versio energiatodistus))
-            (not (energiatodistus-2026/has-ilmastoselvitys? energiatodistus)))
+    (when (and (= 2027 (:versio energiatodistus))
+            (not (energiatodistus-2027/has-ilmastoselvitys? energiatodistus)))
       (energiatodistus-db/reset-ilmastoselvitys!
         db
         {:id (:id energiatodistus)}))
-    (when (and (= 2026 (:versio energiatodistus))
+    (when (and (= 2027 (:versio energiatodistus))
             (reset-unused-localized-fields db id)))))
 
 (defn language-id->codes [language]

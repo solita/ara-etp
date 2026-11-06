@@ -68,11 +68,11 @@
   let lammitysmuodot;
   let ilmanvaihtotyypit;
 
-  let chartData2018, chartData2013, chartData2026;
+  let chartData2018, chartData2013, chartData2027;
 
   let total2013 = 0;
   let total2018 = 0;
-  let total2026 = 0;
+  let total2027 = 0;
   let totalLammitysIlmanvaihto = 0;
   let lammitysmuotoCombined;
   let ilmanvaihtoCombined;
@@ -143,7 +143,7 @@
 
         total2018 = 0;
         total2013 = 0;
-        total2026 = 0;
+        total2027 = 0;
 
         for (let key in results?.['counts']?.['2018']?.['e-luokka']) {
           total2018 += results?.['counts']?.['2018']?.['e-luokka'][key];
@@ -153,8 +153,8 @@
           total2013 += results?.['counts']?.['2013']?.['e-luokka'][key];
         }
 
-        for (let key in results?.['counts']?.['2026']?.['e-luokka']) {
-          total2026 += results?.['counts']?.['2026']?.['e-luokka'][key];
+        for (let key in results?.['counts']?.['2027']?.['e-luokka']) {
+          total2027 += results?.['counts']?.['2027']?.['e-luokka'][key];
         }
 
         chartData2018 = [
@@ -175,32 +175,32 @@
           (results?.['counts']?.['2013']?.['e-luokka']?.F || 0) / total2013,
           (results?.['counts']?.['2013']?.['e-luokka']?.G || 0) / total2013
         ];
-        chartData2026 = [
-          (results?.['counts']?.['2026']?.['e-luokka']?.A0 || 0) / total2026,
-          (results?.['counts']?.['2026']?.['e-luokka']?.['A+'] || 0) /
-            total2026,
-          (results?.['counts']?.['2026']?.['e-luokka']?.A || 0) / total2026,
-          (results?.['counts']?.['2026']?.['e-luokka']?.B || 0) / total2026,
-          (results?.['counts']?.['2026']?.['e-luokka']?.C || 0) / total2026,
-          (results?.['counts']?.['2026']?.['e-luokka']?.D || 0) / total2026,
-          (results?.['counts']?.['2026']?.['e-luokka']?.E || 0) / total2026,
-          (results?.['counts']?.['2026']?.['e-luokka']?.F || 0) / total2026,
-          (results?.['counts']?.['2026']?.['e-luokka']?.G || 0) / total2026
+        chartData2027 = [
+          (results?.['counts']?.['2027']?.['e-luokka']?.A0 || 0) / total2027,
+          (results?.['counts']?.['2027']?.['e-luokka']?.['A+'] || 0) /
+            total2027,
+          (results?.['counts']?.['2027']?.['e-luokka']?.A || 0) / total2027,
+          (results?.['counts']?.['2027']?.['e-luokka']?.B || 0) / total2027,
+          (results?.['counts']?.['2027']?.['e-luokka']?.C || 0) / total2027,
+          (results?.['counts']?.['2027']?.['e-luokka']?.D || 0) / total2027,
+          (results?.['counts']?.['2027']?.['e-luokka']?.E || 0) / total2027,
+          (results?.['counts']?.['2027']?.['e-luokka']?.F || 0) / total2027,
+          (results?.['counts']?.['2027']?.['e-luokka']?.G || 0) / total2027
         ];
 
         lammitysmuotoCombined = mergeCounts(
           results?.['counts']?.['2018']?.['lammitysmuoto'],
-          results?.['counts']?.['2026']?.['lammitysmuoto']
+          results?.['counts']?.['2027']?.['lammitysmuoto']
         );
         ilmanvaihtoCombined = mergeCounts(
           results?.['counts']?.['2018']?.['ilmanvaihto'],
-          results?.['counts']?.['2026']?.['ilmanvaihto']
+          results?.['counts']?.['2027']?.['ilmanvaihto']
         );
         uusiutuvatCombined = mergeCounts(
           results?.['uusiutuvat-omavaraisenergiat-counts']?.['2018'],
-          results?.['uusiutuvat-omavaraisenergiat-counts']?.['2026']
+          results?.['uusiutuvat-omavaraisenergiat-counts']?.['2027']
         );
-        totalLammitysIlmanvaihto = total2018 + total2026;
+        totalLammitysIlmanvaihto = total2018 + total2027;
 
         resultsElem?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -350,7 +350,7 @@
               <aside
                 class="w-full mt-4 lg:mt-0 lg:w-5/12 lg:pl-4 lg:border-l-8 border-ashblue text-ashblue italic text-sm">
                 {#if isEtp2026}
-                  {$_('TILASTOT_ASIDE_2026')}
+                  {$_('TILASTOT_ASIDE_2027')}
                 {:else}
                   {$_('TILASTOT_ASIDE')}
                 {/if}
@@ -545,7 +545,7 @@
               <span class="uppercase font-bold w-full mb-2">
                 {$_('TILASTOT_TULOKSIA')}
                 {' '}
-                {total2013 + total2018 + (isEtp2026 ? total2026 : 0) || '< 4'}
+                {total2013 + total2018 + (isEtp2026 ? total2027 : 0) || '< 4'}
               </span>
               <!-- SEARCH PARAMS SHOWN WHEN PRINTING -->
               <div class="only-print">
@@ -595,7 +595,7 @@
                   </div>
                 </div>
               </div>
-              {#if total2013 + total2018 + (isEtp2026 ? total2026 : 0) > 0}
+              {#if total2013 + total2018 + (isEtp2026 ? total2027 : 0) > 0}
                 <!-- GRAPHS -->
                 <div
                   class="my-4 grid grid-cols-1 md:grid-cols-2 {isEtp2026
@@ -604,10 +604,10 @@
                   {#if isEtp2026}
                     <TilastotEtVersion
                       {printing}
-                      version="2026"
-                      count={total2026}
-                      eLukuData={results?.['e-luku-statistics']?.['2026']}
-                      chartData={chartData2026} />
+                      version="2027"
+                      count={total2027}
+                      eLukuData={results?.['e-luku-statistics']?.['2027']}
+                      chartData={chartData2027} />
                   {/if}
                   <TilastotEtVersion
                     {printing}
@@ -627,7 +627,7 @@
                 <div class="pbb-always">
                   <h1 class="w-full mt-12 mb-2 space-x-2">
                     {$_('TILASTOT_LASKETUT_TUNNUSLUVUT')}
-                    {` (${total2013 + total2018 + (isEtp2026 ? total2026 : 0)} ${$_('TILASTOT_KPL')})`}
+                    {` (${total2013 + total2018 + (isEtp2026 ? total2027 : 0)} ${$_('TILASTOT_KPL')})`}
                   </h1>
                   <div
                     class="flex flex-col lg:flex-row space-y-4 lg:space-x-16 lg:space-y-0 justify-evenly">
@@ -805,8 +805,8 @@
                     </div>
                   </div>
                 </div>
-                <!-- 2018 ja 2026 TUNNUSLUVUT-->
-                {#if total2018 + total2026 > 0}
+                <!-- 2018 ja 2027 TUNNUSLUVUT-->
+                {#if total2018 + total2027 > 0}
                   <div class="mt-8">
                     <div
                       class="flex flex-col lg:flex-row space-y-4 lg:space-x-16 lg:space-y-0 justify-evenly">
@@ -832,7 +832,7 @@
                             title={$_('TILASTOT_UUSIUTUVIEN')}
                             tooltip={isEtp2026
                               ? $_('TILASTOT_UUSIUTUVIEN_TOOLTIP')
-                              : $_('TILASTOT_UUSIUTUVIEN_TOOLTIP_NO_2026')}>
+                              : $_('TILASTOT_UUSIUTUVIEN_TOOLTIP_NO_2027')}>
                             <h2>{$_('TILASTOT_UUSIUTUVIEN')}</h2>
                           </InfoTooltip>
                         </div>
@@ -894,7 +894,7 @@
                         </dl>
                         <div class="w-full" />
                       </div>
-                      {#if isEtp2026 && (searchmodel.versio === '0' || searchmodel.versio === '2026') && results?.['elinkaaren-aikaiset-paastot']}
+                      {#if isEtp2026 && (searchmodel.versio === '0' || searchmodel.versio === '2027') && results?.['elinkaaren-aikaiset-paastot']}
                         <div class="w-full flex flex-col">
                           <div class="my-4">
                             <InfoTooltip

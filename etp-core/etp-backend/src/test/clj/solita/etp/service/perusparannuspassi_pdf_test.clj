@@ -25,12 +25,12 @@
     [laatija-id whoami]))
 
 (defn- create-et-and-ppp!
-  "Creates a 2026 ET and a PPP with given passin-perustiedot overrides.
+  "Creates a 2027 ET and a PPP with given passin-perustiedot overrides.
    The PPP vaihe includes :vaiheen-alku-pvm so that PDF generation
    actually processes the vaihe (the PDF filters out vaiheet without dates).
    Returns [et-id ppp-id]."
   [laatija-id whoami passin-perustiedot-overrides]
-  (let [[et-id _] (energiatodistus-test-data/generate-and-insert! 2026 true laatija-id)
+  (let [[et-id _] (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id)
         ppp-add (-> (ppp-test-data/generate-add et-id)
                     (update :passin-perustiedot merge passin-perustiedot-overrides)
                     (assoc-in [:vaiheet 0 :tulokset :vaiheen-alku-pvm] (LocalDate/of 2025 1 1)))
@@ -41,7 +41,7 @@
     [et-id ppp-id]))
 
 (t/deftest generate-ppp-pdf-smoke-test
-  ;; Given: a laatija, a 2026 ET, and a PPP with one valid vaihe
+  ;; Given: a laatija, a 2027 ET, and a PPP with one valid vaihe
   (let [[laatija-id whoami] (create-laatija-and-whoami!)]
 
     ;; Scenario 1: Basic smoke test — PPP-PDF generates without exception
@@ -102,7 +102,7 @@
 
     ;; Scenario 4: PPP with multiple vaihe (3 valid phases)
     (t/testing "PPP-PDF with multiple vaiheet generates successfully"
-      (let [[et-id _] (energiatodistus-test-data/generate-and-insert! 2026 true laatija-id)
+      (let [[et-id _] (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id)
             base-ppp (ppp-test-data/generate-add et-id)
             base-vaihe (first (:vaiheet base-ppp))
             ;; Each vaihe needs :vaiheen-alku-pvm so PDF actually processes them

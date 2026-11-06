@@ -16,7 +16,7 @@
   "Calculate weighted energy from PPP vaihe tulokset using e-luokka energiamuotokerroin"
   [tulokset]
   (when tulokset
-    (let [kertoimet (e-luokka-service/energiamuotokerroin 2026)]
+    (let [kertoimet (e-luokka-service/energiamuotokerroin 2027)]
       (with-precision 20
         (reduce + 0M
                 (map (fn [[ppp-key kerroin-key]]
@@ -129,7 +129,7 @@
         (assoc-in [:tulokset :toteutunut-energia-kustannukset] nil)
         (assoc-in [:tulokset :co2-paastot] nil))
     ;; For valid vaiheet, calculate real values
-    (let [versio 2026
+    (let [versio 2027
           tulokset (:tulokset ppp-vaihe)
           e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus ppp-vaihe)
           e-luokka (-> (e-luokka-service/e-luokka
@@ -228,10 +228,10 @@
 
 (defn luokittelut
   "Fetch all classification data needed for completing PPP vaiheet.
-   Returns a map with :kayttotarkoitukset and :alakayttotarkoitukset for versio 2026."
+   Returns a map with :kayttotarkoitukset and :alakayttotarkoitukset for versio 2027."
   [db]
-  {:kayttotarkoitukset    {2026 (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)}
-   :alakayttotarkoitukset {2026 (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)}})
+  {:kayttotarkoitukset    {2027 (kayttotarkoitus-service/find-kayttotarkoitukset db 2027)}
+   :alakayttotarkoitukset {2027 (kayttotarkoitus-service/find-alakayttotarkoitukset db 2027)}})
 
 (defn find-complete-perusparannuspassi
   "Fetch a perusparannuspassi and enrich it with calculated fields.

@@ -48,8 +48,8 @@
        (get-in e-luokka/energiamuotokerroin [2013 key])
        " when 2018 then "
        (get-in e-luokka/energiamuotokerroin [2018 key])
-       " when 2026 then "
-       (get-in e-luokka/energiamuotokerroin [2026 key])
+       " when 2027 then "
+       (get-in e-luokka/energiamuotokerroin [2027 key])
        " end)"))
 
 (defn- painotettu-kulutus-entry [[key schema]]
@@ -166,14 +166,14 @@
              denominator (str "energiatodistus.t$e_luku + "
                               "(" (weighted-sum "uusiutuvat_omavaraisenergiat") ")"
                               " / nullif(energiatodistus.lt$lammitetty_nettoala, 0)")]
-         (str "case when energiatodistus.versio = 2026 then "
+         (str "case when energiatodistus.versio = 2027 then "
               "round(" numerator " / nullif(" denominator ", 0) * 100) end"))
        common-schema/NonNegative]
       :uusiutuvat-omavaraisenergiat-kokonaistuotanto
       (per-nettoala-for-schema
         [:tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto]
         #(str % "-neliovuosikulutus")
-        energiatodistus-schema/Energiatodistus2026)}
+        energiatodistus-schema/Energiatodistus2027)}
     :toteutunut-ostoenergiankulutus
     {:ostettu-energia
      (per-nettoala-for-schema

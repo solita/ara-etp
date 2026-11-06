@@ -415,7 +415,7 @@ INSERT INTO etp.toimenpide_ehdotus VALUES
 --
 
 INSERT INTO etp.ppp_vaihe_validation_numeric_column VALUES
-	('t$uusiutuvan_energian_hyodynnetty_osuus', 2026, 0, 100, 0, 100, true) ON CONFLICT DO NOTHING;
+	('t$uusiutuvan_energian_hyodynnetty_osuus', 2027, 0, 100, 0, 100, true) ON CONFLICT DO NOTHING;
 
 
 --
@@ -423,16 +423,16 @@ INSERT INTO etp.ppp_vaihe_validation_numeric_column VALUES
 --
 
 INSERT INTO etp.ppp_vaihe_validation_required_column VALUES
-	('tp$toimenpideseloste', 2026, 0, false, false),
-	('tp$toimenpideseloste_fi', 2026, 0, true, false),
-	('tp$toimenpideseloste_sv', 2026, 1, true, false),
-	('t$ostoenergian_tarve_kaukolampo', 2026, 2, true, false),
-	('t$ostoenergian_tarve_sahko', 2026, 3, true, false),
-	('t$ostoenergian_tarve_uusiutuvat_pat', 2026, 4, true, false),
-	('t$ostoenergian_tarve_fossiiliset_pat', 2026, 5, true, false),
-	('t$ostoenergian_tarve_kaukojaahdytys', 2026, 6, true, false),
-	('t$uusiutuvan_energian_kokonaistuotto', 2026, 7, true, false),
-	('t$uusiutuvan_energian_hyodynnetty_osuus', 2026, 8, true, false) ON CONFLICT DO NOTHING;
+	('tp$toimenpideseloste', 2027, 0, false, false),
+	('tp$toimenpideseloste_fi', 2027, 0, true, false),
+	('tp$toimenpideseloste_sv', 2027, 1, true, false),
+	('t$ostoenergian_tarve_kaukolampo', 2027, 2, true, false),
+	('t$ostoenergian_tarve_sahko', 2027, 3, true, false),
+	('t$ostoenergian_tarve_uusiutuvat_pat', 2027, 4, true, false),
+	('t$ostoenergian_tarve_fossiiliset_pat', 2027, 5, true, false),
+	('t$ostoenergian_tarve_kaukojaahdytys', 2027, 6, true, false),
+	('t$uusiutuvan_energian_kokonaistuotto', 2027, 7, true, false),
+	('t$uusiutuvan_energian_hyodynnetty_osuus', 2027, 8, true, false) ON CONFLICT DO NOTHING;
 
 
 --
@@ -440,16 +440,16 @@ INSERT INTO etp.ppp_vaihe_validation_required_column VALUES
 --
 
 INSERT INTO etp.ppp_validation_numeric_column VALUES
-	('t$kaukolampo_hinta', 2026, 0, 20, 0, 200, true),
-	('t$sahko_hinta', 2026, 0, 20, 0, 200, true),
-	('t$uusiutuvat_pat_hinta', 2026, 0, 20, 0, 200, true),
-	('t$fossiiliset_pat_hinta', 2026, 0, 20, 0, 200, true),
-	('t$kaukojaahdytys_hinta', 2026, 0, 20, 0, 200, true),
-	('rpt$ulkoseinat_ehdotettu_taso', 2026, 0.08, 0.81, 0.05, 2, true),
-	('rpt$ylapohja_ehdotettu_taso', 2026, 0.05, 0.47, 0.03, 2, true),
-	('rpt$alapohja_ehdotettu_taso', 2026, 0.05, 0.60, 0.03, 4, true),
-	('rpt$ikkunat_ehdotettu_taso', 2026, 0.50, 3.10, 0.40, 6.5, true),
-	('rpt$ulkoovet_ehdotettu_taso', 2026, 0.50, 2.20, 0.20, 6.5, true) ON CONFLICT DO NOTHING;
+	('t$kaukolampo_hinta', 2027, 0, 20, 0, 200, true),
+	('t$sahko_hinta', 2027, 0, 20, 0, 200, true),
+	('t$uusiutuvat_pat_hinta', 2027, 0, 20, 0, 200, true),
+	('t$fossiiliset_pat_hinta', 2027, 0, 20, 0, 200, true),
+	('t$kaukojaahdytys_hinta', 2027, 0, 20, 0, 200, true),
+	('rpt$ulkoseinat_ehdotettu_taso', 2027, 0.08, 0.81, 0.05, 2, true),
+	('rpt$ylapohja_ehdotettu_taso', 2027, 0.05, 0.47, 0.03, 2, true),
+	('rpt$alapohja_ehdotettu_taso', 2027, 0.05, 0.60, 0.03, 4, true),
+	('rpt$ikkunat_ehdotettu_taso', 2027, 0.50, 3.10, 0.40, 6.5, true),
+	('rpt$ulkoovet_ehdotettu_taso', 2027, 0.50, 2.20, 0.20, 6.5, true) ON CONFLICT DO NOTHING;
 
 
 --
@@ -457,22 +457,22 @@ INSERT INTO etp.ppp_validation_numeric_column VALUES
 --
 
 INSERT INTO etp.ppp_validation_required_column VALUES
-	('ppt$havainnointikaynti', 2026, 0, true, false),
-	('ppt$passin_esittely', 2026, 1, true, false),
-	('rpt$ulkoseinat_ehdotettu_taso', 2026, 2, true, false),
-	('rpt$ylapohja_ehdotettu_taso', 2026, 3, true, false),
-	('rpt$alapohja_ehdotettu_taso', 2026, 4, true, false),
-	('rpt$ikkunat_ehdotettu_taso', 2026, 5, true, false),
-	('rpt$paalammitysjarjestelma_ehdotettu_taso', 2026, 6, true, false),
-	('rpt$ilmanvaihto_ehdotettu_taso', 2026, 7, true, false),
-	('rpt$uusiutuva_energia_ehdotettu_taso', 2026, 8, true, false),
-	('rpt$jaahdytys_ehdotettu_taso', 2026, 9, true, false),
-	('rpt$mahdollisuus_liittya_energiatehokkaaseen', 2026, 10, true, false),
-	('t$kaukolampo_hinta', 2026, 11, true, false),
-	('t$sahko_hinta', 2026, 12, true, false),
-	('t$uusiutuvat_pat_hinta', 2026, 13, true, false),
-	('t$fossiiliset_pat_hinta', 2026, 14, true, false),
-	('t$kaukojaahdytys_hinta', 2026, 15, true, false) ON CONFLICT DO NOTHING;
+	('ppt$havainnointikaynti', 2027, 0, true, false),
+	('ppt$passin_esittely', 2027, 1, true, false),
+	('rpt$ulkoseinat_ehdotettu_taso', 2027, 2, true, false),
+	('rpt$ylapohja_ehdotettu_taso', 2027, 3, true, false),
+	('rpt$alapohja_ehdotettu_taso', 2027, 4, true, false),
+	('rpt$ikkunat_ehdotettu_taso', 2027, 5, true, false),
+	('rpt$paalammitysjarjestelma_ehdotettu_taso', 2027, 6, true, false),
+	('rpt$ilmanvaihto_ehdotettu_taso', 2027, 7, true, false),
+	('rpt$uusiutuva_energia_ehdotettu_taso', 2027, 8, true, false),
+	('rpt$jaahdytys_ehdotettu_taso', 2027, 9, true, false),
+	('rpt$mahdollisuus_liittya_energiatehokkaaseen', 2027, 10, true, false),
+	('t$kaukolampo_hinta', 2027, 11, true, false),
+	('t$sahko_hinta', 2027, 12, true, false),
+	('t$uusiutuvat_pat_hinta', 2027, 13, true, false),
+	('t$fossiiliset_pat_hinta', 2027, 14, true, false),
+	('t$kaukojaahdytys_hinta', 2027, 15, true, false) ON CONFLICT DO NOTHING;
 
 
 --

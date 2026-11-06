@@ -1,5 +1,5 @@
 (ns solita.etp.service.energiatodistus-pdf.tulokset
-  "E-luvun laskennan tulokset page for Energiatodistus 2026 PDF"
+  "E-luvun laskennan tulokset page for Energiatodistus 2027 PDF"
   (:require [solita.common.formats :as formats]
             [solita.etp.service.localization :as loc]))
 

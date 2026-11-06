@@ -62,22 +62,22 @@ describe('Navigation', () => {
       ).toEqual(expected);
     });
 
-    it('should return energiatodistus-links with muutoshistoria for ET2026', () => {
+    it('should return energiatodistus-links with muutoshistoria for ET2027', () => {
       const expected = [
-        { label: 'ET 1', href: '#/energiatodistus/2026/1' },
-        { label: 'Liitteet', href: '#/energiatodistus/2026/1/liitteet' },
-        { label: 'Valvonta', href: '#/valvonta/oikeellisuus/2026/1' },
-        { label: 'Viestit', href: '#/energiatodistus/2026/1/viestit' },
+        { label: 'ET 1', href: '#/energiatodistus/2027/1' },
+        { label: 'Liitteet', href: '#/energiatodistus/2027/1/liitteet' },
+        { label: 'Valvonta', href: '#/valvonta/oikeellisuus/2027/1' },
+        { label: 'Viestit', href: '#/energiatodistus/2027/1/viestit' },
         {
           label: 'Muutoshistoria',
-          href: '#/energiatodistus/2026/1/muutoshistoria'
+          href: '#/energiatodistus/2027/1/muutoshistoria'
         }
       ];
 
       expect(
         R.map(
           R.pick(['label', 'href']),
-          Navigation.parseEnergiatodistus(false, i18n, kayttaja, ['2026', '1'])
+          Navigation.parseEnergiatodistus(false, i18n, kayttaja, ['2027', '1'])
         )
       ).toEqual(expected);
     });
@@ -467,19 +467,19 @@ describe('Navigation', () => {
         )
       ).toEqual(expected);
     });
-    it('should return energiatodistus with muutoshistoria for ET2026', () => {
+    it('should return energiatodistus with muutoshistoria for ET2027', () => {
       const isDev = false;
       const whoami = { id: 1, rooli: 2 };
-      const locationParts = ['2026', '1'];
+      const locationParts = ['2027', '1'];
 
       const expected = [
-        { label: 'ET 1', href: '#/energiatodistus/2026/1' },
-        { label: 'Liitteet', href: '#/energiatodistus/2026/1/liitteet' },
-        { label: 'Valvonta', href: '#/valvonta/oikeellisuus/2026/1' },
-        { label: 'Viestit', href: '#/energiatodistus/2026/1/viestit' },
+        { label: 'ET 1', href: '#/energiatodistus/2027/1' },
+        { label: 'Liitteet', href: '#/energiatodistus/2027/1/liitteet' },
+        { label: 'Valvonta', href: '#/valvonta/oikeellisuus/2027/1' },
+        { label: 'Viestit', href: '#/energiatodistus/2027/1/viestit' },
         {
           label: 'Muutoshistoria',
-          href: '#/energiatodistus/2026/1/muutoshistoria'
+          href: '#/energiatodistus/2027/1/muutoshistoria'
         }
       ];
 

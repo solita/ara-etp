@@ -55,7 +55,7 @@
 
 (def private-routes
   [["/perusparannuspassit"
-   ["/2026"
+   ["/2027"
     [""
      {:post {:summary    "Lisää energiatodistukselle perusparannuspassi"
              :parameters {:body ppp-schema/PerusparannuspassiSave}

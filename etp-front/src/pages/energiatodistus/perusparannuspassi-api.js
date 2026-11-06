@@ -16,7 +16,7 @@ export const postPerusparannuspassi = R.curry((fetch, perusparannuspassi) =>
       Fetch.fetchWithMethod(
         fetch,
         'post',
-        '/api/private/perusparannuspassit/2026'
+        '/api/private/perusparannuspassit/2027'
       )
     ),
     serialize
@@ -36,7 +36,7 @@ export const getPerusparannuspassi = R.curry((fetch, pppId) =>
     R.map(deserialize),
     Fetch.responseAsJson,
     Future.encaseP(Fetch.getFetch(fetch))
-  )(`/api/private/perusparannuspassit/2026/${pppId}`)
+  )(`/api/private/perusparannuspassit/2027/${pppId}`)
 );
 
 export const putPerusparannuspassi = R.curry(
@@ -47,7 +47,7 @@ export const putPerusparannuspassi = R.curry(
         Fetch.fetchWithMethod(
           fetch,
           'put',
-          `/api/private/perusparannuspassit/2026/${pppId}`
+          `/api/private/perusparannuspassit/2027/${pppId}`
         )
       ),
       serialize
@@ -148,7 +148,7 @@ export const serialize = R.compose(
   withValidVaiheetAccordingToAloitusPvm
 );
 
-let pppUrl = '/perusparannuspassit/2026';
+let pppUrl = '/perusparannuspassit/2027';
 
 export const pppValidation = R.memoizeWith(R.identity, version =>
   Future.parallelObject(6, {
