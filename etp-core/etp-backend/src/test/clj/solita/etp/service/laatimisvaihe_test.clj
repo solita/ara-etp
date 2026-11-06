@@ -6,8 +6,8 @@
 (defn et-2018-in-vaihe [vaihe]
   {:versio 2018 :perustiedot {:laatimisvaihe vaihe}})
 
-(defn et-2026-in-vaihe [vaihe]
-  {:versio 2026 :perustiedot {:laatimisvaihe vaihe}})
+(defn et-2027-in-vaihe [vaihe]
+  {:versio 2027 :perustiedot {:laatimisvaihe vaihe}})
 
 (defn et-2013 [uudisrakennus?]
   {:versio 2013 :perustiedot {:uudisrakennus uudisrakennus?}})
@@ -50,19 +50,19 @@
                    #(laatimisvaihe/validate-laatimisvaihe-for-versio! (et-2018-in-vaihe 4)))]
       (t/is (= (:type result) :invalid-laatimisvaihe)))))
 
-(t/deftest validate-laatimisvaihe-valid-2026
-  (t/testing "given a 2026 energiatodistus with laatimisvaihe ids 0-4, when validating, then does not throw for any"
+(t/deftest validate-laatimisvaihe-valid-2027
+  (t/testing "given a 2027 energiatodistus with laatimisvaihe ids 0-4, when validating, then does not throw for any"
     (doseq [vaihe-id [0 1 2 3 4]]
-      (t/is (nil? (laatimisvaihe/validate-laatimisvaihe-for-versio! (et-2026-in-vaihe vaihe-id)))))))
+      (t/is (nil? (laatimisvaihe/validate-laatimisvaihe-for-versio! (et-2027-in-vaihe vaihe-id)))))))
 
 (t/deftest validate-laatimisvaihe-2013-not-validated
   (t/testing "given a 2013 energiatodistus, when validating, then does not throw (2013 doesn't use laatimisvaihe)"
     (t/is (nil? (laatimisvaihe/validate-laatimisvaihe-for-versio! (et-2013 true))))))
 
 (t/deftest validate-laatimisvaihe-invalid-unknown-id
-  (t/testing "given a 2026 energiatodistus with laatimisvaihe 99, when validating, then throws :invalid-laatimisvaihe"
+  (t/testing "given a 2027 energiatodistus with laatimisvaihe 99, when validating, then throws :invalid-laatimisvaihe"
     (let [result (etp-test/catch-ex-data
-                   #(laatimisvaihe/validate-laatimisvaihe-for-versio! (et-2026-in-vaihe 99)))]
+                   #(laatimisvaihe/validate-laatimisvaihe-for-versio! (et-2027-in-vaihe 99)))]
       (t/is (= (:type result) :invalid-laatimisvaihe)))))
 
 (t/deftest validate-laatimisvaihe-nil-does-not-throw

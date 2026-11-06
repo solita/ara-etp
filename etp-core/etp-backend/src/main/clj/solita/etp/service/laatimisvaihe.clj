@@ -22,7 +22,7 @@
 (def rakennuslupa? (partial in-vaihe? 0))
 (def kayttoonotto? (partial in-vaihe? 1))
 
-;; applicable only for 2026 version
+;; applicable only for 2027 version
 (def rakennuslupa-perusparannus? (partial in-vaihe? 3))
 
 ;; applicable 2013 and 2018 versions
@@ -33,7 +33,7 @@
 
 (def ^:private allowed-laatimisvaihe-ids
   {2018 #{0 1 2}
-   2026 #{0 1 2 3 4}})
+   2027 #{0 1 2 3 4}})
 
 (defn validate-laatimisvaihe-for-versio!
   "Validates that the laatimisvaihe of the energiatodistus is allowed for its version.

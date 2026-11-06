@@ -48,7 +48,7 @@
   (schemas->search-schema
     {:energiatodistus energiatodistus-schema/Energiatodistus2013}
     {:energiatodistus energiatodistus-schema/Energiatodistus2018}
-    {:energiatodistus energiatodistus-schema/Energiatodistus2026}
+    {:energiatodistus energiatodistus-schema/Energiatodistus2027}
     {:energiatodistus
      {:perustiedot
       {:nimi        schema/Str
@@ -72,7 +72,7 @@
   (schemas->search-schema
     {:energiatodistus public-energiatodistus-schema/Energiatodistus2013}
     {:energiatodistus public-energiatodistus-schema/Energiatodistus2018}
-    {:energiatodistus public-energiatodistus-schema/Energiatodistus2026}
+    {:energiatodistus public-energiatodistus-schema/Energiatodistus2027}
     {:energiatodistus
      {:perustiedot
       {:nimi        schema/Str
@@ -298,7 +298,7 @@
       (energiatodistus.versio = 2018 AND
        energiatodistus.pt$kayttotarkoitus NOT IN ('YAT', 'KAT', 'KREP'))
       OR
-      (energiatodistus.versio = 2026 AND
+      (energiatodistus.versio = 2027 AND
        energiatodistus.pt$kayttotarkoitus NOT IN ('YAT', 'KAT', 'KREP')))"]
     (rooli-service/system? whoami)
     ["energiatodistus.tila_id IN (2, 4)"]))

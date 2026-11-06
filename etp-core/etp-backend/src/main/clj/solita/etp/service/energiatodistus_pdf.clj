@@ -8,7 +8,7 @@
             [solita.common.time :as common-time]
             [solita.common.xlsx :as xlsx]
             [solita.etp.etp2026 :as etp2026]
-            [solita.etp.service.energiatodistus-2026-pdf :as etp2026-pdf]
+            [solita.etp.service.energiatodistus-2027-pdf :as et2027-pdf]
             [solita.etp.config :as config]
             [solita.etp.service.complete-energiatodistus :as complete-energiatodistus-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
@@ -576,7 +576,7 @@
               {:path [:tulokset :kuukausierittely-summat :hyoty :lampo] :dp 0}])})
 
 (defn fill-xlsx-template [{:keys [versio] :as complete-energiatodistus} kieli draft?]
-  (let [versio (etp2026/implement-2026-via-2018 versio "There is no xlsx-template for 2026 version")]
+  (let [versio (etp2026/implement-2026-via-2018 versio "There is no xlsx-template for 2027 version")]
     (with-open [is (-> xlsx-template-paths
                        (get-in [versio kieli])
                        io/resource
@@ -758,10 +758,10 @@
     (io/delete-file pdf-path)
     is))
 
-(defn- generate-et-2026-pdf-as-input-stream [db whoami complete-energiatodistus kieli draft?]
-  (log/info "Generating 2026 PDF for id" (:id complete-energiatodistus))
-  (let [luokittelut {:alakayttotarkoitukset              (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
-                     :kayttotarkoitukset                 (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
+(defn- generate-et-2027-pdf-as-input-stream [db whoami complete-energiatodistus kieli draft?]
+  (log/info "Generating 2027 PDF for id" (:id complete-energiatodistus))
+  (let [luokittelut {:alakayttotarkoitukset              (kayttotarkoitus-service/find-alakayttotarkoitukset db 2027)
+                     :kayttotarkoitukset                 (kayttotarkoitus-service/find-kayttotarkoitukset db 2027)
                      :laatimisvaiheet                    (luokittelu-service/find-laatimisvaiheet db)
                      :mahdollisuus-liittya               (luokittelu-service/find-mahdollisuus-liittya db)
                      :uusiutuva-energia                  (luokittelu-service/find-uusiutuva-energia db)
@@ -772,16 +772,16 @@
         complete-ppp (when (:perusparannuspassi-valid complete-energiatodistus)
                        (complete-ppp-service/find-complete-perusparannuspassi
                          db whoami (:perusparannuspassi-id complete-energiatodistus)))]
-    (io/input-stream (etp2026-pdf/generate-energiatodistus-pdf
+    (io/input-stream (et2027-pdf/generate-energiatodistus-pdf
                        complete-energiatodistus complete-ppp kieli draft? luokittelut))))
 
 ;; Set as dynamic so that it can be mocked in tests.
-(defn ^:dynamic generate-et-2026-pdf-as-file [db whoami complete-energiatodistus kieli draft? laatija-allekirjoitus-id]
+(defn ^:dynamic generate-et-2027-pdf-as-file [db whoami complete-energiatodistus kieli draft? laatija-allekirjoitus-id]
   (let [pdf-path (->> (java.util.UUID/randomUUID)
                   .toString
                   (format "energiatodistus-%s.pdf")
                   (str tmp-dir))
-        input-stream (generate-et-2026-pdf-as-input-stream db whoami complete-energiatodistus kieli draft?)]
+        input-stream (generate-et-2027-pdf-as-input-stream db whoami complete-energiatodistus kieli draft?)]
     (io/make-parents pdf-path)
     (io/copy input-stream (io/file pdf-path))
 
@@ -790,7 +790,7 @@
                   laatija-allekirjoitus-id
                   (or (get-in complete-energiatodistus [:perustiedot (keyword (str "nimi-" kieli))]) "Energiatodistus"))
     (when (and
-            ;; For ET 2026, the input stream for a draft already has the draft watermark in place
+            ;; For ET 2027, the input stream for a draft already has the draft watermark in place
             (not draft?)
             (contains? #{"local-dev" "dev" "test"} config/environment-alias))
       (watermark-pdf/add-watermark pdf-path (test-watermark-texts kieli)))
@@ -800,8 +800,8 @@
                                {:keys [versio] :as complete-energiatodistus}
                                kieli draft? laatija-allekirjoitus-id]
   (cond
-    (= 2026 versio)
-    (generate-et-2026-pdf-as-file db whoami complete-energiatodistus kieli draft? laatija-allekirjoitus-id)
+    (= 2027 versio)
+    (generate-et-2027-pdf-as-file db whoami complete-energiatodistus kieli draft? laatija-allekirjoitus-id)
 
     (contains? #{2013 2018} versio)
     (generate-et-2013-2018-pdf-as-file complete-energiatodistus kieli draft? laatija-allekirjoitus-id)))
@@ -816,8 +816,8 @@
 
 (defn- generate-et-pdf-as-input-stream [db whoami kieli complete-energiatodistus]
   (let [draft? true]
-    (if (= 2026 (:versio complete-energiatodistus))
-      (generate-et-2026-pdf-as-input-stream db whoami complete-energiatodistus kieli draft?)
+    (if (= 2027 (:versio complete-energiatodistus))
+      (generate-et-2027-pdf-as-input-stream db whoami complete-energiatodistus kieli draft?)
       (generate-et-2013-2018-pdf-as-input-stream complete-energiatodistus kieli draft? nil))))
 
 (defn find-energiatodistus-pdf [db aws-s3-client whoami id kieli]
@@ -830,11 +830,11 @@
       (find-existing-pdf aws-s3-client id kieli)
       (generate-et-pdf-as-input-stream db whoami kieli complete-energiatodistus))))
 
-(defn find-energiatodistus-2026-html [db whoami id kieli]
+(defn find-energiatodistus-2027-html [db whoami id kieli]
   (when-let [complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db whoami id)]
     (let [kieli-keyword (keyword kieli)
-          luokittelut {:alakayttotarkoitukset              (kayttotarkoitus-service/find-alakayttotarkoitukset db 2026)
-                       :kayttotarkoitukset                 (kayttotarkoitus-service/find-kayttotarkoitukset db 2026)
+          luokittelut {:alakayttotarkoitukset              (kayttotarkoitus-service/find-alakayttotarkoitukset db 2027)
+                       :kayttotarkoitukset                 (kayttotarkoitus-service/find-kayttotarkoitukset db 2027)
                        :laatimisvaiheet                    (luokittelu-service/find-laatimisvaiheet db)
                        :mahdollisuus-liittya               (luokittelu-service/find-mahdollisuus-liittya db)
                        :uusiutuva-energia                  (luokittelu-service/find-uusiutuva-energia db)
@@ -844,7 +844,7 @@
                        :ilmastoselvitys-laadintaperusteet  (luokittelu-service/find-ilmastoselvitys-laadintaperusteet db)}
           {:keys [alakayttotarkoitukset kayttotarkoitukset laatimisvaiheet
                   ilmastoselvitys-laadintaperusteet]} luokittelut]
-      (etp2026-pdf/generate-energiatodistus-html
+      (et2027-pdf/generate-energiatodistus-html
         {:energiatodistus                    complete-energiatodistus
          :alakayttotarkoitukset              alakayttotarkoitukset
          :laatimisvaiheet                    laatimisvaiheet

@@ -31,7 +31,7 @@
 
 (defn- create-et-and-ppp!
   [laatija-id whoami]
-  (let [[et-id _] (energiatodistus-test-data/generate-and-insert! 2026 true laatija-id)
+  (let [[et-id _] (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id)
         ppp-add (-> (ppp-test-data/generate-add et-id)
                     (assoc-in [:vaiheet 0 :tulokset :vaiheen-alku-pvm] (LocalDate/of 2025 1 1)))
         ppp-id (:id (perusparannuspassi-service/insert-perusparannuspassi!
@@ -40,13 +40,13 @@
                       ppp-add))]
     [et-id ppp-id]))
 
-(defn- create-energiatodistus-2026!
+(defn- create-energiatodistus-2027!
   []
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
         laatija-id (-> laatijat keys sort first)
         db (ts/db-user laatija-id)
         whoami {:id laatija-id :rooli 0}
-        [energiatodistus-id _] (energiatodistus-test-data/generate-and-insert! 2026 true laatija-id)]
+        [energiatodistus-id _] (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id)]
     {:db db
      :whoami whoami
      :energiatodistus-id energiatodistus-id}))
@@ -107,7 +107,7 @@
                                                           {:ppp-id ppp-id})))]
     (.readAllBytes pdf-stream)))
 
-(defn- generate-energiatodistus-2026-pdf-bytes [db whoami energiatodistus-id]
+(defn- generate-energiatodistus-2027-pdf-bytes [db whoami energiatodistus-id]
   (let [complete-energiatodistus (or (complete-energiatodistus-service/find-complete-energiatodistus db whoami energiatodistus-id)
                                      (throw (ex-info "Energiatodistus was not found"
                                                      {:energiatodistus-id energiatodistus-id})))
@@ -141,27 +141,27 @@
 (t/deftest pdf-font-family-regression-test
   (let [[laatija-id ppp-whoami] (create-laatija-and-whoami!)
         [et-with-ppp-id ppp-id] (create-et-and-ppp! laatija-id ppp-whoami)
-        {:keys [db whoami energiatodistus-id]} (create-energiatodistus-2026!)
-        document-fonts {"Perusparannuspassi 2026" (-> (generate-current-ppp-pdf-bytes ppp-whoami ppp-id) pdf-font-names)
-                        ;; Only ET 2026-based PDFs are covered here because older energiatodistus PDFs are generated via a different path.
-                        "Energiatodistus 2026"                    (-> (generate-energiatodistus-2026-pdf-bytes db whoami energiatodistus-id) pdf-font-names)
-                        "Energiatodistus 2026 + Perusparannuspassi" (-> (generate-energiatodistus-2026-pdf-bytes ts/*db* ppp-whoami et-with-ppp-id) pdf-font-names)
+        {:keys [db whoami energiatodistus-id]} (create-energiatodistus-2027!)
+        document-fonts {"Perusparannuspassi 2027" (-> (generate-current-ppp-pdf-bytes ppp-whoami ppp-id) pdf-font-names)
+                        ;; Only ET 2027-based PDFs are covered here because older energiatodistus PDFs are generated via a different path.
+                        "Energiatodistus 2027"                    (-> (generate-energiatodistus-2027-pdf-bytes db whoami energiatodistus-id) pdf-font-names)
+                        "Energiatodistus 2027 + Perusparannuspassi" (-> (generate-energiatodistus-2027-pdf-bytes ts/*db* ppp-whoami et-with-ppp-id) pdf-font-names)
                         "template-letter"                        (-> (generate-template-letter-pdf-bytes) pdf-font-names)
                         "iPost"                                  (-> (generate-ipost-address-page-pdf-bytes) pdf-font-names)}]
-    (t/testing "Perusparannuspassi 2026 uses Carlito and does not use Roboto"
-      (assert-font-family-present! "Perusparannuspassi 2026" (get document-fonts "Perusparannuspassi 2026") "carlito")
-      (assert-font-family-absent! "Perusparannuspassi 2026" (get document-fonts "Perusparannuspassi 2026") "roboto"))
+    (t/testing "Perusparannuspassi 2027 uses Carlito and does not use Roboto"
+      (assert-font-family-present! "Perusparannuspassi 2027" (get document-fonts "Perusparannuspassi 2027") "carlito")
+      (assert-font-family-absent! "Perusparannuspassi 2027" (get document-fonts "Perusparannuspassi 2027") "roboto"))
 
-    (t/testing "Energiatodistus 2026 uses Carlito and does not use Roboto"
-      (assert-font-family-present! "Energiatodistus 2026" (get document-fonts "Energiatodistus 2026") "carlito")
-      (assert-font-family-absent! "Energiatodistus 2026" (get document-fonts "Energiatodistus 2026") "roboto"))
+    (t/testing "Energiatodistus 2027 uses Carlito and does not use Roboto"
+      (assert-font-family-present! "Energiatodistus 2027" (get document-fonts "Energiatodistus 2027") "carlito")
+      (assert-font-family-absent! "Energiatodistus 2027" (get document-fonts "Energiatodistus 2027") "roboto"))
 
-    (t/testing "Energiatodistus 2026 + Perusparannuspassi use only Carlito"
-      (assert-font-family-absent! "Energiatodistus 2026 + Perusparannuspassi"
-                                   (get document-fonts "Energiatodistus 2026 + Perusparannuspassi")
+    (t/testing "Energiatodistus 2027 + Perusparannuspassi use only Carlito"
+      (assert-font-family-absent! "Energiatodistus 2027 + Perusparannuspassi"
+                                   (get document-fonts "Energiatodistus 2027 + Perusparannuspassi")
                                    "roboto")
-      (assert-font-family-present! "Energiatodistus 2026 + Perusparannuspassi"
-                                  (get document-fonts "Energiatodistus 2026 + Perusparannuspassi")
+      (assert-font-family-present! "Energiatodistus 2027 + Perusparannuspassi"
+                                  (get document-fonts "Energiatodistus 2027 + Perusparannuspassi")
                                   "carlito"))
 
     (t/testing "iPost uses Roboto and does not use Carlito"

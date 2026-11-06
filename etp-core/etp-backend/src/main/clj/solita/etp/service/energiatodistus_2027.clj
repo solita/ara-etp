@@ -1,4 +1,4 @@
-(ns solita.etp.service.energiatodistus-2026)
+(ns solita.etp.service.energiatodistus-2027)
 
 (def toimenpide-ehdotukset-hidden-e-luokat #{"A" "A0" "A+"})
 

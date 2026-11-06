@@ -98,20 +98,20 @@
         whoami {:id laatija-id :rooli 0 :patevyystaso 4}]
     [laatija-id whoami]))
 
-(defn- create-energiatodistus-2026!
+(defn- create-energiatodistus-2027!
   []
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
         laatija-id (-> laatijat keys sort first)
         db (ts/db-user laatija-id)
         whoami {:id laatija-id :rooli 0}
-        [energiatodistus-id _] (energiatodistus-test-data/generate-and-insert! 2026 true laatija-id)]
+        [energiatodistus-id _] (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id)]
     {:db db
      :whoami whoami
      :energiatodistus-id energiatodistus-id}))
 
 (defn- create-perusparannuspassi!
   [laatija-id whoami]
-  (let [[et-id _] (energiatodistus-test-data/generate-and-insert! 2026 true laatija-id)
+  (let [[et-id _] (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id)
         ppp-add (-> (ppp-test-data/generate-add et-id)
                     (assoc-in [:vaiheet 0 :tulokset :vaiheen-alku-pvm] (LocalDate/of 2025 1 1)))
         ppp-id (:id (perusparannuspassi-service/insert-perusparannuspassi!
@@ -121,8 +121,8 @@
     ppp-id))
 
 (t/deftest ^{:broken-test "inexclicably fails in GHA"} openhtmltopdf-warnings-test
-  (t/testing "energiatodistus 2026 emits all and only the expected OpenHTMLToPDF warnings"
-    (let [{:keys [db whoami energiatodistus-id]} (create-energiatodistus-2026!)
+  (t/testing "energiatodistus 2027 emits all and only the expected OpenHTMLToPDF warnings"
+    (let [{:keys [db whoami energiatodistus-id]} (create-energiatodistus-2027!)
           complete-energiatodistus (complete-energiatodistus-service/find-complete-energiatodistus db whoami energiatodistus-id)
           language-code (or (some-> complete-energiatodistus
                                     :perustiedot

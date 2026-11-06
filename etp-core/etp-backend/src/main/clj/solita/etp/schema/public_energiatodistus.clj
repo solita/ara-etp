@@ -54,10 +54,10 @@
 
 (def Energiatodistus2018 (energiatodistus-versio 2018))
 
-(def Energiatodistus2026 (energiatodistus-versio 2026))
+(def Energiatodistus2027 (energiatodistus-versio 2027))
 
 (def Energiatodistus
   (schema/conditional
    (partial energiatodistus-schema/versio? 2013) Energiatodistus2013
    (partial energiatodistus-schema/versio? 2018) Energiatodistus2018
-   (partial energiatodistus-schema/versio? 2026) Energiatodistus2026))
+   (partial energiatodistus-schema/versio? 2027) Energiatodistus2027))

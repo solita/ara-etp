@@ -8,7 +8,7 @@
 .nrepl-port
 
 # Locally generated PDF visual regression baseline
-etp-backend/src/test/resources/documents/energiatodistus-2026-with-perusparannuspassi.pdf
+etp-backend/src/test/resources/documents/energiatodistus-2027-with-perusparannuspassi.pdf
 .projectile
 .vscode
 

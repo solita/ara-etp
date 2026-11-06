@@ -46,7 +46,7 @@ export const isOlemassaOlevaRakennus = R.ifElse(
 );
 
 /**
- * Havainnointikaynti is required in 2026 for:
+ * Havainnointikaynti is required in 2027 for:
  * - olemassa oleva rakennus
  * - rakennuslupavaihe, laajamittainen perusparannus
  * - käyttöönottovaihe, laajamittainen perusparannus
@@ -59,13 +59,13 @@ export const isHavainnointikayntiRequired = R.anyPass([
 
 const allowedIdsByVersion = {
   2018: new Set([0, 1, 2]),
-  2026: new Set([0, 1, 2, 3, 4])
+  2027: new Set([0, 1, 2, 3, 4])
 };
 
 /**
  * Filter laatimisvaiheet by energiatodistus version.
  * 2018: only ids 0, 1, 2
- * 2026: all ids 0, 1, 2, 3, 4
+ * 2027: all ids 0, 1, 2, 3, 4
  */
 export const filterByVersion = R.curry((version, laatimisvaiheet) => {
   const allowed = allowedIdsByVersion[version];

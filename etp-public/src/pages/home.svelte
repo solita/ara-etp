@@ -7,7 +7,7 @@
   import EtHakuImage from '@Asset/ethaku.jpg';
   import LaatijaHakuImage from '@Asset/laatijahaku.jpg';
   import ETMalli2018 from '@Asset/energiatodistusmalli_2018.pdf';
-  import ETMalli2026 from '@Asset/energiatodistusmalli_2026.pdf';
+  import ETMalli2027 from '@Asset/energiatodistusmalli_2027.pdf';
 
   import BorderImage from '@Component/border-image';
   import Hero from '@Component/hero';
@@ -81,7 +81,7 @@
         <div>
           <h2 class="mb-4">{$_('HOME_ENERGIATODISTUSHAKU')}</h2>
           {#if isEtp2026}
-            <p>{$_('HOME_ENERGIATODISTUSHAKU_KUVAUS_2026')}</p>
+            <p>{$_('HOME_ENERGIATODISTUSHAKU_KUVAUS_2027')}</p>
           {:else}
             <p>{$_('HOME_ENERGIATODISTUSHAKU_KUVAUS')}</p>
           {/if}
@@ -195,17 +195,17 @@
       <!-- <span class="font-icon text-6xl">info</span> -->
       <h2 class="mb-4 text-lg text-white">{$_('INFO_TITLE')}</h2>
       {#if isEtp2026}
-        <p>{$_('INFO_KUVAUS_P1_2026')}</p>
+        <p>{$_('INFO_KUVAUS_P1_2027')}</p>
         <br />
-        <p>{$_('INFO_KUVAUS_P2_2026')}</p>
+        <p>{$_('INFO_KUVAUS_P2_2027')}</p>
         <div class="mt-4">
           <ButtonLink
             {...buttonStyles.white}
-            href={ETMalli2026}
+            href={ETMalli2027}
             target="_blank">
             <span class="material-icons" aria-hidden="true"
               >picture_as_pdf</span>
-            <span>{$_('INFO_ENERGIATODISTUSMALLI_V2026_2026')}</span>
+            <span>{$_('INFO_ENERGIATODISTUSMALLI_V2027_2027')}</span>
             <span class="sr-only">(pdf)</span>
           </ButtonLink>
           <ButtonLink
@@ -214,7 +214,7 @@
             target="_blank">
             <span class="material-icons" aria-hidden="true"
               >picture_as_pdf</span>
-            <span>{$_('INFO_ENERGIATODISTUSMALLI_V2018_2026')}</span>
+            <span>{$_('INFO_ENERGIATODISTUSMALLI_V2018_2027')}</span>
             <span class="sr-only">(pdf)</span>
           </ButtonLink>
         </div>
@@ -246,7 +246,7 @@
                 <li>{$_('LISATIETOA_LUKEMINEN')}</li>
                 <li>{$_('LISATIETOA_TARVE')}</li>
                 {#if isEtp2026}
-                  <li>{$_('LISATIETOA_PERUSPARANNUSPASSI_2026')}</li>
+                  <li>{$_('LISATIETOA_PERUSPARANNUSPASSI_2027')}</li>
                 {/if}
                 <li>{$_('LISATIETOA_FAQ')}</li>
               </ul>
@@ -292,11 +292,11 @@
       {#if isEtp2026}
         <section class="md:w-1/2 py-8">
           <h3 class="mb-4">
-            {$_('LISATIETOA_PERUSPARANNUSPASSI_SECTION_2026')}
+            {$_('LISATIETOA_PERUSPARANNUSPASSI_SECTION_2027')}
           </h3>
           <div class="flex flex-col space-y-2">
             <p class="block py-2">
-              {$_('LISATIETOA_PERUSPARANNUSPASSI_INFO_2026')}
+              {$_('LISATIETOA_PERUSPARANNUSPASSI_INFO_2027')}
             </p>
           </div>
         </section>

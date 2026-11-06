@@ -478,20 +478,20 @@ context('Laatija', () => {
       it('should copy perusparannuspassi data when copying energiatodistus', () => {
         cy.intercept({
           method: 'POST',
-          pathname: /\/api\/private\/energiatodistukset\/2026$/
+          pathname: /\/api\/private\/energiatodistukset\/2027$/
         }).as('post');
 
         cy.intercept({
           method: 'PUT',
-          pathname: /\/api\/private\/energiatodistukset\/2026\/*/
+          pathname: /\/api\/private\/energiatodistukset\/2027\/*/
         }).as('save');
 
         cy.intercept({
           method: 'POST',
-          pathname: /\/api\/private\/perusparannuspassit\/2026$/
+          pathname: /\/api\/private\/perusparannuspassit\/2027$/
         }).as('postPpp');
 
-        // Create a new ET 2026
+        // Create a new ET 2027
         cy.visit('/#/energiatodistus/all');
         cy.get('[data-cy="create-new-et26"]').click();
 
@@ -510,7 +510,7 @@ context('Laatija', () => {
         cy.wait(['@post']);
 
         // Wait for navigation to the created energiatodistus
-        cy.location('hash').should('match', /\/energiatodistus\/2026\/\d+/);
+        cy.location('hash').should('match', /\/energiatodistus\/2027\/\d+/);
 
         // Scroll to PPP section and add PPP
         cy.get('[data-cy="perusparannuspassi"]').scrollIntoView();
@@ -541,7 +541,7 @@ context('Laatija', () => {
         // Should navigate to new ET with copy-from-id
         cy.location('hash').should(
           'match',
-          /\/energiatodistus\/2026\/new\?copy-from-id=\d+/
+          /\/energiatodistus\/2027\/new\?copy-from-id=\d+/
         );
 
         // Verify PPP section exists and is valid (should be added automatically)
@@ -559,7 +559,7 @@ context('Laatija', () => {
         cy.wait(['@post', '@postPpp']);
 
         // Wait for navigation to the newly created energiatodistus
-        cy.location('hash').should('match', /\/energiatodistus\/2026\/\d+$/);
+        cy.location('hash').should('match', /\/energiatodistus\/2027\/\d+$/);
 
         // Verify the PPP has been assigned an id that is one greater than the original
         cy.get('[data-cy="perusparannuspassi"]').scrollIntoView();

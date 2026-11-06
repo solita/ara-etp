@@ -37,9 +37,9 @@
   (let [img (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)]
     (ImageIO/write img "PNG" (io/file path))))
 
-(defn signature-png-2026
+(defn signature-png-2027
   "Some text or image is required whether to create a signature field even if we want it to be only a clickable box on
-  top of the signature section. For 2026 version we just want the box, so we create a transparent png."
+  top of the signature section. For 2027 version we just want the box, so we create a transparent png."
   [path]
   (transparent-png path 727 65))
 
@@ -111,8 +111,8 @@
              signature-png-path (str/replace pdf-path #".pdf" "-signature.png")
              pdf-file-key (energiatodistus-service/file-key id language)
              energiatodistus-pdf (File. pdf-path)
-             _ (if (= versio 2026)
-                 (signature-png-2026 signature-png-path)
+             _ (if (= versio 2027)
+                 (signature-png-2027 signature-png-path)
                  (signature-as-png signature-png-path laatija-fullname now))
              signature-png (File. signature-png-path)
              signature-options (case versio
@@ -126,7 +126,7 @@
                                        :origin-x      75
                                        :origin-y      666
                                        :zoom          134}
-                                 2026 {:signature-png signature-png
+                                 2027 {:signature-png signature-png
                                        :page     2
                                        :origin-x 25
                                        :origin-y 751

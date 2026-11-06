@@ -67,13 +67,13 @@
       EtApi.alakayttotarkoitusluokat(fetch, 2018),
       ...(isEtp2026Enabled
         ? [
-            EtApi.kayttotarkoitusluokat(fetch, 2026),
-            EtApi.alakayttotarkoitusluokat(fetch, 2026)
+            EtApi.kayttotarkoitusluokat(fetch, 2027),
+            EtApi.alakayttotarkoitusluokat(fetch, 2027)
           ]
         : [])
     ];
     return Promise.all(fetches).then(results => {
-      const [kt2013, kt2018, akt2013, akt2018, kt2026, akt2026] = results;
+      const [kt2013, kt2018, akt2013, akt2018, kt2027, akt2027] = results;
       return {
         '0': {
           kayttotarkoitusluokat: [],
@@ -89,9 +89,9 @@
         },
         ...(isEtp2026Enabled
           ? {
-              '2026': {
-                kayttotarkoitusluokat: kt2026,
-                alakayttotarkoitusluokat: akt2026
+              '2027': {
+                kayttotarkoitusluokat: kt2027,
+                alakayttotarkoitusluokat: akt2027
               }
             }
           : {})
@@ -304,7 +304,7 @@
 <Container {...containerStyles.beige}>
   <InfoBlock title={$_('ETHAKU_INFO_TITLE')}>
     {#if isEtp2026}
-      {$_('ETHAKU_INFO_TEXT_2026')}
+      {$_('ETHAKU_INFO_TEXT_2027')}
     {:else}
       {$_('ETHAKU_INFO_TEXT')}
     {/if}
@@ -780,7 +780,7 @@
           {:else}
             <span
               class="tarkennettu-label w-full md:w-1/2 text-ashblue tracking-widest">
-              {$_('ETHAKU_E_LUKU2026')}
+              {$_('ETHAKU_E_LUKU2027')}
             </span>
           {/if}
           <div class="w-full md:w-1/2">

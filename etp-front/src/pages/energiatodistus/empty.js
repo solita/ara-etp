@@ -47,7 +47,7 @@ const emptyToimenpide = _ => ({
   'eluvun-muutos': ValidNone()
 });
 
-const emptyToimenpide2026 = _ =>
+const emptyToimenpide2027 = _ =>
   Deep.mergeRight(
     R.anyPass([Either.isEither, Maybe.isMaybe]),
     emptyToimenpide(),
@@ -62,12 +62,12 @@ const emptyHuomio = _ => ({
   toimenpide: [emptyToimenpide(), emptyToimenpide(), emptyToimenpide()]
 });
 
-const emptyHuomio2026 = _ =>
+const emptyHuomio2027 = _ =>
   Deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]), emptyHuomio(), {
     toimenpide: [
-      emptyToimenpide2026(),
-      emptyToimenpide2026(),
-      emptyToimenpide2026()
+      emptyToimenpide2027(),
+      emptyToimenpide2027(),
+      emptyToimenpide2027()
     ]
   });
 
@@ -306,18 +306,18 @@ export const energiatodistus2013 = R.compose(
   energiatodistus2018
 );
 
-const notIn2026 = R.compose(
+const notIn2027 = R.compose(
   R.dissocPath([
     'toteutunut-ostoenergiankulutus',
     'polttoaineet-vuosikulutus-yhteensa'
   ])
 );
 
-export const energiatodistus2026 = _ =>
+export const energiatodistus2027 = _ =>
   R.compose(
-    notIn2026,
+    notIn2027,
     Deep.mergeRight(R.anyPass([Either.isEither, Maybe.isMaybe]), R.__, {
-      versio: 2026,
+      versio: 2027,
       perustiedot: {
         'havainnointikayntityyppi-id': Maybe.None(),
         'tayttaa-aplus-vaatimukset': false,
@@ -326,15 +326,15 @@ export const energiatodistus2026 = _ =>
       huomiot: {
         lammitys: Deep.mergeRight(
           R.anyPass([Either.isEither, Maybe.isMaybe]),
-          emptyHuomio2026(),
+          emptyHuomio2027(),
           {
             'kayttoikaa-jaljella-arvio-vuosina': ValidNone()
           }
         ),
-        'alapohja-ylapohja': emptyHuomio2026(),
-        'iv-ilmastointi': emptyHuomio2026(),
-        ymparys: emptyHuomio2026(),
-        'valaistus-muut': emptyHuomio2026()
+        'alapohja-ylapohja': emptyHuomio2027(),
+        'iv-ilmastointi': emptyHuomio2027(),
+        ymparys: emptyHuomio2027(),
+        'valaistus-muut': emptyHuomio2027()
       },
       'toteutunut-ostoenergiankulutus': {
         'tietojen-alkuperavuosi': ValidNone(),

@@ -9,8 +9,8 @@ import * as Maybe from '@Utility/maybe-utils';
 import * as Either from '@Utility/either-utils';
 
 import Ilmastoselvitys from './form-parts/Ilmastoselvitys.svelte';
-import { energiatodistus2026 } from './empty';
-import { v2026 } from './schema';
+import { energiatodistus2027 } from './empty';
+import { v2027 } from './schema';
 import { setupI18n } from '@Language/i18n';
 
 beforeAll(() => {
@@ -29,8 +29,8 @@ const mockLuokittelut = {
 };
 
 const defaultProps = () => ({
-  energiatodistus: energiatodistus2026(),
-  schema: v2026,
+  energiatodistus: energiatodistus2027(),
+  schema: v2027,
   luokittelut: mockLuokittelut,
   disabled: false,
   inputLanguage: 'fi'
@@ -175,7 +175,7 @@ test('given energiatodistus with some rakennus values set, when rendered, then y
       ],
       Either.Right(Maybe.Some(3.2))
     )
-  )(energiatodistus2026());
+  )(energiatodistus2027());
 
   const props = { ...defaultProps(), energiatodistus: et };
 
@@ -197,7 +197,7 @@ test('given energiatodistus with only one rakennus value set, when rendered, the
       'rakennustuotteiden-valmistus'
     ],
     Either.Right(Maybe.Some(5.0)),
-    energiatodistus2026()
+    energiatodistus2027()
   );
 
   const props = { ...defaultProps(), energiatodistus: et };
@@ -238,7 +238,7 @@ test('given only laatija is set, when rendered, then no validation errors are sh
   const et = R.assocPath(
     ['ilmastoselvitys', 'laatija'],
     Either.Right(Maybe.Some('Test Laatija')),
-    energiatodistus2026()
+    energiatodistus2027()
   );
 
   const props = { ...defaultProps(), energiatodistus: et };
@@ -254,10 +254,10 @@ test('given only laatija is set, when rendered, then no validation errors are sh
 });
 
 // Test 4.10: Section is positioned after lisämerkintöjä in the form
-describe('ET2026Form integration', () => {
+describe('ET2027Form integration', () => {
   // This test verifies the DOM order of the headings.
   // We mock getComputedStyle to avoid JSDOM limitations with autoresize.
-  test('given the full ET2026Form, when rendered, then Ilmastoselvitys heading appears after Lisämerkintojä heading', async () => {
+  test('given the full ET2027Form, when rendered, then Ilmastoselvitys heading appears after Lisämerkintojä heading', async () => {
     // Stub getComputedStyle for JSDOM (autoresize.js needs font-size)
     const origGetComputedStyle = window.getComputedStyle;
     window.getComputedStyle = el => {
@@ -270,11 +270,11 @@ describe('ET2026Form integration', () => {
     };
 
     try {
-      // This test requires the full ET2026Form with all dependencies.
-      const ET2026Form = (await import('./ET2026Form.svelte')).default;
+      // This test requires the full ET2027Form with all dependencies.
+      const ET2027Form = (await import('./ET2027Form.svelte')).default;
 
       // given — build minimal required props
-      const et = energiatodistus2026();
+      const et = energiatodistus2027();
       const minimalLuokittelut = {
         ...mockLuokittelut,
         lammonjako: [],
@@ -284,7 +284,7 @@ describe('ET2026Form integration', () => {
         kielisyys: [],
         laatimisvaiheet: [],
         laatimisvaiheet2018: [],
-        laatimisvaiheet2026: [],
+        laatimisvaiheet2027: [],
         patevyydet: [],
         kayttotarkoitusluokat: [],
         alakayttotarkoitusluokat: [],
@@ -297,11 +297,11 @@ describe('ET2026Form integration', () => {
       };
 
       // when
-      const { container } = render(ET2026Form, {
+      const { container } = render(ET2027Form, {
         energiatodistus: et,
         inputLanguage: 'fi',
         luokittelut: minimalLuokittelut,
-        schema: v2026,
+        schema: v2027,
         disabled: false,
         validation: { kuormat: [] },
         eTehokkuus: Maybe.None(),

@@ -143,7 +143,7 @@ const Huomio = {
   )
 };
 
-const Huomio2026 = {
+const Huomio2027 = {
   teksti: String(2, 1000),
   toimenpide: R.repeat(
     {
@@ -348,7 +348,7 @@ export const v2013 = R.compose(
   R.dissocPath(['perustiedot', 'laatimisvaihe'])
 )(v2018);
 
-const notIn2026 = R.compose(
+const notIn2027 = R.compose(
   R.dissocPath([
     'toteutunut-ostoenergiankulutus',
     'polttoaineet-vuosikulutus-yhteensa'
@@ -358,17 +358,17 @@ const notIn2026 = R.compose(
 /*
 Note: booleans are not in the frontend's schemas. For example lt$lammitys$lammonjako_lampotilajousto is not.
  */
-export const v2026 = R.compose(
-  notIn2026,
+export const v2027 = R.compose(
+  notIn2027,
   R.mergeDeepRight(R.__, {
     huomiot: {
-      'iv-ilmastointi': Huomio2026,
-      'valaistus-muut': Huomio2026,
-      lammitys: R.mergeDeepRight(Huomio2026, {
+      'iv-ilmastointi': Huomio2027,
+      'valaistus-muut': Huomio2027,
+      lammitys: R.mergeDeepRight(Huomio2027, {
         'kayttoikaa-jaljella-arvio-vuosina': IntegerNonNegative
       }),
-      ymparys: Huomio2026,
-      'alapohja-ylapohja': Huomio2026
+      ymparys: Huomio2027,
+      'alapohja-ylapohja': Huomio2027
     },
     'toteutunut-ostoenergiankulutus': {
       'tietojen-alkuperavuosi': {

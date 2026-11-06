@@ -168,7 +168,7 @@
         dataCy="korvaavuus-checkbox"
         bind:model={checked}
         disabled={!enabled} />
-      {#if energiatodistus.versio === 2026}
+      {#if energiatodistus.versio === 2027}
         <Checkbox
           label={i18n(
             'energiatodistus.korvaavuus.yksinkertaistettu-paivitysmenettely'
@@ -179,7 +179,7 @@
           disabled={!simplifiedProcedureAvailable} />
       {/if}
     </div>
-    {#if energiatodistus.versio === 2026}
+    {#if energiatodistus.versio === 2027}
       <p class="ml-1 mt-2 flex text-sm">
         <span class="mr-1 font-icon">info</span>
         {i18n('energiatodistus.korvaavuus.yksinkertaistettu-info')}

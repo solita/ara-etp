@@ -1,13 +1,13 @@
 <script>
   import { _ } from '@Localization/localization';
   const luokat = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-  const luokat2026 = ['A+', 'A0'];
+  const luokat2027 = ['A+', 'A0'];
   export let group = [];
   export let name;
   export let versio = '0';
   export let isEtp2026 = false;
 
-  $: show2026 = isEtp2026 && (versio === '0' || versio === '2026');
+  $: show2027 = isEtp2026 && (versio === '0' || versio === '2027');
 </script>
 
 <style>
@@ -35,8 +35,8 @@
 
 <fieldset class="flex flex-row flex-wrap sm:justify-between items-center">
   <legend class="sr-only">{$_('ET_LUOKKA')}:</legend>
-  {#if show2026}
-    {#each luokat2026 as luokka}
+  {#if show2027}
+    {#each luokat2027 as luokka}
       <label class="checkbox-container flex items-center px-3 py-2 md:p-0">
         <input on:change {name} type="checkbox" bind:group value={luokka} />
         <span class="material-icons checked text-green" aria-hidden="true">

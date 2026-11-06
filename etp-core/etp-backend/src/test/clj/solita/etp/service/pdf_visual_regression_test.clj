@@ -43,8 +43,8 @@
                                :postitoimipaikka  "Helsinki"}
     :rakennusosa              "Päärakennus"
     :kieli                    0
-    :nimi-fi                  "Esimerkkitalo 2026"
-    :nimi-sv                  "Exempelhus 2026"
+    :nimi-fi                  "Esimerkkitalo 2027"
+    :nimi-sv                  "Exempelhus 2027"
     :kayttotarkoitus          "T"}
    :lahtotiedot
    {:lammitetty-nettoala 3000
@@ -254,9 +254,9 @@
    :tulokset {:kaukolampo-hinta 10M :kaukojaahdytys-hinta 18M :sahko-hinta 15M
               :uusiutuvat-pat-hinta 8M :fossiiliset-pat-hinta 14M :lisatietoja-fi nil :lisatietoja-sv nil}})
 
-(t/deftest energiatodistus-2026-with-perusparannuspassi-visual-regression-test
+(t/deftest energiatodistus-2027-with-perusparannuspassi-visual-regression-test
   (when (or doc/*update-snapshots*
-            (io/resource "documents/energiatodistus-2026-with-perusparannuspassi.pdf"))
+            (io/resource "documents/energiatodistus-2027-with-perusparannuspassi.pdf"))
     (let [laatija-id (laatija/insert-suomifi-laatija! {:etunimi "Liisa" :sukunimi "Specimen-Potex"
                                                        :puhelin "0501234567" :patevyystaso 4
                                                        :jakeluosoite "Testikatu 1" :postinumero "00100"
@@ -264,12 +264,12 @@
                                                        :toteamispaivamaara (LocalDate/of 2025 1 1)
                                                        :toteaja "ARA"})
           whoami {:id laatija-id :rooli 0 :patevyystaso 4}
-          et-id (:id (energiatodistus/add-energiatodistus! (ts/db-user laatija-id) whoami 2026 et-add))
+          et-id (:id (energiatodistus/add-energiatodistus! (ts/db-user laatija-id) whoami 2027 et-add))
           _ (:id (perusparannuspassi/insert-perusparannuspassi! (ts/db-user laatija-id) whoami
                                                                  (assoc ppp-add :energiatodistus-id et-id)))
           complete-et (complete-energiatodistus/find-complete-energiatodistus ts/*db* whoami et-id)
           pdf-path (energiatodistus-pdf/generate-et-pdf-as-file ts/*db* whoami complete-et "fi" true "visual-regression")]
       (try
         (with-open [pdf-document (Loader/loadPDF (io/file pdf-path))]
-          (doc/assert-pdf-matches-visually pdf-document "documents/energiatodistus-2026-with-perusparannuspassi.pdf"))
+          (doc/assert-pdf-matches-visually pdf-document "documents/energiatodistus-2027-with-perusparannuspassi.pdf"))
         (finally (io/delete-file pdf-path true))))))

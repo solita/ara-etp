@@ -57,7 +57,7 @@
   };
 
   const energiamuotokertoimet = {
-    2026: {
+    2027: {
       'fossiilinen-polttoaine': 1,
       kaukojaahdytys: 0.21,
       kaukolampo: 0.38,
@@ -486,7 +486,7 @@
             {/if}
           {/if}
         </dl>
-        {#if versio !== '2026'}
+        {#if versio !== '2027'}
           <div class="w-full my-8 print:my-0 graph-container">
             <div class="w-full flex flex-col bg-white">
               <div class="w-full flex border-b border-black">

@@ -128,7 +128,7 @@
     {disabled} />
 </div>
 
-{#if R.equals(versio, 2026)}
+{#if R.equals(versio, 2027)}
   <div class="w-full py-4">
     <Checkbox
       bind:model={energiatodistus}

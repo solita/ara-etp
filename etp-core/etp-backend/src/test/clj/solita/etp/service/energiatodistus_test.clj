@@ -36,7 +36,7 @@
                                    laatija-id)
                                   (energiatodistus-test-data/generate-and-insert!
                                    1
-                                   2026
+                                   2027
                                    true
                                    laatija-id))]
     {:paakayttajat (zipmap paakayttaja-ids paakayttaja-adds)
@@ -88,8 +88,8 @@
   (let [{:keys [laatijat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         [energiatodistus-2018
-         energiatodistus-2026] (mapv #(energiatodistus-test-data/generate-add % false)
-                                     [2018 2026])
+         energiatodistus-2027] (mapv #(energiatodistus-test-data/generate-add % false)
+                                     [2018 2027])
         add-energiatodistus
         (fn [energiatodistus versio path value]
           (etp-test/catch-ex-data
@@ -136,14 +136,14 @@
                      (assoc-in [:lahtotiedot :sis-kuorma :henkilot]
                                {:kayttoaste 9999 :lampokuorma 9999}))))))))
 
-(t/deftest validation-2026-invalid-sisainen-kuorma-yat-test
-  ;; given: a 2026 energiatodistus with käyttötarkoitus 'YAT' (luokka 1)
+(t/deftest validation-2027-invalid-sisainen-kuorma-yat-test
+  ;; given: a 2027 energiatodistus with käyttötarkoitus 'YAT' (luokka 1)
   ;;        and invalid sisäinen kuorma values
   (let [{:keys [laatijat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
-        energiatodistus (energiatodistus-test-data/generate-add 2026 false)]
+        energiatodistus (energiatodistus-test-data/generate-add 2027 false)]
     ;; when: attempting to add the energiatodistus with invalid sis-kuorma
-    ;; then: an :invalid-sisainen-kuorma exception is thrown with valid values for 2026/YAT
+    ;; then: an :invalid-sisainen-kuorma exception is thrown with valid values for 2027/YAT
     (t/is (xmap/submap?
             {:type         :invalid-sisainen-kuorma
              :valid-kuorma {:henkilot {:kayttoaste 0.6M, :lampokuorma 2M},
@@ -153,20 +153,20 @@
               #(service/add-energiatodistus!
                  (ts/db-user laatija-id)
                  (test-whoami/laatija laatija-id)
-                 2026
+                 2027
                  (-> energiatodistus
                      (assoc-in [:perustiedot :kayttotarkoitus] "YAT")
                      (assoc-in [:lahtotiedot :sis-kuorma :henkilot]
                                {:kayttoaste 9999 :lampokuorma 9999}))))))))
 
-(t/deftest validation-2026-invalid-sisainen-kuorma-toimisto-test
-  ;; given: a 2026 energiatodistus with käyttötarkoitus 'T' (luokka 3 — Toimistorakennukset)
+(t/deftest validation-2027-invalid-sisainen-kuorma-toimisto-test
+  ;; given: a 2027 energiatodistus with käyttötarkoitus 'T' (luokka 3 — Toimistorakennukset)
   ;;        and invalid sisäinen kuorma values
   (let [{:keys [laatijat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
-        energiatodistus (energiatodistus-test-data/generate-add 2026 false)]
+        energiatodistus (energiatodistus-test-data/generate-add 2027 false)]
     ;; when: attempting to add the energiatodistus with invalid sis-kuorma
-    ;; then: an :invalid-sisainen-kuorma exception is thrown with valid values for 2026/T (luokka 3)
+    ;; then: an :invalid-sisainen-kuorma exception is thrown with valid values for 2027/T (luokka 3)
     (t/is (xmap/submap?
             {:type         :invalid-sisainen-kuorma
              :valid-kuorma {:henkilot {:kayttoaste 0.65M, :lampokuorma 5M},
@@ -176,28 +176,28 @@
               #(service/add-energiatodistus!
                  (ts/db-user laatija-id)
                  (test-whoami/laatija laatija-id)
-                 2026
+                 2027
                  (-> energiatodistus
                      (assoc-in [:perustiedot :kayttotarkoitus] "T")
                      (assoc-in [:lahtotiedot :sis-kuorma :henkilot]
                                {:kayttoaste 9999 :lampokuorma 9999}))))))))
 
-(t/deftest validation-2026-valid-sisainen-kuorma-accepted-test
-  ;; given: a 2026 energiatodistus with käyttötarkoitus 'YAT' (luokka 1)
+(t/deftest validation-2027-valid-sisainen-kuorma-accepted-test
+  ;; given: a 2027 energiatodistus with käyttötarkoitus 'YAT' (luokka 1)
   ;;        and correct sisäinen kuorma values matching the DB rules
   (let [{:keys [laatijat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
-        energiatodistus (energiatodistus-test-data/generate-add 2026 false)]
+        energiatodistus (energiatodistus-test-data/generate-add 2027 false)]
     ;; when: adding the energiatodistus with valid sis-kuorma for YAT
     ;; then: no exception is thrown, the energiatodistus is created successfully
     (t/is (number? (:id (service/add-energiatodistus!
                           (ts/db-user laatija-id)
                           (test-whoami/laatija laatija-id)
-                          2026
+                          2027
                           (-> energiatodistus
                               (assoc-in [:perustiedot :kayttotarkoitus] "YAT")
                               (assoc-in [:lahtotiedot :sis-kuorma]
-                                        (energiatodistus-test-data/sisainen-kuorma 2026 1)))))))))
+                                        (energiatodistus-test-data/sisainen-kuorma 2027 1)))))))))
 
 (t/deftest update-energiatodistus-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
@@ -315,11 +315,11 @@
         laatija-id (-> laatijat keys sort first)
         whoami {:id laatija-id :rooli 0 :patevyystaso 4}
         db (ts/db-user laatija-id)
-        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)
+        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2027 true laatija-id)
                   keys
                   first)
-        update (-> (energiatodistus-test-data/generate-add 2026 true)
-             ;; laatimisvaihe != 2 means toimenpide pages are not included in 2026 output
+        update (-> (energiatodistus-test-data/generate-add 2027 true)
+             ;; laatimisvaihe != 2 means toimenpide pages are not included in 2027 output
              (assoc-in [:perustiedot :laatimisvaihe] 1)
              (assoc-in [:perustiedot :keskeiset-suositukset-fi] "fi-keskeiset")
              (assoc-in [:perustiedot :keskeiset-suositukset-sv] "sv-keskeiset")
@@ -343,7 +343,7 @@
         whoami {:id laatija-id :rooli 0}
         db (ts/db-user laatija-id)
         ;; Set the tayttaa-aplus-vaatimukset to false, so that the ilmastoselvitys will not be required.
-        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+        et-add (-> (energiatodistus-test-data/generate-add 2027 true)
                    (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] false))
         [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)
         update (-> et-add
@@ -408,10 +408,10 @@
         laatija-id (-> laatijat keys sort first)
         whoami {:id laatija-id :rooli 0}
         db (ts/db-user laatija-id)
-        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)
+        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2027 true laatija-id)
                   keys
                   first)
-        update (-> (energiatodistus-test-data/generate-add 2026 true)
+        update (-> (energiatodistus-test-data/generate-add 2027 true)
                    (assoc-in [:perustiedot :laatimisvaihe] 2)
                    (assoc-in [:perustiedot :kieli] 0)
                    (assoc-in [:tulokset :kaytettavat-energiamuodot :kaukolampo] 20000M)
@@ -481,10 +481,10 @@
         laatija-id (-> laatijat keys sort first)
         whoami {:id laatija-id :rooli 0}
         db (ts/db-user laatija-id)
-        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)
+        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2027 true laatija-id)
                   keys
                   first)
-        update (-> (energiatodistus-test-data/generate-add 2026 true)
+        update (-> (energiatodistus-test-data/generate-add 2027 true)
                  (assoc-in [:perustiedot :kieli] 1)
                  (assoc-in [:perustiedot :laatimisvaihe] 2)
                  (assoc-in [:tulokset :kaytettavat-energiamuodot :kaukolampo] 20000M)
@@ -571,12 +571,12 @@
         laatija-id (first laatija-ids)
         whoami {:id laatija-id :rooli 0 :patevyystaso 4}
         db (ts/db-user laatija-id)
-        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)
+        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2027 true laatija-id)
                   keys
                   first)
         _ (service/update-energiatodistus!
             db whoami et-id
-            (-> (energiatodistus-test-data/generate-add 2026 true)
+            (-> (energiatodistus-test-data/generate-add 2027 true)
                 (assoc-in [:perustiedot :kieli] 0)
                 (assoc-in [:perustiedot :laatimisvaihe] 2)))
         ppp-add (-> (perusparannuspassi-test-data/generate-add et-id)
@@ -608,12 +608,12 @@
         laatija-id (first laatija-ids)
         whoami {:id laatija-id :rooli 0 :patevyystaso 4}
         db (ts/db-user laatija-id)
-        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)
+        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2027 true laatija-id)
                   keys
                   first)
         _ (service/update-energiatodistus!
             db whoami et-id
-            (-> (energiatodistus-test-data/generate-add 2026 true)
+            (-> (energiatodistus-test-data/generate-add 2027 true)
                 (assoc-in [:perustiedot :kieli] 1)
                 (assoc-in [:perustiedot :laatimisvaihe] 2)))
         ppp-add (-> (perusparannuspassi-test-data/generate-add et-id)
@@ -644,7 +644,7 @@
         laatija-id (-> laatijat keys sort first)
     whoami {:id laatija-id :rooli 0 :patevyystaso 4}
         db (ts/db-user laatija-id)
-        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)
+        et-id (-> (energiatodistus-test-data/generate-and-insert! 1 2027 true laatija-id)
                   keys
                   first)
         ppp-add (perusparannuspassi-test-data/generate-add et-id)
@@ -1075,7 +1075,7 @@
         laatija-ids (laatija-test-data/insert! laatija-adds)
         laatija-id (first laatija-ids)
         laatija-whoami {:id laatija-id :rooli 0 :patevyystaso 4}
-        et-add (-> (first (energiatodistus-test-data/generate-adds 1 2026 true))
+        et-add (-> (first (energiatodistus-test-data/generate-adds 1 2027 true))
                    (assoc-in [:perustiedot :postinumero] "33100")
                    (assoc-in [:perustiedot :katuosoite-fi] "Testikatu 1")
                    (assoc-in [:perustiedot :rakennustunnus] "103515074X"))
@@ -1105,7 +1105,7 @@
   ;; Then: perusparannuspassi-id is nil
   (let [{:keys [laatijat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
-        et-add (-> (first (energiatodistus-test-data/generate-adds 1 2026 true))
+        et-add (-> (first (energiatodistus-test-data/generate-adds 1 2027 true))
                    (assoc-in [:perustiedot :postinumero] "33100")
                    (assoc-in [:perustiedot :katuosoite-fi] "Testikatu 2")
                    (assoc-in [:perustiedot :rakennustunnus] "103515075Y"))
@@ -1389,7 +1389,7 @@
 
 (t/deftest test-localized-field-paths
   ;;Given energiatodistus, check that localized fields are correctly identified to have -sv or -fi endings in the field paths
-  (let [et-add (first (energiatodistus-test-data/generate-adds 1 2026 true))
+  (let [et-add (first (energiatodistus-test-data/generate-adds 1 2027 true))
         localized-fields (service/localized-field-paths et-add)]
     (t/is (some #(= % [:perustiedot :katuosoite-fi]) localized-fields))
     (t/is (some #(= % [:perustiedot :katuosoite-sv]) localized-fields))

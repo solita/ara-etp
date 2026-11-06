@@ -66,7 +66,7 @@
                            (str "Energiatodistus " id " does not exists."))
                           (r/not-found "File not found")))}}])
 
-(defn html-route-2026 []
+(defn html-route-2027 []
   ["/html/:kieli/:filename"
    {:get {:summary    "Lataa energiatodistus HTML-tiedostona"
           :access     (some-fn rooli-service/laatija? rooli-service/paakayttaja?)
@@ -78,7 +78,7 @@
           :handler    (fn [{{{:keys [id kieli filename]} :path} :parameters :keys [db whoami]}]
                         (if (valid-html-filename? filename id kieli)
                           (api-response/html-response
-                           (energiatodistus-pdf-service/find-energiatodistus-2026-html db
+                           (energiatodistus-pdf-service/find-energiatodistus-2027-html db
                                                                                        whoami
                                                                                        id
                                                                                        kieli)
@@ -218,16 +218,16 @@
         crud-api/discarded
         liite-api/routes
         signing-api/routes]]
-      ["/2026"
-       ["" (crud-api/post 2026 energiatodistus-schema/EnergiatodistusSave2026
+      ["/2027"
+       ["" (crud-api/post 2027 energiatodistus-schema/EnergiatodistusSave2027
                           identity rooli-service/ppp-laatija?)]
        ["/:id"
-        (crud-api/gpd-routes energiatodistus-schema/Energiatodistus2026
-                             energiatodistus-schema/EnergiatodistusSave2026
+        (crud-api/gpd-routes energiatodistus-schema/Energiatodistus2027
+                             energiatodistus-schema/EnergiatodistusSave2027
                              rooli-service/ppp-laatija?)
-        (pdf-route 2026)
+        (pdf-route 2027)
         (when-not (= config/environment-alias "prod")
-          (html-route-2026))
+          (html-route-2027))
         crud-api/discarded
         liite-api/routes
         signing-api/routes]]]
@@ -284,10 +284,10 @@
     ["/2018" (crud-api/post 2018 energiatodistus-schema/EnergiatodistusSave2018External
                             energiatodistus-schema/dissoc-deprecated-external-fields
                             rooli-service/laatija?)]
-    ["/2026-ppp"
+    ["/2027-ppp"
      {:post
-      {:summary    "Lisää 2026 energiatodistus ja optionaalisesti perusparannuspassi"
-       :parameters {:body energiatodistus-schema/EnergiatodistusSave2026External}
+      {:summary    "Lisää 2027 energiatodistus ja optionaalisesti perusparannuspassi"
+       :parameters {:body energiatodistus-schema/EnergiatodistusSave2027External}
        :responses  {201 {:body common-schema/IdAndWarnings}}
        :handler    (fn [{:keys [db whoami parameters uri]}]
                     (external-response/with-external-exceptions
@@ -295,7 +295,7 @@
                              ppp-data (:perusparannuspassi body)
                              et-data (dissoc body :perusparannuspassi)
                              et-result (energiatodistus-service/add-energiatodistus!
-                                         db whoami 2026 et-data)
+                                         db whoami 2027 et-data)
                              ppp-result (when ppp-data
                                           (perusparannuspassi-service/insert-perusparannuspassi!
                                             db whoami

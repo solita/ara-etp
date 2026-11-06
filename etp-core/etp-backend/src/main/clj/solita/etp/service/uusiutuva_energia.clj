@@ -2,7 +2,7 @@
 
 ;; These coefficients are defined independently in the spec:
 ;; "tuotettu sähkö kertoimella 0,9 ja tuotettu aurinkolämpö kertoimella 0,38"
-;; They happen to coincide with energiamuotokerroin 2026 values but are separate concepts.
+;; They happen to coincide with energiamuotokerroin 2027 values but are separate concepts.
 (def uusiutuva-kerroin
   {:aurinkosahko 0.90
    :tuulisahko   0.90
@@ -23,7 +23,7 @@
 
    Formula: round((Σ(E_tuotto × k) / A_netto) / (E_luku + Σ(E_hyödynnetty × k) / A_netto) × 100)"
   [versio energiatodistus]
-  (when (= versio 2026)
+  (when (= versio 2027)
     (let [nettoala  (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
           e-luku    (get-in energiatodistus [:tulokset :e-luku])]
       (when (and nettoala (pos? nettoala) (some? e-luku))

@@ -20,7 +20,7 @@
     ;; Only return vaihe data if it has a starting date
     ;; This filters out vaiheet where data was added but later deleted
     (when (and vaihe (some? (get-in vaihe [:tulokset :vaiheen-alku-pvm])))
-      (let [versio 2026
+      (let [versio 2027
             passin-perustiedot (:passin-perustiedot perusparannuspassi)
             e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus vaihe)
             e-luokka (-> (e-luokka-service/e-luokka kayttotarkoitukset alakayttotarkoitukset versio

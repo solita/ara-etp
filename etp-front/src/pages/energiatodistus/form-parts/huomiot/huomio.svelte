@@ -25,7 +25,7 @@
 
 <H3 text={$_(`${base}.header`)} />
 
-{#if R.and(R.equals(versio, 2026), R.includes(huomio, ['lammitys']))}
+{#if R.and(R.equals(versio, 2027), R.includes(huomio, ['lammitys']))}
   <div class="my-4 flex flex-col gap-x-8">
     <div class="py-4 lg:w-2/5">
       <Input
@@ -85,7 +85,7 @@
             )}</span>
           <span class="block"><ELukuUnit /></span>
         </th>
-        {#if R.equals(versio, 2026)}
+        {#if R.equals(versio, 2027)}
           <th class="et-table--th et-table--th-right-aligned">
             <span
               >{$_(
@@ -142,7 +142,7 @@
                 'eluvun-muutos'
               ]} />
           </td>
-          {#if R.equals(versio, 2026)}
+          {#if R.equals(versio, 2027)}
             <td class="et-table--td">
               <Input
                 {disabled}

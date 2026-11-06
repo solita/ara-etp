@@ -100,7 +100,7 @@
                                  :description "Testivirhe2"}
                                 ])
         laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
-        energiatodistus-add (energiatodistus-test-data/generate-add 2026 true)
+        energiatodistus-add (energiatodistus-test-data/generate-add 2027 true)
         energiatodistus-ids (energiatodistus-test-data/insert!
                               (vec (repeat 3 energiatodistus-add))
                               laatija-id)
@@ -661,7 +661,7 @@
 (t/deftest destroy-only-expired-valvontas-from-mixed-data-test
   (let [{paakayttaja-id :paakayttaja-id} (test-data-set)
         laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
-        energiatodistus-add (energiatodistus-test-data/generate-add 2026 true)
+        energiatodistus-add (energiatodistus-test-data/generate-add 2027 true)
         additional-energiatodistus-ids
         (energiatodistus-test-data/insert!
           (vec (repeat 30 energiatodistus-add))

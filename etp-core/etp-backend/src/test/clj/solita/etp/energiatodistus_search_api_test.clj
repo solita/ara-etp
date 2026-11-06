@@ -53,10 +53,10 @@
                       response-body))))))
 
 (t/deftest search-energiatodistus-by-havainnointikayntityyppi-api-test
-  ;; Given: signed ET2026 certificates with known havainnointikayntityyppi-id
+  ;; Given: signed ET2027 certificates with known havainnointikayntityyppi-id
   (let [[laatija-id] (laatija-test-data/insert! (laatija-test-data/generate-adds 1))]
     (test-kayttajat/insert-virtu-paakayttaja!)
-    (let [et-adds (->> (energiatodistus-test-data/generate-adds 2 2026 true)
+    (let [et-adds (->> (energiatodistus-test-data/generate-adds 2 2027 true)
                        (map #(assoc-in % [:perustiedot :havainnointikayntityyppi-id] 1)))
           ids (energiatodistus-test-data/insert! et-adds laatija-id)]
       (energiatodistus-search-test/sign-energiatodistukset! (map #(vector laatija-id %) ids))
@@ -84,14 +84,14 @@
 
 ;; AE-2590: API-level test for searching by perusparannuspassi.valid
 (t/deftest search-energiatodistus-by-ppp-valid-api-test
-  ;; Given: ET2026 certificates, some with PPP and some without
+  ;; Given: ET2027 certificates, some with PPP and some without
   (let [[laatija-id] (laatija-test-data/insert!
                        (map #(assoc-in % [:patevyystaso] 4)
                             (laatija-test-data/generate-adds 1)))
         laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}]
     (test-kayttajat/insert-virtu-paakayttaja!)
-    (let [et-with-ppp-adds (energiatodistus-test-data/generate-adds 1 2026 true)
-          et-without-ppp-adds (energiatodistus-test-data/generate-adds 1 2026 true)
+    (let [et-with-ppp-adds (energiatodistus-test-data/generate-adds 1 2027 true)
+          et-without-ppp-adds (energiatodistus-test-data/generate-adds 1 2027 true)
           ids-with-ppp (energiatodistus-test-data/insert! et-with-ppp-adds laatija-id)
           ids-without-ppp (energiatodistus-test-data/insert! et-without-ppp-adds laatija-id)]
       ;; Insert PPP before signing (PPP can only be added to draft ET)
@@ -111,10 +111,10 @@
 
 ;; AE-2590: API-level test for searching by yksinkertaistettu-paivitysmenettely
 (t/deftest search-energiatodistus-by-yksinkertaistettu-api-test
-  ;; Given: ET2026 certificates, one with yksinkertaistettu-paivitysmenettely = true
+  ;; Given: ET2027 certificates, one with yksinkertaistettu-paivitysmenettely = true
   (let [[laatija-id] (laatija-test-data/insert! (laatija-test-data/generate-adds 1))]
     (test-kayttajat/insert-virtu-paakayttaja!)
-    (let [et-adds (energiatodistus-test-data/generate-adds 2 2026 true)
+    (let [et-adds (energiatodistus-test-data/generate-adds 2 2027 true)
           ids (energiatodistus-test-data/insert! et-adds laatija-id)
           target-id (first ids)]
       (energiatodistus-search-test/sign-energiatodistukset! (map #(vector laatija-id %) ids))

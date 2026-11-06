@@ -1,6 +1,6 @@
 dbColumn,dataCy,type,required,validValue,warningMin,warningMax,errorMin,errorMax,testedInE2e,section,description,maxLength
 id,,system,false,,,,,,false,Jarjestelma,Auto-generated primary key,
-versio,,system,false,,,,,,false,Jarjestelma,ET version (2013/2018/2026),
+versio,,system,false,,,,,,false,Jarjestelma,ET version (2013/2018/2027),
 tila_id,,system,false,,,,,,false,Jarjestelma,Certificate state (draft/signed/etc.),
 allekirjoitusaika,,system,false,,,,,,false,Jarjestelma,Signing timestamp,
 voimassaolo_paattymisaika,,system,false,,,,,,false,Jarjestelma,Validity end date,
@@ -18,9 +18,9 @@ valvonta$pending,,system,false,,,,,,false,Jarjestelma,Supervision pending flag,
 valvonta$valvoja_id,,system,false,,,,,,false,Jarjestelma,Supervisor user id,
 laskutettava_yritys_defined,,system,false,,,,,,false,Jarjestelma,Whether billing company is set,
 pt$yritys$nimi,perustiedot.yritys.nimi,input,false,Testiyritys Oy,,,,,true,Perustiedot,Company name,40
-pt$yritys$katuosoite,perustiedot.yritys.katuosoite,input,false,Testikatu 1,,,,,false,Perustiedot,Not rendered on ET2026 form (only yritys.nimi is shown),40
-pt$yritys$postinumero,perustiedot.yritys.postinumero,input,false,100,,,,,false,Perustiedot,Not rendered on ET2026 form (only yritys.nimi is shown),8
-pt$yritys$postitoimipaikka,perustiedot.yritys.postitoimipaikka,input,false,Helsinki,,,,,false,Perustiedot,Not rendered on ET2026 form (only yritys.nimi is shown),30
+pt$yritys$katuosoite,perustiedot.yritys.katuosoite,input,false,Testikatu 1,,,,,false,Perustiedot,Not rendered on ET2027 form (only yritys.nimi is shown),40
+pt$yritys$postinumero,perustiedot.yritys.postinumero,input,false,100,,,,,false,Perustiedot,Not rendered on ET2027 form (only yritys.nimi is shown),8
+pt$yritys$postitoimipaikka,perustiedot.yritys.postitoimipaikka,input,false,Helsinki,,,,,false,Perustiedot,Not rendered on ET2027 form (only yritys.nimi is shown),30
 pt$kieli,perustiedot.kieli,select,true,Suomi,,,,,true,Perustiedot,Certificate language,
 pt$laatimisvaihe,perustiedot.laatimisvaihe,select,true,Olemassa oleva rakennus,,,,,true,Perustiedot,Drafting phase (controls conditional fields),
 pt$havainnointikaynti,perustiedot.havainnointikaynti,input,true,15.3.2026,,,,,true,Perustiedot,"Observation visit date; shown only for ""Olemassa oleva rakennus""",
@@ -82,12 +82,12 @@ lt$ikkunat$lansi$g_ks,lahtotiedot.ikkunat.lansi.g-ks,input,true,0.5,0.3,0.85,0.1
 lt$ikkunat$luode$ala,lahtotiedot.ikkunat.luode.ala,input,false,5,,,,,true,Ikkunat (luode),Northwest-facing windows area (m²),
 lt$ikkunat$luode$u,lahtotiedot.ikkunat.luode.U,input,true,1,0.5,3.1,0.4,6.5,true,Ikkunat (luode),Northwest-facing windows U-value,
 lt$ikkunat$luode$g_ks,lahtotiedot.ikkunat.luode.g-ks,input,true,0.5,0.3,0.85,0.1,1,true,Ikkunat (luode),Northwest-facing windows g-value,
-lt$ikkunat$katto$ala,,not-in-2026,false,,,,,,false,Ikkunat (katto),Removed in ET2026,
-lt$ikkunat$katto$u,,not-in-2026,false,,,,,,false,Ikkunat (katto),Removed in ET2026,
-lt$ikkunat$katto$g_ks,,not-in-2026,false,,,,,,false,Ikkunat (katto),Removed in ET2026,
-lt$ikkunat$valokupu$ala,,not-in-2026,false,,,,,,false,Ikkunat (valokupu),Removed in ET2026,
-lt$ikkunat$valokupu$u,,not-in-2026,false,,,,,,false,Ikkunat (valokupu),Removed in ET2026,
-lt$ikkunat$valokupu$g_ks,,not-in-2026,false,,,,,,false,Ikkunat (valokupu),Removed in ET2026,
+lt$ikkunat$katto$ala,,not-in-2027,false,,,,,,false,Ikkunat (katto),Removed in ET2027,
+lt$ikkunat$katto$u,,not-in-2027,false,,,,,,false,Ikkunat (katto),Removed in ET2027,
+lt$ikkunat$katto$g_ks,,not-in-2027,false,,,,,,false,Ikkunat (katto),Removed in ET2027,
+lt$ikkunat$valokupu$ala,,not-in-2027,false,,,,,,false,Ikkunat (valokupu),Removed in ET2027,
+lt$ikkunat$valokupu$u,,not-in-2027,false,,,,,,false,Ikkunat (valokupu),Removed in ET2027,
+lt$ikkunat$valokupu$g_ks,,not-in-2027,false,,,,,,false,Ikkunat (valokupu),Removed in ET2027,
 lt$ilmanvaihto$tyyppi_id,lahtotiedot.ilmanvaihto.tyyppi-id,select,true,Koneellinen poistoilmanvaihtojärjestelmä,,,,,true,Ilmanvaihto,Ventilation system type,
 lt$ilmanvaihto$kuvaus_fi,lahtotiedot.ilmanvaihto.kuvaus,input,true,IV-kuvaus,,,,,false,Ilmanvaihto,Conditionally shown only when tyyppi-id = 6 (Muu ilmanvaihtojärjestelmä),
 lt$ilmanvaihto$kuvaus_sv,lahtotiedot.ilmanvaihto.kuvaus,input,true,,,,,,false,Ilmanvaihto,Swedish variant; same conditional visibility as kuvaus_fi,
@@ -198,7 +198,7 @@ to$fossiiliset_polttoaineet_vuosikulutus_yhteensa,toteutunut-ostoenergiankulutus
 to$uusiutuva_energia_vuosituotto_yhteensa,toteutunut-ostoenergiankulutus.uusiutuva-energia-vuosituotto-yhteensa,input,false,0,,,,,true,Toteutunut ostoenergiankulutus yhteensa,Total renewable energy production (kWh/a),
 to$ostettu_energia$muu,,complex-array,false,,,,,,false,Toteutunut ostettu energia,Other purchased energy (dynamic rows),
 to$ostetut_polttoaineet$muu,,complex-array,false,,,,,,false,Ostetut polttoaineet,Other purchased fuels (dynamic rows),
-to$polttoaineet_vuosikulutus_yhteensa,,not-in-2026,false,,,,,,false,Toteutunut ostoenergiankulutus,Removed in ET2026; replaced by separate fossil/renewable totals,
+to$polttoaineet_vuosikulutus_yhteensa,,not-in-2027,false,,,,,,false,Toteutunut ostoenergiankulutus,Removed in ET2027; replaced by separate fossil/renewable totals,
 h$ymparys$teksti_fi,huomiot.ymparys.teksti,textarea,true,Huomio ymparys teksti.,,,,,true,Huomiot ymparys,Surroundings observation text (fi),1000
 h$ymparys$teksti_sv,huomiot.ymparys.teksti,textarea,true,,,,,,false,Huomiot ymparys,Surroundings observation text (sv); shares data-cy with fi variant,1000
 h$ymparys$toimenpide,,complex-array,false,,,,,,false,Huomiot ymparys,Surroundings improvement measures (dynamic rows),
@@ -251,5 +251,5 @@ is$hiilikadenjalki$rakennuspaikka$karbonatisoituminen,ilmastoselvitys.hiilikaden
 t$kaytettavat_energiamuodot$muu,,complex-array,false,,,,,,false,Kaytettavat energiamuodot,Other energy forms (dynamic rows),
 t$uusiutuvat_omavaraisenergiat$muu,,complex-array,false,,,,,,false,Uusiutuvat omavaraisenergiat,Other renewable self-use energy (dynamic rows),
 t$kuukausierittely,,computed,false,,,,,,false,Tulokset,Computed monthly breakdown,
-pt$uudisrakennus,,not-in-2026,false,,,,,,false,Perustiedot,Removed in ET2026; replaced by laatimisvaihe,
-pt$nimi,,not-in-2026,false,,,,,,false,Perustiedot,Removed in ET2026; replaced by nimi_fi/nimi_sv,
+pt$uudisrakennus,,not-in-2027,false,,,,,,false,Perustiedot,Removed in ET2027; replaced by laatimisvaihe,
+pt$nimi,,not-in-2027,false,,,,,,false,Perustiedot,Removed in ET2027; replaced by nimi_fi/nimi_sv,

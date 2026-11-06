@@ -69,8 +69,8 @@ describe('filterByVersion: ', () => {
     expect(result.map(v => v.id)).toEqual([0, 1, 2]);
   });
 
-  it('returns all ids for version 2026', () => {
-    const result = Laatimisvaiheet.filterByVersion(2026, allLaatimisvaiheet);
+  it('returns all ids for version 2027', () => {
+    const result = Laatimisvaiheet.filterByVersion(2027, allLaatimisvaiheet);
     expect(result.map(v => v.id)).toEqual([0, 1, 2, 3, 4]);
   });
 

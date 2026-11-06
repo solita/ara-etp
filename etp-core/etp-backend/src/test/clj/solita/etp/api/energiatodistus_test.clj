@@ -108,8 +108,8 @@
       first
       :tilaaja))
 
-(defn- post-external-2026-ppp! [et]
-  (ts/handler (-> (mock/request :post "/api/external/energiatodistukset/2026-ppp")
+(defn- post-external-2027-ppp! [et]
+  (ts/handler (-> (mock/request :post "/api/external/energiatodistukset/2027-ppp")
                   (mock/header "Accept" "application/json")
                   (mock/header "Content-Type" "application/json")
                   (mock/header "Authorization" (basic-auth-header "laatija@solita.fi" "password"))
@@ -124,15 +124,15 @@
         (t/is (= 201 (:status response)))
         (t/is (nil? (stored-tilaaja (:id (response-body response))))))))
 
-  (t/testing "JSON 2026-ppp no longer has tilaaja"
-    (let [et (-> (et-test-data/generate-add 2026 false)
+  (t/testing "JSON 2027-ppp no longer has tilaaja"
+    (let [et (-> (et-test-data/generate-add 2027 false)
                  (dissoc :kommentti :draft-visible-to-paakayttaja
                          :bypass-validation-limits :bypass-validation-limits-reason
                          :yksinkertaistettu-paivitysmenettely))
-          response (post-external-2026-ppp! et)]
+          response (post-external-2027-ppp! et)]
       (t/is (= 201 (:status response)))
       (t/is (nil? (stored-tilaaja (:id (response-body response)))))
-      (t/is (= 400 (:status (post-external-2026-ppp!
+      (t/is (= 400 (:status (post-external-2027-ppp!
                               (assoc-in et [:perustiedot :tilaaja] "tilaaja")))))))
 
   (t/testing "Legacy XML accepts Tilaaja but does not store it"
@@ -184,9 +184,9 @@
                                    (mock/body et-body)
                                    (laatija-test-data/with-suomifi-laatija)))]
       (t/is (= 201 (:status post-res)) "Expected status 201 from ET creation"))
-    (let [et (-> (et-test-data/generate-add 2026 true))
+    (let [et (-> (et-test-data/generate-add 2027 true))
           et-body (-> et j/write-value-as-string)
-          post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2026")
+          post-res (ts/handler (-> (mock/request :post "/api/private/energiatodistukset/2027")
                                    (mock/header "Accept" "application/json")
                                    (mock/header "Content-Type" "application/json")
                                    (mock/body et-body)
@@ -228,82 +228,82 @@
                              (coercer response))]
       (t/is (not (s-utils/error? coerced-response)))))
 
-  (t/testing "Fetching of ET 2026 produces an ET 2026"
-    (let [list-response (ts/handler (-> (mock/request :get "/api/private/energiatodistukset?where=%5B%5B%5B%22%3D%22%2C%22energiatodistus.versio%22%2C2026%5D%5D%5D")
+  (t/testing "Fetching of ET 2027 produces an ET 2027"
+    (let [list-response (ts/handler (-> (mock/request :get "/api/private/energiatodistukset?where=%5B%5B%5B%22%3D%22%2C%22energiatodistus.versio%22%2C2027%5D%5D%5D")
                                         (mock/header "Accept" "application/json")
                                         (laatija-test-data/with-suomifi-laatija)))
-          et2026-id (-> list-response :body (j/read-value object-mapper) first :id)
-          response (-> (ts/handler (-> (mock/request :get (str "/api/private/energiatodistukset/2026/" et2026-id))
+          et2027-id (-> list-response :body (j/read-value object-mapper) first :id)
+          response (-> (ts/handler (-> (mock/request :get (str "/api/private/energiatodistukset/2027/" et2027-id))
                                        (mock/header "Accept" "application/json")
                                        (laatija-test-data/with-suomifi-laatija)))
                        :body
                        (j/read-value object-mapper))
-          coerced-response (let [coercer (sc/coercer et-schema/Energiatodistus2026 stc/json-coercion-matcher)]
+          coerced-response (let [coercer (sc/coercer et-schema/Energiatodistus2027 stc/json-coercion-matcher)]
                              (coercer response))]
       (t/is (not (s-utils/error? coerced-response))))))
 
-(t/deftest post-2026-e-luokka-downgrade-test
+(t/deftest post-2027-e-luokka-downgrade-test
   (laatija-test-data/insert-suomifi-laatija!
     (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))
 
   ;; Note: generated test data uses value 1.0M for all numeric fields,
   ;; so e-luku will be very small (well within A+ range for YAT).
 
-  (t/testing "POST 2026: tayttaa-aplus/a0-vaatimukset both true → e-luokka A+"
-    ;; Given: 2026-todistus with both tayttaa-*-vaatimukset true
-    (let [et (-> (et-test-data/generate-add 2026 true)
+  (t/testing "POST 2027: tayttaa-aplus/a0-vaatimukset both true → e-luokka A+"
+    ;; Given: 2027-todistus with both tayttaa-*-vaatimukset true
+    (let [et (-> (et-test-data/generate-add 2027 true)
                  (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] true)
                  (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] true))
           ;; When: POST and then GET
-          post-res (post-et! 2026 et)
+          post-res (post-et! 2027 et)
           _ (t/is (= 201 (:status post-res)))
           et-id (:id (response-body post-res))
-          get-res (get-et 2026 et-id)
+          get-res (get-et 2027 et-id)
           body (response-body get-res)]
       ;; Then: e-luokka is "A+" (both rastit true, no downgrade)
       (t/is (= "A+" (get-in body [:tulokset :e-luokka]))
             "Both tayttaa-*-vaatimukset true → e-luokka should be A+")))
 
-  (t/testing "POST 2026: tayttaa-aplus/a0-vaatimukset both false → e-luokka A (downgraded)"
-    ;; Given: 2026-todistus with both tayttaa-*-vaatimukset false
-    (let [et (-> (et-test-data/generate-add 2026 true)
+  (t/testing "POST 2027: tayttaa-aplus/a0-vaatimukset both false → e-luokka A (downgraded)"
+    ;; Given: 2027-todistus with both tayttaa-*-vaatimukset false
+    (let [et (-> (et-test-data/generate-add 2027 true)
                  (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] false)
                  (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] false))
           ;; When: POST and then GET
-          post-res (post-et! 2026 et)
+          post-res (post-et! 2027 et)
           _ (t/is (= 201 (:status post-res)))
           et-id (:id (response-body post-res))
-          get-res (get-et 2026 et-id)
+          get-res (get-et 2027 et-id)
           body (response-body get-res)]
       ;; Then: e-luokka is "A" (downgraded from A+ because false, false)
       (t/is (= "A" (get-in body [:tulokset :e-luokka]))
             "Both tayttaa-*-vaatimukset false → e-luokka should be A (downgraded from A+)")))
 
-  (t/testing "POST 2026: aplus=false, a0=true → e-luokka A0 (downgraded from A+)"
-    ;; Given: 2026-todistus with aplus false, a0 true
-    (let [et (-> (et-test-data/generate-add 2026 true)
+  (t/testing "POST 2027: aplus=false, a0=true → e-luokka A0 (downgraded from A+)"
+    ;; Given: 2027-todistus with aplus false, a0 true
+    (let [et (-> (et-test-data/generate-add 2027 true)
                  (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] false)
                  (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] true))
           ;; When: POST and then GET
-          post-res (post-et! 2026 et)
+          post-res (post-et! 2027 et)
           _ (t/is (= 201 (:status post-res)))
           et-id (:id (response-body post-res))
-          get-res (get-et 2026 et-id)
+          get-res (get-et 2027 et-id)
           body (response-body get-res)]
       ;; Then: e-luokka is "A0" (downgraded from A+ because aplus false, a0 stays)
       (t/is (= "A0" (get-in body [:tulokset :e-luokka]))
             "aplus=false, a0=true → e-luokka should be A0"))))
 
 
-(t/deftest put-2026-e-luokka-downgrade-test
+(t/deftest put-2027-e-luokka-downgrade-test
   (laatija-test-data/insert-suomifi-laatija!
     (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))
 
-  ;; Given: 2026-todistus created with both tayttaa-*-vaatimukset false
-  (let [et (-> (et-test-data/generate-add 2026 true)
+  ;; Given: 2027-todistus created with both tayttaa-*-vaatimukset false
+  (let [et (-> (et-test-data/generate-add 2027 true)
                (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] false)
                (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] false))
-        post-res (post-et! 2026 et)
+        post-res (post-et! 2027 et)
         _ (t/is (= 201 (:status post-res)))
         et-id (:id (response-body post-res))]
 
@@ -312,10 +312,10 @@
       (let [updated-et (-> et
                            (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] true)
                            (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] true))
-            put-res (put-et! 2026 et-id updated-et)]
+            put-res (put-et! 2027 et-id updated-et)]
         ;; Then: e-luokka should now be "A+"
         (t/is (= 200 (:status put-res)))
-        (let [verify-body (response-body (get-et 2026 et-id))]
+        (let [verify-body (response-body (get-et 2027 et-id))]
           (t/is (= "A+" (get-in verify-body [:tulokset :e-luokka]))
                 "After setting both rastit true, e-luokka should be A+"))))
 
@@ -324,9 +324,9 @@
       (let [updated-et (-> et
                            (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] false)
                            (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] true))
-            put-res (put-et! 2026 et-id updated-et)]
+            put-res (put-et! 2027 et-id updated-et)]
         ;; Then: e-luokka should be "A0"
         (t/is (= 200 (:status put-res)))
-        (let [verify-body (response-body (get-et 2026 et-id))]
+        (let [verify-body (response-body (get-et 2027 et-id))]
           (t/is (= "A0" (get-in verify-body [:tulokset :e-luokka]))
                 "aplus=false, a0=true → e-luokka should be A0"))))))

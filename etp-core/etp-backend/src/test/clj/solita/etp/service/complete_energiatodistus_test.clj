@@ -142,7 +142,7 @@
         energiatodistus-adds (concat
                               (energiatodistus-test-data/generate-adds 1 2013 true)
                               (energiatodistus-test-data/generate-adds 1 2018 true)
-                              (energiatodistus-test-data/generate-adds 1 2026 true))
+                              (energiatodistus-test-data/generate-adds 1 2027 true))
         energiatodistus-ids (energiatodistus-test-data/insert!
                              energiatodistus-adds laatija-id)
         luokittelut (service/luokittelut ts/*db*)]

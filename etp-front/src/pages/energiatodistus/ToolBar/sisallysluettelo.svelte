@@ -55,7 +55,7 @@
 
   $: tocItems = allTocItems.filter(item => {
     if (item.id === 'perusparannuspassi' || item.id === 'ilmastoselvitys') {
-      return isEtp2026Enabled(config) && version === 2026;
+      return isEtp2026Enabled(config) && version === 2027;
     }
     return true;
   });

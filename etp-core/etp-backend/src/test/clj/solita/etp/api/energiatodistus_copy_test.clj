@@ -46,7 +46,7 @@
   (let [laatija-id (-> (laatija-test-data/insert-suomifi-laatija!
                          (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4}))))]
 
-    (doseq [versio [2013 2018 2026]]
+    (doseq [versio [2013 2018 2027]]
       (let [et (-> (et-test-data/generate-add versio true))
             et-body (-> et j/write-value-as-string)
             post-res (ts/handler (-> (mock/request :post (str "/api/private/energiatodistukset/" versio))

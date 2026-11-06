@@ -442,7 +442,7 @@
     "et-lisays": "Uuden energiatodistuksen voit lisätä täältä:",
     "luo2018": "Luo ET 2018",
     "luo2013": "Luo ET 2013",
-    "luo2026": "Luo ET 2026",
+    "luo2027": "Luo ET 2027",
     "lataa-csv": "Lataa energiatodistukset CSV-tiedostona",
     "allekirjoitusaika": "Todistuksen laatimispäivä",
     "voimassaolo-paattymisaika": "Todistuksen voimassaolon päättymispäivä",
@@ -624,7 +624,7 @@
       "tayttaa-aplus-vaatimukset": "Rakennus täyttää A+-luokan lisävaatimukset",
       "keskeiset-suositukset": "Keskeiset suositukset",
       "keskeiset-suositukset-heading": {
-        "2026": {
+        "2027": {
           "h2": "Toimenpide-ehdotuksia e-luvun parantamiseksi",
           "h3": "Keskeiset suositukset rakennuksen e-lukua parantaviksi toimenpiteiksi (ei koske uusia rakennuksia tai todistuksia, joilla on perusparannuspassi)"
         },
@@ -927,7 +927,7 @@
         "label-context": "E-luvun erittely",
         "kaytettavat-energiamuodot": "Käytet\u00ADtävät energia\u00ADmuodot",
         "ostoenergia": {
-          "2026": "Vakioi\u00ADdulla käytöllä laskettu osto\u00ADenergia",
+          "2027": "Vakioi\u00ADdulla käytöllä laskettu osto\u00ADenergia",
           "2018": "Vakioi\u00ADdulla käytöllä laskettu osto\u00ADenergia",
           "2013": "Laskettu osto\u00ADenergia"
         },
@@ -966,7 +966,7 @@
       },
       "uusiutuvat-omavaraisenergiat": {
         "header": {
-          "2026": "Rakennuksen hyödyntämä ja tuottama uusiutuva energia",
+          "2027": "Rakennuksen hyödyntämä ja tuottama uusiutuva energia",
           "2018": "Rakennuksen ympäristössä olevasta energiasta otettu energia, hyödynnetty osuus (kuukausitason erittely lisätiedoissa)",
           "2013": "Uusiutuva omavaraisenergia, hyödyksikäytetty osuus"
         },
@@ -1100,7 +1100,7 @@
       "table-header": "Energialähteet",
       "ostettu-energia": {
         "header": {
-          "2026": "Energiaverkosta ostettu energia",
+          "2027": "Energiaverkosta ostettu energia",
           "2018": "Energiaverkosta ostettu energia",
           "2013": "Ostettu energia"
         },
@@ -1170,7 +1170,7 @@
       "toteutuneet-yhteensa-header": {
         "2013": "Toteutunut ostenergia",
         "2018": "Toteutunut ostenergia",
-        "2026": "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia"
+        "2027": "Toteutunut ostoenergiankulutus ja tuotettu uusiutuva energia"
       },
       "label-context": "Toteutunut ostoenergia",
       "toteutuneet-yhteensa-table-header": "Energianlähde",
@@ -1203,7 +1203,7 @@
     },
     "huomiot": {
       "header": {
-        "2026": "Toimenpide-ehdotukset e-luvun parantamiseksi",
+        "2027": "Toimenpide-ehdotukset e-luvun parantamiseksi",
         "2018": "Toimenpide-ehdotukset e-luvun parantamiseksi",
         "2013": "Toimenpide-ehdotukset energiatehokkuuden parantamiseksi"
       },
@@ -1220,7 +1220,7 @@
         "kasvihuonepaastojen-muutos": "Energiankäytön kasvihuone\u00ADkaasupäästöjen muutos"
       },
       "suositukset-header": {
-        "2026": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
+        "2027": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
         "2018": "Suosituksia rakennuksen käyttöön ja ylläpitoon (eivät vaikuta e-lukuun)",
         "2013": "Suosituksia rakennuksen käyttöön ja ylläpitoon"
       },

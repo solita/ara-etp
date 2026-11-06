@@ -49,10 +49,10 @@
         ;; Create energiatodistukset with all supported versions
         [et-2013-id _] (energiatodistus-test-data/generate-and-insert! 2013 true laatija-id)
         [et-2018-id _] (energiatodistus-test-data/generate-and-insert! 2018 true laatija-id)
-        [et-2026-id _] (energiatodistus-test-data/generate-and-insert! 2026 true laatija-id)
+        [et-2027-id _] (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id)
         whoami (test-whoami/paakayttaja paakayttaja-id)]
     ;; Start valvonta cases by setting pending to true
-    (doseq [et-id [et-2013-id et-2018-id et-2026-id]]
+    (doseq [et-id [et-2013-id et-2018-id et-2027-id]]
       (valvonta-service/save-valvonta! (ts/db-user paakayttaja-id) whoami et-id
                                        {:pending true :valvoja-id paakayttaja-id}))
     ;; Add a toimenpide to one of the cases to have more realistic data
@@ -69,22 +69,22 @@
                                        :tiedoksi      []})
     {:paakayttaja-id      paakayttaja-id
      :laatija-id          laatija-id
-     :energiatodistus-ids [et-2013-id et-2018-id et-2026-id]}))
+     :energiatodistus-ids [et-2013-id et-2018-id et-2027-id]}))
 
-(t/deftest laatija-lists-et2018-and-et2026-valvonta-cases
+(t/deftest laatija-lists-et2018-and-et2027-valvonta-cases
   (let [paakayttaja-id (test-kayttajat/insert-paakayttaja!)
         laatija-id (laatija-test-data/insert-suomifi-laatija!)
         [et-2018-id _] (energiatodistus-test-data/generate-and-insert!
                          2018 true laatija-id)
-        [et-2026-id _] (energiatodistus-test-data/generate-and-insert!
-                         2026 true laatija-id)]
+        [et-2027-id _] (energiatodistus-test-data/generate-and-insert!
+                         2027 true laatija-id)]
     (assert-laatija-valvonnat #{})
 
     (begin-valvonta! paakayttaja-id et-2018-id)
     (assert-laatija-valvonnat #{et-2018-id})
 
-    (begin-valvonta! paakayttaja-id et-2026-id)
-    (assert-laatija-valvonnat #{et-2018-id et-2026-id})))
+    (begin-valvonta! paakayttaja-id et-2027-id)
+    (assert-laatija-valvonnat #{et-2018-id et-2027-id})))
 
 (t/deftest valvonta-oikeellisuus-list-endpoint
   (t/testing "Pääkäyttäjä can call the valvonta oikeellisuus list endpoint without getting a 500 error"

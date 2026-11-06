@@ -528,25 +528,25 @@ describe('BreadcrumbUtils', () => {
         ).toEqual(expected);
       });
 
-      it('should return crumb for ET2026 energiatodistus muutoshistoria', () => {
+      it('should return crumb for ET2027 energiatodistus muutoshistoria', () => {
         const expected = [
           {
             url: '#/energiatodistus/all',
             label: 'navigation.energiatodistukset'
           },
           {
-            url: `#/energiatodistus/2026/1`,
+            url: `#/energiatodistus/2027/1`,
             label: 'navigation.et 1'
           },
           {
-            url: `#/energiatodistus/2026/1/muutoshistoria`,
+            url: `#/energiatodistus/2027/1/muutoshistoria`,
             label: 'navigation.muutoshistoria'
           }
         ];
 
         expect(
           BreadcrumbUtils.energiatodistusCrumb(i18n, [
-            '2026',
+            '2027',
             '1',
             'muutoshistoria'
           ])

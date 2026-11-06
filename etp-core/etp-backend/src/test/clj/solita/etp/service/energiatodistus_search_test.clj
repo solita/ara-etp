@@ -432,12 +432,12 @@
                "energiatodistus.tulokset.kaytettavat-energiamuodot.sahko-painotettu-neliovuosikulutus"
                (/ sahko-kertoimella nettoala)]]]))))
 
-(defn test-data-set-2026 []
+(defn test-data-set-2027 []
   (let [laatijat (laatija-test-data/generate-and-insert! 3)
         laatija-ids (-> laatijat keys sort)
         energiatodistus-adds (->> (energiatodistus-test-data/generate-adds
                                     2
-                                    2026
+                                    2027
                                     true)
                                   (map #(assoc-in %
                                                   [:perustiedot :postinumero]
@@ -457,7 +457,7 @@
                                      (take 2 energiatodistus-ids))
                                    (partition 2)))
     ;; Re-fetch from DB so the reference data reflects the post-signing state.
-    ;; Signing a 2026 ET may reset certain fields (e.g. suositukset) via
+    ;; Signing a 2027 ET may reset certain fields (e.g. suositukset) via
     ;; reset-signing-time-sensitive-fields!, causing the stored adds to diverge
     ;; from the actual DB values that search results are compared against.
     {:laatijat           laatijat
@@ -465,16 +465,16 @@
                                          [id (energiatodistus-service/find-energiatodistus ts/*db* id)])
                                        energiatodistus-ids))}))
 
-(t/deftest search-by-sahko-painotettu-neliovuosikulutus-2026-test
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+(t/deftest search-by-sahko-painotettu-neliovuosikulutus-2027-test
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
         sahko (-> energiatodistus :tulokset :kaytettavat-energiamuodot :sahko)
-        ;; Given a 2026 energiatodistus with known sahko value
-        ;; When we calculate painotettu using the new 2026 coefficient (0.90)
+        ;; Given a 2027 energiatodistus with known sahko value
+        ;; When we calculate painotettu using the new 2027 coefficient (0.90)
         sahko-kertoimella (* sahko (get-in e-luokka-service/energiamuotokerroin
-                                           [2026 :sahko]))]
+                                           [2027 :sahko]))]
     ;; Then searching by painotettu and painotettu-neliovuosikulutus finds the correct ET
     (t/is (search-and-assert
             test-data-set
@@ -489,15 +489,15 @@
                "energiatodistus.tulokset.kaytettavat-energiamuodot.sahko-painotettu-neliovuosikulutus"
                (/ sahko-kertoimella nettoala)]]]))))
 
-(t/deftest search-by-kaukolampo-painotettu-2026-test
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+(t/deftest search-by-kaukolampo-painotettu-2027-test
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         kaukolampo (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukolampo)
-        ;; Given a 2026 energiatodistus with known kaukolampo value
-        ;; When we calculate painotettu using the new 2026 coefficient (0.38)
+        ;; Given a 2027 energiatodistus with known kaukolampo value
+        ;; When we calculate painotettu using the new 2027 coefficient (0.38)
         kaukolampo-kertoimella (* kaukolampo (get-in e-luokka-service/energiamuotokerroin
-                                                     [2026 :kaukolampo]))]
+                                                     [2027 :kaukolampo]))]
     ;; Then searching by painotettu finds the correct ET
     (t/is (search-and-assert
             test-data-set
@@ -506,15 +506,15 @@
                "energiatodistus.tulokset.kaytettavat-energiamuodot.kaukolampo-painotettu"
                kaukolampo-kertoimella]]]))))
 
-(t/deftest search-by-kaukojaahdytys-painotettu-2026-test
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+(t/deftest search-by-kaukojaahdytys-painotettu-2027-test
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         kaukojaahdytys (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukojaahdytys)
-        ;; Given a 2026 energiatodistus with known kaukojaahdytys value
-        ;; When we calculate painotettu using the new 2026 coefficient (0.21)
+        ;; Given a 2027 energiatodistus with known kaukojaahdytys value
+        ;; When we calculate painotettu using the new 2027 coefficient (0.21)
         kaukojaahdytys-kertoimella (* kaukojaahdytys (get-in e-luokka-service/energiamuotokerroin
-                                                             [2026 :kaukojaahdytys]))]
+                                                             [2027 :kaukojaahdytys]))]
     ;; Then searching by painotettu finds the correct ET
     (t/is (search-and-assert
             test-data-set
@@ -631,23 +631,23 @@
     (t/is (= 2 (count (search kayttaja-test-data/laskuttaja nil nil nil nil))))
     (t/is (= 0 (count (search nil nil nil nil nil))))))
 
-(t/deftest public-search-2026-non-excluded-kayttotarkoitus-visible-test
-  ;; given: a signed 2026 energiatodistus with non-excluded käyttötarkoitus 'RT'
+(t/deftest public-search-2027-non-excluded-kayttotarkoitus-visible-test
+  ;; given: a signed 2027 energiatodistus with non-excluded käyttötarkoitus 'RT'
   (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
-        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+        et-add (-> (energiatodistus-test-data/generate-add 2027 true)
                    (assoc-in [:perustiedot :kayttotarkoitus] "RT"))
         et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
     (sign-energiatodistukset! [[laatija-id et-id]])
     ;; when: searching as public user (nil whoami)
     ;; then: the energiatodistus appears in results
     (t/is (= 1 (count (search nil nil nil nil nil)))
-           "Signed 2026 ET with non-excluded käyttötarkoitus should be visible in public search")))
+           "Signed 2027 ET with non-excluded käyttötarkoitus should be visible in public search")))
 
-(t/deftest public-search-2026-excluded-kayttotarkoitus-not-visible-test
-  ;; given: signed 2026 energiatodistukset with excluded käyttötarkoitus values
+(t/deftest public-search-2027-excluded-kayttotarkoitus-not-visible-test
+  ;; given: signed 2027 energiatodistukset with excluded käyttötarkoitus values
   (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
         make-et (fn [kayttotarkoitus]
-                  (-> (energiatodistus-test-data/generate-add 2026 true)
+                  (-> (energiatodistus-test-data/generate-add 2027 true)
                       (assoc-in [:perustiedot :kayttotarkoitus] kayttotarkoitus)))
         yat-id (first (energiatodistus-test-data/insert! [(make-et "YAT")] laatija-id))
         kat-id (first (energiatodistus-test-data/insert! [(make-et "KAT")] laatija-id))
@@ -658,28 +658,28 @@
     ;; when: searching as public user
     ;; then: none of the excluded käyttötarkoitus values appear
     (t/is (= 0 (count (search nil nil nil nil nil)))
-           "Signed 2026 ETs with excluded käyttötarkoitus (YAT, KAT, KREP) should not be visible in public search")))
+           "Signed 2027 ETs with excluded käyttötarkoitus (YAT, KAT, KREP) should not be visible in public search")))
 
-(t/deftest public-search-2026-private-search-finds-excluded-kayttotarkoitus-test
-  ;; given: a signed 2026 energiatodistus with excluded käyttötarkoitus 'YAT'
+(t/deftest public-search-2027-private-search-finds-excluded-kayttotarkoitus-test
+  ;; given: a signed 2027 energiatodistus with excluded käyttötarkoitus 'YAT'
   (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
-        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+        et-add (-> (energiatodistus-test-data/generate-add 2027 true)
                    (assoc-in [:perustiedot :kayttotarkoitus] "YAT"))
         et-id (first (energiatodistus-test-data/insert! [et-add] laatija-id))]
     (sign-energiatodistukset! [[laatija-id et-id]])
     ;; when: searching as pääkäyttäjä (private search)
     ;; then: the excluded käyttötarkoitus is still found (exclusion only applies to public)
     (t/is (= 1 (count (search kayttaja-test-data/paakayttaja nil nil nil nil)))
-           "Pääkäyttäjä should find 2026 ET with excluded käyttötarkoitus in private search")))
+           "Pääkäyttäjä should find 2027 ET with excluded käyttötarkoitus in private search")))
 
-(t/deftest public-search-2026-mixed-kayttotarkoitus-test
-  ;; given: multiple signed 2026 energiatodistukset with different käyttötarkoitus values
+(t/deftest public-search-2027-mixed-kayttotarkoitus-test
+  ;; given: multiple signed 2027 energiatodistukset with different käyttötarkoitus values
   (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
         make-et (fn [kayttotarkoitus luokka-id]
-                  (-> (energiatodistus-test-data/generate-add 2026 true)
+                  (-> (energiatodistus-test-data/generate-add 2027 true)
                       (assoc-in [:perustiedot :kayttotarkoitus] kayttotarkoitus)
                       (assoc-in [:lahtotiedot :sis-kuorma]
-                                (energiatodistus-test-data/sisainen-kuorma 2026 luokka-id))))
+                                (energiatodistus-test-data/sisainen-kuorma 2027 luokka-id))))
         ;; Non-excluded: RT (Rivitalot, luokka 1), T (Toimistorakennukset, luokka 3)
         rt-id (first (energiatodistus-test-data/insert! [(make-et "RT" 1)] laatija-id))
         t-id (first (energiatodistus-test-data/insert! [(make-et "T" 3)] laatija-id))
@@ -693,7 +693,7 @@
     ;; when: searching as public user
     ;; then: only non-excluded types are visible (RT and T)
     (t/is (= 2 (count (search nil nil nil nil nil)))
-           "Public search should show only non-excluded 2026 käyttötarkoitus (RT, T but not YAT, KAT)")))
+           "Public search should show only non-excluded 2027 käyttötarkoitus (RT, T but not YAT, KAT)")))
 
 (t/deftest public-search-regression-2018-kayttotarkoitus-filtering-test
   ;; given: signed 2018 energiatodistukset with excluded and non-excluded käyttötarkoitus
@@ -1025,26 +1025,26 @@
         laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
 
         energiatodistus-ids-2018 (keys (energiatodistus-test-data/generate-and-insert! 2 2018 true laatija-id))
-        energiatodistus-ids-2026-without-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
-        never-created-ppp-et-ids (concat energiatodistus-ids-2018 energiatodistus-ids-2026-without-ppp)
+        energiatodistus-ids-2027-without-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2027 true laatija-id))
+        never-created-ppp-et-ids (concat energiatodistus-ids-2018 energiatodistus-ids-2027-without-ppp)
 
-        energiatodistus-ids-2026-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
-        perusparannuspassi-ids-2026 (ppp-test-data/generate-and-insert! energiatodistus-ids-2026-with-ppp laatija-whoami)
+        energiatodistus-ids-2027-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2027 true laatija-id))
+        perusparannuspassi-ids-2027 (ppp-test-data/generate-and-insert! energiatodistus-ids-2027-with-ppp laatija-whoami)
 
-        energiatodistus-id-2026-ppp-removed (first (keys (energiatodistus-test-data/generate-and-insert! 1 2026 true laatija-id)))
-        perusparannuspassi-removed-id-2026 (first (ppp-test-data/generate-and-insert! [energiatodistus-id-2026-ppp-removed] laatija-whoami))
+        energiatodistus-id-2027-ppp-removed (first (keys (energiatodistus-test-data/generate-and-insert! 1 2027 true laatija-id)))
+        perusparannuspassi-removed-id-2027 (first (ppp-test-data/generate-and-insert! [energiatodistus-id-2027-ppp-removed] laatija-whoami))
 
-        energiatodistus->ppp (merge (zipmap energiatodistus-ids-2026-with-ppp perusparannuspassi-ids-2026)
-                                    (zipmap [energiatodistus-id-2026-ppp-removed] [perusparannuspassi-removed-id-2026]))]
+        energiatodistus->ppp (merge (zipmap energiatodistus-ids-2027-with-ppp perusparannuspassi-ids-2027)
+                                    (zipmap [energiatodistus-id-2027-ppp-removed] [perusparannuspassi-removed-id-2027]))]
     ;; Remove the ppp from energiatodistus
-    (-> (ppp-test-data/generate-add energiatodistus-id-2026-ppp-removed)
+    (-> (ppp-test-data/generate-add energiatodistus-id-2027-ppp-removed)
         (assoc-in [:valid] false)
-        (ppp-test-data/update! perusparannuspassi-removed-id-2026 laatija-whoami))
+        (ppp-test-data/update! perusparannuspassi-removed-id-2027 laatija-whoami))
     (t/testing "Perusparannuspassi-id shows up (created and exists in db)"
       (let [results (search laatija-whoami nil nil nil nil)
             filtered-results (filter #(->> %
                                            :id
-                                           (contains? (set energiatodistus-ids-2026-with-ppp))) results)]
+                                           (contains? (set energiatodistus-ids-2027-with-ppp))) results)]
         (t/is (= 2 (count filtered-results)))
         (t/is (every? #(= (get energiatodistus->ppp (:id %)) (:perusparannuspassi-id %))
                       filtered-results))))
@@ -1052,7 +1052,7 @@
       (let [results (search laatija-whoami nil nil nil nil)
             filtered-results (filter #(->> %
                                            :id
-                                           (contains? (set [energiatodistus-id-2026-ppp-removed]))) results)]
+                                           (contains? (set [energiatodistus-id-2027-ppp-removed]))) results)]
         (t/is (= 1 (count filtered-results)))
         (t/is (every? #(= nil (:perusparannuspassi-id %))
                       filtered-results))))
@@ -1066,8 +1066,8 @@
                       filtered-results))))))
 
 (defn test-data-set-mixed
-  "Creates both ET2018 and ET2026 certificates for mixed-version tests.
-   Returns {:laatijat, :energiatodistukset-2018, :energiatodistukset-2026}"
+  "Creates both ET2018 and ET2027 certificates for mixed-version tests.
+   Returns {:laatijat, :energiatodistukset-2018, :energiatodistukset-2027}"
   []
   (let [laatijat (laatija-test-data/generate-and-insert! 3)
         laatija-ids (-> laatijat keys sort)
@@ -1075,19 +1075,19 @@
         et2018-adds (->> (energiatodistus-test-data/generate-adds 2 2018 true)
                          (map #(assoc-in % [:perustiedot :postinumero] "33100"))
                          (map #(assoc-in % [:perustiedot :yritys :nimi] nil)))
-        et2026-adds (->> (energiatodistus-test-data/generate-adds 2 2026 true)
+        et2027-adds (->> (energiatodistus-test-data/generate-adds 2 2027 true)
                          (map #(assoc-in % [:perustiedot :postinumero] "33100"))
                          (map #(assoc-in % [:perustiedot :yritys :nimi] nil)))
         et2018-ids (energiatodistus-test-data/insert! et2018-adds first-laatija-id)
-        et2026-ids (energiatodistus-test-data/insert! et2026-adds first-laatija-id)]
-    (sign-energiatodistukset! (map #(vector first-laatija-id %) (concat et2018-ids et2026-ids)))
+        et2027-ids (energiatodistus-test-data/insert! et2027-adds first-laatija-id)]
+    (sign-energiatodistukset! (map #(vector first-laatija-id %) (concat et2018-ids et2027-ids)))
     {:laatijat                laatijat
      :energiatodistukset-2018 (zipmap et2018-ids et2018-adds)
-     :energiatodistukset-2026 (zipmap et2026-ids et2026-adds)}))
+     :energiatodistukset-2027 (zipmap et2027-ids et2027-adds)}))
 
-(t/deftest search-by-havainnointikayntityyppi-id-2026-test
-  ;; Given: ET2026 certificate with known havainnointikayntityyppi-id
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+(t/deftest search-by-havainnointikayntityyppi-id-2027-test
+  ;; Given: ET2027 certificate with known havainnointikayntityyppi-id
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         havainnointikayntityyppi-id (-> energiatodistus :perustiedot :havainnointikayntityyppi-id)]
@@ -1099,11 +1099,11 @@
                havainnointikayntityyppi-id]]]))))
 
 (t/deftest search-by-havainnointikayntityyppi-id-excludes-et2018-test
-  ;; Given: both ET2018 and ET2026 certificates
-  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
-        et2026-id (-> energiatodistukset-2026 keys sort first)
-        et2026 (get energiatodistukset-2026 et2026-id)
-        havainnointikayntityyppi-id (-> et2026 :perustiedot :havainnointikayntityyppi-id)
+  ;; Given: both ET2018 and ET2027 certificates
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2027]} (test-data-set-mixed)
+        et2027-id (-> energiatodistukset-2027 keys sort first)
+        et2027 (get energiatodistukset-2027 et2027-id)
+        havainnointikayntityyppi-id (-> et2027 :perustiedot :havainnointikayntityyppi-id)
         ;; When: searching by havainnointikayntityyppi-id
         results (search kayttaja-test-data/paakayttaja
                         [[["="
@@ -1112,15 +1112,15 @@
                         nil nil nil)
         result-ids (set (map :id results))
         et2018-ids (set (keys energiatodistukset-2018))]
-    ;; Then: only ET2026 certificates are in results
+    ;; Then: only ET2027 certificates are in results
     (t/is (not-empty results)
-           "Should find at least one ET2026 certificate")
+           "Should find at least one ET2027 certificate")
     (t/is (empty? (set/intersection result-ids et2018-ids))
            "ET2018 certificates should not appear in results")))
 
-(t/deftest search-et2026-by-shared-field-lammitetty-nettoala-test
-  ;; Given: ET2026 certificate with known lammitetty-nettoala
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+(t/deftest search-et2027-by-shared-field-lammitetty-nettoala-test
+  ;; Given: ET2027 certificate with known lammitetty-nettoala
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)]
@@ -1131,9 +1131,9 @@
                "energiatodistus.lahtotiedot.lammitetty-nettoala"
                nettoala]]]))))
 
-(t/deftest search-polttoaineet-vuosikulutus-yhteensa-excludes-et2026-test
-  ;; Given: ET2018 with known polttoaineet-vuosikulutus-yhteensa and ET2026 certificates
-  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
+(t/deftest search-polttoaineet-vuosikulutus-yhteensa-excludes-et2027-test
+  ;; Given: ET2018 with known polttoaineet-vuosikulutus-yhteensa and ET2027 certificates
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2027]} (test-data-set-mixed)
         et2018-id (-> energiatodistukset-2018 keys sort first)
         et2018 (get energiatodistukset-2018 et2018-id)
         polttoaineet-yht (-> et2018 :toteutunut-ostoenergiankulutus :polttoaineet-vuosikulutus-yhteensa)
@@ -1144,16 +1144,16 @@
                            polttoaineet-yht]]]
                         nil nil nil)
         result-ids (set (map :id results))
-        et2026-ids (set (keys energiatodistukset-2026))]
-    ;; Then: only ET2018 is in results (ET2026 doesn't have this field)
+        et2027-ids (set (keys energiatodistukset-2027))]
+    ;; Then: only ET2018 is in results (ET2027 doesn't have this field)
     (t/is (contains? result-ids et2018-id)
            "ET2018 certificate should be found")
-    (t/is (empty? (set/intersection result-ids et2026-ids))
-           "ET2026 certificates should not appear in polttoaineet-vuosikulutus-yhteensa search")))
+    (t/is (empty? (set/intersection result-ids et2027-ids))
+           "ET2027 certificates should not appear in polttoaineet-vuosikulutus-yhteensa search")))
 
 (t/deftest search-by-kokonaistuotanto-aurinkosahko-neliovuosikulutus-test
-  ;; Given: ET2026 certificate with known kokonaistuotanto aurinkosahko
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+  ;; Given: ET2027 certificate with known kokonaistuotanto aurinkosahko
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
@@ -1166,7 +1166,7 @@
                (/ aurinkosahko nettoala)]]]))))
 
 (t/deftest search-by-kokonaistuotanto-aurinkolampo-neliovuosikulutus-test
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
@@ -1179,7 +1179,7 @@
                (/ aurinkolampo nettoala)]]]))))
 
 (t/deftest search-by-kokonaistuotanto-tuulisahko-neliovuosikulutus-test
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
@@ -1192,7 +1192,7 @@
                (/ tuulisahko nettoala)]]]))))
 
 (t/deftest search-by-kokonaistuotanto-lampopumppu-neliovuosikulutus-test
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
@@ -1205,7 +1205,7 @@
                (/ lampopumppu nettoala)]]]))))
 
 (t/deftest search-by-kokonaistuotanto-muulampo-neliovuosikulutus-test
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
@@ -1218,7 +1218,7 @@
                (/ muulampo nettoala)]]]))))
 
 (t/deftest search-by-kokonaistuotanto-muusahko-neliovuosikulutus-test
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
@@ -1231,7 +1231,7 @@
                (/ muusahko nettoala)]]]))))
 
 (t/deftest search-by-kokonaistuotanto-aurinkosahko-raw-test
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         aurinkosahko (-> energiatodistus :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko)]
@@ -1243,11 +1243,11 @@
                aurinkosahko]]]))))
 
 (t/deftest search-by-kokonaistuotanto-excludes-et2018-test
-  ;; Given: both ET2018 and ET2026 certificates
-  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
-        et2026-id (-> energiatodistukset-2026 keys sort first)
-        et2026 (get energiatodistukset-2026 et2026-id)
-        aurinkosahko (-> et2026 :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko)
+  ;; Given: both ET2018 and ET2027 certificates
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2027]} (test-data-set-mixed)
+        et2027-id (-> energiatodistukset-2027 keys sort first)
+        et2027 (get energiatodistukset-2027 et2027-id)
+        aurinkosahko (-> et2027 :tulokset :uusiutuvat-omavaraisenergiat-kokonaistuotanto :aurinkosahko)
         ;; When: searching by kokonaistuotanto field
         results (search kayttaja-test-data/paakayttaja
                         [[["="
@@ -1256,9 +1256,9 @@
                         nil nil nil)
         result-ids (set (map :id results))
         et2018-ids (set (keys energiatodistukset-2018))]
-    ;; Then: only ET2026 certificates appear
+    ;; Then: only ET2027 certificates appear
     (t/is (not-empty results)
-           "Should find at least one ET2026 certificate")
+           "Should find at least one ET2027 certificate")
     (t/is (empty? (set/intersection result-ids et2018-ids))
            "ET2018 certificates should not appear in kokonaistuotanto search")))
 
@@ -1277,9 +1277,9 @@
                   energiamuoto->co2-key))
      nettoala))
 
-(t/deftest search-by-kasvihuonepaastot-per-nelio-2026-test
-  ;; Given: ET2026 certificate with known kaytettavat-energiamuodot and nettoala
-  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2026)
+(t/deftest search-by-kasvihuonepaastot-per-nelio-2027-test
+  ;; Given: ET2027 certificate with known kaytettavat-energiamuodot and nettoala
+  (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
@@ -1309,7 +1309,7 @@
 
 (t/deftest search-by-kasvihuonepaastot-per-nelio-zero-nettoala-test
   ;; Given: certificate with nettoala set to 0 after insertion (validation prevents 0 on insert)
-  (let [{:keys [energiatodistukset laatijat]} (test-data-set-2026)
+  (let [{:keys [energiatodistukset laatijat]} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         laatija-id (-> laatijat keys sort first)]
     (jdbc/execute!
@@ -1328,7 +1328,7 @@
 (t/deftest search-by-kasvihuonepaastot-per-nelio-null-values-test
   ;; Given: certificate where some kaytettavat-energiamuodot values are NULL
   (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
-        et-add (-> (energiatodistus-test-data/generate-add 2026 true)
+        et-add (-> (energiatodistus-test-data/generate-add 2027 true)
                    (assoc-in [:lahtotiedot :lammitetty-nettoala] 100M)
                    (assoc-in [:tulokset :kaytettavat-energiamuodot :sahko] 50M)
                    (assoc-in [:tulokset :kaytettavat-energiamuodot :kaukolampo] nil)
@@ -1349,8 +1349,8 @@
              "Certificate with NULL energiamuoto values should be found with coalesced calculation"))))
 
 (t/deftest search-by-kasvihuonepaastot-per-nelio-comparison-operators-test
-  ;; Given: ET2026 certificate with known kasvihuonepaastot-per-nelio value
-  (let [{:keys [energiatodistukset]} (test-data-set-2026)
+  ;; Given: ET2027 certificate with known kasvihuonepaastot-per-nelio value
+  (let [{:keys [energiatodistukset]} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
@@ -1391,18 +1391,18 @@
   "Build an energiatodistus-like map from test inputs and delegate to the shared calculation."
   [kokonaistuotanto hyodynnetty nettoala e-luku]
   (uusiutuva-energia/uusiutuvan-energian-osuus
-    2026
+    2027
     {:lahtotiedot {:lammitetty-nettoala nettoala}
      :tulokset    {:e-luku                                      e-luku
                    :uusiutuvat-omavaraisenergiat-kokonaistuotanto kokonaistuotanto
                    :uusiutuvat-omavaraisenergiat                  hyodynnetty}}))
 
-(defn- insert-signed-et2026-with-uusiutuva!
-  "Insert and sign an ET2026 certificate with specified renewable energy values.
+(defn- insert-signed-et2027-with-uusiutuva!
+  "Insert and sign an ET2027 certificate with specified renewable energy values.
    Overrides e-luku via SQL when provided. Returns [laatija-id et-id]."
   [{:keys [nettoala e-luku kokonaistuotanto hyodynnetty]}]
   (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
-        et-add (cond-> (energiatodistus-test-data/generate-add 2026 true)
+        et-add (cond-> (energiatodistus-test-data/generate-add 2027 true)
                  nettoala
                  (assoc-in [:lahtotiedot :lammitetty-nettoala] nettoala)
 
@@ -1425,12 +1425,12 @@
       (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET t$e_luku = ? WHERE id = ?" e-luku et-id]))
     [laatija-id et-id]))
 
-(t/deftest search-by-uusiutuvan-energian-osuus-2026-test
+(t/deftest search-by-uusiutuvan-energian-osuus-2027-test
   (let [nettoala 100M
         e-luku 150M
         kokonaistuotanto {:aurinkosahko 500M :tuulisahko 300M :aurinkolampo 200M}
         hyodynnetty {:aurinkosahko 400M :tuulisahko 250M :aurinkolampo 150M}
-        [_ et-id] (insert-signed-et2026-with-uusiutuva!
+        [_ et-id] (insert-signed-et2027-with-uusiutuva!
                     {:nettoala nettoala :e-luku e-luku
                      :kokonaistuotanto kokonaistuotanto :hyodynnetty hyodynnetty})
         expected (uusiutuvan-energian-osuus kokonaistuotanto hyodynnetty nettoala e-luku)
@@ -1439,11 +1439,11 @@
                         nil nil nil)
         result-ids (set (map :id results))]
     (t/is (contains? result-ids et-id)
-           "ET2026 certificate should be found by calculated uusiutuvan-energian-osuus")))
+           "ET2027 certificate should be found by calculated uusiutuvan-energian-osuus")))
 
 (t/deftest search-by-uusiutuvan-energian-osuus-zero-nettoala-test
   ;; Nettoala set to 0 via SQL since validation prevents 0
-  (let [[_ et-id] (insert-signed-et2026-with-uusiutuva! {})]
+  (let [[_ et-id] (insert-signed-et2027-with-uusiutuva! {})]
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET lt$lammitetty_nettoala = 0 WHERE id = ?" et-id])
     (let [results-zero (search kayttaja-test-data/paakayttaja
                                [[["=" "energiatodistus.tulokset.uusiutuvan-energian-osuus" 0]]]
@@ -1457,7 +1457,7 @@
              "Certificate with zero nettoala should not match any value"))))
 
 (t/deftest search-by-uusiutuvan-energian-osuus-null-e-luku-test
-  (let [[_ et-id] (insert-signed-et2026-with-uusiutuva!
+  (let [[_ et-id] (insert-signed-et2027-with-uusiutuva!
                     {:kokonaistuotanto {:aurinkosahko 100M}})]
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET t$e_luku = NULL WHERE id = ?" et-id])
     (let [results (search kayttaja-test-data/paakayttaja
@@ -1472,7 +1472,7 @@
         e-luku 150M
         kokonaistuotanto {:aurinkosahko 500M :tuulisahko nil :aurinkolampo nil}
         hyodynnetty {:aurinkosahko 400M :tuulisahko nil :aurinkolampo nil}
-        [_ et-id] (insert-signed-et2026-with-uusiutuva!
+        [_ et-id] (insert-signed-et2027-with-uusiutuva!
                     {:nettoala nettoala :e-luku e-luku
                      :kokonaistuotanto kokonaistuotanto :hyodynnetty hyodynnetty})
         expected (uusiutuvan-energian-osuus kokonaistuotanto hyodynnetty nettoala e-luku)
@@ -1486,7 +1486,7 @@
 (t/deftest search-by-uusiutuvan-energian-osuus-zero-tuotanto-test
   (let [nettoala 100M
         e-luku 150M
-        [_ et-id] (insert-signed-et2026-with-uusiutuva!
+        [_ et-id] (insert-signed-et2027-with-uusiutuva!
                     {:nettoala nettoala :e-luku e-luku
                      :kokonaistuotanto {:aurinkosahko 0M :tuulisahko 0M :aurinkolampo 0M}
                      :hyodynnetty {:aurinkosahko 0M :tuulisahko 0M :aurinkolampo 0M}})
@@ -1499,7 +1499,7 @@
 
 (t/deftest search-by-uusiutuvan-energian-osuus-zero-nimittaja-test
   ;; e-luku = 0 and all hyödynnetty = 0, but kokonaistuotanto has values → denominator 0 → NULL
-  (let [[_ et-id] (insert-signed-et2026-with-uusiutuva!
+  (let [[_ et-id] (insert-signed-et2027-with-uusiutuva!
                     {:nettoala 100M
                      :kokonaistuotanto {:aurinkosahko 500M :tuulisahko 300M :aurinkolampo 200M}
                      :hyodynnetty {:aurinkosahko 0M :tuulisahko 0M :aurinkolampo 0M}})]
@@ -1515,7 +1515,7 @@
         e-luku 150M
         kokonaistuotanto {:aurinkosahko 500M :tuulisahko 300M :aurinkolampo 200M}
         hyodynnetty {:aurinkosahko 400M :tuulisahko 250M :aurinkolampo 150M}
-        [_ et-id] (insert-signed-et2026-with-uusiutuva!
+        [_ et-id] (insert-signed-et2027-with-uusiutuva!
                     {:nettoala nettoala :e-luku e-luku
                      :kokonaistuotanto kokonaistuotanto :hyodynnetty hyodynnetty})
         expected (uusiutuvan-energian-osuus kokonaistuotanto hyodynnetty nettoala e-luku)]
@@ -1558,11 +1558,11 @@
              "ET2018 should not match uusiutuvan-energian-osuus with any value"))))
 
 (t/deftest search-by-energiankulutuksen-valmius-true-test
-  ;; Given: ET2026 with energiankulutuksen-valmius = true, another with false
+  ;; Given: ET2027 with energiankulutuksen-valmius = true, another with false
   (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
-        et-true (-> (energiatodistus-test-data/generate-add 2026 true)
+        et-true (-> (energiatodistus-test-data/generate-add 2027 true)
                     (assoc-in [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin] true))
-        et-false (-> (energiatodistus-test-data/generate-add 2026 true)
+        et-false (-> (energiatodistus-test-data/generate-add 2027 true)
                      (assoc-in [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin] false))
         [id-true] (energiatodistus-test-data/insert! [et-true] laatija-id)
         [id-false] (energiatodistus-test-data/insert! [et-false] laatija-id)]
@@ -1581,8 +1581,8 @@
              "Certificate with false should not be found"))))
 
 (t/deftest search-by-energiankulutuksen-valmius-false-includes-et2018-test
-  ;; Given: ET2018 and ET2026 certificates (ET2018 defaults to false for this field)
-  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
+  ;; Given: ET2018 and ET2027 certificates (ET2018 defaults to false for this field)
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2027]} (test-data-set-mixed)
         et2018-ids (set (keys energiatodistukset-2018))
         ;; When: searching = false
         results (search kayttaja-test-data/paakayttaja
@@ -1591,16 +1591,16 @@
                            false]]]
                         nil nil nil)
         result-ids (set (map :id results))]
-    ;; Then: ET2018 certificates appear (default false) plus ET2026 with false
+    ;; Then: ET2018 certificates appear (default false) plus ET2027 with false
     (t/is (every? #(contains? result-ids %) et2018-ids)
            "ET2018 certificates should appear with default false value")))
 
 (t/deftest search-by-lammonjako-lampotilajousto-true-test
-  ;; Given: ET2026 with lammonjako-lampotilajousto = true, another with false
+  ;; Given: ET2027 with lammonjako-lampotilajousto = true, another with false
   (let [laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
-        et-true (-> (energiatodistus-test-data/generate-add 2026 true)
+        et-true (-> (energiatodistus-test-data/generate-add 2027 true)
                     (assoc-in [:lahtotiedot :lammitys :lammonjako-lampotilajousto] true))
-        et-false (-> (energiatodistus-test-data/generate-add 2026 true)
+        et-false (-> (energiatodistus-test-data/generate-add 2027 true)
                      (assoc-in [:lahtotiedot :lammitys :lammonjako-lampotilajousto] false))
         [id-true] (energiatodistus-test-data/insert! [et-true] laatija-id)
         [id-false] (energiatodistus-test-data/insert! [et-false] laatija-id)]
@@ -1619,8 +1619,8 @@
              "Certificate with lammonjako-lampotilajousto false should not be found"))))
 
 (t/deftest search-by-lammonjako-lampotilajousto-false-includes-et2018-test
-  ;; Given: ET2018 and ET2026 certificates
-  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
+  ;; Given: ET2018 and ET2027 certificates
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2027]} (test-data-set-mixed)
         et2018-ids (set (keys energiatodistukset-2018))
         ;; When: searching = false
         results (search kayttaja-test-data/paakayttaja
@@ -1635,8 +1635,8 @@
 
 ;; AE-2590: Search by yksinkertaistettu-paivitysmenettely
 (t/deftest search-by-yksinkertaistettu-paivitysmenettely-true-test
-  ;; Given: ET2026 certificates where one has yksinkertaistettu-paivitysmenettely = true
-  (let [{:keys [energiatodistukset]} (test-data-set-2026)
+  ;; Given: ET2027 certificates where one has yksinkertaistettu-paivitysmenettely = true
+  (let [{:keys [energiatodistukset]} (test-data-set-2027)
         [id-true id-false] (sort (keys energiatodistukset))]
     ;; Set one certificate's yksinkertaistettu-paivitysmenettely to true via direct SQL
     (jdbc/execute! ts/*db*
@@ -1655,8 +1655,8 @@
              "Certificate with yksinkertaistettu-paivitysmenettely false should not be found"))))
 
 (t/deftest search-by-yksinkertaistettu-paivitysmenettely-false-test
-  ;; Given: ET2026 certificates where one has yksinkertaistettu-paivitysmenettely = true
-  (let [{:keys [energiatodistukset]} (test-data-set-2026)
+  ;; Given: ET2027 certificates where one has yksinkertaistettu-paivitysmenettely = true
+  (let [{:keys [energiatodistukset]} (test-data-set-2027)
         [id-true id-false] (sort (keys energiatodistukset))]
     (jdbc/execute! ts/*db*
       ["UPDATE energiatodistus SET yksinkertaistettu_paivitysmenettely = true WHERE id = ?" id-true])
@@ -1674,8 +1674,8 @@
              "Certificate with yksinkertaistettu-paivitysmenettely true should not be found"))))
 
 (t/deftest search-by-yksinkertaistettu-paivitysmenettely-false-includes-et2018-test
-  ;; Given: ET2018 and ET2026 certificates (ET2018 have default false)
-  (let [{:keys [energiatodistukset-2018 energiatodistukset-2026]} (test-data-set-mixed)
+  ;; Given: ET2018 and ET2027 certificates (ET2018 have default false)
+  (let [{:keys [energiatodistukset-2018 energiatodistukset-2027]} (test-data-set-mixed)
         et2018-ids (set (keys energiatodistukset-2018))
         ;; When: searching = false
         results (search kayttaja-test-data/paakayttaja
@@ -1690,16 +1690,16 @@
 
 ;; AE-2590: Search by perusparannuspassi.valid filter (regression tests for existing behavior)
 (t/deftest search-by-ppp-valid-true-filter-test
-  ;; Given: ET2026 certificates, some with PPP and some without
+  ;; Given: ET2027 certificates, some with PPP and some without
   (let [laatija-id (->> (laatija-test-data/generate-adds 1)
                         (map #(assoc-in % [:patevyystaso] 4))
                         (laatija-test-data/insert!)
                         first)
         laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
-        ;; Create 2 ET2026 without PPP
-        energiatodistus-ids-without-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
-        ;; Create 2 ET2026 with PPP
-        energiatodistus-ids-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
+        ;; Create 2 ET2027 without PPP
+        energiatodistus-ids-without-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2027 true laatija-id))
+        ;; Create 2 ET2027 with PPP
+        energiatodistus-ids-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2027 true laatija-id))
         _ (ppp-test-data/generate-and-insert! energiatodistus-ids-with-ppp laatija-whoami)
         ;; Sign all ETs so they are visible to paakayttaja (tila-id = 2)
         _ (sign-energiatodistukset! (map #(vec [laatija-id %]) (concat energiatodistus-ids-without-ppp energiatodistus-ids-with-ppp)))]
@@ -1715,16 +1715,16 @@
              "Certificates without PPP should not be found"))))
 
 (t/deftest search-by-ppp-valid-is-distinct-from-filter-test
-  ;; Given: ET2026 certificates, some with PPP and some without
+  ;; Given: ET2027 certificates, some with PPP and some without
   (let [laatija-id (->> (laatija-test-data/generate-adds 1)
                         (map #(assoc-in % [:patevyystaso] 4))
                         (laatija-test-data/insert!)
                         first)
         laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
-        ;; Create 2 ET2026 without PPP
-        energiatodistus-ids-without-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
-        ;; Create 2 ET2026 with PPP
-        energiatodistus-ids-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
+        ;; Create 2 ET2027 without PPP
+        energiatodistus-ids-without-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2027 true laatija-id))
+        ;; Create 2 ET2027 with PPP
+        energiatodistus-ids-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2027 true laatija-id))
         _ (ppp-test-data/generate-and-insert! energiatodistus-ids-with-ppp laatija-whoami)
         ;; Sign all ETs so they are visible to paakayttaja (tila-id = 2)
         _ (sign-energiatodistukset! (map #(vec [laatija-id %]) (concat energiatodistus-ids-without-ppp energiatodistus-ids-with-ppp)))]
@@ -1741,13 +1741,13 @@
              "Certificates with valid PPP should not be found"))))
 
 (t/deftest search-by-ppp-id-filter-test
-  ;; Given: ET2026 certificates with known PPP ids
+  ;; Given: ET2027 certificates with known PPP ids
   (let [laatija-id (->> (laatija-test-data/generate-adds 1)
                         (map #(assoc-in % [:patevyystaso] 4))
                         (laatija-test-data/insert!)
                         first)
         laatija-whoami {:id laatija-id :patevyystaso 4 :rooli 0}
-        energiatodistus-ids (keys (energiatodistus-test-data/generate-and-insert! 2 2026 true laatija-id))
+        energiatodistus-ids (keys (energiatodistus-test-data/generate-and-insert! 2 2027 true laatija-id))
         ppp-ids (ppp-test-data/generate-and-insert! energiatodistus-ids laatija-whoami)
         target-ppp-id (first ppp-ids)
         ;; Sign all ETs so they are visible to paakayttaja (tila-id = 2)

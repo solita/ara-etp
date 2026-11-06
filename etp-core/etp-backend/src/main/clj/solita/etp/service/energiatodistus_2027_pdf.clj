@@ -1,8 +1,8 @@
-(ns solita.etp.service.energiatodistus-2026-pdf
+(ns solita.etp.service.energiatodistus-2027-pdf
   (:require [hiccup.core :as hiccup]
             [clojure.java.io :as io]
             [solita.etp.config :as config]
-            [solita.etp.service.energiatodistus-2026 :as energiatodistus-2026]
+            [solita.etp.service.energiatodistus-2027 :as energiatodistus-2027]
             [solita.etp.service.pdf :as pdf-service]
             [solita.etp.service.localization :as loc]
             [solita.etp.service.watermark-pdf :as watermark-pdf]
@@ -29,7 +29,7 @@
                            "sv" "TEST"})
 
 (defn- styles []
-  (slurp (io/resource "energiatodistus-2026.css")))
+  (slurp (io/resource "energiatodistus-2027.css")))
 
 (defn- page-header [title subtitle]
   [:div {:class "page-header"}
@@ -54,7 +54,7 @@
      (page-footer et-tunnus page-num total-pages l)]))
 
 (defn generate-document-hiccup
-  "Generate hiccup data for complete HTML document for Energiatodistus 2026 PDF."
+  "Generate hiccup data for complete HTML document for Energiatodistus 2027 PDF."
   [pages et-tunnus l]
   (let [total-pages (count pages)
         pages-html (map-indexed
@@ -72,17 +72,17 @@
       pages-html]]))
 
 (defn generate-energiatodistus-hiccup
-  "Generate hiccup data of HTML, representing the ET2026 part of a PDF document
-  containing both ET2026 and possibly a PPP."
+  "Generate hiccup data of HTML, representing the ET2027 part of a PDF document
+  containing both ET2027 and possibly a PPP."
   [{:keys [energiatodistus kieli] :as params}]
   (let [l (kieli loc/et-pdf-localization)
-        show-toimenpide? (energiatodistus-2026/show-toimenpide-ehdotukset-pages? energiatodistus)
+        show-toimenpide? (energiatodistus-2027/show-toimenpide-ehdotukset-pages? energiatodistus)
         show-ilmastoselvitys? (ilmastoselvitys/has-ilmastoselvitys? energiatodistus)
         pages (concat
                 [{:page-border? true
                   :content
                   [:div
-                   (page-header (l :energiatodistus) (l :energiatodistus-2026-subtitle))
+                   (page-header (l :energiatodistus) (l :energiatodistus-2027-subtitle))
                    [:div {:class "page-section"}
                     (et-etusivu-yleistiedot/et-etusivu-yleistiedot params)]
                    [:div {:class "page-section"}
@@ -116,8 +116,8 @@
     (generate-document-hiccup pages (:id energiatodistus) l)))
 
 (defn generate-energiatodistus-html
-  "Generate string of HTML, representing the ET2026 part of a PDF document
-  containing both ET2026 and possibly a PPP."
+  "Generate string of HTML, representing the ET2027 part of a PDF document
+  containing both ET2027 and possibly a PPP."
   [params]
   (hiccup/html (generate-energiatodistus-hiccup params)))
 
@@ -136,7 +136,7 @@
         et-pdf-bytes))))
 
 (defn generate-energiatodistus-pdf
-  "Generate the full energiatodistus 2026 PDF, including perusparannuspassi if present.
+  "Generate the full energiatodistus 2027 PDF, including perusparannuspassi if present.
   The result is an array of bytes representing the PDF file.
 
    luokittelut is a map of classification data with keys:

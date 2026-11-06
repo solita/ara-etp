@@ -133,7 +133,7 @@
          :font-weight "bold"
          :fill "#ffffff"}
         e-luokka
-        [:tspan {:baseline-shift "sub" :font-size 8} "2026"]]
+        [:tspan {:baseline-shift "sub" :font-size 8} "2027"]]
        [:text
         {:x luku-x
          :y cy

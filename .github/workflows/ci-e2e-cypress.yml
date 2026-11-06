@@ -19,10 +19,10 @@ jobs:
             spec: 'cypress/e2e/**/*.cy.js'
           - suite: etp2026
             etp2026: true
-            spec: 'cypress/e2e/**/!(energiatodistus-2026-validation).cy.js'
+            spec: 'cypress/e2e/**/!(energiatodistus-2027-validation).cy.js'
           - suite: etp2026-validation
             etp2026: true
-            spec: 'cypress/e2e/laatija/energiatodistus-2026-validation.cy.js'
+            spec: 'cypress/e2e/laatija/energiatodistus-2027-validation.cy.js'
     name: test (${{ matrix.suite }})
     steps:
       - uses: actions/checkout@v6

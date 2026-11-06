@@ -1,5 +1,5 @@
 (ns solita.etp.service.energiatodistus-pdf.lahtotiedot
-  "E-luvun laskennan lähtötiedot page for Energiatodistus 2026 PDF"
+  "E-luvun laskennan lähtötiedot page for Energiatodistus 2027 PDF"
   (:require
     [clojure.string :as str]
     [solita.common.formats :as formats]

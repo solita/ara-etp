@@ -105,19 +105,19 @@
   (update-energiatodistus-n
     2 2018 (first (laatija-test-data/generate-and-insert! 1))))
 
-;; ---- ET2026 Audit Tests ----
+;; ---- ET2027 Audit Tests ----
 
-(t/deftest add-energiatodistus-2026
-  ;; Given: a generated ET2026 energiatodistus
+(t/deftest add-energiatodistus-2027
+  ;; Given: a generated ET2027 energiatodistus
   (let [[laatija-id laatija] (first (laatija-test-data/generate-and-insert! 1))
-        energiatodistus (energiatodistus-test-data/generate-add 2026 false)
+        energiatodistus (energiatodistus-test-data/generate-add 2027 false)
         db (ts/db-user laatija-id)
         whoami (whoami-laatija laatija-id)
 
         ;; When: we add the energiatodistus
         energiatodistus-id
         (:id (energiatodistus-service/add-energiatodistus!
-               (ts/db-user laatija-id) whoami 2026 energiatodistus))
+               (ts/db-user laatija-id) whoami 2027 energiatodistus))
         audit (find-energiatodistus-audit db energiatodistus-id laatija)]
 
     ;; Then: audit row matches the inserted energiatodistus
@@ -132,16 +132,16 @@
     (t/is (= laatija-id (:modifiedby-id audit)))
     (t/is (= "core.etp.test" (:service-uri audit)))))
 
-(t/deftest update-energiatodistus-2026
-  ;; Given: an ET2026 energiatodistus is created
+(t/deftest update-energiatodistus-2027
+  ;; Given: an ET2027 energiatodistus is created
   (let [[laatija-id laatija] (first (laatija-test-data/generate-and-insert! 1))
-        energiatodistus-add (energiatodistus-test-data/generate-add 2026 false)
-        energiatodistus-update (energiatodistus-test-data/generate-add 2026 false)
+        energiatodistus-add (energiatodistus-test-data/generate-add 2027 false)
+        energiatodistus-update (energiatodistus-test-data/generate-add 2027 false)
         db (ts/db-user laatija-id)
         whoami (whoami-laatija laatija-id)
         energiatodistus-id
         (:id (energiatodistus-service/add-energiatodistus!
-               (ts/db-user laatija-id) whoami 2026 energiatodistus-add))
+               (ts/db-user laatija-id) whoami 2027 energiatodistus-add))
 
         ;; When: we update the energiatodistus
         _ (energiatodistus-service/update-energiatodistus! db whoami energiatodistus-id energiatodistus-update)
@@ -159,34 +159,34 @@
     (t/is (= laatija-id (:modifiedby-id audit)))
     (t/is (= "core.etp.test" (:service-uri audit)))))
 
-(t/deftest update-energiatodistus-1-2026
-  ;; Given/When/Then: multiple updates create correct audit rows for ET2026
+(t/deftest update-energiatodistus-1-2027
+  ;; Given/When/Then: multiple updates create correct audit rows for ET2027
   (update-energiatodistus-n
-    1 2026 (first (laatija-test-data/generate-and-insert! 1))))
+    1 2027 (first (laatija-test-data/generate-and-insert! 1))))
 
-(t/deftest update-energiatodistus-2-2026
-  ;; Given/When/Then: two updates create correct audit rows for ET2026
+(t/deftest update-energiatodistus-2-2027
+  ;; Given/When/Then: two updates create correct audit rows for ET2027
   (update-energiatodistus-n
-    2 2026 (first (laatija-test-data/generate-and-insert! 1))))
+    2 2027 (first (laatija-test-data/generate-and-insert! 1))))
 
-(t/deftest audit-row-contains-2026-specific-columns
-  ;; Given: an ET2026 energiatodistus with specific ET2026-only field values
+(t/deftest audit-row-contains-2027-specific-columns
+  ;; Given: an ET2027 energiatodistus with specific ET2027-only field values
   (let [[laatija-id laatija] (first (laatija-test-data/generate-and-insert! 1))
-        energiatodistus (energiatodistus-test-data/generate-add 2026 false)
+        energiatodistus (energiatodistus-test-data/generate-add 2027 false)
         db (ts/db-user laatija-id)
         whoami (whoami-laatija laatija-id)
 
         ;; When: we add the energiatodistus
         energiatodistus-id
         (:id (energiatodistus-service/add-energiatodistus!
-               (ts/db-user laatija-id) whoami 2026 energiatodistus))
+               (ts/db-user laatija-id) whoami 2027 energiatodistus))
 
-        ;; Then: audit row contains ET2026-specific database columns
+        ;; Then: audit row contains ET2027-specific database columns
         audit-row (first
                     (jdbc/query db
                                 ["select * from audit.energiatodistus where id = ? order by event_id desc" energiatodistus-id]
                                 db/default-opts))]
-    ;; Verify ET2026-specific columns exist in the audit row (they should not be absent from the result set)
+    ;; Verify ET2027-specific columns exist in the audit row (they should not be absent from the result set)
     (t/is (contains? audit-row :lt$energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin))
     (t/is (contains? audit-row :lt$lammitys$lammonjako-lampotilajousto))
     (t/is (contains? audit-row :pt$havainnointikayntityyppi-id))

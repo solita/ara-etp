@@ -22,7 +22,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       field => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys.hiilijalanjalki.rakennus[field];
+          schema.v2027.ilmastoselvitys.hiilijalanjalki.rakennus[field];
 
         // when
         const result = fieldSchema.parse('12.5');
@@ -37,7 +37,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       field => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys.hiilijalanjalki.rakennus[field];
+          schema.v2027.ilmastoselvitys.hiilijalanjalki.rakennus[field];
 
         // when
         const result = fieldSchema.parse('-3.7');
@@ -52,7 +52,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       field => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys.hiilijalanjalki.rakennus[field];
+          schema.v2027.ilmastoselvitys.hiilijalanjalki.rakennus[field];
 
         // when
         const result = fieldSchema.parse('100');
@@ -78,7 +78,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       field => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys.hiilijalanjalki.rakennuspaikka[field];
+          schema.v2027.ilmastoselvitys.hiilijalanjalki.rakennuspaikka[field];
 
         // when
         const result = fieldSchema.parse('12.5');
@@ -93,7 +93,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       field => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys.hiilijalanjalki.rakennuspaikka[field];
+          schema.v2027.ilmastoselvitys.hiilijalanjalki.rakennuspaikka[field];
 
         // when
         const result = fieldSchema.parse('-3.7');
@@ -119,7 +119,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       field => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys.hiilikadenjalki.rakennus[field];
+          schema.v2027.ilmastoselvitys.hiilikadenjalki.rakennus[field];
 
         // when
         const result = fieldSchema.parse('12.5');
@@ -134,7 +134,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       field => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys.hiilikadenjalki.rakennus[field];
+          schema.v2027.ilmastoselvitys.hiilikadenjalki.rakennus[field];
 
         // when
         const result = fieldSchema.parse('-3.7');
@@ -149,7 +149,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       field => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys.hiilikadenjalki.rakennus[field];
+          schema.v2027.ilmastoselvitys.hiilikadenjalki.rakennus[field];
 
         // when
         const result = fieldSchema.parse('100');
@@ -175,7 +175,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       field => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys.hiilikadenjalki.rakennuspaikka[field];
+          schema.v2027.ilmastoselvitys.hiilikadenjalki.rakennuspaikka[field];
 
         // when
         const result = fieldSchema.parse('12.5');
@@ -190,7 +190,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       field => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys.hiilikadenjalki.rakennuspaikka[field];
+          schema.v2027.ilmastoselvitys.hiilikadenjalki.rakennuspaikka[field];
 
         // when
         const result = fieldSchema.parse('-3.7');
@@ -236,7 +236,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       (section, subsection, field) => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys[section][subsection][field];
+          schema.v2027.ilmastoselvitys[section][subsection][field];
         const value = Maybe.Some(-100.5);
 
         // when / then
@@ -251,7 +251,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       (section, subsection, field) => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys[section][subsection][field];
+          schema.v2027.ilmastoselvitys[section][subsection][field];
         const value = Maybe.Some(0);
 
         // when / then
@@ -266,7 +266,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
       (section, subsection, field) => {
         // given
         const fieldSchema =
-          schema.v2026.ilmastoselvitys[section][subsection][field];
+          schema.v2027.ilmastoselvitys[section][subsection][field];
         const value = Maybe.Some(999.99);
 
         // when / then
@@ -281,7 +281,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
   describe('ilmastoselvitys string fields remain unchanged', () => {
     it('given the laatija field, when parsing a string, then returns a Maybe string value', () => {
       // given
-      const laatija = schema.v2026.ilmastoselvitys.laatija;
+      const laatija = schema.v2027.ilmastoselvitys.laatija;
 
       // when
       const result = laatija.parse('Test Laatija');
@@ -292,7 +292,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
 
     it('given the laatimisajankohta field, then it has a parse function (DateValue)', () => {
       // given
-      const laatimisajankohta = schema.v2026.ilmastoselvitys.laatimisajankohta;
+      const laatimisajankohta = schema.v2027.ilmastoselvitys.laatimisajankohta;
 
       // then
       expect(typeof laatimisajankohta.parse).toBe('function');
@@ -301,7 +301,7 @@ describe('Ilmastoselvitys schema numeric types', () => {
 
     it('given the laatimisajankohta field, when parsing a date with a two-digit year, then maps it to the 2000s', () => {
       // given
-      const laatimisajankohta = schema.v2026.ilmastoselvitys.laatimisajankohta;
+      const laatimisajankohta = schema.v2027.ilmastoselvitys.laatimisajankohta;
 
       // when
       const result = laatimisajankohta.parse('12.12.12');
