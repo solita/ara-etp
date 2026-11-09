@@ -82,6 +82,13 @@
 
   const path = (path, obj) => path.reduce((acc, p) => acc[p], obj);
 
+  // Use the energiatodistus-specific coefficient when present, otherwise the
+  // version default.
+  const energiamuotokerroin = (energiatodistus, energiamuoto) =>
+    energiatodistus.tulokset?.['kaytettavat-energiamuodot-kertoimet']?.[
+      energiamuoto
+    ] ?? energiamuotokertoimet[energiatodistus.versio][energiamuoto];
+
   const aperture = (n, arr) =>
     arr.reduce((acc, _, index) => [...acc, arr.slice(index, index + n)], []);
 
@@ -89,7 +96,7 @@
     fxmath.round(0, n / energiatodistus.lahtotiedot['lammitetty-nettoala']);
 
   const energiamuotokerroinTulo = (energiatodistus, energiamuoto) =>
-    path([energiatodistus.versio, energiamuoto], energiamuotokertoimet) *
+    energiamuotokerroin(energiatodistus, energiamuoto) *
     path(
       ['tulokset', 'kaytettavat-energiamuodot', energiamuoto],
       energiatodistus
@@ -786,7 +793,7 @@
                   </td>
                   <td class="py-4 print:py-1 font-normal">
                     {formats.formatNumberMax2(
-                      energiamuotokertoimet[versio]['kaukolampo']
+                      energiamuotokerroin(energiatodistus, 'kaukolampo')
                     )}
                   </td>
                   <td class="py-4 print:py-1">

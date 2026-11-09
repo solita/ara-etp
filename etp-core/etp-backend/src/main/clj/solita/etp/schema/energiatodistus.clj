@@ -380,7 +380,9 @@
                                                           :tuulisahko   common-schema/NonNegative
                                                           :lampopumppu  common-schema/NonNegative
                                                           :muulampo     common-schema/NonNegative
-                                                          :muusahko     common-schema/NonNegative}}
+                                                          :muusahko     common-schema/NonNegative}
+                                                         :kaytettavat-energiamuodot-kertoimet
+                                                         {:kaukolampo schema/Num}}
                         :huomiot                        {:iv-ilmastointi    Huomio2027
                                                          :valaistus-muut    Huomio2027
                                                          :lammitys          (assoc Huomio2027

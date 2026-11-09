@@ -417,7 +417,7 @@
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
         sahko (-> energiatodistus :tulokset :kaytettavat-energiamuodot :sahko)
-        sahko-kertoimella (* sahko (get-in e-luokka-service/energiamuotokerroin
+        sahko-kertoimella (* sahko (get-in e-luokka-service/fixed-energiamuotokertoimet
                                            [2018 :sahko]))]
     (t/is (search-and-assert
             test-data-set
@@ -473,7 +473,7 @@
         sahko (-> energiatodistus :tulokset :kaytettavat-energiamuodot :sahko)
         ;; Given a 2027 energiatodistus with known sahko value
         ;; When we calculate painotettu using the new 2027 coefficient (0.90)
-        sahko-kertoimella (* sahko (get-in e-luokka-service/energiamuotokerroin
+        sahko-kertoimella (* sahko (get-in e-luokka-service/fixed-energiamuotokertoimet
                                            [2027 :sahko]))]
     ;; Then searching by painotettu and painotettu-neliovuosikulutus finds the correct ET
     (t/is (search-and-assert
@@ -496,7 +496,7 @@
         kaukolampo (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukolampo)
         ;; Given a 2027 energiatodistus with known kaukolampo value
         ;; When we calculate painotettu using the new 2027 coefficient (0.38)
-        kaukolampo-kertoimella (* kaukolampo (get-in e-luokka-service/energiamuotokerroin
+        kaukolampo-kertoimella (* kaukolampo (get-in e-luokka-service/fixed-energiamuotokertoimet
                                                      [2027 :kaukolampo]))]
     ;; Then searching by painotettu finds the correct ET
     (t/is (search-and-assert
@@ -506,6 +506,27 @@
                "energiatodistus.tulokset.kaytettavat-energiamuodot.kaukolampo-painotettu"
                kaukolampo-kertoimella]]]))))
 
+(t/deftest search-by-kaukolampo-painotettu-2027-energiatodistus-kerroin-test
+  (let [laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
+        ;; Given signed 2027 olemassa oleva rakennus energiatodistus
+        ;; with an energiatodistus specific kaukolämpö kerroin
+        add (-> (energiatodistus-test-data/generate-add 2027 true)
+                (assoc-in [:perustiedot :laatimisvaihe] 2)
+                (assoc-in [:tulokset :kaytettavat-energiamuodot :kaukolampo] 1000M)
+                (assoc-in [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo] 0.25M))
+        id (first (energiatodistus-test-data/insert! [add] laatija-id))
+        _ (sign-energiatodistukset! [[laatija-id id]])
+        found-ids (fn [value]
+                    (->> (search {:rooli 0 :id laatija-id}
+                                 [[["="
+                                    "energiatodistus.tulokset.kaytettavat-energiamuodot.kaukolampo-painotettu"
+                                    value]]]
+                                 nil nil nil)
+                         (map :id)))]
+    ;; Then painotettu kulutus is calculated with the energiatodistus specific kerroin
+    (t/is (= [id] (found-ids 250M)))
+    (t/is (empty? (found-ids 380M)))))
+
 (t/deftest search-by-kaukojaahdytys-painotettu-2027-test
   (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)
@@ -513,7 +534,7 @@
         kaukojaahdytys (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukojaahdytys)
         ;; Given a 2027 energiatodistus with known kaukojaahdytys value
         ;; When we calculate painotettu using the new 2027 coefficient (0.21)
-        kaukojaahdytys-kertoimella (* kaukojaahdytys (get-in e-luokka-service/energiamuotokerroin
+        kaukojaahdytys-kertoimella (* kaukojaahdytys (get-in e-luokka-service/fixed-energiamuotokertoimet
                                                              [2027 :kaukojaahdytys]))]
     ;; Then searching by painotettu finds the correct ET
     (t/is (search-and-assert

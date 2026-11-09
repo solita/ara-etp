@@ -151,12 +151,14 @@
       <LaskennallinenOstoenergia
         bind:perusparannuspassi
         {energiatodistus}
+        oletusEnergiamuotokertoimet={luokittelut.energiamuotokertoimet}
         {eTehokkuus}
         {schema}
         {disabled} />
       <UusiutuvaEnergia
         bind:perusparannuspassi
         {energiatodistus}
+        oletusEnergiamuotokertoimet={luokittelut.energiamuotokertoimet}
         schema={saveSchema}
         {disabled} />
       <ToteutunutOstoenergia

@@ -42,14 +42,25 @@
     (into {} (map (per-nettoala-entry (map name path) rename-key))
           (get-in schema path))))
 
+(defn- kerroin-2027-sql
+  "Kaukolämpö uses the energiatodistus specific (tehollinen) kerroin
+  if it is applicable. See e-luokka/tehollinen-kaukolampo-kerroin."
+  [key]
+  (let [default (get-in e-luokka/fixed-energiamuotokertoimet [2027 key])]
+    (if (= key :kaukolampo)
+      (str "(case when energiatodistus.pt$laatimisvaihe = 2"
+           " then coalesce(energiatodistus.t$kaytettavat_energiamuodot_kertoimet$kaukolampo, "
+           default ") else " default " end)")
+      default)))
+
 (defn- painotettu-kulutus-sql [path key]
   (str (field->db-column (conj path (name key))) " * (case energiatodistus.versio"
        " when 2013 then "
-       (get-in e-luokka/energiamuotokerroin [2013 key])
+       (get-in e-luokka/fixed-energiamuotokertoimet [2013 key])
        " when 2018 then "
-       (get-in e-luokka/energiamuotokerroin [2018 key])
+       (get-in e-luokka/fixed-energiamuotokertoimet [2018 key])
        " when 2027 then "
-       (get-in e-luokka/energiamuotokerroin [2027 key])
+       (kerroin-2027-sql key)
        " end)"))
 
 (defn- painotettu-kulutus-entry [[key schema]]

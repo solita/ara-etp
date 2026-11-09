@@ -55,6 +55,7 @@
     <div transition:slide={{ duration: 200 }} class="grid gap-6">
       <Perustiedot
         {perusparannuspassi}
+        oletusEnergiamuotokertoimet={luokittelut.energiamuotokertoimet}
         {pppSchema}
         {vaihe}
         {energiatodistus}

@@ -1,6 +1,7 @@
 (ns solita.etp.schema.public-energiatodistus
   (:require [schema.core :as schema]
             [solita.etp.schema.energiatodistus :as energiatodistus-schema]
+            [solita.etp.schema.common :as common-schema]
             [solita.common.schema :as xschema]))
 
 (def Perustiedot
@@ -35,6 +36,11 @@
   (select-keys energiatodistus-schema/Tulokset
                [:kaytettavat-energiamuodot]))
 
+(def Tulokset2027
+  (assoc Tulokset
+    ;; Contains the author-specified kaukolämpö energiamuotokerroin, if any.
+    :kaytettavat-energiamuodot-kertoimet {:kaukolampo common-schema/NonNegative}))
+
 (defn energiatodistus-versio [versio]
   (-> (energiatodistus-schema/energiatodistus-versio
         versio
@@ -43,6 +49,7 @@
            :lahtotiedot Lahtotiedot
            :tulokset    (case versio
                           2013 Tulokset2013
+                          2027 Tulokset2027
                           Tulokset)}))
       (dissoc :laatija-fullname
               :laatija-id

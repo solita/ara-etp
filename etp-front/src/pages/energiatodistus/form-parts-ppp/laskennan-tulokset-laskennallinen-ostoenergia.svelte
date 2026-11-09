@@ -15,6 +15,12 @@
   export let perusparannuspassi;
   export let schema;
   export let disabled = false;
+  export let oletusEnergiamuotokertoimet;
+
+  $: energiamuotokertoimet = ETUtils.energiamuotokertoimet(
+    oletusEnergiamuotokertoimet,
+    energiatodistus
+  );
 
   const etEnergiamuodotFromPppVaihe = vaihe =>
     R.compose(
@@ -31,7 +37,7 @@
    */
   const vaiheEluokka = (
     eTehokkuus,
-    versio,
+    kertoimet,
     nettoala,
     vaiheEnergiamuodot,
     tayttaaAplusVaatimukset,
@@ -47,7 +53,7 @@
         ),
       Maybe.toMaybeList([
         R.map(R.prop('raja-asteikko'), eTehokkuus),
-        ETUtils.eluku(versio, nettoala, vaiheEnergiamuodot)
+        ETUtils.eluku(kertoimet, nettoala, vaiheEnergiamuodot)
       ])
     );
 </script>
@@ -125,7 +131,7 @@
       <td class="et-table--td"
         >{vaiheEluokka(
           eTehokkuus,
-          energiatodistus.versio,
+          energiamuotokertoimet,
           energiatodistus.lahtotiedot['lammitetty-nettoala'],
           energiatodistus.tulokset['kaytettavat-energiamuodot'],
           energiatodistus.perustiedot['tayttaa-aplus-vaatimukset'],
@@ -136,7 +142,7 @@
           {#if Maybe.isSome(EitherMaybe.toMaybe(vaihe.tulokset['vaiheen-alku-pvm']))}
             {vaiheEluokka(
               eTehokkuus,
-              energiatodistus.versio,
+              energiamuotokertoimet,
               energiatodistus.lahtotiedot['lammitetty-nettoala'],
               etEnergiamuodotFromPppVaihe(vaihe.tulokset),
               perusparannuspassi['passin-perustiedot']?.[
@@ -156,7 +162,7 @@
         {Maybe.orSome(
           '',
           ETUtils.eluku(
-            energiatodistus.versio,
+            energiamuotokertoimet,
             energiatodistus.lahtotiedot['lammitetty-nettoala'],
             energiatodistus.tulokset['kaytettavat-energiamuodot']
           )
@@ -168,7 +174,7 @@
             {Maybe.orSome(
               '',
               ETUtils.eluku(
-                energiatodistus.versio,
+                energiamuotokertoimet,
                 energiatodistus.lahtotiedot['lammitetty-nettoala'],
                 etEnergiamuodotFromPppVaihe(vaihe.tulokset)
               )

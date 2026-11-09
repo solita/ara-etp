@@ -14,8 +14,12 @@
   export let perusparannuspassi;
   export let schema;
   export let disabled = false;
+  export let oletusEnergiamuotokertoimet;
 
-  $: lahtotilanneOsuus = ETUtils.uusiutuvanEnergianOsuus(energiatodistus);
+  $: lahtotilanneOsuus = ETUtils.uusiutuvanEnergianOsuus(
+    oletusEnergiamuotokertoimet,
+    energiatodistus
+  );
 </script>
 
 <H4

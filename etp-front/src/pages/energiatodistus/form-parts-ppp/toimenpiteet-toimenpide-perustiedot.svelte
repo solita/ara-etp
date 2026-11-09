@@ -13,6 +13,12 @@
   export let perusparannuspassi;
   export let pppSchema;
   export let vaihe;
+  export let oletusEnergiamuotokertoimet;
+
+  $: energiamuotokertoimet = ETUtils.energiamuotokertoimet(
+    oletusEnergiamuotokertoimet,
+    energiatodistus
+  );
 
   const vaiheIndex = vaihe => vaihe['vaihe-nro'] - 1;
 
@@ -48,7 +54,7 @@
   const eluku = {
     calculate: ({ energiatodistus, perusparannuspassi, vaihe }) =>
       ETUtils.eluku(
-        energiatodistus.versio,
+        energiamuotokertoimet,
         energiatodistus.lahtotiedot['lammitetty-nettoala'],
         etEnergiamuodotFromPppVaihe(
           perusparannuspassi.vaiheet[vaiheIndex(vaihe)].tulokset
@@ -72,7 +78,7 @@
     Maybe.toMaybeList([
       R.map(R.prop('raja-asteikko'), eTehokkuus),
       ETUtils.eluku(
-        energiatodistus.versio,
+        energiamuotokertoimet,
         energiatodistus.lahtotiedot['lammitetty-nettoala'],
         etEnergiamuodotFromPppVaihe(
           perusparannuspassi.vaiheet[vaiheIndex(vaihe)].tulokset

@@ -16,17 +16,32 @@
 
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
+  import * as Laatimisvaiheet from '@Pages/energiatodistus/laatimisvaiheet';
 
   export let disabled;
   export let schema;
   export let energiatodistus;
   export let versio;
   export let eTehokkuus = Maybe.None();
+  // Default energiamuotokertoimet by versio (api.luokittelut.energiamuotokertoimet)
+  export let oletusEnergiamuotokertoimet;
 
   let eTehokkuusParams = [];
 
+  $: kaukolampoKerroinEditable =
+    versio === 2027 && Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus);
+
+  $: oletusKaukolampoKerroin = R.pathOr(
+    null,
+    [versio, 'kaukolampo'],
+    oletusEnergiamuotokertoimet
+  );
+
   $: energiamuotokertoimet = R.mergeRight(
-    EtUtils.energiamuotokertoimet()[versio],
+    EtUtils.energiamuotokertoimet(oletusEnergiamuotokertoimet, {
+      ...energiatodistus,
+      versio
+    }),
     EtUtils.muutEnergiamuotokertoimet(energiatodistus)
   );
 
@@ -69,6 +84,7 @@
 
     Maybe.orElseRun(_ => {
       eTehokkuus = Maybe.None();
+      eTehokkuusParams = [];
     }, params);
 
     R.forEach(p => {
@@ -149,11 +165,27 @@
               path={['tulokset', 'kaytettavat-energiamuodot', energiamuoto]} />
           </td>
           <td class="et-table--td">
-            {R.compose(
-              Maybe.get,
-              R.map(formats.numberFormat),
-              R.prop(energiamuoto)
-            )(energiamuotokertoimet)}
+            {#if energiamuoto === 'kaukolampo' && kaukolampoKerroinEditable}
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                placeholder={R.isNil(oletusKaukolampoKerroin)
+                  ? ''
+                  : formats.numberFormatPrecision(2, oletusKaukolampoKerroin)}
+                bind:model={energiatodistus}
+                path={[
+                  'tulokset',
+                  'kaytettavat-energiamuodot-kertoimet',
+                  'kaukolampo'
+                ]} />
+            {:else}
+              {R.compose(
+                Maybe.orSome(''),
+                R.map(formats.numberFormat),
+                R.prop(energiamuoto)
+              )(energiamuotokertoimet)}
+            {/if}
           </td>
           <td class="et-table--td et-table--td__fifth">
             {R.compose(

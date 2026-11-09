@@ -310,6 +310,29 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
       (t/is (= (energiatodistus-service/start-energiatodistus-signing! db whoami et-id)
                :ok)))))
 
+;; AE-2777: energiatodistus specific kaukolämpö kerroin
+(defn- start-signing-with-kaukolampo-kerroin! [versio laatimisvaihe-id]
+  (let [laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys sort first)
+        et-id (generate-and-insert-with-laatimisvaihe! versio laatimisvaihe-id laatija-id)]
+    (jdbc/execute! ts/*db*
+                   ["UPDATE energiatodistus SET t$kaytettavat_energiamuodot_kertoimet$kaukolampo = 0.25 WHERE id = ?"
+                    et-id])
+    (t/is (= (energiatodistus-service/start-energiatodistus-signing!
+               (ts/db-user laatija-id) {:id laatija-id} et-id)
+             :ok))
+    (-> (energiatodistus-service/find-energiatodistus ts/*db* et-id)
+        :tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo)))
+
+(t/deftest signing-keeps-kaukolampo-kerroin-for-olemassa-oleva-rakennus-2027
+  (t/is (= 0.25M (start-signing-with-kaukolampo-kerroin! 2027 2))))
+
+(t/deftest signing-resets-kaukolampo-kerroin-for-other-laatimisvaihe-2027
+  (doseq [laatimisvaihe-id [0 1 3 4]]
+    (t/is (nil? (start-signing-with-kaukolampo-kerroin! 2027 laatimisvaihe-id)))))
+
+(t/deftest signing-resets-kaukolampo-kerroin-for-2018
+  (t/is (nil? (start-signing-with-kaukolampo-kerroin! 2018 2))))
+
 ;; ============================================================================
 ;; AE-2782: Validity period PDF generation bug — new tests
 ;; ============================================================================
