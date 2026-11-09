@@ -39,7 +39,7 @@
   (file/delete-file aws-s3-client file-key))
 
 (defn- delete-from-s3 [aws-s3-client file-key {:keys [log-when-file-missing?]}]
-  (if (file/file-exists? aws-s3-client file-key)
+  (if (file/file-exists-or-forbidden? aws-s3-client file-key)
     (do
       (handle-deletion-from-s3 aws-s3-client file-key)
       (log/info (str "Deleted " file-key " from S3")))
