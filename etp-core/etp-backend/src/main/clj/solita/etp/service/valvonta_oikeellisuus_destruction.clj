@@ -25,28 +25,30 @@
   (tag-versions-for-destruction! aws-s3-client file-key)
   (file/delete-file aws-s3-client file-key))
 
-(defn- delete-from-s3! [aws-s3-client file-key {:keys [log-when-file-missing?]}]
+(defn- delete-from-s3! [aws-s3-client file-key {:keys [log-when-file-missing? dry-run?]}]
   (if (file/file-exists? aws-s3-client file-key)
-    (do
-      (prepare-deletion-from-s3! aws-s3-client file-key)
-      (log/info (str "Deleted " file-key " from S3")))
+    (if dry-run?
+      (log/info (str "Dry-run: would delete " file-key " from S3"))
+      (do
+        (prepare-deletion-from-s3! aws-s3-client file-key)
+        (log/info (str "Deleted " file-key " from S3"))))
     (when log-when-file-missing?
       (log/warn (str "Tried to delete " file-key " but it does not exist!")))))
 
-(defn- delete-liite-s3! [aws-s3-client {:keys [liite-id]}]
+(defn- delete-liite-s3! [aws-s3-client dry-run? {:keys [liite-id]}]
   (let [file-key (liite-service/file-key liite-id)]
     ;; Some liitteet are only links and do not have files.
-    (delete-from-s3! aws-s3-client file-key {:log-when-file-missing? false})))
+    (delete-from-s3! aws-s3-client file-key {:log-when-file-missing? false :dry-run? dry-run?})))
 
-(defn- delete-viesti-liite-s3! [aws-s3-client {:keys [viesti-liite-id viestiketju-id]}]
+(defn- delete-viesti-liite-s3! [aws-s3-client dry-run? {:keys [viesti-liite-id viestiketju-id]}]
   (let [file-key (viesti-service/file-path viestiketju-id viesti-liite-id)]
     ;; Some liitteet are only links and do not have files.
-    (delete-from-s3! aws-s3-client file-key {:log-when-file-missing? false})))
+    (delete-from-s3! aws-s3-client file-key {:log-when-file-missing? false :dry-run? dry-run?})))
 
-(defn- delete-vo-toimenpide-s3! [aws-s3-client energiatodistus-id vo-toimenpide-id]
+(defn- delete-vo-toimenpide-s3! [aws-s3-client dry-run? energiatodistus-id vo-toimenpide-id]
   (let [file-key (vo-asha-service/file-path energiatodistus-id vo-toimenpide-id)]
     ;; All the toimenpiteet do not create documents
-    (delete-from-s3! aws-s3-client file-key {:log-when-file-missing? false})))
+    (delete-from-s3! aws-s3-client file-key {:log-when-file-missing? false :dry-run? dry-run?})))
 
 ;; ------------------------------
 
@@ -113,9 +115,9 @@
        db
        {:vo-toimenpide-id vo-toimenpide-id}))})
 
-(defn destroy-liite-table! [{:keys [db aws-s3-client]} {:keys [vo-toimenpide-id]}]
+(defn destroy-liite-table! [{:keys [db aws-s3-client dry-run?]} {:keys [vo-toimenpide-id]}]
   (let [linked-liite-ids (find-linked-liite-ids db vo-toimenpide-id)]
-    (run! (partial delete-liite-s3! aws-s3-client) linked-liite-ids)
+    (run! (partial delete-liite-s3! aws-s3-client dry-run?) linked-liite-ids)
     (let [result
           (valvonta-oikeellisuus-destruction-db/destroy-liite-table-data!
             db
@@ -153,9 +155,9 @@
        db
        {:vo-toimenpide-id vo-toimenpide-id}))})
 
-(defn destroy-viesti-liite-table! [{:keys [db aws-s3-client]} {:keys [vo-toimenpide-id]}]
+(defn destroy-viesti-liite-table! [{:keys [db aws-s3-client dry-run?]} {:keys [vo-toimenpide-id]}]
   (let [linked-liite-ids (find-linked-viesti-liite-ids db vo-toimenpide-id)]
-    (run! (partial delete-viesti-liite-s3! aws-s3-client) linked-liite-ids)
+    (run! (partial delete-viesti-liite-s3! aws-s3-client dry-run?) linked-liite-ids)
     (let [result
           (valvonta-oikeellisuus-destruction-db/destroy-viesti-liite-table-data!
             db
@@ -175,8 +177,8 @@
       {:vo-toimenpide-id vo-toimenpide-id})
     {:viestiketju (affected-row-count result)}))
 
-(defn anonymize-and-destroy-vo-toimenpide-table! [{:keys [db aws-s3-client]} {:keys [vo-toimenpide-id energiatodistus-id]}]
-  (delete-vo-toimenpide-s3! aws-s3-client energiatodistus-id vo-toimenpide-id)
+(defn anonymize-and-destroy-vo-toimenpide-table! [{:keys [db aws-s3-client dry-run?]} {:keys [vo-toimenpide-id energiatodistus-id]}]
+  (delete-vo-toimenpide-s3! aws-s3-client dry-run? energiatodistus-id vo-toimenpide-id)
   (let [result
         (valvonta-oikeellisuus-destruction-db/anonymize-vo-toimenpide-table-data!
           db
@@ -194,7 +196,7 @@
     (exception/throw-forbidden! (str "Can not run destruction of expired oikeellisuuden valvonta as whoami (id: " (:id whoami) ") (rooli: " (:rooli whoami) ")"))))
 
 (defn- destroy-expired-vo-toimenpiteet!
-  [db aws-s3-client vo-toimenpide-rows]
+  [db aws-s3-client dry-run? vo-toimenpide-rows]
   (let [energiatodistus-id (:energiatodistus-id (first vo-toimenpide-rows))
         ;; Re-query for the rows to prevent the case where someone
         ;; adds a toimenpide when the destruction is running.
@@ -225,7 +227,7 @@
                   (fn [counts handler]
                     (add-counts
                       counts
-                      (handler {:db db :aws-s3-client aws-s3-client}
+                      (handler {:db db :aws-s3-client aws-s3-client :dry-run? dry-run?}
                                {:vo-toimenpide-id vo-toimenpide-id
                                 :energiatodistus-id energiatodistus-id})))
                   empty-destruction-counts
@@ -234,7 +236,10 @@
             expired-vo-toimenpide-rows)))
       empty-destruction-counts)))
 
-(defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client whoami]
+(defn anonymize-expired-vo-valvontas-and-destroy-linked-data
+  ([db aws-s3-client whoami]
+   (anonymize-expired-vo-valvontas-and-destroy-linked-data db aws-s3-client whoami false))
+  ([db aws-s3-client whoami dry-run?]
   (assert-whoami! whoami)
   (let [expired-vo-toimenpide-rows (find-expired-oikeellisuuden-valvonta-ids db)
         ;; Process each energiatodistus's toimenpiteet in a separate transaction
@@ -246,11 +251,15 @@
             (add-counts
               total
               (jdbc/with-db-transaction [db db]
-                (destroy-expired-vo-toimenpiteet!
-                  db
-                  aws-s3-client
-                  vo-toimenpide-rows))))
+                (let [counts (destroy-expired-vo-toimenpiteet!
+                               db
+                               aws-s3-client
+                               dry-run?
+                               vo-toimenpide-rows)]
+                  (when dry-run?
+                    (jdbc/db-set-rollback-only! db))
+                  counts))))
           empty-destruction-counts
           expired-vo-toimenpiteet-by-energiatodistus)]
-    (log/info "Valvonta oikeellisuus destruction finished. Affected resources: " destruction-counts)
-    destruction-counts))
+    (log/info (str "Valvonta oikeellisuus destruction " (when dry-run? "(dry-run) ") "finished. Affected resources: ") destruction-counts)
+    destruction-counts)))
