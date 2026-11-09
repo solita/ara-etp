@@ -211,7 +211,7 @@
       (t/is (> (->> expired-valvonta-ids (mapv find-linked-vo-virhe) ->result-count) 0))
       (t/is (> (->> non-expired-valvonta-id (find-linked-vo-virhe) count) 0)))
 
-    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user false)
 
     (t/testing "There are no linked vo_virhe after running the destruction in the expired valvontas"
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-vo-virhe) ->result-count) 0)))
@@ -245,7 +245,8 @@
     (service/anonymize-expired-vo-valvontas-and-destroy-linked-data
       ts/*db*
       ts/*aws-s3-client*
-      system-vo-expiration-user)
+      system-vo-expiration-user
+      false)
 
     (t/testing "There are no vo_note rows for expired valvontas"
       (t/is (= 0
@@ -300,7 +301,7 @@
           (when (= (:contenttype liite-result) "application/octet-stream")
             (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (liite-service/file-key (:liite-id liite-result))))))))
 
-      (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+      (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user false)
 
       (t/testing "All the version of the expired files have the destruction tag"
         (let [
@@ -369,7 +370,7 @@
       (t/is (> (->> expired-valvonta-ids (mapv find-linked-vo-tiedoksi) ->result-count ) 0))
       (t/is (> (->> non-expired-valvonta-id (find-linked-vo-tiedoksi) count) 0)))
 
-    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user false)
 
     (t/testing "There are no linked vo_tiedoksi after running the destruction in the expired valvontas"
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-vo-tiedoksi ) ->result-count) 0)))
@@ -397,7 +398,7 @@
       (t/is (> (->> expired-valvonta-ids (mapv find-linked-vastaanottaja) ->result-count ) 0))
       (t/is (> (->> non-expired-valvonta-id (find-linked-vastaanottaja) count) 0)))
 
-    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user false)
 
     (t/testing "There are no linked vastaanottaja after running the destruction in the expired valvontas"
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-vastaanottaja ) ->result-count) 0)))
@@ -448,7 +449,7 @@
       (t/is (> (->> expired-valvonta-ids (mapv find-linked-viesti-reader) ->result-count ) 0))
       (t/is (> (->> non-expired-valvonta-id (find-linked-viesti-reader) count) 0)))
 
-    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user false)
 
     (t/testing "There are no linked viesti-reader after running the destruction in the expired valvontas"
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-viesti-reader ) ->result-count) 0)))
@@ -476,7 +477,7 @@
       (t/is (> (->> expired-valvonta-ids (mapv find-linked-viesti) ->result-count ) 0))
       (t/is (> (->> non-expired-valvonta-id (find-linked-viesti) count) 0)))
 
-    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user false)
 
     (t/testing "There are no linked viesti after running the destruction in the expired valvontas"
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-viesti ) ->result-count) 0)))
@@ -536,7 +537,7 @@
           (when (= (:contenttype viesti-liite-result) "application/octet-stream")
             (t/is (true? (file-service/file-exists? ts/*aws-s3-client* (viesti-service/file-path (:viestiketju-id viesti-liite-result) (:viesti-liite-id viesti-liite-result))))))))
 
-      (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+      (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user false)
 
       (t/testing "All the version of the expired files have the destruction tag"
         (let [
@@ -607,7 +608,7 @@
         (t/is (> (count expired-audit) 0))
         (t/is (> (count non-expired-audit) 0))))
 
-    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user false)
 
     (t/testing "There are no linked viestiketju after running the destruction in the expired valvontas"
       (t/is (= (->> expired-valvonta-ids (mapv find-linked-viestiketju ) ->result-count) 0)))
@@ -693,7 +694,8 @@
     (service/anonymize-expired-vo-valvontas-and-destroy-linked-data
       ts/*db*
       ts/*aws-s3-client*
-      system-vo-expiration-user)
+      system-vo-expiration-user
+      false)
 
     (t/testing "Expired valvontas are anonymized"
       (t/is (every? is-vo-toimenpide-anonymized? expired-valvonta-ids)))
@@ -761,7 +763,7 @@
         (t/is (> (count expired-audit) 0))
         (t/is (> (count non-expired-audit) 0))))
 
-    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user)
+    (service/anonymize-expired-vo-valvontas-and-destroy-linked-data ts/*db* ts/*aws-s3-client* system-vo-expiration-user false)
     (t/testing "All versions of expired valvonta documents have the destruction tag"
       (doseq [file-key expired-document-keys]
         (t/is (all-file-versions-have-destruction-tag? file-key))))
