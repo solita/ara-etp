@@ -363,12 +363,15 @@
              :middleware [[security/wrap-db-application-name
                             (kayttaja-service/system-kayttaja :valvonta-oikeellisuus-expiration)]
                            [security/wrap-whoami-for-internal-valvonta-oikeellisuus-expiration-api]]
+             :parameters {:query {(schema/optional-key :dry-run) schema/Bool}}
              :responses  {200 {:body nil}}
-             :handler    (fn [{:keys [db aws-s3-client whoami]}]
+             :handler    (fn [{{{:keys [dry-run]} :query} :parameters :keys [db aws-s3-client whoami]}]
                            (r/response
                              (concurrent/run-background
                                #(vo-destruction-service/anonymize-expired-vo-valvontas-and-destroy-linked-data
                                   db
                                   aws-s3-client
-                                  whoami)
+                                  whoami
+                                  ;; Dry-run is on by default. Pass dry-run=false to really delete.
+                                  (if (nil? dry-run) true dry-run))
                                "Expired valvonta oikeellisuus destruction failed")))}}]]])

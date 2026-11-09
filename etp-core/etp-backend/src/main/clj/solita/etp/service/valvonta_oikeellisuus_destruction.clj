@@ -236,10 +236,7 @@
             expired-vo-toimenpide-rows)))
       empty-destruction-counts)))
 
-(defn anonymize-expired-vo-valvontas-and-destroy-linked-data
-  ([db aws-s3-client whoami]
-   (anonymize-expired-vo-valvontas-and-destroy-linked-data db aws-s3-client whoami false))
-  ([db aws-s3-client whoami dry-run?]
+(defn anonymize-expired-vo-valvontas-and-destroy-linked-data [db aws-s3-client whoami dry-run?]
   (assert-whoami! whoami)
   (let [expired-vo-toimenpide-rows (find-expired-oikeellisuuden-valvonta-ids db)
         ;; Process each energiatodistus's toimenpiteet in a separate transaction
@@ -262,4 +259,4 @@
           empty-destruction-counts
           expired-vo-toimenpiteet-by-energiatodistus)]
     (log/info (str "Valvonta oikeellisuus destruction " (when dry-run? "(dry-run) ") "finished. Affected resources: ") destruction-counts)
-    destruction-counts)))
+    destruction-counts))
