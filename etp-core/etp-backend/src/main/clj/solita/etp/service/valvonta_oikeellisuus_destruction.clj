@@ -26,7 +26,7 @@
   (file/delete-file aws-s3-client file-key))
 
 (defn- delete-from-s3! [aws-s3-client file-key {:keys [log-when-file-missing? dry-run?]}]
-  (if (file/file-exists? aws-s3-client file-key)
+  (if (file/file-exists-or-forbidden? aws-s3-client file-key)
     (if dry-run?
       (log/info (str "Dry-run: would delete " file-key " from S3"))
       (do
@@ -247,15 +247,21 @@
           (fn [total [_ vo-toimenpide-rows]]
             (add-counts
               total
-              (jdbc/with-db-transaction [db db]
-                (let [counts (destroy-expired-vo-toimenpiteet!
-                               db
-                               aws-s3-client
-                               dry-run?
-                               vo-toimenpide-rows)]
-                  (when dry-run?
-                    (jdbc/db-set-rollback-only! db))
-                  counts))))
+              (try
+                (jdbc/with-db-transaction [db db]
+                                          (let [counts (destroy-expired-vo-toimenpiteet!
+                                                         db
+                                                         aws-s3-client
+                                                         dry-run?
+                                                         vo-toimenpide-rows)]
+                                            (when dry-run?
+                                              (jdbc/db-set-rollback-only! db))
+                                            counts))
+                (catch Exception e
+                  (log/error e
+                             "Could not delete oikeellisuuden valvonta for energiatodistus-id: "
+                             (:energiatodistus-id (first vo-toimenpide-rows)))
+                  {}))))
           empty-destruction-counts
           expired-vo-toimenpiteet-by-energiatodistus)]
     (log/info (str "Valvonta oikeellisuus destruction " (when dry-run? "(dry-run) ") "finished. Affected resources: ") destruction-counts)

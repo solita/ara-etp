@@ -72,11 +72,19 @@
     (s3/get-object-head aws-s3-client key)
     true
     (catch ExceptionInfo e
-      (let [{:keys [type]} (ex-data e)
-            new-exception-info (ex-info (str "Failed to check existence of " key ": " type) {:type :ae-2861-temporary-type} e)]
+      (let [{:keys [type]} (ex-data e)]
         (if (= type :resource-not-found)
           false
-          (throw new-exception-info))))))
+          (throw e))))))
+
+(defn file-exists-or-forbidden? [aws-s3-client key]
+  (try
+    (file-exists? aws-s3-client key)
+    (catch ExceptionInfo e
+      (let [{:keys [type]} (ex-data e)]
+        (if (= type :resource-forbidden)
+          true
+          (throw e))))))
 
 (defn upsert-file-in-parts
   "Uploads a file to S3 in parts.
