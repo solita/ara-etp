@@ -34,9 +34,13 @@
 
 
 (defn test-energiamuoto [versio energiamuoto]
-  (t/is (= (e-luokka-service/e-luku versio (et 1 {energiamuoto 1}))
-           (.setScale (energiamuoto (e-luokka-service/energiamuotokertoimet versio nil))
-                      0 RoundingMode/CEILING))))
+  (let [energiatodistus (et 1 {energiamuoto 1})]
+    (t/is (= (e-luokka-service/e-luku versio energiatodistus)
+             (.setScale (energiamuoto
+                         (e-luokka-service/energiamuotokertoimet
+                           versio
+                           energiatodistus))
+                        0 RoundingMode/CEILING)))))
 
 (t/deftest e-luku-kerroin-2018
   (test-energiamuoto 2018 :fossiilinen-polttoaine)

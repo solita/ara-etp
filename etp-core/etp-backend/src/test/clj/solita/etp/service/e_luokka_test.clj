@@ -572,10 +572,16 @@
     (t/is (nil? (service/muutettu-kaukolampokerroin 2018 (et-with-kaukolampo 2 0.2M))))))
 (t/deftest energiamuotokertoimet-test
   (t/is (= 0.38M (:kaukolampo (service/energiamuotokertoimet 2027 nil))))
-  (t/is (= 0.2M (:kaukolampo (service/energiamuotokertoimet 2027 0.2M))))
-  (t/is (= 0.5M (:kaukolampo (service/energiamuotokertoimet 2018 0.2M)))))
+  (t/is (= 0.2M (:kaukolampo
+                 (service/energiamuotokertoimet 2027
+                                                 (et-with-kaukolampo 2 0.2M)))))
+  (t/is (= 0.5M (:kaukolampo
+                 (service/energiamuotokertoimet 2018
+                                                 (et-with-kaukolampo 2 0.2M))))))
 (t/deftest painotettu-ostoenergiankulutus-kaukolampo-kerroin-test
   (let [energiamuodot {:kaukolampo 100M}]
     (t/is (= 38M (service/painotettu-ostoenergiankulutus 2027 energiamuodot nil)))
-    (t/is (= 20M (service/painotettu-ostoenergiankulutus 2027 energiamuodot 0.2M)))
-    (t/is (= 70M (service/painotettu-ostoenergiankulutus 2013 energiamuodot 0.2M)))))
+    (t/is (= 20M (service/painotettu-ostoenergiankulutus
+                   2027 energiamuodot (et-with-kaukolampo 2 0.2M))))
+    (t/is (= 70M (service/painotettu-ostoenergiankulutus
+                   2013 energiamuodot (et-with-kaukolampo 2 0.2M))))))

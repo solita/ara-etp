@@ -43,7 +43,7 @@
           (get-in schema path))))
 
 (defn- kerroin-2027-sql [key]
-  (let [default (get (e-luokka/energiamuotokertoimet 2027 nil) key)]
+  (let [default (get-in e-luokka/fixed-energiamuotokertoimet [2027 key])]
     (if (= key :kaukolampo)
       ;; Effective coefficient: marked value only when laatimisvaihe is 2
       (str "(case when energiatodistus.pt$laatimisvaihe = 2 then coalesce("
@@ -54,9 +54,9 @@
 (defn- painotettu-kulutus-sql [path key]
   (str (field->db-column (conj path (name key))) " * (case energiatodistus.versio"
        " when 2013 then "
-       (get (e-luokka/energiamuotokertoimet 2013 nil) key)
+  (get-in e-luokka/fixed-energiamuotokertoimet [2013 key])
        " when 2018 then "
-       (get (e-luokka/energiamuotokertoimet 2018 nil) key)
+  (get-in e-luokka/fixed-energiamuotokertoimet [2018 key])
        " when 2027 then "
        (kerroin-2027-sql key)
        " end)"))

@@ -259,7 +259,7 @@
             versio alakayttotarkoitus-id nettoala e-luku
             tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset))
 
-(def ^:private fixed-energiamuotokertoimet
+(def fixed-energiamuotokertoimet
   {2027 {:fossiilinen-polttoaine 1M
          :sahko 0.90M
          :kaukojaahdytys 0.21M
@@ -290,16 +290,17 @@
             bigdec)))
 
 (defn energiamuotokertoimet
-  "Returns the energy form coefficients for versio."
-  [versio kaukolampo-kerroin]
-  (cond-> (get fixed-energiamuotokertoimet versio)
-    (and (= versio 2027) kaukolampo-kerroin)
-    (assoc :kaukolampo (bigdec kaukolampo-kerroin))))
+  "Returns the effective energy form coefficients for an energiatodistus."
+  [versio energiatodistus]
+  (let [kaukolampo-kerroin (muutettu-kaukolampokerroin versio energiatodistus)]
+    (cond-> (get fixed-energiamuotokertoimet versio)
+      kaukolampo-kerroin
+      (assoc :kaukolampo kaukolampo-kerroin))))
 
-(defn painotettu-ostoenergiankulutus [versio energiamuodot kaukolampo-kerroin]
+(defn painotettu-ostoenergiankulutus [versio energiamuodot energiatodistus]
   (logic/if-let*
     [fixed-energiamuodot (some-> energiamuodot (dissoc :muu :kaukolampo-kerroin))
-     muotokerroin (energiamuotokertoimet versio kaukolampo-kerroin)]
+     muotokerroin (energiamuotokertoimet versio energiatodistus)]
     (with-precision 20
       (reduce + 0M (map #(* (bigdec (or %1 1M)) (bigdec (or %2 0M)))
                         (concat
@@ -310,10 +311,10 @@
                           (map :ostoenergia (:muu energiamuodot))))))))
 
 (defn- e-luku-from-energiamuodot
-  [versio energiamuodot nettoala kaukolampo-kerroin]
+  [versio energiamuodot nettoala energiatodistus]
   (logic/if-let*
     [^BigDecimal kulutus
-     (painotettu-ostoenergiankulutus versio energiamuodot kaukolampo-kerroin)
+     (painotettu-ostoenergiankulutus versio energiamuodot energiatodistus)
      ^BigDecimal nettoala (some-> nettoala bigdec)]
     (when-not (zero? nettoala) (.divide kulutus nettoala 0 RoundingMode/CEILING))))
 
@@ -324,7 +325,7 @@
   (e-luku-from-energiamuodot versio
                              (-> energiatodistus :tulokset :kaytettavat-energiamuodot)
                              (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
-                             (muutettu-kaukolampokerroin versio energiatodistus)))
+                             energiatodistus))
 
 (defn e-luku-from-ppp-vaihe
   "Calculate e-luku from PPP vaihe data.
@@ -338,4 +339,4 @@
      :kaukolampo             (-> ppp-vaihe :tulokset :ostoenergian-tarve-kaukolampo)
      :uusiutuva-polttoaine   (-> ppp-vaihe :tulokset :ostoenergian-tarve-uusiutuvat-pat)}
     (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
-    (muutettu-kaukolampokerroin versio energiatodistus)))
+    energiatodistus))
