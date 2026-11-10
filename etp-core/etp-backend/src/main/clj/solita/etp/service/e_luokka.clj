@@ -1,6 +1,7 @@
 (ns solita.etp.service.e-luokka
   (:require [clojure.core.match :as match]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
+            [solita.etp.service.laatimisvaihe :as laatimisvaihe]
             [solita.common.logic :as logic])
   (:import (java.math RoundingMode)))
 
@@ -276,15 +277,13 @@
          :kaukolampo 0.7M
          :uusiutuva-polttoaine 0.5M}})
 
-(def ^:private olemassa-oleva-rakennus-laatimisvaihe 2)
-
 (defn muutettu-kaukolampokerroin
   "Returns the coefficient specified for an ET2027 existing-building certificate,
   or nil when the default coefficient is used."
   [versio energiatodistus]
   (when (and (= versio 2027)
              (= (-> energiatodistus :perustiedot :laatimisvaihe)
-                olemassa-oleva-rakennus-laatimisvaihe))
+                laatimisvaihe/olemassa-oleva-rakennus))
     (some-> energiatodistus
             :tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin
             bigdec)))

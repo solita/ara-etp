@@ -5,6 +5,8 @@
 
 (def find-laatimisvaiheet luokittelu-service/find-laatimisvaiheet)
 
+(def olemassa-oleva-rakennus 2)
+
 (def ^:private vaihe-keys
   [:rakennuslupa,
    :kayttoonotto,
@@ -29,7 +31,7 @@
 (def olemassaoleva-rakennus?
   (logic/if* (logic/pred = :versio 2013)
              (complement (logic/pipe :perustiedot :uudisrakennus))
-             (partial in-vaihe? 2)))
+             (partial in-vaihe? olemassa-oleva-rakennus)))
 
 (def ^:private allowed-laatimisvaihe-ids
   {2018 #{0 1 2}
