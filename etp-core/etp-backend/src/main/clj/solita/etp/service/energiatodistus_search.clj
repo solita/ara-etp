@@ -347,6 +347,7 @@
     (update-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]
                #(or % (:kaukolampo (e-luokka-service/energiamuotokertoimet 2027))))
     energiatodistus))
+
 (defn search
   "Energiatodistus search for APIs. Makes sure that
    there's a sensible limit for results. Coerces results with

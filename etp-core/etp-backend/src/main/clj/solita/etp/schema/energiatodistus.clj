@@ -383,7 +383,7 @@
                                                          :uusiutuva-energia-vuosituotto-yhteensa common-schema/NonNegative}
                         :tulokset                       {:kaytettavat-energiamuodot
                                                          {:kaukolampo-kerroin KaukolampoKerroin2027}
-                                                         :uusiutuvat-omavaraisenergiat-kokonaistuotanto
+                                                          :uusiutuvat-omavaraisenergiat-kokonaistuotanto
                                                          {:aurinkosahko common-schema/NonNegative
                                                           :aurinkolampo common-schema/NonNegative
                                                           :tuulisahko   common-schema/NonNegative

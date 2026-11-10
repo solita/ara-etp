@@ -14,7 +14,7 @@
 
 (defn- painotettu-ostoenergia
   "Calculate weighted energy from PPP vaihe tulokset using e-luokka energiamuotokerroin.
-  kaukolampo-kerroin is the changed district heating coefficient or nil."
+   kaukolampo-kerroin is the changed district heating coefficient or nil."
   [kaukolampo-kerroin tulokset]
   (when tulokset
     (let [kertoimet (e-luokka-service/energiamuotokertoimet 2027 kaukolampo-kerroin)]
@@ -24,6 +24,7 @@
                        (* (bigdec (or (get tulokset ppp-key) 0))
                           (bigdec (or (get kertoimet kerroin-key) 0))))
                      ppp-key->energiamuotokerroin-key))))))
+
 (defn- energia-kustannukset
   "Calculate energy bill from PPP vaihe ostoenergian-tarve values.
    Returns cost in € per year."

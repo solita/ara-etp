@@ -275,7 +275,9 @@
          :kaukojaahdytys 0.4M
          :kaukolampo 0.7M
          :uusiutuva-polttoaine 0.5M}})
+
 (def ^:private olemassa-oleva-rakennus-laatimisvaihe 2)
+
 (defn muutettu-kaukolampokerroin
   "The district heating energy form coefficient changed by the laatija, or nil
   when the fixed coefficient of the versio is used. The changed coefficient is
@@ -288,6 +290,7 @@
     (some-> energiatodistus
             :tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin
             bigdec)))
+
 (defn energiamuotokertoimet
   "Energy form coefficients of the versio. This is the only way to access the
   coefficients so that the changed district heating coefficient can't be
@@ -298,6 +301,7 @@
    (cond-> (get fixed-energiamuotokertoimet versio)
      (and (= versio 2027) kaukolampo-kerroin)
      (assoc :kaukolampo (bigdec kaukolampo-kerroin)))))
+
 (defn painotettu-ostoenergiankulutus [versio energiamuodot kaukolampo-kerroin]
   (logic/if-let*
     [fixed-energiamuodot (some-> energiamuodot (dissoc :muu :kaukolampo-kerroin))
@@ -310,10 +314,12 @@
                         (concat
                           (vals fixed-energiamuodot)
                           (map :ostoenergia (:muu energiamuodot))))))))
+
 (defn- e-luku-from-energiamuodot
   [versio energiamuodot nettoala kaukolampo-kerroin]
   (logic/if-let*
-    [^BigDecimal kulutus (painotettu-ostoenergiankulutus versio energiamuodot kaukolampo-kerroin)
+    [^BigDecimal kulutus
+     (painotettu-ostoenergiankulutus versio energiamuodot kaukolampo-kerroin)
      ^BigDecimal nettoala (some-> nettoala bigdec)]
     (when-not (zero? nettoala) (.divide kulutus nettoala 0 RoundingMode/CEILING))))
 
