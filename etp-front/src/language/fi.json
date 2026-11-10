@@ -8,6 +8,7 @@
     "max-length": "Pituus saa olla enintään {max} merkkiä",
     "min-number": "Pienin sallittu arvo on {min}.",
     "max-number": "Suurin sallittu arvo on {max}.",
+    "max-two-decimals": "Enintään kaksi desimaalia sallitaan.",
     "invalid-url": "Virheellinen www-osoite",
     "invalid-email": "Virheellinen email",
     "invalid-ytunnus": "Virheellinen ytunnus",
@@ -940,6 +941,7 @@
           "kaukolampo": "Kauko\u00ADlämpö",
           "uusiutuva-polttoaine": "Uusiu\u00ADtuva poltto\u00ADaine"
         },
+        "kaukolampo-kerroin": "Kaukolämmön energiamuodon kerroin",
         "fossiilinen-polttoaine": "Ostoenergia / Fossiilinen polttoaine",
         "fossiilinen-polttoaine-painotettu": "Painotettu kulutus / Fossiilinen polttoaine (kWhE/vuosi)",
         "fossiilinen-polttoaine-painotettu-neliovuosikulutus": "Painotettu kulutus / Fossiilinen polttoaine (kWhE/(m²vuosi))",

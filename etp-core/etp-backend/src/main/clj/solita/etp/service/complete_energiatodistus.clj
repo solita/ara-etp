@@ -202,7 +202,14 @@
           (assoc-in [:perustiedot :paakayttotarkoitus-id] paakayttotarkoitus-id)
           (assoc-in [:perustiedot :paakayttotarkoitus-fi] (:label-fi paakayttotarkoitus))
           (assoc-in [:perustiedot :paakayttotarkoitus-sv] (:label-sv paakayttotarkoitus))
-          (update-in [:tulokset :kaytettavat-energiamuodot] (partial merge (energiamuotokertoimet versio)))
+          (update-in [:tulokset :kaytettavat-energiamuodot]
+                     #(merge %
+                             (energiamuotokertoimet versio)
+                             ;; Effective coefficient: the value marked to the
+                             ;; energiatodistus or the fixed one of the versio
+                             {:kaukolampo-kerroin
+                              (e-luokka-service/kaukolampo-energiamuotokerroin
+                                versio energiatodistus)}))
           (update-in [:tulokset :kuukausierittely] kuukausierittely-hyodynnetty)
           (assoc-kuukausierittely-summat)
           (combine-keys #(when (= versio 2013) (+ %1 %2))

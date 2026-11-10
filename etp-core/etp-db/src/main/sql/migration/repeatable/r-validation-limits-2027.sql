@@ -35,7 +35,10 @@ values
 (2027, 'lt$lkvn_kaytto$lammitysenergian_nettotarve', 0, 40, 0, 999999),
 (2027, 'lt$lkvn_kaytto$ominaiskulutus',              0, 700, 0, 999999),
 
-(2027, 'lt$jaahdytysjarjestelma$jaahdytyskauden_painotettu_kylmakerroin', 0, 3.5, 0, 30)
+(2027, 'lt$jaahdytysjarjestelma$jaahdytyskauden_painotettu_kylmakerroin', 0, 3.5, 0, 30),
+
+-- Kaukolämmön energiamuotokerroin (muutettavissa vain olemassa olevissa rakennuksissa)
+(2027, 't$kaytettavat_energiamuodot$kaukolampo_kerroin', 0.2, 0.38, 0.2, 0.38)
 
 on conflict (column_name, versio) do update set
   warning$min = excluded.warning$min,

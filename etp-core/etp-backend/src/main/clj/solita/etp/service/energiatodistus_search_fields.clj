@@ -42,6 +42,15 @@
     (into {} (map (per-nettoala-entry (map name path) rename-key))
           (get-in schema path))))
 
+(defn- kerroin-2027-sql [key]
+  (let [default (get-in e-luokka/energiamuotokerroin [2027 key])]
+    (if (= key :kaukolampo)
+      ;; Effective coefficient: marked value only when laatimisvaihe is 2
+      (str "(case when energiatodistus.pt$laatimisvaihe = 2 then coalesce("
+           (field->db-column ["energiatodistus" "tulokset" "kaytettavat-energiamuodot" "kaukolampo-kerroin"])
+           ", " default ") else " default " end)")
+      default)))
+
 (defn- painotettu-kulutus-sql [path key]
   (str (field->db-column (conj path (name key))) " * (case energiatodistus.versio"
        " when 2013 then "
@@ -49,7 +58,7 @@
        " when 2018 then "
        (get-in e-luokka/energiamuotokerroin [2018 key])
        " when 2027 then "
-       (get-in e-luokka/energiamuotokerroin [2027 key])
+       (kerroin-2027-sql key)
        " end)"))
 
 (defn- painotettu-kulutus-entry [[key schema]]

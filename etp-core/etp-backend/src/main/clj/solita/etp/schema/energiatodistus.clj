@@ -360,6 +360,13 @@
    :hiilijalanjalki         Hiilijalanjalki
    :hiilikadenjalki         Hiilikadenjalki})
 
+(def KaukolampoKerroin2027Value
+  (schema/constrained schema/Num #(<= 0.2 % 0.38) "[0.2, 0.38]"))
+(def KaukolampoKerroin2027
+  "Changeable district heating energy form coefficient (AE-2777). Nullable:
+  null means that the fixed coefficient of the system is used."
+  (schema/maybe KaukolampoKerroin2027Value))
+
 (def EnergiatodistusSave2027
   (-> (dissoc-not-in-2027 EnergiatodistusSave2018)
       (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key
@@ -374,7 +381,9 @@
                                                          :uusiutuvat-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
                                                          :fossiiliset-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
                                                          :uusiutuva-energia-vuosituotto-yhteensa common-schema/NonNegative}
-                        :tulokset                       {:uusiutuvat-omavaraisenergiat-kokonaistuotanto
+                        :tulokset                       {:kaytettavat-energiamuodot
+                                                         {:kaukolampo-kerroin KaukolampoKerroin2027}
+                                                         :uusiutuvat-omavaraisenergiat-kokonaistuotanto
                                                          {:aurinkosahko common-schema/NonNegative
                                                           :aurinkolampo common-schema/NonNegative
                                                           :tuulisahko   common-schema/NonNegative

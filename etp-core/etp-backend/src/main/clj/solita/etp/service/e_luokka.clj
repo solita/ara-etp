@@ -276,11 +276,35 @@
          :kaukolampo 0.7M
          :uusiutuva-polttoaine 0.5M}})
 
+(def ^:private olemassa-oleva-rakennus-laatimisvaihe 2)
+
+(defn kaukolampo-energiamuotokerroin
+  "Effective district heating energy form coefficient of an energiatodistus.
+
+  In ET2027 the laatija may change the coefficient when laatimisvaihe is
+  'olemassa oleva rakennus'. Otherwise (and when the coefficient is not set)
+  the fixed coefficient of the version is used."
+  [versio energiatodistus]
+  (let [default (get-in energiamuotokerroin [versio :kaukolampo])
+        marked (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin)]
+    (if (and (= versio 2027)
+             (= (-> energiatodistus :perustiedot :laatimisvaihe)
+                olemassa-oleva-rakennus-laatimisvaihe)
+             (some? marked))
+      (bigdec marked)
+      default)))
+
+(defn energiamuotokertoimet
+  "Effective energy form coefficients of an energiatodistus."
+  [versio energiatodistus]
+  (some-> (get energiamuotokerroin versio)
+          (assoc :kaukolampo (kaukolampo-energiamuotokerroin versio energiatodistus))))
+
 (defn painotettu-ostoenergiankulutus [versio energiatodistus]
   (logic/if-let*
     [energiamuodot (-> energiatodistus :tulokset :kaytettavat-energiamuodot)
-     fixed-energiamuodot (dissoc energiamuodot :muu)
-     muotokerroin (get energiamuotokerroin versio)]
+     fixed-energiamuodot (dissoc energiamuodot :muu :kaukolampo-kerroin)
+     muotokerroin (energiamuotokertoimet versio energiatodistus)]
     (with-precision 20
       (reduce + 0M (map #(* (bigdec (or %1 1M)) (bigdec (or %2 0M)))
                         (concat
@@ -312,7 +336,12 @@
                     :kaukojaahdytys         (-> ppp-vaihe :tulokset :ostoenergian-tarve-kaukojaahdytys)
                     :kaukolampo             (-> ppp-vaihe :tulokset :ostoenergian-tarve-kaukolampo)
                     :uusiutuva-polttoaine   (-> ppp-vaihe :tulokset :ostoenergian-tarve-uusiutuvat-pat)}
-     ;; Create a temporary ET-like structure for calculation
-     temp-et {:tulokset {:kaytettavat-energiamuodot energiamuodot}
-              :lahtotiedot {:lammitetty-nettoala nettoala}}]
+     ;; Create a temporary ET-like structure for calculation. The district heating
+     ;; coefficient of the energiatodistus is used also for the PPP vaihe.
+     temp-et {:perustiedot  {:laatimisvaihe (-> energiatodistus :perustiedot :laatimisvaihe)}
+              :tulokset     {:kaytettavat-energiamuodot
+                             (assoc energiamuodot
+                               :kaukolampo-kerroin
+                               (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin))}
+              :lahtotiedot  {:lammitetty-nettoala nettoala}}]
     (e-luku versio temp-et)))

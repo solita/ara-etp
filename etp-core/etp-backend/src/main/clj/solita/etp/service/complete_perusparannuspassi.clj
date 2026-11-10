@@ -13,17 +13,17 @@
    :ostoenergian-tarve-kaukojaahdytys   :kaukojaahdytys})
 
 (defn- painotettu-ostoenergia
-  "Calculate weighted energy from PPP vaihe tulokset using e-luokka energiamuotokerroin"
-  [tulokset]
+  "Calculate weighted energy from PPP vaihe tulokset using e-luokka energiamuotokerroin.
+  The district heating coefficient is the effective one of the energiatodistus."
+  [energiatodistus tulokset]
   (when tulokset
-    (let [kertoimet (e-luokka-service/energiamuotokerroin 2027)]
+    (let [kertoimet (e-luokka-service/energiamuotokertoimet 2027 energiatodistus)]
       (with-precision 20
         (reduce + 0M
                 (map (fn [[ppp-key kerroin-key]]
                        (* (bigdec (or (get tulokset ppp-key) 0))
                           (bigdec (or (get kertoimet kerroin-key) 0))))
                      ppp-key->energiamuotokerroin-key))))))
-
 (defn- energia-kustannukset
   "Calculate energy bill from PPP vaihe ostoenergian-tarve values.
    Returns cost in € per year."
@@ -143,7 +143,7 @@
                          (:tayttaa-a0-vaatimukset ppp-perustiedot))
                        :e-luokka)
           ostoenergia (total-ostoenergia-ppp tulokset)
-          painotettu (painotettu-ostoenergia tulokset)
+          painotettu (painotettu-ostoenergia energiatodistus tulokset)
           kustannukset (energia-kustannukset tulokset ppp-tulokset)
           toteutunut-ostoenergia (total-toteutunut-ostoenergia tulokset)
           toteutunut-kustannukset (toteutunut-energia-kustannukset tulokset ppp-tulokset)

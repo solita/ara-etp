@@ -40,7 +40,8 @@
       (dissoc :kayttotarkoitusluokka-id)))
 
 (defn generate-add [versio ready-for-signing?]
-  (generators/complete
+  (cond->
+    (generators/complete
     (merge
       {:perustiedot                     (merge
                                           {:kieli           (rand-int 2)
@@ -65,7 +66,10 @@
         {:ilmastoselvitys {:laadintaperuste (rand-int 2)}}))
     (schema-by-version-and-ready-for-signing versio
                                              ready-for-signing?)
-    generators))
+    generators)
+    ;; The changeable kaukolampo coefficient is not set by default:
+    ;; null means that the fixed coefficient is used.
+    (= versio 2027) (assoc-in [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin] nil)))
 
 (defn generate-adds [n versio ready-for-signing?]
   (repeatedly n #(generate-add versio ready-for-signing?)))

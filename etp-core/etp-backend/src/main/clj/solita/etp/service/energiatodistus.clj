@@ -568,6 +568,10 @@
                                   energiatodistus (find-energiatodistus db id)]
                               (if (= result 1)
                                 (do
+                                  ;; Same transaction with the other checks: failed signing
+                                  ;; start does not leave the reset in effect.
+                                  (energiatodistus-db/reset-kaukolampo-kerroin-when-not-allowed!
+                                    db {:id id})
                                   (validate-required! db energiatodistus)
                                   (laatimisvaihe-service/validate-laatimisvaihe-for-versio! energiatodistus)
                                   (laatija-service/validate-laatija-patevyys! db (:id whoami))

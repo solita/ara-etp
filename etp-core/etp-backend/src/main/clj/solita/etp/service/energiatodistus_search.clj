@@ -2,6 +2,7 @@
   (:require [clojure.string :as str]
             [clojure.java.jdbc :as jdbc]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
+            [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.energiatodistus-search-fields :as search-fields]
             [schema.core :as schema]
             [solita.common.map :as m]
@@ -334,6 +335,18 @@
   (let [query-limit 500]
     (update query :limit #(min query-limit (or % query-limit)))))
 
+(defn- effective-kaukolampo-kerroin-for-public
+  "The public API returns the effective district heating coefficient of
+  ET2027 (AE-2777). Public results are signed energiatodistukset, so the
+  stored value is already reset when it is not allowed (see signing). Null
+  means the fixed coefficient."
+  [whoami energiatodistus]
+  (if (and (rooli-service/public? whoami)
+           (contains? (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])
+                      :kaukolampo-kerroin))
+    (update-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]
+               #(or % (get-in e-luokka-service/energiamuotokerroin [2027 :kaukolampo])))
+    energiatodistus))
 (defn search
   "Energiatodistus search for APIs. Makes sure that
    there's a sensible limit for results. Coerces results with
@@ -341,7 +354,8 @@
   [db whoami query schema]
   (let [query (enforce-query-limit query)]
     (->> (jdbc/query db (sql-query (select schema) whoami query) nil)
-         (map (energiatodistus-service/schema->db-row->energiatodistus schema)))))
+         (map (energiatodistus-service/schema->db-row->energiatodistus schema))
+         (map (partial effective-kaukolampo-kerroin-for-public whoami)))))
 
 (defn reducible-search
   "Energiatodistus search for other services. Does reducibly-query meaning that

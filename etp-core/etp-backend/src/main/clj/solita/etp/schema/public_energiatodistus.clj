@@ -35,6 +35,13 @@
   (select-keys energiatodistus-schema/Tulokset
                [:kaytettavat-energiamuodot]))
 
+(def Tulokset2027
+  "In ET2027 the public API returns also the energiatodistus specific
+  (effective) district heating energy form coefficient."
+  (assoc-in Tulokset
+            [:kaytettavat-energiamuodot :kaukolampo-kerroin]
+            energiatodistus-schema/KaukolampoKerroin2027))
+
 (defn energiatodistus-versio [versio]
   (-> (energiatodistus-schema/energiatodistus-versio
         versio
@@ -43,6 +50,7 @@
            :lahtotiedot Lahtotiedot
            :tulokset    (case versio
                           2013 Tulokset2013
+                          2027 Tulokset2027
                           Tulokset)}))
       (dissoc :laatija-fullname
               :laatija-id

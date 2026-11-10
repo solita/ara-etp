@@ -8,6 +8,7 @@
     "max-length": "Längden får vara högst {max} tecken",
     "min-number": "Minsta tillåtna värde är {min}.",
     "max-number": "Högsta tillåtna värde är {max}.",
+    "max-two-decimals": "Högst två decimaler tillåts.",
     "invalid-url": "Felaktig webbadress",
     "invalid-email": "Felaktig e-post",
     "invalid-ytunnus": "Felaktigt FO-nummer",
@@ -912,6 +913,7 @@
           "kaukolampo": "Fjärr\u00ADvärme",
           "uusiutuva-polttoaine": "Förr\u00ADnybara bränslen"
         },
+        "kaukolampo-kerroin": "Energiformsfaktor för fjärrvärme",
         "fossiilinen-polttoaine": "Köpt energi / Fossila bränslen",
         "fossiilinen-polttoaine-painotettu": "Viktad energiförbrukning / Fossila bränslen (kWhE/år)",
         "fossiilinen-polttoaine-painotettu-neliovuosikulutus": "Viktad energiförbrukning/ Fossila bränslen (kWhE/(m²år))",

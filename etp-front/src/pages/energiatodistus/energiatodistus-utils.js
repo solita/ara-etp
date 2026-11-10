@@ -1,4 +1,5 @@
 import * as R from 'ramda';
+import { get, writable } from 'svelte/store';
 
 import * as deep from '@Utility/deep-objects';
 import * as Maybe from '@Utility/maybe-utils';
@@ -6,6 +7,7 @@ import * as Either from '@Utility/either-utils';
 import * as EitherMaybe from '@Utility/either-maybe.js';
 import * as objects from '@Utility/objects';
 import * as fxmath from '@Utility/fxmath';
+import * as Laatimisvaiheet from './laatimisvaiheet';
 
 export const breadcrumb1stLevel = i18n => ({
   label: i18n('navigation.energiatodistukset'),
@@ -139,11 +141,63 @@ export const sumEtValues = R.compose(
 
 export const partOfSum = R.curry((sum, value) => R.lift(R.divide)(value, sum));
 
-export const energiamuotokertoimet = () => ({
+/**
+ * Default (fixed) energiamuotokertoimet fetched from the backend,
+ * for example { 2027: { kaukolampo: 0.38, ... } }. The ET2027 district
+ * heating default is not hardcoded in the frontend (AE-2777).
+ */
+export const defaultEnergiamuotokertoimet = writable({});
+const kaukolampoKerroinPath = [
+  'tulokset',
+  'kaytettavat-energiamuodot',
+  'kaukolampo-kerroin'
+];
+/**
+ * Coefficient of district heating marked to the energiatodistus (ET2027).
+ * None if the laatija has not changed it.
+ */
+export const markedKaukolampoKerroin = R.compose(
+  EitherMaybe.toMaybe,
+  R.pathOr(Maybe.None(), kaukolampoKerroinPath)
+);
+/**
+ * Default district heating coefficient of the version from the backend.
+ */
+export const defaultKaukolampoKerroin = (
+  versio,
+  defaults = get(defaultEnergiamuotokertoimet)
+) => Maybe.fromNull(R.path([versio, 'kaukolampo'], defaults));
+/**
+ * Effective district heating coefficient of the energiatodistus. The marked
+ * value is used only in ET2027 when laatimisvaihe is "olemassa oleva rakennus".
+ * Same rule as in backend: solita.etp.service.e-luokka/kaukolampo-energiamuotokerroin
+ */
+export const effectiveKaukolampoKerroin = (
+  energiatodistus,
+  defaults = get(defaultEnergiamuotokertoimet)
+) => {
+  const versio = R.prop('versio', energiatodistus);
+  const marked =
+    versio === 2027 && Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)
+      ? markedKaukolampoKerroin(energiatodistus)
+      : Maybe.None();
+  return Maybe.isSome(marked)
+    ? marked
+    : defaultKaukolampoKerroin(versio, defaults);
+};
+export const energiamuotokertoimet = (
+  energiatodistus,
+  defaults = get(defaultEnergiamuotokertoimet)
+) => ({
   2027: {
     'fossiilinen-polttoaine': Maybe.Some(1),
     kaukojaahdytys: Maybe.Some(0.21),
-    kaukolampo: Maybe.Some(0.38),
+    kaukolampo: energiatodistus
+      ? effectiveKaukolampoKerroin(
+          R.assoc('versio', 2027, energiatodistus),
+          defaults
+        )
+      : defaultKaukolampoKerroin(2027, defaults),
     sahko: Maybe.Some(0.9),
     'uusiutuva-polttoaine': Maybe.Some(0.38)
   },
@@ -162,7 +216,6 @@ export const energiamuotokertoimet = () => ({
     'uusiutuva-polttoaine': Maybe.Some(0.5)
   }
 });
-
 const fieldsWithErittelyOstoenergia = [
   'kaukolampo',
   'sahko',
@@ -289,7 +342,7 @@ export const ostetutEnergiamuodot = R.compose(
   ostettuEnergia
 );
 
-export const eluku = (versio, nettoala, energiamuodot) =>
+export const eluku = (versio, nettoala, energiamuodot, energiatodistus) =>
   R.compose(
     R.lift(Math.ceil),
     R.lift(R.flip(R.divide))(unnestValidation(nettoala)),
@@ -297,8 +350,11 @@ export const eluku = (versio, nettoala, energiamuodot) =>
     R.sum,
     Maybe.findAllSome,
     R.values,
-    R.evolve(R.map(R.lift(R.multiply), energiamuotokertoimet()[versio])),
-    R.map(unnestValidation)
+    R.evolve(
+      R.map(R.lift(R.multiply), energiamuotokertoimet(energiatodistus)[versio])
+    ),
+    R.map(unnestValidation),
+    R.omit(['kaukolampo-kerroin'])
   )(energiamuodot);
 
 /**
@@ -467,7 +523,8 @@ export const uusiutuvanEnergianOsuus = energiatodistus => {
     eluku(
       energiatodistus.versio,
       energiatodistus.lahtotiedot['lammitetty-nettoala'],
-      energiatodistus.tulokset['kaytettavat-energiamuodot']
+      energiatodistus.tulokset['kaytettavat-energiamuodot'],
+      energiatodistus
     )
   );
   if (!nettoala || nettoala <= 0 || eLuku == null) return null;

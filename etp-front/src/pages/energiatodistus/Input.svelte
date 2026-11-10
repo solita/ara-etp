@@ -18,6 +18,7 @@
   export let format = formats.optionalString;
   export let inputLanguage = Maybe.None();
   export let unit;
+  export let placeholder = undefined;
   export let labelUnit;
   export let i18nRoot = 'energiatodistus';
 
@@ -56,6 +57,7 @@
       validators={R.defaultTo([], type.validators)}
       warnValidators={R.defaultTo([], type.warnValidators)}
       i18n={$_}
+      {placeholder}
       {labelUnit} />
   </div>
   <div class="unit" class:disabled>

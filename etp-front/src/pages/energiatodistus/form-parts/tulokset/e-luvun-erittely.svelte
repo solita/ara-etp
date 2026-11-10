@@ -1,5 +1,6 @@
 <script>
   import * as R from 'ramda';
+  import { onMount } from 'svelte';
   import { _ } from '@Language/i18n';
 
   import * as Maybe from '@Utility/maybe-utils';
@@ -16,6 +17,7 @@
 
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
+  import * as Laatimisvaiheet from '@Pages/energiatodistus/laatimisvaiheet';
 
   export let disabled;
   export let schema;
@@ -25,8 +27,32 @@
 
   let eTehokkuusParams = [];
 
+  const defaultKertoimet = EtUtils.defaultEnergiamuotokertoimet;
+  onMount(() => {
+    if (versio === 2027) {
+      Future.fork(
+        _ => {},
+        _ => {},
+        api.loadDefaultEnergiamuotokertoimet(fetch, versio)
+      );
+    }
+  });
+  // The marked district heating coefficient is changeable only in ET2027
+  // when laatimisvaihe is 'olemassa oleva rakennus'
+  $: kaukolampoKerroinChangeable =
+    versio === 2027 &&
+    Laatimisvaiheet.isOlemassaOlevaRakennus(
+      R.assoc('versio', versio, energiatodistus)
+    );
+  $: kaukolampoKerroinPlaceholder = R.compose(
+    Maybe.orSome(''),
+    R.map(formats.numberFormatPrecision(2))
+  )(EtUtils.defaultKaukolampoKerroin(versio, $defaultKertoimet));
   $: energiamuotokertoimet = R.mergeRight(
-    EtUtils.energiamuotokertoimet()[versio],
+    EtUtils.energiamuotokertoimet(
+      R.assoc('versio', versio, energiatodistus),
+      $defaultKertoimet
+    )[versio],
     EtUtils.muutEnergiamuotokertoimet(energiatodistus)
   );
 
@@ -149,11 +175,25 @@
               path={['tulokset', 'kaytettavat-energiamuodot', energiamuoto]} />
           </td>
           <td class="et-table--td">
-            {R.compose(
-              Maybe.get,
-              R.map(formats.numberFormat),
-              R.prop(energiamuoto)
-            )(energiamuotokertoimet)}
+            {#if energiamuoto === 'kaukolampo' && kaukolampoKerroinChangeable}
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                bind:model={energiatodistus}
+                placeholder={kaukolampoKerroinPlaceholder}
+                path={[
+                  'tulokset',
+                  'kaytettavat-energiamuodot',
+                  'kaukolampo-kerroin'
+                ]} />
+            {:else}
+              {R.compose(
+                Maybe.orSome(''),
+                R.map(formats.numberFormat),
+                R.prop(energiamuoto)
+              )(energiamuotokertoimet)}
+            {/if}
           </td>
           <td class="et-table--td et-table--td__fifth">
             {R.compose(

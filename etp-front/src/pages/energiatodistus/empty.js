@@ -350,6 +350,9 @@ export const energiatodistus2027 = _ =>
       },
 
       tulokset: {
+        'kaytettavat-energiamuodot': {
+          'kaukolampo-kerroin': ValidNone()
+        },
         'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
           aurinkosahko: ValidNone(),
           aurinkolampo: ValidNone(),
