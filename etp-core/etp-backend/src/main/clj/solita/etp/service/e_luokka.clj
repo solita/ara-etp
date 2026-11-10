@@ -291,11 +291,10 @@
 
 (defn energiamuotokertoimet
   "Returns the energy form coefficients for versio."
-  ([versio] (energiamuotokertoimet versio nil))
-  ([versio kaukolampo-kerroin]
-   (cond-> (get fixed-energiamuotokertoimet versio)
-     (and (= versio 2027) kaukolampo-kerroin)
-     (assoc :kaukolampo (bigdec kaukolampo-kerroin)))))
+  [versio kaukolampo-kerroin]
+  (cond-> (get fixed-energiamuotokertoimet versio)
+    (and (= versio 2027) kaukolampo-kerroin)
+    (assoc :kaukolampo (bigdec kaukolampo-kerroin))))
 
 (defn painotettu-ostoenergiankulutus [versio energiamuodot kaukolampo-kerroin]
   (logic/if-let*

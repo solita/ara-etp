@@ -342,7 +342,7 @@
            (contains? (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])
                       :kaukolampo-kerroin))
     (update-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]
-               #(or % (:kaukolampo (e-luokka-service/energiamuotokertoimet 2027))))
+               #(or % (:kaukolampo (e-luokka-service/energiamuotokertoimet 2027 nil))))
     energiatodistus))
 
 (defn search
