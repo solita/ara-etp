@@ -77,20 +77,13 @@ const Rakennustunnus = {
 
 /**
  * Changeable district heating energy form coefficient (AE-2777).
- * Interval and at most two decimals. Displayed with two decimals.
+ * Displayed with two decimals.
  */
-const hasMaxTwoDecimals = n => Math.abs(n * 100 - Math.round(n * 100)) < 1e-9;
 const KaukolampoKerroin = {
   parse: parsers.optionalParser(parsers.parseNumber),
   format: R.compose(Maybe.orSome(''), R.map(formats.numberFormatPrecision(2))),
   deserialize: Either.Right,
-  validators: [
-    ...validations.MaybeInterval(0.2, 0.38),
-    validations.liftValidator({
-      predicate: hasMaxTwoDecimals,
-      label: R.applyTo('validation.max-two-decimals')
-    })
-  ]
+  validators: validations.MaybeInterval(0.2, 0.38)
 };
 const FloatNonNegative = Float(0.0, 9999999999);
 const Float1 = Float(0.0, 1.0);

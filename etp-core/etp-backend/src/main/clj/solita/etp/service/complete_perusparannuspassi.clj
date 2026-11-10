@@ -14,10 +14,10 @@
 
 (defn- painotettu-ostoenergia
   "Calculate weighted energy from PPP vaihe tulokset using e-luokka energiamuotokerroin.
-  The district heating coefficient is the effective one of the energiatodistus."
-  [energiatodistus tulokset]
+  kaukolampo-kerroin is the changed district heating coefficient or nil."
+  [kaukolampo-kerroin tulokset]
   (when tulokset
-    (let [kertoimet (e-luokka-service/energiamuotokertoimet 2027 energiatodistus)]
+    (let [kertoimet (e-luokka-service/energiamuotokertoimet 2027 kaukolampo-kerroin)]
       (with-precision 20
         (reduce + 0M
                 (map (fn [[ppp-key kerroin-key]]
@@ -143,7 +143,9 @@
                          (:tayttaa-a0-vaatimukset ppp-perustiedot))
                        :e-luokka)
           ostoenergia (total-ostoenergia-ppp tulokset)
-          painotettu (painotettu-ostoenergia energiatodistus tulokset)
+          painotettu (painotettu-ostoenergia
+                      (e-luokka-service/muutettu-kaukolampokerroin versio energiatodistus)
+                      tulokset)
           kustannukset (energia-kustannukset tulokset ppp-tulokset)
           toteutunut-ostoenergia (total-toteutunut-ostoenergia tulokset)
           toteutunut-kustannukset (toteutunut-energia-kustannukset tulokset ppp-tulokset)

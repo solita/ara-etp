@@ -5,9 +5,6 @@ import * as R from 'ramda';
 
 import * as EtUtils from './energiatodistus-utils';
 
-// The ET2027 district heating default is fetched from the backend (AE-2777)
-EtUtils.defaultEnergiamuotokertoimet.set({ 2027: { kaukolampo: 0.38 } });
-
 describe('Energiatodistus Utils: ', () => {
   describe('unnestValidation', () => {
     it('should return value within Either', () => {

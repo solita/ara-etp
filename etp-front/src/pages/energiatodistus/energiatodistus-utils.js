@@ -1,5 +1,4 @@
 import * as R from 'ramda';
-import { get, writable } from 'svelte/store';
 
 import * as deep from '@Utility/deep-objects';
 import * as Maybe from '@Utility/maybe-utils';
@@ -142,62 +141,32 @@ export const sumEtValues = R.compose(
 export const partOfSum = R.curry((sum, value) => R.lift(R.divide)(value, sum));
 
 /**
- * Default (fixed) energiamuotokertoimet fetched from the backend,
- * for example { 2027: { kaukolampo: 0.38, ... } }. The ET2027 district
- * heating default is not hardcoded in the frontend (AE-2777).
+ * District heating coefficient changed by the laatija (AE-2777). None unless
+ * versio is 2027 and laatimisvaihe is "olemassa oleva rakennus".
+ * Same rule as in backend: solita.etp.service.e-luokka/muutettu-kaukolampokerroin
  */
-export const defaultEnergiamuotokertoimet = writable({});
-const kaukolampoKerroinPath = [
-  'tulokset',
-  'kaytettavat-energiamuodot',
-  'kaukolampo-kerroin'
-];
+export const muutettuKaukolampokerroin = energiatodistus =>
+  R.prop('versio', energiatodistus) === 2027 &&
+  Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)
+    ? EitherMaybe.toMaybe(
+        R.pathOr(Maybe.None(), [
+          'tulokset',
+          'kaytettavat-energiamuodot',
+          'kaukolampo-kerroin'
+        ])(energiatodistus)
+      )
+    : Maybe.None();
 /**
- * Coefficient of district heating marked to the energiatodistus (ET2027).
- * None if the laatija has not changed it.
+ * @param {Maybe} kaukolampoKerroin changed ET2027 district heating coefficient
+ * (see muutettuKaukolampokerroin), None for the fixed coefficient
  */
-export const markedKaukolampoKerroin = R.compose(
-  EitherMaybe.toMaybe,
-  R.pathOr(Maybe.None(), kaukolampoKerroinPath)
-);
-/**
- * Default district heating coefficient of the version from the backend.
- */
-export const defaultKaukolampoKerroin = (
-  versio,
-  defaults = get(defaultEnergiamuotokertoimet)
-) => Maybe.fromNull(R.path([versio, 'kaukolampo'], defaults));
-/**
- * Effective district heating coefficient of the energiatodistus. The marked
- * value is used only in ET2027 when laatimisvaihe is "olemassa oleva rakennus".
- * Same rule as in backend: solita.etp.service.e-luokka/kaukolampo-energiamuotokerroin
- */
-export const effectiveKaukolampoKerroin = (
-  energiatodistus,
-  defaults = get(defaultEnergiamuotokertoimet)
-) => {
-  const versio = R.prop('versio', energiatodistus);
-  const marked =
-    versio === 2027 && Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)
-      ? markedKaukolampoKerroin(energiatodistus)
-      : Maybe.None();
-  return Maybe.isSome(marked)
-    ? marked
-    : defaultKaukolampoKerroin(versio, defaults);
-};
-export const energiamuotokertoimet = (
-  energiatodistus,
-  defaults = get(defaultEnergiamuotokertoimet)
-) => ({
+export const energiamuotokertoimet = (kaukolampoKerroin = Maybe.None()) => ({
   2027: {
     'fossiilinen-polttoaine': Maybe.Some(1),
     kaukojaahdytys: Maybe.Some(0.21),
-    kaukolampo: energiatodistus
-      ? effectiveKaukolampoKerroin(
-          R.assoc('versio', 2027, energiatodistus),
-          defaults
-        )
-      : defaultKaukolampoKerroin(2027, defaults),
+    kaukolampo: Maybe.isSome(kaukolampoKerroin)
+      ? kaukolampoKerroin
+      : Maybe.Some(0.38),
     sahko: Maybe.Some(0.9),
     'uusiutuva-polttoaine': Maybe.Some(0.38)
   },
@@ -342,7 +311,12 @@ export const ostetutEnergiamuodot = R.compose(
   ostettuEnergia
 );
 
-export const eluku = (versio, nettoala, energiamuodot, energiatodistus) =>
+export const eluku = (
+  versio,
+  nettoala,
+  energiamuodot,
+  kaukolampoKerroin = Maybe.None()
+) =>
   R.compose(
     R.lift(Math.ceil),
     R.lift(R.flip(R.divide))(unnestValidation(nettoala)),
@@ -351,7 +325,10 @@ export const eluku = (versio, nettoala, energiamuodot, energiatodistus) =>
     Maybe.findAllSome,
     R.values,
     R.evolve(
-      R.map(R.lift(R.multiply), energiamuotokertoimet(energiatodistus)[versio])
+      R.map(
+        R.lift(R.multiply),
+        energiamuotokertoimet(kaukolampoKerroin)[versio]
+      )
     ),
     R.map(unnestValidation),
     R.omit(['kaukolampo-kerroin'])
@@ -524,7 +501,7 @@ export const uusiutuvanEnergianOsuus = energiatodistus => {
       energiatodistus.versio,
       energiatodistus.lahtotiedot['lammitetty-nettoala'],
       energiatodistus.tulokset['kaytettavat-energiamuodot'],
-      energiatodistus
+      muutettuKaukolampokerroin(energiatodistus)
     )
   );
   if (!nettoala || nettoala <= 0 || eLuku == null) return null;

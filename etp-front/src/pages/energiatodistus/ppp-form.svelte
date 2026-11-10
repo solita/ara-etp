@@ -2,7 +2,6 @@
   import * as R from 'ramda';
   import { _ } from '@Language/i18n';
   import * as schemas from './schema';
-  import { defaultEnergiamuotokertoimet } from './energiatodistus-utils';
 
   import H2 from '@Component/H/H2';
   import H3 from '@Component/H/H3';
@@ -75,130 +74,127 @@
   }
 </style>
 
-<!-- Re-render when default energiamuotokertoimet (used in e-luku calculation) are loaded -->
-{#key $defaultEnergiamuotokertoimet}
-  <HR />
-  <div class="ppp-section flex flex-col gap-6">
-    <div class="flex items-baseline justify-between">
-      <H2
-        id="perusparannuspassi"
-        dataCy="perusparannuspassi"
-        text={$_('energiatodistus.perusparannuspassi.header')} />
-      {#if !disabled}
-        {#if !perusparannuspassi.valid}
-          <TextButton
-            dataCy="add-ppp-button"
-            icon="add_circle_outline"
-            text={$_('energiatodistus.perusparannuspassi.add-button')}
-            type="button"
-            largeIcon={true}
-            on:click={onAddPPP} />
-        {:else}
-          <TextButton
-            dataCy="delete-ppp-button"
-            icon="delete_forever"
-            text={$_('energiatodistus.perusparannuspassi.delete-button')}
-            type="button"
-            largeIcon={true}
-            on:click={onDeletePPP} />
-        {/if}
+<HR />
+<div class="ppp-section flex flex-col gap-6">
+  <div class="flex items-baseline justify-between">
+    <H2
+      id="perusparannuspassi"
+      dataCy="perusparannuspassi"
+      text={$_('energiatodistus.perusparannuspassi.header')} />
+    {#if !disabled}
+      {#if !perusparannuspassi.valid}
+        <TextButton
+          dataCy="add-ppp-button"
+          icon="add_circle_outline"
+          text={$_('energiatodistus.perusparannuspassi.add-button')}
+          type="button"
+          largeIcon={true}
+          on:click={onAddPPP} />
+      {:else}
+        <TextButton
+          dataCy="delete-ppp-button"
+          icon="delete_forever"
+          text={$_('energiatodistus.perusparannuspassi.delete-button')}
+          type="button"
+          largeIcon={true}
+          on:click={onDeletePPP} />
       {/if}
-    </div>
-    <div class="flex items-center bg-tertiary p-4">
-      <span class="mr-2 font-icon text-2xl">info_outline</span>
-      <span>
-        {$_(
-          perusparannuspassi.valid
-            ? 'energiatodistus.perusparannuspassi.info-text-when-PPP'
-            : 'energiatodistus.perusparannuspassi.info-text'
-        )}
-      </span>
-    </div>
-
-    {#if !perusparannuspassi.valid}
-      <p>
-        {$_('energiatodistus.perusparannuspassi.not-added')}
-      </p>
-      <p>
-        {$_('energiatodistus.perusparannuspassi.disclaimer')}
-      </p>
-    {:else}
-      <p>
-        {$_('energiatodistus.perusparannuspassi.disclaimer')}
-      </p>
-      <HR />
-      <div class="flex flex-col gap-6">
-        <H3 text={$_('perusparannuspassi.passin-perustiedot.header')} />
-
-        <Perustiedot bind:perusparannuspassi schema={saveSchema} {disabled} />
-
-        <H3 text={$_('perusparannuspassi.rakennuksen-perustiedot.header')} />
-
-        <RakenteidenUArvot
-          bind:perusparannuspassi
-          {energiatodistus}
-          schema={saveSchema}
-          {disabled} />
-
-        <Energiajarjestelmat
-          bind:perusparannuspassi
-          {energiatodistus}
-          {inputLanguage}
-          {luokittelut}
-          {schema}
-          {disabled} />
-
-        <H3 text={$_('perusparannuspassi.laskennan-tulokset.header')} />
-        <Vaiheistus bind:perusparannuspassi schema={saveSchema} {disabled} />
-
-        <LaskennallinenOstoenergia
-          bind:perusparannuspassi
-          {energiatodistus}
-          {eTehokkuus}
-          {schema}
-          {disabled} />
-        <UusiutuvaEnergia
-          bind:perusparannuspassi
-          {energiatodistus}
-          schema={saveSchema}
-          {disabled} />
-        <ToteutunutOstoenergia
-          bind:perusparannuspassi
-          {energiatodistus}
-          {schema}
-          {disabled} />
-        <EnergianHinta
-          bind:perusparannuspassi
-          {energiatodistus}
-          schema={saveSchema}
-          {disabled} />
-
-        <LaskennallinenEnergiaKustannukset
-          bind:perusparannuspassi
-          {energiatodistus}
-          {schema} />
-
-        <ToteutunutOstoenergiaKustannukset
-          bind:perusparannuspassi
-          {energiatodistus}
-          {schema} />
-
-        <Toimenpiteet
-          {energiatodistus}
-          {eTehokkuus}
-          bind:perusparannuspassi
-          pppSchema={schema}
-          {luokittelut}
-          {inputLanguage}
-          {disabled} />
-
-        <Lisatietoja
-          bind:perusparannuspassi
-          {schema}
-          {inputLanguage}
-          {disabled} />
-      </div>
     {/if}
   </div>
-  <HR />
-{/key}
+  <div class="flex items-center bg-tertiary p-4">
+    <span class="mr-2 font-icon text-2xl">info_outline</span>
+    <span>
+      {$_(
+        perusparannuspassi.valid
+          ? 'energiatodistus.perusparannuspassi.info-text-when-PPP'
+          : 'energiatodistus.perusparannuspassi.info-text'
+      )}
+    </span>
+  </div>
+
+  {#if !perusparannuspassi.valid}
+    <p>
+      {$_('energiatodistus.perusparannuspassi.not-added')}
+    </p>
+    <p>
+      {$_('energiatodistus.perusparannuspassi.disclaimer')}
+    </p>
+  {:else}
+    <p>
+      {$_('energiatodistus.perusparannuspassi.disclaimer')}
+    </p>
+    <HR />
+    <div class="flex flex-col gap-6">
+      <H3 text={$_('perusparannuspassi.passin-perustiedot.header')} />
+
+      <Perustiedot bind:perusparannuspassi schema={saveSchema} {disabled} />
+
+      <H3 text={$_('perusparannuspassi.rakennuksen-perustiedot.header')} />
+
+      <RakenteidenUArvot
+        bind:perusparannuspassi
+        {energiatodistus}
+        schema={saveSchema}
+        {disabled} />
+
+      <Energiajarjestelmat
+        bind:perusparannuspassi
+        {energiatodistus}
+        {inputLanguage}
+        {luokittelut}
+        {schema}
+        {disabled} />
+
+      <H3 text={$_('perusparannuspassi.laskennan-tulokset.header')} />
+      <Vaiheistus bind:perusparannuspassi schema={saveSchema} {disabled} />
+
+      <LaskennallinenOstoenergia
+        bind:perusparannuspassi
+        {energiatodistus}
+        {eTehokkuus}
+        {schema}
+        {disabled} />
+      <UusiutuvaEnergia
+        bind:perusparannuspassi
+        {energiatodistus}
+        schema={saveSchema}
+        {disabled} />
+      <ToteutunutOstoenergia
+        bind:perusparannuspassi
+        {energiatodistus}
+        {schema}
+        {disabled} />
+      <EnergianHinta
+        bind:perusparannuspassi
+        {energiatodistus}
+        schema={saveSchema}
+        {disabled} />
+
+      <LaskennallinenEnergiaKustannukset
+        bind:perusparannuspassi
+        {energiatodistus}
+        {schema} />
+
+      <ToteutunutOstoenergiaKustannukset
+        bind:perusparannuspassi
+        {energiatodistus}
+        {schema} />
+
+      <Toimenpiteet
+        {energiatodistus}
+        {eTehokkuus}
+        bind:perusparannuspassi
+        pppSchema={schema}
+        {luokittelut}
+        {inputLanguage}
+        {disabled} />
+
+      <Lisatietoja
+        bind:perusparannuspassi
+        {schema}
+        {inputLanguage}
+        {disabled} />
+    </div>
+  {/if}
+</div>
+<HR />

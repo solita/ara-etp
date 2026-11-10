@@ -53,15 +53,6 @@
            :handler    (fn [{{{:keys [versio]} :path} :parameters :keys [db]}]
                          (r/response (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)))}}]
 
-   ["/energiamuotokertoimet/:versio"
-    {:get {:summary    "Hae energiatodistuksen version kiinteät energiamuotokertoimet (oletusarvot)"
-           :parameters {:path {:versio common-schema/Key}}
-           :responses  {200 {:body {schema/Keyword schema/Num}}}
-           :handler    (fn [{{{:keys [versio]} :path} :parameters}]
-                         (api-response/get-response
-                           (e-luokka-service/energiamuotokerroin versio)
-                           "Could not find energiamuotokertoimet with given versio"))}}]
-
    ["/e-luokka/:versio/:alakayttotarkoitusluokka/:nettoala/:e-luku"
     {:get {:summary    "Laske energiatodistukselle energiatehokkuusluokka"
            :parameters {:path {:versio                   common-schema/Key

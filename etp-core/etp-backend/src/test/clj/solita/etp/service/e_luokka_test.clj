@@ -561,24 +561,21 @@
 (defn- et-with-kaukolampo [laatimisvaihe kerroin]
   {:perustiedot {:laatimisvaihe laatimisvaihe}
    :tulokset    {:kaytettavat-energiamuodot {:kaukolampo-kerroin kerroin}}})
-(t/deftest kaukolampo-energiamuotokerroin-test
-  (t/testing "ET2027 olemassa oleva rakennus uses marked value"
-    (t/is (= 0.2M (service/kaukolampo-energiamuotokerroin 2027 (et-with-kaukolampo 2 0.2M))))
-    (t/is (= 0.3M (service/kaukolampo-energiamuotokerroin 2027 (et-with-kaukolampo 2 0.3M)))))
-  (t/testing "null and explicit 0.38 are equivalent"
-    (t/is (= 0.38M (service/kaukolampo-energiamuotokerroin 2027 (et-with-kaukolampo 2 nil))))
-    (t/is (= 0.38M (service/kaukolampo-energiamuotokerroin 2027 (et-with-kaukolampo 2 0.38M)))))
-  (t/testing "other laatimisvaihe use the fixed coefficient"
-    (t/is (= 0.38M (service/kaukolampo-energiamuotokerroin 2027 (et-with-kaukolampo 0 0.2M))))
-    (t/is (= 0.38M (service/kaukolampo-energiamuotokerroin 2027 (et-with-kaukolampo 1 0.2M)))))
-  (t/testing "ET2013 and ET2018 are not affected"
-    (t/is (= 0.7M (service/kaukolampo-energiamuotokerroin 2013 (et-with-kaukolampo 2 0.2M))))
-    (t/is (= 0.5M (service/kaukolampo-energiamuotokerroin 2018 (et-with-kaukolampo 2 0.2M))))))
+(t/deftest muutettu-kaukolampokerroin-test
+  (t/testing "ET2027 olemassa oleva rakennus uses the marked value"
+    (t/is (= 0.2M (service/muutettu-kaukolampokerroin 2027 (et-with-kaukolampo 2 0.2M))))
+    (t/is (nil? (service/muutettu-kaukolampokerroin 2027 (et-with-kaukolampo 2 nil)))))
+  (t/testing "other laatimisvaihe and versions have no changed coefficient"
+    (t/is (nil? (service/muutettu-kaukolampokerroin 2027 (et-with-kaukolampo 0 0.2M))))
+    (t/is (nil? (service/muutettu-kaukolampokerroin 2027 (et-with-kaukolampo 1 0.2M))))
+    (t/is (nil? (service/muutettu-kaukolampokerroin 2013 (et-with-kaukolampo 2 0.2M))))
+    (t/is (nil? (service/muutettu-kaukolampokerroin 2018 (et-with-kaukolampo 2 0.2M))))))
+(t/deftest energiamuotokertoimet-test
+  (t/is (= 0.38M (:kaukolampo (service/energiamuotokertoimet 2027 nil))))
+  (t/is (= 0.2M (:kaukolampo (service/energiamuotokertoimet 2027 0.2M))))
+  (t/is (= 0.5M (:kaukolampo (service/energiamuotokertoimet 2018 0.2M)))))
 (t/deftest painotettu-ostoenergiankulutus-kaukolampo-kerroin-test
-  (let [et (fn [laatimisvaihe kerroin]
-             (-> (et-with-kaukolampo laatimisvaihe kerroin)
-                 (assoc-in [:tulokset :kaytettavat-energiamuodot :kaukolampo] 100M)))]
-    (t/is (= 38M (service/painotettu-ostoenergiankulutus 2027 (et 2 nil))))
-    (t/is (= 20M (service/painotettu-ostoenergiankulutus 2027 (et 2 0.2M))))
-    (t/is (= 38M (service/painotettu-ostoenergiankulutus 2027 (et 1 0.2M))))
-    (t/is (= 70M (service/painotettu-ostoenergiankulutus 2013 (et 2 0.2M))))))
+  (let [energiamuodot {:kaukolampo 100M}]
+    (t/is (= 38M (service/painotettu-ostoenergiankulutus 2027 energiamuodot nil)))
+    (t/is (= 20M (service/painotettu-ostoenergiankulutus 2027 energiamuodot 0.2M)))
+    (t/is (= 70M (service/painotettu-ostoenergiankulutus 2013 energiamuodot 0.2M)))))

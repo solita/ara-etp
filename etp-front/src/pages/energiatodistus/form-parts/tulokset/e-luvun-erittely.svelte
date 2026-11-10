@@ -1,6 +1,5 @@
 <script>
   import * as R from 'ramda';
-  import { onMount } from 'svelte';
   import { _ } from '@Language/i18n';
 
   import * as Maybe from '@Utility/maybe-utils';
@@ -27,17 +26,7 @@
 
   let eTehokkuusParams = [];
 
-  const defaultKertoimet = EtUtils.defaultEnergiamuotokertoimet;
-  onMount(() => {
-    if (versio === 2027) {
-      Future.fork(
-        _ => {},
-        _ => {},
-        api.loadDefaultEnergiamuotokertoimet(fetch, versio)
-      );
-    }
-  });
-  // The marked district heating coefficient is changeable only in ET2027
+  // The changed district heating coefficient is editable only in ET2027
   // when laatimisvaihe is 'olemassa oleva rakennus'
   $: kaukolampoKerroinChangeable =
     versio === 2027 &&
@@ -46,16 +35,17 @@
     );
   $: kaukolampoKerroinPlaceholder = R.compose(
     Maybe.orSome(''),
-    R.map(formats.numberFormatPrecision(2))
-  )(EtUtils.defaultKaukolampoKerroin(versio, $defaultKertoimet));
+    R.map(formats.numberFormatPrecision(2)),
+    R.path([2027, 'kaukolampo'])
+  )(EtUtils.energiamuotokertoimet());
   $: energiamuotokertoimet = R.mergeRight(
     EtUtils.energiamuotokertoimet(
-      R.assoc('versio', versio, energiatodistus),
-      $defaultKertoimet
+      EtUtils.muutettuKaukolampokerroin(
+        R.assoc('versio', versio, energiatodistus)
+      )
     )[versio],
     EtUtils.muutEnergiamuotokertoimet(energiatodistus)
   );
-
   $: ostoenergiat = R.mergeRight(
     EtUtils.ostoenergiat(energiatodistus),
     EtUtils.muutOstoenergiat(energiatodistus)

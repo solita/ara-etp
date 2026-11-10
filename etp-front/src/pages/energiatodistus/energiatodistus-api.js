@@ -10,7 +10,6 @@ import * as geoApi from '@Utility/api/geo-api';
 import * as dfns from 'date-fns';
 import * as Query from '@Utility/query';
 import * as Laatimisvaiheet from './laatimisvaiheet';
-import { defaultEnergiamuotokertoimet } from './energiatodistus-utils';
 
 /*
 This deserializer is for all energiatodistus versions.
@@ -432,19 +431,6 @@ export const getEluokka = R.curry(
     )
 );
 
-/**
- * Fetch the fixed energiamuotokertoimet of the versio from the backend and
- * store them as the defaults used in e-luku calculation.
- */
-export const loadDefaultEnergiamuotokertoimet = (fetch, versio) =>
-  R.compose(
-    R.map(kertoimet => {
-      defaultEnergiamuotokertoimet.update(R.assoc(versio, kertoimet));
-      return kertoimet;
-    }),
-    Fetch.responseAsJson,
-    Future.encaseP(Fetch.getFetch(fetch))
-  )(`api/private/energiamuotokertoimet/${versio}`);
 export const korvattavat = R.compose(
   R.map(R.map(deserialize)),
   Fetch.responseAsJson,

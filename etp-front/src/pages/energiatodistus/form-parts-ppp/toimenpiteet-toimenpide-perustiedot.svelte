@@ -53,7 +53,7 @@
         etEnergiamuodotFromPppVaihe(
           perusparannuspassi.vaiheet[vaiheIndex(vaihe)].tulokset
         ),
-        energiatodistus
+        ETUtils.muutettuKaukolampokerroin(energiatodistus)
       ),
     format: Maybe.orSome('')
   };
@@ -78,7 +78,7 @@
         etEnergiamuodotFromPppVaihe(
           perusparannuspassi.vaiheet[vaiheIndex(vaihe)].tulokset
         ),
-        energiatodistus
+        ETUtils.muutettuKaukolampokerroin(energiatodistus)
       )
     ])
   );

@@ -47,7 +47,12 @@
         ),
       Maybe.toMaybeList([
         R.map(R.prop('raja-asteikko'), eTehokkuus),
-        ETUtils.eluku(versio, nettoala, vaiheEnergiamuodot, energiatodistus)
+        ETUtils.eluku(
+          versio,
+          nettoala,
+          vaiheEnergiamuodot,
+          ETUtils.muutettuKaukolampokerroin(energiatodistus)
+        )
       ])
     );
 </script>
@@ -159,7 +164,7 @@
             energiatodistus.versio,
             energiatodistus.lahtotiedot['lammitetty-nettoala'],
             energiatodistus.tulokset['kaytettavat-energiamuodot'],
-            energiatodistus
+            ETUtils.muutettuKaukolampokerroin(energiatodistus)
           )
         )}</td>
 
@@ -172,7 +177,7 @@
                 energiatodistus.versio,
                 energiatodistus.lahtotiedot['lammitetty-nettoala'],
                 etEnergiamuodotFromPppVaihe(vaihe.tulokset),
-                energiatodistus
+                ETUtils.muutettuKaukolampokerroin(energiatodistus)
               )
             )}
           {/if}

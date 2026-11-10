@@ -277,34 +277,28 @@
          :uusiutuva-polttoaine 0.5M}})
 
 (def ^:private olemassa-oleva-rakennus-laatimisvaihe 2)
-
-(defn kaukolampo-energiamuotokerroin
-  "Effective district heating energy form coefficient of an energiatodistus.
-
-  In ET2027 the laatija may change the coefficient when laatimisvaihe is
-  'olemassa oleva rakennus'. Otherwise (and when the coefficient is not set)
-  the fixed coefficient of the version is used."
+(defn muutettu-kaukolampokerroin
+  "The district heating energy form coefficient changed by the laatija, or nil
+  when the fixed coefficient of the versio is used. The changed coefficient is
+  in effect only in ET2027 when laatimisvaihe is 'olemassa oleva rakennus'.
+  Resolve this early and pass only the result to the calculation functions."
   [versio energiatodistus]
-  (let [default (get-in energiamuotokerroin [versio :kaukolampo])
-        marked (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin)]
-    (if (and (= versio 2027)
+  (when (and (= versio 2027)
              (= (-> energiatodistus :perustiedot :laatimisvaihe)
-                olemassa-oleva-rakennus-laatimisvaihe)
-             (some? marked))
-      (bigdec marked)
-      default)))
-
+                olemassa-oleva-rakennus-laatimisvaihe))
+    (some-> energiatodistus
+            :tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin
+            bigdec)))
 (defn energiamuotokertoimet
-  "Effective energy form coefficients of an energiatodistus."
-  [versio energiatodistus]
-  (some-> (get energiamuotokerroin versio)
-          (assoc :kaukolampo (kaukolampo-energiamuotokerroin versio energiatodistus))))
-
-(defn painotettu-ostoenergiankulutus [versio energiatodistus]
+  "Energy form coefficients of the versio. kaukolampo-kerroin is the optional
+  changed district heating coefficient (see muutettu-kaukolampokerroin)."
+  [versio kaukolampo-kerroin]
+  (cond-> (get energiamuotokerroin versio)
+    (and (= versio 2027) kaukolampo-kerroin) (assoc :kaukolampo (bigdec kaukolampo-kerroin))))
+(defn painotettu-ostoenergiankulutus [versio energiamuodot kaukolampo-kerroin]
   (logic/if-let*
-    [energiamuodot (-> energiatodistus :tulokset :kaytettavat-energiamuodot)
-     fixed-energiamuodot (dissoc energiamuodot :muu :kaukolampo-kerroin)
-     muotokerroin (energiamuotokertoimet versio energiatodistus)]
+    [fixed-energiamuodot (some-> energiamuodot (dissoc :muu :kaukolampo-kerroin))
+     muotokerroin (energiamuotokertoimet versio kaukolampo-kerroin)]
     (with-precision 20
       (reduce + 0M (map #(* (bigdec (or %1 1M)) (bigdec (or %2 0M)))
                         (concat
@@ -313,35 +307,31 @@
                         (concat
                           (vals fixed-energiamuodot)
                           (map :ostoenergia (:muu energiamuodot))))))))
-
+(defn- e-luku-from-energiamuodot
+  [versio energiamuodot nettoala kaukolampo-kerroin]
+  (logic/if-let*
+    [^BigDecimal kulutus (painotettu-ostoenergiankulutus versio energiamuodot kaukolampo-kerroin)
+     ^BigDecimal nettoala (some-> nettoala bigdec)]
+    (when-not (zero? nettoala) (.divide kulutus nettoala 0 RoundingMode/CEILING))))
 (defn e-luku
   "E-luvun määritelmä:
   https://www.finlex.fi/fi/laki/alkup/2017/20171010#Pidp446079392"
   [versio energiatodistus]
-  (logic/if-let*
-    [^BigDecimal kulutus (painotettu-ostoenergiankulutus versio energiatodistus)
-     ^BigDecimal nettoala (some-> energiatodistus :lahtotiedot :lammitetty-nettoala bigdec)]
-    (when-not (zero? nettoala) (.divide kulutus nettoala 0 RoundingMode/CEILING))))
-
+  (e-luku-from-energiamuodot versio
+                             (-> energiatodistus :tulokset :kaytettavat-energiamuodot)
+                             (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+                             (muutettu-kaukolampokerroin versio energiatodistus)))
 (defn e-luku-from-ppp-vaihe
   "Calculate e-luku from PPP vaihe data.
-   Takes the base energiatodistus (for nettoala) and a PPP vaihe with ostoenergian-tarve values.
-   Returns the calculated e-luku for this vaihe."
+   Takes the base energiatodistus (for nettoala and the changed district heating
+   coefficient) and a PPP vaihe with ostoenergian-tarve values."
   [versio energiatodistus ppp-vaihe]
-  (logic/if-let*
-    [^BigDecimal nettoala (some-> energiatodistus :lahtotiedot :lammitetty-nettoala bigdec)
-     ;; Build energiamuodot map from vaihe's ostoenergian-tarve values
-     energiamuodot {:fossiilinen-polttoaine (-> ppp-vaihe :tulokset :ostoenergian-tarve-fossiiliset-pat)
-                    :sahko                  (-> ppp-vaihe :tulokset :ostoenergian-tarve-sahko)
-                    :kaukojaahdytys         (-> ppp-vaihe :tulokset :ostoenergian-tarve-kaukojaahdytys)
-                    :kaukolampo             (-> ppp-vaihe :tulokset :ostoenergian-tarve-kaukolampo)
-                    :uusiutuva-polttoaine   (-> ppp-vaihe :tulokset :ostoenergian-tarve-uusiutuvat-pat)}
-     ;; Create a temporary ET-like structure for calculation. The district heating
-     ;; coefficient of the energiatodistus is used also for the PPP vaihe.
-     temp-et {:perustiedot  {:laatimisvaihe (-> energiatodistus :perustiedot :laatimisvaihe)}
-              :tulokset     {:kaytettavat-energiamuodot
-                             (assoc energiamuodot
-                               :kaukolampo-kerroin
-                               (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin))}
-              :lahtotiedot  {:lammitetty-nettoala nettoala}}]
-    (e-luku versio temp-et)))
+  (e-luku-from-energiamuodot
+    versio
+    {:fossiilinen-polttoaine (-> ppp-vaihe :tulokset :ostoenergian-tarve-fossiiliset-pat)
+     :sahko                  (-> ppp-vaihe :tulokset :ostoenergian-tarve-sahko)
+     :kaukojaahdytys         (-> ppp-vaihe :tulokset :ostoenergian-tarve-kaukojaahdytys)
+     :kaukolampo             (-> ppp-vaihe :tulokset :ostoenergian-tarve-kaukolampo)
+     :uusiutuva-polttoaine   (-> ppp-vaihe :tulokset :ostoenergian-tarve-uusiutuvat-pat)}
+    (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
+    (muutettu-kaukolampokerroin versio energiatodistus)))

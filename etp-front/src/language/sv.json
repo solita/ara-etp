@@ -8,7 +8,6 @@
     "max-length": "Längden får vara högst {max} tecken",
     "min-number": "Minsta tillåtna värde är {min}.",
     "max-number": "Högsta tillåtna värde är {max}.",
-    "max-two-decimals": "Högst två decimaler tillåts.",
     "invalid-url": "Felaktig webbadress",
     "invalid-email": "Felaktig e-post",
     "invalid-ytunnus": "Felaktigt FO-nummer",
