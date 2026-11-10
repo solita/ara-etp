@@ -88,8 +88,6 @@
   const perLammitettyNettoala = (energiatodistus, n) =>
     fxmath.round(0, n / energiatodistus.lahtotiedot['lammitetty-nettoala']);
 
-  // Effective coefficient: the public API returns the energiatodistus specific
-  // district heating coefficient in ET2027 (AE-2777). Other coefficients are constant.
   const energiamuotokerroin = (energiatodistus, energiamuoto) =>
     (energiamuoto === 'kaukolampo' &&
       energiatodistus.versio === 2027 &&

@@ -26,8 +26,6 @@
 
   let eTehokkuusParams = [];
 
-  // The changed district heating coefficient is editable only in ET2027
-  // when laatimisvaihe is 'olemassa oleva rakennus'
   $: kaukolampoKerroinChangeable =
     versio === 2027 &&
     Laatimisvaiheet.isOlemassaOlevaRakennus(

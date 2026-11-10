@@ -75,10 +75,6 @@ const Rakennustunnus = {
   validators: [validations.liftValidator(validations.rakennustunnusValidator)]
 };
 
-/**
- * Changeable district heating energy form coefficient (AE-2777).
- * Displayed with two decimals.
- */
 const KaukolampoKerroin = {
   parse: parsers.optionalParser(parsers.parseNumber),
   format: R.compose(Maybe.orSome(''), R.map(formats.numberFormatPrecision(2))),

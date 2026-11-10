@@ -336,10 +336,7 @@
     (update query :limit #(min query-limit (or % query-limit)))))
 
 (defn- effective-kaukolampo-kerroin-for-public
-  "The public API returns the effective district heating coefficient of
-  ET2027 (AE-2777). Public results are signed energiatodistukset, so the
-  stored value is already reset when it is not allowed (see signing). Null
-  means the fixed coefficient."
+  "Returns the effective district heating coefficient for public results."
   [whoami energiatodistus]
   (if (and (rooli-service/public? whoami)
            (contains? (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])

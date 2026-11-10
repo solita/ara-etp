@@ -141,9 +141,9 @@ export const sumEtValues = R.compose(
 export const partOfSum = R.curry((sum, value) => R.lift(R.divide)(value, sum));
 
 /**
- * District heating coefficient changed by the laatija (AE-2777). None unless
- * versio is 2027 and laatimisvaihe is "olemassa oleva rakennus".
- * Same rule as in backend: solita.etp.service.e-luokka/muutettu-kaukolampokerroin
+ * Returns the changeable district heating coefficient for applicable ET2027
+ * certificates.
+ * @returns {Maybe}
  */
 export const muutettuKaukolampokerroin = energiatodistus =>
   R.prop('versio', energiatodistus) === 2027 &&
@@ -157,8 +157,8 @@ export const muutettuKaukolampokerroin = energiatodistus =>
       )
     : Maybe.None();
 /**
- * @param {Maybe} kaukolampoKerroin changed ET2027 district heating coefficient
- * (see muutettuKaukolampokerroin), None for the fixed coefficient
+ * @param {Maybe} kaukolampoKerroin Optional district heating coefficient.
+ * @returns {Object} Energy form coefficients by version.
  */
 export const energiamuotokertoimet = (kaukolampoKerroin = Maybe.None()) => ({
   2027: {

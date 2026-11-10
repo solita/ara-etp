@@ -13,8 +13,7 @@
    :ostoenergian-tarve-kaukojaahdytys   :kaukojaahdytys})
 
 (defn- painotettu-ostoenergia
-  "Calculate weighted energy from PPP vaihe tulokset using e-luokka energiamuotokerroin.
-   kaukolampo-kerroin is the changed district heating coefficient or nil."
+  "Calculate weighted energy from PPP vaihe tulokset using e-luokka energiamuotokerroin."
   [kaukolampo-kerroin tulokset]
   (when tulokset
     (let [kertoimet (e-luokka-service/energiamuotokertoimet 2027 kaukolampo-kerroin)]

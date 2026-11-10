@@ -111,7 +111,6 @@
          (reduce + 0))))
 
 (defn- energiamuotokertoimet
-  "Effective energy form coefficients as :<energiamuoto>-kerroin"
   [versio energiatodistus]
   (->> (e-luokka-service/muutettu-kaukolampokerroin versio energiatodistus)
        (e-luokka-service/energiamuotokertoimet versio)

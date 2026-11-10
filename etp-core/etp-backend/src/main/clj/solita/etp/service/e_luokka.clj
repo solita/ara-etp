@@ -279,10 +279,8 @@
 (def ^:private olemassa-oleva-rakennus-laatimisvaihe 2)
 
 (defn muutettu-kaukolampokerroin
-  "The district heating energy form coefficient changed by the laatija, or nil
-  when the fixed coefficient of the versio is used. The changed coefficient is
-  in effect only in ET2027 when laatimisvaihe is 'olemassa oleva rakennus'.
-  Resolve this early and pass only the result to the functions below."
+  "Returns the coefficient specified for an ET2027 existing-building certificate,
+  or nil when the default coefficient is used."
   [versio energiatodistus]
   (when (and (= versio 2027)
              (= (-> energiatodistus :perustiedot :laatimisvaihe)
@@ -292,10 +290,7 @@
             bigdec)))
 
 (defn energiamuotokertoimet
-  "Energy form coefficients of the versio. This is the only way to access the
-  coefficients so that the changed district heating coefficient can't be
-  forgotten: kaukolampo-kerroin is the changed coefficient (see
-  muutettu-kaukolampokerroin) or nil/omitted for the fixed one."
+  "Returns the energy form coefficients for versio."
   ([versio] (energiamuotokertoimet versio nil))
   ([versio kaukolampo-kerroin]
    (cond-> (get fixed-energiamuotokertoimet versio)
@@ -334,8 +329,7 @@
 
 (defn e-luku-from-ppp-vaihe
   "Calculate e-luku from PPP vaihe data.
-   Takes the base energiatodistus (for nettoala and the changed district heating
-   coefficient) and a PPP vaihe with ostoenergian-tarve values."
+   Takes the base energiatodistus and a PPP vaihe with ostoenergian-tarve values."
   [versio energiatodistus ppp-vaihe]
   (e-luku-from-energiamuodot
     versio

@@ -363,8 +363,7 @@
 (def KaukolampoKerroin2027Value
   (schema/constrained schema/Num #(<= 0.2 % 0.38) "[0.2, 0.38]"))
 (def KaukolampoKerroin2027
-  "Changeable district heating energy form coefficient (AE-2777). Nullable:
-  null means that the fixed coefficient of the system is used."
+  "Nullable district heating energy form coefficient for ET2027."
   (schema/maybe KaukolampoKerroin2027Value))
 
 (def EnergiatodistusSave2027
