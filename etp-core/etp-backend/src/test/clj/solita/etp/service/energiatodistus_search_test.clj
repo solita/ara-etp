@@ -417,8 +417,7 @@
         energiatodistus (get energiatodistukset id)
         nettoala (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
         sahko (-> energiatodistus :tulokset :kaytettavat-energiamuodot :sahko)
-        sahko-kertoimella (* sahko (get-in e-luokka-service/energiamuotokerroin
-                                           [2018 :sahko]))]
+        sahko-kertoimella (* sahko (get (e-luokka-service/energiamuotokertoimet 2018) :sahko))]
     (t/is (search-and-assert
             test-data-set
             id
@@ -473,8 +472,7 @@
         sahko (-> energiatodistus :tulokset :kaytettavat-energiamuodot :sahko)
         ;; Given a 2027 energiatodistus with known sahko value
         ;; When we calculate painotettu using the new 2027 coefficient (0.90)
-        sahko-kertoimella (* sahko (get-in e-luokka-service/energiamuotokerroin
-                                           [2027 :sahko]))]
+        sahko-kertoimella (* sahko (get (e-luokka-service/energiamuotokertoimet 2027) :sahko))]
     ;; Then searching by painotettu and painotettu-neliovuosikulutus finds the correct ET
     (t/is (search-and-assert
             test-data-set
@@ -496,8 +494,7 @@
         kaukolampo (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukolampo)
         ;; Given a 2027 energiatodistus with known kaukolampo value
         ;; When we calculate painotettu using the new 2027 coefficient (0.38)
-        kaukolampo-kertoimella (* kaukolampo (get-in e-luokka-service/energiamuotokerroin
-                                                     [2027 :kaukolampo]))]
+        kaukolampo-kertoimella (* kaukolampo (get (e-luokka-service/energiamuotokertoimet 2027) :kaukolampo))]
     ;; Then searching by painotettu finds the correct ET
     (t/is (search-and-assert
             test-data-set
@@ -513,8 +510,7 @@
         kaukojaahdytys (-> energiatodistus :tulokset :kaytettavat-energiamuodot :kaukojaahdytys)
         ;; Given a 2027 energiatodistus with known kaukojaahdytys value
         ;; When we calculate painotettu using the new 2027 coefficient (0.21)
-        kaukojaahdytys-kertoimella (* kaukojaahdytys (get-in e-luokka-service/energiamuotokerroin
-                                                             [2027 :kaukojaahdytys]))]
+        kaukojaahdytys-kertoimella (* kaukojaahdytys (get (e-luokka-service/energiamuotokertoimet 2027) :kaukojaahdytys))]
     ;; Then searching by painotettu finds the correct ET
     (t/is (search-and-assert
             test-data-set

@@ -259,7 +259,7 @@
             versio alakayttotarkoitus-id nettoala e-luku
             tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset))
 
-(def energiamuotokerroin
+(def ^:private fixed-energiamuotokertoimet
   {2027 {:fossiilinen-polttoaine 1M
          :sahko 0.90M
          :kaukojaahdytys 0.21M
@@ -275,13 +275,12 @@
          :kaukojaahdytys 0.4M
          :kaukolampo 0.7M
          :uusiutuva-polttoaine 0.5M}})
-
 (def ^:private olemassa-oleva-rakennus-laatimisvaihe 2)
 (defn muutettu-kaukolampokerroin
   "The district heating energy form coefficient changed by the laatija, or nil
   when the fixed coefficient of the versio is used. The changed coefficient is
   in effect only in ET2027 when laatimisvaihe is 'olemassa oleva rakennus'.
-  Resolve this early and pass only the result to the calculation functions."
+  Resolve this early and pass only the result to the functions below."
   [versio energiatodistus]
   (when (and (= versio 2027)
              (= (-> energiatodistus :perustiedot :laatimisvaihe)
@@ -290,11 +289,15 @@
             :tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin
             bigdec)))
 (defn energiamuotokertoimet
-  "Energy form coefficients of the versio. kaukolampo-kerroin is the optional
-  changed district heating coefficient (see muutettu-kaukolampokerroin)."
-  [versio kaukolampo-kerroin]
-  (cond-> (get energiamuotokerroin versio)
-    (and (= versio 2027) kaukolampo-kerroin) (assoc :kaukolampo (bigdec kaukolampo-kerroin))))
+  "Energy form coefficients of the versio. This is the only way to access the
+  coefficients so that the changed district heating coefficient can't be
+  forgotten: kaukolampo-kerroin is the changed coefficient (see
+  muutettu-kaukolampokerroin) or nil/omitted for the fixed one."
+  ([versio] (energiamuotokertoimet versio nil))
+  ([versio kaukolampo-kerroin]
+   (cond-> (get fixed-energiamuotokertoimet versio)
+     (and (= versio 2027) kaukolampo-kerroin)
+     (assoc :kaukolampo (bigdec kaukolampo-kerroin)))))
 (defn painotettu-ostoenergiankulutus [versio energiamuodot kaukolampo-kerroin]
   (logic/if-let*
     [fixed-energiamuodot (some-> energiamuodot (dissoc :muu :kaukolampo-kerroin))
@@ -313,6 +316,7 @@
     [^BigDecimal kulutus (painotettu-ostoenergiankulutus versio energiamuodot kaukolampo-kerroin)
      ^BigDecimal nettoala (some-> nettoala bigdec)]
     (when-not (zero? nettoala) (.divide kulutus nettoala 0 RoundingMode/CEILING))))
+
 (defn e-luku
   "E-luvun määritelmä:
   https://www.finlex.fi/fi/laki/alkup/2017/20171010#Pidp446079392"
@@ -321,6 +325,7 @@
                              (-> energiatodistus :tulokset :kaytettavat-energiamuodot)
                              (-> energiatodistus :lahtotiedot :lammitetty-nettoala)
                              (muutettu-kaukolampokerroin versio energiatodistus)))
+
 (defn e-luku-from-ppp-vaihe
   "Calculate e-luku from PPP vaihe data.
    Takes the base energiatodistus (for nettoala and the changed district heating
