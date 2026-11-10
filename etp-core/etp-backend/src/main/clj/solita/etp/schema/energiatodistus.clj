@@ -361,7 +361,8 @@
    :hiilikadenjalki         Hiilikadenjalki})
 
 (def KaukolampoKerroin2027Value
-  (schema/constrained schema/Num #(<= 0.2 % 0.38) "[0.2, 0.38]"))
+  common-schema/Num1)
+
 (def KaukolampoKerroin2027
   "Nullable district heating energy form coefficient for ET2027."
   (schema/maybe KaukolampoKerroin2027Value))

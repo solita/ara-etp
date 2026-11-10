@@ -86,7 +86,6 @@
    common/Rakennustunnus                    (test-generators/fmap rakennustunnus-generator test-generators/boolean)
    energiatodistus/YritysPostinumero        (g/always "33100")
    ;; The changeable coefficient is not set by default: null means the fixed coefficient
-   energiatodistus/KaukolampoKerroin2027Value (g/always 0.38M)
    energiatodistus/OptionalKuukausierittely (test-generators/one-of
                                               [(g/always (vec (repeat 12 kuukausierittely)))
                                                (g/always [])])

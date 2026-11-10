@@ -13,10 +13,10 @@
 (def ^:private kerroin-path [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin])
 (t/deftest schema-validation-test
   (t/testing "null and the limits are valid"
-    (doseq [v [nil 0.2 0.38 0.3M 0.25]]
+    (doseq [v [nil 0 1 0.2 0.38 0.3M 0.25]]
       (t/is (nil? (schema/check energiatodistus-schema/KaukolampoKerroin2027 v)) (str v))))
   (t/testing "values outside the limits are invalid"
-    (doseq [v [0.19 0.39 0 1 -0.3]]
+    (doseq [v [-0.1 1.1 -0.3]]
       (t/is (some? (schema/check energiatodistus-schema/KaukolampoKerroin2027 v)) (str v))))
   (t/testing "field is not allowed in ET2013 and ET2018"
     (doseq [s [energiatodistus-schema/EnergiatodistusSave2013
