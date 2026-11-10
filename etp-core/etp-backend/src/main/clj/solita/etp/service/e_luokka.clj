@@ -1,7 +1,7 @@
 (ns solita.etp.service.e-luokka
   (:require [clojure.core.match :as match]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
-            [solita.etp.service.laatimisvaihe :as laatimisvaihe]
+            [solita.etp.service.laatimisvaihe :as laatimisvaihe-service]
             [solita.common.logic :as logic])
   (:import (java.math RoundingMode)))
 
@@ -283,7 +283,7 @@
   [versio energiatodistus]
   (when (and (= versio 2027)
              (= (-> energiatodistus :perustiedot :laatimisvaihe)
-                laatimisvaihe/olemassa-oleva-rakennus))
+                laatimisvaihe-service/olemassa-oleva-rakennus))
     (some-> energiatodistus
             :tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin
             bigdec)))
