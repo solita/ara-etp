@@ -47,7 +47,8 @@
     (if (= key :kaukolampo)
       ;; Effective coefficient: marked value only when laatimisvaihe is 2
       (str "(case when energiatodistus.pt$laatimisvaihe = 2 then coalesce("
-           (field->db-column ["energiatodistus" "tulokset" "kaytettavat-energiamuodot" "kaukolampo-kerroin"])
+           (field->db-column ["energiatodistus" "tulokset"
+                              "kaytettavat-energiamuodot-kertoimet" "kaukolampo"])
            ", " default ") else " default " end)")
       default)))
 

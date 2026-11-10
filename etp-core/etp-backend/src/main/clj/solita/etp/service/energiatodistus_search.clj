@@ -339,9 +339,9 @@
   "Returns the effective district heating coefficient for public results."
   [whoami energiatodistus]
   (if (and (rooli-service/public? whoami)
-           (contains? (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])
-                      :kaukolampo-kerroin))
-    (update-in energiatodistus [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]
+           (contains? (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot-kertoimet])
+                      :kaukolampo))
+    (update-in energiatodistus [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo]
                #(or % (:kaukolampo (e-luokka-service/energiamuotokertoimet 2027 nil))))
     energiatodistus))
 

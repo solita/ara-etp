@@ -285,7 +285,7 @@
              (= (-> energiatodistus :perustiedot :laatimisvaihe)
                 laatimisvaihe-service/olemassa-oleva-rakennus))
     (some-> energiatodistus
-            :tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin
+            :tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo
             bigdec)))
 
 (defn energiamuotokertoimet
@@ -298,7 +298,7 @@
 
 (defn painotettu-ostoenergiankulutus [versio energiamuodot energiatodistus]
   (logic/if-let*
-    [fixed-energiamuodot (some-> energiamuodot (dissoc :muu :kaukolampo-kerroin))
+    [fixed-energiamuodot (some-> energiamuodot (dissoc :muu))
      muotokerroin (energiamuotokertoimet versio energiatodistus)]
     (with-precision 20
       (reduce + 0M (map #(* (bigdec (or %1 1M)) (bigdec (or %2 0M)))

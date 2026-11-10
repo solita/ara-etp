@@ -151,8 +151,8 @@ export const muutettuKaukolampokerroin = energiatodistus =>
     ? EitherMaybe.toMaybe(
         R.pathOr(Maybe.None(), [
           'tulokset',
-          'kaytettavat-energiamuodot',
-          'kaukolampo-kerroin'
+          'kaytettavat-energiamuodot-kertoimet',
+          'kaukolampo'
         ])(energiatodistus)
       )
     : Maybe.None();
@@ -331,7 +331,7 @@ export const eluku = (
       )
     ),
     R.map(unnestValidation),
-    R.omit(['kaukolampo-kerroin'])
+    R.identity
   )(energiamuodot);
 
 /**

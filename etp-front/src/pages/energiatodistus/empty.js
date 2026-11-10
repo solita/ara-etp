@@ -203,6 +203,9 @@ export const energiatodistus2018 = _ => ({
       kaukolampo: ValidNone(),
       'uusiutuva-polttoaine': ValidNone()
     },
+    'kaytettavat-energiamuodot-kertoimet': {
+      kaukolampo: ValidNone()
+    },
     'uusiutuvat-omavaraisenergiat': {
       aurinkosahko: ValidNone(),
       tuulisahko: ValidNone(),
@@ -350,8 +353,8 @@ export const energiatodistus2027 = _ =>
       },
 
       tulokset: {
-        'kaytettavat-energiamuodot': {
-          'kaukolampo-kerroin': ValidNone()
+        'kaytettavat-energiamuodot-kertoimet': {
+          kaukolampo: ValidNone()
         },
         'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
           aurinkosahko: ValidNone(),

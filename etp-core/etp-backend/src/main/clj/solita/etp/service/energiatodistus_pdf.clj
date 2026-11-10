@@ -121,7 +121,7 @@
       {:path [:lahtotiedot :ilmanvaihto :label-sv]}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo] :dp 0}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala] :dp 0}
-      {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]}
+      {:path [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo]}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala-kertoimella] :dp 0}
       {:path [:tulokset :kaytettavat-energiamuodot :sahko] :dp 0}
       {:path [:tulokset :kaytettavat-energiamuodot :sahko-nettoala] :dp 0}
@@ -260,7 +260,7 @@
       {:path [:lahtotiedot :lammitetty-nettoala] :dp 1}
       {:path [:tulokset :e-luku]}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo] :dp 0}
-      {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]}
+      {:path [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo]}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-kertoimella] :dp 0}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala-kertoimella] :dp 0}
       {:path [:tulokset :kaytettavat-energiamuodot :sahko] :dp 0}

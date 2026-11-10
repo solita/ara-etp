@@ -185,7 +185,7 @@ where id = :id;
 -- The changeable kaukolampo coefficient is allowed only in versio 2027 when
 -- laatimisvaihe is 'olemassa oleva rakennus' (2).
 update energiatodistus
-set t$kaytettavat_energiamuodot$kaukolampo_kerroin = null
+set t$kaytettavat_energiamuodot_kertoimet$kaukolampo = null
 where id = :id
-  and t$kaytettavat_energiamuodot$kaukolampo_kerroin is not null
+  and t$kaytettavat_energiamuodot_kertoimet$kaukolampo is not null
   and (versio <> 2027 or pt$laatimisvaihe is distinct from 2);

@@ -10,7 +10,7 @@
 (t/use-fixtures :each ts/fixture)
 
 (db/require-queries 'energiatodistus)
-(def ^:private kerroin-path [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin])
+(def ^:private kerroin-path [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo])
 (t/deftest schema-validation-test
   (t/testing "null and the limits are valid"
     (doseq [v [nil 0 1 0.2 0.38 0.3M 0.25]]
@@ -21,7 +21,7 @@
   (t/testing "field is not allowed in ET2013 and ET2018"
     (doseq [s [energiatodistus-schema/EnergiatodistusSave2013
                energiatodistus-schema/EnergiatodistusSave2018]]
-      (t/is (nil? (get-in s [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]))))))
+      (t/is (nil? (get-in s [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo]))))))
 (defn- update-kerroin! [laatija-id id add kerroin]
   (service/update-energiatodistus!
     (ts/db-user laatija-id)

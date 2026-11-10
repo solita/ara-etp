@@ -91,8 +91,8 @@
   const energiamuotokerroin = (energiatodistus, energiamuoto) =>
     (energiamuoto === 'kaukolampo' &&
       energiatodistus.versio === 2027 &&
-      energiatodistus.tulokset['kaytettavat-energiamuodot'][
-        'kaukolampo-kerroin'
+      energiatodistus.tulokset['kaytettavat-energiamuodot-kertoimet'][
+        'kaukolampo'
       ]) ||
     path([energiatodistus.versio, energiamuoto], energiamuotokertoimet);
   const energiamuotokerroinTulo = (energiatodistus, energiamuoto) =>

@@ -172,8 +172,8 @@
                 placeholder={kaukolampoKerroinPlaceholder}
                 path={[
                   'tulokset',
-                  'kaytettavat-energiamuodot',
-                  'kaukolampo-kerroin'
+                  'kaytettavat-energiamuodot-kertoimet',
+                  'kaukolampo'
                 ]} />
             {:else}
               {R.compose(

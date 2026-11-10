@@ -69,7 +69,7 @@
     generators)
     ;; The changeable kaukolampo coefficient is not set by default:
     ;; null means that the fixed coefficient is used.
-    (= versio 2027) (assoc-in [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin] nil)))
+    (= versio 2027) (assoc-in [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo] nil)))
 
 (defn generate-adds [n versio ready-for-signing?]
   (repeatedly n #(generate-add versio ready-for-signing?)))

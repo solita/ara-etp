@@ -37,7 +37,7 @@
 
 (def Tulokset2027
   (assoc-in Tulokset
-            [:kaytettavat-energiamuodot :kaukolampo-kerroin]
+            [:kaytettavat-energiamuodot-kertoimet :kaukolampo]
             energiatodistus-schema/KaukolampoKerroin2027))
 
 (defn energiatodistus-versio [versio]

@@ -112,7 +112,7 @@
 
 (defn- energiamuotokertoimet
   [versio energiatodistus]
-  (-> (e-luokka-service/energiamuotokertoimet versio energiatodistus)
+  (->> (e-luokka-service/energiamuotokertoimet versio energiatodistus)
        (map/map-keys #(-> % name (str "-kerroin") keyword))))
 
 (defn co2-paastot-et

@@ -262,6 +262,9 @@ export const v2018 = {
       kaukolampo: FloatNonNegative,
       'uusiutuva-polttoaine': FloatNonNegative
     },
+    'kaytettavat-energiamuodot-kertoimet': {
+      kaukolampo: FloatNonNegative
+    },
     'uusiutuvat-omavaraisenergiat': {
       aurinkosahko: FloatNonNegative,
       tuulisahko: FloatNonNegative,
@@ -387,8 +390,8 @@ export const v2027 = R.compose(
       'uusiutuva-energia-vuosituotto-yhteensa': FloatNonNegative
     },
     tulokset: {
-      'kaytettavat-energiamuodot': {
-        'kaukolampo-kerroin': KaukolampoKerroin
+      'kaytettavat-energiamuodot-kertoimet': {
+        kaukolampo: KaukolampoKerroin
       },
       'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
         aurinkosahko: IntegerNonNegative,

@@ -381,8 +381,8 @@
                                                          :uusiutuvat-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
                                                          :fossiiliset-polttoaineet-vuosikulutus-yhteensa common-schema/NonNegative
                                                          :uusiutuva-energia-vuosituotto-yhteensa common-schema/NonNegative}
-                        :tulokset                       {:kaytettavat-energiamuodot
-                                                         {:kaukolampo-kerroin KaukolampoKerroin2027}
+                        :tulokset                       {:kaytettavat-energiamuodot-kertoimet
+                                                         {:kaukolampo KaukolampoKerroin2027}
                                                           :uusiutuvat-omavaraisenergiat-kokonaistuotanto
                                                          {:aurinkosahko common-schema/NonNegative
                                                           :aurinkolampo common-schema/NonNegative

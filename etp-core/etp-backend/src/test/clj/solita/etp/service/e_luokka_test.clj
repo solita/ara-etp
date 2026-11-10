@@ -560,7 +560,7 @@
     ))
 (defn- et-with-kaukolampo [laatimisvaihe kerroin]
   {:perustiedot {:laatimisvaihe laatimisvaihe}
-   :tulokset    {:kaytettavat-energiamuodot {:kaukolampo-kerroin kerroin}}})
+   :tulokset    {:kaytettavat-energiamuodot-kertoimet {:kaukolampo kerroin}}})
 (t/deftest muutettu-kaukolampokerroin-test
   (t/testing "ET2027 olemassa oleva rakennus uses the marked value"
     (t/is (= 0.2M (service/muutettu-kaukolampokerroin 2027 (et-with-kaukolampo 2 0.2M))))
