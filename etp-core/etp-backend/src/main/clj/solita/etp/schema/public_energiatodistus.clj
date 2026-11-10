@@ -36,8 +36,6 @@
                [:kaytettavat-energiamuodot]))
 
 (def Tulokset2027
-  "In ET2027 the public API returns also the energiatodistus specific
-  (effective) district heating energy form coefficient."
   (assoc-in Tulokset
             [:kaytettavat-energiamuodot :kaukolampo-kerroin]
             energiatodistus-schema/KaukolampoKerroin2027))
