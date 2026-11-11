@@ -85,6 +85,8 @@
                        (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-fi]))
                        (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-sv]))
                        (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-id]))
+                       ;; Not a csv column, the value is shown in [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]
+                       (map #(xmap/dissoc-in % [:tulokset :kaytettavat-energiamuodot-kertoimet]))
                        (map xmap/paths)
                        (apply concat)
                        (filter #(every? keyword? %)))))))
