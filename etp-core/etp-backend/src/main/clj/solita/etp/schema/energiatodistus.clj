@@ -360,12 +360,9 @@
    :hiilijalanjalki         Hiilijalanjalki
    :hiilikadenjalki         Hiilikadenjalki})
 
-(def KaukolampoKerroin2027Value
-  common-schema/Num1)
-
 (def KaukolampoKerroin2027
-  "Nullable district heating energy form coefficient for ET2027."
-  (schema/maybe KaukolampoKerroin2027Value))
+  "Building specific district heating energy form coefficient for ET2027."
+  (schema/maybe common-schema/Num1))
 
 (def EnergiatodistusSave2027
   (-> (dissoc-not-in-2027 EnergiatodistusSave2018)
