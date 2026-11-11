@@ -262,9 +262,6 @@ export const v2018 = {
       kaukolampo: FloatNonNegative,
       'uusiutuva-polttoaine': FloatNonNegative
     },
-    'kaytettavat-energiamuodot-kertoimet': {
-      kaukolampo: FloatNonNegative
-    },
     'uusiutuvat-omavaraisenergiat': {
       aurinkosahko: FloatNonNegative,
       tuulisahko: FloatNonNegative,

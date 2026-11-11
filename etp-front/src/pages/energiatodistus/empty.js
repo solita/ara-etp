@@ -203,9 +203,6 @@ export const energiatodistus2018 = _ => ({
       kaukolampo: ValidNone(),
       'uusiutuva-polttoaine': ValidNone()
     },
-    'kaytettavat-energiamuodot-kertoimet': {
-      kaukolampo: ValidNone()
-    },
     'uusiutuvat-omavaraisenergiat': {
       aurinkosahko: ValidNone(),
       tuulisahko: ValidNone(),
