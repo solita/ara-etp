@@ -121,7 +121,7 @@
       {:path [:lahtotiedot :ilmanvaihto :label-sv]}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo] :dp 0}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala] :dp 0}
-      {:path [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo]}
+      {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala-kertoimella] :dp 0}
       {:path [:tulokset :kaytettavat-energiamuodot :sahko] :dp 0}
       {:path [:tulokset :kaytettavat-energiamuodot :sahko-nettoala] :dp 0}
@@ -260,7 +260,7 @@
       {:path [:lahtotiedot :lammitetty-nettoala] :dp 1}
       {:path [:tulokset :e-luku]}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo] :dp 0}
-      {:path [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo]}
+      {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-kertoimella] :dp 0}
       {:path [:tulokset :kaytettavat-energiamuodot :kaukolampo-nettoala-kertoimella] :dp 0}
       {:path [:tulokset :kaytettavat-energiamuodot :sahko] :dp 0}
@@ -423,14 +423,12 @@
       {:path [:toteutunut-ostoenergiankulutus :ostetut-polttoaineet :muu 1 :muunnoskerroin]}
       {:path [:toteutunut-ostoenergiankulutus :ostetut-polttoaineet :muu 1 :kwh] :dp 0}
       {:path [:toteutunut-ostoenergiankulutus :ostetut-polttoaineet :muu 1 :kwh-nettoala] :dp 0}
-      {:path [:toteutunut-ostoenergiankulutus :sahko-vuosikulutus-yhteensa] :dp 0}
-      {:path [:toteutunut-ostoenergiankulutus :sahko-vuosikulutus-yhteensa-nettoala] :dp 0}
-      {:path [:toteutunut-ostoenergiankulutus :kaukolampo-vuosikulutus-yhteensa] :dp 0}
-      {:path [:toteutunut-ostoenergiankulutus :kaukolampo-vuosikulutus-yhteensa-nettoala] :dp 0}
-      {:path [:toteutunut-ostoenergiankulutus :polttoaineet-vuosikulutus-yhteensa] :dp 0}
-      {:path [:toteutunut-ostoenergiankulutus :polttoaineet-vuosikulutus-yhteensa-nettoala] :dp 0}
-      {:path [:toteutunut-ostoenergiankulutus :kaukojaahdytys-vuosikulutus-yhteensa] :dp 0}
-      {:path [:toteutunut-ostoenergiankulutus :kaukojaahdytys-vuosikulutus-yhteensa-nettoala] :dp 0}
+      {:path [:toteutunut-ostoenergiankulutus :ostetut-polttoaineet :muu 2 :nimi]}
+      {:path [:toteutunut-ostoenergiankulutus :ostetut-polttoaineet :muu 2 :maara-vuodessa] :dp 0}
+      {:path [:toteutunut-ostoenergiankulutus :ostetut-polttoaineet :muu 2 :yksikko]}
+      {:path [:toteutunut-ostoenergiankulutus :ostetut-polttoaineet :muu 2 :muunnoskerroin]}
+      {:path [:toteutunut-ostoenergiankulutus :ostetut-polttoaineet :muu 2 :kwh] :dp 0}
+      {:path [:toteutunut-ostoenergiankulutus :ostetut-polttoaineet :muu 2 :kwh-nettoala] :dp 0}
       {:path [:toteutunut-ostoenergiankulutus :summa] :dp 0}
       {:path [:toteutunut-ostoenergiankulutus :summa-nettoala] :dp 0}]
    5 [{:path [:id]}
@@ -851,3 +849,6 @@
          :kieli                              kieli-keyword
          :kayttotarkoitukset                 kayttotarkoitukset
          :ilmastoselvitys-laadintaperusteet  ilmastoselvitys-laadintaperusteet}))))
+
+
+

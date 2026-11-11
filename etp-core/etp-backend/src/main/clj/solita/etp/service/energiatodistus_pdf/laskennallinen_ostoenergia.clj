@@ -62,7 +62,7 @@
             laskennallinen-kaukojaahdytys]}
       {:dt (l :energimuodon-kerroin)
        :dd [(str "")
-            (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo]) (fmt 2))
+            (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]) (fmt 2))
             (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :sahko-kerroin]) (fmt 2))
             (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :uusiutuva-polttoaine-kerroin]) (fmt 2))
             (-> energiatodistus (get-in [:tulokset :kaytettavat-energiamuodot :fossiilinen-polttoaine-kerroin]) (fmt 2))
