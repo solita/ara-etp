@@ -81,6 +81,7 @@
                        (map #(xmap/dissoc-in % [:perustiedot :yritys :postinumero]))
                        (map #(xmap/dissoc-in % [:perustiedot :yritys :postitoimipaikka]))
                        (map #(xmap/dissoc-in % [:tulokset :e-luokka-rajat]))
+                       (map #(xmap/dissoc-in % [:tulokset :kaytettavat-energiamuodot-kertoimet]))
                        (map #(xmap/dissoc-in % [:lahtotiedot :lammitys :lampohavio-lammittamaton-tila]))
                        (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-fi]))
                        (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-sv]))
