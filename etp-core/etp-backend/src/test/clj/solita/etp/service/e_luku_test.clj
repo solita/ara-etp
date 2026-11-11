@@ -156,3 +156,57 @@
     (t/is (= (:kaukojaahdytys kertoimet) 0.4M))
     (t/is (= (:fossiilinen-polttoaine kertoimet) 1M))
     (t/is (= (:uusiutuva-polttoaine kertoimet) 0.5M))))
+
+;; === AE-2777: ET2027 laatijan asettama kaukolämmön energiamuotokerroin ===
+
+(defn et-with-kaukolampo-kerroin [nettoala energiamuodot laatimisvaihe kerroin]
+  (-> (et nettoala energiamuodot)
+      (assoc-in [:perustiedot :laatimisvaihe] laatimisvaihe)
+      (assoc-in [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo] kerroin)))
+
+(t/deftest energiamuotokertoimet-2027-olemassaoleva-rakennus
+  ;; Given olemassa oleva rakennus with kerroin 0.2, Then kaukolampo kerroin is 0.2
+  (t/is (= (:kaukolampo (e-luokka-service/energiamuotokertoimet
+                          2027 (et-with-kaukolampo-kerroin 1 {} 2 0.2M)))
+           0.2M))
+  ;; Other kertoimet stay constant
+  (t/is (= (dissoc (e-luokka-service/energiamuotokertoimet
+                     2027 (et-with-kaukolampo-kerroin 1 {} 2 0.2M))
+                   :kaukolampo)
+           (dissoc (get e-luokka-service/energiamuotokerroin 2027) :kaukolampo)))
+  ;; Given olemassa oleva rakennus without kerroin, Then default kerroin is used
+  (t/is (= (e-luokka-service/energiamuotokertoimet
+             2027 (et-with-kaukolampo-kerroin 1 {} 2 nil))
+           (get e-luokka-service/energiamuotokerroin 2027))))
+
+(t/deftest energiamuotokertoimet-2027-other-laatimisvaihe
+  ;; Given another laatimisvaihe with kerroin, Then default kerroin is used
+  (doseq [laatimisvaihe [0 1 3 4 nil]]
+    (t/is (= (e-luokka-service/energiamuotokertoimet
+               2027 (et-with-kaukolampo-kerroin 1 {} laatimisvaihe 0.2M))
+             (get e-luokka-service/energiamuotokerroin 2027)))))
+
+(t/deftest energiamuotokertoimet-2018-ignores-kerroin
+  (t/is (= (e-luokka-service/energiamuotokertoimet
+             2018 (et-with-kaukolampo-kerroin 1 {} 2 0.2M))
+           (get e-luokka-service/energiamuotokerroin 2018))))
+
+(t/deftest e-luku-2027-kaukolampo-kerroin
+  ;; Given nettoala=100, kaukolampo=10000 and kerroin=0.2 for olemassa oleva rakennus
+  ;; Then E-luku = ceil(10000 * 0.2 / 100) = 20
+  (t/is (= (e-luokka-service/e-luku
+             2027 (et-with-kaukolampo-kerroin 100 {:kaukolampo 10000} 2 0.2M))
+           20M))
+  ;; Given the same for rakennuslupa, Then E-luku = ceil(10000 * 0.38 / 100) = 38
+  (t/is (= (e-luokka-service/e-luku
+             2027 (et-with-kaukolampo-kerroin 100 {:kaukolampo 10000} 0 0.2M))
+           38M)))
+
+(t/deftest e-luku-from-ppp-vaihe-kaukolampo-kerroin
+  ;; Given olemassa oleva rakennus with kerroin 0.2 and vaihe kaukolampo=10000, nettoala=100
+  ;; Then E-luku = ceil(10000 * 0.2 / 100) = 20
+  (t/is (= (e-luokka-service/e-luku-from-ppp-vaihe
+             2027
+             (et-with-kaukolampo-kerroin 100 {} 2 0.2M)
+             {:tulokset {:ostoenergian-tarve-kaukolampo 10000}})
+           20M)))

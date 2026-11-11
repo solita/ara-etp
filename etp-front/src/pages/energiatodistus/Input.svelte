@@ -20,6 +20,7 @@
   export let unit;
   export let labelUnit;
   export let i18nRoot = 'energiatodistus';
+  export let placeholder;
 
   const id = inputs.id(path);
   $: type = inputs.type(schema, path);
@@ -49,6 +50,7 @@
       {compact}
       {center}
       {search}
+      {placeholder}
       bind:model
       lens={inputs.dataLens(inputLanguage, path)}
       format={type.format || format}

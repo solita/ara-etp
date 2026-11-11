@@ -388,6 +388,9 @@ export const v2027 = R.compose(
         lampopumppu: IntegerNonNegative,
         muulampo: IntegerNonNegative,
         muusahko: IntegerNonNegative
+      },
+      'kaytettavat-energiamuodot-kertoimet': {
+        kaukolampo: FloatNonNegative
       }
     },
     lisamerkintoja: String(2, 4000),

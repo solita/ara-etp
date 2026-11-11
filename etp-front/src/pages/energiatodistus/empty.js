@@ -357,6 +357,9 @@ export const energiatodistus2027 = _ =>
           lampopumppu: ValidNone(),
           muulampo: ValidNone(),
           muusahko: ValidNone()
+        },
+        'kaytettavat-energiamuodot-kertoimet': {
+          kaukolampo: ValidNone()
         }
       },
       ilmastoselvitys: {

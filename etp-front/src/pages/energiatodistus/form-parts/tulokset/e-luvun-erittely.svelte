@@ -15,6 +15,7 @@
   import VuosikulutusUnit from '@Pages/energiatodistus/form-parts/units/annual-energy';
 
   import * as EtUtils from '@Pages/energiatodistus/energiatodistus-utils';
+  import * as Laatimisvaiheet from '@Pages/energiatodistus/laatimisvaiheet';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
 
   export let disabled;
@@ -26,9 +27,12 @@
   let eTehokkuusParams = [];
 
   $: energiamuotokertoimet = R.mergeRight(
-    EtUtils.energiamuotokertoimet()[versio],
+    EtUtils.energiatodistusEnergiamuotokertoimet(versio, energiatodistus),
     EtUtils.muutEnergiamuotokertoimet(energiatodistus)
   );
+
+  $: kaukolampoKerroinEditable =
+    versio === 2027 && Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus);
 
   $: ostoenergiat = R.mergeRight(
     EtUtils.ostoenergiat(energiatodistus),
@@ -149,11 +153,28 @@
               path={['tulokset', 'kaytettavat-energiamuodot', energiamuoto]} />
           </td>
           <td class="et-table--td">
-            {R.compose(
-              Maybe.get,
-              R.map(formats.numberFormat),
-              R.prop(energiamuoto)
-            )(energiamuotokertoimet)}
+            {#if energiamuoto === 'kaukolampo' && kaukolampoKerroinEditable}
+              <Input
+                {disabled}
+                {schema}
+                compact={true}
+                placeholder={R.compose(
+                  Maybe.orSome(''),
+                  R.map(formats.numberFormat)
+                )(EtUtils.energiamuotokertoimet()[versio].kaukolampo)}
+                bind:model={energiatodistus}
+                path={[
+                  'tulokset',
+                  'kaytettavat-energiamuodot-kertoimet',
+                  'kaukolampo'
+                ]} />
+            {:else}
+              {R.compose(
+                Maybe.get,
+                R.map(formats.numberFormat),
+                R.prop(energiamuoto)
+              )(energiamuotokertoimet)}
+            {/if}
           </td>
           <td class="et-table--td et-table--td__fifth">
             {R.compose(

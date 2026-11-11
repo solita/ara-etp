@@ -6,6 +6,7 @@ import * as Either from '@Utility/either-utils';
 import * as EitherMaybe from '@Utility/either-maybe.js';
 import * as objects from '@Utility/objects';
 import * as fxmath from '@Utility/fxmath';
+import * as Laatimisvaiheet from './laatimisvaiheet';
 
 export const breadcrumb1stLevel = i18n => ({
   label: i18n('navigation.energiatodistukset'),
@@ -163,6 +164,34 @@ export const energiamuotokertoimet = () => ({
   }
 });
 
+const kaukolampoKerroin = R.compose(
+  R.defaultTo(Maybe.None()),
+  unnestValidation,
+  R.path(['tulokset', 'kaytettavat-energiamuodot-kertoimet', 'kaukolampo'])
+);
+
+/**
+ * Energiamuotokertoimet of the given energiatodistus.
+ * In version 2027 laatija may set the kaukolampo kerroin of an olemassa oleva rakennus.
+ * Otherwise the constant kertoimet of the version are used.
+ * NOTE: Backend has a parallel implementation: solita.etp.service.e-luokka/energiamuotokertoimet.
+ */
+export const energiatodistusEnergiamuotokertoimet = (
+  versio,
+  energiatodistus
+) => {
+  const kertoimet = energiamuotokertoimet()[versio];
+  return versio === 2027 &&
+    !R.isNil(energiatodistus) &&
+    Laatimisvaiheet.isOlemassaOlevaRakennus(energiatodistus)
+    ? R.assoc(
+        'kaukolampo',
+        Maybe.orElse(kertoimet.kaukolampo, kaukolampoKerroin(energiatodistus)),
+        kertoimet
+      )
+    : kertoimet;
+};
+
 const fieldsWithErittelyOstoenergia = [
   'kaukolampo',
   'sahko',
@@ -289,7 +318,7 @@ export const ostetutEnergiamuodot = R.compose(
   ostettuEnergia
 );
 
-export const eluku = (versio, nettoala, energiamuodot) =>
+export const eluku = (versio, nettoala, energiamuodot, energiatodistus) =>
   R.compose(
     R.lift(Math.ceil),
     R.lift(R.flip(R.divide))(unnestValidation(nettoala)),
@@ -297,7 +326,12 @@ export const eluku = (versio, nettoala, energiamuodot) =>
     R.sum,
     Maybe.findAllSome,
     R.values,
-    R.evolve(R.map(R.lift(R.multiply), energiamuotokertoimet()[versio])),
+    R.evolve(
+      R.map(
+        R.lift(R.multiply),
+        energiatodistusEnergiamuotokertoimet(versio, energiatodistus)
+      )
+    ),
     R.map(unnestValidation)
   )(energiamuodot);
 
@@ -467,7 +501,8 @@ export const uusiutuvanEnergianOsuus = energiatodistus => {
     eluku(
       energiatodistus.versio,
       energiatodistus.lahtotiedot['lammitetty-nettoala'],
-      energiatodistus.tulokset['kaytettavat-energiamuodot']
+      energiatodistus.tulokset['kaytettavat-energiamuodot'],
+      energiatodistus
     )
   );
   if (!nettoala || nettoala <= 0 || eLuku == null) return null;

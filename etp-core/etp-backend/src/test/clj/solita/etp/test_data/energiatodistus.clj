@@ -62,7 +62,8 @@
        :bypass-validation-limits        false
        :bypass-validation-limits-reason nil}
       (when (contains? #{2027} versio)
-        {:ilmastoselvitys {:laadintaperuste (rand-int 2)}}))
+        {:ilmastoselvitys {:laadintaperuste (rand-int 2)}
+         :tulokset        {:kaytettavat-energiamuodot-kertoimet {:kaukolampo 0.38M}}}))
     (schema-by-version-and-ready-for-signing versio
                                              ready-for-signing?)
     generators))

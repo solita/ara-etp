@@ -88,8 +88,24 @@
   const perLammitettyNettoala = (energiatodistus, n) =>
     fxmath.round(0, n / energiatodistus.lahtotiedot['lammitetty-nettoala']);
 
+  // In version 2027 laatija may set the kaukolampo kerroin of an olemassa oleva rakennus
+  const olemassaolevaRakennusLaatimisvaihe = 2;
+
+  const energiamuotokerroin = (energiatodistus, energiamuoto) => {
+    const kaukolampoKerroin =
+      energiatodistus.tulokset?.['kaytettavat-energiamuodot-kertoimet']
+        ?.kaukolampo;
+    return energiatodistus.versio === 2027 &&
+      energiamuoto === 'kaukolampo' &&
+      energiatodistus.perustiedot?.laatimisvaihe ===
+        olemassaolevaRakennusLaatimisvaihe &&
+      kaukolampoKerroin != null
+      ? kaukolampoKerroin
+      : path([energiatodistus.versio, energiamuoto], energiamuotokertoimet);
+  };
+
   const energiamuotokerroinTulo = (energiatodistus, energiamuoto) =>
-    path([energiatodistus.versio, energiamuoto], energiamuotokertoimet) *
+    energiamuotokerroin(energiatodistus, energiamuoto) *
     path(
       ['tulokset', 'kaytettavat-energiamuodot', energiamuoto],
       energiatodistus
@@ -786,7 +802,7 @@
                   </td>
                   <td class="py-4 print:py-1 font-normal">
                     {formats.formatNumberMax2(
-                      energiamuotokertoimet[versio]['kaukolampo']
+                      energiamuotokerroin(energiatodistus, 'kaukolampo')
                     )}
                   </td>
                   <td class="py-4 print:py-1">

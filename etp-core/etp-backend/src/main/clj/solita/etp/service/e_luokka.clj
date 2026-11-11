@@ -1,6 +1,7 @@
 (ns solita.etp.service.e-luokka
   (:require [clojure.core.match :as match]
             [solita.etp.service.kayttotarkoitus :as kayttotarkoitus-service]
+            [solita.etp.service.laatimisvaihe :as laatimisvaihe]
             [solita.common.logic :as logic])
   (:import (java.math RoundingMode)))
 
@@ -276,11 +277,27 @@
          :kaukolampo 0.7M
          :uusiutuva-polttoaine 0.5M}})
 
+(defn energiamuotokertoimet
+  "Energiamuotokertoimet of the given energiatodistus. In version 2027
+  laatija may set the kaukolampo kerroin of an olemassa oleva rakennus.
+  Otherwise the constant kertoimet of the version are used."
+  [versio energiatodistus]
+  (let [kertoimet (get energiamuotokerroin versio)
+        kaukolampo (-> energiatodistus
+                       :tulokset
+                       :kaytettavat-energiamuodot-kertoimet
+                       :kaukolampo)]
+    (if (and (= versio 2027)
+             (some? kaukolampo)
+             (laatimisvaihe/olemassaoleva-rakennus? energiatodistus))
+      (assoc kertoimet :kaukolampo (bigdec kaukolampo))
+      kertoimet)))
+
 (defn painotettu-ostoenergiankulutus [versio energiatodistus]
   (logic/if-let*
     [energiamuodot (-> energiatodistus :tulokset :kaytettavat-energiamuodot)
      fixed-energiamuodot (dissoc energiamuodot :muu)
-     muotokerroin (get energiamuotokerroin versio)]
+     muotokerroin (energiamuotokertoimet versio energiatodistus)]
     (with-precision 20
       (reduce + 0M (map #(* (bigdec (or %1 1M)) (bigdec (or %2 0M)))
                         (concat
@@ -313,6 +330,10 @@
                     :kaukolampo             (-> ppp-vaihe :tulokset :ostoenergian-tarve-kaukolampo)
                     :uusiutuva-polttoaine   (-> ppp-vaihe :tulokset :ostoenergian-tarve-uusiutuvat-pat)}
      ;; Create a temporary ET-like structure for calculation
-     temp-et {:tulokset {:kaytettavat-energiamuodot energiamuodot}
+     ;; Laatimisvaihe and energiamuotokertoimet are needed for the ET specific kertoimet
+     temp-et {:perustiedot (select-keys (:perustiedot energiatodistus) [:laatimisvaihe])
+              :tulokset {:kaytettavat-energiamuodot energiamuodot
+                         :kaytettavat-energiamuodot-kertoimet
+                         (-> energiatodistus :tulokset :kaytettavat-energiamuodot-kertoimet)}
               :lahtotiedot {:lammitetty-nettoala nettoala}}]
     (e-luku versio temp-et)))

@@ -380,7 +380,9 @@
                                                           :tuulisahko   common-schema/NonNegative
                                                           :lampopumppu  common-schema/NonNegative
                                                           :muulampo     common-schema/NonNegative
-                                                          :muusahko     common-schema/NonNegative}}
+                                                          :muusahko     common-schema/NonNegative}
+                                                         :kaytettavat-energiamuodot-kertoimet
+                                                         {:kaukolampo common-schema/NonNegative}}
                         :huomiot                        {:iv-ilmastointi    Huomio2027
                                                          :valaistus-muut    Huomio2027
                                                          :lammitys          (assoc Huomio2027
@@ -422,8 +424,19 @@
   because the PPP is created alongside the energiatodistus."
   (dissoc ppp-schema/PerusparannuspassiSave :energiatodistus-id))
 
+(defn- optional-kaytettavat-energiamuodot-kertoimet
+  "Kaytettavat-energiamuodot-kertoimet was added afterwards to version 2027.
+  It is optional in external api for backwards compatibility."
+  [schema]
+  (update schema :tulokset
+          #(-> %
+               (dissoc :kaytettavat-energiamuodot-kertoimet)
+               (assoc (schema/optional-key :kaytettavat-energiamuodot-kertoimet)
+                      (:kaytettavat-energiamuodot-kertoimet %)))))
+
 (def EnergiatodistusSave2027External
-  (assoc (->EnergiatodistusSaveExternal EnergiatodistusSave2027)
+  (assoc (-> (->EnergiatodistusSaveExternal EnergiatodistusSave2027)
+             optional-kaytettavat-energiamuodot-kertoimet)
     (schema/optional-key :perusparannuspassi) (schema/maybe PerusparannuspassiSaveExternal)))
 
 (def Energiatehokkuus

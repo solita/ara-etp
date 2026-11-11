@@ -52,7 +52,8 @@
         energiatodistus.lahtotiedot['lammitetty-nettoala'],
         etEnergiamuodotFromPppVaihe(
           perusparannuspassi.vaiheet[vaiheIndex(vaihe)].tulokset
-        )
+        ),
+        energiatodistus
       ),
     format: Maybe.orSome('')
   };
@@ -76,7 +77,8 @@
         energiatodistus.lahtotiedot['lammitetty-nettoala'],
         etEnergiamuodotFromPppVaihe(
           perusparannuspassi.vaiheet[vaiheIndex(vaihe)].tulokset
-        )
+        ),
+        energiatodistus
       )
     ])
   );

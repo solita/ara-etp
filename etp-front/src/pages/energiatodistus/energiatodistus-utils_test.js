@@ -985,3 +985,93 @@ describe('eluokkaFromRajaAsteikko + applyEluokkaDowngrade combined', () => {
     });
   });
 });
+
+// === AE-2777: ET2027 laatijan asettama kaukolämmön energiamuotokerroin ===
+
+describe('ET2027 kaukolampo energiamuotokerroin', () => {
+  const et = (laatimisvaihe, kerroin) => ({
+    versio: 2027,
+    perustiedot: { laatimisvaihe: Maybe.fromNull(laatimisvaihe) },
+    tulokset: {
+      'kaytettavat-energiamuodot-kertoimet': {
+        kaukolampo: Either.Right(Maybe.fromNull(kerroin))
+      }
+    }
+  });
+
+  const energiamuodot = {
+    'fossiilinen-polttoaine': Either.Right(Maybe.Some(0)),
+    sahko: Either.Right(Maybe.Some(0)),
+    kaukojaahdytys: Either.Right(Maybe.Some(0)),
+    kaukolampo: Either.Right(Maybe.Some(10000)),
+    'uusiutuva-polttoaine': Either.Right(Maybe.Some(0))
+  };
+
+  it('uses the kerroin of an olemassa oleva rakennus', () => {
+    const kertoimet = EtUtils.energiatodistusEnergiamuotokertoimet(
+      2027,
+      et(2, 0.2)
+    );
+    expect(kertoimet.kaukolampo).toEqual(Maybe.Some(0.2));
+    expect(R.dissoc('kaukolampo', kertoimet)).toEqual(
+      R.dissoc('kaukolampo', EtUtils.energiamuotokertoimet()[2027])
+    );
+  });
+
+  it('uses the default kerroin when the kerroin is not set', () => {
+    expect(
+      EtUtils.energiatodistusEnergiamuotokertoimet(2027, et(2, null))
+    ).toEqual(EtUtils.energiamuotokertoimet()[2027]);
+  });
+
+  it('uses the default kerroin when the kerroin is invalid', () => {
+    const invalid = R.assocPath(
+      ['tulokset', 'kaytettavat-energiamuodot-kertoimet', 'kaukolampo'],
+      Either.Left('invalid'),
+      et(2, null)
+    );
+    expect(EtUtils.energiatodistusEnergiamuotokertoimet(2027, invalid)).toEqual(
+      EtUtils.energiamuotokertoimet()[2027]
+    );
+  });
+
+  it('uses the default kerroin in other laatimisvaiheet', () => {
+    R.forEach(
+      laatimisvaihe =>
+        expect(
+          EtUtils.energiatodistusEnergiamuotokertoimet(
+            2027,
+            et(laatimisvaihe, 0.2)
+          )
+        ).toEqual(EtUtils.energiamuotokertoimet()[2027]),
+      [0, 1, 3, 4, null]
+    );
+  });
+
+  it('uses the default kertoimet without energiatodistus', () => {
+    expect(EtUtils.energiatodistusEnergiamuotokertoimet(2027)).toEqual(
+      EtUtils.energiamuotokertoimet()[2027]
+    );
+  });
+
+  it('eluku uses the kerroin of an olemassa oleva rakennus', () => {
+    // ceil(10000 * 0.2 / 100) = 20
+    expect(
+      EtUtils.eluku(
+        2027,
+        Either.Right(Maybe.Some(100)),
+        energiamuodot,
+        et(2, 0.2)
+      )
+    ).toEqual(Maybe.Some(20));
+    // ceil(10000 * 0.38 / 100) = 38
+    expect(
+      EtUtils.eluku(
+        2027,
+        Either.Right(Maybe.Some(100)),
+        energiamuodot,
+        et(0, 0.2)
+      )
+    ).toEqual(Maybe.Some(38));
+  });
+});
