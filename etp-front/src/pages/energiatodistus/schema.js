@@ -75,12 +75,6 @@ const Rakennustunnus = {
   validators: [validations.liftValidator(validations.rakennustunnusValidator)]
 };
 
-const KaukolampoKerroin = {
-  parse: parsers.optionalParser(parsers.parseNumber),
-  format: R.compose(Maybe.orSome(''), R.map(formats.numberFormatPrecision(2))),
-  deserialize: Either.Right,
-  validators: validations.MaybeInterval(0.2, 0.38)
-};
 const FloatNonNegative = Float(0.0, 9999999999);
 const Float1 = Float(0.0, 1.0);
 const AnyFloat = Float(-9999999999, 9999999999);
@@ -388,7 +382,7 @@ export const v2027 = R.compose(
     },
     tulokset: {
       'kaytettavat-energiamuodot-kertoimet': {
-        kaukolampo: KaukolampoKerroin
+        kaukolampo: FloatNonNegative
       },
       'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
         aurinkosahko: IntegerNonNegative,
