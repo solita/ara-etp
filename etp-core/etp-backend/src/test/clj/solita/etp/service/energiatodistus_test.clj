@@ -1079,25 +1079,24 @@
                    (assoc-in [:perustiedot :postinumero] "33100")
                    (assoc-in [:perustiedot :katuosoite-fi] "Testikatu 1")
                    (assoc-in [:perustiedot :rakennustunnus] "103515074X"))
-        [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)]
+        [et-id] (energiatodistus-test-data/insert! [et-add] laatija-id)
+        ;; Given: create a perusparannuspassi BEFORE signing (PPP can only be added to draft)
+        ppp-add (perusparannuspassi-test-data/generate-add et-id)
+        [ppp-id] (perusparannuspassi-test-data/insert! [ppp-add] laatija-whoami)]
 
-    ;; Given: create a perusparannuspassi BEFORE signing (PPP can only be added to draft)
-    (let [ppp-add (perusparannuspassi-test-data/generate-add et-id)
-          [ppp-id] (perusparannuspassi-test-data/insert! [ppp-add] laatija-whoami)]
+    ;; Sign the ET after PPP is added
+    (energiatodistus-test-data/sign! et-id laatija-id true)
 
-      ;; Sign the ET after PPP is added
-      (energiatodistus-test-data/sign! et-id laatija-id true)
+    ;; When: find-korvattavat with matching rakennustunnus
+    (let [results (service/find-korvattavat ts/*db*
+                                             {:rakennustunnus "103515074X"
+                                              :postinumero    "33100"})
+          found-et (first (filter #(= (:id %) et-id) results))]
 
-      ;; When: find-korvattavat with matching rakennustunnus
-      (let [results (service/find-korvattavat ts/*db*
-                                               {:rakennustunnus "103515074X"
-                                                :postinumero    "33100"})
-            found-et (first (filter #(= (:id %) et-id) results))]
-
-        ;; Then: PPP id is present
-        (t/is (some? found-et) "ET should be found in korvattavat results")
-        (t/is (= ppp-id (:perusparannuspassi-id found-et))
-              "Korvattavat result should include perusparannuspassi-id")))))
+      ;; Then: PPP id is present
+      (t/is (some? found-et) "ET should be found in korvattavat results")
+      (t/is (= ppp-id (:perusparannuspassi-id found-et))
+            "Korvattavat result should include perusparannuspassi-id"))))
 
 (t/deftest find-korvattavat-ppp-nil-when-no-ppp-test
   ;; Given: a signed ET without a perusparannuspassi

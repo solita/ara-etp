@@ -1721,17 +1721,17 @@
         energiatodistus-ids-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2027 true laatija-id))
         _ (ppp-test-data/generate-and-insert! energiatodistus-ids-with-ppp laatija-whoami)
         ;; Sign all ETs so they are visible to paakayttaja (tila-id = 2)
-        _ (sign-energiatodistukset! (map #(vec [laatija-id %]) (concat energiatodistus-ids-without-ppp energiatodistus-ids-with-ppp)))]
-    ;; When: searching for perusparannuspassi.valid = true
-    (let [results (search kayttaja-test-data/paakayttaja
-                          [[["=" "perusparannuspassi.valid" true]]]
-                          nil nil nil)
-          result-ids (set (map :id results))]
-      ;; Then: only certificates with valid PPP are returned
-      (t/is (every? #(contains? result-ids %) energiatodistus-ids-with-ppp)
-             "Certificates with PPP should be found")
-      (t/is (not-any? #(contains? result-ids %) energiatodistus-ids-without-ppp)
-             "Certificates without PPP should not be found"))))
+        _ (sign-energiatodistukset! (map #(vec [laatija-id %]) (concat energiatodistus-ids-without-ppp energiatodistus-ids-with-ppp)))
+        ;; When: searching for perusparannuspassi.valid = true
+        results (search kayttaja-test-data/paakayttaja
+                        [[["=" "perusparannuspassi.valid" true]]]
+                        nil nil nil)
+        result-ids (set (map :id results))]
+    ;; Then: only certificates with valid PPP are returned
+    (t/is (every? #(contains? result-ids %) energiatodistus-ids-with-ppp)
+          "Certificates with PPP should be found")
+    (t/is (not-any? #(contains? result-ids %) energiatodistus-ids-without-ppp)
+          "Certificates without PPP should not be found")))
 
 (t/deftest search-by-ppp-valid-is-distinct-from-filter-test
   ;; Given: ET2027 certificates, some with PPP and some without
@@ -1746,18 +1746,18 @@
         energiatodistus-ids-with-ppp (keys (energiatodistus-test-data/generate-and-insert! 2 2027 true laatija-id))
         _ (ppp-test-data/generate-and-insert! energiatodistus-ids-with-ppp laatija-whoami)
         ;; Sign all ETs so they are visible to paakayttaja (tila-id = 2)
-        _ (sign-energiatodistukset! (map #(vec [laatija-id %]) (concat energiatodistus-ids-without-ppp energiatodistus-ids-with-ppp)))]
-    ;; When: searching for perusparannuspassi.valid IS DISTINCT FROM true (= no valid PPP)
-    (let [results (search kayttaja-test-data/paakayttaja
-                          [[["is-distinct-from" "perusparannuspassi.valid" true]]]
-                          nil nil nil)
-          result-ids (set (map :id results))]
-      ;; Then: certificates WITHOUT PPP are returned
-      (t/is (every? #(contains? result-ids %) energiatodistus-ids-without-ppp)
-             "Certificates without PPP should be found")
-      ;; And: certificates WITH valid PPP are NOT returned
-      (t/is (not-any? #(contains? result-ids %) energiatodistus-ids-with-ppp)
-             "Certificates with valid PPP should not be found"))))
+        _ (sign-energiatodistukset! (map #(vec [laatija-id %]) (concat energiatodistus-ids-without-ppp energiatodistus-ids-with-ppp)))
+        ;; When: searching for perusparannuspassi.valid IS DISTINCT FROM true (= no valid PPP)
+        results (search kayttaja-test-data/paakayttaja
+                        [[["is-distinct-from" "perusparannuspassi.valid" true]]]
+                        nil nil nil)
+        result-ids (set (map :id results))]
+    ;; Then: certificates WITHOUT PPP are returned
+    (t/is (every? #(contains? result-ids %) energiatodistus-ids-without-ppp)
+          "Certificates without PPP should be found")
+    ;; And: certificates WITH valid PPP are NOT returned
+    (t/is (not-any? #(contains? result-ids %) energiatodistus-ids-with-ppp)
+          "Certificates with valid PPP should not be found")))
 
 (t/deftest search-by-ppp-id-filter-test
   ;; Given: ET2027 certificates with known PPP ids
@@ -1770,15 +1770,15 @@
         ppp-ids (ppp-test-data/generate-and-insert! energiatodistus-ids laatija-whoami)
         target-ppp-id (first ppp-ids)
         ;; Sign all ETs so they are visible to paakayttaja (tila-id = 2)
-        _ (sign-energiatodistukset! (map #(vec [laatija-id %]) energiatodistus-ids))]
-    ;; When: searching for perusparannuspassi.id = specific id
-    (let [results (search kayttaja-test-data/paakayttaja
-                          [[["=" "perusparannuspassi.id" target-ppp-id]]]
-                          nil nil nil)
-          _result-ids (set (map :id results))]
-      ;; Then: exactly one certificate is returned
-      (t/is (= 1 (count results))
-             "Exactly one certificate should match the specific PPP id")
-      ;; And: the result's perusparannuspassi-id matches
-      (t/is (= target-ppp-id (:perusparannuspassi-id (first results)))
-             "The returned certificate should have the matching PPP id"))))
+        _ (sign-energiatodistukset! (map #(vec [laatija-id %]) energiatodistus-ids))
+        ;; When: searching for perusparannuspassi.id = specific id
+        results (search kayttaja-test-data/paakayttaja
+                        [[["=" "perusparannuspassi.id" target-ppp-id]]]
+                        nil nil nil)
+        _result-ids (set (map :id results))]
+    ;; Then: exactly one certificate is returned
+    (t/is (= 1 (count results))
+          "Exactly one certificate should match the specific PPP id")
+    ;; And: the result's perusparannuspassi-id matches
+    (t/is (= target-ppp-id (:perusparannuspassi-id (first results)))
+          "The returned certificate should have the matching PPP id")))
