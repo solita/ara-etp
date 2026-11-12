@@ -259,7 +259,7 @@
             versio alakayttotarkoitus-id nettoala e-luku
             tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset))
 
-(def energiamuotokerroin
+(def fixed-energiamuotokertoimet
   {2027 {:fossiilinen-polttoaine 1M
          :sahko 0.90M
          :kaukojaahdytys 0.21M
@@ -292,7 +292,7 @@
 (defn energiamuotokertoimet
   "Effective (tehollinen) energiamuotokertoimet for the given energiatodistus."
   [versio energiatodistus]
-  (when-let [kertoimet (get energiamuotokerroin versio)]
+  (when-let [kertoimet (get fixed-energiamuotokertoimet versio)]
     (if-let [kaukolampo (tehollinen-kaukolampo-kerroin versio energiatodistus)]
       (assoc kertoimet :kaukolampo kaukolampo)
       kertoimet)))

@@ -42,7 +42,7 @@
    ["/energiamuotokertoimet"
     {:get {:summary   "Hae energiatodistuksen energiamuotokertoimien oletusarvot versioittain"
            :responses {200 {:body {schema/Int {schema/Keyword schema/Num}}}}
-           :handler   (fn [_] (r/response e-luokka-service/energiamuotokerroin))}}]
+           :handler   (fn [_] (r/response e-luokka-service/fixed-energiamuotokertoimet))}}]
 
    ["/kayttotarkoitusluokat/:versio"
     {:get {:summary    "Hae energiatodistuksen käyttötarkoitusluokat"

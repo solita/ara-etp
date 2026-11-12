@@ -35,7 +35,7 @@
 
 (defn test-energiamuoto [versio energiamuoto]
   (t/is (= (e-luokka-service/e-luku versio (et 1 {energiamuoto 1}))
-           (.setScale (energiamuoto (e-luokka-service/energiamuotokerroin versio))
+           (.setScale (energiamuoto (e-luokka-service/fixed-energiamuotokertoimet versio))
                       0 RoundingMode/CEILING))))
 
 (t/deftest e-luku-kerroin-2018
@@ -69,7 +69,7 @@
 
 ;; 1.2 - Exact coefficient values for 2027
 (t/deftest energiamuotokerroin-2027-values
-  (let [kertoimet (get e-luokka-service/energiamuotokerroin 2027)]
+  (let [kertoimet (get e-luokka-service/fixed-energiamuotokertoimet 2027)]
     (t/is (= (:sahko kertoimet) 0.90M))
     (t/is (= (:kaukolampo kertoimet) 0.38M))
     (t/is (= (:kaukojaahdytys kertoimet) 0.21M))
@@ -141,7 +141,7 @@
 
 ;; 1.7 - Regression: 2018 coefficients unchanged
 (t/deftest energiamuotokerroin-2018-unchanged
-  (let [kertoimet (get e-luokka-service/energiamuotokerroin 2018)]
+  (let [kertoimet (get e-luokka-service/fixed-energiamuotokertoimet 2018)]
     (t/is (= (:sahko kertoimet) 1.2M))
     (t/is (= (:kaukolampo kertoimet) 0.5M))
     (t/is (= (:kaukojaahdytys kertoimet) 0.28M))
@@ -150,7 +150,7 @@
 
 ;; 1.8 - Regression: 2013 coefficients unchanged
 (t/deftest energiamuotokerroin-2013-unchanged
-  (let [kertoimet (get e-luokka-service/energiamuotokerroin 2013)]
+  (let [kertoimet (get e-luokka-service/fixed-energiamuotokertoimet 2013)]
     (t/is (= (:sahko kertoimet) 1.7M))
     (t/is (= (:kaukolampo kertoimet) 0.7M))
     (t/is (= (:kaukojaahdytys kertoimet) 0.4M))
