@@ -84,6 +84,7 @@
 
     Maybe.orElseRun(_ => {
       eTehokkuus = Maybe.None();
+      eTehokkuusParams = [];
     }, params);
 
     R.forEach(p => {
