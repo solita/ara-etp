@@ -32,13 +32,15 @@
                                                     "- Viestin extrenalId: {{external-id}}\n\n"
                                                     "Etsi logeista externalId:llä, niin voit päätellä, mihin lähettäminen on kaatunut.")}})
 
+(def ^:private markdown-config
+  (-> ch/default-config
+      (update-in [:renderer :nodes SoftLineBreak] (constantly [:br]))))
+
 (defn- prepare-email [{:keys [subject body]} data]
-  (let [config (update-in ch/default-config
-                          [:renderer :nodes SoftLineBreak] (constantly [:br]))]
-    {:subject (clostache/render subject data)
-     :body    (->> (clostache/render body data) (ch/markdown->html config) html)
-     :subtype "html"
-     :to      config/email-exception-info}))
+  {:subject (clostache/render subject data)
+   :body    (->> (clostache/render body data) (ch/markdown->html markdown-config) html)
+   :subtype "html"
+   :to      config/email-exception-info})
 
 (defn exception-handler [^Throwable t]
   (let [{:keys [type] :as data} (-> t ex-data)]
