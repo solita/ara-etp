@@ -75,6 +75,25 @@ const Rakennustunnus = {
   validators: [validations.liftValidator(validations.rakennustunnusValidator)]
 };
 
+const hasMaxTwoDecimals = n => Math.round(n * 100) / 100 === n;
+
+const Energiamuotokerroin = {
+  ...Float(0.2, 0.38),
+  parse: parsers.optionalParser(
+    R.compose(
+      R.chain(
+        R.ifElse(
+          hasMaxTwoDecimals,
+          Either.Right,
+          R.always(Either.Left(R.applyTo('parsing.max-two-decimals')))
+        )
+      ),
+      parsers.parseNumber
+    )
+  ),
+  format: R.compose(Maybe.orSome(''), R.map(formats.numberFormatPrecision(2)))
+};
+
 const FloatNonNegative = Float(0.0, 9999999999);
 const Float1 = Float(0.0, 1.0);
 const AnyFloat = Float(-9999999999, 9999999999);
@@ -381,6 +400,9 @@ export const v2027 = R.compose(
       'uusiutuva-energia-vuosituotto-yhteensa': FloatNonNegative
     },
     tulokset: {
+      'kaytettavat-energiamuodot-kertoimet': {
+        kaukolampo: Energiamuotokerroin
+      },
       'uusiutuvat-omavaraisenergiat-kokonaistuotanto': {
         aurinkosahko: IntegerNonNegative,
         aurinkolampo: IntegerNonNegative,

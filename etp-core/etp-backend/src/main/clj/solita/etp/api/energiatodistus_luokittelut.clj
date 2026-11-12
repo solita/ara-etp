@@ -39,6 +39,11 @@
    (classification-route "/havainnointikayntityyppi" "havainnointikayntityyppi" luokittelu-service/find-havainnointikayntityypit)
    (classification-route "/ilmastoselvitys-laadintaperuste" "ilmastoselvitys-laadintaperuste" luokittelu-service/find-ilmastoselvitys-laadintaperusteet)
 
+   ["/energiamuotokertoimet"
+    {:get {:summary   "Hae energiatodistuksen energiamuotokertoimien oletusarvot versioittain"
+           :responses {200 {:body {schema/Int {schema/Keyword schema/Num}}}}
+           :handler   (fn [_] (r/response e-luokka-service/energiamuotokerroin))}}]
+
    ["/kayttotarkoitusluokat/:versio"
     {:get {:summary    "Hae energiatodistuksen käyttötarkoitusluokat"
            :parameters {:path {:versio common-schema/Key}}

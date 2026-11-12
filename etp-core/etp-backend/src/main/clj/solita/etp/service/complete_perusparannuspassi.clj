@@ -13,10 +13,11 @@
    :ostoenergian-tarve-kaukojaahdytys   :kaukojaahdytys})
 
 (defn- painotettu-ostoenergia
-  "Calculate weighted energy from PPP vaihe tulokset using e-luokka energiamuotokerroin"
-  [tulokset]
+  "Calculate weighted energy from PPP vaihe tulokset using the energiatodistus
+  specific (tehollinen) energiamuotokertoimet"
+  [energiatodistus tulokset]
   (when tulokset
-    (let [kertoimet (e-luokka-service/energiamuotokerroin 2027)]
+    (let [kertoimet (e-luokka-service/energiamuotokertoimet 2027 energiatodistus)]
       (with-precision 20
         (reduce + 0M
                 (map (fn [[ppp-key kerroin-key]]
@@ -143,7 +144,7 @@
                          (:tayttaa-a0-vaatimukset ppp-perustiedot))
                        :e-luokka)
           ostoenergia (total-ostoenergia-ppp tulokset)
-          painotettu (painotettu-ostoenergia tulokset)
+          painotettu (painotettu-ostoenergia energiatodistus tulokset)
           kustannukset (energia-kustannukset tulokset ppp-tulokset)
           toteutunut-ostoenergia (total-toteutunut-ostoenergia tulokset)
           toteutunut-kustannukset (toteutunut-energia-kustannukset tulokset ppp-tulokset)

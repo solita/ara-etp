@@ -21,6 +21,7 @@
             [solita.etp.schema.viesti :as viesti-schema]
             [solita.etp.security :as security]
             [solita.etp.service.concurrent :as concurrent]
+            [solita.etp.service.e-luokka :as e-luokka-service]
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-destruction :as energiatodistus-destruction-service]
             [solita.etp.service.energiatodistus-csv :as energiatodistus-csv-service]
@@ -92,20 +93,23 @@
            :invalid-arguments
            (str "Invalid json in where: " where)))))
 
-(defn search-route [schema]
-  [""
-   {:get {:summary    "Hae energiatodistuksia"
-          :parameters {:query energiatodistus-schema/EnergiatodistusSearch}
-          :responses  {200 {:body [schema]}}
-          :access     rooli-service/energiatodistus-reader?
-          :handler    (fn [{{:keys [query]} :parameters :keys [db whoami]}]
-                        (api-response/response-with-exceptions
-                          #(energiatodistus-search-service/search
-                           db
-                           whoami
-                           (update query :where parse-where)
-                           schema)
-                         search-exceptions))}}])
+(defn search-route
+  ([schema] (search-route schema identity))
+  ([schema post-process]
+   [""
+    {:get {:summary    "Hae energiatodistuksia"
+           :parameters {:query energiatodistus-schema/EnergiatodistusSearch}
+           :responses  {200 {:body [schema]}}
+           :access     rooli-service/energiatodistus-reader?
+           :handler    (fn [{{:keys [query]} :parameters :keys [db whoami]}]
+                         (api-response/response-with-exceptions
+                           #(mapv post-process
+                                 (energiatodistus-search-service/search
+                                   db
+                                   whoami
+                                   (update query :where parse-where)
+                                   schema))
+                           search-exceptions))}}]))
 
 (def search-count-route
   ["/count"
@@ -143,7 +147,8 @@
 (def public-routes
   (concat
    [["/energiatodistukset"
-     (search-route public-energiatodistus-schema/Energiatodistus)
+     (search-route public-energiatodistus-schema/Energiatodistus
+                   e-luokka-service/assoc-tehollinen-kaukolampo-kerroin)
      search-count-route
      (csv-route energiatodistus-csv-service/energiatodistukset-public-csv true)
      luokittelut-api/routes]]))

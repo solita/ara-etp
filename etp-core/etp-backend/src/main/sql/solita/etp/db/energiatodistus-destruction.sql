@@ -281,6 +281,7 @@ set
     t$kaytettavat_energiamuodot$sahko                               = null,
     t$kaytettavat_energiamuodot$uusiutuva_polttoaine                = null,
     t$kaytettavat_energiamuodot$muu                                 = null,
+    t$kaytettavat_energiamuodot_kertoimet$kaukolampo                = null,
     t$lampokuormat$aurinko                                          = null,
     t$lampokuormat$ihmiset                                          = null,
     t$lampokuormat$kuluttajalaitteet                                = null,

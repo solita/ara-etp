@@ -618,6 +618,34 @@ describe('Energiatodistus Utils: ', () => {
   });
 });
 
+// Default kertoimet in the format returned by backend /energiamuotokertoimet
+const oletusKertoimet = {
+  2013: {
+    'fossiilinen-polttoaine': 1,
+    sahko: 1.7,
+    kaukojaahdytys: 0.4,
+    kaukolampo: 0.7,
+    'uusiutuva-polttoaine': 0.5
+  },
+  2018: {
+    'fossiilinen-polttoaine': 1,
+    sahko: 1.2,
+    kaukojaahdytys: 0.28,
+    kaukolampo: 0.5,
+    'uusiutuva-polttoaine': 0.5
+  },
+  2027: {
+    'fossiilinen-polttoaine': 1,
+    sahko: 0.9,
+    kaukojaahdytys: 0.21,
+    kaukolampo: 0.38,
+    'uusiutuva-polttoaine': 0.38
+  }
+};
+
+const kertoimet = versio =>
+  EtUtils.energiamuotokertoimet(oletusKertoimet, { versio });
+
 describe('e-luku calculations', () => {
   describe('complete e-luku calculation', () => {
     describe('Only fossiilinen polttoaine', () => {
@@ -631,7 +659,7 @@ describe('e-luku calculations', () => {
         };
 
         const e_luku = EtUtils.eluku(
-          2018,
+          kertoimet(2018),
           Either.Right(Maybe.Some(100)),
           energiamuodot
         );
@@ -648,7 +676,7 @@ describe('e-luku calculations', () => {
         };
 
         const e_luku = EtUtils.eluku(
-          2018,
+          kertoimet(2018),
           Either.Right(Maybe.Some(100)),
           energiamuodot
         );
@@ -665,7 +693,7 @@ describe('e-luku calculations', () => {
         };
 
         const e_luku = EtUtils.eluku(
-          2018,
+          kertoimet(2018),
           Either.Right(Maybe.None()),
           energiamuodot
         );
@@ -682,7 +710,7 @@ describe('e-luku calculations', () => {
         };
 
         const e_luku = EtUtils.eluku(
-          2018,
+          kertoimet(2018),
           Either.Right(Maybe.Some(100)),
           energiamuodot
         );
@@ -698,32 +726,26 @@ describe('ET2027 energiamuotokertoimet', () => {
   // 3.1 - Correct 2027 coefficient values
   describe('energiamuotokertoimet returns correct 2027 values', () => {
     it('should have the new 2027 coefficients', () => {
-      // Given the energiamuotokertoimet function
-      // When we retrieve 2027 coefficients
-      const kertoimet = EtUtils.energiamuotokertoimet()[2027];
+      const k = kertoimet(2027);
 
-      // Then all values match the new regulation
-      expect(kertoimet['fossiilinen-polttoaine']).toEqual(Maybe.Some(1));
-      expect(kertoimet.sahko).toEqual(Maybe.Some(0.9));
-      expect(kertoimet.kaukolampo).toEqual(Maybe.Some(0.38));
-      expect(kertoimet.kaukojaahdytys).toEqual(Maybe.Some(0.21));
-      expect(kertoimet['uusiutuva-polttoaine']).toEqual(Maybe.Some(0.38));
+      expect(k['fossiilinen-polttoaine']).toEqual(Maybe.Some(1));
+      expect(k.sahko).toEqual(Maybe.Some(0.9));
+      expect(k.kaukolampo).toEqual(Maybe.Some(0.38));
+      expect(k.kaukojaahdytys).toEqual(Maybe.Some(0.21));
+      expect(k['uusiutuva-polttoaine']).toEqual(Maybe.Some(0.38));
     });
   });
 
   // 3.2 - Regression: 2018 values unchanged
   describe('energiamuotokertoimet 2018 values unchanged', () => {
     it('should still have the original 2018 coefficients', () => {
-      // Given the energiamuotokertoimet function
-      // When we retrieve 2018 coefficients
-      const kertoimet = EtUtils.energiamuotokertoimet()[2018];
+      const k = kertoimet(2018);
 
-      // Then all values remain as they were
-      expect(kertoimet.sahko).toEqual(Maybe.Some(1.2));
-      expect(kertoimet.kaukolampo).toEqual(Maybe.Some(0.5));
-      expect(kertoimet.kaukojaahdytys).toEqual(Maybe.Some(0.28));
-      expect(kertoimet['fossiilinen-polttoaine']).toEqual(Maybe.Some(1));
-      expect(kertoimet['uusiutuva-polttoaine']).toEqual(Maybe.Some(0.5));
+      expect(k.sahko).toEqual(Maybe.Some(1.2));
+      expect(k.kaukolampo).toEqual(Maybe.Some(0.5));
+      expect(k.kaukojaahdytys).toEqual(Maybe.Some(0.28));
+      expect(k['fossiilinen-polttoaine']).toEqual(Maybe.Some(1));
+      expect(k['uusiutuva-polttoaine']).toEqual(Maybe.Some(0.5));
     });
   });
 
@@ -741,7 +763,7 @@ describe('ET2027 energiamuotokertoimet', () => {
 
       // When E-luku is calculated with 2027 coefficients
       const e_luku = EtUtils.eluku(
-        2027,
+        kertoimet(2027),
         Either.Right(Maybe.Some(100)),
         energiamuodot
       );
@@ -763,7 +785,7 @@ describe('ET2027 energiamuotokertoimet', () => {
 
       // When E-luku is calculated with 2027 coefficients
       const e_luku = EtUtils.eluku(
-        2027,
+        kertoimet(2027),
         Either.Right(Maybe.Some(100)),
         energiamuodot
       );
@@ -786,7 +808,7 @@ describe('ET2027 energiamuotokertoimet', () => {
 
       // When E-luku is calculated with 2027 coefficients
       const e_luku = EtUtils.eluku(
-        2027,
+        kertoimet(2027),
         Either.Right(Maybe.Some(150)),
         energiamuodot
       );
@@ -809,7 +831,7 @@ describe('ET2027 energiamuotokertoimet', () => {
 
       // When E-luku is calculated
       const e_luku = EtUtils.eluku(
-        2027,
+        kertoimet(2027),
         Either.Right(Maybe.None()),
         energiamuodot
       );
@@ -831,7 +853,7 @@ describe('ET2027 energiamuotokertoimet', () => {
 
       // When E-luku is calculated with 2027 coefficients
       const e_luku = EtUtils.eluku(
-        2027,
+        kertoimet(2027),
         Either.Right(Maybe.Some(100)),
         energiamuodot
       );
@@ -839,6 +861,89 @@ describe('ET2027 energiamuotokertoimet', () => {
       // Then result is 0
       expect(e_luku).toEqual(Maybe.Some(0));
     });
+  });
+});
+
+// === AE-2777: energiatodistus specific kaukolämpö kerroin ===
+
+describe('tehollinen kaukolämpö kerroin', () => {
+  const et = (versio, laatimisvaihe, kaukolampo) => ({
+    versio,
+    perustiedot: { laatimisvaihe },
+    tulokset: {
+      'kaytettavat-energiamuodot-kertoimet': {
+        kaukolampo: Either.Right(kaukolampo)
+      }
+    }
+  });
+
+  it('is used for 2027 olemassa oleva rakennus', () => {
+    const energiatodistus = et(2027, Maybe.Some(2), Maybe.Some(0.25));
+    expect(EtUtils.tehollinenKaukolampoKerroin(energiatodistus)).toEqual(
+      Maybe.Some(0.25)
+    );
+    const k = EtUtils.energiamuotokertoimet(oletusKertoimet, energiatodistus);
+    expect(k.kaukolampo).toEqual(Maybe.Some(0.25));
+    expect(k.sahko).toEqual(Maybe.Some(0.9));
+  });
+
+  it('falls back to default when the value is missing', () => {
+    const energiatodistus = et(2027, Maybe.Some(2), Maybe.None());
+    expect(EtUtils.tehollinenKaukolampoKerroin(energiatodistus)).toEqual(
+      Maybe.None()
+    );
+    expect(
+      EtUtils.energiamuotokertoimet(oletusKertoimet, energiatodistus).kaukolampo
+    ).toEqual(Maybe.Some(0.38));
+  });
+
+  it('falls back to default when the value is invalid', () => {
+    const energiatodistus = {
+      ...et(2027, Maybe.Some(2), Maybe.None()),
+      tulokset: {
+        'kaytettavat-energiamuodot-kertoimet': {
+          kaukolampo: Either.Left('invalid')
+        }
+      }
+    };
+    expect(
+      EtUtils.energiamuotokertoimet(oletusKertoimet, energiatodistus).kaukolampo
+    ).toEqual(Maybe.Some(0.38));
+  });
+
+  it('is ignored for other laatimisvaihe', () => {
+    [Maybe.Some(0), Maybe.Some(1), Maybe.None()].forEach(laatimisvaihe => {
+      const energiatodistus = et(2027, laatimisvaihe, Maybe.Some(0.25));
+      expect(
+        EtUtils.energiamuotokertoimet(oletusKertoimet, energiatodistus)
+          .kaukolampo
+      ).toEqual(Maybe.Some(0.38));
+    });
+  });
+
+  it('is ignored for 2018', () => {
+    const energiatodistus = et(2018, Maybe.Some(2), Maybe.Some(0.25));
+    expect(
+      EtUtils.energiamuotokertoimet(oletusKertoimet, energiatodistus).kaukolampo
+    ).toEqual(Maybe.Some(0.5));
+  });
+
+  it('affects e-luku', () => {
+    const energiamuodot = {
+      'fossiilinen-polttoaine': Either.Right(Maybe.None()),
+      sahko: Either.Right(Maybe.None()),
+      kaukojaahdytys: Either.Right(Maybe.None()),
+      kaukolampo: Either.Right(Maybe.Some(10000)),
+      'uusiutuva-polttoaine': Either.Right(Maybe.None())
+    };
+    const energiatodistus = et(2027, Maybe.Some(2), Maybe.Some(0.2));
+    expect(
+      EtUtils.eluku(
+        EtUtils.energiamuotokertoimet(oletusKertoimet, energiatodistus),
+        Either.Right(Maybe.Some(100)),
+        energiamuodot
+      )
+    ).toEqual(Maybe.Some(20));
   });
 });
 

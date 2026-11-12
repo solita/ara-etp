@@ -44,11 +44,17 @@
        (apply deep/deep-merge)
        (flat/tree->flat ".")))
 
+(defn- dissoc-non-searchable-fields
+  "The energiatodistus specific kaukolämpö kerroin is not searchable as such,
+  because it is not always the effective (tehollinen) kerroin."
+  [schema]
+  (update schema :tulokset dissoc :kaytettavat-energiamuodot-kertoimet))
+
 (def private-search-schema
   (schemas->search-schema
     {:energiatodistus energiatodistus-schema/Energiatodistus2013}
     {:energiatodistus energiatodistus-schema/Energiatodistus2018}
-    {:energiatodistus energiatodistus-schema/Energiatodistus2027}
+    {:energiatodistus (dissoc-non-searchable-fields energiatodistus-schema/Energiatodistus2027)}
     {:energiatodistus
      {:perustiedot
       {:nimi        schema/Str
@@ -72,7 +78,7 @@
   (schemas->search-schema
     {:energiatodistus public-energiatodistus-schema/Energiatodistus2013}
     {:energiatodistus public-energiatodistus-schema/Energiatodistus2018}
-    {:energiatodistus public-energiatodistus-schema/Energiatodistus2027}
+    {:energiatodistus (dissoc-non-searchable-fields public-energiatodistus-schema/Energiatodistus2027)}
     {:energiatodistus
      {:perustiedot
       {:nimi        schema/Str

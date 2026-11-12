@@ -156,3 +156,45 @@
     (t/is (= (:kaukojaahdytys kertoimet) 0.4M))
     (t/is (= (:fossiilinen-polttoaine kertoimet) 1M))
     (t/is (= (:uusiutuva-polttoaine kertoimet) 0.5M))))
+
+;; === AE-2777: energiatodistus specific kaukolämpö kerroin ===
+
+(defn- et-with-kaukolampo-kerroin [versio laatimisvaihe kerroin]
+  (-> (et 100 {:kaukolampo 10000})
+      (assoc :versio versio)
+      (assoc-in [:perustiedot :laatimisvaihe] laatimisvaihe)
+      (assoc-in [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo] kerroin)))
+
+(t/deftest e-luku-2027-kaukolampo-kerroin
+  ;; Olemassa oleva rakennus uses the given kerroin: ceil(0.25 * 10000 / 100) = 25
+  (t/is (= (e-luokka-service/e-luku 2027 (et-with-kaukolampo-kerroin 2027 2 0.25M)) 25M))
+  ;; Missing kerroin uses the default: ceil(0.38 * 10000 / 100) = 38
+  (t/is (= (e-luokka-service/e-luku 2027 (et-with-kaukolampo-kerroin 2027 2 nil)) 38M))
+  ;; Other laatimisvaihe ignores the kerroin
+  (doseq [laatimisvaihe [nil 0 1 3 4]]
+    (t/is (= (e-luokka-service/e-luku 2027 (et-with-kaukolampo-kerroin 2027 laatimisvaihe 0.25M))
+             38M)))
+  ;; Older versions ignore the kerroin
+  (t/is (= (e-luokka-service/e-luku 2018 (et-with-kaukolampo-kerroin 2018 2 0.25M)) 50M)))
+
+(t/deftest e-luku-from-ppp-vaihe-kaukolampo-kerroin
+  (let [ppp-vaihe {:tulokset {:ostoenergian-tarve-kaukolampo 10000}}]
+    (t/is (= (e-luokka-service/e-luku-from-ppp-vaihe
+               2027 (et-with-kaukolampo-kerroin 2027 2 0.2M) ppp-vaihe)
+             20M))
+    (t/is (= (e-luokka-service/e-luku-from-ppp-vaihe
+               2027 (et-with-kaukolampo-kerroin 2027 1 0.2M) ppp-vaihe)
+             38M))))
+
+(t/deftest assoc-tehollinen-kaukolampo-kerroin
+  (t/is (= 0.25M (-> (et-with-kaukolampo-kerroin 2027 2 0.25M)
+                     e-luokka-service/assoc-tehollinen-kaukolampo-kerroin
+                     :tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo)))
+  (t/is (= 0.38M (-> (et-with-kaukolampo-kerroin 2027 2 nil)
+                     e-luokka-service/assoc-tehollinen-kaukolampo-kerroin
+                     :tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo)))
+  (t/is (= 0.38M (-> (et-with-kaukolampo-kerroin 2027 1 0.25M)
+                     e-luokka-service/assoc-tehollinen-kaukolampo-kerroin
+                     :tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo)))
+  (let [et-2018 (et-with-kaukolampo-kerroin 2018 2 nil)]
+    (t/is (= et-2018 (e-luokka-service/assoc-tehollinen-kaukolampo-kerroin et-2018)))))

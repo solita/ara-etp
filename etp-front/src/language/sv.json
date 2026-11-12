@@ -30,7 +30,8 @@
     "invalid-integer": "Felaktigt heltal",
     "invalid-number": "Felaktigt nummer",
     "invalid-date": "Felaktigt datum",
-    "invalid-year": "Felaktigt år"
+    "invalid-year": "Felaktigt år",
+    "max-two-decimals": "Högst två decimaler"
   },
   "navigation": {
     "breadcrumb-bar": "Sidhierarki",
@@ -894,6 +895,10 @@
       "yhteensa": "Totalt",
       "e-luku": "E-talet",
       "e-luokka": "E-klass",
+      "kaytettavat-energiamuodot-kertoimet": {
+        "label-context": "Specifikation av E-tal",
+        "kaukolampo": "Energiformsfaktor för fjärrvärme"
+      },
       "kaytettavat-energiamuodot": {
         "header": "Specifikation av E-tal",
         "label-context": "Specifikation av E-tal",

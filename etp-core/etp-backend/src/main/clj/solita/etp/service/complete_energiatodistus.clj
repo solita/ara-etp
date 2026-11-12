@@ -110,10 +110,9 @@
          (remove nil?)
          (reduce + 0))))
 
-(def ^:private energiamuotokertoimet
-  (map/map-values
-    (partial map/map-keys #(-> % name (str "-kerroin") keyword))
-    e-luokka-service/energiamuotokerroin))
+(defn- energiamuotokertoimet [versio energiatodistus]
+  (map/map-keys #(-> % name (str "-kerroin") keyword)
+                (e-luokka-service/energiamuotokertoimet versio energiatodistus)))
 
 (defn co2-paastot-et
   [tulokset]
@@ -202,7 +201,7 @@
           (assoc-in [:perustiedot :paakayttotarkoitus-id] paakayttotarkoitus-id)
           (assoc-in [:perustiedot :paakayttotarkoitus-fi] (:label-fi paakayttotarkoitus))
           (assoc-in [:perustiedot :paakayttotarkoitus-sv] (:label-sv paakayttotarkoitus))
-          (update-in [:tulokset :kaytettavat-energiamuodot] (partial merge (energiamuotokertoimet versio)))
+          (update-in [:tulokset :kaytettavat-energiamuodot] (partial merge (energiamuotokertoimet versio energiatodistus)))
           (update-in [:tulokset :kuukausierittely] kuukausierittely-hyodynnetty)
           (assoc-kuukausierittely-summat)
           (combine-keys #(when (= versio 2013) (+ %1 %2))

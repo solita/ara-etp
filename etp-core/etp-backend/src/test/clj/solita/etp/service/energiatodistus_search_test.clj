@@ -506,6 +506,27 @@
                "energiatodistus.tulokset.kaytettavat-energiamuodot.kaukolampo-painotettu"
                kaukolampo-kertoimella]]]))))
 
+(t/deftest search-by-kaukolampo-painotettu-2027-energiatodistus-kerroin-test
+  (let [laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys first)
+        ;; Given signed 2027 olemassa oleva rakennus energiatodistus
+        ;; with an energiatodistus specific kaukolämpö kerroin
+        add (-> (energiatodistus-test-data/generate-add 2027 true)
+                (assoc-in [:perustiedot :laatimisvaihe] 2)
+                (assoc-in [:tulokset :kaytettavat-energiamuodot :kaukolampo] 1000M)
+                (assoc-in [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo] 0.25M))
+        id (first (energiatodistus-test-data/insert! [add] laatija-id))
+        _ (sign-energiatodistukset! [[laatija-id id]])
+        found-ids (fn [value]
+                    (->> (search {:rooli 0 :id laatija-id}
+                                 [[["="
+                                    "energiatodistus.tulokset.kaytettavat-energiamuodot.kaukolampo-painotettu"
+                                    value]]]
+                                 nil nil nil)
+                         (map :id)))]
+    ;; Then painotettu kulutus is calculated with the energiatodistus specific kerroin
+    (t/is (= [id] (found-ids 250M)))
+    (t/is (empty? (found-ids 380M)))))
+
 (t/deftest search-by-kaukojaahdytys-painotettu-2027-test
   (let [{:keys [energiatodistukset] :as test-data-set} (test-data-set-2027)
         id (-> energiatodistukset keys sort first)

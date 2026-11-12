@@ -20,6 +20,7 @@
   export let unit;
   export let labelUnit;
   export let i18nRoot = 'energiatodistus';
+  export let placeholder = undefined;
 
   const id = inputs.id(path);
   $: type = inputs.type(schema, path);
@@ -46,6 +47,7 @@
         : inputs.label($_, i18nRoot, inputLanguage, path)}
       {required}
       {disabled}
+      {placeholder}
       {compact}
       {center}
       {search}

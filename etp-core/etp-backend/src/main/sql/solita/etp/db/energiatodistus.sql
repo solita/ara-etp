@@ -181,3 +181,12 @@ set
     is$hiilikadenjalki$rakennus$hyodyntaminen_energiana = null,
     is$hiilikadenjalki$rakennuspaikka$hyodyntaminen_energiana = null
 where id = :id;
+
+-- name: reset-kaukolampo-energiamuotokerroin!
+-- The energiatodistus specific kaukolämpö kerroin is applicable only for
+-- versio 2027 and laatimisvaihe 2 (olemassa oleva rakennus)
+update energiatodistus
+set t$kaytettavat_energiamuodot_kertoimet$kaukolampo = null
+where id = :id and
+      t$kaytettavat_energiamuodot_kertoimet$kaukolampo is not null and
+      (versio <> 2027 or pt$laatimisvaihe is distinct from 2);

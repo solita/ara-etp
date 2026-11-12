@@ -565,6 +565,8 @@
   (jdbc/with-db-transaction [db db]
                             (let [result (energiatodistus-db/update-energiatodistus-allekirjoituksessa!
                                            db {:id id :laatija-id (:id whoami)})
+                                  _ (when (= result 1)
+                                      (energiatodistus-db/reset-kaukolampo-energiamuotokerroin! db {:id id}))
                                   energiatodistus (find-energiatodistus db id)]
                               (if (= result 1)
                                 (do
