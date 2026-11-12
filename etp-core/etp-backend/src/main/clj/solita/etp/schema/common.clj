@@ -56,10 +56,6 @@
 (def IntPositive
   (LimitedNum schema/Int 1 9999999999 "[1, max]"))
 
-(defn LimitedDecimal [mininclusive maxinclusive]
-  (LimitedNum schema/Num mininclusive maxinclusive
-              (str "[" mininclusive ", " maxinclusive "]")))
-
 (defn LimitedInt [mininclusive maxinclusive]
   (LimitedNum schema/Int mininclusive maxinclusive
               (str "[" mininclusive ", " maxinclusive "]")))
