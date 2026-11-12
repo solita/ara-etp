@@ -360,10 +360,6 @@
    :hiilijalanjalki         Hiilijalanjalki
    :hiilikadenjalki         Hiilikadenjalki})
 
-(def KaukolampoEnergiamuotokerroin
-  "Energiatodistus specific kaukolämpö energiamuotokerroin (ET2027, olemassa oleva rakennus)"
-  (common-schema/LimitedDecimal 0.2M 0.38M))
-
 (def EnergiatodistusSave2027
   (-> (dissoc-not-in-2027 EnergiatodistusSave2018)
       (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key
@@ -386,7 +382,7 @@
                                                           :muulampo     common-schema/NonNegative
                                                           :muusahko     common-schema/NonNegative}
                                                          :kaytettavat-energiamuodot-kertoimet
-                                                         {:kaukolampo KaukolampoEnergiamuotokerroin}}
+                                                         {:kaukolampo schema/Num}}
                         :huomiot                        {:iv-ilmastointi    Huomio2027
                                                          :valaistus-muut    Huomio2027
                                                          :lammitys          (assoc Huomio2027

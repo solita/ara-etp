@@ -93,23 +93,21 @@
            :invalid-arguments
            (str "Invalid json in where: " where)))))
 
-(defn search-route
-  ([schema] (search-route schema identity))
-  ([schema post-process]
-   [""
-    {:get {:summary    "Hae energiatodistuksia"
-           :parameters {:query energiatodistus-schema/EnergiatodistusSearch}
-           :responses  {200 {:body [schema]}}
-           :access     rooli-service/energiatodistus-reader?
-           :handler    (fn [{{:keys [query]} :parameters :keys [db whoami]}]
-                         (api-response/response-with-exceptions
-                           #(mapv post-process
-                                 (energiatodistus-search-service/search
-                                   db
-                                   whoami
-                                   (update query :where parse-where)
-                                   schema))
-                           search-exceptions))}}]))
+(defn search-route [schema post-process]
+  [""
+   {:get {:summary    "Hae energiatodistuksia"
+          :parameters {:query energiatodistus-schema/EnergiatodistusSearch}
+          :responses  {200 {:body [schema]}}
+          :access     rooli-service/energiatodistus-reader?
+          :handler    (fn [{{:keys [query]} :parameters :keys [db whoami]}]
+                        (api-response/response-with-exceptions
+                          #(mapv post-process
+                                (energiatodistus-search-service/search
+                                  db
+                                  whoami
+                                  (update query :where parse-where)
+                                  schema))
+                          search-exceptions))}}])
 
 (def search-count-route
   ["/count"
@@ -164,7 +162,7 @@
                            (let [auth-time (-> jwt-payloads :access :auth_time (Instant/ofEpochSecond))
                                  signing-allowed (security/session-fresh? auth-time config/system-signature-session-timeout-minutes)]
                              (r/response {:signing-allowed signing-allowed})))}}]
-      (search-route valvonta-schema/Energiatodistus+Valvonta)
+      (search-route valvonta-schema/Energiatodistus+Valvonta identity)
       search-count-route
       (csv-route energiatodistus-csv-service/energiatodistukset-private-csv false)
       ["/korvattavat"

@@ -23,8 +23,7 @@
                  schema/Num                   (g/always 1.0M)
                  common-schema/Num1           (g/always 1.0M)
                  common-schema/NonNegative    (g/always 1.0M)
-                 common-schema/IntNonNegative (g/always 1)
-                 energiatodistus-schema/KaukolampoEnergiamuotokerroin (g/always 0.3M)})
+                 common-schema/IntNonNegative (g/always 1)})
 
 (defn schema-by-version-and-ready-for-signing [versio ready-for-signing?]
   (cond->> (cond

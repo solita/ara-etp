@@ -54,7 +54,7 @@
   (schemas->search-schema
     {:energiatodistus energiatodistus-schema/Energiatodistus2013}
     {:energiatodistus energiatodistus-schema/Energiatodistus2018}
-    {:energiatodistus (dissoc-non-searchable-fields energiatodistus-schema/Energiatodistus2027)}
+    {:energiatodistus energiatodistus-schema/Energiatodistus2027}
     {:energiatodistus
      {:perustiedot
       {:nimi        schema/Str
