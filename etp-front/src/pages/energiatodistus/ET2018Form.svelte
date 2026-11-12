@@ -216,6 +216,7 @@
 
 <ELuku {eTehokkuus} idSuffix="tulokset" />
 <ELuvunErittely
+  oletusEnergiamuotokertoimet={luokittelut.energiamuotokertoimet}
   bind:eTehokkuus
   {disabled}
   {schema}

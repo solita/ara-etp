@@ -85,6 +85,8 @@
                        (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-fi]))
                        (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-sv]))
                        (map #(xmap/dissoc-in % [:perustiedot :havainnointikayntityyppi-id]))
+                       ;; The effective kerroin is in [:tulokset :kaytettavat-energiamuodot :kaukolampo-kerroin]
+                       (map #(xmap/dissoc-in % [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo]))
                        (map xmap/paths)
                        (apply concat)
                        (filter #(every? keyword? %)))))))

@@ -139,28 +139,53 @@ export const sumEtValues = R.compose(
 
 export const partOfSum = R.curry((sum, value) => R.lift(R.divide)(value, sum));
 
-export const energiamuotokertoimet = () => ({
-  2027: {
-    'fossiilinen-polttoaine': Maybe.Some(1),
-    kaukojaahdytys: Maybe.Some(0.21),
-    kaukolampo: Maybe.Some(0.38),
-    sahko: Maybe.Some(0.9),
-    'uusiutuva-polttoaine': Maybe.Some(0.38)
-  },
-  2018: {
-    'fossiilinen-polttoaine': Maybe.Some(1),
-    kaukojaahdytys: Maybe.Some(0.28),
-    kaukolampo: Maybe.Some(0.5),
-    sahko: Maybe.Some(1.2),
-    'uusiutuva-polttoaine': Maybe.Some(0.5)
-  },
-  2013: {
-    'fossiilinen-polttoaine': Maybe.Some(1),
-    kaukojaahdytys: Maybe.Some(0.4),
-    kaukolampo: Maybe.Some(0.7),
-    sahko: Maybe.Some(1.7),
-    'uusiutuva-polttoaine': Maybe.Some(0.5)
-  }
+const kaukolampoKerroinPath = [
+  'tulokset',
+  'kaytettavat-energiamuodot-kertoimet',
+  'kaukolampo'
+];
+
+const isOlemassaOlevaRakennus = R.compose(
+  Maybe.exists(R.equals(2)),
+  R.pathOr(Maybe.None(), ['perustiedot', 'laatimisvaihe'])
+);
+
+/**
+ * The energiatodistus specific kaukolämpö kerroin is applicable only for
+ * versio 2027 and laatimisvaihe olemassa oleva rakennus.
+ * NOTE: Backend has a parallel implementation:
+ * solita.etp.service.e-luokka/tehollinen-kaukolampo-kerroin.
+ * @returns {Maybe<number>}
+ */
+export const tehollinenKaukolampoKerroin = R.ifElse(
+  R.both(R.propEq(2027, 'versio'), isOlemassaOlevaRakennus),
+  R.compose(unnestValidation, R.pathOr(Maybe.None(), kaukolampoKerroinPath)),
+  Maybe.None
+);
+
+/**
+ * Effective (tehollinen) energiamuotokertoimet for the energiatodistus.
+ * @param oletukset - default kertoimet by versio from backend
+ *   (api.luokittelut.energiamuotokertoimet)
+ * @returns map of energiamuoto -> Maybe<number>
+ */
+export const energiamuotokertoimet = R.curry((oletukset, energiatodistus) => {
+  const versionOletukset = R.propOr({}, energiatodistus.versio, oletukset);
+  const kertoimet = R.fromPairs(
+    R.map(
+      energiamuoto => [
+        energiamuoto,
+        Maybe.fromNull(versionOletukset[energiamuoto])
+      ],
+      fieldsWithErittelyOstoenergia
+    )
+  );
+  return R.compose(
+    Maybe.orSome(kertoimet),
+    R.map(R.assoc('kaukolampo', R.__, kertoimet)),
+    R.map(Maybe.Some),
+    tehollinenKaukolampoKerroin
+  )(energiatodistus);
 });
 
 const fieldsWithErittelyOstoenergia = [
@@ -289,7 +314,11 @@ export const ostetutEnergiamuodot = R.compose(
   ostettuEnergia
 );
 
-export const eluku = (versio, nettoala, energiamuodot) =>
+/**
+ * @param kertoimet - map of energiamuoto -> Maybe<number>
+ *   see energiamuotokertoimet
+ */
+export const eluku = (kertoimet, nettoala, energiamuodot) =>
   R.compose(
     R.lift(Math.ceil),
     R.lift(R.flip(R.divide))(unnestValidation(nettoala)),
@@ -297,7 +326,7 @@ export const eluku = (versio, nettoala, energiamuodot) =>
     R.sum,
     Maybe.findAllSome,
     R.values,
-    R.evolve(R.map(R.lift(R.multiply), energiamuotokertoimet()[versio])),
+    R.evolve(R.map(R.lift(R.multiply), kertoimet)),
     R.map(unnestValidation)
   )(energiamuodot);
 
@@ -459,13 +488,13 @@ const painotettuUusiutuvaSumma = energyMap =>
  *
  * Formula: round((Σ(E_tuotto × k) / A_netto) / (E_luku + Σ(E_hyödynnetty × k) / A_netto) × 100)
  */
-export const uusiutuvanEnergianOsuus = energiatodistus => {
+export const uusiutuvanEnergianOsuus = (oletusKertoimet, energiatodistus) => {
   const nettoala = EitherMaybe.orSome(null)(
     energiatodistus?.lahtotiedot?.['lammitetty-nettoala']
   );
   const eLuku = Maybe.orSome(null)(
     eluku(
-      energiatodistus.versio,
+      energiamuotokertoimet(oletusKertoimet, energiatodistus),
       energiatodistus.lahtotiedot['lammitetty-nettoala'],
       energiatodistus.tulokset['kaytettavat-energiamuodot']
     )

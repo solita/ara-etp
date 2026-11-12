@@ -259,7 +259,7 @@
             versio alakayttotarkoitus-id nettoala e-luku
             tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset))
 
-(def energiamuotokerroin
+(def fixed-energiamuotokertoimet
   {2027 {:fossiilinen-polttoaine 1M
          :sahko 0.90M
          :kaukojaahdytys 0.21M
@@ -276,11 +276,32 @@
          :kaukolampo 0.7M
          :uusiutuva-polttoaine 0.5M}})
 
+(def ^:private laatimisvaihe-olemassa-oleva-rakennus 2)
+
+(defn tehollinen-kaukolampo-kerroin
+  "Returns the energiatodistus specific kaukolämpö kerroin if it is applicable
+  i.e. versio 2027 and laatimisvaihe olemassa oleva rakennus. Otherwise nil."
+  [versio energiatodistus]
+  (when (and (= versio 2027)
+             (= (-> energiatodistus :perustiedot :laatimisvaihe)
+                laatimisvaihe-olemassa-oleva-rakennus))
+    (some-> energiatodistus
+            :tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo
+            bigdec)))
+
+(defn energiamuotokertoimet
+  "Effective (tehollinen) energiamuotokertoimet for the given energiatodistus."
+  [versio energiatodistus]
+  (when-let [kertoimet (get fixed-energiamuotokertoimet versio)]
+    (if-let [kaukolampo (tehollinen-kaukolampo-kerroin versio energiatodistus)]
+      (assoc kertoimet :kaukolampo kaukolampo)
+      kertoimet)))
+
 (defn painotettu-ostoenergiankulutus [versio energiatodistus]
   (logic/if-let*
     [energiamuodot (-> energiatodistus :tulokset :kaytettavat-energiamuodot)
      fixed-energiamuodot (dissoc energiamuodot :muu)
-     muotokerroin (get energiamuotokerroin versio)]
+     muotokerroin (energiamuotokertoimet versio energiatodistus)]
     (with-precision 20
       (reduce + 0M (map #(* (bigdec (or %1 1M)) (bigdec (or %2 0M)))
                         (concat
@@ -313,6 +334,9 @@
                     :kaukolampo             (-> ppp-vaihe :tulokset :ostoenergian-tarve-kaukolampo)
                     :uusiutuva-polttoaine   (-> ppp-vaihe :tulokset :ostoenergian-tarve-uusiutuvat-pat)}
      ;; Create a temporary ET-like structure for calculation
-     temp-et {:tulokset {:kaytettavat-energiamuodot energiamuodot}
+     temp-et {:perustiedot {:laatimisvaihe (-> energiatodistus :perustiedot :laatimisvaihe)}
+              :tulokset {:kaytettavat-energiamuodot energiamuodot
+                         :kaytettavat-energiamuodot-kertoimet
+                         (-> energiatodistus :tulokset :kaytettavat-energiamuodot-kertoimet)}
               :lahtotiedot {:lammitetty-nettoala nettoala}}]
     (e-luku versio temp-et)))

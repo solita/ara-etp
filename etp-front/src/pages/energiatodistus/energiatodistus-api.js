@@ -364,7 +364,8 @@ export const luokittelut = {
   ilmastoselvitysLaadintaperusteet: Fetch.cached(
     fetch,
     '/ilmastoselvitys-laadintaperuste'
-  )
+  ),
+  energiamuotokertoimet: Fetch.cached(fetch, '/energiamuotokertoimet')
 };
 
 const kayttotarkoitusluokittelut = R.memoizeWith(R.identity, version => ({

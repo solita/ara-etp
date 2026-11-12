@@ -31,7 +31,8 @@
     "invalid-integer": "Virheellinen kokonaislukunumero",
     "invalid-number": "Virheellinen numero",
     "invalid-date": "Virheellinen päivämäärä",
-    "invalid-year": "Virheellinen vuosiluku"
+    "invalid-year": "Virheellinen vuosiluku",
+    "max-two-decimals": "Enintään kaksi desimaalia"
   },
   "navigation": {
     "breadcrumb-bar": "Sivuhierarkia",
@@ -922,6 +923,10 @@
       "yhteensa": "Yhteensä",
       "e-luku": "E-luku",
       "e-luokka": "E-luokka",
+      "kaytettavat-energiamuodot-kertoimet": {
+        "label-context": "E-luvun erittely",
+        "kaukolampo": "Kaukolämmön energiamuotokerroin"
+      },
       "kaytettavat-energiamuodot": {
         "header": "E-Luvun erittely",
         "label-context": "E-luvun erittely",

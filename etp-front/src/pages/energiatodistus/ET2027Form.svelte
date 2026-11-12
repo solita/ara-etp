@@ -283,6 +283,7 @@
   tayttaaA0Vaatimukset={energiatodistus.perustiedot['tayttaa-a0-vaatimukset']}
   idSuffix="tulokset" />
 <ELuvunErittely
+  oletusEnergiamuotokertoimet={luokittelut.energiamuotokertoimet}
   bind:eTehokkuus
   {disabled}
   {schema}
