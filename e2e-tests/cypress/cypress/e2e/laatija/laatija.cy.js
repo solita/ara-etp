@@ -569,4 +569,79 @@ context('Laatija', () => {
       });
     }
   );
+
+  (isEtp2026Enabled() ? describe : describe.skip)(
+    'Validation when toggling perusparannuspassi',
+    () => {
+      const createEt2027 = () => {
+        cy.visit('/#/energiatodistus/all');
+        cy.get('[data-cy="create-new-et26"]').click();
+        cy.selectInSelect(
+          'perustiedot.laatimisvaihe',
+          'Olemassa oleva rakennus'
+        );
+        cy.selectInSelect(
+          'perustiedot.havainnointikayntityyppi-id',
+          'Virtuaalikäynti'
+        );
+      };
+
+      it('should not add perusparannuspassi when energiatodistus has invalid content', () => {
+        createEt2027();
+
+        // Invalid ilmanvuotoluku (over the error limit)
+        cy.get('[data-cy="lahtotiedot.rakennusvaippa.ilmanvuotoluku"]')
+          .clear()
+          .type('51')
+          .blur();
+
+        cy.get('[data-cy="perusparannuspassi"]').scrollIntoView();
+        cy.get('[data-cy="add-ppp-button"]').click();
+
+        // Adding is blocked and the error is announced
+        cy.get('[data-cy="form-alert-text"]').should(
+          'contain.text',
+          'Ilmanvuotoluku'
+        );
+        cy.get('[data-cy="add-ppp-button"]').should('exist');
+        cy.get('[data-cy="delete-ppp-button"]').should('not.exist');
+
+        // After fixing the field the passi can be added
+        cy.get('[data-cy="lahtotiedot.rakennusvaippa.ilmanvuotoluku"]')
+          .clear()
+          .blur();
+        cy.get('[data-cy="perusparannuspassi"]').scrollIntoView();
+        cy.get('[data-cy="add-ppp-button"]').click();
+        cy.get('[data-cy="delete-ppp-button"]').should('exist');
+      });
+
+      it('should not remove perusparannuspassi when it has invalid content', () => {
+        createEt2027();
+
+        cy.get('[data-cy="perusparannuspassi"]').scrollIntoView();
+        cy.get('[data-cy="add-ppp-button"]').click();
+
+        // Invalid date in the passi
+        cy.get('[data-cy="passin-perustiedot.havainnointikaynti"]')
+          .type('invalid')
+          .blur();
+
+        cy.get('[data-cy="delete-ppp-button"]').click();
+
+        // Removing is blocked and the passi is still there
+        cy.get('[data-cy="form-alert-text"]').should('be.visible');
+        cy.get('[data-cy="delete-ppp-button"]').should('exist');
+        cy.get('[data-cy="passin-perustiedot.havainnointikaynti"]').should(
+          'exist'
+        );
+
+        // After fixing the field the passi can be removed
+        cy.get('[data-cy="passin-perustiedot.havainnointikaynti"]')
+          .clear()
+          .blur();
+        cy.get('[data-cy="delete-ppp-button"]').click();
+        cy.get('[data-cy="add-ppp-button"]').should('exist');
+      });
+    }
+  );
 });
