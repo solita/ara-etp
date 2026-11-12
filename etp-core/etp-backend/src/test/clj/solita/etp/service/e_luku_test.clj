@@ -185,16 +185,3 @@
     (t/is (= (e-luokka-service/e-luku-from-ppp-vaihe
                2027 (et-with-kaukolampo-kerroin 2027 1 0.2M) ppp-vaihe)
              38M))))
-
-(t/deftest assoc-tehollinen-kaukolampo-kerroin
-  (t/is (= 0.25M (-> (et-with-kaukolampo-kerroin 2027 2 0.25M)
-                     e-luokka-service/assoc-tehollinen-kaukolampo-kerroin
-                     :tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo)))
-  (t/is (= 0.38M (-> (et-with-kaukolampo-kerroin 2027 2 nil)
-                     e-luokka-service/assoc-tehollinen-kaukolampo-kerroin
-                     :tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo)))
-  (t/is (= 0.38M (-> (et-with-kaukolampo-kerroin 2027 1 0.25M)
-                     e-luokka-service/assoc-tehollinen-kaukolampo-kerroin
-                     :tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo)))
-  (let [et-2018 (et-with-kaukolampo-kerroin 2018 2 nil)]
-    (t/is (= et-2018 (e-luokka-service/assoc-tehollinen-kaukolampo-kerroin et-2018)))))

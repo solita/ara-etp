@@ -38,7 +38,7 @@
 
 (def Tulokset2027
   (assoc Tulokset
-    ;; Contains the effective (tehollinen) kaukolämpö energiamuotokerroin
+    ;; Contains the author-specified kaukolämpö energiamuotokerroin, if any.
     :kaytettavat-energiamuodot-kertoimet {:kaukolampo common-schema/NonNegative}))
 
 (defn energiatodistus-versio [versio]

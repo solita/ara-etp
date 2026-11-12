@@ -297,16 +297,6 @@
       (assoc kertoimet :kaukolampo kaukolampo)
       kertoimet)))
 
-(defn assoc-tehollinen-kaukolampo-kerroin
-  "Replace the stored kaukolämpö kerroin with the effective (tehollinen) one
-  for versio 2027 energiatodistus. Other versions are returned as is."
-  [{:keys [versio] :as energiatodistus}]
-  (if (= versio 2027)
-    (assoc-in energiatodistus
-              [:tulokset :kaytettavat-energiamuodot-kertoimet :kaukolampo]
-              (:kaukolampo (energiamuotokertoimet versio energiatodistus)))
-    energiatodistus))
-
 (defn painotettu-ostoenergiankulutus [versio energiatodistus]
   (logic/if-let*
     [energiamuodot (-> energiatodistus :tulokset :kaytettavat-energiamuodot)

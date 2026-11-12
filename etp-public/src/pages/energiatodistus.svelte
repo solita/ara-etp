@@ -82,8 +82,8 @@
 
   const path = (path, obj) => path.reduce((acc, p) => acc[p], obj);
 
-  // The API returns the effective (tehollinen) energiatodistus specific
-  // kaukolämpö kerroin for 2027 energiatodistukset.
+  // Use the energiatodistus-specific coefficient when present, otherwise the
+  // version default.
   const energiamuotokerroin = (energiatodistus, energiamuoto) =>
     energiatodistus.tulokset?.['kaytettavat-energiamuodot-kertoimet']?.[
       energiamuoto
