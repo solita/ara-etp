@@ -184,6 +184,44 @@
     }
   };
 
+  // Validates the perusparannuspassi content regardless of its valid-state.
+  // Returns true if content is valid, otherwise announces errors and returns false.
+  const validatePppContent = ppp => {
+    const invalidET = R.filter(
+      R.propSatisfies(
+        EtValidations.isValidationRequired(whoami, energiatodistus),
+        0
+      ),
+      EtValidations.invalidProperties(saveSchema, energiatodistus)
+    );
+    if (!R.isEmpty(invalidET)) {
+      showInvalidPropertiesMessage(invalidET);
+      return false;
+    }
+    if (!ppp) {
+      return true;
+    }
+    const invalidPPP = R.filter(
+      R.propSatisfies(
+        EtValidations.isValidationRequired(whoami, energiatodistus),
+        0
+      ),
+      EtValidations.invalidProperties(
+        pppSaveSchema,
+        R.assocPath(
+          ['perustiedot', 'kieli'],
+          energiatodistus.perustiedot.kieli,
+          ppp
+        )
+      )
+    );
+    if (R.isEmpty(invalidPPP)) {
+      return true;
+    }
+    showInvalidPPPPropertiesMessage(invalidPPP);
+    return false;
+  };
+
   const validateAndSubmit =
     (onSuccessfulSave, onUnsuccessfulSave = () => {}) =>
     () => {
@@ -435,6 +473,7 @@
             bind:dirty
             schema={schemas.perusparannuspassi}
             {pppValidation}
+            validate={validatePppContent}
             bind:perusparannuspassi />
         {/if}
       </form>

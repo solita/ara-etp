@@ -34,12 +34,20 @@
 
   export let perusparannuspassi;
 
+  export let validate = () => true;
+
   const onAddPPP = () => {
+    if (!validate(perusparannuspassi)) {
+      return;
+    }
     perusparannuspassi = R.assoc('valid', true, perusparannuspassi);
     dirty = true;
   };
 
   const onDeletePPP = () => {
+    if (!validate(perusparannuspassi)) {
+      return;
+    }
     perusparannuspassi = R.assoc('valid', false, perusparannuspassi);
     dirty = true;
   };
