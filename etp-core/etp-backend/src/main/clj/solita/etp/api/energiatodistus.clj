@@ -101,11 +101,11 @@
           :handler    (fn [{{:keys [query]} :parameters :keys [db whoami]}]
                         (api-response/response-with-exceptions
                           #(energiatodistus-search-service/search
-                             db
-                             whoami
-                             (update query :where parse-where)
-                             schema)
-                          search-exceptions))}}])
+                           db
+                           whoami
+                           (update query :where parse-where)
+                           schema)
+                         search-exceptions))}}])
 
 (def search-count-route
   ["/count"
