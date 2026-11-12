@@ -184,9 +184,11 @@
     }
   };
 
-  // Validates the perusparannuspassi content regardless of its valid-state.
-  // Returns true if content is valid, otherwise announces errors and returns false.
-  const validatePppContent = ppp => {
+
+  // Validates the whole form (energiatodistus and perusparannuspassi content,
+  // regardless of the passi's valid-state) before the passi is added or removed.
+  // Returns true if valid, otherwise announces errors and returns false.
+  const validateBeforePppToggle = () => {
     const invalidET = R.filter(
       R.propSatisfies(
         EtValidations.isValidationRequired(whoami, energiatodistus),
@@ -194,13 +196,6 @@
       ),
       EtValidations.invalidProperties(saveSchema, energiatodistus)
     );
-    if (!R.isEmpty(invalidET)) {
-      showInvalidPropertiesMessage(invalidET);
-      return false;
-    }
-    if (!ppp) {
-      return true;
-    }
     const invalidPPP = R.filter(
       R.propSatisfies(
         EtValidations.isValidationRequired(whoami, energiatodistus),
@@ -211,15 +206,15 @@
         R.assocPath(
           ['perustiedot', 'kieli'],
           energiatodistus.perustiedot.kieli,
-          ppp
+          perusparannuspassi
         )
       )
     );
-    if (R.isEmpty(invalidPPP)) {
-      return true;
-    }
+
+    showInvalidPropertiesMessage(invalidET);
     showInvalidPPPPropertiesMessage(invalidPPP);
-    return false;
+
+    return R.isEmpty(invalidET) && R.isEmpty(invalidPPP);
   };
 
   const validateAndSubmit =
@@ -473,7 +468,7 @@
             bind:dirty
             schema={schemas.perusparannuspassi}
             {pppValidation}
-            validate={validatePppContent}
+            validateBeforeToggle={validateBeforePppToggle}
             bind:perusparannuspassi />
         {/if}
       </form>

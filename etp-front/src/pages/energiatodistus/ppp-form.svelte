@@ -45,7 +45,7 @@
   };
 
   const onDeletePPP = () => {
-    if (!validate(perusparannuspassi)) {
+    if (!validateBeforeToggle()) {
       return;
     }
     perusparannuspassi = R.assoc('valid', false, perusparannuspassi);
