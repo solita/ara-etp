@@ -450,8 +450,8 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
           korvattava-id (create-signed-energiatodistus! 2018 laatija-id)
           custom-validity (five-years-from-now)
           _ (set-custom-validity! korvattava-id custom-validity)
-          korvattava-validity (:voimassaolo-paattymisaika
-                                (energiatodistus-service/find-energiatodistus ts/*db* korvattava-id))
+          _korvattava-validity (:voimassaolo-paattymisaika
+                                 (energiatodistus-service/find-energiatodistus ts/*db* korvattava-id))
           ;; And: a draft ET B replacing A with yksinkertaistettu=true
           korvaava-id (create-simplified-update-draft! 2018 laatija-id korvattava-id)
           ;; Capture the voimassaolo-paattymisaika passed to PDF generation

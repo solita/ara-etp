@@ -181,7 +181,8 @@
     (t/is (:published sivu-out))))
 
 (t/deftest ordinal-new-root-prepend
-  (let [{:keys [defaults
+  (let [{:keys [
+                defaults
                 root-0-id
                 root-1-id
                 whoami]} (ordinal-test-data-set)
@@ -197,7 +198,7 @@
                    :ordinal)))))
 
 (t/deftest ordinal-delete
-  (let [{:keys [defaults
+  (let [{:keys [
                 root-1-id
                 sub-1-0-id
                 sub-1-1-id
@@ -208,7 +209,8 @@
              {:ordinal 0 :parent-id root-1-id}))))
 
 (t/deftest ordinal-new-root-append
-  (let [{:keys [defaults
+  (let [{:keys [
+                defaults
                 root-0-id
                 root-1-id
                 whoami]} (ordinal-test-data-set)
@@ -222,26 +224,9 @@
                    :ordinal)))
     (t/is (= 2 (-> (service/find-sivu ts/*db* whoami sivu-id)
                    :ordinal)))))
-
-(t/deftest ordinal-new-root-append
-  (let [{:keys [defaults
-                root-0-id
-                root-1-id
-                whoami]} (ordinal-test-data-set)
-        sivu-id (:id (service/add-sivu! ts/*db* (assoc defaults
-                                                       :title "Päätason sivu"
-                                                       :parent-id nil
-                                                       :ordinal nil)))]
-    (t/is (= 0 (-> (service/find-sivu ts/*db* whoami root-0-id)
-                   :ordinal)))
-    (t/is (= 1 (-> (service/find-sivu ts/*db* whoami root-1-id)
-                   :ordinal)))
-    (t/is (= 2 (-> (service/find-sivu ts/*db* whoami sivu-id)
-                   :ordinal)))))
-
 
 (t/deftest ordinal-reroot
-  (let [{:keys [defaults
+  (let [{:keys [
                 root-0-id
                 root-1-id
                 sub-0-0-id
@@ -271,7 +256,7 @@
 
 
 (t/deftest ordinal-reroot-last
-  (let [{:keys [defaults
+  (let [{:keys [
                 root-0-id
                 root-1-id
                 sub-0-0-id
@@ -314,7 +299,7 @@
                             :body "Poltetaan asioita"
                             :parent-id root-1-id
                             :ordinal 1)
-        child-1-1-id (service/add-sivu! ts/*db* child-1-1-in)
+        _child-1-1-id (service/add-sivu! ts/*db* child-1-1-in)
         child-1-2-in (assoc defaults
                             :title "Koirat"
                             :body "Nämäkin luovuttavat lämpöenergiaa"
@@ -324,7 +309,7 @@
         root-2-in (assoc defaults
                          :title "Eristäminen"
                          :body "Miten saadaan energia pysymään sisällä?")
-        root-2-id (:id (service/add-sivu! ts/*db* root-2-in))
+        _root-2-id (:id (service/add-sivu! ts/*db* root-2-in))
         sivu-list (service/find-all-sivut ts/*db* whoami)]
     (t/is (seq sivu-list))
     (t/is (= (:body (service/find-sivu ts/*db* whoami (:id child-1-2-id)))

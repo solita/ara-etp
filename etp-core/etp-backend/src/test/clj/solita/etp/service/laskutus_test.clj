@@ -137,7 +137,7 @@
                                {:laskutus-asiakastunnus (format "L0%08d" id)
                                 :nimi (str etunimi " " sukunimi)
                                 :henkilotunnus henkilotunnus})))
-                   (map (fn [[id {:keys [nimi henkilotunnus]}]]
+                   (map (fn [[id {:keys [nimi]}]]
                           {:laskutus-asiakastunnus (format "L1%08d" id)
                            :nimi nimi
                            :henkilotunnus (-> laatijat (get id) :henkilotunnus)})
@@ -210,7 +210,7 @@
                                            [:laatijat
                                             laatija-id
                                             :energiatodistukset])
-        energiatodistus-ids (-> energiatodistukset keys sort)]
+        _energiatodistus-ids (-> energiatodistukset keys sort)]
     (t/is (= 4 (count laskutustiedot)))
     (t/is (= {:laskutus-asiakastunnus yritys-laskutus-asiakastunnus
               :laatijat {yritys-laatija-id

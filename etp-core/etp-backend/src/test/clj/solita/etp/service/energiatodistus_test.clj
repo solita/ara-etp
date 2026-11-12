@@ -78,7 +78,7 @@
                    first
                    (assoc :draft-visible-to-paakayttaja true))]
     (service/update-energiatodistus! ts/*db* {:id laatija-id :rooli 0} id update)
-    (doseq [rooli [kayttaja-test-data/laatija
+    (doseq [_rooli [kayttaja-test-data/laatija
                    kayttaja-test-data/paakayttaja
                    kayttaja-test-data/laskuttaja]]
       (t/is (add-eq-found? update
@@ -590,7 +590,7 @@
                     (assoc-in [:vaiheet 0 :toimenpiteet :toimenpideseloste-sv] "sv-vaihe-seloste"))
         ppp-id (:id (perusparannuspassi-service/insert-perusparannuspassi! db whoami ppp-add))]
   (energiatodistus-test-data/sign! et-id laatija-id true)
-  (let [signed (service/find-energiatodistus db et-id)
+  (let [_signed (service/find-energiatodistus db et-id)
         ppp (perusparannuspassi-service/find-perusparannuspassi db whoami ppp-id)]
     (t/is (= "fi-passi-lisatietoja" (get-in ppp [:passin-perustiedot :lisatietoja-fi])))
     (t/is (nil? (get-in ppp [:passin-perustiedot :lisatietoja-sv])))
@@ -627,7 +627,7 @@
                     (assoc-in [:vaiheet 0 :toimenpiteet :toimenpideseloste-sv] "sv-vaihe-seloste"))
         ppp-id (:id (perusparannuspassi-service/insert-perusparannuspassi! db whoami ppp-add))]
     (energiatodistus-test-data/sign! et-id laatija-id true)
-    (let [signed (service/find-energiatodistus db et-id)
+    (let [_signed (service/find-energiatodistus db et-id)
           ppp (perusparannuspassi-service/find-perusparannuspassi db whoami ppp-id)]
       (t/is (nil? (get-in ppp [:passin-perustiedot :lisatietoja-fi])))
       (t/is (= "sv-passi-lisatietoja"(get-in ppp [:passin-perustiedot :lisatietoja-sv])))
@@ -754,7 +754,7 @@
   (let [{:keys [laatijat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         whoami {:id laatija-id :rooli 0}
-        db (ts/db-user laatija-id)
+        _db (ts/db-user laatija-id)
         energiatodistus (first (energiatodistus-test-data/generate-adds 1
                                                                         2018
                                                                         true))
@@ -848,10 +848,10 @@
 (t/deftest set-energiatodistus-discarded!-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
-        whoami {:id laatija-id :rooli 0}
+        _whoami {:id laatija-id :rooli 0}
         db (ts/db-user laatija-id)
         id (-> energiatodistukset keys sort first)
-        add (get energiatodistukset id)]
+        _add (get energiatodistukset id)]
     (t/is (= (energiatodistus-tila id) :draft))
     (energiatodistus-test-data/sign! id laatija-id true)
     (t/is (= (energiatodistus-tila id) :signed))
@@ -1202,7 +1202,7 @@
         [korvattava-id] (energiatodistus-test-data/insert! [korvattava-add] laatija-id)
         _ (energiatodistus-test-data/sign! korvattava-id laatija-id true)
         korvattava-et (service/find-energiatodistus ts/*db* korvattava-id)
-        korvattava-validity (:voimassaolo-paattymisaika korvattava-et)
+        _korvattava-validity (:voimassaolo-paattymisaika korvattava-et)
         korvaava-add (-> (first (energiatodistus-test-data/generate-adds 1 2018 true))
                          (assoc :korvattu-energiatodistus-id korvattava-id
                                 :yksinkertaistettu-paivitysmenettely false))

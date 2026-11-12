@@ -392,7 +392,7 @@
 (t/deftest find-liite-other-user
   (let [{:keys [laatijat energiatodistukset
                 file-liitteet link-liitteet]} (test-data-set)
-        laatija-id (-> laatijat keys sort first)
+        _laatija-id (-> laatijat keys sort first)
         [energiatodistus-id _] (-> energiatodistukset first)
         liitteet (merge file-liitteet link-liitteet)
         [other-laatija-id _] (laatija-test-data/generate-and-insert!)]

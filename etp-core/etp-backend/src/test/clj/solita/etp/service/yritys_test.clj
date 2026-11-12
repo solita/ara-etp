@@ -66,7 +66,7 @@
 
 (t/deftest update-yritys-no-permissions-test
   (let [{:keys [laskuttajat laatijat yritykset]} (test-data-set)
-        laskuttaja-id (-> laskuttajat keys sort first)
+        _laskuttaja-id (-> laskuttajat keys sort first)
         laatija-id (-> laatijat keys sort last)
         yritys-id (-> yritykset keys sort first)
         whoami {:rooli 0 :id laatija-id}]

@@ -299,7 +299,7 @@
 
 (t/deftest audit-row->flat-energiatodistus-2027-test
   ;; Given: an ET2027 energiatodistus is created and updated
-  (let [{:keys [laatijat energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
+  (let [{:keys [energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
         (test-data-set-2027)
         laatija-id-1 (first laatija-ids)]
 

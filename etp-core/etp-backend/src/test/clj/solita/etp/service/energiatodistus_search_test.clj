@@ -128,10 +128,10 @@
                              [[["=" "energiatodistus.id" id]]]))))
 
 (t/deftest search-by-laatija-voimassaolo-paattymisaika-test
-  (let [{:keys [energiatodistukset laatijat] :as test-data-set} (test-data-set)
+  (let [{:keys [energiatodistukset laatijat]} (test-data-set)
         id (-> energiatodistukset keys sort first)
         laatija-id (-> laatijat keys clojure.core/sort first)
-        {:keys [voimassaolo-paattymisaika] :as laatija} (laatija-service/find-laatija-by-id ts/*db* laatija-id)
+        {:keys [voimassaolo-paattymisaika]} (laatija-service/find-laatija-by-id ts/*db* laatija-id)
         one-day (. java.time.Duration (ofDays 1))
         two-days (. java.time.Duration (ofDays 2))]
     (t/is (nil? (-> (service/search
@@ -163,7 +163,7 @@
                     first :id)))))
 
 (t/deftest search-by-id-null-nettoala-test
-  (let [{:keys [energiatodistukset laatijat] :as test-data-set} (test-data-set)
+  (let [{:keys [energiatodistukset laatijat]} (test-data-set)
         id (-> energiatodistukset keys sort first)
         laatija-id (-> laatijat keys clojure.core/sort first)]
     (jdbc/execute!
@@ -180,7 +180,7 @@
       (t/is (= id found-id)))))
 
 (t/deftest search-by-id-zero-nettoala-test
-  (let [{:keys [energiatodistukset laatijat] :as test-data-set} (test-data-set)
+  (let [{:keys [energiatodistukset laatijat]} (test-data-set)
         id (-> energiatodistukset keys sort first)
         laatija-id (-> laatijat keys clojure.core/sort first)]
 
@@ -349,7 +349,7 @@
         expected-kwh-per-year-m2 (/ ostettu-kaukolampo nettoala)
         laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
         other-ets (energiatodistus-test-data/generate-adds 5 2018 true)
-        other-et-ids (energiatodistus-test-data/insert! other-ets laatija-id)
+        _other-et-ids (energiatodistus-test-data/insert! other-ets laatija-id)
         target-et (-> (energiatodistus-test-data/generate-add 2018 true)
                       (assoc :draft-visible-to-paakayttaja true)
                       (assoc-in [:lahtotiedot
@@ -588,7 +588,7 @@
         expected-kwh-per-year-m2 (/ (* kevyt-polttooljy-litres 10) nettoala)
         laatija-id (first (keys (laatija-test-data/generate-and-insert! 1)))
         other-ets (energiatodistus-test-data/generate-adds 5 2018 true)
-        other-et-ids (energiatodistus-test-data/insert! other-ets laatija-id)
+        _other-et-ids (energiatodistus-test-data/insert! other-ets laatija-id)
         target-et (-> (energiatodistus-test-data/generate-add 2018 true)
                       (assoc :draft-visible-to-paakayttaja true)
                       (assoc-in [:lahtotiedot
@@ -632,7 +632,7 @@
                           target-et-id)))))
 
 (t/deftest laatija-cant-find-other-laatija-energiatodistukset-test
-  (let [{:keys [laatijat energiatodistukset] :as test-data-set} (test-data-set)
+  (let [{:keys [laatijat]} (test-data-set)
         laatija-ids (-> laatijat keys sort)]
     (t/is (= 1 (count (search {:rooli 0 :id (first laatija-ids)}
                               nil
@@ -646,8 +646,7 @@
                               nil))))))
 
 (t/deftest public-paakayttaja-and-laskuttaja-cant-find-luonnokset-test
-  (let [{:keys [laatijat energiatodistukset] :as test-data-set} (test-data-set)
-        laatija-ids (-> laatijat keys sort)]
+  (let [_ (test-data-set)]
     (t/is (= 2 (count (search kayttaja-test-data/paakayttaja nil nil nil nil))))
     (t/is (= 2 (count (search kayttaja-test-data/laskuttaja nil nil nil nil))))
     (t/is (= 0 (count (search nil nil nil nil nil))))))
@@ -765,7 +764,7 @@
            "Regression: 2013 public search should still exclude YAT, KAT, MEP, MAEP")))
 
 (t/deftest deleted-are-not-found-test
-  (let [{:keys [laatijat energiatodistukset] :as test-data-set} (test-data-set)
+  (let [{:keys [laatijat]} (test-data-set)
         laatija-ids (-> laatijat keys sort)]
     (t/is (= 1 (count (search {:rooli 0 :id (first laatija-ids)}
                               nil
@@ -890,7 +889,7 @@
     (Thread/sleep 100)))
 
 (t/deftest search-by-postitoimipaikka-test
-  (let [[laatija-id laatija] (-> (laatija-test-data/generate-and-insert! 1) first)
+  (let [[laatija-id _laatija] (-> (laatija-test-data/generate-and-insert! 1) first)
         energiatodistus-adds (concat
                                ;; Pyhtää / Pyttis
                                (map #(assoc-in % [:perustiedot :postinumero] "49270")
@@ -926,7 +925,7 @@
           (t/is (= (get-in et [:perustiedot :postinumero]) "49270")))))))
 
 (t/deftest search-by-keyword-postitoimipaikka-test
-  (let [[laatija-id laatija] (-> (laatija-test-data/generate-and-insert! 1) first)
+  (let [[laatija-id _laatija] (-> (laatija-test-data/generate-and-insert! 1) first)
         energiatodistus-adds (concat
                                ;; Hirvas, kunta Rovaniemi - postitoimipaikka name
                                ;; differs from the kunta name, so this can only
@@ -1330,9 +1329,8 @@
 
 (t/deftest search-by-kasvihuonepaastot-per-nelio-zero-nettoala-test
   ;; Given: certificate with nettoala set to 0 after insertion (validation prevents 0 on insert)
-  (let [{:keys [energiatodistukset laatijat]} (test-data-set-2027)
-        id (-> energiatodistukset keys sort first)
-        laatija-id (-> laatijat keys sort first)]
+  (let [{:keys [energiatodistukset]} (test-data-set-2027)
+        id (-> energiatodistukset keys sort first)]
     (jdbc/execute!
       ts/*db*
       ["UPDATE energiatodistus SET lt$lammitetty_nettoala = 0 where id = ?" id])
@@ -1603,7 +1601,7 @@
 
 (t/deftest search-by-energiankulutuksen-valmius-false-includes-et2018-test
   ;; Given: ET2018 and ET2027 certificates (ET2018 defaults to false for this field)
-  (let [{:keys [energiatodistukset-2018 energiatodistukset-2027]} (test-data-set-mixed)
+  (let [{:keys [energiatodistukset-2018]} (test-data-set-mixed)
         et2018-ids (set (keys energiatodistukset-2018))
         ;; When: searching = false
         results (search kayttaja-test-data/paakayttaja
@@ -1641,7 +1639,7 @@
 
 (t/deftest search-by-lammonjako-lampotilajousto-false-includes-et2018-test
   ;; Given: ET2018 and ET2027 certificates
-  (let [{:keys [energiatodistukset-2018 energiatodistukset-2027]} (test-data-set-mixed)
+  (let [{:keys [energiatodistukset-2018]} (test-data-set-mixed)
         et2018-ids (set (keys energiatodistukset-2018))
         ;; When: searching = false
         results (search kayttaja-test-data/paakayttaja
@@ -1696,7 +1694,7 @@
 
 (t/deftest search-by-yksinkertaistettu-paivitysmenettely-false-includes-et2018-test
   ;; Given: ET2018 and ET2027 certificates (ET2018 have default false)
-  (let [{:keys [energiatodistukset-2018 energiatodistukset-2027]} (test-data-set-mixed)
+  (let [{:keys [energiatodistukset-2018]} (test-data-set-mixed)
         et2018-ids (set (keys energiatodistukset-2018))
         ;; When: searching = false
         results (search kayttaja-test-data/paakayttaja
@@ -1777,7 +1775,7 @@
     (let [results (search kayttaja-test-data/paakayttaja
                           [[["=" "perusparannuspassi.id" target-ppp-id]]]
                           nil nil nil)
-          result-ids (set (map :id results))]
+          _result-ids (set (map :id results))]
       ;; Then: exactly one certificate is returned
       (t/is (= 1 (count results))
              "Exactly one certificate should match the specific PPP id")
