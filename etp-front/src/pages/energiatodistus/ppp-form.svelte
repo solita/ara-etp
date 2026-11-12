@@ -34,10 +34,10 @@
 
   export let perusparannuspassi;
 
-  export let validate = () => true;
+  export let validateBeforeToggle = () => true;
 
   const onAddPPP = () => {
-    if (!validate(perusparannuspassi)) {
+    if (!validateBeforeToggle()) {
       return;
     }
     perusparannuspassi = R.assoc('valid', true, perusparannuspassi);

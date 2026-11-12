@@ -184,91 +184,67 @@
     }
   };
 
-
-  // Validates the whole form (energiatodistus and perusparannuspassi content,
-  // regardless of the passi's valid-state) before the passi is added or removed.
-  // Returns true if valid, otherwise announces errors and returns false.
-  const validateBeforePppToggle = () => {
-    const invalidET = R.filter(
+  const invalidRequired = (schema, object) =>
+    R.filter(
       R.propSatisfies(
         EtValidations.isValidationRequired(whoami, energiatodistus),
         0
       ),
-      EtValidations.invalidProperties(saveSchema, energiatodistus)
-    );
-    const invalidPPP = R.filter(
-      R.propSatisfies(
-        EtValidations.isValidationRequired(whoami, energiatodistus),
-        0
-      ),
-      EtValidations.invalidProperties(
-        pppSaveSchema,
-        R.assocPath(
-          ['perustiedot', 'kieli'],
-          energiatodistus.perustiedot.kieli,
-          perusparannuspassi
-        )
-      )
+      EtValidations.invalidProperties(schema, object)
     );
 
-    showInvalidPropertiesMessage(invalidET);
+  // Validates the energiatodistus and the perusparannuspassi and announces errors.
+  // The passi is validated only if it has been added, unless validatePppAlways is set.
+  // Returns true if everything is valid.
+  const validate = (validatePppAlways = false) => {
+    const invalid = invalidRequired(saveSchema, energiatodistus);
+
+    const invalidPPP =
+      validatePppAlways || R.propOr(false, 'valid', perusparannuspassi)
+        ? invalidRequired(
+            pppSaveSchema,
+            R.assocPath(
+              ['perustiedot', 'kieli'],
+              energiatodistus.perustiedot.kieli,
+              perusparannuspassi
+            )
+          )
+        : [];
+
+    showInvalidPropertiesMessage(invalid);
     showInvalidPPPPropertiesMessage(invalidPPP);
 
-    return R.isEmpty(invalidET) && R.isEmpty(invalidPPP);
+    return R.isEmpty(invalid) && R.isEmpty(invalidPPP);
+  };
+
+  // Validates the form before the passi is added or removed, regardless of
+  // the passi's valid-state, so that invalid content can't get hidden.
+  const validateBeforePppToggle = () => validate(true);
+
+  const submitForm = (onSuccessfulSave, onUnsuccessfulSave) => {
+    clearAnnouncements();
+    submit(
+      energiatodistus,
+      perusparannuspassi,
+      whoami,
+      ({ newPerusparannuspassiId }) => {
+        setPppIdIfItChanged(newPerusparannuspassiId);
+        dirty = false;
+        onSuccessfulSave();
+      },
+      onUnsuccessfulSave
+    );
   };
 
   const validateAndSubmit =
     (onSuccessfulSave, onUnsuccessfulSave = () => {}) =>
     () => {
-      const invalid = R.filter(
-        R.propSatisfies(
-          EtValidations.isValidationRequired(whoami, energiatodistus),
-          0
-        ),
-        EtValidations.invalidProperties(saveSchema, energiatodistus)
-      );
+      showKorvausErrorMessage(korvausError);
 
-      const invalidPPP = [];
-
-      if (perusparannuspassi && perusparannuspassi.valid) {
-        invalidPPP.push(
-          ...R.filter(
-            R.propSatisfies(
-              EtValidations.isValidationRequired(whoami, energiatodistus),
-              0
-            ),
-            EtValidations.invalidProperties(
-              pppSaveSchema,
-              R.assocPath(
-                ['perustiedot', 'kieli'],
-                energiatodistus.perustiedot.kieli,
-                perusparannuspassi
-              )
-            )
-          )
-        );
-      }
-
-      const allInvalid = [...invalid, ...invalidPPP];
-
-      if (R.isEmpty(allInvalid) && korvausError.isNone()) {
-        clearAnnouncements();
-        submit(
-          energiatodistus,
-          perusparannuspassi,
-          whoami,
-          ({ newPerusparannuspassiId }) => {
-            setPppIdIfItChanged(newPerusparannuspassiId);
-            dirty = false;
-            onSuccessfulSave();
-          },
-          onUnsuccessfulSave
-        );
+      if (validate() && korvausError.isNone()) {
+        submitForm(onSuccessfulSave, onUnsuccessfulSave);
       } else {
         onUnsuccessfulSave();
-        showKorvausErrorMessage(korvausError);
-        showInvalidPropertiesMessage(invalid);
-        showInvalidPPPPropertiesMessage(invalidPPP);
       }
     };
 
