@@ -3,7 +3,7 @@
             [clojure.java.jdbc :as jdbc]
             [clojure.test :as t]
             [jsonista.core :as j]
-            [schema-tools.coerce :as schema-tools.coerce]
+            [schema-tools.coerce]
             [solita.etp.schema.energiatodistus :as schema.energiatodistus]
             [solita.etp.test-data.generators :as generators]
             [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]
