@@ -171,7 +171,7 @@
 
 (t/deftest audit-row-contains-2027-specific-columns
   ;; Given: an ET2027 energiatodistus with specific ET2027-only field values
-  (let [[laatija-id laatija] (first (laatija-test-data/generate-and-insert! 1))
+  (let [[laatija-id _laatija] (first (laatija-test-data/generate-and-insert! 1))
         energiatodistus (energiatodistus-test-data/generate-add 2027 false)
         db (ts/db-user laatija-id)
         whoami (whoami-laatija laatija-id)

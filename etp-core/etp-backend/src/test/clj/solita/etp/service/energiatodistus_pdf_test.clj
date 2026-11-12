@@ -49,7 +49,7 @@
 
 (t/deftest fill-xlsx-template-test
   (let [{:keys [energiatodistukset]} (test-data-set)
-        energiatodistus-ids (-> energiatodistukset keys sort)]
+        _energiatodistus-ids (-> energiatodistukset keys sort)]
     (doseq [id (-> energiatodistukset keys sort)
             :let [energiatodistus (energiatodistus-service/find-energiatodistus
                                     ts/*db*

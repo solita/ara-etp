@@ -81,9 +81,9 @@ Content-Disposition: attachment; filename=start.sh
         second-email-content (slurp second-email)]
     (t/is (= 4 (count emails)))
     (doseq [email-content [first-email-content second-email-content]]
-      (t/is (str/includes? first-email-content result-email-from-and-to))
-      (t/is (str/includes? first-email-content result-email-subject-and-mime))
-      (t/is (str/includes? first-email-content result-email-body-part)))
+      (t/is (str/includes? email-content result-email-from-and-to))
+      (t/is (str/includes? email-content result-email-subject-and-mime))
+      (t/is (str/includes? email-content result-email-body-part)))
     (t/is (not (str/includes? first-email-content result-email-attachment-1-part)))
     (t/is (not (str/includes? first-email-content result-email-attachment-2-part)))
     (t/is (str/includes? second-email-content result-email-attachment-1-part))

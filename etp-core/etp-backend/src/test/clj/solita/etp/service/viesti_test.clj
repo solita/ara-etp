@@ -537,15 +537,15 @@
                                                     (laatija-whoami laatija-1-id)
                                                     empty-query)
                               :count)
-        ketju-count-laatija-2 (-> (service/count-ketjut (ts/db-user laatija-2-id)
+        _ketju-count-laatija-2 (-> (service/count-ketjut (ts/db-user laatija-2-id)
                                                         (laatija-whoami laatija-2-id)
                                                         empty-query)
                                   :count)
-        ketju-count-pk (-> (service/count-ketjut (ts/db-user paakayttaja-1-id)
+        _ketju-count-pk (-> (service/count-ketjut (ts/db-user paakayttaja-1-id)
                                                  (paakayttaja-whoami paakayttaja-1-id)
                                                  empty-query)
                            :count)
-        ketju-count-pk2 (-> (service/count-ketjut (ts/db-user paakayttaja-2-id)
+        _ketju-count-pk2 (-> (service/count-ketjut (ts/db-user paakayttaja-2-id)
                                                   (paakayttaja-whoami paakayttaja-2-id)
                                                   empty-query)
                             :count)]
@@ -585,7 +585,6 @@
           "Nil is expected from find of a non-existent ketju")))
 
 (t/deftest remove-kasitelty-on-new-viesti-test
-  "Check that we meet requirements in AE-1321"
   (let [{:keys [laatijat paakayttajat]} (test-data-set)
         [[paakayttaja-id _]] (take 1 paakayttajat)
         [[laatija-id _]] (take 1 laatijat)

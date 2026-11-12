@@ -8,6 +8,7 @@
     [solita.common.time :as time]
     [solita.etp.config :as config]
     [solita.etp.service.energiatodistus :as energiatodistus-service]
+    [solita.etp.service.energiatodistus-pdf]
     [solita.etp.service.signing.pdf-sign :as pdf-sign]
     [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]
     [solita.etp.test-data.laatija :as test-data.laatija]
@@ -210,11 +211,10 @@
                   (loop [elapsed-time-seconds (Duration/ofSeconds 0)]
                     (when (every? true? [(not= (:body @response-cancel) "Ok")
                                          (> 0 (.compareTo elapsed-time-seconds timeout-seconds))])
-                      (do
-                        (reset! response-cancel (ts/handler (-> (mock/request :post cancel-url)
-                                                                (test-data.laatija/with-suomifi-laatija)
-                                                                (mock/header "Accept" "application/json"))))
-                        (recur (Duration/between (time/now) time-before))))))
+                      (reset! response-cancel (ts/handler (-> (mock/request :post cancel-url)
+                                                              (test-data.laatija/with-suomifi-laatija)
+                                                              (mock/header "Accept" "application/json"))))
+                      (recur (Duration/between (time/now) time-before)))))
               ;; Wait for the signing process to finish. Otherwise, the test-system fails.
               _ @signing-process
               response-sign (ts/handler (-> (mock/request :post url)
@@ -369,17 +369,17 @@
                              (assoc-in [:perustiedot :kieli] 0)
                              (assoc :korvattu-energiatodistus-id korvattava-id
                                     :yksinkertaistettu-paivitysmenettely true))
-            [korvaava-id] (test-data.energiatodistus/insert! [korvaava-add] laatija-id)]
-        ;; When: sign B via API
-        (let [url (energiatodistus-sign-url korvaava-id 2018)
-              response (ts/handler (-> (mock/request :post url)
-                                       (test-data.laatija/with-suomifi-laatija)
-                                       (mock/header "Accept" "application/json")))]
-          (t/is (= (:status response) 200) "Signing korvaava should succeed")
-          ;; Then: DB validity of B should equal A's validity (inherited)
-          (let [korvaava-et (energiatodistus-service/find-energiatodistus ts/*db* korvaava-id)
-                db-voimassaolo (:voimassaolo-paattymisaika korvaava-et)]
-            (t/is (some? db-voimassaolo)
-                  "voimassaolo-paattymisaika must be set after signing")
-            (t/is (= korvattava-validity db-voimassaolo)
-                  "API-signed simplified update should inherit replaced ET's validity")))))))
+            [korvaava-id] (test-data.energiatodistus/insert! [korvaava-add] laatija-id)
+            ;; When: sign B via API
+            url (energiatodistus-sign-url korvaava-id 2018)
+            response (ts/handler (-> (mock/request :post url)
+                                     (test-data.laatija/with-suomifi-laatija)
+                                     (mock/header "Accept" "application/json")))]
+        (t/is (= (:status response) 200) "Signing korvaava should succeed")
+        ;; Then: DB validity of B should equal A's validity (inherited)
+        (let [korvaava-et (energiatodistus-service/find-energiatodistus ts/*db* korvaava-id)
+              db-voimassaolo (:voimassaolo-paattymisaika korvaava-et)]
+          (t/is (some? db-voimassaolo)
+                "voimassaolo-paattymisaika must be set after signing")
+          (t/is (= korvattava-validity db-voimassaolo)
+                "API-signed simplified update should inherit replaced ET's validity"))))))

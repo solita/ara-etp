@@ -488,7 +488,7 @@
 
 (t/deftest find-history-2027-form-history-et2027-specific-fields-test
   ;; Given: an ET2027 energiatodistus
-  (let [{:keys [laatijat energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
+  (let [{:keys [energiatodistus-id-1 energiatodistus-add-1 laatija-ids]}
         (test-data-set-2027)
         laatija-id-1 (first laatija-ids)
         original-value (get-in energiatodistus-add-1
@@ -561,7 +561,7 @@
 
 (t/deftest find-history-2027-no-permissions-test
   ;; Given: an ET2027 energiatodistus owned by laatija-id-2
-  (let [{:keys [laatijat energiatodistus-id-2 laatija-ids]}
+  (let [{:keys [energiatodistus-id-2 laatija-ids]}
         (test-data-set-2027)
         [laatija-id-1] laatija-ids]
 

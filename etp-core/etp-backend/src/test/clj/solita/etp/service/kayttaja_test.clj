@@ -56,7 +56,7 @@
 (t/deftest update-and-find-test
   (let [{:keys [kayttajat]} (test-data-set)
         updates (kayttaja-test-data/generate-updates (count kayttajat))]
-    (doseq [[[id kayttaja] update] (->> (interleave kayttajat updates)
+    (doseq [[[id _kayttaja] update] (->> (interleave kayttajat updates)
                                         (partition 2))]
       (service/update-kayttaja! ts/*db*
                                 kayttaja-test-data/paakayttaja
@@ -72,7 +72,7 @@
 (t/deftest update-and-find-no-permissions-test
   (let [{:keys [kayttajat]} (test-data-set)
         updates (kayttaja-test-data/generate-updates (count kayttajat))]
-    (doseq [[[id kayttaja] update] (->> (interleave kayttajat updates)
+    (doseq [[[id _kayttaja] update] (->> (interleave kayttajat updates)
                                         (partition 2))]
       (t/is (thrown-with-msg?
              clojure.lang.ExceptionInfo
