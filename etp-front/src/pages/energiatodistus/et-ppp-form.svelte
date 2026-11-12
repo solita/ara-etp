@@ -219,7 +219,11 @@
 
   // Validates the form before the passi is added or removed, regardless of
   // the passi's valid-state, so that invalid content can't get hidden.
-  const validateBeforePppToggle = () => validate(true);
+  // Old announcements are cleared so that fixed errors don't linger.
+  const validateBeforePppToggle = () => {
+    clearAnnouncements();
+    return validate(true);
+  };
 
   const submitForm = (onSuccessfulSave, onUnsuccessfulSave) => {
     clearAnnouncements();

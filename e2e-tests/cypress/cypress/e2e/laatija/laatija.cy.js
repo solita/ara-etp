@@ -613,6 +613,7 @@ context('Laatija', () => {
         cy.get('[data-cy="perusparannuspassi"]').scrollIntoView();
         cy.get('[data-cy="add-ppp-button"]').click();
         cy.get('[data-cy="delete-ppp-button"]').should('exist');
+        cy.get('[data-cy="form-alert-text"]').should('not.exist');
       });
 
       it('should not remove perusparannuspassi when it has invalid content', () => {
@@ -641,6 +642,7 @@ context('Laatija', () => {
           .blur();
         cy.get('[data-cy="delete-ppp-button"]').click();
         cy.get('[data-cy="add-ppp-button"]').should('exist');
+        cy.get('[data-cy="form-alert-text"]').should('not.exist');
       });
     }
   );
