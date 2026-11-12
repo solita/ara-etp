@@ -8,6 +8,7 @@
     [solita.common.time :as time]
     [solita.etp.config :as config]
     [solita.etp.service.energiatodistus :as energiatodistus-service]
+    [solita.etp.service.energiatodistus-pdf]
     [solita.etp.service.signing.pdf-sign :as pdf-sign]
     [solita.etp.test-data.energiatodistus :as test-data.energiatodistus]
     [solita.etp.test-data.laatija :as test-data.laatija]

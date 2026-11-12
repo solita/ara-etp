@@ -88,7 +88,7 @@
   (let [{:keys [laatijat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         [energiatodistus-2018
-         energiatodistus-2027] (mapv #(energiatodistus-test-data/generate-add % false)
+         _energiatodistus-2027] (mapv #(energiatodistus-test-data/generate-add % false)
                                      [2018 2027])
         add-energiatodistus
         (fn [energiatodistus versio path value]

@@ -57,7 +57,7 @@
         time-issued (signed-url/unix-time)
         expires (+ time-issued 60)
         time-late-test (+ expires 10)
-        optimistic-expiration (+ time-late-test 10)
+        _optimistic-expiration (+ time-late-test 10)
         url (signed-url/url->signed-url base-url
                                         expires
                                         ip-address

@@ -6,7 +6,6 @@
             [solita.etp.service.energiatodistus :as energiatodistus-service]
             [solita.etp.service.energiatodistus-destruction :as service]
             [solita.etp.service.energiatodistus-tila :as tila-service]
-            [solita.etp.service.file :as file]
             [solita.etp.service.file :as file-service]
             [solita.etp.service.kayttaja :as kayttaja-service]
             [solita.etp.service.liite :as liite-service]
@@ -50,7 +49,7 @@
 (defn test-data-set []
   (let [laatijat (laatija-test-data/generate-and-insert! 4)
         laatija-ids (-> laatijat keys sort)
-        [laatija-id-1 laatija-id-2 laatija-id-3 laatija-id-4] laatija-ids
+        [laatija-id-1 laatija-id-2 laatija-id-3 _laatija-id-4] laatija-ids
         energiatodistus-adds (energiatodistus-test-data/generate-adds 4
                                                                       2018
                                                                       true)
@@ -60,7 +59,7 @@
                                     energiatodistus-adds
                                     laatija-ids)
         [energiatodistus-id-1 energiatodistus-id-2 energiatodistus-id-3 energiatodistus-id-4] energiatodistus-ids
-        [energiatodistus-add-1 energiatodistus-add-2 energiatodistus-add-3 energiatodistus-add-4] energiatodistus-adds]
+        [_energiatodistus-add-1 energiatodistus-add-2 energiatodistus-add-3 _energiatodistus-add-4] energiatodistus-adds]
 
     ;; Sign energiatodistus 1
     (energiatodistus-test-data/sign! energiatodistus-id-1 laatija-id-1 true)
@@ -427,10 +426,10 @@
         get-et-1-audit-information #(select-audit-information id-1)
         get-et-2-audit-information #(select-audit-information id-2)]
     (t/testing "There was some audit information before deletion."
-      (t/is (not (empty? (get-et-1-audit-information)))))
+      (t/is (seq (get-et-1-audit-information))))
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
     (t/testing "The audit data for et-1 still exists as it is not expired."
-      (t/is (not (empty? (get-et-1-audit-information)))))
+      (t/is (seq (get-et-1-audit-information))))
     (t/testing "The audit data for et-2 is destroyed as it is expired."
       (t/is (empty? (get-et-2-audit-information))))))
 
@@ -521,19 +520,19 @@
                                                        {:inhibit-email? true})
 
     (t/testing "There is some toimenpide before deletion."
-      (t/is (not (empty? (get-vo-toimenpiteet energiatodistus-id-1)))))
+      (t/is (seq (get-vo-toimenpiteet energiatodistus-id-1))))
     (t/testing "There is some note before deletion."
-      (t/is (not (empty? (get-vo-notes energiatodistus-id-1)))))
+      (t/is (seq (get-vo-notes energiatodistus-id-1))))
     (t/testing "There is some tiedoksi before deletion."
-      (t/is (not (empty? (get-vo-tiedoksi energiatodistus-id-1)))))
+      (t/is (seq (get-vo-tiedoksi energiatodistus-id-1))))
     (t/testing "There is some virheet before deletion."
-      (t/is (not (empty? (get-vo-virheet energiatodistus-id-1)))))
+      (t/is (seq (get-vo-virheet energiatodistus-id-1))))
 
 
     (t/testing "There was some audit data on toimenpiteet before deletion."
-      (t/is (not (empty? (select-toimenpiteet-audit energiatodistus-id-1)))))
+      (t/is (seq (select-toimenpiteet-audit energiatodistus-id-1))))
     (t/testing "There was some audit data on notes before deletion."
-      (t/is (not (empty? (select-notes-audit energiatodistus-id-1)))))
+      (t/is (seq (select-notes-audit energiatodistus-id-1))))
 
     (t/testing "There are valvonta liite documents"
       (let [file-key-et-1 (vo-asha-service/file-path energiatodistus-id-1 vo-toimenpide-1-id)
@@ -565,19 +564,19 @@
     (t/testing "There are no more virheet after deletion."
       (t/is (empty? (get-vo-virheet energiatodistus-id-1))))
     (t/testing "Didn't affect the other energiatodistus"
-      (t/is (not (empty? (get-vo-toimenpiteet energiatodistus-id-2))))
-      (t/is (not (empty? (get-vo-notes energiatodistus-id-2))))
-      (t/is (not (empty? (get-vo-tiedoksi energiatodistus-id-2))))
-      (t/is (not (empty? (get-vo-virheet energiatodistus-id-2)))))
+      (t/is (seq (get-vo-toimenpiteet energiatodistus-id-2)))
+      (t/is (seq (get-vo-notes energiatodistus-id-2)))
+      (t/is (seq (get-vo-tiedoksi energiatodistus-id-2)))
+      (t/is (seq (get-vo-virheet energiatodistus-id-2))))
 
     (t/testing "The audit data on toimenpiteet is destroyed."
       (t/is (empty? (select-toimenpiteet-audit energiatodistus-id-1))))
     (t/testing "The audit data for et-2 toimenpiteet still exists."
-      (t/is (not (empty? (select-toimenpiteet-audit energiatodistus-id-2)))))
+      (t/is (seq (select-toimenpiteet-audit energiatodistus-id-2))))
     (t/testing "The audit data on notes is destroyed."
       (t/is (empty? (select-notes-audit energiatodistus-id-1))))
     (t/testing "The audit data for et-2 notes still exists."
-      (t/is (not (empty? (select-notes-audit energiatodistus-id-2)))))))
+      (t/is (seq (select-notes-audit energiatodistus-id-2))))))
 
 (t/deftest destroy-liite-test
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
@@ -705,8 +704,8 @@
                                   keys
                                   (map #(viesti-service/file-path viestiketju-2-id %)))]
     (t/testing "Viestiketjut exists before deletion"
-      (t/is (not (empty? (select-viestiketju viestiketju-1-id))))
-      (t/is (not (empty? (select-viestiketju viestiketju-2-id)))))
+      (t/is (seq (select-viestiketju viestiketju-1-id)))
+      (t/is (seq (select-viestiketju viestiketju-2-id))))
     (t/testing "The liitteet exist before deletion"
       (let [liitteet-1-in-db (select-viesti-liitteet viestiketju-1-id)
             liitteet-2-in-db (select-viesti-liitteet viestiketju-2-id)]
@@ -719,31 +718,31 @@
         (t/is (= 4 (count liitteet-1-in-db)))
         (t/is (= 4 (count liitteet-2-in-db)))))
     (t/testing "Vastaanottaja for both ketjus exists before deletion"
-      (t/is (not (empty? (select-vastaanottajat viestiketju-1-id))))
-      (t/is (not (empty? (select-vastaanottajat viestiketju-2-id)))))
+      (t/is (seq (select-vastaanottajat viestiketju-1-id)))
+      (t/is (seq (select-vastaanottajat viestiketju-2-id))))
     (t/testing "Viesti for both ketjus exists before deletion"
-      (t/is (not (empty? (select-viestit viestiketju-1-id))))
-      (t/is (not (empty? (select-viestit viestiketju-2-id)))))
+      (t/is (seq (select-viestit viestiketju-1-id)))
+      (t/is (seq (select-viestit viestiketju-2-id))))
     (t/testing "Viesti readers for both ketjus exists before deletion"
-      (t/is (not (empty? (select-viesti-readers viestiketju-1-id))))
-      (t/is (not (empty? (select-viesti-readers viestiketju-2-id)))))
+      (t/is (seq (select-viesti-readers viestiketju-1-id)))
+      (t/is (seq (select-viesti-readers viestiketju-2-id))))
     (t/testing "Viesti liite for both ketjus exists before deletion"
-      (t/is (not (empty? (select-viesti-liitteet viestiketju-1-id))))
-      (t/is (not (empty? (select-viesti-liitteet viestiketju-2-id)))))
+      (t/is (seq (select-viesti-liitteet viestiketju-1-id)))
+      (t/is (seq (select-viesti-liitteet viestiketju-2-id))))
 
     (t/testing "Viestiketju audit for both ketjus exists before deletion"
-      (t/is (not (empty? (select-viestiketju-audit viestiketju-1-id))))
-      (t/is (not (empty? (select-viestiketju-audit viestiketju-2-id)))))
+      (t/is (seq (select-viestiketju-audit viestiketju-1-id)))
+      (t/is (seq (select-viestiketju-audit viestiketju-2-id))))
     (t/testing "Viesti liite audit for both ketjus exists before deletion"
-      (t/is (not (empty? (select-viesti-liite-audit viestiketju-1-id))))
-      (t/is (not (empty? (select-viesti-liite-audit viestiketju-2-id)))))
+      (t/is (seq (select-viesti-liite-audit viestiketju-1-id)))
+      (t/is (seq (select-viesti-liite-audit viestiketju-2-id))))
 
     (expire-energiatodistus-and-its-valvonta energiatodistus-id-1)
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "Only viestiketju 2 exists after deletion"
       (t/is (empty? (select-viestiketju viestiketju-1-id)))
-      (t/is (not (empty? (select-viestiketju viestiketju-2-id)))))
+      (t/is (seq (select-viestiketju viestiketju-2-id))))
     (t/testing "Liitteet is removed only from viestiketju-1 after deletion"
       (let [liitteet-1-in-db (select-viesti-liitteet viestiketju-1-id)
             liitteet-2-in-db (select-viesti-liitteet viestiketju-2-id)]
@@ -757,20 +756,20 @@
         (t/is (= 4 (count liitteet-2-in-db)))))
     (t/testing "Vastaanottaja is removed only from viestiketju-1 after deletion"
       (t/is (empty? (select-vastaanottajat viestiketju-1-id)))
-      (t/is (not (empty? (select-vastaanottajat viestiketju-2-id)))))
+      (t/is (seq (select-vastaanottajat viestiketju-2-id))))
     (t/testing "Viesti is removed only for viestiketju-1-id afted deletion"
       (t/is (empty? (select-viestit viestiketju-1-id)))
-      (t/is (not (empty? (select-viestit viestiketju-2-id)))))
+      (t/is (seq (select-viestit viestiketju-2-id))))
     (t/testing "Viesti readers is removed only for viestiketju-1-id after deletion"
       (t/is (empty? (select-viesti-readers viestiketju-1-id)))
-      (t/is (not (empty? (select-viesti-readers viestiketju-2-id)))))
+      (t/is (seq (select-viesti-readers viestiketju-2-id))))
 
     (t/testing "Viestiketju audit for viestiketju-1-id does not exist after deletion"
       (t/is (empty? (select-viestiketju-audit viestiketju-1-id)))
-      (t/is (not (empty? (select-viestiketju-audit viestiketju-2-id)))))
+      (t/is (seq (select-viestiketju-audit viestiketju-2-id))))
     (t/testing "Viesti liite audit for viestiketju-1-id does not exist after deletion"
       (t/is (empty? (select-viesti-liite-audit viestiketju-1-id)))
-      (t/is (not (empty? (select-viesti-liite-audit viestiketju-2-id)))))))
+      (t/is (seq (select-viesti-liite-audit viestiketju-2-id))))))
 
 (t/deftest ^{:broken-test "causes test bucket to bot be deleted since the bucket cleanup should also handle pagination"}
            destroy-when-needs-to-paginate-liite-test
@@ -801,8 +800,8 @@
     (service/destroy-expired-energiatodistukset! ts/*db* ts/*aws-s3-client* system-expiration-user)
 
     (t/testing "All versions of liite 1 have the destruction tag and others don't"
-      (let [liite-1-version-ids (file/key->version-ids ts/*aws-s3-client* "liitteet/1")
-            liite-10-version-ids (file/key->version-ids ts/*aws-s3-client* "liitteet/10")]
+      (let [liite-1-version-ids (file-service/key->version-ids ts/*aws-s3-client* "liitteet/1")
+            liite-10-version-ids (file-service/key->version-ids ts/*aws-s3-client* "liitteet/10")]
 
         ;; 1 + 502 verions.
         (t/is (= 502 (count liite-1-version-ids)))

@@ -13,6 +13,7 @@
     [clojure.test :as t]
     [solita.etp.test-data.laatija :as laatija-test-data]
     [solita.etp.test-data.energiatodistus :as energiatodistus-test-data]
+    [solita.etp.test-timeserver :as test-timeserver]
     [solita.etp.test-system :as ts])
   (:import (java.io InputStream)
            (java.time Instant ZoneId)

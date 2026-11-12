@@ -326,6 +326,6 @@
                          :body "Miten saadaan energia pysymään sisällä?")
         root-2-id (:id (service/add-sivu! ts/*db* root-2-in))
         sivu-list (service/find-all-sivut ts/*db* whoami)]
-    (t/is (not (empty? sivu-list)))
+    (t/is (seq sivu-list))
     (t/is (= (:body (service/find-sivu ts/*db* whoami (:id child-1-2-id)))
              (:body child-1-2-in)))))

@@ -1,5 +1,6 @@
 (ns solita.etp.api.perusparannuspassi-test
   (:require
+    [clojure.java.io :as io]
     [clojure.test :as t]
     [jsonista.core :as j]
     [ring.mock.request :as mock]
@@ -63,7 +64,7 @@
       (let [get-res (ts/handler (-> (mock/request :get (str "/api/private/perusparannuspassit/2027/" ppp-id))
                                     (mock/header "Accept" "application/json")
                                     (laatija-test-data/with-suomifi-laatija)))
-            body-str (slurp (clojure.java.io/reader (:body get-res)))
+            body-str (slurp (io/reader (:body get-res)))
             full-ppp (j/read-value body-str object-mapper)
             created-ppp (dissoc full-ppp :id :tila-id :laatija-id)]
         (assert-status get-res 200)
