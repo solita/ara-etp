@@ -193,7 +193,7 @@
       EtValidations.invalidProperties(schema, object)
     );
 
-  // Validates the energiatodistus and the perusparannuspassi and announces errors.
+  // Validates the korvaavuus, the energiatodistus and the perusparannuspassi and announces errors.
   // The passi is validated only if it has been added, unless validatePppAlways is set.
   // Returns true if everything is valid.
   const validate = (validatePppAlways = false) => {
@@ -211,10 +211,11 @@
           )
         : [];
 
+    showKorvausErrorMessage(korvausError);
     showInvalidPropertiesMessage(invalid);
     showInvalidPPPPropertiesMessage(invalidPPP);
 
-    return R.isEmpty(invalid) && R.isEmpty(invalidPPP);
+    return korvausError.isNone() && R.isEmpty(invalid) && R.isEmpty(invalidPPP);
   };
 
   // Validates the form before the passi is added or removed, regardless of
@@ -243,9 +244,7 @@
   const validateAndSubmit =
     (onSuccessfulSave, onUnsuccessfulSave = () => {}) =>
     () => {
-      showKorvausErrorMessage(korvausError);
-
-      if (validate() && korvausError.isNone()) {
+      if (validate()) {
         submitForm(onSuccessfulSave, onUnsuccessfulSave);
       } else {
         onUnsuccessfulSave();
