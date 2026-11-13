@@ -184,58 +184,70 @@
     }
   };
 
+  const invalidRequired = (schema, object) =>
+    R.filter(
+      R.propSatisfies(
+        EtValidations.isValidationRequired(whoami, energiatodistus),
+        0
+      ),
+      EtValidations.invalidProperties(schema, object)
+    );
+
+  // Validates the korvaavuus, the energiatodistus and the perusparannuspassi and announces errors.
+  // The passi is validated only if it has been added, unless validatePppAlways is set.
+  // Returns true if everything is valid.
+  const validate = (validatePppAlways = false) => {
+    const invalid = invalidRequired(saveSchema, energiatodistus);
+
+    const invalidPPP =
+      validatePppAlways || R.propOr(false, 'valid', perusparannuspassi)
+        ? invalidRequired(
+            pppSaveSchema,
+            R.assocPath(
+              ['perustiedot', 'kieli'],
+              energiatodistus.perustiedot.kieli,
+              perusparannuspassi
+            )
+          )
+        : [];
+
+    showKorvausErrorMessage(korvausError);
+    showInvalidPropertiesMessage(invalid);
+    showInvalidPPPPropertiesMessage(invalidPPP);
+
+    return korvausError.isNone() && R.isEmpty(invalid) && R.isEmpty(invalidPPP);
+  };
+
+  // Validates the form before the passi is added or removed, regardless of
+  // the passi's valid-state, so that invalid content can't get hidden.
+  // Old announcements are cleared so that fixed errors don't linger.
+  const validateBeforePppToggle = () => {
+    clearAnnouncements();
+    return validate(true);
+  };
+
+  const submitForm = (onSuccessfulSave, onUnsuccessfulSave) => {
+    clearAnnouncements();
+    submit(
+      energiatodistus,
+      perusparannuspassi,
+      whoami,
+      ({ newPerusparannuspassiId }) => {
+        setPppIdIfItChanged(newPerusparannuspassiId);
+        dirty = false;
+        onSuccessfulSave();
+      },
+      onUnsuccessfulSave
+    );
+  };
+
   const validateAndSubmit =
     (onSuccessfulSave, onUnsuccessfulSave = () => {}) =>
     () => {
-      const invalid = R.filter(
-        R.propSatisfies(
-          EtValidations.isValidationRequired(whoami, energiatodistus),
-          0
-        ),
-        EtValidations.invalidProperties(saveSchema, energiatodistus)
-      );
-
-      const invalidPPP = [];
-
-      if (perusparannuspassi && perusparannuspassi.valid) {
-        invalidPPP.push(
-          ...R.filter(
-            R.propSatisfies(
-              EtValidations.isValidationRequired(whoami, energiatodistus),
-              0
-            ),
-            EtValidations.invalidProperties(
-              pppSaveSchema,
-              R.assocPath(
-                ['perustiedot', 'kieli'],
-                energiatodistus.perustiedot.kieli,
-                perusparannuspassi
-              )
-            )
-          )
-        );
-      }
-
-      const allInvalid = [...invalid, ...invalidPPP];
-
-      if (R.isEmpty(allInvalid) && korvausError.isNone()) {
-        clearAnnouncements();
-        submit(
-          energiatodistus,
-          perusparannuspassi,
-          whoami,
-          ({ newPerusparannuspassiId }) => {
-            setPppIdIfItChanged(newPerusparannuspassiId);
-            dirty = false;
-            onSuccessfulSave();
-          },
-          onUnsuccessfulSave
-        );
+      if (validate()) {
+        submitForm(onSuccessfulSave, onUnsuccessfulSave);
       } else {
         onUnsuccessfulSave();
-        showKorvausErrorMessage(korvausError);
-        showInvalidPropertiesMessage(invalid);
-        showInvalidPPPPropertiesMessage(invalidPPP);
       }
     };
 
@@ -435,6 +447,7 @@
             bind:dirty
             schema={schemas.perusparannuspassi}
             {pppValidation}
+            validateBeforeToggle={validateBeforePppToggle}
             bind:perusparannuspassi />
         {/if}
       </form>

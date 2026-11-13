@@ -34,12 +34,20 @@
 
   export let perusparannuspassi;
 
+  export let validateBeforeToggle = () => true;
+
   const onAddPPP = () => {
+    if (!validateBeforeToggle()) {
+      return;
+    }
     perusparannuspassi = R.assoc('valid', true, perusparannuspassi);
     dirty = true;
   };
 
   const onDeletePPP = () => {
+    if (!validateBeforeToggle()) {
+      return;
+    }
     perusparannuspassi = R.assoc('valid', false, perusparannuspassi);
     dirty = true;
   };
