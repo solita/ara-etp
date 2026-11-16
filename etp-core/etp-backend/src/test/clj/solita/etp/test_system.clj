@@ -65,7 +65,7 @@
                             :DeleteMarkers
                             (map #(select-keys % [:Key :VersionId])))
         objects (concat versions delete-markers)]
-    (when (-> objects empty? not)
+    (when (seq objects)
       (#'aws.utils/invoke client :DeleteObjects {:Delete {:Objects objects}
                                                  :Bucket bucket}))
     (#'aws.utils/invoke client :DeleteBucket {:Bucket bucket})))

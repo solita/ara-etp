@@ -64,7 +64,7 @@
 (defn test-data-set [n sign?]
   (let [laatijat (laatija-test-data/generate-and-insert! 1)
         laatija-id (-> laatijat keys sort first)
-        postinumerot [00100 33100]
+        _postinumerot [00100 33100]
         energiatodistus-adds (energiatodistus-adds n)
         energiatodistus-ids (energiatodistus-test-data/insert!
                              energiatodistus-adds
@@ -100,7 +100,7 @@
                                                             "F" 2}}))))
 
 (t/deftest find-counts-test
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+  (let [_ (test-data-set 12 true)]
     (t/is (= {2013 {:e-luokka {"A" 3 "B" 3}
                     :lammitysmuoto {2 3 4 3}
                     :ilmanvaihto {2 3 4 3}}
@@ -113,7 +113,7 @@
              (service/find-counts ts/*db* query-exact)))))
 
 (t/deftest find-e-luku-statistics-test
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+  (let [_ (test-data-set 12 true)]
 
     ;; TODO are percentiles meaninful? They are interpolated values.
     (t/is (= {:avg 350.00M :median 350.0 :percentile-15 175.0 :percentile-85 525.0}
@@ -126,7 +126,7 @@
              (service/find-e-luku-statistics ts/*db* query-exact 2018)))))
 
 (t/deftest find-common-averages-test
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)
+  (let [_ (test-data-set 12 true)
         common-averages-for-all (service/find-common-averages ts/*db* query-all)
         common-averages-for-exact (service/find-common-averages ts/*db*
                                                                 query-exact)]
@@ -148,7 +148,7 @@
    :muulampo n})
 
 (t/deftest find-uusiutuvat-omavaraisenergiat-counts
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+  (let [_ (test-data-set 12 true)]
     (t/is (= (uusiutuvat-omavaraisenergiat-counts-result 6)
              (service/find-uusiutuvat-omavaraisenergiat-counts ts/*db*
                                                                query-all
@@ -165,7 +165,7 @@
                     :elinkaaren-aikaiset-paastot         nil})
 
 (t/deftest find-statistics-test
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+  (let [_ (test-data-set 12 true)]
     (t/is (= {:counts {2013 {:e-luokka {"A" 3 "B" 3}
                              :lammitysmuoto {4 3 2 3}
                              :ilmanvaihto {4 3 2 3}}
@@ -206,32 +206,32 @@
     (t/is (= empty-results (service/find-statistics ts/*db* query-exact)))))
 
 (t/deftest find-statistics-not-signed-test
-  (let [{:keys [energiatodistukset]} (test-data-set 12 false)]
+  (let [_ (test-data-set 12 false)]
     (t/is (= empty-results (service/find-statistics ts/*db* query-all)))))
 
 (t/deftest find-statistics-expired-test
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+  (let [_ (test-data-set 12 true)]
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET voimassaolo_paattymisaika = now()"])
     (t/is (= empty-results (service/find-statistics ts/*db* query-all)))))
 
 
 (t/deftest find-e-luokka-counts-returns-only-e-luokka-test
   ;; Given: signed certificates exist for versio 2013 and 2018
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
-    ;; When: we call find-e-luokka-counts
-    (let [result (service/find-e-luokka-counts ts/*db* query-all)]
-      ;; Then: result contains e-luokka counts per versio
-      (t/is (= {"A" 3 "B" 3} (get-in result [2013 :e-luokka])))
-      (t/is (= {"A" 3 "B" 3} (get-in result [2018 :e-luokka])))
-      ;; Then: result does NOT contain lammitysmuoto or ilmanvaihto
-      (t/is (nil? (get-in result [2013 :lammitysmuoto])))
-      (t/is (nil? (get-in result [2013 :ilmanvaihto])))
-      (t/is (nil? (get-in result [2018 :lammitysmuoto])))
-      (t/is (nil? (get-in result [2018 :ilmanvaihto]))))))
+  (let [_ (test-data-set 12 true)
+        ;; When: we call find-e-luokka-counts
+        result (service/find-e-luokka-counts ts/*db* query-all)]
+    ;; Then: result contains e-luokka counts per versio
+    (t/is (= {"A" 3 "B" 3} (get-in result [2013 :e-luokka])))
+    (t/is (= {"A" 3 "B" 3} (get-in result [2018 :e-luokka])))
+    ;; Then: result does NOT contain lammitysmuoto or ilmanvaihto
+    (t/is (nil? (get-in result [2013 :lammitysmuoto])))
+    (t/is (nil? (get-in result [2013 :ilmanvaihto])))
+    (t/is (nil? (get-in result [2018 :lammitysmuoto])))
+    (t/is (nil? (get-in result [2018 :ilmanvaihto])))))
 
 (t/deftest find-e-luokka-counts-not-affected-by-allekirjoitusaika-test
   ;; Given: signed certificates exist, some with allekirjoitusaika before 2021
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+  (let [_ (test-data-set 12 true)]
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2020-06-15'::timestamp WHERE versio = 2018"])
     ;; When: we call find-e-luokka-counts
     (let [result (service/find-e-luokka-counts ts/*db* query-all)]
@@ -243,21 +243,21 @@
 
 (t/deftest find-lammitys-ilmanvaihto-counts-returns-only-lammitys-and-ilmanvaihto-test
   ;; Given: signed certificates exist (allekirjoitusaika = now(), i.e. 2026, which is >= 2021)
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
-    ;; When: we call find-lammitys-ilmanvaihto-counts
-    (let [result (service/find-lammitys-ilmanvaihto-counts ts/*db* query-all)]
-      ;; Then: result contains lammitysmuoto and ilmanvaihto counts per versio
-      (t/is (= {2 3 4 3} (get-in result [2013 :lammitysmuoto])))
-      (t/is (= {2 3 4 3} (get-in result [2013 :ilmanvaihto])))
-      (t/is (= {2 3 4 3} (get-in result [2018 :lammitysmuoto])))
-      (t/is (= {2 3 4 3} (get-in result [2018 :ilmanvaihto])))
-      ;; Then: result does NOT contain e-luokka
-      (t/is (nil? (get-in result [2013 :e-luokka])))
-      (t/is (nil? (get-in result [2018 :e-luokka]))))))
+  (let [_ (test-data-set 12 true)
+        ;; When: we call find-lammitys-ilmanvaihto-counts
+        result (service/find-lammitys-ilmanvaihto-counts ts/*db* query-all)]
+    ;; Then: result contains lammitysmuoto and ilmanvaihto counts per versio
+    (t/is (= {2 3 4 3} (get-in result [2013 :lammitysmuoto])))
+    (t/is (= {2 3 4 3} (get-in result [2013 :ilmanvaihto])))
+    (t/is (= {2 3 4 3} (get-in result [2018 :lammitysmuoto])))
+    (t/is (= {2 3 4 3} (get-in result [2018 :ilmanvaihto])))
+    ;; Then: result does NOT contain e-luokka
+    (t/is (nil? (get-in result [2013 :e-luokka])))
+    (t/is (nil? (get-in result [2018 :e-luokka])))))
 
 (t/deftest find-lammitys-ilmanvaihto-counts-excludes-pre-2021-test
   ;; Given: signed certificates exist, ALL with allekirjoitusaika before 2021
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+  (let [_ (test-data-set 12 true)]
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2020-06-15'::timestamp"])
     ;; When: we call find-lammitys-ilmanvaihto-counts
     (let [result (service/find-lammitys-ilmanvaihto-counts ts/*db* query-all)]
@@ -267,7 +267,7 @@
 (t/deftest find-lammitys-ilmanvaihto-counts-includes-post-2021-only-test
   ;; Given: signed certificates exist, half with allekirjoitusaika before 2021
   ;; and half after (the default now() = 2026)
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+  (let [_ (test-data-set 12 true)]
     ;; Set versio 2013 certificates to pre-2021 allekirjoitusaika
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2020-06-15'::timestamp WHERE versio = 2013"])
     ;; When: we call find-lammitys-ilmanvaihto-counts
@@ -281,7 +281,7 @@
 
 (t/deftest find-lammitys-ilmanvaihto-counts-boundary-2021-01-01-test
   ;; Given: signed certificates exist, all with allekirjoitusaika exactly on 2021-01-01
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+  (let [_ (test-data-set 12 true)]
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2021-01-01 00:00:00'::timestamp"])
     ;; When: we call find-lammitys-ilmanvaihto-counts
     (let [result (service/find-lammitys-ilmanvaihto-counts ts/*db* query-all)]
@@ -293,7 +293,7 @@
 
 (t/deftest find-lammitys-ilmanvaihto-counts-boundary-2020-12-31-test
   ;; Given: signed certificates exist, all with allekirjoitusaika just before 2021
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+  (let [_ (test-data-set 12 true)]
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2020-12-31 23:59:59'::timestamp"])
     ;; When: we call find-lammitys-ilmanvaihto-counts
     (let [result (service/find-lammitys-ilmanvaihto-counts ts/*db* query-all)]
@@ -619,7 +619,7 @@
 
 (t/deftest find-statistics-mixed-allekirjoitusaika-test
   ;; Given: signed certificates exist, versio 2013 signed pre-2021, versio 2018 signed post-2021
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
+  (let [_ (test-data-set 12 true)]
     (jdbc/execute! ts/*db* ["UPDATE energiatodistus SET allekirjoitusaika = '2020-06-15'::timestamp WHERE versio = 2013"])
     ;; When: we call find-statistics
     (let [result (service/find-statistics ts/*db* query-all)]
@@ -733,45 +733,45 @@
 (t/deftest find-e-luku-statistics-laatimisvaihe-uudisrakennus-2013-test
   ;; Given: versio 2013 records with 2 uudisrakennus=true and 2 uudisrakennus=false
   (let [{:keys [ids-2013]} (laatimisvaihe-test-data-set)
-        uudis-ids (take 2 ids-2013)]
-    ;; When: find-e-luku-statistics called with laatimisvaihe=1 for versio 2013
-    (let [result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 1) 2013)]
-      ;; Then: statistics computed only from uudisrakennus=true records
-      ;; e_luku = 100 * id for each, so avg should reflect only the uudis ids
-      (t/is (some? result))
-      (let [expected-avg (/ (reduce + (map #(* 100 %) uudis-ids)) 2)]
-        (t/is (= (bigdec expected-avg) (:avg result)))))))
+        uudis-ids (take 2 ids-2013)
+        ;; When: find-e-luku-statistics called with laatimisvaihe=1 for versio 2013
+        result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 1) 2013)]
+    ;; Then: statistics computed only from uudisrakennus=true records
+    ;; e_luku = 100 * id for each, so avg should reflect only the uudis ids
+    (t/is (some? result))
+    (let [expected-avg (/ (reduce + (map #(* 100 %) uudis-ids)) 2)]
+      (t/is (= (bigdec expected-avg) (:avg result))))))
 
 (t/deftest find-e-luku-statistics-laatimisvaihe-olemassa-oleva-2018-test
   ;; Given: versio 2018 records — 1 with laatimisvaihe=2 (olemassa oleva)
   (let [{:keys [ids-2018]} (laatimisvaihe-test-data-set)
-        oleva-id (nth ids-2018 3)]
-    ;; When: find-e-luku-statistics called with laatimisvaihe=2 for versio 2018
-    (let [result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 2) 2018)]
-      ;; Then: statistics computed only from laatimisvaihe=2 record
-      (t/is (some? result))
-      (t/is (= (bigdec (* 100 oleva-id)) (:avg result))))))
+        oleva-id (nth ids-2018 3)
+        ;; When: find-e-luku-statistics called with laatimisvaihe=2 for versio 2018
+        result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 2) 2018)]
+    ;; Then: statistics computed only from laatimisvaihe=2 record
+    (t/is (some? result))
+    (t/is (= (bigdec (* 100 oleva-id)) (:avg result)))))
 
 (t/deftest find-e-luku-statistics-laatimisvaihe-uudisrakennus-2027-test
   ;; Given: versio 2027 records — 1 with laatimisvaihe=0 (uudisrakennus)
   (let [{:keys [ids-2027]} (laatimisvaihe-test-data-set)
-        uudis-id (nth ids-2027 0)]
-    ;; When: find-e-luku-statistics called with laatimisvaihe=1 for versio 2027
-    (let [result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 1) 2027)]
-      ;; Then: statistics computed only from laatimisvaihe IN (0,1) records
-      (t/is (some? result))
-      (t/is (= (bigdec (* 100 uudis-id)) (:avg result))))))
+        uudis-id (nth ids-2027 0)
+        ;; When: find-e-luku-statistics called with laatimisvaihe=1 for versio 2027
+        result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 1) 2027)]
+    ;; Then: statistics computed only from laatimisvaihe IN (0,1) records
+    (t/is (some? result))
+    (t/is (= (bigdec (* 100 uudis-id)) (:avg result)))))
 
 (t/deftest find-e-luku-statistics-laatimisvaihe-olemassa-oleva-2027-includes-perusparannus-test
   ;; Given: versio 2027 records — laatimisvaihe 2, 3, 4 are all "olemassa oleva"
   (let [{:keys [ids-2027]} (laatimisvaihe-test-data-set)
-        oleva-ids (rest ids-2027)] ;; ids at positions 1,2,3 have laatimisvaihe 2,3,4
-    ;; When: find-e-luku-statistics called with laatimisvaihe=2 for versio 2027
-    (let [result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 2) 2027)]
-      ;; Then: statistics computed from laatimisvaihe IN (2, 3, 4) — all 3 records
-      (t/is (some? result))
-      (let [expected-avg (/ (reduce + (map #(* 100 %) oleva-ids)) 3)]
-        (t/is (= (bigdec expected-avg) (:avg result)))))))
+        oleva-ids (rest ids-2027) ;; ids at positions 1,2,3 have laatimisvaihe 2,3,4
+        ;; When: find-e-luku-statistics called with laatimisvaihe=2 for versio 2027
+        result (service/find-e-luku-statistics ts/*db* (assoc query-all :laatimisvaihe 2) 2027)]
+    ;; Then: statistics computed from laatimisvaihe IN (2, 3, 4) — all 3 records
+    (t/is (some? result))
+    (let [expected-avg (/ (reduce + (map #(* 100 %) oleva-ids)) 3)]
+      (t/is (= (bigdec expected-avg) (:avg result))))))
 
 (t/deftest find-statistics-laatimisvaihe-uudisrakennus-full-test
   ;; Given: mixed test data with known laatimisvaihe values
@@ -901,23 +901,23 @@
 
 (t/deftest find-counts-laatimisvaihe-nil-regression-test
   ;; Given: existing test data (no explicit laatimisvaihe set)
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
-    ;; When: find-counts called with laatimisvaihe=nil (default, no filter)
-    (let [result (service/find-counts ts/*db* (assoc query-all :laatimisvaihe nil))]
-      ;; Then: results identical to existing test — all records included
-      (t/is (= {2013 {:e-luokka {"A" 3 "B" 3}
-                      :lammitysmuoto {2 3 4 3}
-                      :ilmanvaihto {2 3 4 3}}
-                2018 {:e-luokka {"A" 3 "B" 3}
-                      :lammitysmuoto {2 3 4 3}
-                      :ilmanvaihto {2 3 4 3}}}
-               result)))))
+  (let [_ (test-data-set 12 true)
+        ;; When: find-counts called with laatimisvaihe=nil (default, no filter)
+        result (service/find-counts ts/*db* (assoc query-all :laatimisvaihe nil))]
+    ;; Then: results identical to existing test — all records included
+    (t/is (= {2013 {:e-luokka {"A" 3 "B" 3}
+                    :lammitysmuoto {2 3 4 3}
+                    :ilmanvaihto {2 3 4 3}}
+              2018 {:e-luokka {"A" 3 "B" 3}
+                    :lammitysmuoto {2 3 4 3}
+                    :ilmanvaihto {2 3 4 3}}}
+             result))))
 
 (t/deftest find-statistics-laatimisvaihe-nil-regression-test
   ;; Given: existing test data (no explicit laatimisvaihe set)
-  (let [{:keys [energiatodistukset]} (test-data-set 12 true)]
-    ;; When: find-statistics called with laatimisvaihe=nil
-    (let [result-with-nil (service/find-statistics ts/*db* (assoc query-all :laatimisvaihe nil))
-          result-without  (service/find-statistics ts/*db* query-all)]
-      ;; Then: results identical to calling without the parameter
-      (t/is (= result-with-nil result-without)))))
+  (let [_ (test-data-set 12 true)
+        ;; When: find-statistics called with laatimisvaihe=nil
+        result-with-nil (service/find-statistics ts/*db* (assoc query-all :laatimisvaihe nil))
+        result-without  (service/find-statistics ts/*db* query-all)]
+    ;; Then: results identical to calling without the parameter
+    (t/is (= result-with-nil result-without))))

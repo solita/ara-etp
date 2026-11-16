@@ -124,32 +124,6 @@
         (t/is (= "Yhden asunnon talot" (:label-fi (some #(when (= "YAT" (:id %)) %) response-body))))
         (t/is (= 200 (:status get-res)))))))
 
-(t/deftest alakayttotarkoitusluokat-endpoint-test
-  (let [endpoint "/api/public/energiatodistukset/alakayttotarkoitusluokat/2013"]
-    (t/testing endpoint
-      (let [get-res (ts/handler (-> (mock/request :get endpoint)
-                                    (mock/header "Accept" "application/json")
-                                    (mock/header "Content-Type" "application/json")))
-            response-body (-> get-res :body (j/read-value object-mapper))]
-        (t/is (= "Yhden asunnon talot" (:label-fi (some #(when (= "YAT" (:id %)) %) response-body))))
-        (t/is (= 200 (:status get-res))))))
-  (let [endpoint "/api/public/energiatodistukset/alakayttotarkoitusluokat/2018"]
-    (t/testing endpoint
-      (let [get-res (ts/handler (-> (mock/request :get endpoint)
-                                    (mock/header "Accept" "application/json")
-                                    (mock/header "Content-Type" "application/json")))
-            response-body (-> get-res :body (j/read-value object-mapper))]
-        (t/is (= "Yhden asunnon talot" (:label-fi (some #(when (= "YAT" (:id %)) %) response-body))))
-        (t/is (= 200 (:status get-res))))))
-  (let [endpoint "/api/public/energiatodistukset/alakayttotarkoitusluokat/2027"]
-    (t/testing endpoint
-      (let [get-res (ts/handler (-> (mock/request :get endpoint)
-                                    (mock/header "Accept" "application/json")
-                                    (mock/header "Content-Type" "application/json")))
-            response-body (-> get-res :body (j/read-value object-mapper))]
-        (t/is (= "Yhden asunnon talot" (:label-fi (some #(when (= "YAT" (:id %)) %) response-body))))
-        (t/is (= 200 (:status get-res)))))))
-
 (t/deftest e-luokka-endpoint-test
   (let [endpoint "/api/public/energiatodistukset/e-luokka/2013/YAT/100/25"]
     (t/testing endpoint

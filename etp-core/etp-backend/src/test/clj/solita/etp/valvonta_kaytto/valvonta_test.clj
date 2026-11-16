@@ -26,7 +26,7 @@
 (t/deftest adding-toimenpide
   (t/testing "Kun uusi toimenpide lisätään, omistajille joilla on Suomi.fi-viestit käytössä lähtee viesti oikealla kuvauksella"
     (let [suomifi-message-sent (promise)
-          assert-suomifi-message-sent (fn [message config]
+          assert-suomifi-message-sent (fn [message _config]
                                         (t/is (= "ARA-ETP-KV-1-1-PERSON-1"
                                                  (:external-id message)))
                                         (t/is (= (str "Tämän viestin liitteenä on tietopyyntö koskien rakennustasi: 1035150826\n"

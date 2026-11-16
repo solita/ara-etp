@@ -32,8 +32,8 @@
                                 kayttaja-test-data/paakayttaja
                                 id)
                   cognitoid (str "cognitoid-" (rand-int 1000000))
-                  virtulocalid (:email found-before)
-                  virtuorganisaatio "organisaatio"
+                  _virtulocalid (:email found-before)
+                  _virtuorganisaatio "organisaatio"
                   _ (service/update-kayttaja-with-whoami! ts/*db*
                                                           {:id id
                                                            :cognitoid cognitoid})

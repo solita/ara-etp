@@ -106,40 +106,40 @@
 
 (t/deftest write-energiatodistukset-csv-test
   (let [{:keys [ids-of-ets-with-pps ids-of-ets-without-pps ppp-laatija-whoami ppp-removed-case et-id->ppp-id]} (test-data-set)
-        laatija-id (:id ppp-laatija-whoami)]
-    (let [result (service/energiatodistukset-private-csv
-                   ts/*db* {:id laatija-id :rooli 0} {})
-          buffer (StringBuffer.)
-          _ (result #(.append buffer %))
+        laatija-id (:id ppp-laatija-whoami)
+        result (service/energiatodistukset-private-csv
+                 ts/*db* {:id laatija-id :rooli 0} {})
+        buffer (StringBuffer.)
+        _ (result #(.append buffer %))
 
-          et-with-ppp-id (rand-nth ids-of-ets-with-pps)
-          et-without-ppp-id (rand-nth ids-of-ets-without-pps)
+        et-with-ppp-id (rand-nth ids-of-ets-with-pps)
+        et-without-ppp-id (rand-nth ids-of-ets-without-pps)
 
-          csv-lines-strings (-> (.toString buffer) str/split-lines)
-          header-line (first csv-lines-strings)]
-      (t/testing "The csv starts with expected headers"
-        (t/is (str/starts-with? header-line
-                                "\"Id\";\"Perusparannuspassi-id\";\"Versio\";")))
-      (t/testing "Perusparannuspassi-id shows up as expected for a todistus with perusparannuspassi"
-        (let [et-with-ppp-line (->> csv-lines-strings
-                                    (filter #(str/starts-with? % (str et-with-ppp-id)))
-                                    first)
-              et-with-ppp (energiatodistus-service/find-energiatodistus ts/*db* et-with-ppp-id)
-              ppp-id (:perusparannuspassi-id et-with-ppp)]
-          (t/testing "Perusparannuspassi-id is not for some other et"
-            (t/is (not (nil? ppp-id)))
-            (t/is (= ppp-id (et-id->ppp-id et-with-ppp-id))))
-          (t/is (str/starts-with? et-with-ppp-line (str et-with-ppp-id ";" ppp-id ";")))))
-      (t/testing "Perusparannuspassi-id is empty for energiatodistus without perusparannuspassi"
-        (let [et-without-ppp-line (->> csv-lines-strings
-                                       (filter #(str/starts-with? % (str et-without-ppp-id)))
-                                       first)]
-          (t/is (str/starts-with? et-without-ppp-line (str et-without-ppp-id ";;")))))
-      (t/testing "Perusparannuspassi-id is empty for energiatodistus that had perusparannuspassi but it is removed"
-        (let [et-without-ppp-line (->> csv-lines-strings
-                                       (filter #(str/starts-with? % (str (:et-id ppp-removed-case))))
-                                       first)]
-          (t/is (str/starts-with? et-without-ppp-line (str (:et-id ppp-removed-case) ";;"))))))))
+        csv-lines-strings (-> (.toString buffer) str/split-lines)
+        header-line (first csv-lines-strings)]
+    (t/testing "The csv starts with expected headers"
+      (t/is (str/starts-with? header-line
+                              "\"Id\";\"Perusparannuspassi-id\";\"Versio\";")))
+    (t/testing "Perusparannuspassi-id shows up as expected for a todistus with perusparannuspassi"
+      (let [et-with-ppp-line (->> csv-lines-strings
+                                  (filter #(str/starts-with? % (str et-with-ppp-id)))
+                                  first)
+            et-with-ppp (energiatodistus-service/find-energiatodistus ts/*db* et-with-ppp-id)
+            ppp-id (:perusparannuspassi-id et-with-ppp)]
+        (t/testing "Perusparannuspassi-id is not for some other et"
+          (t/is (not (nil? ppp-id)))
+          (t/is (= ppp-id (et-id->ppp-id et-with-ppp-id))))
+        (t/is (str/starts-with? et-with-ppp-line (str et-with-ppp-id ";" ppp-id ";")))))
+    (t/testing "Perusparannuspassi-id is empty for energiatodistus without perusparannuspassi"
+      (let [et-without-ppp-line (->> csv-lines-strings
+                                     (filter #(str/starts-with? % (str et-without-ppp-id)))
+                                     first)]
+        (t/is (str/starts-with? et-without-ppp-line (str et-without-ppp-id ";;")))))
+    (t/testing "Perusparannuspassi-id is empty for energiatodistus that had perusparannuspassi but it is removed"
+      (let [et-without-ppp-line (->> csv-lines-strings
+                                     (filter #(str/starts-with? % (str (:et-id ppp-removed-case))))
+                                     first)]
+        (t/is (str/starts-with? et-without-ppp-line (str (:et-id ppp-removed-case) ";;")))))))
 
 (t/deftest other-columns-are-subsets-of-private-columns-test
   (let [private (set service/private-columns)]

@@ -49,7 +49,7 @@
         not-updated-id (-> laatijat keys sort last)
         not-updated-add (get laatijat not-updated-id)]
     (doseq [id (-> laatijat keys sort butlast)
-            :let [{:keys [henkilotunnus] :as add} (get laatijat id)
+            :let [{:keys [henkilotunnus] :as _add} (get laatijat id)
 
                   ;; Adds are always used to upsert
                   update (-> (laatija-test-data/generate-adds 1)
