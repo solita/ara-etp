@@ -589,8 +589,7 @@
                     (assoc-in [:vaiheet 0 :toimenpiteet :toimenpideseloste-sv] "sv-vaihe-seloste"))
         ppp-id (:id (perusparannuspassi-service/insert-perusparannuspassi! db whoami ppp-add))]
   (energiatodistus-test-data/sign! et-id laatija-id true)
-  (let [_signed (service/find-energiatodistus db et-id)
-        ppp (perusparannuspassi-service/find-perusparannuspassi db whoami ppp-id)]
+  (let [ppp (perusparannuspassi-service/find-perusparannuspassi db whoami ppp-id)]
     (t/is (= "fi-passi-lisatietoja" (get-in ppp [:passin-perustiedot :lisatietoja-fi])))
     (t/is (nil? (get-in ppp [:passin-perustiedot :lisatietoja-sv])))
     (t/is (= "fi-rakennus-lisatietoja" (get-in ppp [:rakennuksen-perustiedot :lisatietoja-fi])))
@@ -598,8 +597,7 @@
     (t/is (= "fi-tulokset-lisatietoja" (get-in ppp [:tulokset :lisatietoja-fi])))
     (t/is (nil? (get-in ppp [:tulokset :lisatietoja-sv])))
     (t/is (= "fi-vaihe-seloste" (get-in ppp[:vaiheet 0 :toimenpiteet :toimenpideseloste-fi])))
-    (t/is (nil? (get-in ppp [:vaiheet 0 :toimenpiteet :toimenpideseloste-sv])))
-    )))
+    (t/is (nil? (get-in ppp [:vaiheet 0 :toimenpiteet :toimenpideseloste-sv]))))))
 
 (t/deftest signing-with-swedish-resets-finnish-fields-in-perusparannuspassi
   (let [laatija-adds (map #(assoc % :patevyystaso 4) (laatija-test-data/generate-adds 1))
@@ -753,7 +751,6 @@
   (let [{:keys [laatijat]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
         whoami {:id laatija-id :rooli 0}
-        _db (ts/db-user laatija-id)
         energiatodistus (first (energiatodistus-test-data/generate-adds 1
                                                                         2018
                                                                         true))
@@ -847,10 +844,8 @@
 (t/deftest set-energiatodistus-discarded!-test
   (let [{:keys [laatijat energiatodistukset]} (test-data-set)
         laatija-id (-> laatijat keys sort first)
-        _whoami {:id laatija-id :rooli 0}
         db (ts/db-user laatija-id)
-        id (-> energiatodistukset keys sort first)
-        _add (get energiatodistukset id)]
+        id (-> energiatodistukset keys sort first)]
     (t/is (= (energiatodistus-tila id) :draft))
     (energiatodistus-test-data/sign! id laatija-id true)
     (t/is (= (energiatodistus-tila id) :signed))
@@ -1199,8 +1194,6 @@
         korvattava-add (first (energiatodistus-test-data/generate-adds 1 2018 true))
         [korvattava-id] (energiatodistus-test-data/insert! [korvattava-add] laatija-id)
         _ (energiatodistus-test-data/sign! korvattava-id laatija-id true)
-        korvattava-et (service/find-energiatodistus ts/*db* korvattava-id)
-        _korvattava-validity (:voimassaolo-paattymisaika korvattava-et)
         korvaava-add (-> (first (energiatodistus-test-data/generate-adds 1 2018 true))
                          (assoc :korvattu-energiatodistus-id korvattava-id
                                 :yksinkertaistettu-paivitysmenettely false))
