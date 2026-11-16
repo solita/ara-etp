@@ -65,8 +65,7 @@
                (service/find-yritys ts/*db* yritys-id))))))
 
 (t/deftest update-yritys-no-permissions-test
-  (let [{:keys [laskuttajat laatijat yritykset]} (test-data-set)
-        _laskuttaja-id (-> laskuttajat keys sort first)
+  (let [{:keys [laatijat yritykset]} (test-data-set)
         laatija-id (-> laatijat keys sort last)
         yritys-id (-> yritykset keys sort first)
         whoami {:rooli 0 :id laatija-id}]

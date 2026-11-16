@@ -390,9 +390,8 @@
           "Unrecognized content is always accepted and stored as application/octet-stream")))
 
 (t/deftest find-liite-other-user
-  (let [{:keys [laatijat energiatodistukset
+  (let [{:keys [energiatodistukset
                 file-liitteet link-liitteet]} (test-data-set)
-        _laatija-id (-> laatijat keys sort first)
         [energiatodistus-id _] (-> energiatodistukset first)
         liitteet (merge file-liitteet link-liitteet)
         [other-laatija-id _] (laatija-test-data/generate-and-insert!)]

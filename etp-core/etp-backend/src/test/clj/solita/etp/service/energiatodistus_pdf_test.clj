@@ -48,8 +48,7 @@
   (t/is (= "12,346 %" (formats/format-number 0.1234567 3 true))))
 
 (t/deftest fill-xlsx-template-test
-  (let [{:keys [energiatodistukset]} (test-data-set)
-        _energiatodistus-ids (-> energiatodistukset keys sort)]
+  (let [{:keys [energiatodistukset]} (test-data-set)]
     (doseq [id (-> energiatodistukset keys sort)
             :let [energiatodistus (energiatodistus-service/find-energiatodistus
                                     ts/*db*

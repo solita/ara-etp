@@ -181,8 +181,7 @@
     (t/is (:published sivu-out))))
 
 (t/deftest ordinal-new-root-prepend
-  (let [{:keys [
-                defaults
+  (let [{:keys [defaults
                 root-0-id
                 root-1-id
                 whoami]} (ordinal-test-data-set)
@@ -198,8 +197,7 @@
                    :ordinal)))))
 
 (t/deftest ordinal-delete
-  (let [{:keys [
-                root-1-id
+  (let [{:keys [root-1-id
                 sub-1-0-id
                 sub-1-1-id
                 whoami]} (ordinal-test-data-set)]
@@ -209,8 +207,7 @@
              {:ordinal 0 :parent-id root-1-id}))))
 
 (t/deftest ordinal-new-root-append
-  (let [{:keys [
-                defaults
+  (let [{:keys [defaults
                 root-0-id
                 root-1-id
                 whoami]} (ordinal-test-data-set)
@@ -226,8 +223,7 @@
                    :ordinal)))))
 
 (t/deftest ordinal-reroot
-  (let [{:keys [
-                root-0-id
+  (let [{:keys [root-0-id
                 root-1-id
                 sub-0-0-id
                 sub-0-1-id
@@ -256,8 +252,7 @@
 
 
 (t/deftest ordinal-reroot-last
-  (let [{:keys [
-                root-0-id
+  (let [{:keys [root-0-id
                 root-1-id
                 sub-0-0-id
                 sub-0-1-id

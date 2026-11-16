@@ -56,8 +56,6 @@
         ip-address "10.0.7.11"
         time-issued (signed-url/unix-time)
         expires (+ time-issued 60)
-        time-late-test (+ expires 10)
-        _optimistic-expiration (+ time-late-test 10)
         url (signed-url/url->signed-url base-url
                                         expires
                                         ip-address
