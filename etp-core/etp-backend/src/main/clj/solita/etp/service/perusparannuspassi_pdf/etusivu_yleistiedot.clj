@@ -34,7 +34,9 @@
       [:dd (:id perusparannuspassi)]]
      [:div
       [:dt (str (l :havainnointikaynnin-paivamaara) ":")]
-      [:dd (-> energiatodistus (get-in [:perustiedot :havainnointikaynti]) time/format-date)]]
+      [:dd (-> perusparannuspassi
+               (get-in [:passin-perustiedot :havainnointikaynti])
+               time/format-date)]]
      [:div
       [:dt (str (l :passin-esittelyn-paivamaara) ":")]
       [:dd (-> perusparannuspassi (get-in [:passin-perustiedot :passin-esittely]) time/format-date)]]
