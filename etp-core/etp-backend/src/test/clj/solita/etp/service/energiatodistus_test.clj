@@ -78,11 +78,10 @@
                    first
                    (assoc :draft-visible-to-paakayttaja true))]
     (service/update-energiatodistus! ts/*db* {:id laatija-id :rooli 0} id update)
-    (doseq [_rooli [kayttaja-test-data/laatija
-                   kayttaja-test-data/paakayttaja
+    (doseq [rooli [kayttaja-test-data/paakayttaja
                    kayttaja-test-data/laskuttaja]]
       (t/is (add-eq-found? update
-                           (service/find-energiatodistus ts/*db* id))))))
+                           (service/find-energiatodistus ts/*db* rooli id))))))
 
 (t/deftest validation-test-invalid-value
   (let [{:keys [laatijat]} (test-data-set)
