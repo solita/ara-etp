@@ -341,27 +341,25 @@ export const eluokkaFromRajaAsteikko = (rajaAsteikko, eLuku) => {
 };
 
 /**
- * Downgrade A+/A0 e-luokka based on tayttaa-aplus-vaatimukset and tayttaa-a0-vaatimukset.
- * A+ requires both aplus and a0 to be true; A0 requires a0 to be true.
- * Other classes are returned unchanged.
+ * Downgrade A+ e-luokka based on tayttaa-aplus-vaatimukset and a0-merkinta-id.
+ * A+ requires tayttaa-aplus-vaatimukset and an A0 marking of A0 (1) or A0_MPR (3).
+ * Otherwise A+ is downgraded to A. Other classes are returned unchanged.
  * NOTE: Backend has a parallel implementation: solita.etp.service.e-luokka/downgrade-e-luokka.
  * @param {string} rawEluokka - The raw e-luokka from raja-asteikko lookup
  * @param {boolean} tayttaaAplusVaatimukset - Whether A+ requirements are met
- * @param {boolean} tayttaaA0Vaatimukset - Whether A0 requirements are met
+ * @param {number} a0MerkintaId - A0 marking id: 0 Ei, 1 A0, 2 A0_korjattu, 3 A0_MPR
  * @returns {string} The (possibly downgraded) e-luokka
  */
 export const applyEluokkaDowngrade = (
   rawEluokka,
   tayttaaAplusVaatimukset,
-  tayttaaA0Vaatimukset
+  a0MerkintaId
 ) => {
   switch (rawEluokka) {
     case 'A+':
-      if (tayttaaAplusVaatimukset && tayttaaA0Vaatimukset) return 'A+';
-      if (tayttaaA0Vaatimukset) return 'A0';
-      return 'A';
-    case 'A0':
-      return tayttaaA0Vaatimukset ? 'A0' : 'A';
+      return tayttaaAplusVaatimukset && [1, 3].includes(a0MerkintaId)
+        ? 'A+'
+        : 'A';
     default:
       return rawEluokka;
   }

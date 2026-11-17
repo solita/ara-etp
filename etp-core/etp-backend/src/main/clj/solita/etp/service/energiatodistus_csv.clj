@@ -25,7 +25,8 @@
                  :uudisrakennus
                  :havainnointikayntityyppi-id :havainnointikayntityyppi-fi
                  :havainnointikayntityyppi-sv
-                 :tayttaa-aplus-vaatimukset :tayttaa-a0-vaatimukset]]
+                 :tayttaa-aplus-vaatimukset :a0-merkinta-id :a0-merkinta-fi
+                 :a0-merkinta-sv]]
       [:perustiedot child])
     [[:tulokset :laskentatyokalu]]
     (for [child [:nimi-fi :nimi-sv :valmistumisvuosi :rakennusosa :katuosoite-fi
@@ -310,7 +311,9 @@
    [:tulokset :kaytettavat-energiamuodot :muu 2 :muotokerroin]
    [:perustiedot :havainnointikayntityyppi-fi]
    [:perustiedot :tayttaa-aplus-vaatimukset]
-   [:perustiedot :tayttaa-a0-vaatimukset]
+   [:perustiedot :a0-merkinta-id]
+   [:perustiedot :a0-merkinta-fi]
+   [:perustiedot :a0-merkinta-sv]
    [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
    [:lahtotiedot :lammitys :lammonjako-lampotilajousto]
    [:tulokset :kasvihuonepaastot]
@@ -493,7 +496,9 @@
    [[:perustiedot :havainnointikayntityyppi-id]
     [:perustiedot :havainnointikayntityyppi-fi]
     [:perustiedot :tayttaa-aplus-vaatimukset]
-    [:perustiedot :tayttaa-a0-vaatimukset]
+    [:perustiedot :a0-merkinta-id]
+    [:perustiedot :a0-merkinta-fi]
+    [:perustiedot :a0-merkinta-sv]
     [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
     [:lahtotiedot :lammitys :lammonjako-lampotilajousto]
     [:tulokset :kasvihuonepaastot]
@@ -730,7 +735,9 @@
    [[:perustiedot :havainnointikayntityyppi-id]
     [:perustiedot :havainnointikayntityyppi-fi]
     [:perustiedot :tayttaa-aplus-vaatimukset]
-    [:perustiedot :tayttaa-a0-vaatimukset]
+    [:perustiedot :a0-merkinta-id]
+    [:perustiedot :a0-merkinta-fi]
+    [:perustiedot :a0-merkinta-sv]
     [:lahtotiedot :energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin]
     [:lahtotiedot :lammitys :lammonjako-lampotilajousto]
     [:tulokset :kasvihuonepaastot]

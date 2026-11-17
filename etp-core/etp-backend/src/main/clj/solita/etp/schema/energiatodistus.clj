@@ -364,7 +364,7 @@
   (-> (dissoc-not-in-2027 EnergiatodistusSave2018)
       (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key
                                                          :tayttaa-aplus-vaatimukset   schema/Bool
-                                                         :tayttaa-a0-vaatimukset      schema/Bool}
+                                                         :a0-merkinta-id              common-schema/Key}
                         :lahtotiedot                    {:energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin schema/Bool
                                                          :lammitys
                                                          {:lammonjako-lampotilajousto schema/Bool}}

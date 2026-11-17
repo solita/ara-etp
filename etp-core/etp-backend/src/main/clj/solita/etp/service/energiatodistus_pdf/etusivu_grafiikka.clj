@@ -45,8 +45,7 @@
 
 (def arrows
   [{:letter "A+" :color "#009641" :luokka "A+"}
-   {:letter "A0" :color "#52ae32" :luokka "A0"}
-   {:letter "A" :color "#c8d302" :luokka "A"}
+   {:letter "A" :color "#9e9e9e" :luokka "A"}
    {:letter "B" :color "#ffed00" :luokka "B"}
    {:letter "C" :color "#fbb900" :luokka "C"}
    {:letter "D" :color "#ec6608" :luokka "D"}
@@ -76,7 +75,6 @@
         (assoc arrow :numbers
                      (case letter
                      "A+" (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A+"))
-                     "A0" (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A0"))
                      "A"  (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A"))
                      "G"  (str "&gt; " last-val)
                      (get ranges letter))))
@@ -90,7 +88,6 @@
 
 (def arrow-body-widths
   [116
-   128
    141
    155
    171

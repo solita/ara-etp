@@ -598,7 +598,7 @@
       "kayttotarkoitusluokka": "Användningskategori",
       "alakayttotarkoitusluokka": "Klasser med avseende på underanvändningsändamål",
       "julkinen-rakennus": "Offentlig byggnad",
-      "tayttaa-a0-vaatimukset": "Byggnaden uppfyller tilläggskraven för klass A0",
+      "a0-merkinta-id": "Täyttää päästöttömän rakennuksen vaatimukset (sv)",
       "tayttaa-aplus-vaatimukset": "Byggnaden uppfyller tilläggskraven för klass A+",
       "keskeiset-suositukset": "De viktigaste rekommendationerna",
       "keskeiset-suositukset-heading": {
@@ -1506,7 +1506,7 @@
       "header": "Grungläggande uppgifter om passet",
       "havainnointikaynti": "Datum för observationsbesök",
       "passin-esittely": "Datum för presentation av passet",
-      "tayttaa-a0-vaatimukset": "Efter den sista fasen är byggnaden i klass A\u2070",
+      "a0-merkinta-id": "Täyttää päästöttömän rakennuksen vaatimukset (sv)",
       "tayttaa-aplus-vaatimukset": "Efter den sista fasen är byggnaden i klass A+",
       "lisatiedot": {
         "header": "Mer information"

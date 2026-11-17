@@ -141,7 +141,7 @@
                          (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
                          e-luku
                          (:tayttaa-aplus-vaatimukset ppp-perustiedot)
-                         (:tayttaa-a0-vaatimukset ppp-perustiedot))
+                         (:a0-merkinta-id ppp-perustiedot))
                        :e-luokka)
           ostoenergia (total-ostoenergia-ppp tulokset)
           painotettu (painotettu-ostoenergia energiatodistus tulokset)
@@ -216,7 +216,7 @@
   [perusparannuspassi energiatodistus luokittelut]
   (let [ppp-tulokset (:tulokset perusparannuspassi)
         passin-perustiedot (:passin-perustiedot perusparannuspassi)
-        ;; Lähtötilanne uses ET's own :tayttaa-aplus-vaatimukset / :tayttaa-a0-vaatimukset
+        ;; Lähtötilanne uses ET's own :tayttaa-aplus-vaatimukset / :a0-merkinta-id
         ;; (from :perustiedot), not PPP's passin-perustiedot.
         lahtotilanne (energiatodistus->lahtotilanne energiatodistus ppp-tulokset luokittelut)]
     (-> perusparannuspassi

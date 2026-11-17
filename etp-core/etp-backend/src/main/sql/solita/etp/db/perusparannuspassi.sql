@@ -89,7 +89,7 @@ set
     ppt$havainnointikaynti = null,
     ppt$passin_esittely = null,
     ppt$tayttaa_aplus_vaatimukset = false,
-    ppt$tayttaa_a0_vaatimukset = false,
+    ppt$a0_merkinta_id = 0,
     rpt$ulkoseinat_ehdotettu_taso = null,
     rpt$ylapohja_ehdotettu_taso = null,
     rpt$alapohja_ehdotettu_taso = null,

@@ -621,7 +621,7 @@
       "kayttotarkoitusluokka": "Käyttötarkoitusluokka",
       "alakayttotarkoitusluokka": "Alakäyttötarkoitusluokka",
       "julkinen-rakennus": "Julkinen rakennus",
-      "tayttaa-a0-vaatimukset": "Rakennus täyttää A0-luokan lisävaatimukset",
+      "a0-merkinta-id": "Täyttää päästöttömän rakennuksen vaatimukset",
       "tayttaa-aplus-vaatimukset": "Rakennus täyttää A+-luokan lisävaatimukset",
       "keskeiset-suositukset": "Keskeiset suositukset",
       "keskeiset-suositukset-heading": {
@@ -1536,7 +1536,7 @@
       "header": "Passin perustiedot",
       "havainnointikaynti": "Havainnointikäynnin päivämäärä",
       "passin-esittely": "Passin esittelyn päivämäärä",
-      "tayttaa-a0-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A0-luokassa",
+      "a0-merkinta-id": "Täyttää päästöttömän rakennuksen vaatimukset",
       "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa",
       "lisatiedot": {
         "header": "Lisätietoja"

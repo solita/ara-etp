@@ -394,7 +394,7 @@
                                          :lt$energiankulutuksen_valmius_reagoida_ulkoisiin_signaaleihin (false? value)
                                          :lt$lammitys$lammonjako_lampotilajousto (false? value)
                                          :pt$tayttaa_aplus_vaatimukset (false? value)
-                                         :pt$tayttaa_a0_vaatimukset (false? value)
+                                         :pt$a0_merkinta_id (= 0 value)
 
                                          ;; Other values are null
                                          (nil? value))})

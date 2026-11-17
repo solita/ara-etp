@@ -131,31 +131,31 @@
         whoami {:id laatija-id :rooli 0 :patevyystaso 4}
         new-et-id! #(first (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id))]
 
-    (t/testing "PPP with both tayttaa-*-vaatimukset true → e-luokka NOT downgraded"
+    (t/testing "PPP with aplus=true and A0 marking → e-luokka NOT downgraded"
       (let [ppp-add (make-ppp-add (new-et-id!)
                                   {:tayttaa-aplus-vaatimukset true
-                                   :tayttaa-a0-vaatimukset true})
+                                   :a0-merkinta-id 1})
             completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
         (t/is (= "A+" (first-vaihe-e-luokka completed)))))
 
-    (t/testing "PPP with both tayttaa-*-vaatimukset false → e-luokka downgraded to A"
+    (t/testing "PPP with aplus=false and A0 marking Ei → e-luokka downgraded to A"
       (let [ppp-add (make-ppp-add (new-et-id!)
                                   {:tayttaa-aplus-vaatimukset false
-                                   :tayttaa-a0-vaatimukset false})
+                                   :a0-merkinta-id 0})
             completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
         (t/is (= "A" (first-vaihe-e-luokka completed)))))
 
-    (t/testing "PPP with aplus=false, a0=true → e-luokka downgraded to A0"
+    (t/testing "PPP with aplus=false and A0 marking → e-luokka downgraded to A"
       (let [ppp-add (make-ppp-add (new-et-id!)
                                   {:tayttaa-aplus-vaatimukset false
-                                   :tayttaa-a0-vaatimukset true})
+                                   :a0-merkinta-id 1})
             completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
-        (t/is (= "A0" (first-vaihe-e-luokka completed)))))
+        (t/is (= "A" (first-vaihe-e-luokka completed)))))
 
-    (t/testing "PPP with aplus=true, a0=false → e-luokka downgraded to A"
+    (t/testing "PPP with aplus=true and A0_korjattu marking → e-luokka downgraded to A"
       (let [ppp-add (make-ppp-add (new-et-id!)
                                   {:tayttaa-aplus-vaatimukset true
-                                   :tayttaa-a0-vaatimukset false})
+                                   :a0-merkinta-id 2})
             completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
         (t/is (= "A" (first-vaihe-e-luokka completed)))))
 
@@ -164,19 +164,19 @@
                              laatija-id whoami
                              (make-ppp-add (new-et-id!)
                                            {:tayttaa-aplus-vaatimukset true
-                                            :tayttaa-a0-vaatimukset true}))
+                                            :a0-merkinta-id 1}))
             completed-false (insert-and-complete-ppp!
                               laatija-id whoami
                               (make-ppp-add (new-et-id!)
                                             {:tayttaa-aplus-vaatimukset false
-                                             :tayttaa-a0-vaatimukset false}))]
+                                             :a0-merkinta-id 0}))]
         (t/is (= "A+" (first-vaihe-e-luokka completed-true)))
         (t/is (= "A" (first-vaihe-e-luokka completed-false)))))
 
     (t/testing "Invalid vaihe does not run downgrade logic"
       (let [ppp-add (make-ppp-add (new-et-id!)
                                   {:tayttaa-aplus-vaatimukset false
-                                   :tayttaa-a0-vaatimukset false}
+                                   :a0-merkinta-id 0}
                                   false)
             completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
         (t/is (nil? (first-vaihe-e-luokka completed)))))

@@ -28,6 +28,19 @@ const Template = args => ({
 export const Default = Template.bind({});
 Default.args = {
   schema: saveSchema,
+  luokittelut: {
+    a0Merkinta: [
+      { id: 0, 'label-fi': 'Ei', 'label-sv': 'Ei (sv)', valid: true },
+      { id: 1, 'label-fi': 'A0', 'label-sv': 'A0', valid: true },
+      {
+        id: 2,
+        'label-fi': 'A0_korjattu',
+        'label-sv': 'A0_korjattu',
+        valid: true
+      },
+      { id: 3, 'label-fi': 'A0_MPR', 'label-sv': 'A0_MPR', valid: true }
+    ]
+  },
   perusparannuspassi: R.mergeDeepLeft(
     {
       id: 4245

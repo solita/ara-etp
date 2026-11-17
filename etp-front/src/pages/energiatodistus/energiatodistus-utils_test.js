@@ -949,60 +949,37 @@ describe('tehollinen kaukolämpö kerroin', () => {
 
 describe('applyEluokkaDowngrade', () => {
   describe('rawEluokka is A+', () => {
-    describe('both aplus and a0 vaatimukset are true', () => {
+    describe('aplus=true and a0 marking is A0 or A0_MPR', () => {
       it('returns A+ unchanged', () => {
-        expect(EtUtils.applyEluokkaDowngrade('A+', true, true)).toBe('A+');
+        expect(EtUtils.applyEluokkaDowngrade('A+', true, 1)).toBe('A+');
+        expect(EtUtils.applyEluokkaDowngrade('A+', true, 3)).toBe('A+');
       });
     });
 
-    describe('aplus=true, a0=false', () => {
-      it('downgrades to A since A+ requires both', () => {
-        expect(EtUtils.applyEluokkaDowngrade('A+', true, false)).toBe('A');
-      });
-    });
-
-    describe('aplus=false, a0=true', () => {
-      it('downgrades to A0', () => {
-        expect(EtUtils.applyEluokkaDowngrade('A+', false, true)).toBe('A0');
-      });
-    });
-
-    describe('both vaatimukset are false', () => {
+    describe('aplus=true and a0 marking is Ei or A0_korjattu', () => {
       it('downgrades to A', () => {
-        expect(EtUtils.applyEluokkaDowngrade('A+', false, false)).toBe('A');
-      });
-    });
-  });
-
-  describe('rawEluokka is A0', () => {
-    describe('a0=true, aplus=false', () => {
-      it('returns A0', () => {
-        expect(EtUtils.applyEluokkaDowngrade('A0', false, true)).toBe('A0');
+        expect(EtUtils.applyEluokkaDowngrade('A+', true, 0)).toBe('A');
+        expect(EtUtils.applyEluokkaDowngrade('A+', true, 2)).toBe('A');
       });
     });
 
-    describe('a0=false, aplus=false', () => {
+    describe('aplus=false and a0 marking is A0 or A0_MPR', () => {
       it('downgrades to A', () => {
-        expect(EtUtils.applyEluokkaDowngrade('A0', false, false)).toBe('A');
+        expect(EtUtils.applyEluokkaDowngrade('A+', false, 1)).toBe('A');
+        expect(EtUtils.applyEluokkaDowngrade('A+', false, 3)).toBe('A');
       });
     });
 
-    describe('both aplus and a0 are true', () => {
-      it('returns A0 since aplus is irrelevant for A0', () => {
-        expect(EtUtils.applyEluokkaDowngrade('A0', true, true)).toBe('A0');
-      });
-    });
-
-    describe('aplus=true, a0=false', () => {
+    describe('aplus=false and a0 marking is Ei', () => {
       it('downgrades to A', () => {
-        expect(EtUtils.applyEluokkaDowngrade('A0', true, false)).toBe('A');
+        expect(EtUtils.applyEluokkaDowngrade('A+', false, 0)).toBe('A');
       });
     });
   });
 
   describe('rawEluokka is A or below', () => {
     it('A is never downgraded', () => {
-      expect(EtUtils.applyEluokkaDowngrade('A', true, true)).toBe('A');
+      expect(EtUtils.applyEluokkaDowngrade('A', true, 1)).toBe('A');
     });
 
     it('B is never downgraded', () => {
@@ -1046,10 +1023,9 @@ describe('applyEluokkaDowngrade', () => {
 });
 
 describe('eluokkaFromRajaAsteikko + applyEluokkaDowngrade combined', () => {
-  // 2027 YAT raja-asteikko: A+ ≤ 78, A0 ≤ 98, A ≤ 98, B ≤ 106, C ≤ 130, D ≤ 181, E ≤ 265, F ≤ 310
+  // 2027 YAT raja-asteikko: A+ ≤ 78, A ≤ 98, B ≤ 106, C ≤ 130, D ≤ 181, E ≤ 265, F ≤ 310
   const rajaAsteikko2027 = [
     [78, 'A+'],
-    [98, 'A0'],
     [98, 'A'],
     [106, 'B'],
     [130, 'C'],
@@ -1059,34 +1035,32 @@ describe('eluokkaFromRajaAsteikko + applyEluokkaDowngrade combined', () => {
   ];
 
   describe('e-luku 50 is in A+ range (≤ 78)', () => {
-    describe('both vaatimukset are true', () => {
+    describe('aplus true and a0 marking A0', () => {
       it('produces A+', () => {
         const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2027, 50);
-        expect(EtUtils.applyEluokkaDowngrade(raw, true, true)).toBe('A+');
+        expect(EtUtils.applyEluokkaDowngrade(raw, true, 1)).toBe('A+');
       });
     });
 
-    describe('both vaatimukset are false', () => {
+    describe('aplus false and a0 marking Ei', () => {
       it('downgrades to A', () => {
         const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2027, 50);
-        expect(EtUtils.applyEluokkaDowngrade(raw, false, false)).toBe('A');
+        expect(EtUtils.applyEluokkaDowngrade(raw, false, 0)).toBe('A');
       });
     });
   });
 
-  describe('e-luku 85 is in A0 range (> 78, ≤ 98)', () => {
-    describe('a0=true', () => {
-      it('produces A0', () => {
-        const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2027, 85);
-        expect(EtUtils.applyEluokkaDowngrade(raw, false, true)).toBe('A0');
-      });
+  describe('e-luku 85 is in A range (> 78, ≤ 98), no A0 class', () => {
+    it('produces A even when the A0 marking is set', () => {
+      const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2027, 85);
+      expect(EtUtils.applyEluokkaDowngrade(raw, false, 1)).toBe('A');
     });
   });
 
   describe('e-luku 100 is in B range (> 98, ≤ 106)', () => {
     it('produces B regardless of rastit', () => {
       const raw = EtUtils.eluokkaFromRajaAsteikko(rajaAsteikko2027, 100);
-      expect(EtUtils.applyEluokkaDowngrade(raw, true, true)).toBe('B');
+      expect(EtUtils.applyEluokkaDowngrade(raw, true, 1)).toBe('B');
     });
   });
 });

@@ -43,7 +43,7 @@
      :valid                   true
      :passin-perustiedot      {:havainnointikaynti        nil
                                :passin-esittely           nil
-                               :tayttaa-a0-vaatimukset    false
+                               :a0-merkinta-id            0
                                :tayttaa-aplus-vaatimukset false
                                :lisatietoja-fi         nil
                                :lisatietoja-sv         nil}

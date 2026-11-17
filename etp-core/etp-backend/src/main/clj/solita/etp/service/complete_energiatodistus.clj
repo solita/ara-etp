@@ -128,7 +128,7 @@
   [energiatodistus {:keys [postinumerot kielisyydet laatimisvaiheet
                            kayttotarkoitukset alakayttotarkoitukset
                            ilmanvaihtotyypit lammitysmuodot lammonjaot
-                           havainnointikayntityypit]}]
+                           havainnointikayntityypit a0-merkinnat]}]
   (with-precision 20
     (let [{:keys [versio]} energiatodistus
           postinumero (find-by-id postinumerot (-> energiatodistus
@@ -176,6 +176,10 @@
                                           :perustiedot
                                           :havainnointikayntityyppi-id)
           havainnointikayntityyppi (find-by-id havainnointikayntityypit havainnointikayntityyppi-id)
+          a0-merkinta-id (-> energiatodistus
+                             :perustiedot
+                             :a0-merkinta-id)
+          a0-merkinta (find-by-id a0-merkinnat a0-merkinta-id)
           ;; Käyttötarkoitus is actually alakäyttötarkoitus in database
           alakayttotarkoitus-id (-> energiatodistus
                                     :perustiedot
@@ -196,6 +200,8 @@
           (assoc-in [:perustiedot :laatimisvaihe-sv] (:label-sv laatimisvaihe))
           (assoc-in [:perustiedot :havainnointikayntityyppi-fi] (:label-fi havainnointikayntityyppi))
           (assoc-in [:perustiedot :havainnointikayntityyppi-sv] (:label-sv havainnointikayntityyppi))
+          (assoc-in [:perustiedot :a0-merkinta-fi] (:label-fi a0-merkinta))
+          (assoc-in [:perustiedot :a0-merkinta-sv] (:label-sv a0-merkinta))
           (assoc-in [:perustiedot :alakayttotarkoitus-fi] (:label-fi alakayttotarkoitus))
           (assoc-in [:perustiedot :alakayttotarkoitus-sv] (:label-sv alakayttotarkoitus))
           (assoc-in [:perustiedot :paakayttotarkoitus-id] paakayttotarkoitus-id)
@@ -565,7 +571,8 @@
    :ilmanvaihtotyypit        (luokittelu/find-ilmanvaihtotyypit db)
    :lammitysmuodot           (luokittelu/find-lammitysmuodot db)
    :lammonjaot               (luokittelu/find-lammonjaot db)
-   :havainnointikayntityypit (luokittelu/find-havainnointikayntityypit db)})
+   :havainnointikayntityypit (luokittelu/find-havainnointikayntityypit db)
+   :a0-merkinnat             (luokittelu/find-a0-merkinnat db)})
 
 (defn find-complete-energiatodistus
   ([db id]
