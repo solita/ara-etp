@@ -129,4 +129,7 @@
              :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "2.10.1241"}}
                         :main-opts  ["-m" "antq.core"]}
              :lint     {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2024.09.27"}}
-                        :main-opts  ["-m" "clj-kondo.main" "--lint" "src"]}}}
+                        :main-opts  ["-m" "clj-kondo.main" "--lint" "src"]}
+             ;; Used by ci-backend.yml to lint changed files; fails on warnings too
+             :lint-changed {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2024.09.27"}}
+                            :main-opts  ["-m" "clj-kondo.main" "--fail-level" "warning" "--lint"]}}}
