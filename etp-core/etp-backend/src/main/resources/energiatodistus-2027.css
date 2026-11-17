@@ -526,7 +526,11 @@ div.etusivu-yleistiedot dl.table-description-list div.etusivu-yleistiedot-last-r
 
 .etusivu-eluku {
     line-height: 1.1;
-    padding: 15px 0px 0px 0px;
+    padding: 10px 0px 0px 0px;
+}
+
+.etusivu-eluku .a0-merkinta {
+    margin-bottom: 5px;
 }
 
 .etusivu-eluku .value {

@@ -22,7 +22,10 @@ values
 (2027, 't$sahko_hinta', 14, false),
 (2027, 't$uusiutuvat_pat_hinta', 15, false),
 (2027, 't$fossiiliset_pat_hinta', 16, false),
-(2027, 't$kaukojaahdytys_hinta', 17, false)
+(2027, 't$kaukojaahdytys_hinta', 17, false),
+
+-- Passin perustiedot / A0-merkintä
+(2027, 'ppt$a0_merkinta_id', 18, false)
 
 on conflict (column_name, versio) do update set
   ordinal = excluded.ordinal,

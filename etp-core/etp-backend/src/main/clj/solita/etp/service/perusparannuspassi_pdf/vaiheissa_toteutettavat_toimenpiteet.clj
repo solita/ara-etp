@@ -28,7 +28,7 @@
                                                     (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
                                                     e-luku
                                                     (:tayttaa-aplus-vaatimukset passin-perustiedot)
-                                                    (:tayttaa-a0-vaatimukset passin-perustiedot))
+                                                    (:a0-merkinta-id passin-perustiedot))
                          :e-luokka)]
         {:vaihe vaihe
          :seuraava-vaihe seuraava-vaihe

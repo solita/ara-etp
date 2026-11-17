@@ -17,20 +17,20 @@
 (defn- response-body [response]
   (-> response :body (j/read-value object-mapper)))
 
-;; Endpoint uses false, false for tayttaa-aplus/a0-vaatimukset,
-;; so A+ and A0 are always downgraded to A.
+;; Endpoint uses false for tayttaa-aplus-vaatimukset and "Ei" for the A0
+;; marking, so A+ is always downgraded to A. A0 is not an energy class.
 (t/deftest e-luokka-2027-endpoint-test
   ;; 2027, YAT, nettoala 100, e-luku 1 → A+ before downgrade → A (false, false)
   (let [response (get-e-luokka 2027 "YAT" 100 1)
         body (response-body response)]
     (t/is (= 200 (:status response)))
     (t/is (= "A" (:e-luokka body)))
-    ;; raja-asteikko is still 8-element and contains A+, A0
-    (t/is (= [[78 "A+"] [98 "A0"] [98 "A"] [106 "B"]
+    ;; raja-asteikko is 7-element and contains A+ but not A0
+    (t/is (= [[78 "A+"] [98 "A"] [106 "B"]
               [130 "C"] [181 "D"] [265 "E"] [310 "F"]]
              (:raja-asteikko body))))
 
-  ;; 2027, YAT, nettoala 100, e-luku 79 → A0 before downgrade → A (false, false)
+  ;; 2027, YAT, nettoala 100, e-luku 79 → A (the former A0 range)
   (let [response (get-e-luokka 2027 "YAT" 100 79)
         body (response-body response)]
     (t/is (= 200 (:status response)))
@@ -42,7 +42,7 @@
     (t/is (= 200 (:status response)))
     (t/is (= "A" (:e-luokka body))))
 
-  ;; 2027, S, nettoala 100, e-luku 230 → A0 before downgrade → A (false, false)
+  ;; 2027, S, nettoala 100, e-luku 230 → A (the former A0 range)
   (let [response (get-e-luokka 2027 "S" 100 230)
         body (response-body response)]
     (t/is (= 200 (:status response)))
@@ -54,10 +54,10 @@
     (t/is (= 200 (:status response)))
     (t/is (= "G" (:e-luokka body))))
 
-  ;; 2027 response raja-asteikko has 8 elements
+  ;; 2027 response raja-asteikko has 7 elements
   (let [response (get-e-luokka 2027 "YAT" 100 1)
         body (response-body response)]
-    (t/is (= 8 (count (:raja-asteikko body)))))
+    (t/is (= 7 (count (:raja-asteikko body)))))
 
   ;; 2027 response does NOT contain :raja-uusi-2018
   (let [response (get-e-luokka 2027 "YAT" 100 1)

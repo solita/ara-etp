@@ -311,6 +311,20 @@ qv9qLQ9UDTgHkSPRn65MhpmqlfSqI1sdQmPUnOJX
       (t/is (= (energiatodistus-service/start-energiatodistus-signing! db whoami et-id)
                :ok)))))
 
+;; AE-2772: A0-merkintä is nullable but required for signing 2027
+(t/deftest signing-rejects-missing-a0-merkinta-2027
+  (t/testing "given a 2027 energiatodistus without a0-merkintä, when signing, then throws :missing-value"
+    (let [laatijat (laatija-test-data/generate-and-insert! 1)
+          laatija-id (-> laatijat keys sort first)
+          et-id (generate-and-insert-with-laatimisvaihe! 2027 3 laatija-id)
+          _ (jdbc/execute! ts/*db*
+                           ["UPDATE energiatodistus SET pt$a0_merkinta_id = NULL WHERE id = ?" et-id])
+          result (etp-test/catch-ex-data
+                   #(energiatodistus-service/start-energiatodistus-signing!
+                      (ts/db-user laatija-id) {:id laatija-id} et-id))]
+      (t/is (= :missing-value (:type result)))
+      (t/is (= ["perustiedot.a0-merkinta-id"] (:missing result))))))
+
 ;; AE-2777: energiatodistus specific kaukolämpö kerroin
 (defn- start-signing-with-kaukolampo-kerroin! [versio laatimisvaihe-id]
   (let [laatija-id (-> (laatija-test-data/generate-and-insert! 1) keys sort first)

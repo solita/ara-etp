@@ -82,7 +82,9 @@ values
 
 (2027, 'to$tietojen_alkuperavuosi', 71, false),
 
-(2027, 'is$laatimisajankohta', 72, false)
+(2027, 'is$laatimisajankohta', 72, false),
+
+(2027, 'pt$a0_merkinta_id', 73, false)
 
 on conflict (column_name, versio) do update set
   ordinal = excluded.ordinal,

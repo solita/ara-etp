@@ -49,7 +49,8 @@
                                             (when (contains? #{2018 2027} versio)
                                               {:laatimisvaihe (rand-int 2)})
                                             (when (contains? #{2027} versio)
-                                              {:havainnointikayntityyppi-id (rand-int 2)}))
+                                              {:havainnointikayntityyppi-id (rand-int 2)
+                                               :a0-merkinta-id              (rand-int 4)}))
          :lahtotiedot                     {:ilmanvaihto {:tyyppi-id (rand-int 7)}
                                            :lammitys    {:lammitysmuoto-1 {:id (rand-int 10)}
                                                          :lammitysmuoto-2 {:id (rand-int 10)}

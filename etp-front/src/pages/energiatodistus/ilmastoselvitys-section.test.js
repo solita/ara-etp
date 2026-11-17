@@ -293,7 +293,8 @@ describe('ET2027Form integration', () => {
         jaahdytys: [],
         'toimenpide-ehdotus': [],
         'toimenpide-ehdotus-group': [],
-        havainnointikayntityyppi: []
+        havainnointikayntityyppi: [],
+        a0Merkinta: []
       };
 
       // when

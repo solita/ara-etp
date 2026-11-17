@@ -41,7 +41,7 @@
     nettoala,
     vaiheEnergiamuodot,
     tayttaaAplusVaatimukset,
-    tayttaaA0Vaatimukset
+    a0MerkintaId
   ) =>
     Maybe.fold(
       '',
@@ -49,7 +49,7 @@
         ETUtils.applyEluokkaDowngrade(
           ETUtils.eluokkaFromRajaAsteikko(rajaAsteikko, eLuku),
           tayttaaAplusVaatimukset,
-          tayttaaA0Vaatimukset
+          a0MerkintaId
         ),
       Maybe.toMaybeList([
         R.map(R.prop('raja-asteikko'), eTehokkuus),
@@ -135,7 +135,7 @@
           energiatodistus.lahtotiedot['lammitetty-nettoala'],
           energiatodistus.tulokset['kaytettavat-energiamuodot'],
           energiatodistus.perustiedot['tayttaa-aplus-vaatimukset'],
-          energiatodistus.perustiedot['tayttaa-a0-vaatimukset']
+          energiatodistus.perustiedot['a0-merkinta-id']
         )}</td>
       {#each perusparannuspassi.vaiheet as vaihe, vaiheIndex}
         <td class="et-table--td">
@@ -148,9 +148,7 @@
               perusparannuspassi['passin-perustiedot']?.[
                 'tayttaa-aplus-vaatimukset'
               ],
-              perusparannuspassi['passin-perustiedot']?.[
-                'tayttaa-a0-vaatimukset'
-              ]
+              perusparannuspassi['passin-perustiedot']?.['a0-merkinta-id']
             )}
           {/if}
         </td>

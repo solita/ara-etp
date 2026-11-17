@@ -45,7 +45,6 @@
 
 (def arrows
   [{:letter "A+" :color "#009641" :luokka "A+"}
-   {:letter "A0" :color "#52ae32" :luokka "A0"}
    {:letter "A" :color "#c8d302" :luokka "A"}
    {:letter "B" :color "#ffed00" :luokka "B"}
    {:letter "C" :color "#fbb900" :luokka "C"}
@@ -76,7 +75,6 @@
         (assoc arrow :numbers
                      (case letter
                      "A+" (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A+"))
-                     "A0" (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A0"))
                      "A"  (str "&#8804; " (raja-asteikko-upper-bound (:raja-asteikko rajat) "A"))
                      "G"  (str "&gt; " last-val)
                      (get ranges letter))))
@@ -145,28 +143,6 @@
          :fill "#ffffff"}
         e-luku " kWh" [:tspan {:baseline-shift "sub" :font-size 8} "E"] "/m&#178;/" (pdf-localization :vuosi)]])))
 
-(defn indicator-line
-  [{:keys [arrow-index label]}]
-  (let [row-height (+ arrow-height arrow-spacing)
-        line-y (+ (* arrow-index row-height) arrow-height (/ arrow-spacing 2))
-        line-end-x indicator-line-length]
-    [:g
-     [:line
-      {:x1 0
-       :y1 line-y
-       :x2 line-end-x
-       :y2 line-y
-       :stroke "#000000"
-       :stroke-width 1
-       :stroke-dasharray "1,2"}]
-     [:text
-      {:x line-end-x
-       :y (- line-y 4)
-       :text-anchor "end"
-       :font-size 13
-       :fill "#000000"}
-      label]]))
-
 (defn- stacked-arrows-alt [kieli e-luokka e-luku]
   (let [l (kieli loc/et-pdf-localization)]
     (str
@@ -207,8 +183,7 @@
       :alt alt-text}
       (concat
         arrow-elements
-        [(indicator-line {:arrow-index 1 :label (l :paastoton-rakennus)})
-         (e-luokka-indicator {:e-luokka e-luokka :e-luku e-luku :arrows arrows :pdf-localization l})])]))
+        [(e-luokka-indicator {:e-luokka e-luokka :e-luku e-luku :arrows arrows :pdf-localization l})])]))
 
 (defn et-etusivu-grafiikka [{:keys [kieli energiatodistus kayttotarkoitukset alakayttotarkoitukset]}]
   (let [l (kieli loc/et-pdf-localization)

@@ -33,8 +33,7 @@ const deserializer = {
   perustiedot: {
     'julkinen-rakennus': Maybe.get,
     uudisrakennus: Maybe.get,
-    'tayttaa-aplus-vaatimukset': Maybe.get,
-    'tayttaa-a0-vaatimukset': Maybe.get
+    'tayttaa-aplus-vaatimukset': Maybe.get
   },
   lahtotiedot: {
     'energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin': Maybe.get,
@@ -361,6 +360,7 @@ export const luokittelut = {
   'toimenpide-ehdotus': Fetch.cached(fetch, '/toimenpide-ehdotus'),
   'toimenpide-ehdotus-group': Fetch.cached(fetch, '/toimenpide-ehdotus-group'),
   havainnointikayntityyppi: Fetch.cached(fetch, '/havainnointikayntityyppi'),
+  a0Merkinta: Fetch.cached(fetch, '/a0-merkinta'),
   ilmastoselvitysLaadintaperusteet: Fetch.cached(
     fetch,
     '/ilmastoselvitys-laadintaperuste'
