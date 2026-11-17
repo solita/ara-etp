@@ -80,7 +80,7 @@
             (assert-status post-res 403)))
 
         (t/testing "Modify ppp with the same laatija-id"
-          (let [modified-ppp (assoc-in created-ppp [:passin-perustiedot :tayttaa-a0-vaatimukset] true)
+          (let [modified-ppp (assoc-in created-ppp [:passin-perustiedot :a0-merkinta-id] 1)
                 new-ppp-body (j/write-value-as-string modified-ppp)
                 put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2027/" ppp-id))
                                         (mock/header "Accept" "application/json")
@@ -90,7 +90,7 @@
             (assert-status put-res 200)))
 
         (t/testing "Can't modify ppp with the different laatija-id"
-          (let [modified-ppp (assoc-in full-ppp [:passin-perustiedot :tayttaa-a0-vaatimukset] true)
+          (let [modified-ppp (assoc-in full-ppp [:passin-perustiedot :a0-merkinta-id] 1)
                 new-ppp-body (j/write-value-as-string modified-ppp)
                 put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2027/" ppp-id))
                                         (mock/header "Accept" "application/json")
@@ -374,7 +374,7 @@
 
     (t/testing "Pääkäyttäjä cannot PUT perusparannuspassi"
       ;; When: pääkäyttäjä tries to modify the PPP
-      (let [modified-ppp (assoc-in ppp [:passin-perustiedot :tayttaa-a0-vaatimukset] true)
+      (let [modified-ppp (assoc-in ppp [:passin-perustiedot :a0-merkinta-id] 1)
             put-body (j/write-value-as-string modified-ppp)
             put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2027/" ppp-id))
                                     (mock/header "Accept" "application/json")
@@ -575,7 +575,7 @@
       ;; Test 1.1 — Laatija cannot PUT (update) PPP after ET is signed
       (t/testing "Laatija cannot PUT perusparannuspassi after ET is signed"
         ;; When: owner laatija sends PUT request to update PPP
-        (let [modified-ppp (assoc-in ppp [:passin-perustiedot :tayttaa-a0-vaatimukset] true)
+        (let [modified-ppp (assoc-in ppp [:passin-perustiedot :a0-merkinta-id] 1)
               put-body (j/write-value-as-string modified-ppp)
               put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2027/" ppp-id))
                                       (mock/header "Accept" "application/json")
@@ -597,7 +597,7 @@
       ;; Test 1.4 — Pääkäyttäjä cannot PUT PPP after ET is signed
       (t/testing "Pääkäyttäjä cannot PUT perusparannuspassi after ET is signed"
         ;; When: pääkäyttäjä sends PUT request to update PPP
-        (let [modified-ppp (assoc-in ppp [:passin-perustiedot :tayttaa-a0-vaatimukset] true)
+        (let [modified-ppp (assoc-in ppp [:passin-perustiedot :a0-merkinta-id] 1)
               put-body (j/write-value-as-string modified-ppp)
               put-res (ts/handler (-> (mock/request :put (str "/api/private/perusparannuspassit/2027/" ppp-id))
                                       (mock/header "Accept" "application/json")

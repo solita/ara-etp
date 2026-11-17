@@ -30,7 +30,7 @@
     :havainnointikaynti       (LocalDate/of 2025 9 15)
     :havainnointikayntityyppi-id 0
     :tayttaa-aplus-vaatimukset false
-    :tayttaa-a0-vaatimukset    false
+    :a0-merkinta-id            0
     :rakennustunnus           "101089529J"
     :postinumero              "00100"
     :keskeiset-suositukset-fi "Paranna rakennuksen energiatehokkuutta lisäeristyksellä ja aurinkopaneeleilla."
@@ -232,7 +232,7 @@
    :energiatodistus-id nil
    :passin-perustiedot {:havainnointikaynti (LocalDate/of 2026 11 1)
                          :passin-esittely (LocalDate/of 2026 11 2)
-                         :tayttaa-a0-vaatimukset false
+                         :a0-merkinta-id 0
                          :tayttaa-aplus-vaatimukset false
                          :lisatietoja-fi nil :lisatietoja-sv nil}
    :vaiheet [{:vaihe-nro 1 :valid true

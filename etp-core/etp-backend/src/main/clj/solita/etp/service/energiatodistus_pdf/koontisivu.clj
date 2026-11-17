@@ -160,7 +160,7 @@
        [:h2 (l :keskeiset-toimenpiteet-otsikko)]
        [:p [:strong (l :ei-koske-teksti)]]
        (let [ei-olemassaoleva (not= (get-in energiatodistus [:perustiedot :laatimisvaihe]) 2)
-             a-luokka (#{"A" "A0" "A+"} (get-in energiatodistus [:tulokset :e-luokka]))]
+             a-luokka (#{"A" "A+"} (get-in energiatodistus [:tulokset :e-luokka]))]
          (if (-> energiatodistus :perusparannuspassi-valid)
            [:div
             (when ei-olemassaoleva

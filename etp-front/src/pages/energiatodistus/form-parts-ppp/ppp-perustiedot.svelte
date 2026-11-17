@@ -3,13 +3,19 @@
 
   import Checkbox from '@Component/Checkbox/Checkbox';
   import HR from '@Component/HR/HR';
-  import { _ } from '@Language/i18n';
+  import Select from '@Component/Select/Select';
+  import { locale, _ } from '@Language/i18n';
+  import * as LocaleUtils from '@Language/locale-utils';
+  import * as et from '@Pages/energiatodistus/energiatodistus-utils';
   import BasicInput from '@Component/Input/Input';
   import Input from '@Pages/energiatodistus/Input';
 
   export let perusparannuspassi;
   export let schema;
+  export let luokittelut;
   export let disabled = false;
+
+  $: labelLocale = LocaleUtils.label($locale);
 </script>
 
 <div class="flex min-w-full flex-col gap-y-5 overflow-x-auto">
@@ -43,13 +49,16 @@
         {schema} />
     </div>
   </div>
-  <Checkbox
+  <Select
+    id={'perusparannuspassi.passin-perustiedot.a0-merkinta-id'}
+    name={'perusparannuspassi.passin-perustiedot.a0-merkinta-id'}
+    label={$_('perusparannuspassi.passin-perustiedot.a0-merkinta-id')}
+    allowNone={false}
     {disabled}
     bind:model={perusparannuspassi}
-    lens={R.lensPath(['passin-perustiedot', 'tayttaa-a0-vaatimukset'])}
-    label={$_(
-      'perusparannuspassi.passin-perustiedot.tayttaa-a0-vaatimukset'
-    )} />
+    lens={R.lensPath(['passin-perustiedot', 'a0-merkinta-id'])}
+    format={et.selectFormat(labelLocale, luokittelut.a0Merkinta)}
+    items={R.pluck('id', luokittelut.a0Merkinta)} />
 
   <Checkbox
     {disabled}

@@ -39,7 +39,6 @@
 
 (def colors-by-e-luokka
  {"A+" "#009641"
-  "A0" "#52ae32"
   "A"  "#c8d302"
   "B"  "#ffed00"
   "C"  "#fbb900"
@@ -50,7 +49,6 @@
 
 (def text-colors-by-e-luokka
   {"A+" "#000000"
-   "A0" "#000000"
    "A"  "#000000"
    "B"  "#000000"
    "C"  "#000000"
@@ -229,7 +227,7 @@
                                                                               (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
                                                                               e-luku
                                                                               (:tayttaa-aplus-vaatimukset passin-perustiedot)
-                                                                              (:tayttaa-a0-vaatimukset passin-perustiedot))
+                                                                              (:a0-merkinta-id passin-perustiedot))
                                                    :e-luokka)]
                                   {:e-luku e-luku
                                    :e-luokka e-luokka}))))
@@ -267,12 +265,14 @@
            final-vaihe (last (:vaiheet perusparannuspassi))
            final-tulokset (:tulokset final-vaihe)
            ;; Check if requirements are met based on the final vaihe
-           tayttaa-a0 (-> perusparannuspassi :passin-perustiedot :tayttaa-a0-vaatimukset)
+           a0-merkinta-id (-> perusparannuspassi :passin-perustiedot :a0-merkinta-id)
            tayttaa-a-plus (-> perusparannuspassi :passin-perustiedot :tayttaa-aplus-vaatimukset)]
        [:dl {:class "tayttaa-vaatimukset-list"}
         [:div
          [:dt (l :tayttaa-a0-luokan-vaatimukset)]
-         [:dd (if tayttaa-a0 (l :kylla) (l :ei))]]
+         [:dd (if (and a0-merkinta-id (not= e-luokka-service/a0-merkinta-ei a0-merkinta-id))
+                (l :kylla)
+                (l :ei))]]
         [:div
          [:dt (l :tayttaa-a-plus-luokan-vaatimukset)]
          [:dd (if tayttaa-a-plus (l :kylla) (l :ei))]]])

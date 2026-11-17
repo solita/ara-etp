@@ -37,6 +37,7 @@
        ->toimenpide-ehdotus-route)
    (classification-route "/toimenpide-ehdotus-group" "toimenpide-ehdotus-group" toimenpide-ehdotus-service/find-toimenpide-ehdotus-groups)
    (classification-route "/havainnointikayntityyppi" "havainnointikayntityyppi" luokittelu-service/find-havainnointikayntityypit)
+   (classification-route "/a0-merkinta" "a0-merkinnat" luokittelu-service/find-a0-merkinnat)
    (classification-route "/ilmastoselvitys-laadintaperuste" "ilmastoselvitys-laadintaperuste" luokittelu-service/find-ilmastoselvitys-laadintaperusteet)
 
    ["/energiamuotokertoimet"
@@ -74,5 +75,5 @@
                                                            nettoala
                                                            e-luku
                                                            false
-                                                           false)
+                                                           e-luokka-service/a0-merkinta-ei)
                            "Could not find luokittelu with given versio and alakayttotarkoitusluokka"))}}]])

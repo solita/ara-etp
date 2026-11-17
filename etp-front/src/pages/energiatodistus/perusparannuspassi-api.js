@@ -61,7 +61,7 @@ const deserializer = {
   'laatija-id': Maybe.get,
   'passin-perustiedot': {
     'tayttaa-aplus-vaatimukset': Maybe.get,
-    'tayttaa-a0-vaatimukset': Maybe.get
+    'a0-merkinta-id': Maybe.get
   },
   vaiheet: R.repeat(
     {

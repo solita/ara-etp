@@ -48,7 +48,7 @@
     (t/testing "PPP-PDF generation succeeds and returns a valid PDF InputStream"
       (let [[_ ppp-id] (create-et-and-ppp! laatija-id whoami
                                            {:tayttaa-aplus-vaatimukset false
-                                            :tayttaa-a0-vaatimukset    false})
+                                            :a0-merkinta-id 0})
             ;; When: generate PPP-PDF via find-perusparannuspassi-pdf
             result (ppp-pdf-service/find-perusparannuspassi-pdf
                      ts/*db* whoami ppp-id "fi")]
@@ -70,7 +70,7 @@
     (t/testing "PPP-PDF with tayttaa-*-vaatimukset true,true generates successfully"
       (let [[_ ppp-id] (create-et-and-ppp! laatija-id whoami
                                            {:tayttaa-aplus-vaatimukset true
-                                            :tayttaa-a0-vaatimukset    true})
+                                            :a0-merkinta-id 1})
             result (ppp-pdf-service/find-perusparannuspassi-pdf
                      ts/*db* whoami ppp-id "fi")]
         (t/is (some? result)
@@ -87,7 +87,7 @@
     (t/testing "PPP-PDF with tayttaa-*-vaatimukset false,false generates successfully (downgrade)"
       (let [[_ ppp-id] (create-et-and-ppp! laatija-id whoami
                                            {:tayttaa-aplus-vaatimukset false
-                                            :tayttaa-a0-vaatimukset    false})
+                                            :a0-merkinta-id 0})
             result (ppp-pdf-service/find-perusparannuspassi-pdf
                      ts/*db* whoami ppp-id "fi")]
         (t/is (some? result)
@@ -113,7 +113,7 @@
             multi-vaihe-ppp (-> base-ppp
                                 (update :passin-perustiedot merge
                                         {:tayttaa-aplus-vaatimukset true
-                                         :tayttaa-a0-vaatimukset    true})
+                                         :a0-merkinta-id 1})
                                 (assoc :vaiheet [(make-vaihe 1 (LocalDate/of 2025 1 1))
                                                  (make-vaihe 2 (LocalDate/of 2025 7 1))
                                                  (make-vaihe 3 (LocalDate/of 2026 1 1))]))

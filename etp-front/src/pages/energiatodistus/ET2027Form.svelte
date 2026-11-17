@@ -189,15 +189,22 @@
     tayttaaAplusVaatimukset={energiatodistus.perustiedot[
       'tayttaa-aplus-vaatimukset'
     ]}
-    tayttaaA0Vaatimukset={energiatodistus.perustiedot['tayttaa-a0-vaatimukset']}
+    a0MerkintaId={energiatodistus.perustiedot['a0-merkinta-id']}
     idSuffix="perustiedot" />
   <div class="my-4 flex flex-col">
     <div class="w-full py-4">
-      <Checkbox
+      <Select
+        id={'perustiedot.a0-merkinta-id'}
+        name={'perustiedot.a0-merkinta-id'}
+        label={$_('energiatodistus.perustiedot.a0-merkinta-id')}
+        required={true}
+        validation={schema.$signature}
+        allowNone={false}
+        {disabled}
         bind:model={energiatodistus}
-        lens={R.lensPath(['perustiedot', 'tayttaa-a0-vaatimukset'])}
-        label={$_('energiatodistus.perustiedot.tayttaa-a0-vaatimukset')}
-        {disabled} />
+        lens={R.lensPath(['perustiedot', 'a0-merkinta-id'])}
+        format={et.selectFormat(labelLocale, luokittelut.a0Merkinta)}
+        items={R.pluck('id', luokittelut.a0Merkinta)} />
     </div>
     <div class="w-full py-4">
       <Checkbox
@@ -280,7 +287,7 @@
   tayttaaAplusVaatimukset={energiatodistus.perustiedot[
     'tayttaa-aplus-vaatimukset'
   ]}
-  tayttaaA0Vaatimukset={energiatodistus.perustiedot['tayttaa-a0-vaatimukset']}
+  a0MerkintaId={energiatodistus.perustiedot['a0-merkinta-id']}
   idSuffix="tulokset" />
 <ELuvunErittely
   oletusEnergiamuotokertoimet={luokittelut.energiamuotokertoimet}

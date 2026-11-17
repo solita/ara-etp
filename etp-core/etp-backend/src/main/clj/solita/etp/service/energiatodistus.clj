@@ -165,7 +165,7 @@
       (:e-luokka (e-luokka-service/find-e-luokka
                    db versio alakayttotarkoitus-id nettoala e-luku
                    (-> energiatodistus :perustiedot :tayttaa-aplus-vaatimukset)
-                   (-> energiatodistus :perustiedot :tayttaa-a0-vaatimukset))))))
+                   (-> energiatodistus :perustiedot :a0-merkinta-id))))))
 
 (defn assoc-e-tehokkuus [energiatodistus db versio]
   (-> energiatodistus
