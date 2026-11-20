@@ -39,7 +39,7 @@ pt$kayttotarkoitus,perustiedot.kayttotarkoitusluokka,select,true,Pienet asuinrak
 pt$kayttotarkoitus,perustiedot.kayttotarkoitus,select,true,Yhden asunnon talot,,,,,true,Rakennuksen perustiedot,Usage sub-category,
 pt$julkinen_rakennus,perustiedot.julkinen-rakennus,checkbox,false,,,,,,false,Rakennuksen perustiedot,Public building flag,
 pt$tayttaa_aplus_vaatimukset,perustiedot.tayttaa-aplus-vaatimukset,checkbox,false,,,,,,false,Rakennuksen perustiedot,Meets A+ requirements,
-pt$a0_merkinta_id,perustiedot.a0-merkinta-id,select,true,Ei, Rakennus ei täytä päästöttömälle rakennukselle asetettuja vaatimuksia,,,,,false,Rakennuksen perustiedot,A0 marking (Ei / A0 / A0_korjattu / A0_MPR),
+pt$a0_merkinta_id,perustiedot.a0-merkinta-id,select,true,Rakennus ei täytä päästöttömälle rakennukselle asetettuja vaatimuksia,,,,,true,Rakennuksen perustiedot,A0 marking (Ei / A0 / A0_korjattu / A0_MPR),
 pt$keskeiset_suositukset_fi,perustiedot.keskeiset-suositukset,textarea,true,Suositellaan lämmöneristyksen parantamista.,,,,,true,Keskeiset suositukset,Key recommendations (fi),2500
 pt$keskeiset_suositukset_sv,perustiedot.keskeiset-suositukset,textarea,true,,,,,,false,Keskeiset suositukset,Key recommendations (sv); shares data-cy with fi variant,2500
 lt$lammitetty_nettoala,lahtotiedot.lammitetty-nettoala,input,true,150,50,999999,0.5,999999,true,Lahtotiedot,Heated net floor area (m²),
