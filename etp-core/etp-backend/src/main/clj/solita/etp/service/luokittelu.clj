@@ -36,6 +36,7 @@
 (def find-karajaoikeudet #(select-luokittelu % "karajaoikeus"))
 
 (def find-havainnointikayntityypit #(select-luokittelu % "havainnointikayntityyppi"))
+(def find-a0-merkinnat #(select-luokittelu % "a0_merkinta"))
 (def find-ilmastoselvitys-laadintaperusteet #(select-luokittelu % "ilmastoselvitys_laadintaperuste"))
 
 (defn- path= [value path object]

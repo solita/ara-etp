@@ -60,8 +60,7 @@ const deserializer = {
   'energiatodistus-id': Maybe.get,
   'laatija-id': Maybe.get,
   'passin-perustiedot': {
-    'tayttaa-aplus-vaatimukset': Maybe.get,
-    'tayttaa-a0-vaatimukset': Maybe.get
+    'tayttaa-aplus-vaatimukset': Maybe.get
   },
   vaiheet: R.repeat(
     {

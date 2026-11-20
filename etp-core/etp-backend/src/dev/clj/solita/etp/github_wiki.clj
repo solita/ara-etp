@@ -426,7 +426,7 @@
     :havainnointikaynti       "2025-09-15"
     :havainnointikayntityyppi-id 0
     :tayttaa-aplus-vaatimukset false
-    :tayttaa-a0-vaatimukset    false
+    :a0-merkinta-id            0
     :rakennustunnus           "101089529J"
     :postinumero              "00100"
     :keskeiset-suositukset-fi "Paranna rakennuksen energiatehokkuutta lisäeristyksellä ja aurinkopaneeleilla."

@@ -2,4 +2,4 @@
   export let state;
 </script>
 
-{@html state}
+<span>{@html state}</span>

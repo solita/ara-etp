@@ -312,16 +312,25 @@
         :paastoton-rakennus                         "Päästötön rakennus"
         :vuosi                                      "vuosi"
         :a+luokka-otsikko                           "A+-luokka"
-        :a+luokka-teksti                            "Rakennus täyttää A0-luokan vaatimukset, on sitä 20 % energiatehokkaampi ja tuottaa\n
+        :a+luokka-teksti                            "Rakennus täyttää uuden päästöttömän rakennuksen\n
+                                                     vaatimukset, on A-luokkaa 20 % energiatehokkaampi ja tuottaa\n
                                                      uusiutuvaa energiaa yli oman tarpeensa."
-        :a0luokka-otsikko                           "A0-luokka"
+        :a0luokka-otsikko                           "Päästötön rakennus, A0"
         :a0luokka-teksti                            "E-lukuvaatimuksen lisäksi paikan päällä tuotettu energia on fossiilivapaata ja rakennus kykenee\n
                                                     reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan."
+        :a0-merkinta-ei-teksti                     "Rakennus ei täytä päästöttömälle rakennukselle asetettuja vaatimuksia"
+        :a0-merkinta-a0-teksti                     "Rakennus täyttää uuden päästöttömän rakennuksen vaatimukset, A0"
+        :a0-merkinta-a0-korjattu-teksti             "Rakennus täyttää korjatun päästöttömän rakennuksen vaatimukset,"
+        :a0-merkinta-a0-mpr-teksti                 "Rakennus täyttää uuden päästöttömän massiivipuurakennuksen vaatimukset,"
+        :a0-merkinta-a0-label                      "A0"
+        :a0-merkinta-korjattu-label                "korjattu"
+        :a0-merkinta-mpr-label                     "MPR"
         :eluku-otsikko                              "E-luku"
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                     Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
-                                                    kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa rakennusten E-lukujen vertailun, muttei\n
-                                                    vertailua toteutuneeseen kulutukseen."
+                                                    kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa\n
+                                                    rakennusten E-lukujen vertailun, muttei vertailua toteutuneeseen\n
+                                                    kulutukseen"
         :lahtotiedot-title                          "E-luvun laskennan lähtötiedot"
         :lahtotiedot-rakennusvaippa                 "Rakennusvaippa"
         :lahtotiedot-ilmanvuotoluku                 "Ilmanvuotoluku q"
@@ -526,16 +535,25 @@
         :paastoton-rakennus                         "Päästötön rakennus (sv)"
         :vuosi                                      "år"
         :a+luokka-otsikko                           "A+-luokka"
-        :a+luokka-teksti                            "Rakennus täyttää A0-luokan vaatimukset, on sitä 20 % energiatehokkaampi ja tuottaa\n
+        :a+luokka-teksti                            "Rakennus täyttää uuden päästöttömän rakennuksen\n
+                                                     vaatimukset, on A-luokkaa 20 % energiatehokkaampi ja tuottaa\n
                                                      uusiutuvaa energiaa yli oman tarpeensa. (sv)"
-        :a0luokka-otsikko                           "A0-luokka (sv)"
+        :a0luokka-otsikko                           "Päästötön rakennus, A0 (sv)"
         :a0luokka-teksti                            "E-lukuvaatimuksen lisäksi paikan päällä tuotettu energia on fossiilivapaata ja rakennus kykenee\n
                                                      reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan. (sv)"
+        :a0-merkinta-ei-teksti                     "Rakennus ei täytä päästöttömälle rakennukselle asetettuja vaatimuksia (sv)"
+        :a0-merkinta-a0-teksti                     "Rakennus täyttää uuden päästöttömän rakennuksen vaatimukset, A0 (sv)"
+        :a0-merkinta-a0-korjattu-teksti             "Rakennus täyttää korjatun päästöttömän rakennuksen vaatimukset, (sv)"
+        :a0-merkinta-a0-mpr-teksti                 "Rakennus täyttää uuden päästöttömän massiivipuurakennuksen vaatimukset, (sv)"
+        :a0-merkinta-a0-label                      "A0"
+        :a0-merkinta-korjattu-label                "korjattu (sv)"
+        :a0-merkinta-mpr-label                     "MPR (sv)"
         :eluku-otsikko                              "E-luku (sv)"
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                      Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
-                                                     kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa rakennusten E-lukujen vertailun, muttei
-                                                     \nvertailua toteutuneeseen kulutukseen. (sv)"
+                                                     kuluttajalaitteet ja valaistuksen. Vakioitu käyttö mahdollistaa\n
+                                                     rakennusten E-lukujen vertailun, muttei vertailua toteutuneeseen\n
+                                                     kulutukseen (sv)"
         :lahtotiedot-title                          "E-talets beräkningsgrunddata"
         :lahtotiedot-rakennusvaippa                 "Byggnadsskal"
         :lahtotiedot-ilmanvuotoluku                 "Luftläckagetal q"

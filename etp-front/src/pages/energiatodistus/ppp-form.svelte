@@ -135,7 +135,11 @@
     <div class="flex flex-col gap-6">
       <H3 text={$_('perusparannuspassi.passin-perustiedot.header')} />
 
-      <Perustiedot bind:perusparannuspassi schema={saveSchema} {disabled} />
+      <Perustiedot
+        bind:perusparannuspassi
+        schema={saveSchema}
+        a0Merkinnat={luokittelut.a0Merkinta}
+        {disabled} />
 
       <H3 text={$_('perusparannuspassi.rakennuksen-perustiedot.header')} />
 

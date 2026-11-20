@@ -23,18 +23,17 @@
     (t/is (= "F" (service/e-luokka-from-raja-asteikko raja-asteikko 59)))
     (t/is (= "G" (service/e-luokka-from-raja-asteikko raja-asteikko 61))))
 
-  ;; 8-element vector for 2027: A+, A0, A, B, C, D, E, F (G is default)
-  (let [raja-asteikko-2027 [[78 "A+"] [98 "A0"] [98 "A"] [106 "B"]
+  ;; 7-element vector for 2027: A+, A, B, C, D, E, F (G is default)
+  (let [raja-asteikko-2027 [[78 "A+"] [98 "A"] [106 "B"]
                              [130 "C"] [181 "D"] [265 "E"] [310 "F"]]]
     ;; E-luku exactly at A+ boundary (inclusive)
     (t/is (= "A+" (service/e-luokka-from-raja-asteikko raja-asteikko-2027 78)))
     ;; E-luku below A+ boundary
     (t/is (= "A+" (service/e-luokka-from-raja-asteikko raja-asteikko-2027 0)))
-    ;; E-luku above A+, at A0 boundary
-    (t/is (= "A0" (service/e-luokka-from-raja-asteikko raja-asteikko-2027 98)))
-    ;; A0 and A share same boundary → first match wins → "A0"
-    ;; E-luku above A+ but ≤ A0/A → "A0" (first match)
-    (t/is (= "A0" (service/e-luokka-from-raja-asteikko raja-asteikko-2027 79)))
+    ;; E-luku above A+, at A boundary
+    (t/is (= "A" (service/e-luokka-from-raja-asteikko raja-asteikko-2027 98)))
+    ;; E-luku above A+ (in the range of the former A0 class) → "A"
+    (t/is (= "A" (service/e-luokka-from-raja-asteikko raja-asteikko-2027 79)))
     ;; E-luku above A boundary, at B boundary
     (t/is (= "B" (service/e-luokka-from-raja-asteikko raja-asteikko-2027 106)))
     ;; E-luku above B, at C boundary
@@ -46,11 +45,12 @@
 
 (defn find-e-luokka-info
   ([versio alakayttotarkoitus-id nettoala e-luku]
-   (find-e-luokka-info versio alakayttotarkoitus-id nettoala e-luku true true))
+   (find-e-luokka-info versio alakayttotarkoitus-id nettoala e-luku
+                       true service/a0-merkinta-a0))
   ([versio alakayttotarkoitus-id nettoala e-luku
-    tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset]
+    tayttaa-aplus-vaatimukset a0-merkinta-id]
    (-> (service/find-e-luokka ts/*db* versio alakayttotarkoitus-id nettoala e-luku
-                               tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset)
+                               tayttaa-aplus-vaatimukset a0-merkinta-id)
        (map/dissoc-in [:kayttotarkoitus :valid]))))
 
 (t/deftest find-e-luokka-info-test
@@ -231,38 +231,38 @@
   ;; ===== 2027 raja-asteikko tests =====
 
   ;; Pienet asuinrakennukset, 50-150 m², kaavapohjaiset (2027)
-  ;; A_netto = 100: A+ = int(114-0.36*100)=78, A0 = int(143-0.45*100)=98, A=98
+  ;; A_netto = 100: A+ = int(114-0.36*100)=78, A = int(143-0.45*100)=98
   ;; B = int(146-0.40*100)=106, C = int(169.5-0.39*100)=130
   ;; D = int(220.5-0.39*100)=181, E = int(303-0.38*100)=265, F = int(349.5-0.39*100)=310
   (t/is (= {:e-luokka "A+"
             :kayttotarkoitus {:id 1
                          :label-fi "1. Pienet asuinrakennukset"
                          :label-sv "1. Små bostadsbyggnader"}
-            :raja-asteikko [[78 "A+"] [98 "A0"] [98 "A"] [106 "B"]
+            :raja-asteikko [[78 "A+"] [98 "A"] [106 "B"]
                             [130 "C"] [181 "D"] [265 "E"] [310 "F"]]}
            (find-e-luokka-info 2027 "YAT" 100 1)))
 
   ;; A_netto = 50 (alaraja)
-  ;; A+ = int(114-0.36*50)=96, A0 = int(143-0.45*50)=120, A=120
+  ;; A+ = int(114-0.36*50)=96, A = int(143-0.45*50)=120
   ;; B = int(146-0.40*50)=126, C = int(169.5-0.39*50)=150
   ;; D = int(220.5-0.39*50)=201, E = int(303-0.38*50)=284, F = int(349.5-0.39*50)=330
-  (t/is (= [[96 "A+"] [120 "A0"] [120 "A"] [126 "B"]
+  (t/is (= [[96 "A+"] [120 "A"] [126 "B"]
              [150 "C"] [201 "D"] [284 "E"] [330 "F"]]
            (:raja-asteikko (find-e-luokka-info 2027 "YAT" 50 1))))
 
   ;; A_netto = 150 (yläraja)
-  ;; A+ = int(114-0.36*150)=60, A0 = int(143-0.45*150)=75, A=75
+  ;; A+ = int(114-0.36*150)=60, A = int(143-0.45*150)=75
   ;; B = int(146-0.40*150)=86, C = int(169.5-0.39*150)=111
   ;; D = int(220.5-0.39*150)=162, E = int(303-0.38*150)=246, F = int(349.5-0.39*150)=291
-  (t/is (= [[60 "A+"] [75 "A0"] [75 "A"] [86 "B"]
+  (t/is (= [[60 "A+"] [75 "A"] [86 "B"]
              [111 "C"] [162 "D"] [246 "E"] [291 "F"]]
            (:raja-asteikko (find-e-luokka-info 2027 "YAT" 150 1))))
 
   ;; A_netto = 30 (alle 50 m², käytetään samaa 50-150 taulukkoa)
-  ;; A+ = int(114-0.36*30)=103, A0 = int(143-0.45*30)=129, A=129
+  ;; A+ = int(114-0.36*30)=103, A = int(143-0.45*30)=129
   ;; B = int(146-0.40*30)=134, C = int(169.5-0.39*30)=157
   ;; D = int(220.5-0.39*30)=208, E = int(303-0.38*30)=291, F = int(349.5-0.39*30)=337
-  (t/is (= [[103 "A+"] [129 "A0"] [129 "A"] [134 "B"]
+  (t/is (= [[103 "A+"] [129 "A"] [134 "B"]
              [157 "C"] [208 "D"] [291 "E"] [337 "F"]]
            (:raja-asteikko (find-e-luokka-info 2027 "YAT" 30 1))))
 
@@ -277,35 +277,35 @@
            (:raja-asteikko (find-e-luokka-info 2027 "KREP" 100 1))))
 
   ;; Pienet asuinrakennukset, 150-600 m² (2027)
-  ;; A_netto = 200: A+ = int(64-0.024*200)=59, A0 = int(80-0.030*200)=74, A=74
+  ;; A_netto = 200: A+ = int(64-0.024*200)=59, A = int(80-0.030*200)=74
   ;; B = int(90.1-0.027*200)=84, C = int(118.1-0.047*200)=108
   ;; D = int(168.8-0.045*200)=159, E = int(253.1-0.047*200)=243, F = int(298.1-0.047*200)=288
-  (t/is (= [[59 "A+"] [74 "A0"] [74 "A"] [84 "B"]
+  (t/is (= [[59 "A+"] [74 "A"] [84 "B"]
              [108 "C"] [159 "D"] [243 "E"] [288 "F"]]
            (:raja-asteikko (find-e-luokka-info 2027 "YAT" 200 1))))
 
   ;; A_netto = 600 (150-600 yläraja)
-  ;; A+ = int(64-0.024*600)=49, A0 = int(80-0.030*600)=62, A=62
+  ;; A+ = int(64-0.024*600)=49, A = int(80-0.030*600)=62
   ;; B = int(90.1-0.027*600)=73, C = int(118.1-0.047*600)=89
   ;; D = int(168.8-0.045*600)=141, E = int(253.1-0.047*600)=224, F = int(298.1-0.047*600)=269
-  (t/is (= [[49 "A+"] [62 "A0"] [62 "A"] [73 "B"]
+  (t/is (= [[49 "A+"] [62 "A"] [73 "B"]
              [89 "C"] [141 "D"] [224 "E"] [269 "F"]]
            (:raja-asteikko (find-e-luokka-info 2027 "YAT" 600 1))))
 
   ;; A_netto = 400, desimaalien katkaisu
   ;; A+ = int(64-0.024*400) = int(54.4) = 54
-  ;; A0 = int(80-0.030*400) = int(68.0) = 68
+  ;; A = int(80-0.030*400) = int(68.0) = 68
   ;; B = int(90.1-0.027*400) = int(79.3) = 79
   ;; C = int(118.1-0.047*400) = int(99.3) = 99
   ;; D = int(168.8-0.045*400) = int(150.8) = 150
   ;; E = int(253.1-0.047*400) = int(234.3) = 234
   ;; F = int(298.1-0.047*400) = int(279.3) = 279
-  (t/is (= [[54 "A+"] [68 "A0"] [68 "A"] [79 "B"]
+  (t/is (= [[54 "A+"] [68 "A"] [79 "B"]
              [99 "C"] [150 "D"] [234 "E"] [279 "F"]]
            (:raja-asteikko (find-e-luokka-info 2027 "YAT" 400 1))))
 
   ;; Pienet asuinrakennukset, > 600 m² (kiinteä)
-  (t/is (= [[50 "A+"] [62 "A0"] [62 "A"] [74 "B"]
+  (t/is (= [[50 "A+"] [62 "A"] [74 "B"]
              [90 "C"] [142 "D"] [225 "E"] [270 "F"]]
            (:raja-asteikko (find-e-luokka-info 2027 "YAT" 700 1))))
   ;; Sama tulos eri nettoaloilla > 600
@@ -325,7 +325,7 @@
             :kayttotarkoitus {:id 1
                          :label-fi "1. Pienet asuinrakennukset"
                          :label-sv "1. Små bostadsbyggnader"}
-            :raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [76 "B"]
+            :raja-asteikko [[57 "A+"] [71 "A"] [76 "B"]
                             [103 "C"] [142 "D"] [225 "E"] [270 "F"]]}
            (find-e-luokka-info 2027 "RT" 100 1)))
   (t/is (= (:raja-asteikko (find-e-luokka-info 2027 "RT" 100 1))
@@ -336,7 +336,7 @@
             :kayttotarkoitus {:id 2
                          :label-fi "2. Asuinkerrostalot"
                          :label-sv "2. Flervåningsbostadshus"}
-            :raja-asteikko [[50 "A+"] [63 "A0"] [63 "A"] [72 "B"]
+            :raja-asteikko [[50 "A+"] [63 "A"] [72 "B"]
                             [92 "C"] [111 "D"] [130 "E"] [162 "F"]]}
            (find-e-luokka-info 2027 "AK3" 100 1)))
 
@@ -345,7 +345,7 @@
             :kayttotarkoitus {:id 3
                          :label-fi "3. Toimistorakennukset"
                          :label-sv "3. Kontorsbyggnader"}
-            :raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [86 "B"]
+            :raja-asteikko [[57 "A+"] [71 "A"] [86 "B"]
                             [119 "C"] [139 "D"] [166 "E"] [206 "F"]]}
            (find-e-luokka-info 2027 "T" 100 1)))
   (t/is (= (:raja-asteikko (find-e-luokka-info 2027 "T" 100 1))
@@ -356,7 +356,7 @@
             :kayttotarkoitus {:id 4
                          :label-fi "4. Liikerakennukset"
                          :label-sv "4. Affärsbyggnader"}
-            :raja-asteikko [[78 "A+"] [97 "A0"] [97 "A"] [121 "B"]
+            :raja-asteikko [[78 "A+"] [97 "A"] [121 "B"]
                             [167 "C"] [193 "D"] [233 "E"] [267 "F"]]}
            (find-e-luokka-info 2027 "N" 100 1)))
 
@@ -365,7 +365,7 @@
             :kayttotarkoitus {:id 5
                          :label-fi "5. Majoitusliikerakennukset"
                          :label-sv "5. Byggnader för inkvarteringsanläggningar"}
-            :raja-asteikko [[91 "A+"] [114 "A0"] [114 "A"] [123 "B"]
+            :raja-asteikko [[91 "A+"] [114 "A"] [123 "B"]
                             [168 "C"] [194 "D"] [234 "E"] [308 "F"]]}
            (find-e-luokka-info 2027 "H" 100 1)))
 
@@ -374,7 +374,7 @@
             :kayttotarkoitus {:id 6
                          :label-fi "6. Opetusrakennukset ja päiväkodit"
                          :label-sv "6. Undervisningsbyggnader och daghem"}
-            :raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [89 "B"]
+            :raja-asteikko [[57 "A+"] [71 "A"] [89 "B"]
                             [114 "C"] [154 "D"] [200 "E"] [240 "F"]]}
            (find-e-luokka-info 2027 "OR" 100 1)))
   (t/is (= (:raja-asteikko (find-e-luokka-info 2027 "OR" 100 1))
@@ -385,7 +385,7 @@
             :kayttotarkoitus {:id 7
                          :label-fi "7. Liikuntahallit, lukuun ottamatta uimahalleja ja jäähalleja"
                          :label-sv "7. Idrottshallar, med undantag för simhallar och ishallar"}
-            :raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [93 "B"]
+            :raja-asteikko [[57 "A+"] [71 "A"] [93 "B"]
                             [119 "C"] [133 "D"] [166 "E"] [192 "F"]]}
            (find-e-luokka-info 2027 "LH" 100 1)))
 
@@ -394,7 +394,7 @@
             :kayttotarkoitus {:id 8
                          :label-fi "8. Sairaalat"
                          :label-sv "8. Sjukhus"}
-            :raja-asteikko [[184 "A+"] [230 "A0"] [230 "A"] [251 "B"]
+            :raja-asteikko [[184 "A+"] [230 "A"] [251 "B"]
                             [312 "C"] [377 "D"] [444 "E"] [546 "F"]]}
            (find-e-luokka-info 2027 "S" 100 1)))
 
@@ -403,25 +403,22 @@
             :kayttotarkoitus {:id 9
                          :label-fi "9. Muut rakennukset"
                          :label-sv "9. Övriga byggnader"}
-            :raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [93 "B"]
+            :raja-asteikko [[57 "A+"] [71 "A"] [93 "B"]
                             [119 "C"] [133 "D"] [166 "E"] [192 "F"]]}
            (find-e-luokka-info 2027 "JH" 100 1)))
 
   ;; Vector structure tests
-  ;; 2027 vector has 8 elements
-  (t/is (= 8 (count (:raja-asteikko (find-e-luokka-info 2027 "YAT" 100 1)))))
+  ;; 2027 vector has 7 elements (A0 is not an energy class)
+  (t/is (= 7 (count (:raja-asteikko (find-e-luokka-info 2027 "YAT" 100 1)))))
   ;; 2013 vector still has 6 elements (regression)
   (t/is (= 6 (count (:raja-asteikko (find-e-luokka-info 2013 "YAT" 100 1)))))
   ;; 2018 vector still has 6 elements (regression)
   (t/is (= 6 (count (:raja-asteikko (find-e-luokka-info 2018 "KAT" 100 1)))))
-  ;; First three labels are A+, A0, A
+  ;; First two labels are A+, A and there is no A0
   (let [asteikko (:raja-asteikko (find-e-luokka-info 2027 "YAT" 100 1))]
     (t/is (= "A+" (second (nth asteikko 0))))
-    (t/is (= "A0" (second (nth asteikko 1))))
-    (t/is (= "A" (second (nth asteikko 2)))))
-  ;; A0 and A have same boundary value
-  (let [asteikko (:raja-asteikko (find-e-luokka-info 2027 "YAT" 100 1))]
-    (t/is (= (first (nth asteikko 1)) (first (nth asteikko 2)))))
+    (t/is (= "A" (second (nth asteikko 1))))
+    (t/is (not-any? #(= "A0" (second %)) asteikko)))
   ;; 2027 response does NOT contain :raja-uusi-2018
   (t/is (nil? (:raja-uusi-2018 (find-e-luokka-info 2027 "YAT" 100 1))))
 
@@ -430,18 +427,18 @@
   (t/is (= "A+" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1))))
   ;; E-luku = 78 (A+ raja) → A+
   (t/is (= "A+" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 78))))
-  ;; E-luku = 79 (A+ < x ≤ A0) → A0
-  (t/is (= "A0" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 79))))
-  ;; E-luku = 98 (A0/A raja) → A0 (first match)
-  (t/is (= "A0" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 98))))
+  ;; E-luku = 79 (A+ < x ≤ A, the former A0 range) → A
+  (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 79))))
+  ;; E-luku = 98 (A raja) → A
+  (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 98))))
   ;; E-luku = 99 (> A raja) → B
   (t/is (= "B" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 99))))
   ;; E-luku = 500 (very large) → G
   (t/is (= "G" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 500))))
   ;; RT: A+ raja = 57
   (t/is (= "A+" (:e-luokka (find-e-luokka-info 2027 "RT" 100 57))))
-  ;; RT: A0 raja = 71
-  (t/is (= "A0" (:e-luokka (find-e-luokka-info 2027 "RT" 100 71))))
+  ;; RT: A raja = 71
+  (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "RT" 100 71))))
   ;; AK3: A+ raja = 50
   (t/is (= "A+" (:e-luokka (find-e-luokka-info 2027 "AK3" 100 50))))
   ;; AK3: > F raja (162) → G
@@ -450,10 +447,10 @@
   (t/is (= "A+" (:e-luokka (find-e-luokka-info 2027 "S" 100 184))))
   ;; Sairaalat: > F raja (546) → G
   (t/is (= "G" (:e-luokka (find-e-luokka-info 2027 "S" 100 547))))
-  ;; Liikuntahallit: A0 raja = 71
-  (t/is (= "A0" (:e-luokka (find-e-luokka-info 2027 "LH" 100 71))))
-  ;; Liikerakennukset: A0 raja = 97
-  (t/is (= "A0" (:e-luokka (find-e-luokka-info 2027 "N" 100 97))))
+  ;; Liikuntahallit: A raja = 71
+  (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "LH" 100 71))))
+  ;; Liikerakennukset: A raja = 97
+  (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "N" 100 97))))
 
   ;; Workaround removal regression
   ;; 2027 raja-asteikko differs from 2018
@@ -478,83 +475,67 @@
     (t/is (some? (get-in luokittelut [:alakayttotarkoitukset 2018])))))
 
 
+(def ^:private ei service/a0-merkinta-ei)
+(def ^:private a0 service/a0-merkinta-a0)
+(def ^:private a0-korjattu service/a0-merkinta-a0-korjattu)
+(def ^:private a0-mpr service/a0-merkinta-a0-mpr)
 (t/deftest downgrade-e-luokka-test
-  (t/testing "A+ with different tayttaa-aplus/a0-vaatimukset combinations"
-    ;; Given: raakaluokka on "A+"
-    ;; When: molemmat vaatimukset täyttyvät
-    ;; Then: palautus "A+"
-    (t/is (= "A+" (service/downgrade-e-luokka "A+" true true)))
-    ;; When: aplus = true, a0 = false → A+ edellyttää molempia
-    ;; Then: palautus "A"
-    (t/is (= "A" (service/downgrade-e-luokka "A+" true false)))
-    ;; When: aplus = false, a0 = true → A+-vaatimus ei täyty, mutta A0 täyttyy
-    ;; Then: palautus "A0"
-    (t/is (= "A0" (service/downgrade-e-luokka "A+" false true)))
-    ;; When: kumpikaan ei täyty
-    ;; Then: palautus "A"
-    (t/is (= "A" (service/downgrade-e-luokka "A+" false false))))
-
-  (t/testing "A0 with different tayttaa-aplus/a0-vaatimukset combinations"
-    ;; Given: raakaluokka on "A0"
-    ;; When: a0 = true
-    ;; Then: palautus "A0"
-    (t/is (= "A0" (service/downgrade-e-luokka "A0" false true)))
-    ;; When: a0 = false
-    ;; Then: palautus "A"
-    (t/is (= "A" (service/downgrade-e-luokka "A0" false false)))
-    ;; When: aplus = true, a0 = true → A+-rasti irrelevantti A0-alueella
-    ;; Then: palautus "A0"
-    (t/is (= "A0" (service/downgrade-e-luokka "A0" true true)))
-    ;; When: aplus = true, a0 = false → pelkkä A+-rasti ei riitä A0:een
-    ;; Then: palautus "A"
-    (t/is (= "A" (service/downgrade-e-luokka "A0" true false))))
-
-  ;; 1.3 Muut luokat: no-op riippumatta rastien tilasta
-  (t/testing "Other e-luokka values are never downgraded"
-    (t/is (= "A" (service/downgrade-e-luokka "A" true true)))
-    (t/is (= "B" (service/downgrade-e-luokka "B" false false)))
-    (t/is (= "C" (service/downgrade-e-luokka "C" true true)))
-    (t/is (= "D" (service/downgrade-e-luokka "D" false false)))
-    (t/is (= "E" (service/downgrade-e-luokka "E" true false)))
-    (t/is (= "F" (service/downgrade-e-luokka "F" false true)))
-    (t/is (= "G" (service/downgrade-e-luokka "G" true true)))))
-
-
+  (t/testing "A+ requires the A+ flag and an A0 or A0_MPR marking"
+    ;; Given: raw class is A+
+    ;; When: both requirements are fulfilled
+    ;; Then: result is A+
+    (t/is (= "A+" (service/downgrade-e-luokka "A+" true a0)))
+    (t/is (= "A+" (service/downgrade-e-luokka "A+" true a0-mpr))))
+  (t/testing "A+ is downgraded to A when the A0 marking is not eligible"
+    ;; When: A+ is set but the marking is not eligible
+    ;; Then: result is A
+    (t/is (= "A" (service/downgrade-e-luokka "A+" true a0-korjattu)))
+    (t/is (= "A" (service/downgrade-e-luokka "A+" true ei)))
+    (t/is (= "A" (service/downgrade-e-luokka "A+" true nil))))
+  (t/testing "A+ is downgraded to A when the A+ flag is not set"
+    ;; When: A+ is not set
+    ;; Then: result is A
+    (t/is (= "A" (service/downgrade-e-luokka "A+" false a0)))
+    (t/is (= "A" (service/downgrade-e-luokka "A+" false a0-mpr)))
+    (t/is (= "A" (service/downgrade-e-luokka "A+" false a0-korjattu)))
+    (t/is (= "A" (service/downgrade-e-luokka "A+" false ei)))
+    (t/is (= "A" (service/downgrade-e-luokka "A+" nil a0))))
+  ;; 1.3 Other classes: no-op regardless of the requirement flags.
+  (t/testing "Other e-luokka values are never changed"
+    (doseq [e-luokka ["A" "B" "C" "D" "E" "F" "G"]
+            aplus [true false]
+            a0-merkinta-id [ei a0 a0-korjattu a0-mpr]]
+      (t/is (= e-luokka (service/downgrade-e-luokka e-luokka aplus a0-merkinta-id))))))
 (t/deftest find-e-luokka-downgrade-test
-  ;; 2.1 Versio 2027 ja downgrade
+  ;; 2.1 Version 2027 downgrade behavior
   (t/testing "2027 e-luokka integrates downgrade logic"
     ;; Given: YAT, nettoala 100, e-luku 1 (A+-alue, A+ raja = 78)
-    ;; When: aplus = true, a0 = true
-    ;; Then: "A+"
-    (t/is (= "A+" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 true true))))
-    ;; When: aplus = false, a0 = false → downgrade A+ → A
-    (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 false false))))
-    ;; When: aplus = false, a0 = true → downgrade A+ → A0
-    (t/is (= "A0" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 false true))))
-
-    ;; Given: YAT, nettoala 100, e-luku 79 (A0-alue, A+ raja = 78, A0 raja = 98)
-    ;; When: a0 = true
-    (t/is (= "A0" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 79 false true))))
-    ;; When: a0 = false → downgrade A0 → A
-    (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 79 false false))))
-
-    ;; Given: YAT, nettoala 100, e-luku 99 (B-alue)
-    ;; When: aplus = true, a0 = true → ei muutu
-    (t/is (= "B" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 99 true true))))
-
-    ;; Given: YAT, nettoala 100, e-luku 500 (G-alue)
-    ;; When: aplus = true, a0 = true → ei muutu
-    (t/is (= "G" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 500 true true)))))
-
-  ;; 2.2 Versio 2013/2018 — no-op regressiotesti
+    ;; When: A+ is set and the marking is eligible
+    ;; Then: result is A+
+    (t/is (= "A+" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 true a0))))
+    (t/is (= "A+" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 true a0-mpr))))
+    (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 true a0-korjattu))))
+    (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 true ei))))
+    ;; When: A+ is not set
+    ;; Then: result is A
+    (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 false a0))))
+    ;; Given: YAT, nettoala 100, e-luku 79 (former A0 range, A+ raja = 78, A raja = 98)
+    ;; Then: A regardless of the A0 marking
+    (doseq [a0-merkinta-id [ei a0 a0-korjattu a0-mpr]]
+      (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 79 true a0-merkinta-id)))))
+    ;; Given: YAT, nettoala 100, e-luku 99 (B-alue) → ei muutu
+    ;; When: requirement flags vary
+    ;; Then: result remains B
+    (t/is (= "B" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 99 true a0))))
+    ;; Given: YAT, nettoala 100, e-luku 500 (G-alue) → ei muutu
+    ;; When: requirement flags vary
+    ;; Then: result remains G
+    (t/is (= "G" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 500 true a0)))))
+  ;; 2.2 Version 2013/2018 — no-op regression test
   (t/testing "2013/2018 are unaffected by downgrade params (regression)"
-    ;; Given: versio 2018, YAT, e-luku pieni → A
-    ;; When: aplus = false, a0 = false
-    ;; Then: sama tulos "A" — 2018 ei tuota A+ tai A0
-    (t/is (= "A" (:e-luokka (find-e-luokka-info 2018 "KAT" 100 1 false false))))
-    ;; Given: versio 2013, YAT, e-luku pieni → A
-    (t/is (= "A" (:e-luokka (find-e-luokka-info 2013 "YAT" 100 1 false false))))
-
-    ;; Olemassa olevat 2013/2018-testit passaavat jo 4-parametrisellä
-    ;; find-e-luokka-info-kutsulla (oletusarvot true, true) — regressio OK
-    ))
+    ;; Given: version 2018, YAT, low E-value → A
+    ;; When: A+ is false
+    ;; Then: result remains A
+    (t/is (= "A" (:e-luokka (find-e-luokka-info 2018 "KAT" 100 1 false ei))))
+    ;; Given: version 2013, YAT, low E-value → A
+    (t/is (= "A" (:e-luokka (find-e-luokka-info 2013 "YAT" 100 1 false ei))))))

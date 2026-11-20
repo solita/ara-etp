@@ -190,7 +190,8 @@
 <svelte:window
   on:click={event => {
     const itemNodes = node.querySelectorAll('.dropdownitem');
-    if (!R.includes(event.target, itemNodes) && event.target !== button) {
+    const clickedItem = R.any(item => item.contains(event.target), itemNodes);
+    if (!clickedItem && !button.contains(event.target)) {
       active = Maybe.None();
     }
   }} />
@@ -239,7 +240,16 @@
     on:blur={_ => {
       focused = false;
     }}>
-    {R.compose(Maybe.orSome($_(noneLabel)), R.map(format))(selected)}
+    {#if itemComponent}
+      <svelte:component
+        this={itemComponent}
+        state={R.compose(
+          Maybe.orSome($_(noneLabel)),
+          R.map(format)
+        )(selected)} />
+    {:else}
+      {R.compose(Maybe.orSome($_(noneLabel)), R.map(format))(selected)}
+    {/if}
   </div>
   {#if showDropdown}
     <DropdownList

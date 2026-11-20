@@ -1,7 +1,7 @@
 <script>
   import { _ } from '@Localization/localization';
   const luokat = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-  const luokat2027 = ['A+', 'A0'];
+  const luokat2027 = ['A+'];
   export let group = [];
   export let name;
   export let versio = '0';

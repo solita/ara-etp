@@ -8,7 +8,7 @@
   {:havainnointikaynti        common-schema/Date
    :passin-esittely           common-schema/Date
    :tayttaa-aplus-vaatimukset schema/Bool
-   :tayttaa-a0-vaatimukset    schema/Bool
+   :a0-merkinta-id            common-schema/Key
    :lisatietoja-fi            common-schema/String3000
    :lisatietoja-sv            common-schema/String3000})
 

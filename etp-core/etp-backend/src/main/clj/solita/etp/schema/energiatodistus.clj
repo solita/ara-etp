@@ -1,7 +1,6 @@
 (ns solita.etp.schema.energiatodistus
   (:require [flathead.deep :as deep]
             [schema.core :as schema]
-            [solita.common.map]
             [solita.common.map :as map]
             [solita.common.schema :as xschema]
             [solita.etp.schema.common :as common-schema]
@@ -364,7 +363,7 @@
   (-> (dissoc-not-in-2027 EnergiatodistusSave2018)
       (deep/deep-merge {:perustiedot                    {:havainnointikayntityyppi-id common-schema/Key
                                                          :tayttaa-aplus-vaatimukset   schema/Bool
-                                                         :tayttaa-a0-vaatimukset      schema/Bool}
+                                                         :a0-merkinta-id              common-schema/Key}
                         :lahtotiedot                    {:energiankulutuksen-valmius-reagoida-ulkoisiin-signaaleihin schema/Bool
                                                          :lammitys
                                                          {:lammonjako-lampotilajousto schema/Bool}}
@@ -443,8 +442,9 @@
   {:laatija-id       common-schema/Key
    :laatija-fullname schema/Str})
 
-(defn energiatodistus-versio [versio save-schema]
+(defn energiatodistus-versio
   "Energiatodistus schema contains basic information about persistent energiatodistus"
+  [versio save-schema]
   (-> save-schema
       (merge common-schema/Id
              {:versio (schema/eq versio)}

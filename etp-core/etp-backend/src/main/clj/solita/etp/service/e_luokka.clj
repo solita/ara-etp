@@ -80,56 +80,56 @@
 
 (defn pienet-asuinrakennukset-50-150-2027 [nettoala]
   {:raja-asteikko (raja-asteikko-without-kertoimet
-                   [[114 0.36 "A+"] [143 0.45 "A0"] [143 0.45 "A"]
+                   [[114 0.36 "A+"] [143 0.45 "A"]
                     [146 0.40 "B"] [169.5 0.39 "C"] [220.5 0.39 "D"]
                     [303 0.38 "E"] [349.5 0.39 "F"]]
                    nettoala)})
 
 (defn pienet-asuinrakennukset-150-600-2027 [nettoala]
   {:raja-asteikko (raja-asteikko-without-kertoimet
-                   [[64 0.024 "A+"] [80 0.030 "A0"] [80 0.030 "A"]
+                   [[64 0.024 "A+"] [80 0.030 "A"]
                     [90.1 0.027 "B"] [118.1 0.047 "C"] [168.8 0.045 "D"]
                     [253.1 0.047 "E"] [298.1 0.047 "F"]]
                    nettoala)})
 
 (defn pienet-asuinrakennukset-600-2027 [_]
-  {:raja-asteikko [[50 "A+"] [62 "A0"] [62 "A"] [74 "B"]
+  {:raja-asteikko [[50 "A+"] [62 "A"] [74 "B"]
                    [90 "C"] [142 "D"] [225 "E"] [270 "F"]]})
 
 (defn rivitalot-2027 [_]
-  {:raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [76 "B"]
+  {:raja-asteikko [[57 "A+"] [71 "A"] [76 "B"]
                    [103 "C"] [142 "D"] [225 "E"] [270 "F"]]})
 
 (defn asuinkerrostalot-2027 [_]
-  {:raja-asteikko [[50 "A+"] [63 "A0"] [63 "A"] [72 "B"]
+  {:raja-asteikko [[50 "A+"] [63 "A"] [72 "B"]
                    [92 "C"] [111 "D"] [130 "E"] [162 "F"]]})
 
 (defn toimistorakennukset-2027 [_]
-  {:raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [86 "B"]
+  {:raja-asteikko [[57 "A+"] [71 "A"] [86 "B"]
                    [119 "C"] [139 "D"] [166 "E"] [206 "F"]]})
 
 (defn liikerakennukset-2027 [_]
-  {:raja-asteikko [[78 "A+"] [97 "A0"] [97 "A"] [121 "B"]
+  {:raja-asteikko [[78 "A+"] [97 "A"] [121 "B"]
                    [167 "C"] [193 "D"] [233 "E"] [267 "F"]]})
 
 (defn majoitusliikerakennukset-2027 [_]
-  {:raja-asteikko [[91 "A+"] [114 "A0"] [114 "A"] [123 "B"]
+  {:raja-asteikko [[91 "A+"] [114 "A"] [123 "B"]
                    [168 "C"] [194 "D"] [234 "E"] [308 "F"]]})
 
 (defn opetusrakennukset-2027 [_]
-  {:raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [89 "B"]
+  {:raja-asteikko [[57 "A+"] [71 "A"] [89 "B"]
                    [114 "C"] [154 "D"] [200 "E"] [240 "F"]]})
 
 (defn liikuntahallit-2027 [_]
-  {:raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [93 "B"]
+  {:raja-asteikko [[57 "A+"] [71 "A"] [93 "B"]
                    [119 "C"] [133 "D"] [166 "E"] [192 "F"]]})
 
 (defn sairaalat-2027 [_]
-  {:raja-asteikko [[184 "A+"] [230 "A0"] [230 "A"] [251 "B"]
+  {:raja-asteikko [[184 "A+"] [230 "A"] [251 "B"]
                    [312 "C"] [377 "D"] [444 "E"] [546 "F"]]})
 
 (defn muut-2027 [_]
-  {:raja-asteikko [[57 "A+"] [71 "A0"] [71 "A"] [93 "B"]
+  {:raja-asteikko [[57 "A+"] [71 "A"] [93 "B"]
                    [119 "C"] [133 "D"] [166 "E"] [192 "F"]]})
 
 (defn raja-asteikko-f [versio kayttotarkoitus-id alakayttotarkoitus-id nettoala]
@@ -203,22 +203,32 @@
 
 (defn e-luokka-from-raja-asteikko [raja-asteikko e-luku]
   (or (some (fn [[raja e-luokka]]
-              (if (<= e-luku raja)
+              (when (<= e-luku raja)
                 e-luokka))
             raja-asteikko)
       default-luokka))
 
+;; A0 merkintä (a0_merkinta classification) ids
+(def a0-merkinta-ei 0)
+(def a0-merkinta-a0 1)
+(def a0-merkinta-a0-korjattu 2)
+(def a0-merkinta-a0-mpr 3)
+
+(def a0-merkinnat-allowing-aplus
+  "A0 markings that make the A+ class possible. A0_korjattu and Ei never lead to A+."
+  #{a0-merkinta-a0 a0-merkinta-a0-mpr})
+
 (defn downgrade-e-luokka
-  "Downgrade A+/A0 e-luokka based on tayttaa-aplus-vaatimukset and tayttaa-a0-vaatimukset.
-   Returns the (possibly downgraded) e-luokka string.
+  "Downgrade A+ e-luokka based on tayttaa-aplus-vaatimukset and a0-merkinta-id.
+   A+ requires the A+ flag and an A0 marking of either A0 (basic) or A0_MPR.
+   Otherwise A+ is downgraded to A. Other classes are returned unchanged.
    NOTE: Frontend has a parallel implementation: etp-front energiatodistus-utils.js / applyEluokkaDowngrade."
-  [e-luokka tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset]
-  (case e-luokka
-    "A+" (cond
-           (and tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset) "A+"
-           tayttaa-a0-vaatimukset "A0"
-           :else "A")
-    "A0" (if tayttaa-a0-vaatimukset "A0" "A")
+  [e-luokka tayttaa-aplus-vaatimukset a0-merkinta-id]
+  (if (= e-luokka "A+")
+    (if (and tayttaa-aplus-vaatimukset
+             (contains? a0-merkinnat-allowing-aplus a0-merkinta-id))
+      "A+"
+      "A")
     e-luokka))
 
 (defn- find-by-id [id collection]
@@ -239,7 +249,7 @@
 
 (defn e-luokka [kayttotarkoitukset alakayttotarkoitukset
                 versio alakayttotarkoitus-id nettoala e-luku
-                tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset]
+                tayttaa-aplus-vaatimukset a0-merkinta-id]
   (logic/if-let*
     [e-luku e-luku
      {:keys [raja-asteikko] :as rajat}
@@ -250,14 +260,14 @@
       :e-luokka (downgrade-e-luokka
                   (e-luokka-from-raja-asteikko raja-asteikko e-luku)
                   tayttaa-aplus-vaatimukset
-                  tayttaa-a0-vaatimukset))))
+                  a0-merkinta-id))))
 
 (defn find-e-luokka [db versio alakayttotarkoitus-id nettoala e-luku
-                     tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset]
+                     tayttaa-aplus-vaatimukset a0-merkinta-id]
   (e-luokka (kayttotarkoitus-service/find-kayttotarkoitukset db versio)
             (kayttotarkoitus-service/find-alakayttotarkoitukset db versio)
             versio alakayttotarkoitus-id nettoala e-luku
-            tayttaa-aplus-vaatimukset tayttaa-a0-vaatimukset))
+            tayttaa-aplus-vaatimukset a0-merkinta-id))
 
 (def fixed-energiamuotokertoimet
   {2027 {:fossiilinen-polttoaine 1M

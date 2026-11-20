@@ -23,7 +23,7 @@
   export let version = '2018';
   $: labels =
     version === '2027'
-      ? ['A0', 'A+', 'A', 'B', 'C', 'D', 'E', 'F', 'G']
+      ? ['A+', 'A', 'B', 'C', 'D', 'E', 'F', 'G']
       : ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
   let labelsVisual = [];
   let ariaLabelText = $_('TILASTOT_CHART_ALT') + ' ';
@@ -44,7 +44,6 @@
 
   const colorMap = {
     'A+': '#009641',
-    A0: '#52ae32',
     A: '#c8d302',
     B: '#ffed00',
     C: '#fbb900',

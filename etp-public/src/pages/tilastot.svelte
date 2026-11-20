@@ -176,7 +176,6 @@
           (results?.['counts']?.['2013']?.['e-luokka']?.G || 0) / total2013
         ];
         chartData2027 = [
-          (results?.['counts']?.['2027']?.['e-luokka']?.A0 || 0) / total2027,
           (results?.['counts']?.['2027']?.['e-luokka']?.['A+'] || 0) /
             total2027,
           (results?.['counts']?.['2027']?.['e-luokka']?.A || 0) / total2027,
