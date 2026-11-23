@@ -341,30 +341,45 @@ export const eluokkaFromRajaAsteikko = (rajaAsteikko, eLuku) => {
 };
 
 /**
- * Downgrade A+/A0 e-luokka based on tayttaa-aplus-vaatimukset and tayttaa-a0-vaatimukset.
- * A+ requires both aplus and a0 to be true; A0 requires a0 to be true.
- * Other classes are returned unchanged.
+ * Ids of the a0_merkinta classification.
+ */
+export const a0Merkinta = {
+  EI: 0,
+  A0: 1,
+  A0_KORJATTU: 2,
+  A0_MPR: 3
+};
+
+const a0MerkinnatAllowingAplus = [a0Merkinta.A0, a0Merkinta.A0_MPR];
+
+/**
+ * Format an A0 marking id as a select option text.
+ * The texts are localized in the frontend (energiatodistus.perustiedot.a0-merkinta.<id>).
+ */
+export const a0MerkintaFormat = R.curry((i18n, id) =>
+  i18n(`energiatodistus.perustiedot.a0-merkinta.${id}`)
+);
+
+/**
+ * Downgrade A+ e-luokka based on tayttaa-aplus-vaatimukset and a0-merkinta-id.
+ * A+ requires the A+ flag and an A0 marking of either A0 or A0_MPR,
+ * otherwise A+ is downgraded to A. Other classes are returned unchanged.
  * NOTE: Backend has a parallel implementation: solita.etp.service.e-luokka/downgrade-e-luokka.
  * @param {string} rawEluokka - The raw e-luokka from raja-asteikko lookup
  * @param {boolean} tayttaaAplusVaatimukset - Whether A+ requirements are met
- * @param {boolean} tayttaaA0Vaatimukset - Whether A0 requirements are met
+ * @param {Maybe<number>} a0MerkintaId - Id of the chosen A0 marking, None if not chosen
  * @returns {string} The (possibly downgraded) e-luokka
  */
 export const applyEluokkaDowngrade = (
   rawEluokka,
   tayttaaAplusVaatimukset,
-  tayttaaA0Vaatimukset
+  a0MerkintaId
 ) => {
-  switch (rawEluokka) {
-    case 'A+':
-      if (tayttaaAplusVaatimukset && tayttaaA0Vaatimukset) return 'A+';
-      if (tayttaaA0Vaatimukset) return 'A0';
-      return 'A';
-    case 'A0':
-      return tayttaaA0Vaatimukset ? 'A0' : 'A';
-    default:
-      return rawEluokka;
-  }
+  if (rawEluokka !== 'A+') return rawEluokka;
+  const id = Maybe.orSome(null, R.defaultTo(Maybe.None(), a0MerkintaId));
+  return tayttaaAplusVaatimukset && R.includes(id, a0MerkinnatAllowingAplus)
+    ? 'A+'
+    : 'A';
 };
 
 const energiamuodotUntil2018 = [

@@ -165,7 +165,7 @@
       (:e-luokka (e-luokka-service/find-e-luokka
                    db versio alakayttotarkoitus-id nettoala e-luku
                    (-> energiatodistus :perustiedot :tayttaa-aplus-vaatimukset)
-                   (-> energiatodistus :perustiedot :tayttaa-a0-vaatimukset))))))
+                   (-> energiatodistus :perustiedot :a0-merkinta-id))))))
 
 (defn assoc-e-tehokkuus [energiatodistus db versio]
   (-> energiatodistus
@@ -183,7 +183,7 @@
      :max      max}))
 
 (defn check-error! [column-name value interval]
-  (if-let [error (check-value column-name value interval)]
+  (when-let [error (check-value column-name value interval)]
     (exception/throw-ex-info!
       (assoc error
         :type :invalid-value
@@ -230,7 +230,7 @@
     energiatodistus))
 
 (defn- validate-laskutettava-yritys-id! [db laatija-id energiatodistus]
-  (if-let [laskutettava-yritys-id (:laskutettava-yritys-id energiatodistus)]
+  (when-let [laskutettava-yritys-id (:laskutettava-yritys-id energiatodistus)]
     (let [laskutusosoitteet (->> (laatija-service/find-laatija-laskutusosoitteet db laatija-id)
                                  (filter :valid) (map :id) set)]
       (when-not (contains? laskutusosoitteet laskutettava-yritys-id)
@@ -297,7 +297,7 @@
    (first (map db-row->energiatodistus
                (energiatodistus-db/select-energiatodistus db {:id id}))))
   ([db whoami id]
-   (if-let [energiatodistus (find-energiatodistus db id)]
+   (when-let [energiatodistus (find-energiatodistus db id)]
      (select-energiatodistus-for-find energiatodistus whoami))))
 
 (def ^:private db-row->energiatodistus-for-any-laatija
@@ -691,8 +691,8 @@
       (energiatodistus-db/reset-ilmastoselvitys!
         db
         {:id (:id energiatodistus)}))
-    (when (and (= 2027 (:versio energiatodistus))
-            (reset-unused-localized-fields db id)))))
+    (when (= 2027 (:versio energiatodistus))
+      (reset-unused-localized-fields db id))))
 
 (defn language-id->codes [language]
   (get {finnish-language-id      ["fi"]

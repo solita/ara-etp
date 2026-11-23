@@ -321,7 +321,7 @@ export const energiatodistus2027 = _ =>
       perustiedot: {
         'havainnointikayntityyppi-id': Maybe.None(),
         'tayttaa-aplus-vaatimukset': false,
-        'tayttaa-a0-vaatimukset': false
+        'a0-merkinta-id': Maybe.None()
       },
       huomiot: {
         lammitys: Deep.mergeRight(
@@ -412,7 +412,7 @@ const emptyPerusparannusPassinPerustiedot = _ => ({
   havainnointikaynti: ValidNone(),
   'passin-esittely': ValidNone(),
   'tayttaa-aplus-vaatimukset': false,
-  'tayttaa-a0-vaatimukset': false,
+  'a0-merkinta-id': Maybe.None(),
   'lisatietoja-fi': Maybe.None(),
   'lisatietoja-sv': Maybe.None()
 });

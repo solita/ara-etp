@@ -249,84 +249,94 @@
   ;; Note: generated test data uses value 1.0M for all numeric fields,
   ;; so e-luku will be very small (well within A+ range for YAT).
 
-  (t/testing "POST 2027: tayttaa-aplus/a0-vaatimukset both true → e-luokka A+"
-    ;; Given: 2027-todistus with both tayttaa-*-vaatimukset true
+  (t/testing "POST 2027: tayttaa-aplus-vaatimukset true and A0 marking A0 → e-luokka A+"
+    ;; Given: 2027-todistus with A+ flag and basic A0 marking
     (let [et (-> (et-test-data/generate-add 2027 true)
                  (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] true)
-                 (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] true))
+                 (assoc-in [:perustiedot :a0-merkinta-id] 1))
           ;; When: POST and then GET
           post-res (post-et! 2027 et)
           _ (t/is (= 201 (:status post-res)))
           et-id (:id (response-body post-res))
           get-res (get-et 2027 et-id)
           body (response-body get-res)]
-      ;; Then: e-luokka is "A+" (both rastit true, no downgrade)
+      ;; Then: e-luokka is "A+" (no downgrade)
       (t/is (= "A+" (get-in body [:tulokset :e-luokka]))
-            "Both tayttaa-*-vaatimukset true → e-luokka should be A+")))
+            "aplus=true, a0-merkinta=A0 → e-luokka should be A+")))
 
-  (t/testing "POST 2027: tayttaa-aplus/a0-vaatimukset both false → e-luokka A (downgraded)"
-    ;; Given: 2027-todistus with both tayttaa-*-vaatimukset false
+  (t/testing "POST 2027: aplus=false and A0 marking Ei → e-luokka A (downgraded)"
+    ;; Given: 2027-todistus without A+ flag and without A0 marking
     (let [et (-> (et-test-data/generate-add 2027 true)
                  (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] false)
-                 (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] false))
+                 (assoc-in [:perustiedot :a0-merkinta-id] 0))
           ;; When: POST and then GET
           post-res (post-et! 2027 et)
           _ (t/is (= 201 (:status post-res)))
           et-id (:id (response-body post-res))
           get-res (get-et 2027 et-id)
           body (response-body get-res)]
-      ;; Then: e-luokka is "A" (downgraded from A+ because false, false)
+      ;; Then: e-luokka is "A" (downgraded from A+)
       (t/is (= "A" (get-in body [:tulokset :e-luokka]))
-            "Both tayttaa-*-vaatimukset false → e-luokka should be A (downgraded from A+)")))
+            "aplus=false, a0-merkinta=Ei → e-luokka should be A (downgraded from A+)")))
 
-  (t/testing "POST 2027: aplus=false, a0=true → e-luokka A0 (downgraded from A+)"
-    ;; Given: 2027-todistus with aplus false, a0 true
+  (t/testing "POST 2027: aplus=true, A0 marking A0_korjattu → e-luokka A (downgraded from A+)"
+    ;; Given: 2027-todistus with A+ flag but A0_korjattu marking, which never leads to A+
     (let [et (-> (et-test-data/generate-add 2027 true)
-                 (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] false)
-                 (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] true))
+                 (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] true)
+                 (assoc-in [:perustiedot :a0-merkinta-id] 2))
           ;; When: POST and then GET
           post-res (post-et! 2027 et)
           _ (t/is (= 201 (:status post-res)))
           et-id (:id (response-body post-res))
           get-res (get-et 2027 et-id)
           body (response-body get-res)]
-      ;; Then: e-luokka is "A0" (downgraded from A+ because aplus false, a0 stays)
-      (t/is (= "A0" (get-in body [:tulokset :e-luokka]))
-            "aplus=false, a0=true → e-luokka should be A0"))))
+      ;; Then: e-luokka is "A" and the marking is returned as saved
+      (t/is (= "A" (get-in body [:tulokset :e-luokka]))
+            "aplus=true, a0-merkinta=A0_korjattu → e-luokka should be A")
+      (t/is (= 2 (get-in body [:perustiedot :a0-merkinta-id])))))
+  (t/testing "POST 2027: aplus=true, A0 marking A0_MPR → e-luokka A+"
+    (let [et (-> (et-test-data/generate-add 2027 true)
+                 (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] true)
+                 (assoc-in [:perustiedot :a0-merkinta-id] 3))
+          post-res (post-et! 2027 et)
+          _ (t/is (= 201 (:status post-res)))
+          et-id (:id (response-body post-res))
+          body (response-body (get-et 2027 et-id))]
+      (t/is (= "A+" (get-in body [:tulokset :e-luokka]))
+            "aplus=true, a0-merkinta=A0_MPR → e-luokka should be A+"))))
 
 
 (t/deftest put-2027-e-luokka-downgrade-test
   (laatija-test-data/insert-suomifi-laatija!
     (-> (laatija-test-data/generate-adds 1) first (merge {:patevyystaso 4})))
 
-  ;; Given: 2027-todistus created with both tayttaa-*-vaatimukset false
+  ;; Given: 2027-todistus created without A+ flag and A0 marking "Ei"
   (let [et (-> (et-test-data/generate-add 2027 true)
                (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] false)
-               (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] false))
+               (assoc-in [:perustiedot :a0-merkinta-id] 0))
         post-res (post-et! 2027 et)
         _ (t/is (= 201 (:status post-res)))
         et-id (:id (response-body post-res))]
 
-    (t/testing "PUT: set both rastit false→true → e-luokka changes A→A+"
-      ;; When: update both tayttaa-*-vaatimukset to true
+    (t/testing "PUT: set A+ flag and A0 marking → e-luokka changes A→A+"
+      ;; When: set A+ flag and basic A0 marking
       (let [updated-et (-> et
                            (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] true)
-                           (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] true))
+                           (assoc-in [:perustiedot :a0-merkinta-id] 1))
             put-res (put-et! 2027 et-id updated-et)]
         ;; Then: e-luokka should now be "A+"
         (t/is (= 200 (:status put-res)))
         (let [verify-body (response-body (get-et 2027 et-id))]
           (t/is (= "A+" (get-in verify-body [:tulokset :e-luokka]))
-                "After setting both rastit true, e-luokka should be A+"))))
+                "After setting A+ flag and A0 marking, e-luokka should be A+"))))
 
-    (t/testing "PUT: set aplus true→false (a0 still true) → e-luokka changes to A0"
-      ;; When: set aplus false, a0 true
+    (t/testing "PUT: change A0 marking to A0_korjattu (A+ flag still set) → e-luokka changes to A"
       (let [updated-et (-> et
-                           (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] false)
-                           (assoc-in [:perustiedot :tayttaa-a0-vaatimukset] true))
+                           (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] true)
+                           (assoc-in [:perustiedot :a0-merkinta-id] 2))
             put-res (put-et! 2027 et-id updated-et)]
-        ;; Then: e-luokka should be "A0"
+        ;; Then: e-luokka should be "A"
         (t/is (= 200 (:status put-res)))
         (let [verify-body (response-body (get-et 2027 et-id))]
-          (t/is (= "A0" (get-in verify-body [:tulokset :e-luokka]))
-                "aplus=false, a0=true → e-luokka should be A0"))))))
+          (t/is (= "A" (get-in verify-body [:tulokset :e-luokka]))
+                "aplus=true, a0-merkinta=A0_korjattu → e-luokka should be A"))))))

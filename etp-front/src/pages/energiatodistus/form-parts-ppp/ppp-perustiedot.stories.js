@@ -28,6 +28,7 @@ const Template = args => ({
 export const Default = Template.bind({});
 Default.args = {
   schema: saveSchema,
+  a0Merkinnat: [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }],
   perusparannuspassi: R.mergeDeepLeft(
     {
       id: 4245

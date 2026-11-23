@@ -73,7 +73,7 @@
       ETUtils.applyEluokkaDowngrade(
         ETUtils.eluokkaFromRajaAsteikko(rajaAsteikko, eLuku),
         perusparannuspassi['passin-perustiedot']?.['tayttaa-aplus-vaatimukset'],
-        perusparannuspassi['passin-perustiedot']?.['tayttaa-a0-vaatimukset']
+        perusparannuspassi['passin-perustiedot']?.['a0-merkinta-id']
       ),
     Maybe.toMaybeList([
       R.map(R.prop('raja-asteikko'), eTehokkuus),

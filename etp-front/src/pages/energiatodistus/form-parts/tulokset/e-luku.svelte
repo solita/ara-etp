@@ -11,7 +11,7 @@
   export let eTehokkuus = Maybe.None();
   export let idSuffix;
   export let tayttaaAplusVaatimukset = false;
-  export let tayttaaA0Vaatimukset = false;
+  export let a0MerkintaId = Maybe.None();
 
   $: displayETehokkuus = Maybe.map(raw => {
     const rajaAsteikko = raw['raja-asteikko'];
@@ -26,7 +26,7 @@
         ETUtils.applyEluokkaDowngrade(
           rawEluokka,
           tayttaaAplusVaatimukset,
-          tayttaaA0Vaatimukset
+          a0MerkintaId
         ),
         raw
       );

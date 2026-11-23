@@ -1,6 +1,6 @@
 (ns solita.etp.service.energiatodistus-2027)
 
-(def toimenpide-ehdotukset-hidden-e-luokat #{"A" "A0" "A+"})
+(def toimenpide-ehdotukset-hidden-e-luokat #{"A" "A+"})
 
 (defn show-toimenpide-ehdotukset-pages? [energiatodistus]
   (let [e-luokka (-> energiatodistus :tulokset :e-luokka)
