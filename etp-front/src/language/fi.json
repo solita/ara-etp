@@ -2058,6 +2058,8 @@
           "add-link-success": "Linkki lisätty toimenpiteelle.",
           "delete-liite-success": "Liite poistettu.",
           "add-files-error": "Liitetiedoston lisääminen epäonnistui.",
+          "add-files-invalid-filename": "Liitetiedoston nimi ei ole sallitussa muodossa.",
+          "add-files-forbidden-extension": "Liitetiedoston tiedostopääte ei ole sallittu.",
           "add-link-error": "Linkin lisääminen epäonnistui.",
           "delete-liite-error": "Liitteen poisto epäonnistui."
         },

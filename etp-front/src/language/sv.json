@@ -2107,6 +2107,8 @@
           "add-link-success": "En länk har lagts till åtgärden.",
           "delete-liite-success": "Bilagan har tagits bort.",
           "add-files-error": "Det gick inte att lägga till filbilagan.",
+          "add-files-invalid-filename": "Liitetiedoston nimi ei ole sallitussa muodossa. (sv)",
+          "add-files-forbidden-extension": "Liitetiedoston tiedostopääte ei ole sallittu. (sv)",
           "add-link-error": "Det gick inte att lägga till länken.",
           "delete-liite-error": "Det gick inte att ta bort bilagan.",
           "delete-success": "Att ta bort åtgärden lyckades.",

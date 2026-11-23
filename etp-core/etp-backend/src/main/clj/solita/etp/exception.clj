@@ -124,12 +124,23 @@
                                 :message (coercion-error-message error)})
                              field-errors)}}))
 
+(defn invalid-attachment-handler [exception request]
+  (log/info "Invalid attachment in service:" (service-name request)
+            "type:" (:type (ex-data exception)))
+  {:status 400
+   :body (ex-data exception)})
+
 (def exception-middleware
   (exception/create-exception-middleware
     (assoc exception/default-handlers
       ::exception/default default-handler
       :unique-violation unique-exception-handler
       :forbidden forbidden-handler
+      :liite-invalid-filename invalid-attachment-handler
+      :liite-forbidden-extension invalid-attachment-handler
+      :liite-executable invalid-attachment-handler
+      :liite-content-type-mismatch invalid-attachment-handler
+      :liite-extension-mismatch invalid-attachment-handler
       :invalid-laatimisvaihe (fn [e request]
                                (log/info "Invalid laatimisvaihe in service:" (service-name request)
                                          (ex-message e))

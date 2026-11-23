@@ -34,14 +34,24 @@
   let dirty = false;
   let overlay = true;
 
+  const attachmentErrorKey = response => {
+    const type = R.path(['body', 'type'], response);
+    return {
+      'liite-invalid-filename': 'add-files-invalid-filename',
+      'liite-forbidden-extension': 'add-files-forbidden-extension'
+    }[type];
+  };
+
   const errorMessage = (key, response) =>
     i18n(
       Response.notFound(response)
         ? `${i18nRoot}.messages.not-found`
-        : Maybe.orSome(
-            `${i18nRoot}.messages.${key}-error`,
-            Response.localizationKey(response)
-          )
+        : attachmentErrorKey(response)
+          ? `${i18nRoot}.messages.${attachmentErrorKey(response)}`
+          : Maybe.orSome(
+              `${i18nRoot}.messages.${key}-error`,
+              Response.localizationKey(response)
+            )
     );
 
   const load = params => {
