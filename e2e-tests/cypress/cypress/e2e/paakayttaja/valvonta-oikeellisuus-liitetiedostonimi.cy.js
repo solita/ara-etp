@@ -26,7 +26,14 @@ const createDraftToimenpide = () =>
       return response.body.id;
     });
 
-const uploadAttachment = (toimenpideId, fileName) => {
+const uploadAttachment = (
+  toimenpideId,
+  {
+    fileName,
+    contents = Cypress.Buffer.from('attachment test'),
+    mimeType = 'text/plain'
+  }
+) => {
   cy.intercept(
     'POST',
     `/api/private/valvonta/oikeellisuus/${energiatodistusId}/toimenpiteet/${toimenpideId}/liitteet/files`
@@ -34,9 +41,9 @@ const uploadAttachment = (toimenpideId, fileName) => {
 
   cy.get('[data-cy="droparea"] input[type="file"]').selectFile(
     {
-      contents: Cypress.Buffer.from('attachment test'),
+      contents,
       fileName,
-      mimeType: 'text/plain'
+      mimeType
     },
     { force: true }
   );
@@ -66,16 +73,72 @@ context('Oikeellisuuden valvonnan liitetiedostonimi', () => {
     });
   });
 
+  it('rejects an invalid filename with 400', () => {
+    createDraftToimenpide().then(toimenpideId => {
+      openToimenpide(toimenpideId);
+
+      uploadAttachment(toimenpideId, { fileName: 'document?.pdf' }).then(
+        ({ response }) => {
+          assertRejectedAttachment(response, 'liite-invalid-filename');
+        }
+      );
+    });
+  });
+
   it('rejects a forbidden extension with 400', () => {
     createDraftToimenpide().then(toimenpideId => {
       openToimenpide(toimenpideId);
 
-      uploadAttachment(toimenpideId, 'document.exe').then(({ response }) => {
-        assertRejectedAttachment(response, 'liite-forbidden-extension');
-      });
+      uploadAttachment(toimenpideId, { fileName: 'document.exe' }).then(
+        ({ response }) => {
+          assertRejectedAttachment(response, 'liite-forbidden-extension');
+        }
+      );
 
       cy.get('[data-cy="droparea"]').should('be.visible');
       cy.contains('document.exe').should('not.exist');
+    });
+  });
+
+  it('rejects executable content with 400', () => {
+    createDraftToimenpide().then(toimenpideId => {
+      openToimenpide(toimenpideId);
+
+      uploadAttachment(toimenpideId, {
+        contents: Cypress.Buffer.from([0x4d, 0x5a, 0x00, 0x00]),
+        fileName: 'virus.dat',
+        mimeType: 'application/octet-stream'
+      }).then(({ response }) => {
+        assertRejectedAttachment(response, 'liite-executable');
+      });
+    });
+  });
+
+  it('rejects a content-type mismatch with 400', () => {
+    createDraftToimenpide().then(toimenpideId => {
+      openToimenpide(toimenpideId);
+
+      uploadAttachment(toimenpideId, {
+        contents: Cypress.Buffer.from([0x25, 0x50, 0x44, 0x46, 0x00, 0x00]),
+        fileName: 'not-really-a-png.png',
+        mimeType: 'image/png'
+      }).then(({ response }) => {
+        assertRejectedAttachment(response, 'liite-content-type-mismatch');
+      });
+    });
+  });
+
+  it('rejects an extension mismatch with 400', () => {
+    createDraftToimenpide().then(toimenpideId => {
+      openToimenpide(toimenpideId);
+
+      uploadAttachment(toimenpideId, {
+        contents: Cypress.Buffer.from([0x25, 0x50, 0x44, 0x46, 0x00, 0x00]),
+        fileName: 'document.txt',
+        mimeType: 'application/pdf'
+      }).then(({ response }) => {
+        assertRejectedAttachment(response, 'liite-extension-mismatch');
+      });
     });
   });
 
@@ -83,9 +146,11 @@ context('Oikeellisuuden valvonnan liitetiedostonimi', () => {
     createDraftToimenpide().then(toimenpideId => {
       openToimenpide(toimenpideId);
 
-      uploadAttachment(toimenpideId, 'document.pdf').then(({ response }) => {
-        expect(response.statusCode).to.eq(201);
-      });
+      uploadAttachment(toimenpideId, { fileName: 'document.pdf' }).then(
+        ({ response }) => {
+          expect(response.statusCode).to.eq(201);
+        }
+      );
 
       cy.contains('document.pdf').should('be.visible');
     });
