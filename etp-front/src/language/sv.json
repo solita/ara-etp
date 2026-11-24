@@ -2000,6 +2000,7 @@
           "save-button": "Spara",
           "reset-button": "Återkalla",
           "publish-button": "Skicka svaret",
+          "delete-button": "Ta bort utkastet",
           "draft-info": "Du kan fortsätta svara senare"
         },
         "rfi-order": {
@@ -2021,7 +2022,7 @@
           "publish-button": "Skicka kontrollpromemoria",
           "save-button": "Spara kontrollpromemoria",
           "reset-button": "Återkalla",
-          "delete-button": "Ta bort utkast",
+          "delete-button": "Ta bort utkastet",
           "virhe": {
             "description": "Felbeskrivning"
           },
@@ -2048,7 +2049,7 @@
           "save-button": "Spara",
           "reset-button": "Återkalla",
           "draft-info": "Du kan fortsätta svara senare",
-          "delete-button": "Ta bort utkastet."
+          "delete-button": "Ta bort utkastet"
         },
         "audit-order": {
           "title": "Uppmaning angående kontrollpromemoria",
