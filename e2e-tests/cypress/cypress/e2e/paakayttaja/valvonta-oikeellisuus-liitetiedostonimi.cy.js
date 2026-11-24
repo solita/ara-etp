@@ -1,8 +1,4 @@
 import paakayttajaHeaders from '../../fixtures/users/paakayttaja.json';
-import {
-  assertRejectedAttachment,
-  assertSuccessfulAttachment
-} from '../../support/attachment-test-helpers';
 
 const backendUrl = Cypress.config('backendUrl');
 const energiatodistusId = 7;
@@ -59,6 +55,11 @@ const openToimenpide = toimenpideId => {
   cy.visit(
     `/#/valvonta/oikeellisuus/${energiatodistusVersio}/${energiatodistusId}/${toimenpideId}`
   );
+};
+
+const assertRejectedAttachment = (response, expectedType) => {
+  expect(response.statusCode).to.eq(400);
+  expect(response.body.type).to.eq(expectedType);
 };
 
 context('Oikeellisuuden valvonnan liitetiedostonimi', () => {
@@ -147,10 +148,7 @@ context('Oikeellisuuden valvonnan liitetiedostonimi', () => {
 
       uploadAttachment(toimenpideId, { fileName: 'document.pdf' }).then(
         ({ response }) => {
-          assertSuccessfulAttachment(
-            response,
-            'Liitetiedostot lisätty toimenpiteelle.'
-          );
+          expect(response.statusCode).to.eq(201);
         }
       );
 

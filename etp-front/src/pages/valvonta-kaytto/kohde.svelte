@@ -2,7 +2,7 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
-  import * as AttachmentError from '@Utility/attachment-error';
+  import * as Response from '@Utility/response';
   import { push } from '@Component/Router/router';
 
   import { _ } from '@Language/i18n';
@@ -38,9 +38,7 @@
     overlay = true;
     Future.fork(
       response => {
-        announceError(
-          i18n(AttachmentError.errorKey404(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
         overlay = false;
       },
       response => {
@@ -64,25 +62,21 @@
     );
   };
 
-  const fork =
-    (action, successCallback, messageRoot = i18nRoot) =>
-    future => {
-      overlay = true;
-      Future.fork(
-        response => {
-          announceError(
-            i18n(AttachmentError.errorKey404(messageRoot, action, response))
-          );
-          overlay = false;
-        },
-        _ => {
-          announceSuccess(i18n(`${messageRoot}.messages.${action}-success`));
-          overlay = false;
-          successCallback();
-        },
-        future
-      );
-    };
+  const fork = (action, successCallback) => future => {
+    overlay = true;
+    Future.fork(
+      response => {
+        announceError(i18n(Response.errorKey404(i18nRoot, action, response)));
+        overlay = false;
+      },
+      _ => {
+        announceSuccess(i18n(`${i18nRoot}.messages.${action}-success`));
+        overlay = false;
+        successCallback();
+      },
+      future
+    );
+  };
 
   const updateKohde = R.compose(
     fork('save', _ => load(params.id)),
@@ -95,11 +89,7 @@
   );
 
   const liiteOperation = (key, liiteFuture) => liite =>
-    fork(
-      key,
-      _ => load(params.id),
-      'energiatodistus.liitteet'
-    )(liiteFuture(liite));
+    fork(key, _ => load(params.id))(liiteFuture(liite));
 
   const liiteApi = {
     getUrl: ValvontaApi.url.liitteet(params.id),

@@ -1434,13 +1434,19 @@
         "url": "Webbadress"
       },
       "messages": {
-        "add-files-success": "Energicertifikatets bilagor har sparats.",
-        "add-files-error": "Det uppstod ett fel i sparandet av energicertifikatets bilagor.",
-        "add-link-success": "Länken till energicertifikatet har sparats.",
-        "add-link-error": "Det uppstod ett oväntat fel i sparandet av länken till energicertifikatet.",
-        "add-link-validation": "Fel på Lägg till-blanketten, kontrollera fälten.",
-        "delete-liite-success": "Bilagan till energicertifikatet har avlägsnats.",
-        "delete-liite-error": "Det uppstod ett fel i avlägsnandet av bilagan till energicertifikatet.",
+        "add-files": {
+          "success": "Energicertifikatets bilagor har sparats.",
+          "error": "Det uppstod ett fel i sparandet av energicertifikatets bilagor."
+        },
+        "add-link": {
+          "success": "Länken till energicertifikatet har sparats.",
+          "error": "Det uppstod ett oväntat fel i sparandet av länken till energicertifikatet.",
+          "validation": "Fel på Lägg till-blanketten, kontrollera fälten."
+        },
+        "delete-liite": {
+          "success": "Bilagan till energicertifikatet har avlägsnats.",
+          "error": "Det uppstod ett fel i avlägsnandet av bilagan till energicertifikatet."
+        },
         "valvonta": {
           "success": "Status för övervakning har uppdaterats.",
           "error": "Ett fel uppstod när status för övervakning skulle uppdateras."
@@ -1855,15 +1861,6 @@
   "file-drop-or": "Lägg till en fil genom att dra eller",
   "file-browse": "bläddra bland filer",
   "file_upload_error_multiple_files": "För många filer. Lägg till en fil i taget.",
-  "attachments": {
-    "messages": {
-      "add-files-invalid-filename": "Bilagan kunde inte läggas till. Filnamnet är inte tillåtet.",
-      "add-files-forbidden-extension": "Bilagan kunde inte läggas till. Filändelsen är inte tillåten.",
-      "add-files-executable": "Bilagan är ett körbart program och kan inte läggas till.",
-      "add-files-content-type-mismatch": "Bilagans innehåll motsvarar inte den angivna filtypen.",
-      "add-files-extension-mismatch": "Bilagans filändelse motsvarar inte filens innehåll."
-    }
-  },
   "country-not-found": "Felaktigt land",
   "table": {
     "actions": "Funktioner"
@@ -2229,6 +2226,12 @@
           "add-success": "Ny användningskontroll har lagts till.",
           "add-error": "Det gick inte att lägga till användningskontrollen.",
           "validation-error": "Det finns ett fel i uppgifterna. Granska uppgifterna om objektet innan du skickar.",
+          "add-link-success": "En länk har lagts till användningskontrollen.",
+          "add-files-success": "Filbilagor har lagts till användningskontrollen.",
+          "delete-liite-success": "Bilagan har tagits bort.",
+          "add-files-error": "Det gick inte att lägga till filbilagan.",
+          "add-link-error": "Det gick inte att lägga till länken.",
+          "delete-liite-error": "Det gick inte att ta bort bilagan.",
           "find-rakennustunnus-error": "Sökningen av byggnadsbeteckningen misslyckades."
         },
         "osapuolet": {

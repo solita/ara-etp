@@ -1,6 +1,6 @@
 <script>
   import * as Maybe from '@Utility/maybe-utils';
-  import * as AttachmentError from '@Utility/attachment-error';
+  import * as Response from '@Utility/response';
   import * as Kayttajat from '@Utility/kayttajat';
 
   import { _, locale } from '@Language/i18n';
@@ -27,9 +27,7 @@
     overlay = true;
     Future.fork(
       response => {
-        announceError(
-          i18n(AttachmentError.errorKey404(i18nRoot, 'load', response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
         overlay = false;
       },
       response => {
@@ -51,9 +49,7 @@
     overlay = true;
     Future.fork(
       response => {
-        announceError(
-          i18n(AttachmentError.errorKey404(i18nRoot, key, response))
-        );
+        announceError(i18n(Response.errorKey404(i18nRoot, key, response)));
         overlay = false;
       },
       _ => {

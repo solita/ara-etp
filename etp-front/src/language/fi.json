@@ -1490,13 +1490,19 @@
         "url": "www-osoite"
       },
       "messages": {
-        "add-files-success": "Energiatodistuksen liitteet lisätty onnistuneesti.",
-        "add-files-error": "Energiatodistuksen liitteiden lisäämisessä tapahtui virhe.",
-        "add-link-success": "Energiatodistuksen linkki lisätty onnistuneesti.",
-        "add-link-error": "Energiatodistuksen linkin lisäämisessä tapahtui odottamaton virhe.",
-        "add-link-validation": "Lisää linkki lomakkeella virheitä, tarkista kentät.",
-        "delete-liite-success": "Energiatodistuksen liite poistettu.",
-        "delete-liite-error": "Energiatodistuksen liitteen poistamisessa tapahtui virhe.",
+        "add-files": {
+          "success": "Energiatodistuksen liitteet lisätty onnistuneesti.",
+          "error": "Energiatodistuksen liitteiden lisäämisessä tapahtui virhe."
+        },
+        "add-link": {
+          "success": "Energiatodistuksen linkki lisätty onnistuneesti.",
+          "error": "Energiatodistuksen linkin lisäämisessä tapahtui odottamaton virhe.",
+          "validation": "Lisää linkki lomakkeella virheitä, tarkista kentät."
+        },
+        "delete-liite": {
+          "success": "Energiatodistuksen liite poistettu.",
+          "error": "Energiatodistuksen liitteen poistamisessa tapahtui virhe."
+        },
         "valvonta": {
           "success": "Valvonnan tila päivitetty.",
           "error": "Valvonnan tilan päivityksessä tapahtui virhe."
@@ -2160,6 +2166,12 @@
           "add-success": "Uusi käytönvalvonta lisätty.",
           "add-error": "Käytönvalvonnan lisääminen epäonnistui.",
           "validation-error": "Tiedoissa on virhe. Tarkista kohteen tiedot ennen lähettämistä.",
+          "add-link-success": "Linkki lisätty käytönvalvontaan.",
+          "add-files-success": "Liitetiedostot lisätty käytönvalvontaan.",
+          "delete-liite-success": "Liite poistettu.",
+          "add-files-error": "Liitetiedoston lisääminen epäonnistui.",
+          "add-link-error": "Linkin lisääminen epäonnistui.",
+          "delete-liite-error": "Liitteen poisto epäonnistui.",
           "find-rakennustunnus-error": "Rakennustunnus haku epäonnistui."
         },
         "osapuolet": {
@@ -2514,15 +2526,6 @@
   "file-drop-or": "Lisää tiedosto raahaamalla tai",
   "file-browse": "selaa tiedostoja",
   "file_upload_error_multiple_files": "Liikaa tiedostoja. Lisää yksi tiedosto kerrallaan.",
-  "attachments": {
-    "messages": {
-      "add-files-invalid-filename": "Liitetiedoston nimi ei ole sallitussa muodossa.",
-      "add-files-forbidden-extension": "Liitetiedoston tiedostopääte ei ole sallittu.",
-      "add-files-executable": "Liitetiedosto on suoritettava ohjelma eikä sitä voi lisätä liitteeksi.",
-      "add-files-content-type-mismatch": "Liitetiedoston sisältö ei vastaa ilmoitettua tiedostotyyppiä.",
-      "add-files-extension-mismatch": "Liitetiedoston tiedostopääte ei vastaa tiedoston sisältöä."
-    }
-  },
   "country-not-found": "Virheellinen maa",
   "table": {
     "actions": "Toiminnot"
