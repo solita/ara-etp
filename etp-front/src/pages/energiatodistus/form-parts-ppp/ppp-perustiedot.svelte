@@ -62,7 +62,10 @@
       parse={Maybe.Some}
       format={ETUtils.a0MerkintaFormat($_)}
       itemComponent={UnescapedItem}
-      items={R.pluck('id', a0Merkinnat)} />
+      items={R.filter(
+        id => id !== ETUtils.a0Merkinta.A0 && id !== ETUtils.a0Merkinta.A0_MPR,
+        R.pluck('id', a0Merkinnat)
+      )} />
   </div>
 
   <Checkbox

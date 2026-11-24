@@ -279,8 +279,8 @@
       (t/is (= "A" (get-in body [:tulokset :e-luokka]))
             "aplus=false, a0-merkinta=Ei → e-luokka should be A (downgraded from A+)")))
 
-  (t/testing "POST 2027: aplus=true, A0 marking A0_korjattu → e-luokka A (downgraded from A+)"
-    ;; Given: 2027-todistus with A+ flag but A0_korjattu marking, which never leads to A+
+  (t/testing "POST 2027: aplus=true, A0 marking A0_korjattu → e-luokka A+"
+    ;; Given: 2027-todistus with A+ flag and A0_korjattu marking
     (let [et (-> (et-test-data/generate-add 2027 true)
                  (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] true)
                  (assoc-in [:perustiedot :a0-merkinta-id] 2))
@@ -290,9 +290,9 @@
           et-id (:id (response-body post-res))
           get-res (get-et 2027 et-id)
           body (response-body get-res)]
-      ;; Then: e-luokka is "A" and the marking is returned as saved
-      (t/is (= "A" (get-in body [:tulokset :e-luokka]))
-            "aplus=true, a0-merkinta=A0_korjattu → e-luokka should be A")
+      ;; Then: e-luokka is "A+" and the marking is returned as saved
+      (t/is (= "A+" (get-in body [:tulokset :e-luokka]))
+            "aplus=true, a0-merkinta=A0_korjattu → e-luokka should be A+")
       (t/is (= 2 (get-in body [:perustiedot :a0-merkinta-id])))))
   (t/testing "POST 2027: aplus=true, A0 marking A0_MPR → e-luokka A+"
     (let [et (-> (et-test-data/generate-add 2027 true)
@@ -330,13 +330,13 @@
           (t/is (= "A+" (get-in verify-body [:tulokset :e-luokka]))
                 "After setting A+ flag and A0 marking, e-luokka should be A+"))))
 
-    (t/testing "PUT: change A0 marking to A0_korjattu (A+ flag still set) → e-luokka changes to A"
+    (t/testing "PUT: change A0 marking to A0_korjattu (A+ flag still set) → e-luokka remains A+"
       (let [updated-et (-> et
                            (assoc-in [:perustiedot :tayttaa-aplus-vaatimukset] true)
                            (assoc-in [:perustiedot :a0-merkinta-id] 2))
             put-res (put-et! 2027 et-id updated-et)]
-        ;; Then: e-luokka should be "A"
+        ;; Then: e-luokka should be "A+"
         (t/is (= 200 (:status put-res)))
         (let [verify-body (response-body (get-et 2027 et-id))]
-          (t/is (= "A" (get-in verify-body [:tulokset :e-luokka]))
-                "aplus=true, a0-merkinta=A0_korjattu → e-luokka should be A"))))))
+          (t/is (= "A+" (get-in verify-body [:tulokset :e-luokka]))
+                "aplus=true, a0-merkinta=A0_korjattu → e-luokka should be A+"))))))

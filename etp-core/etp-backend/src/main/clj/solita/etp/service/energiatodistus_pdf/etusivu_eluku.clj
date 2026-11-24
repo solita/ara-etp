@@ -9,14 +9,14 @@
                      [:span {:class "value"} (:dd %)]]) key-vals)))
 
 (defn- a0-merkinta-teksti [l a0-merkinta-id]
-  (case a0-merkinta-id
-    0 (l :a0-merkinta-ei-teksti)
-    1 (l :a0-merkinta-a0-teksti)
-    2 [:span (l :a0-merkinta-a0-korjattu-teksti)
-       " " (l :a0-merkinta-a0-label) [:sub (l :a0-merkinta-korjattu-label)]]
-    3 [:span (l :a0-merkinta-a0-mpr-teksti)
-       " " (l :a0-merkinta-a0-label) [:sub (l :a0-merkinta-mpr-label)]]
-    nil))
+  (when-let [localization-key
+             (case a0-merkinta-id
+               0 :a0-merkinta-ei-teksti
+               1 :a0-merkinta-a0-teksti
+               2 :a0-merkinta-a0-korjattu-teksti
+               3 :a0-merkinta-a0-mpr-teksti
+               nil)]
+    (loc/with-subscripts (l localization-key))))
 
 
 (defn et-etusivu-eluku-teksti [{:keys [kieli] :as params}]

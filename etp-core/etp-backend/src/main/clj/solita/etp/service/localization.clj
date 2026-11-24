@@ -2,6 +2,24 @@
   (:require
     [solita.etp.service.luokittelu :as luokittelu-service]))
 
+(defn with-subscripts [text]
+  (let [matcher (re-matcher #"_([\p{L}\p{N}]+)" text)]
+    (loop [start 0
+           children []]
+      (if (.find matcher)
+        (recur (.end matcher)
+               (cond-> children
+                 (< start (.start matcher))
+                 (conj (subs text start (.start matcher)))
+
+                 true
+                 (conj [:sub (.group matcher 1)])))
+        (if (seq children)
+          (cond-> (into [:span] children)
+            (< start (count text))
+            (conj (subs text start)))
+          text)))))
+
 (def ppp-pdf-localization
   {:fi {:rakennuksen-nimi                  "Rakennuksen nimi"
         :rakennuksen-osoite                "Rakennuksen osoite"
@@ -57,11 +75,11 @@
         :perusparannuspassin-tunnus-footer "Perusparannuspassin tunnus"
 
         ;; Requirements fulfillment
-        :tayttaa-a0-luokan-vaatimukset     "Täyttää A0 -luokan vaatimukset"
+        :tayttaa-a0-korjattu-vaatimukset   "Täyttää A0_korjattu vaatimukset"
         :tayttaa-a-plus-luokan-vaatimukset "Täyttää A+ -luokan vaatimukset"
         :kylla                             "Kyllä"
         :ei                                "Ei"
-        :a0-selite                         "A0 on päästötön rakennus"
+        :a0-korjattu-selite                "A0_korjattu on päästötön rakennus"
         :a-plus-selite                     "A+ rakennus on erittäin energiatehokas, päästötön ja energiapositiivinen"
         :toimenpide-ehdotukset             "Toimenpide-ehdotukset"
 
@@ -197,11 +215,11 @@
         :perusparannuspassin-tunnus-footer "Grundrenoveringspassets beteckning"
 
         ;; Requirements fulfillment
-        :tayttaa-a0-luokan-vaatimukset     "Uppfyller A0-klassens krav"
+        :tayttaa-a0-korjattu-vaatimukset   "Täyttää A0_korjattu vaatimukset (sv)"
         :tayttaa-a-plus-luokan-vaatimukset "Uppfyller A+-klassens krav"
         :kylla                             "Ja"
         :ei                                "Nej"
-        :a0-selite                         "A0 är en utsläppsfri byggnad"
+        :a0-korjattu-selite                "A0_korjattu on päästötön rakennus (sv)"
         :a-plus-selite                     "A+ byggnad är mycket energieffektiv, utsläppsfri och energipositiv"
         :toimenpide-ehdotukset             "Åtgärdsförslag"
 
@@ -320,11 +338,8 @@
                                                     reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan."
         :a0-merkinta-ei-teksti                     "Rakennus ei täytä päästöttömälle rakennukselle asetettuja vaatimuksia"
         :a0-merkinta-a0-teksti                     "Rakennus täyttää uuden päästöttömän rakennuksen vaatimukset, A0"
-        :a0-merkinta-a0-korjattu-teksti             "Rakennus täyttää korjatun päästöttömän rakennuksen vaatimukset,"
-        :a0-merkinta-a0-mpr-teksti                 "Rakennus täyttää uuden päästöttömän massiivipuurakennuksen vaatimukset,"
-        :a0-merkinta-a0-label                      "A0"
-        :a0-merkinta-korjattu-label                "korjattu"
-        :a0-merkinta-mpr-label                     "MPR"
+        :a0-merkinta-a0-korjattu-teksti             "Rakennus täyttää korjatun päästöttömän rakennuksen vaatimukset, A0_korjattu"
+        :a0-merkinta-a0-mpr-teksti                 "Rakennus täyttää uuden päästöttömän massiivipuurakennuksen vaatimukset, A0_MPR"
         :eluku-otsikko                              "E-luku"
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                     Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n
@@ -543,11 +558,8 @@
                                                      reagoimaan ulkoisiin signaaleihin mukauttaen energiankäyttöään, tuotantoaan ja varastointiaan. (sv)"
         :a0-merkinta-ei-teksti                     "Rakennus ei täytä päästöttömälle rakennukselle asetettuja vaatimuksia (sv)"
         :a0-merkinta-a0-teksti                     "Rakennus täyttää uuden päästöttömän rakennuksen vaatimukset, A0 (sv)"
-        :a0-merkinta-a0-korjattu-teksti             "Rakennus täyttää korjatun päästöttömän rakennuksen vaatimukset, (sv)"
-        :a0-merkinta-a0-mpr-teksti                 "Rakennus täyttää uuden päästöttömän massiivipuurakennuksen vaatimukset, (sv)"
-        :a0-merkinta-a0-label                      "A0"
-        :a0-merkinta-korjattu-label                "korjattu (sv)"
-        :a0-merkinta-mpr-label                     "MPR (sv)"
+        :a0-merkinta-a0-korjattu-teksti             "Rakennus täyttää korjatun päästöttömän rakennuksen vaatimukset, A0_korjattu (sv)"
+        :a0-merkinta-a0-mpr-teksti                 "Rakennus täyttää uuden päästöttömän massiivipuurakennuksen vaatimukset, A0_MPR (sv)"
         :eluku-otsikko                              "E-luku (sv)"
         :eluku-teksti                               "Perustuu rakennuksen laskennalliseen energiankulutukseen ja energiamuotojen kertoimiin.\n
                                                      Vakioituun käyttöön perustuva laskenta huomioi lämmitys-, ilmanvaihto- ja jäähdytysjärjestelmät sekä\n

@@ -350,7 +350,11 @@ export const a0Merkinta = {
   A0_MPR: 3
 };
 
-const a0MerkinnatAllowingAplus = [a0Merkinta.A0, a0Merkinta.A0_MPR];
+const a0MerkinnatAllowingAplus = [
+  a0Merkinta.A0,
+  a0Merkinta.A0_KORJATTU,
+  a0Merkinta.A0_MPR
+];
 
 /**
  * Format an A0 marking id as a select option text.
@@ -362,7 +366,7 @@ export const a0MerkintaFormat = R.curry((i18n, id) =>
 
 /**
  * Downgrade A+ e-luokka based on tayttaa-aplus-vaatimukset and a0-merkinta-id.
- * A+ requires the A+ flag and an A0 marking of either A0 or A0_MPR,
+ * A+ requires the A+ flag and an A0 marking of A0, A0_korjattu or A0_MPR,
  * otherwise A+ is downgraded to A. Other classes are returned unchanged.
  * NOTE: Backend has a parallel implementation: solita.etp.service.e-luokka/downgrade-e-luokka.
  * @param {string} rawEluokka - The raw e-luokka from raja-asteikko lookup

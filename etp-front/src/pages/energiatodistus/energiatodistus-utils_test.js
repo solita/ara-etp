@@ -952,20 +952,20 @@ const a0MerkinnatAsMaybe = R.map(Maybe.Some, EtUtils.a0Merkinta);
 describe('applyEluokkaDowngrade', () => {
   const { EI, A0, A0_KORJATTU, A0_MPR } = a0MerkinnatAsMaybe;
   describe('rawEluokka is A+', () => {
-    describe('aplus=true and A0 marking is A0 or A0_MPR', () => {
+    describe('aplus=true and A0 marking is A0, A0_korjattu or A0_MPR', () => {
       it('returns A+ unchanged with A0', () => {
         expect(EtUtils.applyEluokkaDowngrade('A+', true, A0)).toBe('A+');
+      });
+      it('returns A+ unchanged with A0_korjattu', () => {
+        expect(EtUtils.applyEluokkaDowngrade('A+', true, A0_KORJATTU)).toBe(
+          'A+'
+        );
       });
       it('returns A+ unchanged with A0_MPR', () => {
         expect(EtUtils.applyEluokkaDowngrade('A+', true, A0_MPR)).toBe('A+');
       });
     });
     describe('aplus=true but A0 marking is not eligible', () => {
-      it('downgrades to A with A0_korjattu', () => {
-        expect(EtUtils.applyEluokkaDowngrade('A+', true, A0_KORJATTU)).toBe(
-          'A'
-        );
-      });
       it('downgrades to A with Ei', () => {
         expect(EtUtils.applyEluokkaDowngrade('A+', true, EI)).toBe('A');
       });

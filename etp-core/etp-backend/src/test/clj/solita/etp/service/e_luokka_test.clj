@@ -480,7 +480,7 @@
 (def ^:private a0-korjattu service/a0-merkinta-a0-korjattu)
 (def ^:private a0-mpr service/a0-merkinta-a0-mpr)
 (t/deftest downgrade-e-luokka-test
-  (t/testing "A+ requires the A+ flag and an A0 or A0_MPR marking"
+  (t/testing "A+ requires the A+ flag and an A0, A0_korjattu or A0_MPR marking"
     ;; Given: raw class is A+
     ;; When: both requirements are fulfilled
     ;; Then: result is A+
@@ -489,7 +489,7 @@
   (t/testing "A+ is downgraded to A when the A0 marking is not eligible"
     ;; When: A+ is set but the marking is not eligible
     ;; Then: result is A
-    (t/is (= "A" (service/downgrade-e-luokka "A+" true a0-korjattu)))
+    (t/is (= "A+" (service/downgrade-e-luokka "A+" true a0-korjattu)))
     (t/is (= "A" (service/downgrade-e-luokka "A+" true ei)))
     (t/is (= "A" (service/downgrade-e-luokka "A+" true nil))))
   (t/testing "A+ is downgraded to A when the A+ flag is not set"
@@ -514,7 +514,7 @@
     ;; Then: result is A+
     (t/is (= "A+" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 true a0))))
     (t/is (= "A+" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 true a0-mpr))))
-    (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 true a0-korjattu))))
+    (t/is (= "A+" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 true a0-korjattu))))
     (t/is (= "A" (:e-luokka (find-e-luokka-info 2027 "YAT" 100 1 true ei))))
     ;; When: A+ is not set
     ;; Then: result is A
