@@ -1,7 +1,7 @@
 <script>
   import * as Future from '@Utility/future-utils';
   import * as Maybe from '@Utility/maybe-utils';
-  import * as Response from '@Utility/response';
+  import * as AttachmentError from '@Utility/attachment-error';
   import * as Kayttajat from '@Utility/kayttajat';
   import * as api from '@Pages/energiatodistus/energiatodistus-api';
   import * as KayttajaApi from '@Pages/kayttaja/kayttaja-api';
@@ -28,7 +28,9 @@
     overlay = true;
     Future.fork(
       response => {
-        announceError(i18n(Response.errorKey404(i18nRoot, 'load', response)));
+        announceError(
+          i18n(AttachmentError.errorKey404(i18nRoot, 'load', response))
+        );
         overlay = false;
       },
       response => {
@@ -49,7 +51,9 @@
     overlay = true;
     Future.fork(
       response => {
-        announceError(i18n(Response.errorKey404(i18nRoot, key, response)));
+        announceError(
+          i18n(AttachmentError.errorKey404(i18nRoot, key, response))
+        );
         overlay = false;
       },
       _ => {

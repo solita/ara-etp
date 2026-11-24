@@ -2,7 +2,7 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
   import * as Future from '@Utility/future-utils';
-  import * as Response from '@Utility/response';
+  import * as AttachmentError from '@Utility/attachment-error';
 
   import * as Router from '@Component/Router/router';
 
@@ -34,35 +34,8 @@
   let dirty = false;
   let overlay = true;
 
-  const attachmentErrorKey = response => {
-    const type = R.path(['body', 'type'], response);
-    return {
-      'liite-invalid-filename': 'add-files-invalid-filename',
-      'liite-forbidden-extension': 'add-files-forbidden-extension',
-      'liite-executable': 'add-files-executable',
-      'liite-content-type-mismatch': 'add-files-content-type-mismatch',
-      'liite-extension-mismatch': 'add-files-extension-mismatch'
-    }[type];
-  };
-
   const errorMessage = (key, response) =>
-    i18n(
-      R.cond([
-        [Response.notFound, R.always(`${i18nRoot}.messages.not-found`)],
-        [
-          R.pipe(attachmentErrorKey, Boolean),
-          response => `${i18nRoot}.messages.${attachmentErrorKey(response)}`
-        ],
-        [
-          R.T,
-          response =>
-            Maybe.orSome(
-              `${i18nRoot}.messages.${key}-error`,
-              Response.localizationKey(response)
-            )
-        ]
-      ])(response)
-    );
+    i18n(AttachmentError.errorKey404(i18nRoot, key, response));
 
   const load = params => {
     overlay = true;
