@@ -2060,6 +2060,9 @@
           "add-files-error": "Liitetiedoston lisääminen epäonnistui.",
           "add-files-invalid-filename": "Liitetiedoston nimi ei ole sallitussa muodossa.",
           "add-files-forbidden-extension": "Liitetiedoston tiedostopääte ei ole sallittu.",
+          "add-files-executable": "Liitetiedosto on suoritettava ohjelma eikä sitä voi lisätä liitteeksi.",
+          "add-files-content-type-mismatch": "Liitetiedoston sisältö ei vastaa ilmoitettua tiedostotyyppiä.",
+          "add-files-extension-mismatch": "Liitetiedoston tiedostopääte ei vastaa tiedoston sisältöä.",
           "add-link-error": "Linkin lisääminen epäonnistui.",
           "delete-liite-error": "Liitteen poisto epäonnistui."
         },

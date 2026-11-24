@@ -38,7 +38,10 @@
     const type = R.path(['body', 'type'], response);
     return {
       'liite-invalid-filename': 'add-files-invalid-filename',
-      'liite-forbidden-extension': 'add-files-forbidden-extension'
+      'liite-forbidden-extension': 'add-files-forbidden-extension',
+      'liite-executable': 'add-files-executable',
+      'liite-content-type-mismatch': 'add-files-content-type-mismatch',
+      'liite-extension-mismatch': 'add-files-extension-mismatch'
     }[type];
   };
 
