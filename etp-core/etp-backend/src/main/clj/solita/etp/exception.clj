@@ -59,13 +59,12 @@
 (defn default-handler
   "Default safe handler for any exception."
   [^Throwable e request]
-  (do
-    (log/error e "Exception in service: "
-               (service-name request)
-               (or (ex-data e) ""))
-    {:status 500
-     :body {:type (exception-type e)
-            :message "Internal system error - see logs for details."}}))
+  (log/error e "Exception in service: "
+             (service-name request)
+             (or (ex-data e) ""))
+  {:status 500
+   :body {:type (exception-type e)
+          :message "Internal system error - see logs for details."}})
 
 (defn create-coercion-handler []
   (let [base-handler (exception/create-coercion-handler 500)]
