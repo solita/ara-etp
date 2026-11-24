@@ -44,14 +44,21 @@
 
   const errorMessage = (key, response) =>
     i18n(
-      Response.notFound(response)
-        ? `${i18nRoot}.messages.not-found`
-        : attachmentErrorKey(response)
-          ? `${i18nRoot}.messages.${attachmentErrorKey(response)}`
-          : Maybe.orSome(
+      R.cond([
+        [Response.notFound, R.always(`${i18nRoot}.messages.not-found`)],
+        [
+          R.pipe(attachmentErrorKey, Boolean),
+          response => `${i18nRoot}.messages.${attachmentErrorKey(response)}`
+        ],
+        [
+          R.T,
+          response =>
+            Maybe.orSome(
               `${i18nRoot}.messages.${key}-error`,
               Response.localizationKey(response)
             )
+        ]
+      ])(response)
     );
 
   const load = params => {
