@@ -1949,6 +1949,7 @@
           "save-button": "Tallenna",
           "reset-button": "Peru muutokset",
           "publish-button": "Lähetä vastaus",
+          "delete-button": "Poista luonnos",
           "draft-info": "Voit jatkaa vastaamista myöhemmin"
         },
         "rfi-order": {
