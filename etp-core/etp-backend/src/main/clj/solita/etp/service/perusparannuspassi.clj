@@ -114,6 +114,29 @@
     (first (perusparannuspassi-db/select-perusparannuspassi
              db {:id id :laatija-id (:id whoami)}))))
 
+(defn active-vaiheet
+  "Valid vaiheet that have a starting date, sorted by vaihe-nro. This excludes
+   vaiheet where data was added but later deleted."
+  [perusparannuspassi]
+  (->> (:vaiheet perusparannuspassi)
+       (filter #(and (:valid %)
+                     (some? (get-in % [:tulokset :vaiheen-alku-pvm]))))
+       (sort-by :vaihe-nro)))
+
+(defn find-active-vaihe
+  "Returns the active vaihe with the given vaihe-nro, or nil."
+  [perusparannuspassi vaihe-nro]
+  (->> (active-vaiheet perusparannuspassi)
+       (filter #(= (:vaihe-nro %) vaihe-nro))
+       first))
+
+(defn find-next-active-vaihe
+  "Returns the first active vaihe after the given vaihe-nro, or nil."
+  [perusparannuspassi vaihe-nro]
+  (->> (active-vaiheet perusparannuspassi)
+       (filter #(> (:vaihe-nro %) vaihe-nro))
+       first))
+
 (defn find-perusparannuspassi [db whoami id]
   (jdbc/with-db-transaction
     [tx db]

@@ -2,7 +2,8 @@
   (:require
     [clojure.string :as str]
     [clojure.pprint :as pp]
-    [solita.etp.service.localization :as loc])
+    [solita.etp.service.localization :as loc]
+    [solita.etp.service.perusparannuspassi :as perusparannuspassi-service])
   (:import
     [java.text DecimalFormat DecimalFormatSymbols]))
 
@@ -39,12 +40,8 @@
    This filters out vaiheet where data was added but later deleted."
   [perusparannuspassi]
   (let [lahtotilanne (-> perusparannuspassi :lahtotilanne)
-        ppp-vaiheet (->> (:vaiheet perusparannuspassi)
-                         ;; Filter to only include active vaiheet with a starting date
-                         ;; This excludes vaiheet where the user added then deleted data
-                         (filter #(and (:valid %)
-                                       (some? (get-in % [:tulokset :vaiheen-alku-pvm])))))]
-     (vec (cons lahtotilanne ppp-vaiheet))))
+        ppp-vaiheet (perusparannuspassi-service/active-vaiheet perusparannuspassi)]
+    (vec (cons lahtotilanne ppp-vaiheet))))
 
 (defn mid-header-tr [text]
   [:tr [:th {:class "th1" :scope "rowgroup" :colspan 6} text]])

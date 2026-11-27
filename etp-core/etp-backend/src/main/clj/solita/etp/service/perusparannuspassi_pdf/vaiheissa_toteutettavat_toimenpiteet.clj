@@ -14,12 +14,8 @@
 
 (defn- get-vaihe-data [params vaihe-nro]
   (let [{:keys [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset]} params
-        active-vaiheet (->> (:vaiheet perusparannuspassi)
-                            (filter #(and (:valid %)
-                                          (some? (get-in % [:tulokset :vaiheen-alku-pvm]))))
-                            (sort-by :vaihe-nro))
-        vaihe (first (filter #(= (:vaihe-nro %) vaihe-nro) active-vaiheet))
-        seuraava-vaihe (first (filter #(> (:vaihe-nro %) vaihe-nro) active-vaiheet))]
+        vaihe (perusparannuspassi-service/find-active-vaihe perusparannuspassi vaihe-nro)
+        seuraava-vaihe (perusparannuspassi-service/find-next-active-vaihe perusparannuspassi vaihe-nro)]
     ;; Only return data for an active vaihe
     ;; This filters out vaiheet where data was added but later deleted
     (when vaihe
