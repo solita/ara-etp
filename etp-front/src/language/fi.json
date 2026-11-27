@@ -1543,7 +1543,6 @@
       "havainnointikaynti": "Havainnointikäynnin päivämäärä",
       "passin-esittely": "Passin esittelyn päivämäärä",
       "a0-merkinta-id": "Rakennus täyttää viimeisen vaiheen jälkeen päästöttömän rakennuksen vaatimukset",
-      "tayttaa-aplus-vaatimukset": "Rakennus on viimeisen vaiheen jälkeen A+-luokassa",
       "lisatiedot": {
         "header": "Lisätietoja"
       },
@@ -1698,6 +1697,7 @@
       },
       "vaiheen-alku-pvm": "Vaiheen aloituspäivämäärä",
       "vaihe-alkaa": "Vaihe alkaa",
+      "tayttaa-aplus-vaatimukset": "Rakennus on tämän vaiheen jälkeen A+-luokassa",
       "e-luokka-jalkeen": "E-luokka vaiheen jälkeen",
       "e-luku-jalkeen": "E-luku vaiheen jälkeen",
       "energiankulutus-vaiheen-jalkeen": {

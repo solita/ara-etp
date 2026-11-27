@@ -11,6 +11,24 @@ describe('Serialization and deserialization of empty PPP: ', () => {
 
     expect(deserialized).toEqual(original);
   });
+
+  it('round-trips separate A+ values for every phase', () => {
+    const original = empty.perusparannuspassi(42);
+    original.vaiheet.forEach((vaihe, index) => {
+      vaihe['tayttaa-aplus-vaatimukset'] = index % 2 === 0;
+    });
+
+    const serialized = PPPApi.serialize(original);
+    const deserialized = PPPApi.deserialize(serialized);
+
+    expect(
+      serialized.vaiheet.map(vaihe => vaihe['tayttaa-aplus-vaatimukset'])
+    ).toEqual([true, false, true, false]);
+    expect(deserialized).toEqual(original);
+    expect(serialized['passin-perustiedot']).not.toHaveProperty(
+      'tayttaa-aplus-vaatimukset'
+    );
+  });
 });
 
 describe('Serialization and deserialization of PPP / toimenpide-ehdotukset: ', () => {

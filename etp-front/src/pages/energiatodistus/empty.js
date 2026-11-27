@@ -411,7 +411,6 @@ export const energiatodistus2027 = _ =>
 const emptyPerusparannusPassinPerustiedot = _ => ({
   havainnointikaynti: ValidNone(),
   'passin-esittely': ValidNone(),
-  'tayttaa-aplus-vaatimukset': false,
   'a0-merkinta-id': Maybe.None(),
   'lisatietoja-fi': Maybe.None(),
   'lisatietoja-sv': Maybe.None()
@@ -470,6 +469,7 @@ const emptyPerusparannusToimenpiteet = _ => ({
 const emptyPerusparannusVaihe = n => ({
   'vaihe-nro': n,
   valid: false,
+  'tayttaa-aplus-vaatimukset': false,
   toimenpiteet: emptyPerusparannusToimenpiteet(),
   tulokset: emptyPerusparannusVaiheenTulokset()
 });

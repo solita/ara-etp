@@ -145,9 +145,7 @@
               energiamuotokertoimet,
               energiatodistus.lahtotiedot['lammitetty-nettoala'],
               etEnergiamuodotFromPppVaihe(vaihe.tulokset),
-              perusparannuspassi['passin-perustiedot']?.[
-                'tayttaa-aplus-vaatimukset'
-              ],
+              vaihe['tayttaa-aplus-vaatimukset'],
               perusparannuspassi['passin-perustiedot']?.['a0-merkinta-id']
             )}
           {/if}

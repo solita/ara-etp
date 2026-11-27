@@ -5,6 +5,7 @@
   import * as ETUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
   import * as formats from '@/utils/formats.js';
+  import Checkbox from '@Component/Checkbox/Checkbox';
 
   const i18n = $_;
 
@@ -14,6 +15,7 @@
   export let pppSchema;
   export let vaihe;
   export let oletusEnergiamuotokertoimet;
+  export let disabled = false;
 
   $: energiamuotokertoimet = ETUtils.energiamuotokertoimet(
     oletusEnergiamuotokertoimet,
@@ -72,7 +74,9 @@
     ([rajaAsteikko, eLuku]) =>
       ETUtils.applyEluokkaDowngrade(
         ETUtils.eluokkaFromRajaAsteikko(rajaAsteikko, eLuku),
-        perusparannuspassi['passin-perustiedot']?.['tayttaa-aplus-vaatimukset'],
+        perusparannuspassi.vaiheet[vaiheIndex(vaihe)][
+          'tayttaa-aplus-vaatimukset'
+        ],
         perusparannuspassi['passin-perustiedot']?.['a0-merkinta-id']
       ),
     Maybe.toMaybeList([
@@ -88,41 +92,56 @@
   );
 </script>
 
-<dl class="ppp-description-list">
-  <dt>
-    {i18n('perusparannuspassi.toimenpiteet.vaihe-alkaa')}
-  </dt>
-  <dd>
-    {R.compose(
-      EitherMaybe.orSome('-'),
-      R.map(R.map(formats.yearFormat))
-    )(
-      R.view(
-        R.lensPath([
-          'vaiheet',
-          vaiheIndex(vaihe),
-          'tulokset',
-          'vaiheen-alku-pvm'
-        ]),
-        perusparannuspassi
-      )
-    )}
-  </dd>
-  <dt>
-    {i18n('perusparannuspassi.toimenpiteet.e-luokka-jalkeen')}
-  </dt>
-  <dd>{eluokka}</dd>
-  <dt>
-    {i18n('perusparannuspassi.toimenpiteet.e-luku-jalkeen')}
-  </dt>
-  <dd>
-    {R.compose(
-      eluku.format,
-      eluku.calculate
-    )({
-      energiatodistus,
-      perusparannuspassi,
-      vaihe
-    })}
-  </dd>
-</dl>
+<div class="flex flex-col gap-y-5">
+  <dl class="ppp-description-list">
+    <dt>
+      {i18n('perusparannuspassi.toimenpiteet.vaihe-alkaa')}
+    </dt>
+    <dd>
+      {R.compose(
+        EitherMaybe.orSome('-'),
+        R.map(R.map(formats.yearFormat))
+      )(
+        R.view(
+          R.lensPath([
+            'vaiheet',
+            vaiheIndex(vaihe),
+            'tulokset',
+            'vaiheen-alku-pvm'
+          ]),
+          perusparannuspassi
+        )
+      )}
+    </dd>
+  </dl>
+
+  <Checkbox
+    {disabled}
+    bind:model={perusparannuspassi}
+    lens={R.lensPath([
+      'vaiheet',
+      vaiheIndex(vaihe),
+      'tayttaa-aplus-vaatimukset'
+    ])}
+    label={i18n('perusparannuspassi.toimenpiteet.tayttaa-aplus-vaatimukset')} />
+
+  <dl class="ppp-description-list">
+    <dt>
+      {i18n('perusparannuspassi.toimenpiteet.e-luokka-jalkeen')}
+    </dt>
+    <dd>{eluokka}</dd>
+    <dt>
+      {i18n('perusparannuspassi.toimenpiteet.e-luku-jalkeen')}
+    </dt>
+    <dd>
+      {R.compose(
+        eluku.format,
+        eluku.calculate
+      )({
+        energiatodistus,
+        perusparannuspassi,
+        vaihe
+      })}
+    </dd>
+  </dl>
+</div>
