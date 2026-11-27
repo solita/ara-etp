@@ -12,8 +12,6 @@
 
 (t/use-fixtures :each ts/fixture)
 
-
-
 (defn- create-laatija-and-whoami!
   "Creates a laatija with patevyystaso 4 and returns [laatija-id whoami]."
   []
@@ -100,7 +98,22 @@
             (finally
               (.close document))))))
 
-    ;; Scenario 4: PPP with multiple vaihe (3 valid phases)
+    ;; Scenario 4: PPP with A0, A0_korjattu and A0_MPR values
+    (doseq [a0-merkinta-id [1 2 3]]
+      (t/testing (str "PPP-PDF with A0 marking " a0-merkinta-id " generates successfully")
+        (let [[_ ppp-id] (create-et-and-ppp! laatija-id whoami
+                                             {:tayttaa-aplus-vaatimukset false
+                                              :a0-merkinta-id a0-merkinta-id})
+              result (ppp-pdf-service/find-perusparannuspassi-pdf
+                       ts/*db* whoami ppp-id "fi")
+              document (Loader/loadPDF (.readAllBytes result))]
+          (try
+            (t/is (pos? (.getNumberOfPages document))
+                  "Generated PDF should have at least one page")
+            (finally
+              (.close document))))))
+
+    ;; Scenario 5: PPP with multiple vaihe (3 valid phases)
     (t/testing "PPP-PDF with multiple vaiheet generates successfully"
       (let [[et-id _] (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id)
             base-ppp (ppp-test-data/generate-add et-id)

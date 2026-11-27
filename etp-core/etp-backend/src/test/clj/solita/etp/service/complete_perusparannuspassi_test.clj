@@ -157,12 +157,12 @@
                                    :a0-merkinta-id 3})
             completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
         (t/is (= "A+" (first-vaihe-e-luokka completed)))))
-    (t/testing "PPP with aplus=true, A0 marking A0_korjattu → e-luokka downgraded to A"
+    (t/testing "PPP with aplus=true, A0 marking A0_korjattu → e-luokka NOT downgraded"
       (let [ppp-add (make-ppp-add (new-et-id!)
                                   {:tayttaa-aplus-vaatimukset true
                                    :a0-merkinta-id 2})
             completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
-        (t/is (= "A" (first-vaihe-e-luokka completed)))))
+        (t/is (= "A+" (first-vaihe-e-luokka completed)))))
 
     (t/testing "PPP with aplus=true, A0 marking Ei → e-luokka downgraded to A"
       (let [ppp-add (make-ppp-add (new-et-id!)

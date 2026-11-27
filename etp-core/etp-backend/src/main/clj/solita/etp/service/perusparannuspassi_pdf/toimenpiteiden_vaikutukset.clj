@@ -212,6 +212,10 @@
                                           alakayttotarkoitukset]}]
   (let [l (kieli loc/ppp-pdf-localization)
         ;; Build vaiheet array: start with energiatodistus (lähtötilanne), then add all PPP vaiheet
+        passin-perustiedot (:passin-perustiedot perusparannuspassi)
+        tayttaa-a-plus (-> passin-perustiedot :tayttaa-aplus-vaatimukset)
+        a0-merkinta-id (:a0-merkinta-id passin-perustiedot)
+        a0-fulfilled? (contains? #{1 2 3} a0-merkinta-id)
         lahtotilanne {:e-luku   (get-in energiatodistus [:tulokset :e-luku])
                       :e-luokka (get-in energiatodistus [:tulokset :e-luokka])}
         ppp-vaiheet (->> (:vaiheet perusparannuspassi)
@@ -220,14 +224,13 @@
                                                   #_(not (nil? (get-in vaihe [:tulokset :vaiheen-alku-pvm]))))))
                          (map (fn [vaihe]
                                 (let [versio 2027
-                                      passin-perustiedot (:passin-perustiedot perusparannuspassi)
                                       e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus vaihe)
                                       e-luokka (-> (e-luokka-service/e-luokka kayttotarkoitukset alakayttotarkoitukset versio
                                                                               (get-in energiatodistus [:perustiedot :kayttotarkoitus])
                                                                               (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
                                                                               e-luku
-                                                                              (:tayttaa-aplus-vaatimukset passin-perustiedot)
-                                                                              (:a0-merkinta-id passin-perustiedot))
+                                                                              tayttaa-a-plus
+                                                                              a0-merkinta-id)
                                                    :e-luokka)]
                                   {:e-luku e-luku
                                    :e-luokka e-luokka}))))
@@ -261,18 +264,14 @@
        [:div {:class "kohdistuminen-box"}
         (kohdistuminen-svg kohdistuminen kieli)])
      [:h3 {:class "etusivu-h3"} (l :rakennus-toimenpiteiden-jalkeen)]
-     (let [tayttaa-a0 (not= e-luokka-service/a0-merkinta-ei
-                            (-> perusparannuspassi :passin-perustiedot :a0-merkinta-id
-                                (or e-luokka-service/a0-merkinta-ei)))
-           tayttaa-a-plus (-> perusparannuspassi :passin-perustiedot :tayttaa-aplus-vaatimukset)]
-       [:dl {:class "tayttaa-vaatimukset-list"}
-        [:div
-         [:dt (l :tayttaa-a0-luokan-vaatimukset)]
-         [:dd (if tayttaa-a0 (l :kylla) (l :ei))]]
-        [:div
-         [:dt (l :tayttaa-a-plus-luokan-vaatimukset)]
-         [:dd (if tayttaa-a-plus (l :kylla) (l :ei))]]])
+     [:dl {:class "tayttaa-vaatimukset-list"}
+      [:div
+       [:dt (loc/with-subscripts (l :tayttaa-a0-korjattu-vaatimukset))]
+       [:dd (l (if a0-fulfilled? :kylla :ei))]]
+      [:div
+       [:dt (l :tayttaa-a-plus-luokan-vaatimukset)]
+       [:dd (if tayttaa-a-plus (l :kylla) (l :ei))]]]
      [:div {:class "vaatimukset-selitteet-box"}
       [:div {:class "vaatimukset-selitteet"}
-       [:div (l :a0-selite)]
+       [:div (loc/with-subscripts (l :a0-korjattu-selite))]
        [:div (l :a-plus-selite)]]]]))

@@ -215,12 +215,12 @@
 (def a0-merkinta-a0-mpr 3)
 
 (def a0-merkinnat-allowing-aplus
-  "A0 markings that make the A+ class possible. A0_korjattu and Ei never lead to A+."
-  #{a0-merkinta-a0 a0-merkinta-a0-mpr})
+  "A0 markings that make the A+ class possible."
+  #{a0-merkinta-a0 a0-merkinta-a0-korjattu a0-merkinta-a0-mpr})
 
 (defn downgrade-e-luokka
   "Downgrade A+ e-luokka based on tayttaa-aplus-vaatimukset and a0-merkinta-id.
-   A+ requires the A+ flag and an A0 marking of either A0 (basic) or A0_MPR.
+   A+ requires the A+ flag and an A0 marking of A0, A0_korjattu or A0_MPR.
    Otherwise A+ is downgraded to A. Other classes are returned unchanged.
    NOTE: Frontend has a parallel implementation: etp-front energiatodistus-utils.js / applyEluokkaDowngrade."
   [e-luokka tayttaa-aplus-vaatimukset a0-merkinta-id]

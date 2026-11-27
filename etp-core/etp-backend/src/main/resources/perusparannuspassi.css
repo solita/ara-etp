@@ -263,6 +263,7 @@ dl.tayttaa-vaatimukset-list > div > dt,
 dl.tayttaa-vaatimukset-list > div > dd {
     display: inline-block;
     border: 1px solid #2c5234;
+    height: 31px;
     padding: 6px 8px;
     margin: 0;
     vertical-align: top;
