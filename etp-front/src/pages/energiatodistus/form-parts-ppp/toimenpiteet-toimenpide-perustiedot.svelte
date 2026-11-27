@@ -5,7 +5,6 @@
   import * as ETUtils from '@Pages/energiatodistus/energiatodistus-utils';
   import { _ } from '@Language/i18n';
   import * as formats from '@/utils/formats.js';
-  import Checkbox from '@Component/Checkbox/Checkbox';
 
   const i18n = $_;
 
@@ -114,16 +113,6 @@
       )}
     </dd>
   </dl>
-
-  <Checkbox
-    {disabled}
-    bind:model={perusparannuspassi}
-    lens={R.lensPath([
-      'vaiheet',
-      vaiheIndex(vaihe),
-      'tayttaa-aplus-vaatimukset'
-    ])}
-    label={i18n('perusparannuspassi.toimenpiteet.tayttaa-aplus-vaatimukset')} />
 
   <dl class="ppp-description-list">
     <dt>

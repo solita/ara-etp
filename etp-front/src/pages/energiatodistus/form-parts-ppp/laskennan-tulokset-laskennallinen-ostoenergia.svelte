@@ -9,6 +9,7 @@
   import H4 from '@Component/H/H4';
   import { _ } from '@Language/i18n';
   import Input from '@Pages/energiatodistus/Input';
+  import Checkbox from '@Component/Checkbox/Checkbox';
 
   export let energiatodistus;
   export let eTehokkuus = Maybe.None();
@@ -126,6 +127,23 @@
         {/each}
       </tr>
     {/each}
+    <tr class="et-table--tr">
+      <td class="et-table--td"
+        >{$_('perusparannuspassi.toimenpiteet.tayttaa-aplus-vaatimukset')}</td>
+      <td class="et-table--td"></td>
+      {#each perusparannuspassi.vaiheet as vaihe}
+        <td class="et-table--td">
+          <Checkbox
+            disabled={disabled || PPPUtils.isVaiheInactive(vaihe)}
+            bind:model={perusparannuspassi}
+            lens={R.lensPath([
+              'vaiheet',
+              vaihe['vaihe-nro'] - 1,
+              'tayttaa-aplus-vaatimukset'
+            ])} />
+        </td>
+      {/each}
+    </tr>
     <tr class="et-table--tr">
       <td class="et-table--td">{$_('energiatodistus.tulokset.e-luokka')}</td>
       <td class="et-table--td"
