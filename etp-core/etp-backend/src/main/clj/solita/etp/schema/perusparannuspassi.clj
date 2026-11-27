@@ -7,7 +7,6 @@
 (def PassiPerustiedot
   {:havainnointikaynti        common-schema/Date
    :passin-esittely           common-schema/Date
-   :tayttaa-aplus-vaatimukset schema/Bool
    :a0-merkinta-id            common-schema/Key
    :lisatietoja-fi            common-schema/String3000
    :lisatietoja-sv            common-schema/String3000})
@@ -59,10 +58,11 @@
    :toimenpide-ehdotukset [common-schema/Id]})
 
 (def PerusparannuspassiVaihe
-  {:vaihe-nro    (common-schema/LimitedInt 1 4)
-   :valid        schema/Bool
-   :toimenpiteet Toimenpiteet
-   :tulokset (xschema/optional-properties VaiheLaskennanTulokset)})
+  {:vaihe-nro                   (common-schema/LimitedInt 1 4)
+   :valid                       schema/Bool
+   :tayttaa-aplus-vaatimukset  schema/Bool
+   :toimenpiteet                Toimenpiteet
+   :tulokset                    (xschema/optional-properties VaiheLaskennanTulokset)})
 
 (def PerusparannuspassiSave
   {:valid                  schema/Bool

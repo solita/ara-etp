@@ -28,6 +28,7 @@
                            :kaukojaahdytys-hinta 4.0}
                  :vaiheet [{:vaihe-nro 1
                            :valid true
+                            :tayttaa-aplus-vaatimukset false
                            :toimenpiteet {:toimenpide-ehdotukset []}
                            :tulokset {:ostoenergian-tarve-kaukolampo 50000
                                      :ostoenergian-tarve-sahko 30000
@@ -51,7 +52,8 @@
     ;; the expected structure
     (doseq [{:keys [tulokset] :as vaihe} (cons (:lahtotilanne completed) (:vaiheet completed))]
       ;; No unexpected stuff on the top-level
-      (t/is (empty? (dissoc vaihe :valid :vaihe-nro :tulokset :toimenpiteet)))
+      (t/is (empty? (dissoc vaihe :valid :vaihe-nro :tayttaa-aplus-vaatimukset
+                            :tulokset :toimenpiteet)))
       (t/is (map? tulokset))
       (t/is (boolean? (:valid vaihe)))
       (t/is (or (nil? (:vaihe-nro vaihe))
@@ -86,14 +88,14 @@
 
 
 (defn- make-ppp-add
-  "Creates a PPP add map with the given et-id and passin-perustiedot.
+  "Creates a PPP add map with the given ET id, phase A+ value and pass-level A0 marking.
    vaihe-valid? defaults to true."
-  ([et-id passin-perustiedot]
-   (make-ppp-add et-id passin-perustiedot true))
-  ([et-id passin-perustiedot vaihe-valid?]
+  ([et-id aplus-tiedot]
+   (make-ppp-add et-id aplus-tiedot true))
+  ([et-id aplus-tiedot vaihe-valid?]
    {:energiatodistus-id et-id
     :valid true
-    :passin-perustiedot passin-perustiedot
+    :passin-perustiedot (select-keys aplus-tiedot [:a0-merkinta-id])
     :rakennuksen-perustiedot {}
     :tulokset {:kaukolampo-hinta 6.5
                :sahko-hinta 15.0
@@ -102,6 +104,7 @@
                :kaukojaahdytys-hinta 4.0}
     :vaiheet [{:vaihe-nro 1
                :valid vaihe-valid?
+               :tayttaa-aplus-vaatimukset (boolean (:tayttaa-aplus-vaatimukset aplus-tiedot))
                :toimenpiteet {:toimenpide-ehdotukset []}
                :tulokset {:ostoenergian-tarve-kaukolampo 1
                           :ostoenergian-tarve-sahko 1
@@ -171,7 +174,7 @@
             completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
         (t/is (= "A" (first-vaihe-e-luokka completed)))))
 
-    (t/testing "PPP uses passin-perustiedot, not energiatodistus perustiedot"
+    (t/testing "PPP uses the phase A+ value and pass-level A0 marking, not energiatodistus perustiedot"
       (let [completed-true (insert-and-complete-ppp!
                              laatija-id whoami
                              (make-ppp-add (new-et-id!)
@@ -185,6 +188,21 @@
         (t/is (= "A+" (first-vaihe-e-luokka completed-true)))
         (t/is (= "A" (first-vaihe-e-luokka completed-false)))))
 
+    (t/testing "Each PPP phase uses its own A+ value"
+      (let [base-ppp (make-ppp-add (new-et-id!)
+                                   {:tayttaa-aplus-vaatimukset true
+                                    :a0-merkinta-id 1})
+            first-vaihe (first (:vaiheet base-ppp))
+            ppp-add (assoc base-ppp :vaiheet
+                           [first-vaihe
+                            (assoc first-vaihe
+                                   :vaihe-nro 2
+                                   :tayttaa-aplus-vaatimukset false)])
+            completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
+        (t/is (= ["A+" "A"]
+                 (mapv #(get-in % [:tulokset :e-luokka])
+                       (take 2 (:vaiheet completed)))))))
+
     (t/testing "Invalid vaihe does not run downgrade logic"
       (let [ppp-add (make-ppp-add (new-et-id!)
                                   {:tayttaa-aplus-vaatimukset false
@@ -193,7 +211,7 @@
             completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
         (t/is (nil? (first-vaihe-e-luokka completed)))))
 
-    (t/testing "PPP with empty passin-perustiedot defaults to false → A+ downgraded to A"
+    (t/testing "PPP phase with no A+ value defaults to false → A+ downgraded to A"
       (let [ppp-add (make-ppp-add (new-et-id!) {})
             completed (insert-and-complete-ppp! laatija-id whoami ppp-add)]
         (t/is (= "A" (first-vaihe-e-luokka completed)))))))

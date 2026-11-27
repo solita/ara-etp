@@ -213,15 +213,17 @@
   (let [l (kieli loc/ppp-pdf-localization)
         ;; Build vaiheet array: start with energiatodistus (lähtötilanne), then add all PPP vaiheet
         passin-perustiedot (:passin-perustiedot perusparannuspassi)
-        tayttaa-a-plus (-> passin-perustiedot :tayttaa-aplus-vaatimukset)
         a0-merkinta-id (:a0-merkinta-id passin-perustiedot)
         a0-fulfilled? (contains? #{1 2 3} a0-merkinta-id)
         lahtotilanne {:e-luku   (get-in energiatodistus [:tulokset :e-luku])
                       :e-luokka (get-in energiatodistus [:tulokset :e-luokka])}
-        ppp-vaiheet (->> (:vaiheet perusparannuspassi)
-                         (filter (fn [vaihe] (and (:valid vaihe)
-                                                  (-> vaihe (get-in [:tulokset :vaiheen-alku-pvm]) some?)
-                                                  #_(not (nil? (get-in vaihe [:tulokset :vaiheen-alku-pvm]))))))
+         active-vaiheet (->> (:vaiheet perusparannuspassi)
+                             (filter (fn [vaihe]
+                                       (and (:valid vaihe)
+                                            (some? (get-in vaihe [:tulokset :vaiheen-alku-pvm])))))
+                             (sort-by :vaihe-nro))
+         tayttaa-a-plus (boolean (:tayttaa-aplus-vaatimukset (last active-vaiheet)))
+         ppp-vaiheet (->> active-vaiheet
                          (map (fn [vaihe]
                                 (let [versio 2027
                                       e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus vaihe)
@@ -229,7 +231,7 @@
                                                                               (get-in energiatodistus [:perustiedot :kayttotarkoitus])
                                                                               (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
                                                                               e-luku
-                                                                              tayttaa-a-plus
+                                                                               (:tayttaa-aplus-vaatimukset vaihe)
                                                                               a0-merkinta-id)
                                                    :e-luokka)]
                                   {:e-luku e-luku

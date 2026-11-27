@@ -23,14 +23,17 @@
     [laatija-id whoami]))
 
 (defn- create-et-and-ppp!
-  "Creates a 2027 ET and a PPP with given passin-perustiedot overrides.
+  "Creates a 2027 ET and a PPP with given phase A+ and pass-level A0 overrides.
    The PPP vaihe includes :vaiheen-alku-pvm so that PDF generation
    actually processes the vaihe (the PDF filters out vaiheet without dates).
    Returns [et-id ppp-id]."
-  [laatija-id whoami passin-perustiedot-overrides]
+  [laatija-id whoami aplus-tiedot]
   (let [[et-id _] (energiatodistus-test-data/generate-and-insert! 2027 true laatija-id)
         ppp-add (-> (ppp-test-data/generate-add et-id)
-                    (update :passin-perustiedot merge passin-perustiedot-overrides)
+                    (update :passin-perustiedot merge
+                            (select-keys aplus-tiedot [:a0-merkinta-id]))
+                    (assoc-in [:vaiheet 0 :tayttaa-aplus-vaatimukset]
+                              (boolean (:tayttaa-aplus-vaatimukset aplus-tiedot)))
                     (assoc-in [:vaiheet 0 :tulokset :vaiheen-alku-pvm] (LocalDate/of 2025 1 1)))
         ppp-id (:id (perusparannuspassi-service/insert-perusparannuspassi!
                       (ts/db-user laatija-id)
@@ -119,25 +122,29 @@
             base-ppp (ppp-test-data/generate-add et-id)
             base-vaihe (first (:vaiheet base-ppp))
             ;; Each vaihe needs :vaiheen-alku-pvm so PDF actually processes them
-            make-vaihe (fn [nro date]
+            make-vaihe (fn [nro date tayttaa-aplus-vaatimukset]
                          (-> base-vaihe
                              (assoc :vaihe-nro nro)
+                             (assoc :tayttaa-aplus-vaatimukset tayttaa-aplus-vaatimukset)
                              (assoc-in [:tulokset :vaiheen-alku-pvm] date)))
             multi-vaihe-ppp (-> base-ppp
                                 (update :passin-perustiedot merge
-                                        {:tayttaa-aplus-vaatimukset true
-                                         :a0-merkinta-id    1})
-                                (assoc :vaiheet [(make-vaihe 1 (LocalDate/of 2025 1 1))
-                                                 (make-vaihe 2 (LocalDate/of 2025 7 1))
-                                                 (make-vaihe 3 (LocalDate/of 2026 1 1))]))
+                                        {:a0-merkinta-id 1})
+                                (assoc :vaiheet [(make-vaihe 1 (LocalDate/of 2025 1 1) true)
+                                                 (make-vaihe 2 (LocalDate/of 2025 7 1) true)
+                                                 (make-vaihe 3 (LocalDate/of 2026 1 1) false)]))
             ppp-id (:id (perusparannuspassi-service/insert-perusparannuspassi!
                           (ts/db-user laatija-id)
                           whoami
                           multi-vaihe-ppp))
             result (ppp-pdf-service/find-perusparannuspassi-pdf
-                     ts/*db* whoami ppp-id "fi")]
+                     ts/*db* whoami ppp-id "fi")
+            html (ppp-pdf-service/find-perusparannuspassi-html
+                   ts/*db* whoami ppp-id "fi")]
         (t/is (some? result)
               "Multi-vaihe PPP-PDF generation should succeed")
+        (t/is (re-find #"(?s)Täyttää A\+ -luokan vaatimukset</dt>\s*<dd>Ei</dd>" html)
+              "The final A+ answer should come from the last active vaihe")
         (let [pdf-bytes (.readAllBytes result)
               document (Loader/loadPDF pdf-bytes)]
           (try

@@ -88,7 +88,6 @@ set
     valid = false,
     ppt$havainnointikaynti = null,
     ppt$passin_esittely = null,
-    ppt$tayttaa_aplus_vaatimukset = false,
     ppt$a0_merkinta_id = null,
     rpt$ulkoseinat_ehdotettu_taso = null,
     rpt$ylapohja_ehdotettu_taso = null,
@@ -117,6 +116,7 @@ where energiatodistus_id = :energiatodistus-id;
 update perusparannuspassi_vaihe vaihe
 set
     valid = false,
+    tayttaa_aplus_vaatimukset = false,
     tp$toimenpideseloste_fi = null,
     tp$toimenpideseloste_sv = null,
     t$vaiheen_alku_pvm = null,

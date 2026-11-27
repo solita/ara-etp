@@ -11,16 +11,22 @@
 
 (def vaihe-gen
   (test-generators/let [n vaihe-nro-gen
-                        v test-generators/boolean]
+                        v test-generators/boolean
+                        a-plus test-generators/boolean]
                        {:vaihe-nro n
-                        :valid     v}))
+                        :valid     v
+                        :tayttaa-aplus-vaatimukset a-plus}))
 
 ;; Generate 0..4 unique phases (distinct vaihe-nro, optional random order)
 (def vaiheet-gen
   (test-generators/let [ns (g/always [1 2 3 4])
-                        bs (test-generators/vector test-generators/boolean (count ns))]
-                       (->> (map vector ns bs)
-                            (mapv (fn [[n b]] {:vaihe-nro n :valid b})))))
+                        bs (test-generators/vector test-generators/boolean (count ns))
+                        a-plussat (test-generators/vector test-generators/boolean (count ns))]
+                       (->> (map vector ns bs a-plussat)
+                            (mapv (fn [[n b a-plus]]
+                                    {:vaihe-nro n
+                                     :valid b
+                                     :tayttaa-aplus-vaatimukset a-plus})))))
 
 (def perusparannuspassi-save-gen
   "Generates a PerusparannupassiSave without energiatodistus-id."
@@ -44,11 +50,11 @@
      :passin-perustiedot      {:havainnointikaynti        nil
                                :passin-esittely           nil
                                :a0-merkinta-id    0
-                               :tayttaa-aplus-vaatimukset false
                                :lisatietoja-fi         nil
                                :lisatietoja-sv         nil}
      :vaiheet                 [{:vaihe-nro    1
                                 :valid        true
+                                :tayttaa-aplus-vaatimukset false
                                 :toimenpiteet {:toimenpideseloste-fi  nil
                                                :toimenpideseloste-sv  nil
                                                :toimenpide-ehdotukset []}

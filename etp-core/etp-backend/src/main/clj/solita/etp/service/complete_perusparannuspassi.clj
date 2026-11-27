@@ -117,7 +117,7 @@
   "Enrich a PPP vaihe with calculated fields.
    Adds calculated fields both to :tulokset and at the top level for consistency.
    For invalid vaiheet, adds nil/0 placeholders."
-  [energiatodistus ppp-perustiedot ppp-tulokset ppp-vaihe {:keys [kayttotarkoitukset alakayttotarkoitukset]}]
+  [energiatodistus aplus-tiedot ppp-tulokset ppp-vaihe {:keys [kayttotarkoitukset alakayttotarkoitukset]}]
   (if-not (:valid ppp-vaihe)
     ;; For invalid vaiheet, add nil placeholders to match structure
     (-> ppp-vaihe
@@ -140,8 +140,8 @@
                          (get-in energiatodistus [:perustiedot :kayttotarkoitus])
                          (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
                          e-luku
-                         (:tayttaa-aplus-vaatimukset ppp-perustiedot)
-                         (:a0-merkinta-id ppp-perustiedot))
+                         (:tayttaa-aplus-vaatimukset aplus-tiedot)
+                         (:a0-merkinta-id aplus-tiedot))
                        :e-luokka)
           ostoenergia (total-ostoenergia-ppp tulokset)
           painotettu (painotettu-ostoenergia energiatodistus tulokset)
@@ -223,7 +223,11 @@
         (update :vaiheet
                 (fn [vaiheet]
                   (->> vaiheet
-                       (mapv #(complete-vaihe energiatodistus passin-perustiedot ppp-tulokset % luokittelut))
+                       (mapv #(complete-vaihe energiatodistus
+                                              (assoc % :a0-merkinta-id (:a0-merkinta-id passin-perustiedot))
+                                              ppp-tulokset
+                                              %
+                                              luokittelut))
                        add-year-ranges)))
         (assoc :lahtotilanne lahtotilanne))))
 
