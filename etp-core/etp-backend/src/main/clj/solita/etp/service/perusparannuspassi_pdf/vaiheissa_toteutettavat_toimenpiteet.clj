@@ -14,12 +14,11 @@
 
 (defn- get-vaihe-data [params vaihe-nro]
   (let [{:keys [perusparannuspassi energiatodistus kayttotarkoitukset alakayttotarkoitukset]} params
-        vaiheet (:vaiheet perusparannuspassi)
-        vaihe (first (filter #(= (:vaihe-nro %) vaihe-nro) vaiheet))
-        seuraava-vaihe (first (filter #(= (:vaihe-nro %) (inc vaihe-nro)) vaiheet))]
-    ;; Only return vaihe data if it has a starting date
+        vaihe (perusparannuspassi-service/find-active-vaihe perusparannuspassi vaihe-nro)
+        seuraava-vaihe (perusparannuspassi-service/find-next-active-vaihe perusparannuspassi vaihe-nro)]
+    ;; Only return data for an active vaihe
     ;; This filters out vaiheet where data was added but later deleted
-    (when (and vaihe (some? (get-in vaihe [:tulokset :vaiheen-alku-pvm])))
+    (when vaihe
       (let [versio 2027
             passin-perustiedot (:passin-perustiedot perusparannuspassi)
             e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus vaihe)
@@ -27,7 +26,7 @@
                                                     (get-in energiatodistus [:perustiedot :kayttotarkoitus])
                                                     (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
                                                     e-luku
-                                                    (:tayttaa-aplus-vaatimukset passin-perustiedot)
+                                                     (:tayttaa-aplus-vaatimukset vaihe)
                                                     (:a0-merkinta-id passin-perustiedot))
                          :e-luokka)]
         {:vaihe vaihe

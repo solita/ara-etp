@@ -117,7 +117,7 @@
   "Enrich a PPP vaihe with calculated fields.
    Adds calculated fields both to :tulokset and at the top level for consistency.
    For invalid vaiheet, adds nil/0 placeholders."
-  [energiatodistus ppp-perustiedot ppp-tulokset ppp-vaihe {:keys [kayttotarkoitukset alakayttotarkoitukset]}]
+  [energiatodistus perustiedot ppp-tulokset ppp-vaihe {:keys [kayttotarkoitukset alakayttotarkoitukset]}]
   (if-not (:valid ppp-vaihe)
     ;; For invalid vaiheet, add nil placeholders to match structure
     (-> ppp-vaihe
@@ -140,8 +140,8 @@
                          (get-in energiatodistus [:perustiedot :kayttotarkoitus])
                          (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
                          e-luku
-                         (:tayttaa-aplus-vaatimukset ppp-perustiedot)
-                         (:a0-merkinta-id ppp-perustiedot))
+                         (:tayttaa-aplus-vaatimukset ppp-vaihe)
+                         (:a0-merkinta-id perustiedot))
                        :e-luokka)
           ostoenergia (total-ostoenergia-ppp tulokset)
           painotettu (painotettu-ostoenergia energiatodistus tulokset)
@@ -172,7 +172,9 @@
   (let [energiamuodot (get-in energiatodistus [:tulokset :kaytettavat-energiamuodot])
         toteutunut-ostoenergiankulutus (:toteutunut-ostoenergiankulutus energiatodistus)
         ;; Create a basic vaihe structure with PPP-style field names
+        et-perustiedot (:perustiedot energiatodistus)
         basic-vaihe {:valid true
+                     :tayttaa-aplus-vaatimukset (:tayttaa-aplus-vaatimukset et-perustiedot)
                      :tulokset {:ostoenergian-tarve-kaukolampo (or (:kaukolampo energiamuodot) 0)
                                 :ostoenergian-tarve-sahko (or (:sahko energiamuodot) 0)
                                 :ostoenergian-tarve-uusiutuvat-pat (or (:uusiutuva-polttoaine energiamuodot) 0)
@@ -192,11 +194,8 @@
                                                                           (get-in [:tulokset :uusiutuvat-omavaraisenergiat])))
                                 :uusiutuvan-energian-hyodynnetty-osuus nil}}]
     ;; Use complete-vaihe to add all calculated fields
-    ;;
-    ;; Here the perustiedot of the ET will pass for PPP-perustiedot, because the relevant fields for
-    ;; calculations (:tayttaa-aplus-vaatimukset and :a0-merkinta-id) are the same in both, and we want to use the
-    ;; ET's values for those.
-    (complete-vaihe energiatodistus (:perustiedot energiatodistus) ppp-tulokset basic-vaihe luokittelut)))
+    ;; The lähtötilanne uses the ET's own :tayttaa-aplus-vaatimukset and :a0-merkinta-id.
+    (complete-vaihe energiatodistus et-perustiedot ppp-tulokset basic-vaihe luokittelut)))
 
 (defn- add-year-ranges
   "Add year-range to each vaihe based on consecutive vaihe start dates.
@@ -223,7 +222,11 @@
         (update :vaiheet
                 (fn [vaiheet]
                   (->> vaiheet
-                       (mapv #(complete-vaihe energiatodistus passin-perustiedot ppp-tulokset % luokittelut))
+                       (mapv #(complete-vaihe energiatodistus
+                                              passin-perustiedot
+                                              ppp-tulokset
+                                              %
+                                              luokittelut))
                        add-year-ranges)))
         (assoc :lahtotilanne lahtotilanne))))
 

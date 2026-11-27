@@ -233,9 +233,9 @@
    :passin-perustiedot {:havainnointikaynti (LocalDate/of 2026 11 1)
                          :passin-esittely (LocalDate/of 2026 11 2)
                          :a0-merkinta-id 0
-                         :tayttaa-aplus-vaatimukset false
                          :lisatietoja-fi nil :lisatietoja-sv nil}
    :vaiheet [{:vaihe-nro 1 :valid true
+              :tayttaa-aplus-vaatimukset false
               :toimenpiteet {:toimenpideseloste-fi nil :toimenpideseloste-sv nil :toimenpide-ehdotukset []}
               :tulokset {:vaiheen-alku-pvm (LocalDate/of 2030 1 1) :vaiheen-loppu-pvm nil
                          :ostoenergian-tarve-kaukolampo 35000M :ostoenergian-tarve-sahko 8000M

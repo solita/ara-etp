@@ -2,7 +2,6 @@
   import * as R from 'ramda';
   import * as Maybe from '@Utility/maybe-utils';
 
-  import Checkbox from '@Component/Checkbox/Checkbox';
   import Select from '@Component/Select/Select';
   import UnescapedItem from '@Component/DropdownList/UnescapedItem.svelte';
   import HR from '@Component/HR/HR';
@@ -68,12 +67,5 @@
       )} />
   </div>
 
-  <Checkbox
-    {disabled}
-    bind:model={perusparannuspassi}
-    lens={R.lensPath(['passin-perustiedot', 'tayttaa-aplus-vaatimukset'])}
-    label={$_(
-      'perusparannuspassi.passin-perustiedot.tayttaa-aplus-vaatimukset'
-    )} />
   <HR />
 </div>

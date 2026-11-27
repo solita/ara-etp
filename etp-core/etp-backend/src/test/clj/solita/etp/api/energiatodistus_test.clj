@@ -12,6 +12,7 @@
     [solita.etp.service.kayttaja :as kayttaja-service]
     [solita.etp.test-data.energiatodistus :as et-test-data]
     [solita.etp.test-data.laatija :as laatija-test-data]
+    [solita.etp.test-data.perusparannuspassi :as ppp-test-data]
     [solita.etp.test-system :as ts])
   (:import (java.util Base64)))
 
@@ -114,6 +115,27 @@
                   (mock/header "Content-Type" "application/json")
                   (mock/header "Authorization" (basic-auth-header "laatija@solita.fi" "password"))
                   (mock/body (j/write-value-as-string et)))))
+
+(t/deftest external-api-2027-ppp-phase-aplus-test
+  (insert-external-api-laatija!)
+  (let [ppp (-> (ppp-test-data/generate-add 1)
+                (dissoc :energiatodistus-id)
+                (assoc-in [:vaiheet 0 :tayttaa-aplus-vaatimukset] true))
+        et (-> (et-test-data/generate-add 2027 false)
+               (dissoc :kommentti :draft-visible-to-paakayttaja
+                       :bypass-validation-limits :bypass-validation-limits-reason
+                       :yksinkertaistettu-paivitysmenettely)
+               (assoc :perusparannuspassi ppp))
+        response (post-external-2027-ppp! et)
+        et-id (:id (response-body response))
+        vaihe (first (jdbc/query ts/*db*
+                        ["select vaihe.tayttaa_aplus_vaatimukset
+                          from perusparannuspassi_vaihe vaihe
+                          join perusparannuspassi ppp on ppp.id = vaihe.perusparannuspassi_id
+                          where ppp.energiatodistus_id = ? and vaihe.vaihe_nro = 1"
+                         et-id]))]
+    (t/is (= 201 (:status response)))
+    (t/is (true? (:tayttaa_aplus_vaatimukset vaihe)))))
 
 (t/deftest external-api-tilaaja-is-accepted-and-discarded-test
   (insert-external-api-laatija!)

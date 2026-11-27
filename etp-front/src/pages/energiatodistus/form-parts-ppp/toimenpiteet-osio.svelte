@@ -54,7 +54,8 @@
   {#if R.equals(true, open)}
     <div transition:slide={{ duration: 200 }} class="grid gap-6">
       <Perustiedot
-        {perusparannuspassi}
+        {disabled}
+        bind:perusparannuspassi
         oletusEnergiamuotokertoimet={luokittelut.energiamuotokertoimet}
         {pppSchema}
         {vaihe}

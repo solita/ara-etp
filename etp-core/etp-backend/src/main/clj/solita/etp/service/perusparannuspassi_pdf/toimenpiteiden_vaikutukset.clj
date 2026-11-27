@@ -1,7 +1,8 @@
 (ns solita.etp.service.perusparannuspassi-pdf.toimenpiteiden-vaikutukset
   (:require [clojure.string :as str]
             [solita.etp.service.e-luokka :as e-luokka-service]
-            [solita.etp.service.localization :as loc]))
+            [solita.etp.service.localization :as loc]
+            [solita.etp.service.perusparannuspassi :as perusparannuspassi-service]))
 
 (defn arrow [color text-color x text1 text2]
   (let [text-fill text-color
@@ -213,15 +214,14 @@
   (let [l (kieli loc/ppp-pdf-localization)
         ;; Build vaiheet array: start with energiatodistus (lähtötilanne), then add all PPP vaiheet
         passin-perustiedot (:passin-perustiedot perusparannuspassi)
-        tayttaa-a-plus (-> passin-perustiedot :tayttaa-aplus-vaatimukset)
         a0-merkinta-id (:a0-merkinta-id passin-perustiedot)
         a0-fulfilled? (contains? #{1 2 3} a0-merkinta-id)
         lahtotilanne {:e-luku   (get-in energiatodistus [:tulokset :e-luku])
                       :e-luokka (get-in energiatodistus [:tulokset :e-luokka])}
-        ppp-vaiheet (->> (:vaiheet perusparannuspassi)
-                         (filter (fn [vaihe] (and (:valid vaihe)
-                                                  (-> vaihe (get-in [:tulokset :vaiheen-alku-pvm]) some?)
-                                                  #_(not (nil? (get-in vaihe [:tulokset :vaiheen-alku-pvm]))))))
+        active-vaiheet (perusparannuspassi-service/active-vaiheet perusparannuspassi)
+        ;; The building fulfills A+ requirements after the last vaihe only if the last vaihe says so
+        tayttaa-a-plus-viimeisen-vaiheen-jalkeen (boolean (:tayttaa-aplus-vaatimukset (last active-vaiheet)))
+         ppp-vaiheet (->> active-vaiheet
                          (map (fn [vaihe]
                                 (let [versio 2027
                                       e-luku (e-luokka-service/e-luku-from-ppp-vaihe versio energiatodistus vaihe)
@@ -229,7 +229,7 @@
                                                                               (get-in energiatodistus [:perustiedot :kayttotarkoitus])
                                                                               (get-in energiatodistus [:lahtotiedot :lammitetty-nettoala])
                                                                               e-luku
-                                                                              tayttaa-a-plus
+                                                                               (:tayttaa-aplus-vaatimukset vaihe)
                                                                               a0-merkinta-id)
                                                    :e-luokka)]
                                   {:e-luku e-luku
@@ -270,7 +270,7 @@
        [:dd (l (if a0-fulfilled? :kylla :ei))]]
       [:div
        [:dt (l :tayttaa-a-plus-luokan-vaatimukset)]
-       [:dd (if tayttaa-a-plus (l :kylla) (l :ei))]]]
+       [:dd (if tayttaa-a-plus-viimeisen-vaiheen-jalkeen (l :kylla) (l :ei))]]]
      [:div {:class "vaatimukset-selitteet-box"}
       [:div {:class "vaatimukset-selitteet"}
        [:div (loc/with-subscripts (l :a0-korjattu-selite))]
